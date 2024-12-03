@@ -49,7 +49,7 @@ PlayerSettings:
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 1
+  m_ActiveColorSpace: 0
   unsupportedMSAAFallback: 0
   m_SpriteBatchVertexThreshold: 300
   m_MTRendering: 1
@@ -93,13 +93,13 @@ PlayerSettings:
   hideHomeButton: 0
   submitAnalytics: 1
   usePlayerLog: 1
-  autoStreaming: 0
+  autoStreaming: 1
   useFontStreaming: 0
   cacheASTextureAB: 0
   maxCacheSize: 0
   maxConcurrentLoad: 0
-  autoStreamingId: 
-  instantGameAppId: 
+  autoStreamingId: /v1/buckets/e520527f-94b8-46f7-a223-fee86b289b0d/release_by_badge/0_1/content
+  instantGameAppId: 9aad8034-bc13-4fa7-a639-bed66943b111
   dedicatedServerOptimizations: 0
   bakeCollisionMeshes: 0
   forceSingleInstance: 0
@@ -355,6 +355,9 @@ PlayerSettings:
   - m_BuildTarget: HMIAndroidPlayer
     m_APIs: 150000000b000000
     m_Automatic: 1
+  - m_BuildTarget: WeixinMiniGameSupport
+    m_APIs: 08000000
+    m_Automatic: 0
   m_BuildTargetVRSettings: []
   m_DefaultShaderChunkSizeInMB: 16
   m_DefaultShaderChunkCount: 0
@@ -639,7 +642,8 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
-  il2cppCodeGeneration: {}
+  il2cppCodeGeneration:
+    WeixinMiniGame: 1
   managedStrippingLevel:
     ArmLinux: 1
     ArmLinuxServer: 1
@@ -768,14 +772,16 @@ PlayerSettings:
   weixinMiniGameExceptionOnlyEnableForUserCodes: 0
   weixinMiniGameNameFilesAsHashes: 0
   weixinMiniGameShowDiagnostics: 0
-  weixinMiniGameDataCaching: 1
-  weixinMiniGameDebugSymbols: 0
-  weixinMiniGameEmscriptenArgs: 
+  weixinMiniGameDataCaching: 0
+  weixinMiniGameDebugSymbols: 1
+  weixinMiniGameEmscriptenArgs: ' -s EXPORTED_FUNCTIONS=_sbrk,_emscripten_stack_get_base,_emscripten_stack_get_end
+    -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s TOTAL_MEMORY=256MB -s EXPORTED_RUNTIME_METHODS=''["ccall","cwrap","stackTrace","addRunDependency","removeRunDependency","FS_createPath","FS_createDataFile","stackTrace","writeStackCookie","checkStackCookie","lengthBytesUTF8","stringToUTF8"]''
+    --profiling-funcs '
   weixinMiniGameModulesDirectory: 
-  weixinMiniGameTemplate: APPLICATION:Default
+  weixinMiniGameTemplate: PATH:D:\Documents\GitHub\yet-another-tetris-wx\My project\Library\PackageCache\com.qq.weixin.minigame@65b7e86611\WebGLTemplates\WXTemplate2022TJ
   weixinMiniGameAnalyzeBuildSize: 0
   weixinMiniGameUseEmbeddedResources: 0
-  weixinMiniGameCompressionFormat: 0
+  weixinMiniGameCompressionFormat: 2
   weixinMiniGameWasmArithmeticExceptions: 0
   weixinMiniGameLinkerTarget: 1
   weixinMiniGameThreadsSupport: 0

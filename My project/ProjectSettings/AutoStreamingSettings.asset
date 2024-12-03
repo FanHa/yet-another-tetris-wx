@@ -16,10 +16,10 @@ AutoStreamingSettings:
   mScenes: []
   mConfigCCD:
     useCCD: 0
-    uosSecret: 
-    uosAppid: 
-    bucketUuid: 
-    bucketName: 
-    badgeName: 
+    uosSecret: ee0b9a2fe823405dbb6de9947b3f73da
+    uosAppid: 9aad8034-bc13-4fa7-a639-bed66943b111
+    bucketUuid: e520527f-94b8-46f7-a223-fee86b289b0d
+    bucketName: wx01
+    badgeName: 0_1
     ttAppid: 
     targetPlatfrom: 
