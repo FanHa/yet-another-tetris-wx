@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cn.tuanjie.minigame.host": "1.0.4",
+    "com.qq.weixin.minigame": "https://github.com/wechat-miniprogram/minigame-tuanjie-transform-sdk.git",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.rider": "3.0.31",
