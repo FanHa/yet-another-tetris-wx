@@ -5,16 +5,18 @@ using UnityEngine.Tilemaps;
 public class Controller : MonoBehaviour
 {
     [SerializeField] private Tilemap operateBoard;
+    [SerializeField] private Tilemap operateBoardMask;
     [SerializeField] private Tilemap stuffBoard;
-    [SerializeField] private TileBase highlightTile;
+    [SerializeField] private TileBase maskTile;
     [SerializeField] private TileBase normalTile;
     [SerializeField] private TileBase setedTile;
     [SerializeField] private TileBase forbidTile;
-    private Vector3Int previousMousePos = new Vector3Int();
+    // private Vector3Int previousMousePos = new Vector3Int();
     private Dictionary<Vector3Int, TileBase> originalTiles = new Dictionary<Vector3Int, TileBase>();
     private Tetri currentTetri;
     private List<Vector3Int> highlightedTiles = new List<Vector3Int>();
-    void Start()
+    private bool isDragging = false;
+    private Stack<List<TileOperation>> history = new Stack<List<TileOperation>>();    void Start()
     {
         InitializeOriginalTiles();
     }
@@ -24,37 +26,43 @@ public class Controller : MonoBehaviour
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int mouseCellPos = operateBoard.WorldToCell(mouseWorldPos);
 
-        if (mouseCellPos != previousMousePos)
+        if (isDragging)
         {
-            // 恢复之前高亮的瓦片及其相邻瓦片
-            RestoreHighliteedTiles();
+            // 恢复之前高亮的瓦片
+            // todo 这里可能会有性能问题，因为每帧都会调用 RestoreHighliteedTiles
+            UnmaskTetri();
 
             // 检查鼠标是否在 operateBoard 上
             if (IsMouseOnOperateBoard(mouseCellPos))
             {
-                // 高亮当前瓦片及其相邻瓦片
                 // 根据选中的 tetri 的形状来高亮瓦片
-                HighlightTile(mouseCellPos);
+                MaskTetriToBoard(mouseCellPos);
             }
-            previousMousePos = mouseCellPos;
         }
 
-        if (Input.GetMouseButtonDown(0)) // 检测鼠标左键点击
+        if (Input.GetMouseButtonDown(0)) // 检测鼠标左键按下
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if (hit.collider != null)
+            if (hit.collider != null && hit.collider.gameObject == stuffBoard.gameObject)
             {
-                if (hit.collider.gameObject == operateBoard.gameObject)
-                {
-                    SetTileAndNeighbors(mouseCellPos, setedTile);
-                }
-                else if (hit.collider.gameObject == stuffBoard.gameObject)
-                {
-                    Tetri tetri = selectTetri(mouseCellPos);
-                    currentTetri = tetri;
-                }
+                Tetri tetri = selectTetri(mouseCellPos);
+                currentTetri = tetri;
+                isDragging = true;
             }
+        }
 
+        if (Input.GetMouseButtonUp(0)) // 检测鼠标左键释放
+        {
+            if (isDragging)
+            {
+                if (IsMouseOnOperateBoard(mouseCellPos))
+                {
+                    SetTetri(mouseCellPos, setedTile);
+                }
+                isDragging = false;
+                currentTetri = null;
+                UnmaskTetri();
+            }
         }
     }
 
@@ -85,31 +93,16 @@ public class Controller : MonoBehaviour
         }
     }
 
-    private void RestoreHighliteedTiles()
+    private void UnmaskTetri()
     {
         foreach (var tilePosition in highlightedTiles)
         {
-            RestoreTile(tilePosition);
+            operateBoardMask.SetTile(tilePosition, null);
         }
         highlightedTiles.Clear();
     }
 
-    private void RestoreTile(Vector3Int position)
-    {
-        if (operateBoard.HasTile(position))
-        {
-            if (originalTiles.ContainsKey(position))
-            {
-                operateBoard.SetTile(position, originalTiles[position]);
-            }
-            else
-            {
-                operateBoard.SetTile(position, null);
-            }
-        }
-    }
-
-    private void HighlightTile(Vector3Int basePosition)
+    private void MaskTetriToBoard(Vector3Int basePosition)
     {
         if (currentTetri == null)
         {
@@ -125,23 +118,23 @@ public class Controller : MonoBehaviour
 
             if (operateBoard.HasTile(tilePosition))
             {
-                if (originalTiles.ContainsKey(tilePosition) && originalTiles[tilePosition] == setedTile)
+                if (operateBoard.GetTile(tilePosition) == setedTile)
                 {
-                    operateBoard.SetTile(tilePosition, forbidTile);
+                    operateBoardMask.SetTile(tilePosition, forbidTile);
                 }
                 else
                 {
-                    operateBoard.SetTile(tilePosition, highlightTile);
+                    operateBoardMask.SetTile(tilePosition, maskTile);
                 }
             }
             else
             {
-                operateBoard.SetTile(tilePosition, forbidTile);
+                operateBoardMask.SetTile(tilePosition, forbidTile);
             }
         }
     }
 
-    private void SetTileAndNeighbors(Vector3Int basePosition, TileBase tile)
+    private void SetTetri(Vector3Int basePosition, TileBase tile)
     {
         if (currentTetri == null)
         {
@@ -155,10 +148,28 @@ public class Controller : MonoBehaviour
             return;
         }
 
+        List<TileOperation> currentOperation = new List<TileOperation>();
+
         foreach (var offset in currentTetri.RelativePositions)
         {
             Vector3Int tilePosition = basePosition + offset;
+            TileBase originalTile = operateBoard.GetTile(tilePosition);
+            currentOperation.Add(new TileOperation(tilePosition, originalTile));
             SetTile(tilePosition, tile);
+        }
+
+        history.Push(currentOperation);
+    }
+
+    public void Undo()
+    {
+        if (history.Count > 0)
+        {
+            List<TileOperation> lastOperation = history.Pop();
+            foreach (var operation in lastOperation)
+            {
+                operateBoard.SetTile(operation.Position, operation.OriginalTile);
+            }
         }
     }
 
@@ -172,7 +183,7 @@ public class Controller : MonoBehaviour
         foreach (var offset in currentTetri.RelativePositions)
         {
             Vector3Int tilePosition = basePosition + offset;
-            if (operateBoard.GetTile(tilePosition) == forbidTile)
+            if (operateBoardMask.GetTile(tilePosition) == forbidTile)
             {
                 return true;
             }
@@ -191,6 +202,7 @@ public class Controller : MonoBehaviour
         }
     }
 
+    // todo
     public void OnSettlementConfirm()
     {
         BoundsInt bounds = operateBoard.cellBounds;
