@@ -7,18 +7,22 @@ public class Controller : MonoBehaviour
     [SerializeField] private Tilemap operateBoard;
     [SerializeField] private Tilemap operateBoardMask;
     [SerializeField] private Tilemap stuffBoard;
+    [SerializeField] private Tilemap stuffBoardMask;
     [SerializeField] private TileBase maskTile;
     [SerializeField] private TileBase normalTile;
     [SerializeField] private TileBase setedTile;
     [SerializeField] private TileBase forbidTile;
+    [SerializeField] private TileBase stuffMaskTile;
     // private Vector3Int previousMousePos = new Vector3Int();
-    private Dictionary<Vector3Int, TileBase> originalTiles = new Dictionary<Vector3Int, TileBase>();
+    private BoardState boardState;
     private Tetri currentTetri;
     private List<Vector3Int> highlightedTiles = new List<Vector3Int>();
     private bool isDragging = false;
-    private Stack<List<TileOperation>> history = new Stack<List<TileOperation>>();    void Start()
+    private Stack<List<TileOperation>> history = new Stack<List<TileOperation>>();
+    private Vector3Int draggingStuffPosition;
+    void Start()
     {
-        InitializeOriginalTiles();
+        InitializeBoardState();
     }
 
     void Update()
@@ -38,6 +42,9 @@ public class Controller : MonoBehaviour
                 // 根据选中的 tetri 的形状来高亮瓦片
                 MaskTetriToBoard(mouseCellPos);
             }
+
+            // 在 stuffBoardMask 上给原来 stuff 的位置的瓦片加上 stuffMaskTile
+            MaskStuffOnBoard(draggingStuffPosition);
         }
 
         if (Input.GetMouseButtonDown(0)) // 检测鼠标左键按下
@@ -47,6 +54,7 @@ public class Controller : MonoBehaviour
             {
                 Tetri tetri = selectTetri(mouseCellPos);
                 currentTetri = tetri;
+                draggingStuffPosition = mouseCellPos;
                 isDragging = true;
             }
         }
@@ -60,9 +68,40 @@ public class Controller : MonoBehaviour
                     SetTetri(mouseCellPos, setedTile);
                 }
                 isDragging = false;
-                currentTetri = null;
+                
                 UnmaskTetri();
+                UnmaskStuffOnBoard(draggingStuffPosition);
+
+                currentTetri = null;
             }
+        }
+    }
+
+    private void MaskStuffOnBoard(Vector3Int basePosition)
+    {
+        if (currentTetri == null)
+        {
+            return;
+        }
+
+        foreach (var offset in currentTetri.RelativePositions)
+        {
+            Vector3Int tilePosition = basePosition + offset;
+            stuffBoardMask.SetTile(tilePosition, stuffMaskTile);
+        }
+    }
+
+    private void UnmaskStuffOnBoard(Vector3Int basePosition)
+    {
+        if (currentTetri == null)
+        {
+            return;
+        }
+
+        foreach (var offset in currentTetri.RelativePositions)
+        {
+            Vector3Int tilePosition = basePosition + offset;
+            stuffBoardMask.SetTile(tilePosition, null);
         }
     }
 
@@ -73,11 +112,12 @@ public class Controller : MonoBehaviour
     }
 
 
-    private void InitializeOriginalTiles()
+    private void InitializeBoardState()
     {
-        // 初始化 originalTiles 字典
+        // 初始化 currentTileMatrix
         BoundsInt bounds = operateBoard.cellBounds;
         TileBase[] allTiles = operateBoard.GetTilesBlock(bounds);
+        Dictionary<Vector3Int, TileBase> tileDictionary = new Dictionary<Vector3Int, TileBase>();
 
         for (int x = 0; x < bounds.size.x; x++)
         {
@@ -87,10 +127,12 @@ public class Controller : MonoBehaviour
                 TileBase tile = allTiles[x + y * bounds.size.x];
                 if (tile != null)
                 {
-                    originalTiles[position] = tile;
+                    tileDictionary[position] = tile;
                 }
             }
         }
+
+        boardState = new BoardState(tileDictionary);
     }
 
     private void UnmaskTetri()
@@ -154,11 +196,29 @@ public class Controller : MonoBehaviour
         {
             Vector3Int tilePosition = basePosition + offset;
             TileBase originalTile = operateBoard.GetTile(tilePosition);
-            currentOperation.Add(new TileOperation(tilePosition, originalTile));
+            TileBase stuffBoardTile = stuffBoard.GetTile(draggingStuffPosition + offset);
+            currentOperation.Add(new TileOperation(tilePosition, originalTile, stuffBoardTile));
             SetTile(tilePosition, tile);
         }
 
         history.Push(currentOperation);
+
+        // 清除 stuffBoard 上的 tetri 瓦片
+        ClearTetriFromStuffBoard(draggingStuffPosition);
+    }
+
+    private void ClearTetriFromStuffBoard(Vector3Int basePosition)
+    {
+        if (currentTetri == null)
+        {
+            return;
+        }
+
+        foreach (var offset in currentTetri.RelativePositions)
+        {
+            Vector3Int tilePosition = basePosition + offset;
+            stuffBoard.SetTile(tilePosition, null);
+        }
     }
 
     public void Undo()
@@ -169,6 +229,8 @@ public class Controller : MonoBehaviour
             foreach (var operation in lastOperation)
             {
                 operateBoard.SetTile(operation.Position, operation.OriginalTile);
+                stuffBoard.SetTile(operation.Position - draggingStuffPosition, operation.StuffBoardTile);
+
             }
         }
     }
@@ -196,7 +258,7 @@ public class Controller : MonoBehaviour
     {
         if (operateBoard.HasTile(position))
         {
-            originalTiles[position] = tile;
+            boardState.SetTile(position, tile);
             operateBoard.SetTile(position, tile);
             
         }
@@ -205,14 +267,18 @@ public class Controller : MonoBehaviour
     // todo
     public void OnSettlementConfirm()
     {
-        BoundsInt bounds = operateBoard.cellBounds;
-        for (int y = bounds.yMin; y <= bounds.yMax; y++)
+        // 获取矩阵
+        TileBase[,] matrix = boardState.GetMatrix();
+
+        // 遍历每一行
+        for (int y = 0; y < matrix.GetLength(1); y++)
         {
             bool allSeted = true;
-            for (int x = bounds.xMin; x <= bounds.xMax; x++)
+
+            // 遍历当前行的每一个瓦片
+            for (int x = 0; x < matrix.GetLength(0); x++)
             {
-                Vector3Int position = new Vector3Int(x, y, 0);
-                if (operateBoard.GetTile(position) != setedTile)
+                if (matrix[x, y] != setedTile)
                 {
                     allSeted = false;
                     break;
@@ -224,20 +290,53 @@ public class Controller : MonoBehaviour
                 // TODO: 执行一些操作
                 Debug.Log("Row " + y + " is fully set.");
             }
-            else 
+            else
             {
                 Debug.Log("Row " + y + " is not fully set.");
             }
         }
 
         // 将所有瓦片设置回 normalTile 状态
-        foreach (var kvp in originalTiles)
+        boardState.ResetTiles(normalTile);
+
+        // 重新初始化 currentTileMatrix
+        InitializeBoardState();
+    }
+    private TileBase[,] ConvertDictionaryToMatrix(Dictionary<Vector3Int, TileBase> dictionary)
+    {
+        if (dictionary.Count == 0)
         {
-            operateBoard.SetTile(kvp.Key, normalTile);
+            return new TileBase[0, 0];
         }
 
-        InitializeOriginalTiles();
+        // 找到最小和最大的 x 和 y 值
+        int minX = int.MaxValue, maxX = int.MinValue;
+        int minY = int.MaxValue, maxY = int.MinValue;
 
+        foreach (var kvp in dictionary)
+        {
+            Vector3Int pos = kvp.Key;
+            if (pos.x < minX) minX = pos.x;
+            if (pos.x > maxX) maxX = pos.x;
+            if (pos.y < minY) minY = pos.y;
+            if (pos.y > maxY) maxY = pos.y;
+        }
+
+        // 创建合适大小的二维数组
+        int width = maxX - minX + 1;
+        int height = maxY - minY + 1;
+        TileBase[,] matrix = new TileBase[width, height];
+
+        // 填充二维数组
+        foreach (var kvp in dictionary)
+        {
+            Vector3Int pos = kvp.Key;
+            int x = pos.x - minX;
+            int y = pos.y - minY;
+            matrix[x, y] = kvp.Value;
+        }
+
+        return matrix;
     }
 
     // 获取与指定位置相连的所有瓦片
