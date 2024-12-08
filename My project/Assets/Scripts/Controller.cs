@@ -28,8 +28,10 @@ public class Controller : MonoBehaviour
     void Update()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int mouseCellPos = operateBoard.WorldToCell(mouseWorldPos);
-
+        Vector3Int operateBoardCellPos = operateBoard.WorldToCell(mouseWorldPos);
+        Vector3Int stuffBoardCellPos = stuffBoard.WorldToCell(mouseWorldPos);
+        // todo
+        stuffBoardCellPos.z = 0;
         if (isDragging)
         {
             // 恢复之前高亮的瓦片
@@ -37,10 +39,10 @@ public class Controller : MonoBehaviour
             UnmaskTetri();
 
             // 检查鼠标是否在 operateBoard 上
-            if (IsMouseOnOperateBoard(mouseCellPos))
+            if (IsMouseOnOperateBoard(operateBoardCellPos))
             {
                 // 根据选中的 tetri 的形状来高亮瓦片
-                MaskTetriToBoard(mouseCellPos);
+                MaskTetriToBoard(operateBoardCellPos);
             }
 
             // 在 stuffBoardMask 上给原来 stuff 的位置的瓦片加上 stuffMaskTile
@@ -52,9 +54,9 @@ public class Controller : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.collider != null && hit.collider.gameObject == stuffBoard.gameObject)
             {
-                Tetri tetri = selectTetri(mouseCellPos);
+                Tetri tetri = selectTetri(stuffBoardCellPos);
                 currentTetri = tetri;
-                draggingStuffPosition = mouseCellPos;
+                draggingStuffPosition = stuffBoardCellPos;
                 isDragging = true;
             }
         }
@@ -63,9 +65,9 @@ public class Controller : MonoBehaviour
         {
             if (isDragging)
             {
-                if (IsMouseOnOperateBoard(mouseCellPos))
+                if (IsMouseOnOperateBoard(operateBoardCellPos))
                 {
-                    SetTetri(mouseCellPos, setedTile);
+                    SetTetri(operateBoardCellPos, setedTile);
                 }
                 isDragging = false;
                 
@@ -205,6 +207,9 @@ public class Controller : MonoBehaviour
 
         // 清除 stuffBoard 上的 tetri 瓦片
         ClearTetriFromStuffBoard(draggingStuffPosition);
+
+        // 调用 OnSettlementConfirm
+        OnSettlementConfirm();
     }
 
     private void ClearTetriFromStuffBoard(Vector3Int basePosition)
@@ -269,6 +274,7 @@ public class Controller : MonoBehaviour
     {
         // 获取矩阵
         TileBase[,] matrix = boardState.GetMatrix();
+        List<int> rowsToReset = new List<int>();
 
         // 遍历每一行
         for (int y = 0; y < matrix.GetLength(1); y++)
@@ -287,56 +293,26 @@ public class Controller : MonoBehaviour
 
             if (allSeted)
             {
-                // TODO: 执行一些操作
-                Debug.Log("Row " + y + " is fully set.");
+                // 记录需要重置的行
+                rowsToReset.Add(y);
+                // Debug.Log("Row " + y + " is fully set.");
             }
             else
             {
-                Debug.Log("Row " + y + " is not fully set.");
+                // Debug.Log("Row " + y + " is not fully set.");
             }
         }
 
-        // 将所有瓦片设置回 normalTile 状态
-        boardState.ResetTiles(normalTile);
-
-        // 重新初始化 currentTileMatrix
-        InitializeBoardState();
-    }
-    private TileBase[,] ConvertDictionaryToMatrix(Dictionary<Vector3Int, TileBase> dictionary)
-    {
-        if (dictionary.Count == 0)
+        // 重置那些成行的方块
+        foreach (int y in rowsToReset)
         {
-            return new TileBase[0, 0];
+            for (int x = 0; x < matrix.GetLength(0); x++)
+            {
+                Vector3Int position = new Vector3Int(x + boardState.MinX, y + boardState.MinY, 0);
+                boardState.SetTile(position, normalTile);
+                operateBoard.SetTile(position, normalTile);
+            }
         }
-
-        // 找到最小和最大的 x 和 y 值
-        int minX = int.MaxValue, maxX = int.MinValue;
-        int minY = int.MaxValue, maxY = int.MinValue;
-
-        foreach (var kvp in dictionary)
-        {
-            Vector3Int pos = kvp.Key;
-            if (pos.x < minX) minX = pos.x;
-            if (pos.x > maxX) maxX = pos.x;
-            if (pos.y < minY) minY = pos.y;
-            if (pos.y > maxY) maxY = pos.y;
-        }
-
-        // 创建合适大小的二维数组
-        int width = maxX - minX + 1;
-        int height = maxY - minY + 1;
-        TileBase[,] matrix = new TileBase[width, height];
-
-        // 填充二维数组
-        foreach (var kvp in dictionary)
-        {
-            Vector3Int pos = kvp.Key;
-            int x = pos.x - minX;
-            int y = pos.y - minY;
-            matrix[x, y] = kvp.Value;
-        }
-
-        return matrix;
     }
 
     // 获取与指定位置相连的所有瓦片

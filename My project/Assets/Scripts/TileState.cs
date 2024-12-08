@@ -4,6 +4,8 @@ using UnityEngine.Tilemaps;
 
 public class BoardState
 {
+    public int MinX => minX;
+    public int MinY => minY;
     private Dictionary<Vector3Int, TileBase> tileDictionary;
     private TileBase[,] matrix;
     private int minX, maxX, minY, maxY;
