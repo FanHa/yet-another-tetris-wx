@@ -1,6 +1,8 @@
+#if !DISABLE_OBSOLETE_CLASSES
 using System.Collections.Generic;
 using UnityEngine;
 
+// todo to delete
 public class Tetri
 {
     public int[,] Shape { get; private set; }
@@ -62,3 +64,4 @@ public class Tetri
         return rotatedShape;
     }
 }
+#endif

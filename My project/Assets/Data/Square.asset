@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e0b0787fc68f7458172f67ff4d0719, type: 3}
+  m_Name: Square
+  m_EditorClassIdentifier: 
+  <IsStackable>k__BackingField: 0
+  <MaxStackSize>k__BackingField: 1
+  <UnitName>k__BackingField: Square
+  <UnitSprite>k__BackingField: {fileID: 7482667652216324306, guid: cc737ee54a83190479cb9b2103ea0e87, type: 3}
+  <Description>k__BackingField: A Basic Unit

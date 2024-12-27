@@ -1,3 +1,5 @@
+#if !DISABLE_OBSOLETE_CLASSES
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -97,3 +99,5 @@ public class DeckManager : MonoBehaviour
 
 
 }
+
+#endif

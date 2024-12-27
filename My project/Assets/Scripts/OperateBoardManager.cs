@@ -1,3 +1,4 @@
+#if !DISABLE_OBSOLETE_CLASSES
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -184,3 +185,4 @@ public class OperateBoardManager : MonoBehaviour
 
 
 }
+#endif

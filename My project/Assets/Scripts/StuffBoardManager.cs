@@ -1,3 +1,4 @@
+#if !DISABLE_OBSOLETE_CLASSES
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -111,3 +112,4 @@ public class StuffBoardManager : MonoBehaviour
     }
 
 }
+#endif

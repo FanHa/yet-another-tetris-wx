@@ -46,8 +46,8 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1920
   defaultScreenHeight: 1080
-  defaultScreenWidthWeb: 960
-  defaultScreenHeightWeb: 600
+  defaultScreenWidthWeb: 1080
+  defaultScreenHeightWeb: 1920
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 0
   unsupportedMSAAFallback: 0
@@ -637,7 +637,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    WeixinMiniGame: DISABLE_OBSOLETE_CLASSES
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
@@ -778,7 +779,7 @@ PlayerSettings:
     -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s TOTAL_MEMORY=256MB -s EXPORTED_RUNTIME_METHODS=''["ccall","cwrap","stackTrace","addRunDependency","removeRunDependency","FS_createPath","FS_createDataFile","stackTrace","writeStackCookie","checkStackCookie","lengthBytesUTF8","stringToUTF8"]''
     --profiling-funcs '
   weixinMiniGameModulesDirectory: 
-  weixinMiniGameTemplate: PATH:D:\Documents\GitHub\yet-another-tetris-wx\My project\Library\PackageCache\com.qq.weixin.minigame@65b7e86611\WebGLTemplates\WXTemplate2022TJ
+  weixinMiniGameTemplate: APPLICATION:Default
   weixinMiniGameAnalyzeBuildSize: 0
   weixinMiniGameUseEmbeddedResources: 0
   weixinMiniGameCompressionFormat: 2

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c6e8b8f8340a494db62a849b5a0ab97, type: 3}
+  m_Name: SetedBrick
+  m_EditorClassIdentifier: 
+  tile: {fileID: 11400000, guid: 70ef6f65ceb3dc64597c30d3c1a9909a, type: 2}
