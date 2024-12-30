@@ -15,7 +15,6 @@ namespace Model {
         public void SetTetriDragged(Tetri tetri)
         {
             draggedTetri = tetri;
-            Debug.Log($"Tetri set as dragged: {tetri}");
         }
 
         public Tetri GetDraggedTetri()
@@ -26,14 +25,18 @@ namespace Model {
         public void AddTetri(Tetri tetri)
         {
             tetriList.Add(tetri);
-            Debug.Log($"Tetri added: {tetri}");
             OnDataChanged?.Invoke(); // 触发数据变化事件
         }
 
         public void AddTetriRange(List<Tetri> tetriRange)
         {
             tetriList.AddRange(tetriRange);
-            Debug.Log($"Tetri range added: {tetriRange.Count} items");
+            OnDataChanged?.Invoke(); // 触发数据变化事件
+        }
+
+        public void ResetAllItems()
+        {
+            tetriList.Clear();
             OnDataChanged?.Invoke(); // 触发数据变化事件
         }
         
@@ -41,7 +44,7 @@ namespace Model {
         public void RemoveTetri(Tetri tetri)
         {
             tetriList.Remove(tetri);
-            Debug.Log($"Tetri removed: {tetri}");
+            OnDataChanged?.Invoke(); // 触发数据变化事件
         }
 
         public List<Tetri> GetAllTetris()

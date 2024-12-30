@@ -1336,6 +1336,42 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &949375413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 949375414}
+  m_Layer: 5
+  m_HasEditorInfo: 1
+  m_Name: Shadow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &949375414
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949375413}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1915951890}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &974353280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,13 +1537,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b06f1d166a834d84f9114556ef3b1e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stuffBoard: {fileID: 0}
-  maskBoard: {fileID: 0}
-  tile: {fileID: 11400000, guid: 70ef6f65ceb3dc64597c30d3c1a9909a, type: 2}
-  basketManager: {fileID: 2135908274}
-  stuffPrefab: {fileID: 4635504721957569760, guid: 19d290bd72adef04e8b48b932246f178, type: 3}
-  nextStuffId: 0
-  stuffsParent: {fileID: 0}
 --- !u!1 &1073752973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,7 +1840,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00022078402}
+  m_AnchoredPosition: {x: 0, y: 0.000020363526}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1159740592
@@ -1922,7 +1951,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 724160083}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999949
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2253,7 +2282,7 @@ Tilemap:
   m_Origin: {x: -5, y: -4, z: 0}
   m_Size: {x: 14, y: 12, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
-  m_TileOrientation: 0
+  m_TileOrientation: 2
   m_TileOrientationMatrix:
     e00: 1
     e01: 0
@@ -2339,14 +2368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6d43b2965120b43affc1f10c34748b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  operateBoard: {fileID: 1358694679}
-  operateBoardMask: {fileID: 559729320}
-  deckManager: {fileID: 708947902}
-  stuffBoardManager: {fileID: 1060670817}
-  operateBoardManager: {fileID: 2065957761}
-  currentStuff: {fileID: 0}
-  highlightedTiles: []
-  isDragging: 0
 --- !u!4 &1391442593
 Transform:
   m_ObjectHideFlags: 0
@@ -2399,6 +2420,7 @@ MonoBehaviour:
   tetrisResourcePanelUI: {fileID: 512681429}
   operationTableUI: {fileID: 2065957762}
   operationTableSO: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
+  assemblyMouseFollower: {fileID: 1915951891}
 --- !u!1 &1417879071
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,6 +3100,7 @@ RectTransform:
   - {fileID: 1073752974}
   - {fileID: 974353281}
   - {fileID: 512681425}
+  - {fileID: 1915951890}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3085,6 +3108,57 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1915951889
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1915951890}
+  - component: {fileID: 1915951891}
+  m_Layer: 5
+  m_HasEditorInfo: 1
+  m_Name: AssemblyMouseFollower
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1915951890
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915951889}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 949375414}
+  m_Father: {fileID: 1776533871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1915951891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915951889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae04423710005a1429193f78aa9054e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1776533870}
 --- !u!1 &1919272944
 GameObject:
   m_ObjectHideFlags: 0
@@ -3315,16 +3389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a02c35c2c0668647bb7ddbdba421662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tableBoard: {fileID: 1358694679}
-  maskBoard: {fileID: 559729320}
-  validTile: {fileID: 11400000, guid: f0240921741938146ab358a1e5dd36b7, type: 2}
-  invalidTile: {fileID: 11400000, guid: 78a0426fdacf19f4da4dcac3e2c52412, type: 2}
-  setedTile: {fileID: 11400000, guid: 70ef6f65ceb3dc64597c30d3c1a9909a, type: 2}
-  draggingStuff: {fileID: 0}
-  lastMouseCellPos: {x: 0, y: 0, z: 0}
-  validBounds:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 0, y: 0, z: 0}
 --- !u!114 &2065957762
 MonoBehaviour:
   m_ObjectHideFlags: 0

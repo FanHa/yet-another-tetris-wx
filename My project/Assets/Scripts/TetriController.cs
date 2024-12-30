@@ -11,8 +11,9 @@ public class TetriController : MonoBehaviour
     [SerializeField] private TetrisResourcePanel tetrisResourcePanelUI;
     [SerializeField] private OperationTable operationTableUI;
     [SerializeField] private OperationTableSO operationTableSO;
+    [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
 
-    private Model.Tetri currentDraggingTetri; // 保存当前拖动的Tetri
+    private TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
 
     private void Start()
     {
@@ -27,31 +28,35 @@ public class TetriController : MonoBehaviour
         Debug.Log($"TetrisResourceItem dropped at position: {position}");
 
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
-        operationTableSO.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
-        // todo 判断PlaceTetri是否成功
+        bool isPlaced = operationTableSO.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
 
         // 2. 解除currentDraggingTetri状态
         currentDraggingTetri = default;
+        assemblyMouseFollower.StopFollowing();
 
         // 3. 调用tetrisResourcesSO告诉它一个tetri已被移出了
-        tetrisResourcesSO.RemoveTetri(item.GetTetri());
+        if (isPlaced)
+        {
+            tetrisResourcesSO.RemoveTetri(item.GetTetri());
+        }
     }
 
-    private void HandleTetriBeginDrag(Tetri tetri)
+    private void HandleTetriBeginDrag(TetrisResourceItem item)
     {
         // 保存当前拖动的Tetri信息
-        currentDraggingTetri = tetri;
-        Debug.Log($"Tetri begin drag: {tetri}");
+        currentDraggingTetri = item;
+        assemblyMouseFollower.SetFollowItem(item);
+        assemblyMouseFollower.StartFollowing();
 
         // 调用TetrisResourcesSO的方法设置某个Tetri被拖动
-        tetrisResourcesSO.SetTetriDragged(tetri);
+        tetrisResourcesSO.SetTetriDragged(item.GetTetri());
     }
 
     private void InitializeResourcesPanel()
     {
         // 初始化资源面板
         tetrisResourcesSO.OnDataChanged += UpdateResourcesPanelUI;
-        tetrisResourcePanelUI.OnTetriBeginDrag += HandleTetriBeginDrag;
+        tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
         AddTestData();
 
     }
@@ -81,6 +86,7 @@ public class TetriController : MonoBehaviour
 
     private void AddTestData()
     {
+        tetrisResourcesSO.ResetAllItems();
         // 添加测试数据
         List<Tetri> testTetriList = new List<Tetri>
         {

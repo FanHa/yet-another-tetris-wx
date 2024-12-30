@@ -153,7 +153,7 @@ namespace Model
             return board;
         }
 
-        public void PlaceTetri(Vector2Int position, Tetri tetri)
+        public bool PlaceTetri(Vector2Int position, Tetri tetri)
         {
             // 检查是否可以放置Tetri
             for (int i = 0; i < tetri.shape.GetLength(0); i++)
@@ -162,14 +162,14 @@ namespace Model
                 {
                     if (tetri.shape[i, j] != 0)
                     {
-                        int x = position.x + i;
-                        int y = position.y + j;
+                        int x = position.x + j; // 调整行列索引
+                        int y = position.y - i ; // 调整行列索引
 
                         if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) 
                             || board[x, y].Tile != emptyBrick.Tile)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -182,8 +182,9 @@ namespace Model
                 {
                     if (tetri.shape[i, j] != 0)
                     {
-                        int x = position.x + i;
-                        int y = position.y + j;
+                       
+                        int x = position.x + j; // 调整行列索引
+                        int y = position.y - i ; // 调整行列索引
 
                         board[x, y] = Instantiate(setedBrick); // 使用一个示例Brick对象来填充棋盘
                         tetriBoard[x, y] = tetriList.Count + 1; // 记录当前格子属于哪个Tetri
@@ -197,6 +198,7 @@ namespace Model
 
             // 触发事件
             OnTableChanged?.Invoke();
+            return true;
         }
     }
 

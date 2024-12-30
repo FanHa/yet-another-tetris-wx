@@ -11,35 +11,12 @@ namespace UI {
     public class TetrisResourcePanel : MonoBehaviour
     {
         public event Action<Tetri> OnTetriClicked;
-        public event Action<Tetri> OnTetriBeginDrag;
+        public event Action<TetrisResourceItem> OnTetriResourceItemBeginDrag;
         [SerializeField] private GameObject tetriResourceItemPrefab; // 用于显示Tetri的预制件
         [SerializeField] private Transform panelTransform; // 用于显示Tetri的面板
 
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
 
-        // public void Init(List<Tetri> initialTetriList)
-        // {
-        //     tetriList = initialTetriList;
-        //     UpdatePanel();
-        // }
-
-        // public void AddTetri(Tetri tetri)
-        // {
-        //     tetriList.Add(tetri);
-        //     UpdatePanel();
-        // }
-
-        // public void AddTetriRange(List<Tetri> tetriRange)
-        // {
-        //     tetriList.AddRange(tetriRange);
-        //     UpdatePanel();
-        // }
-
-        // public void RemoveTetri(Tetri tetri)
-        // {
-        //     tetriList.Remove(tetri);
-        //     UpdatePanel();
-        // }
 
         public void UpdatePanel(List<Tetri> tetriList)
         {
@@ -67,7 +44,7 @@ namespace UI {
                 // ResetDraggedItem();
                 return;
             }
-            OnTetriBeginDrag?.Invoke(itemList[index].GetTetri());
+            OnTetriResourceItemBeginDrag?.Invoke(itemList[index]);
         }
 
         private void ResetDraggedItem()
