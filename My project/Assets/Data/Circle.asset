@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e0b0787fc68f7458172f67ff4d0719, type: 3}
   m_Name: Circle
   m_EditorClassIdentifier: 
-  <IsStackable>k__BackingField: 0
-  <MaxStackSize>k__BackingField: 1
   <UnitName>k__BackingField: Circle
   <UnitSprite>k__BackingField: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  <Prefab>k__BackingField: {fileID: 5840720245222542523, guid: 228c14437279f4c48948b88140d5bf8e, type: 3}
   <Description>k__BackingField: A Circle Unit

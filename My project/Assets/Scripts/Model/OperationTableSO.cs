@@ -15,17 +15,11 @@ namespace Model
         [SerializeField] private Brick setedBrick;
 
         private Brick[,] board; // 棋盘
-        private List<OperationTableTetri> tetriList; // 记录当前棋盘中的Tetri列表
-        private int[,] tetriBoard; // 记录每个格子属于哪个Tetri
-        private Dictionary<int, TetriInfo> tetriInfoDict; // 记录每个Tetri的信息
 
 
         public void Init(int rows, int columns)
         {
             board = new Brick[rows, columns];
-            tetriList = new List<OperationTableTetri>();
-            tetriBoard = new int[rows, columns];
-            tetriInfoDict = new Dictionary<int, TetriInfo>();
 
              // 初始化棋盘，将所有格子变为type为"Setable"的Brick
             for (int x = 0; x < rows; x++)
@@ -65,49 +59,13 @@ namespace Model
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 clearedBricks.Add(board[x, row]);
-                board[x, row] = new Brick(); // 清空该行的砖块
-                tetriBoard[x, row] = 0; // 更新tetriBoard
-            }
-
-            // 更新TetriInfo todo 这里有点重,是否真的有必要保存这个信息
-            foreach (var kvp in tetriInfoDict)
-            {
-                TetriInfo tetriInfo = kvp.Value;
-                bool tetriExists = false;
-
-                for (int i = 0; i < tetriInfo.tetri.shape.GetLength(0); i++)
+                if (board[x, row] != null)
                 {
-                    for (int j = 0; j < tetriInfo.tetri.shape.GetLength(1); j++)
-                    {
-                        int x = tetriInfo.startPoint.x + i;
-                        int y = tetriInfo.startPoint.y + j;
-
-                        if (x >= 0 && x < board.GetLength(0) && y >= 0 && y < board.GetLength(1) && board[x, y].Tile != emptyBrick.Tile)
-                        {
-                            tetriExists = true;
-                            break;
-                        }
-                    }
-
-                    if (tetriExists)
-                    {
-                        break;
-                    }
+                    Destroy(board[x, row]); // 销毁旧的Brick对象
                 }
-
-                tetriInfo.isActive = tetriExists;
-                tetriInfoDict[kvp.Key] = tetriInfo;
+                board[x, row] = Instantiate(emptyBrick); 
             }
 
-            // 更新tetriList
-            tetriList = new List<OperationTableTetri>();
-            foreach (var kvp in tetriInfoDict)
-            {
-                if (kvp.Value.isActive)
-                {
-                    tetriList.Add(new OperationTableTetri(kvp.Value.startPoint, kvp.Value.tetri));
-                }
-            }
 
             // 触发改变事件
             OnTableChanged?.Invoke();
@@ -135,18 +93,6 @@ namespace Model
             }
         }
 
-        public void PrintTetriBoard()
-        {
-            for (int i = 0; i < tetriBoard.GetLength(0); i++)
-            {
-                string row = "";
-                for (int j = 0; j < tetriBoard.GetLength(1); j++)
-                {
-                    row += tetriBoard[i, j] + " ";
-                }
-                Debug.Log(row);
-            }
-        }
 
         public Brick[,] GetBoardData()
         {
@@ -187,14 +133,10 @@ namespace Model
                         int y = position.y - i ; // 调整行列索引
 
                         board[x, y] = Instantiate(setedBrick); // 使用一个示例Brick对象来填充棋盘
-                        tetriBoard[x, y] = tetriList.Count + 1; // 记录当前格子属于哪个Tetri
                     }
                 }
             }
 
-            // 更新TetriInfo
-            tetriList.Add(new OperationTableTetri(position, tetri));
-            tetriInfoDict[tetriList.Count] = new TetriInfo(tetriList.Count, position, tetri);
 
             // 触发事件
             OnTableChanged?.Invoke();

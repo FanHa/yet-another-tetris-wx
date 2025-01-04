@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inventory.UI
+namespace UI
 {
-public class MouseFollower : MonoBehaviour
+public class InventoryMouseFollower : MonoBehaviour
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private InventoryItemUI item;
+    [SerializeField] private InventoryItem item;
 
     public void Awake()
     {
         canvas = transform.root.GetComponent<Canvas>();
-        item = GetComponentInChildren<InventoryItemUI>();
+        item = GetComponentInChildren<InventoryItem>();
     }
 
     public void SetData(Sprite sprite)
@@ -34,7 +34,6 @@ public class MouseFollower : MonoBehaviour
 
     public void Toggle(bool val)
     {
-        Debug.Log($"Item toggled {val}");
         gameObject.SetActive(val);
     }
 }

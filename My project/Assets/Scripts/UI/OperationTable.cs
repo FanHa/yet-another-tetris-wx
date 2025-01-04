@@ -104,10 +104,6 @@ namespace UI {
                 if (resourceItem != null)
                 {
                     Vector3Int cellPosition = tilemap.WorldToCell(eventData.pointerCurrentRaycast.worldPosition);
-
-                    // 处理TetrisResourceItem被拖动到当前区域的逻辑
-                    Debug.Log("TetrisResourceItem dropped in the operation table.");
-
                     // 触发事件，通知订阅者
                     OnTetriDropped?.Invoke(resourceItem, cellPosition);
                 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 public class BattlefieldController : MonoBehaviour
@@ -12,19 +13,18 @@ public class BattlefieldController : MonoBehaviour
     public float spawnIntervalB = 5f; // 刷新时间间隔
     public Color colorFactionA = Color.red; // 阵营A的颜色
     public Color colorFactionB = Color.blue; // 阵营B的颜色
-    private List<SpawnConfig> spawnConfigsA; // 阵营A的Unit生成配置列表
+
+
+    [SerializeField] private Model.Inventory inventoryData;
 
     // Start is called before the first frame update
     void Start()
     {
-        spawnConfigsA = GameDataManager.Instance.spawnConfigsA;
 
-        // 启动阵营A的生成协程
-        foreach (var config in spawnConfigsA)
+        foreach (var inventoryItem in inventoryData.Items)
         {
-            StartCoroutine(SpawnUnitsA(config));
+            StartCoroutine(SpawnUnitsA(inventoryItem));
         }
-
         // 启动阵营B的生成协程
         foreach (var config in spawnConfigsB)
         {
@@ -38,20 +38,21 @@ public class BattlefieldController : MonoBehaviour
         
     }
 
-    IEnumerator SpawnUnitsA(SpawnConfig config)
-    {
-        if (config.spawnInterval <= 0)
+    IEnumerator SpawnUnitsA(Model.InventoryItem item)
+    {   
+
+        if (item.spawnInterval <= 0)
         {
-            SpawnUnit(spawnPointA, config.unitPrefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+            SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
             yield break;
         }
         while (true)
         {
             // 刷新阵营A的Unit
-            SpawnUnit(spawnPointA, config.unitPrefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+            SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
 
             // 等待一段时间后再次刷新
-            yield return new WaitForSeconds(config.spawnInterval);
+            yield return new WaitForSeconds(item.spawnInterval);
         }
     }
 
@@ -118,4 +119,5 @@ public class BattlefieldController : MonoBehaviour
             spriteRenderer.color = factionColor;
         }
     }
+
 }

@@ -1,106 +1,90 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using Inventory.UI;
-using Inventory.Model;
+using UI;
+using Model;
 
-namespace Inventory {
-    public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviour
+{
+    public List<Model.CombatUnit> initialCombatUnits = new List<Model.CombatUnit>();
+    [SerializeField] private UI.Inventory inventoryUI;
+    [SerializeField] private Model.Inventory inventoryData;
+    
+    private void Start()
     {
-        public List<InventoryItem> initialItems = new List<InventoryItem>();
-
-        [SerializeField] private InventoryUI inventoryUI;
-        [SerializeField] private InventorySO inventoryData;
-
+        PrepareUI();
+        PrepareInventoryData();
+    }
+    private void PrepareUI()
+    {
+        inventoryUI.InitializeInventory(inventoryData.Size);
+        inventoryUI.OnDescriptionRequested += HandleDescriptionRequest;
+        inventoryUI.OnSwapItems += HandleSwapItems;
+        inventoryUI.OnStartDragging += HandleStartDragging;
+        inventoryUI.OnItemActionRequested += HandleItemActionRequest;
+    }
+    private void PrepareInventoryData()
+    {
+        inventoryData.Initialize();
+        inventoryData.OnInventoryChanged += UpdateInventoryUI;
+        foreach (var unit in initialCombatUnits)
+        {
+            inventoryData.AddCombatUnit(unit);
+        }
+    }
+    private void UpdateInventoryUI(Dictionary<int, Model.InventoryItem> inventoryState)
+    {
+        inventoryUI.ResetAllItems();
+        foreach (var item in inventoryState)
+        {
+            inventoryUI.UpdateData(item.Key, item.Value.Unit.UnitSprite);
+        }
+    }
+    private void HandleItemActionRequest(int itemIndex)
+    {
+        throw new NotImplementedException();
+    }
+    private void HandleStartDragging(int itemIndex)
+    {
+        Model.InventoryItem item = inventoryData.GetItemAt(itemIndex);
+        if (item.IsEmpty)
+        {
+            return;
+        }
+        inventoryUI.CreateDraggedItem(item.Unit.UnitSprite);
+    }
+    private void HandleSwapItems(int itemIndex_1, int itemIndex_2)
+    {
+        inventoryData.SwapItems(itemIndex_1, itemIndex_2);
+    }
+    private void HandleDescriptionRequest(int itemIndex)
+    {
+        Model.InventoryItem item = inventoryData.GetItemAt(itemIndex);
+        if (item.IsEmpty)
+        {
+            inventoryUI.ResetSelection();
+            return;
+        }
+        CombatUnit unit = item.Unit;
+        inventoryUI.UpdateDescription(itemIndex, unit.UnitSprite, unit.UnitName, unit.Description);
+    }
+    public void Update()
+    {
         
-        private void Start()
+    }
+    public void InventoryAction()
+    {
+        if (inventoryUI.gameObject.activeSelf)
         {
-            PrepareUI();
-            PrepareInventoryData();
+            inventoryUI.Hide();
         }
-
-        private void PrepareUI()
+        else
         {
-            inventoryUI.InitializeInventory(inventoryData.Size);
-            inventoryUI.OnDescriptionRequested += HandleDescriptionRequest;
-            inventoryUI.OnSwapItems += HandleSwapItems;
-            inventoryUI.OnStartDragging += HandleStartDragging;
-            inventoryUI.OnItemActionRequested += HandleItemActionRequest;
-        }
-
-        private void PrepareInventoryData()
-        {
-            inventoryData.Initialize();
-            inventoryData.OnInventoryChanged += UpdateInventoryUI;
-            foreach (var item in initialItems)
+            inventoryUI.Show();
+            foreach (var item in inventoryData.GetCurrentInventoryState())
             {
-                if (item.IsEmpty)
-                {
-                    continue;
-                }
-                inventoryData.AddItem(item);
-            }
-        }
-
-        private void UpdateInventoryUI(Dictionary<int, InventoryItem> inventoryState)
-        {
-            inventoryUI.ResetAllItems();
-            foreach (var item in inventoryState)
-            {
-                inventoryUI.UpdateData(item.Key, item.Value.unit.UnitSprite);
-            }
-        }
-
-        private void HandleItemActionRequest(int itemIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void HandleStartDragging(int itemIndex)
-        {
-            InventoryItem item = inventoryData.GetItemAt(itemIndex);
-            if (item.IsEmpty)
-            {
-                return;
-            }
-            inventoryUI.CreateDraggedItem(item.unit.UnitSprite);
-        }
-
-        private void HandleSwapItems(int itemIndex_1, int itemIndex_2)
-        {
-            inventoryData.SwapItems(itemIndex_1, itemIndex_2);
-        }
-
-        private void HandleDescriptionRequest(int itemIndex)
-        {
-            InventoryItem item = inventoryData.GetItemAt(itemIndex);
-            if (item.IsEmpty)
-            {
-                inventoryUI.ResetSelection();
-                return;
-            }
-            UnitSO unit = item.unit;
-            inventoryUI.UpdateDescription(itemIndex, unit.UnitSprite, unit.UnitName, unit.Description);
-        }
-
-        public void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                if (inventoryUI.gameObject.activeSelf)
-                {
-                    inventoryUI.Hide();
-                }
-                else
-                {
-                    inventoryUI.Show();
-                    foreach (var item in inventoryData.GetCurrentInventoryState())
-                    {
-                        inventoryUI.UpdateData(item.Key, item.Value.unit.UnitSprite);
-                    }
-                }
+                inventoryUI.UpdateData(item.Key, item.Value.Unit.UnitSprite);
             }
         }
     }

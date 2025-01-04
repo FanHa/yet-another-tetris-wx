@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Inventory.UI
+namespace UI
 {
 
-    public class InventoryUI : MonoBehaviour
+    public class Inventory : MonoBehaviour
     {
         public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
         public event Action<int, int> OnSwapItems;
-        [SerializeField] private InventoryItemUI itemPrefab;
+        [SerializeField] private InventoryItem itemPrefab;
         [SerializeField] private Transform contentPanel;
         [SerializeField] private InventoryDescription itemDescription;
-        [SerializeField] private MouseFollower mouseFollower;
-        List<InventoryItemUI> items = new List<InventoryItemUI>();
+        [SerializeField] private InventoryMouseFollower mouseFollower;
+        List<InventoryItem> items = new List<InventoryItem>();
         private int currentlyDraggedItemIndex = -1;
 
         private void Awake()
@@ -28,7 +28,7 @@ namespace Inventory.UI
         {
             for (int i = 0; i < size; i++)
             {
-                InventoryItemUI item = Instantiate(itemPrefab, contentPanel);
+                InventoryItem item = Instantiate(itemPrefab, contentPanel);
                 items.Add(item);
                 item.OnItemClicked += HandleItemSelection;
                 item.OnItemDroppedOn += HandleSwap;
@@ -46,17 +46,17 @@ namespace Inventory.UI
             }
         }
 
-        private void HandleShowItemActions(InventoryItemUI item)
+        private void HandleShowItemActions(InventoryItem item)
         {
             
         }
 
-        private void HandleEndDrag(InventoryItemUI item)
+        private void HandleEndDrag(InventoryItem item)
         {
             ResetDraggedItem();
         }
 
-        private void HandleSwap(InventoryItemUI item)
+        private void HandleSwap(InventoryItem item)
         {
             int index = items.IndexOf(item);
             if (index == -1)
@@ -74,7 +74,7 @@ namespace Inventory.UI
             currentlyDraggedItemIndex = -1;
         }
 
-        private void HandleBeginDrag(InventoryItemUI item)
+        private void HandleBeginDrag(InventoryItem item)
         {
             int index = items.IndexOf(item);
             if (index == -1)
@@ -92,7 +92,7 @@ namespace Inventory.UI
             mouseFollower.SetData(sprite);
             mouseFollower.Toggle(true);
         }
-        private void HandleItemSelection(InventoryItemUI item)
+        private void HandleItemSelection(InventoryItem item)
         {
             int index = items.IndexOf(item);
             if(index == -1)

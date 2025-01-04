@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1172427057965250130}
   - component: {fileID: 5952813581456553130}
   - component: {fileID: 200510645127040243}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Scroll View
   m_TagString: Untagged
@@ -120,9 +120,8 @@ GameObject:
   - component: {fileID: 6957550159202727617}
   - component: {fileID: 3772751043774166014}
   - component: {fileID: 5711541915497219467}
-  - component: {fileID: 1786857757896133133}
   - component: {fileID: 3986746670980404357}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Content
   m_TagString: Untagged
@@ -188,26 +187,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1786857757896133133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643414132445395281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &3986746670980404357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,8 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 300
-  m_MinHeight: -1
+  m_MinWidth: -1
+  m_MinHeight: 1400
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -238,7 +217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5091017088072240176}
   - component: {fileID: 3266659836513868503}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Content
   m_TagString: Untagged
@@ -262,7 +241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000016906295}
+  m_AnchoredPosition: {x: 0, y: 1.861645}
   m_SizeDelta: {x: -4.5248, y: 490.0394}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3266659836513868503
@@ -278,17 +257,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 20
-    m_Right: 20
-    m_Top: 20
-    m_Bottom: 20
+    m_Left: 50
+    m_Right: 50
+    m_Top: 50
+    m_Bottom: 50
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 20, y: 20}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_CellSize: {x: 300, y: 300}
+  m_Spacing: {x: 25, y: 25}
+  m_Constraint: 1
+  m_ConstraintCount: 3
 --- !u!1 &2878659403023486665
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +280,7 @@ GameObject:
   - component: {fileID: 2282971779436871750}
   - component: {fileID: 5353827037466479348}
   - component: {fileID: 5702484789831361446}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Viewport
   m_TagString: Untagged
@@ -392,7 +371,7 @@ GameObject:
   - component: {fileID: 4034137799868110686}
   - component: {fileID: 1667915121398689695}
   - component: {fileID: 1208598739535580359}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: ImageBoard
   m_TagString: Untagged
@@ -493,7 +472,7 @@ GameObject:
   serializedVersion: 7
   m_Component:
   - component: {fileID: 6527011980437571230}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Sliding Area
   m_TagString: Untagged
@@ -533,7 +512,7 @@ GameObject:
   - component: {fileID: 8233403965757621363}
   - component: {fileID: 7839371533122391374}
   - component: {fileID: 278190091103513981}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: DescriptionTxt
   m_TagString: Untagged
@@ -690,7 +669,7 @@ GameObject:
   - component: {fileID: 7371992199773393336}
   - component: {fileID: 3921316476893930765}
   - component: {fileID: 6585581668494874919}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: DescriptionPanel
   m_TagString: Untagged
@@ -815,7 +794,7 @@ GameObject:
   - component: {fileID: 694827537508308906}
   - component: {fileID: 2650684074114455809}
   - component: {fileID: 3802767541078134555}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: ImagePanel
   m_TagString: Untagged
@@ -913,7 +892,7 @@ GameObject:
   - component: {fileID: 7872988932353016016}
   - component: {fileID: 3755980029733753955}
   - component: {fileID: 2435595918573486140}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Scrollbar Vertical
   m_TagString: Untagged
@@ -1022,8 +1001,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5020373167244681314}
   m_HandleRect: {fileID: 4312159286307383380}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.8631959
+  m_Value: 0
+  m_Size: 0.64997184
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1039,7 +1018,7 @@ GameObject:
   - component: {fileID: 8389139815743793801}
   - component: {fileID: 4622301076154419212}
   - component: {fileID: 3233387270392287591}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Image
   m_TagString: Untagged
@@ -1115,7 +1094,7 @@ GameObject:
   - component: {fileID: 4312159286307383380}
   - component: {fileID: 6415420499677492002}
   - component: {fileID: 5020373167244681314}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Handle
   m_TagString: Untagged
@@ -1192,7 +1171,7 @@ GameObject:
   - component: {fileID: 3250948887940281513}
   - component: {fileID: 7937747840093252551}
   - component: {fileID: 376763331998085299}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: TitleTxt
   m_TagString: Untagged
@@ -1347,9 +1326,9 @@ GameObject:
   - component: {fileID: 8322048861285757132}
   - component: {fileID: 1505741686508654802}
   - component: {fileID: 1612902103882930234}
-  - component: {fileID: 4645157390321691861}
   - component: {fileID: 7451820877559608260}
-  m_Layer: 5
+  - component: {fileID: 9152654176207660580}
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Inventory
   m_TagString: Untagged
@@ -1374,7 +1353,7 @@ RectTransform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1416,32 +1395,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4645157390321691861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7562406848794871952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 20
-    m_Right: 20
-    m_Top: 20
-    m_Bottom: 20
-  m_ChildAlignment: 4
-  m_Spacing: 20
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!114 &7451820877559608260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,14 +1407,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3f7bfe044b6fe448f5e4a721e27839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 6ca47031a67f31a45bea49bc251583e1, type: 3}
-  sprite2: {fileID: 0}
-  title: Sword
-  description: Sword's description
   itemPrefab: {fileID: 8026325663875849544, guid: adc7018f3bb979349bde3bb32640180a, type: 3}
   contentPanel: {fileID: 5091017088072240176}
   itemDescription: {fileID: 4163043750443375820}
   mouseFollower: {fileID: 0}
+--- !u!114 &9152654176207660580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7562406848794871952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 20
+    m_Right: 20
+    m_Top: 20
+    m_Bottom: 20
+  m_ChildAlignment: 0
+  m_Spacing: 20
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &8152082813005052165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,7 +1450,7 @@ GameObject:
   - component: {fileID: 7061170228346574383}
   - component: {fileID: 1221122729747330517}
   - component: {fileID: 4163043750443375820}
-  m_Layer: 5
+  m_Layer: 11
   m_HasEditorInfo: 1
   m_Name: Description
   m_TagString: Untagged

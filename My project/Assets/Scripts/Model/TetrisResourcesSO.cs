@@ -52,6 +52,11 @@ namespace Model {
             return new List<Tetri>(tetriList);
         }
 
+        public bool IsEmpty()
+        {
+            return tetriList == null || tetriList.Count == 0;
+        }
+
         // 其他方法和属性
     }
 }

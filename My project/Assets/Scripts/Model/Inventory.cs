@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inventory.Model{
+namespace Model{
 
     [CreateAssetMenu]
-    public class InventorySO : ScriptableObject
+    [Serializable]
+    public class Inventory : ScriptableObject
     {
-        [SerializeField]
-        private List<InventoryItem> items;
+        [field: SerializeField] public List<InventoryItem> items;
 
         [field: SerializeField]
-        public int Size { get; private set; } = 10;
+        public int Size { get; private set; } = 12;
+
+        public IReadOnlyList<InventoryItem> Items => items;
 
         public event Action<Dictionary<int, InventoryItem>> OnInventoryChanged;
 
@@ -21,31 +23,26 @@ namespace Inventory.Model{
             items = new List<InventoryItem>();
             for (int i = 0; i < Size; i++)
             {
-                items.Add(InventoryItem.GetEmptyItem());
+                items.Add(new InventoryItem());
             }
         }
 
-        public void AddItem(UnitSO unit, int quantity)
+        public void AddCombatUnit(CombatUnit unit)
         {
             for (int i=0; i<items.Count; i++)
             {
                 if (items[i].IsEmpty)
                 {
-                    items[i] = new InventoryItem
-                    {
-                        unit = unit,
-                        quantity = quantity
-                    };
+                    var newItem = new InventoryItem();
+                    newItem.Unit = unit;
+                    items[i] = newItem;
                     return;
                 }
             }
+            // todo 如果找不到空位，应该怎么处理？
             InformAboutChange();
         }
 
-        public void AddItem(InventoryItem item)
-        {
-            AddItem(item.unit, item.quantity);
-        }
 
         public Dictionary<int, InventoryItem> GetCurrentInventoryState()
         {
@@ -81,30 +78,4 @@ namespace Inventory.Model{
         }
     }
 
-[Serializable]
-public struct InventoryItem
-{
-    public int quantity;
-    public UnitSO unit;
-
-    public bool IsEmpty => unit == null;
-
-    public InventoryItem ChangeQuantity(int newValue)
-    {
-        return new InventoryItem
-        {
-            quantity = newValue,
-            unit = unit
-        };
-    }
-
-    public static InventoryItem GetEmptyItem()
-    {
-        return new InventoryItem
-        {
-            quantity = 0,
-            unit = null
-        };
-    }
-}
 }
