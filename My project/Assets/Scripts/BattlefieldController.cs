@@ -9,13 +9,14 @@ public class BattlefieldController : MonoBehaviour
     public Transform spawnPointB; // 阵营B的复活点
     public Transform factionAParent; // 阵营A的父对象
     public Transform factionBParent; // 阵营B的父对象
-    public List<SpawnConfig> spawnConfigsB; // 阵营B的Unit生成配置列表
+    
     public float spawnIntervalB = 5f; // 刷新时间间隔
     public Color colorFactionA = Color.red; // 阵营A的颜色
     public Color colorFactionB = Color.blue; // 阵营B的颜色
 
 
     [SerializeField] private Model.Inventory inventoryData;
+    [SerializeField] private Model.Inventory enemyData;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +27,9 @@ public class BattlefieldController : MonoBehaviour
             StartCoroutine(SpawnUnitsA(inventoryItem));
         }
         // 启动阵营B的生成协程
-        foreach (var config in spawnConfigsB)
+        foreach (var enemyItem in enemyData.Items)
         {
-            StartCoroutine(SpawnUnitsB(config));
+            StartCoroutine(SpawnUnitsB(enemyItem));
         }
     }
 
@@ -56,15 +57,20 @@ public class BattlefieldController : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnUnitsB(SpawnConfig config)
+    IEnumerator SpawnUnitsB(Model.InventoryItem item)
     {
+        if (item.spawnInterval <= 0)
+        {
+            SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+            yield break;
+        }
         while (true)
         {
             // 刷新阵营B的Unit
-            SpawnUnit(spawnPointB, config.unitPrefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+            SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
 
             // 等待一段时间后再次刷新
-            yield return new WaitForSeconds(config.spawnInterval);
+            yield return new WaitForSeconds(item.spawnInterval);
         }
     }
 

@@ -440,11 +440,11 @@ MonoBehaviour:
   spawnPointB: {fileID: 977387751}
   factionAParent: {fileID: 377612667}
   factionBParent: {fileID: 577981219}
-  spawnConfigsB: []
   spawnIntervalB: 5
   colorFactionA: {r: 1, g: 0, b: 0, a: 1}
   colorFactionB: {r: 0, g: 0, b: 1, a: 1}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
+  enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
 --- !u!4 &295296813
 Transform:
   m_ObjectHideFlags: 0
@@ -535,7 +535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5091017088072240176, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000006172006
+      value: 0.00038003252
       objectReference: {fileID: 0}
     - target: {fileID: 5306519082754149889, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_AnchorMax.y

@@ -101,7 +101,6 @@ public class Unit : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHP -= damage;
-        Debug.Log("Unit took damage: " + damage + ", current HP: " + currentHP);
     }
 
     protected void CheckHealth()
@@ -109,7 +108,6 @@ public class Unit : MonoBehaviour
         if (currentHP <= 0)
         {
             Destroy(gameObject);
-            Debug.Log("Unit destroyed");
         }
     }
 
