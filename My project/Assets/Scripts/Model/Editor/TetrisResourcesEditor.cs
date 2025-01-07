@@ -10,16 +10,20 @@ namespace Model
         private SerializedProperty tetriListProperty;
         private SerializedProperty usedTetriListProperty;
         private SerializedProperty unusedTetriListProperty;
+        private SerializedProperty unusedTetriListTemplateProperty;
 
         private bool showTetriList = true;
         private bool showUsedTetriList = true;
         private bool showUnusedTetriList = true;
+        private bool showUnusedTetriListTemplate = true;
 
         private void OnEnable()
         {
             tetriListProperty = serializedObject.FindProperty("tetriList");
             usedTetriListProperty = serializedObject.FindProperty("usedTetriList");
             unusedTetriListProperty = serializedObject.FindProperty("unusedTetriList");
+            unusedTetriListTemplateProperty = serializedObject.FindProperty("unusedTetriListTemplate");
+
         }
 
         public override void OnInspectorGUI()
@@ -44,6 +48,11 @@ namespace Model
                 DrawList(unusedTetriListProperty);
             }
 
+            showUnusedTetriListTemplate = EditorGUILayout.Foldout(showUnusedTetriListTemplate, "Unused Tetri List Template");
+            if (showUnusedTetriListTemplate)
+            {
+                DrawList(unusedTetriListTemplateProperty);
+            }
             serializedObject.ApplyModifiedProperties();
         }
 

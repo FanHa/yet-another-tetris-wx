@@ -5,7 +5,7 @@ using UI;
 using Model;
 public class TetriController : MonoBehaviour
 {
-    [SerializeField] private TetrisResources tetrisResourcesSO;
+    [SerializeField] private TetrisResources tetrisResourcesData;
     [SerializeField] private TetrisResourcePanel tetrisResourcePanelUI;
     [SerializeField] private OperationTable operationTableUI;
     [SerializeField] private OperationTableSO operationTableSO;
@@ -36,10 +36,10 @@ public class TetriController : MonoBehaviour
         if (isPlaced)
         {
             operationTableSO.CheckAndClearFullRows();
-            tetrisResourcesSO.UseTetri(item.GetTetri());
+            tetrisResourcesData.UseTetri(item.GetTetri());
             // todo 删除测试代码
 
-            if (tetrisResourcesSO.IsEmpty())
+            if (tetrisResourcesData.IsEmpty())
             {
                 // AddTestData();
             }
@@ -55,15 +55,16 @@ public class TetriController : MonoBehaviour
         assemblyMouseFollower.StartFollowing();
 
         // 调用TetrisResourcesSO的方法设置某个Tetri被拖动
-        tetrisResourcesSO.SetTetriDragged(item.GetTetri());
+        tetrisResourcesData.SetTetriDragged(item.GetTetri());
     }
 
     private void InitializeResourcesPanel()
     {
-        UpdateResourcesPanelUI();
         // 初始化资源面板
-        tetrisResourcesSO.OnDataChanged += UpdateResourcesPanelUI;
+        tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
         tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
+        tetrisResourcesData.Reset();
+        tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
     }
 
     private void InitializeOperationTable()
@@ -95,7 +96,7 @@ public class TetriController : MonoBehaviour
     {
         
         // 更新资源面板UI
-        tetrisResourcePanelUI.UpdatePanel(tetrisResourcesSO.GetAllTetris());
+        tetrisResourcePanelUI.UpdatePanel(tetrisResourcesData.GetAllTetris());
     }
 
     private void OnDestroy()

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 namespace Model {
-    [CreateAssetMenu(fileName = "TetrisResources", menuName = "ScriptableObjects/TetrisResourcesSO", order = 1)]
+    [CreateAssetMenu(fileName = "TetrisResources", menuName = "ScriptableObjects/TetrisResources", order = 1)]
     public class TetrisResources : ScriptableObject
     {
         public event Action OnDataChanged;
@@ -18,9 +20,9 @@ namespace Model {
         [SerializeField]
         private List<Tetri> unusedTetriList = new List<Tetri>(); // 未使用的Tetri列表
 
-        // public IReadOnlyList<Tetri> TetriList => tetriList;
-        // public IReadOnlyList<Tetri> UsedTetriList => usedTetriList;
-        // public IReadOnlyList<Tetri> UnusedTetriList => unusedTetriList;
+        [SerializeField]
+        private List<Tetri> unusedTetriListTemplate = new List<Tetri>(); // 未使用的Tetri列表模板
+
 
         public void SetTetriDragged(Tetri tetri)
         {
@@ -30,6 +32,28 @@ namespace Model {
         public Tetri GetDraggedTetri()
         {
             return draggedTetri;
+        }
+
+        public void DrawRandomTetriFromUnusedList(int count)
+        {
+            if (unusedTetriList.Count < count)
+            {
+                // 如果unusedTetriList为空，将usedTetriList中的所有Tetri移动到unusedTetriList中
+                unusedTetriList.AddRange(usedTetriList);
+                usedTetriList.Clear();
+            }
+
+            // 随机抽取若干个Tetri
+            List<Tetri> drawnTetri = unusedTetriList.OrderBy(x => Guid.NewGuid()).Take(count).ToList();
+
+            // 从unusedTetriList中移除抽取的Tetri，并添加到tetriList中
+            foreach (var tetri in drawnTetri)
+            {
+                unusedTetriList.Remove(tetri);
+                tetriList.Add(tetri);
+            }
+
+            OnDataChanged?.Invoke();
         }
 
         public void AddUnusedTetri(Tetri tetri)
@@ -44,13 +68,7 @@ namespace Model {
             OnDataChanged?.Invoke();
         }
 
-        public void ResetAllItems()
-        {
-            tetriList.Clear();
-            OnDataChanged?.Invoke(); // 触发数据变化事件
-        }
         
-
         public void UseTetri(Tetri tetri)
         {
             tetriList.Remove(tetri);
@@ -68,6 +86,15 @@ namespace Model {
             return tetriList == null || tetriList.Count == 0;
         }
 
-        // 其他方法和属性
+        internal void Reset()
+        {
+            tetriList.Clear();
+            usedTetriList.Clear();
+            unusedTetriList.Clear();
+            // 将模板中的数据添加到unusedTetriList中
+            unusedTetriList.AddRange(unusedTetriListTemplate.Select(t => (Tetri)t.Clone()).ToList());
+
+            OnDataChanged?.Invoke(); // 触发数据变化事件
+        }
     }
 }

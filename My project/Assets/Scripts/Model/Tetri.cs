@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Model{
     [Serializable]
-    public class Tetri
+    public class Tetri : ICloneable
     {
         [SerializeField]
         public Serializable2DArray shape;
@@ -16,9 +16,12 @@ namespace Model{
             shape = new Serializable2DArray(4, 4);
         }
 
-        public Tetri(int rows, int cols)
+        public object Clone()
         {
-            shape = new Serializable2DArray(rows, cols);
+            return new Tetri
+            {
+                shape = (Serializable2DArray)this.shape.Clone()
+            };
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model
 {
     [Serializable]
-    public class Serializable2DArray
+    public class Serializable2DArray : ICloneable
     {
         [SerializeField]
         private int rows;
@@ -44,5 +44,13 @@ namespace Model
                 throw new IndexOutOfRangeException();
             }
         }
+
+        public object Clone()
+        {
+            Serializable2DArray clone = new Serializable2DArray(rows, cols);
+            Array.Copy(array, clone.array, array.Length);
+            return clone;
+        }
+
     }
 }
