@@ -102,11 +102,11 @@ namespace Model
         public bool PlaceTetri(Vector2Int position, Tetri tetri)
         {
             // 检查是否可以放置Tetri
-            for (int i = 0; i < tetri.shape.GetLength(0); i++)
+            for (int i = 0; i < tetri.Shape.GetLength(0); i++)
             {
-                for (int j = 0; j < tetri.shape.GetLength(1); j++)
+                for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.shape[i, j] != 0)
+                    if (tetri.Shape[i, j] != 0)
                     {
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
@@ -122,11 +122,11 @@ namespace Model
             }
 
             // 放置Tetri
-            for (int i = 0; i < tetri.shape.GetLength(0); i++)
+            for (int i = 0; i < tetri.Shape.GetLength(0); i++)
             {
-                for (int j = 0; j < tetri.shape.GetLength(1); j++)
+                for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.shape[i, j] != 0)
+                    if (tetri.Shape[i, j] != 0)
                     {
                        
                         int x = position.x + j; // 调整行列索引
@@ -153,17 +153,6 @@ namespace Model
         {
             this.startPoint = startPoint;
             this.tetri = tetri;
-        }
-    }
-
-    [Serializable]
-    public struct Tetri
-    {   
-        public int[,] shape; // tetri的形状
-
-        public Tetri(int[,] shape)
-        {
-            this.shape = shape;
         }
     }
 

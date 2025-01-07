@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: TetrisResources
   m_EditorClassIdentifier: 
   tetriList: []
+  usedTetriList: []
+  unusedTetriList: []

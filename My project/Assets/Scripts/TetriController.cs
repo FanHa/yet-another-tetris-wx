@@ -5,7 +5,7 @@ using UI;
 using Model;
 public class TetriController : MonoBehaviour
 {
-    [SerializeField] private TetrisResourcesSO tetrisResourcesSO;
+    [SerializeField] private TetrisResources tetrisResourcesSO;
     [SerializeField] private TetrisResourcePanel tetrisResourcePanelUI;
     [SerializeField] private OperationTable operationTableUI;
     [SerializeField] private OperationTableSO operationTableSO;
@@ -36,7 +36,7 @@ public class TetriController : MonoBehaviour
         if (isPlaced)
         {
             operationTableSO.CheckAndClearFullRows();
-            tetrisResourcesSO.RemoveTetri(item.GetTetri());
+            tetrisResourcesSO.UseTetri(item.GetTetri());
             // todo 删除测试代码
 
             if (tetrisResourcesSO.IsEmpty())
@@ -101,33 +101,33 @@ public class TetriController : MonoBehaviour
 
     private void AddTestData()
     {
-        tetrisResourcesSO.ResetAllItems();
-        // 添加测试数据
-        List<Tetri> testTetriList = new List<Tetri>
-        {
-            new Tetri(new int[,] 
-            { 
-                { 1, 1, 0, 0 }, 
-                { 1, 1, 0, 0 }, 
-                { 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0 } 
-            }),
-            new Tetri(new int[,] 
-            { 
-                { 1, 1, 1, 0 }, 
-                { 0, 1, 0, 0 }, 
-                { 0, 0, 0, 0 }, 
-                { 0, 0, 0, 0 } 
-            }),
-            new Tetri(new int[,] 
-            { 
-                { 1, 0, 0, 0 }, 
-                { 1, 1, 0, 0 }, 
-                { 1, 0, 0, 0 }, 
-                { 0, 0, 0, 0 } 
-            })
-        };
-        tetrisResourcesSO.AddTetriRange(testTetriList);
+        // tetrisResourcesSO.ResetAllItems();
+        // // 添加测试数据
+        // List<Tetri> testTetriList = new List<Tetri>
+        // {
+        //     new Tetri(new int[,] 
+        //     { 
+        //         { 1, 1, 0, 0 }, 
+        //         { 1, 1, 0, 0 }, 
+        //         { 0, 0, 0, 0 }, 
+        //         { 0, 0, 0, 0 } 
+        //     }),
+        //     new Tetri(new int[,] 
+        //     { 
+        //         { 1, 1, 1, 0 }, 
+        //         { 0, 1, 0, 0 }, 
+        //         { 0, 0, 0, 0 }, 
+        //         { 0, 0, 0, 0 } 
+        //     }),
+        //     new Tetri(new int[,] 
+        //     { 
+        //         { 1, 0, 0, 0 }, 
+        //         { 1, 1, 0, 0 }, 
+        //         { 1, 0, 0, 0 }, 
+        //         { 0, 0, 0, 0 } 
+        //     })
+        // };
+        // tetrisResourcesSO.AddUnusedTetriRange(testTetriList);
     }
 
     private void OnDestroy()

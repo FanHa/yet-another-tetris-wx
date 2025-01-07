@@ -10,7 +10,6 @@ public class BattlefieldController : MonoBehaviour
     public Transform factionAParent; // 阵营A的父对象
     public Transform factionBParent; // 阵营B的父对象
     
-    public float spawnIntervalB = 5f; // 刷新时间间隔
     public Color colorFactionA = Color.red; // 阵营A的颜色
     public Color colorFactionB = Color.blue; // 阵营B的颜色
 
@@ -24,6 +23,10 @@ public class BattlefieldController : MonoBehaviour
 
         foreach (var inventoryItem in inventoryData.Items)
         {
+            if (inventoryItem.IsEmpty)
+            {
+                continue;
+            }
             StartCoroutine(SpawnUnitsA(inventoryItem));
         }
         // 启动阵营B的生成协程

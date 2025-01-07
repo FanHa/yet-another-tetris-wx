@@ -87,12 +87,8 @@ public class Unit : MonoBehaviour
             if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
             {
                 // 发起攻击
-                Debug.Log("Attacking enemy: " + targetEnemy.name);
                 Unit enemyUnit = targetEnemy.GetComponent<Unit>();
-                if (enemyUnit != null)
-                {
-                    enemyUnit.TakeDamage(attackDamage);
-                }
+                enemyUnit?.TakeDamage(attackDamage);
                 lastAttackTime = Time.time;
             }
         }
