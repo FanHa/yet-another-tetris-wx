@@ -18,9 +18,9 @@ namespace Model {
         [SerializeField]
         private List<Tetri> unusedTetriList = new List<Tetri>(); // 未使用的Tetri列表
 
-        public IReadOnlyList<Tetri> TetriList => tetriList;
-        public IReadOnlyList<Tetri> UsedTetriList => usedTetriList;
-        public IReadOnlyList<Tetri> UnusedTetriList => unusedTetriList;
+        // public IReadOnlyList<Tetri> TetriList => tetriList;
+        // public IReadOnlyList<Tetri> UsedTetriList => usedTetriList;
+        // public IReadOnlyList<Tetri> UnusedTetriList => unusedTetriList;
 
         public void SetTetriDragged(Tetri tetri)
         {

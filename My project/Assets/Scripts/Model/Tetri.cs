@@ -11,6 +11,11 @@ namespace Model{
 
         public Serializable2DArray Shape => shape;
 
+        public Tetri()
+        {
+            shape = new Serializable2DArray(4, 4);
+        }
+
         public Tetri(int rows, int cols)
         {
             shape = new Serializable2DArray(rows, cols);

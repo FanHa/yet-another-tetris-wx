@@ -41,7 +41,7 @@ public class TetriController : MonoBehaviour
 
             if (tetrisResourcesSO.IsEmpty())
             {
-                AddTestData();
+                // AddTestData();
             }
 
         }
@@ -60,11 +60,10 @@ public class TetriController : MonoBehaviour
 
     private void InitializeResourcesPanel()
     {
+        UpdateResourcesPanelUI();
         // 初始化资源面板
         tetrisResourcesSO.OnDataChanged += UpdateResourcesPanelUI;
         tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
-        AddTestData();
-
     }
 
     private void InitializeOperationTable()
@@ -97,37 +96,6 @@ public class TetriController : MonoBehaviour
         
         // 更新资源面板UI
         tetrisResourcePanelUI.UpdatePanel(tetrisResourcesSO.GetAllTetris());
-    }
-
-    private void AddTestData()
-    {
-        // tetrisResourcesSO.ResetAllItems();
-        // // 添加测试数据
-        // List<Tetri> testTetriList = new List<Tetri>
-        // {
-        //     new Tetri(new int[,] 
-        //     { 
-        //         { 1, 1, 0, 0 }, 
-        //         { 1, 1, 0, 0 }, 
-        //         { 0, 0, 0, 0 }, 
-        //         { 0, 0, 0, 0 } 
-        //     }),
-        //     new Tetri(new int[,] 
-        //     { 
-        //         { 1, 1, 1, 0 }, 
-        //         { 0, 1, 0, 0 }, 
-        //         { 0, 0, 0, 0 }, 
-        //         { 0, 0, 0, 0 } 
-        //     }),
-        //     new Tetri(new int[,] 
-        //     { 
-        //         { 1, 0, 0, 0 }, 
-        //         { 1, 1, 0, 0 }, 
-        //         { 1, 0, 0, 0 }, 
-        //         { 0, 0, 0, 0 } 
-        //     })
-        // };
-        // tetrisResourcesSO.AddUnusedTetriRange(testTetriList);
     }
 
     private void OnDestroy()
