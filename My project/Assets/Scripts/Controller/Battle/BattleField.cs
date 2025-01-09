@@ -1,0 +1,150 @@
+using System.Collections;
+using System.Collections.Generic;
+using UI;
+using UnityEditor.SearchService;
+using UnityEngine;
+
+namespace Controller {
+    public class Battlefield : MonoBehaviour
+    {
+        private Dictionary<Unit.Faction, List<Unit>> factionUnits 
+            = new Dictionary<Unit.Faction, List<Unit>>();
+
+        public Transform spawnPointA; // 阵营A的复活点
+        public Transform spawnPointB; // 阵营B的复活点
+        public Transform factionAParent; // 阵营A的父对象
+        public Transform factionBParent; // 阵营B的父对象
+        
+        public Color colorFactionA = Color.red; // 阵营A的颜色
+        public Color colorFactionB = Color.blue; // 阵营B的颜色
+
+
+        [SerializeField] private Model.Inventory inventoryData;
+        [SerializeField] private Model.Inventory enemyData;
+
+        private Scene scene;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+             // 获取Scene组件
+            scene = GetComponent<Scene>();
+            if (scene == null)
+            {
+                Debug.LogError("Scene component not found on the object.");
+                return;
+            }
+
+            // 初始化字典
+            factionUnits[Unit.Faction.FactionA] = new List<Unit>();
+            factionUnits[Unit.Faction.FactionB] = new List<Unit>();
+
+
+            foreach (var inventoryItem in inventoryData.Items)
+            {
+                if (inventoryItem.IsEmpty)
+                {
+                    continue;
+                }
+                StartCoroutine(SpawnUnitsA(inventoryItem));
+            }
+            // 启动阵营B的生成协程
+            foreach (var enemyItem in enemyData.Items)
+            {
+                StartCoroutine(SpawnUnitsB(enemyItem));
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            
+        }
+
+        IEnumerator SpawnUnitsA(Model.InventoryItem item)
+        {   
+
+            if (item.spawnInterval <= 0)
+            {
+                SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+                yield break;
+            }
+            while (true)
+            {
+                // 刷新阵营A的Unit
+                SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+
+                // 等待一段时间后再次刷新
+                yield return new WaitForSeconds(item.spawnInterval);
+            }
+        }
+
+        IEnumerator SpawnUnitsB(Model.InventoryItem item)
+        {
+            if (item.spawnInterval <= 0)
+            {
+                SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+                yield break;
+            }
+            while (true)
+            {
+                // 刷新阵营B的Unit
+                SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+
+                // 等待一段时间后再次刷新
+                yield return new WaitForSeconds(item.spawnInterval);
+            }
+        }
+
+        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Color factionColor, Transform parent)
+        {
+            if (unitPrefab == null)
+            {
+                Debug.LogWarning("Unit prefab is null for faction: " + faction);
+                return;
+            }
+
+            // 生成随机偏移量
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-1f, 1f), // X轴随机偏移
+                Random.Range(-1f, 1f), // Y轴随机偏移
+                0f // Z轴保持不变
+            );
+            Vector3 spawnPosition = spawnPoint.position + randomOffset;
+            // 实例化Unit
+            GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
+            Unit unitComponent = newUnit.GetComponent<Unit>();
+            if (unitComponent != null)
+            {
+                unitComponent.unitFaction = faction;
+                // 监听死亡事件
+                unitComponent.OnDeath += OnUnitDeath;
+                // 加入到列表
+                factionUnits[faction].Add(unitComponent);
+            }
+
+            // 设置SpriteRenderer的颜色
+            SpriteRenderer spriteRenderer = newUnit.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = factionColor;
+            }
+        }
+
+        private void OnUnitDeath(Unit deadUnit)
+        {
+            // 从对应阵营里移除死亡单位
+            if (factionUnits.ContainsKey(deadUnit.unitFaction))
+            {
+                factionUnits[deadUnit.unitFaction].Remove(deadUnit);
+                // 如果某阵营单位列表为空，则表示该阵营全部阵亡
+                if (factionUnits[deadUnit.unitFaction].Count == 0)
+                {
+                    Debug.Log(deadUnit.unitFaction + " 全部死亡");
+                    // todo , 根据不同阵营全部死亡触发不同的情况
+                    scene.LoadScene("Setup");
+                }
+            }
+        }
+    }
+}

@@ -15,7 +15,7 @@ MonoBehaviour:
   items:
   - <Unit>k__BackingField: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
     spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
+  - <Unit>k__BackingField: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
     spawnInterval: 0
   - <Unit>k__BackingField: {fileID: 0}
     spawnInterval: 0

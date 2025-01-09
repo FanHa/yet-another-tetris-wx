@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Unit : MonoBehaviour
         FactionA,
         FactionB
     }
+
+    public event Action<Unit> OnDeath;
 
     public Faction unitFaction; // 单位的阵营
     public float moveSpeed = 5f; // 移动速度
@@ -37,7 +40,6 @@ public class Unit : MonoBehaviour
     {
         FindClosestEnemy();
         MoveTowardsEnemy();
-        CheckHealth();
         AttackEnemy();
     }
 
@@ -97,12 +99,14 @@ public class Unit : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHP -= damage;
+        CheckHealth();
     }
 
-    protected void CheckHealth()
+    private void CheckHealth()
     {
         if (currentHP <= 0)
         {
+            OnDeath?.Invoke(this);
             Destroy(gameObject);
         }
     }
