@@ -13,26 +13,54 @@ namespace UI {
         public event Action<Tetri> OnTetriClicked;
         public event Action<TetrisResourceItem> OnTetriResourceItemBeginDrag;
         [SerializeField] private GameObject tetriResourceItemPrefab; // 用于显示Tetri的预制件
-        [SerializeField] private Transform panelTransform; // 用于显示Tetri的面板
+
+        [SerializeField] private Transform usablePanelTransform;  // Panel for available Tetris pieces
+        [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
+        [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
+    
 
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
 
 
-        public void UpdatePanel(List<Tetri> tetriList)
+        public void UpdatePanels(List<Tetri> usableTetriList, List<Tetri> usedTetriList, List<Tetri> unusedTetriList)
         {
-            // 清空面板
-            foreach (Transform child in panelTransform)
+            // Clear all panels
+            ClearPanel(usablePanelTransform);
+            ClearPanel(usedPanelTransform);
+            ClearPanel(unusedPanelTransform);
+
+            // Clear item tracking list
+            itemList.Clear();
+
+            // Update usable panel
+            foreach (var tetri in usableTetriList)
             {
-                Destroy(child.gameObject);
+                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, usablePanelTransform, tetri);
+                resourceItem.OnItemClicked += HandleItemClicked;
+                resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
+                itemList.Add(resourceItem);
             }
 
-            // 按顺序显示Tetri
-            foreach (var tetri in tetriList)
+            // Update used panel
+            foreach (var tetri in usedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, panelTransform, tetri);
-                resourceItem.OnItemClicked += HandleItemClicked; // 添加点击事件
-                resourceItem.OnItemBeginDrag += HandleItemBeginDrag; // 添加开始拖动事件
-                itemList.Add(resourceItem);
+                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, usedPanelTransform, tetri);
+                resourceItem.OnItemClicked += HandleItemClicked;
+            }
+
+            // Update unused panel
+            foreach (var tetri in unusedTetriList)
+            {
+                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, unusedPanelTransform, tetri);
+                resourceItem.OnItemClicked += HandleItemClicked;
+            }
+        }
+
+        private void ClearPanel(Transform panel)
+        {
+            foreach (Transform child in panel)
+            {
+                Destroy(child.gameObject);
             }
         }
 

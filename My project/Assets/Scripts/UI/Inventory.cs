@@ -105,6 +105,8 @@ namespace UI
 
         public void Show()
         {
+            // todo 很奇怪的问题,这里必须SetActive两次在第一次调用后就成功将activeSelf设置为true
+            gameObject.SetActive(true);
             gameObject.SetActive(true);
             ResetSelection();
         }

@@ -12,9 +12,9 @@ namespace Model
         private SerializedProperty unusedTetriListProperty;
         private SerializedProperty unusedTetriListTemplateProperty;
 
-        private bool showTetriList = true;
-        private bool showUsedTetriList = true;
-        private bool showUnusedTetriList = true;
+        private bool showTetriList = false;
+        private bool showUsedTetriList = false;
+        private bool showUnusedTetriList = false;
         private bool showUnusedTetriListTemplate = true;
 
         private void OnEnable()

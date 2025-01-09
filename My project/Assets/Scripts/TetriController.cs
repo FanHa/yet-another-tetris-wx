@@ -96,7 +96,10 @@ public class TetriController : MonoBehaviour
     {
         
         // 更新资源面板UI
-        tetrisResourcePanelUI.UpdatePanel(tetrisResourcesData.GetAllTetris());
+        tetrisResourcePanelUI.UpdatePanels(
+            tetrisResourcesData.GetUsableTetris(),
+            tetrisResourcesData.GetUsedTetris(),
+            tetrisResourcesData.GetUnusedTetris());
     }
 
     private void OnDestroy()

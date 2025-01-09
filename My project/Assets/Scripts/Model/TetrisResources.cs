@@ -13,13 +13,10 @@ namespace Model {
 
         [SerializeField]
         private List<Tetri> tetriList = new List<Tetri>(); // 管理Tetri列表
-
         [SerializeField]
         private List<Tetri> usedTetriList = new List<Tetri>(); // 已使用的Tetri列表
-
         [SerializeField]
         private List<Tetri> unusedTetriList = new List<Tetri>(); // 未使用的Tetri列表
-
         [SerializeField]
         private List<Tetri> unusedTetriListTemplate = new List<Tetri>(); // 未使用的Tetri列表模板
 
@@ -76,9 +73,19 @@ namespace Model {
             OnDataChanged?.Invoke(); // 触发数据变化事件
         }
 
-        public List<Tetri> GetAllTetris()
+        public List<Tetri> GetUsableTetris()
         {
             return new List<Tetri>(tetriList);
+        }
+
+        public List<Tetri> GetUsedTetris()
+        {
+            return new List<Tetri>(usedTetriList);
+        }
+
+        public List<Tetri> GetUnusedTetris()
+        {
+            return new List<Tetri>(unusedTetriList);
         }
 
         public bool IsEmpty()

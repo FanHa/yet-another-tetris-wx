@@ -10,7 +10,6 @@ namespace Model{
         {
             EditorGUI.BeginProperty(position, label, property);
             
-            EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
             // 绘制标签
             EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 

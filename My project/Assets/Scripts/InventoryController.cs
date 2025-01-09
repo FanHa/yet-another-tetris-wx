@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Model;
+using Unity.VisualScripting;
 
 public class InventoryController : MonoBehaviour
 {
@@ -73,7 +74,7 @@ public class InventoryController : MonoBehaviour
     {
         
     }
-    public void InventoryAction()
+    public void ToggleInventory()
     {
         if (inventoryUI.gameObject.activeSelf)
         {

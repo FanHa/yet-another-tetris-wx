@@ -354,56 +354,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &223966536
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 223966538}
-  - component: {fileID: 223966537}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: GameDataManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &223966537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223966536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2c75373b225cf841b7e7f9af3bd3153, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnConfigsA:
-  - unitPrefab: {fileID: 5840720245222542523, guid: 228c14437279f4c48948b88140d5bf8e, type: 3}
-    spawnInterval: 0
-  - unitPrefab: {fileID: 789831601662553356, guid: da2f22e3999eb1540b3efae2cc27c314, type: 3}
-    spawnInterval: 5
---- !u!4 &223966538
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223966536}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 896.9414, y: 344.22952, z: -1.5304259}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &295296811
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +484,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5091017088072240176, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00074257783
+      value: 0.0007619534
       objectReference: {fileID: 0}
     - target: {fileID: 5306519082754149889, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2432,4 +2382,3 @@ SceneRoots:
   - {fileID: 1728011066}
   - {fileID: 514222173}
   - {fileID: 69176983}
-  - {fileID: 223966538}
