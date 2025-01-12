@@ -9,7 +9,7 @@ namespace Model{
     [Serializable]
     public class Inventory : ScriptableObject
     {
-        [field: SerializeField] public List<InventoryItem> items;
+        [field: SerializeField] private List<InventoryItem> items;
 
         [field: SerializeField]
         public int Size { get; private set; } = 12;

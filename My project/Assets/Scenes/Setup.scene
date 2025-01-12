@@ -3198,7 +3198,7 @@ GameObject:
   - component: {fileID: 974353283}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: InventoryUI
+  m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4553,10 +4553,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1391442591}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a40e9b19023f6545a9d3410db9fdda6, type: 3}
+  m_Script: {fileID: 11500000, guid: 50bdea73ea2aad548b8fa0690613bd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialCombatUnits: []
+  initialCombatUnits:
+  - {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
   inventoryUI: {fileID: 4151451581973223046}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
 --- !u!114 &1391442595
@@ -4574,7 +4575,7 @@ MonoBehaviour:
   tetrisResourcesData: {fileID: 11400000, guid: 273c05945e59e604f8b633b5e8ce89a7, type: 2}
   tetrisResourcePanelUI: {fileID: 512681429}
   operationTableUI: {fileID: 2065957762}
-  operationTableSO: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
+  operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
   assemblyMouseFollower: {fileID: 1915951891}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   testUnit: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
@@ -6044,7 +6045,7 @@ PrefabInstance:
       objectReference: {fileID: 1919272946}
     - target: {fileID: 7562406848794871952, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_Name
-      value: Inventory
+      value: InventoryUI
       objectReference: {fileID: 0}
     - target: {fileID: 7562406848794871952, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
       propertyPath: m_IsActive

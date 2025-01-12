@@ -2,31 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "OperationTableSO", menuName = "ScriptableObjects/OperationTableSO", order = 1)]
-    public class OperationTableSO : ScriptableObject
+    [CreateAssetMenu(fileName = "OperationTable", menuName = "ScriptableObjects/OperationTable", order = 1)]
+    public class OperationTable : ScriptableObject
     {
         public event Action OnTableChanged;
         public event Action<RowClearedInfo> OnRowCleared; // 定义事件，参数为RowClearedInfo
 
-        [SerializeField] private Brick emptyBrick; 
-        [SerializeField] private Brick setedBrick;
+        [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
+        [SerializeField] private Tile setedBrickTile; // 已放置砖块的Tile
 
-        private Brick[,] board; // 棋盘
+        [SerializeField] private Serializable2DArray<Brick> board; // 棋盘
 
 
         public void Init(int rows, int columns)
         {
-            board = new Brick[rows, columns];
+            board = new Serializable2DArray<Brick>(rows, columns);
 
              // 初始化棋盘，将所有格子变为type为"Setable"的Brick
             for (int x = 0; x < rows; x++)
             {
                 for (int y = 0; y < columns; y++)
                 {
-                    board[x, y] = Instantiate(emptyBrick); // 使用一个示例Brick对象来填充棋盘
+                    board[x, y] = new Brick(emptyBrickTile); // 使用一个实例Brick对象来填充棋盘
                 }
             }
         }
@@ -39,7 +40,7 @@ namespace Model
                 bool isFullRow = true;
                 for (int x = 0; x < board.GetLength(0); x++)
                 {
-                    if (board[x, y].Tile == emptyBrick.Tile)
+                    if (board[x, y].Tile == emptyBrickTile)
                     {
                         isFullRow = false;
                         break;
@@ -61,9 +62,9 @@ namespace Model
                 clearedBricks.Add(board[x, row]);
                 if (board[x, row] != null)
                 {
-                    Destroy(board[x, row]); // 销毁旧的Brick对象
+                    board[x, row] = null;
                 }
-                board[x, row] = Instantiate(emptyBrick); 
+                board[x, row] = new Brick(emptyBrickTile); 
             }
 
 
@@ -80,7 +81,7 @@ namespace Model
                 string row = "";
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i, j].Tile != emptyBrick.Tile)
+                    if (board[i, j].Tile != emptyBrickTile)
                     {
                         row += board[i, j].Tile + " ";
                     }
@@ -94,7 +95,7 @@ namespace Model
         }
 
 
-        public Brick[,] GetBoardData()
+        public Serializable2DArray<Brick> GetBoardData()
         {
             return board;
         }
@@ -112,7 +113,7 @@ namespace Model
                         int y = position.y - i ; // 调整行列索引
 
                         if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) 
-                            || board[x, y].Tile != emptyBrick.Tile)
+                            || board[x, y].Tile != emptyBrickTile)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
                             return false;
@@ -132,7 +133,7 @@ namespace Model
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
 
-                        board[x, y] = Instantiate(setedBrick); // 使用一个示例Brick对象来填充棋盘
+                        board[x, y] = new Brick(setedBrickTile); // 使用一个示例Brick对象来填充棋盘
                     }
                 }
             }
@@ -156,22 +157,6 @@ namespace Model
         }
     }
 
-    [Serializable]
-    public struct TetriInfo
-    {
-        public int index; // Tetri的索引
-        public Vector2Int startPoint; // Tetri的起始点
-        public Tetri tetri; // Tetri的形状
-        public bool isActive; // Tetri是否仍然存在于棋盘上
-
-        public TetriInfo(int index, Vector2Int startPoint, Tetri tetri)
-        {
-            this.index = index;
-            this.startPoint = startPoint;
-            this.tetri = tetri;
-            isActive = true;
-        }
-    }
 
     [Serializable]
     public struct RowClearedInfo

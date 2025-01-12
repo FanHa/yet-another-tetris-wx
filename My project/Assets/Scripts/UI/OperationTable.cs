@@ -14,15 +14,13 @@ namespace UI {
 
         [SerializeField] private Tilemap tilemap; // Tilemap组件
 
-        
-
-        private Brick[,] board; // 棋盘数据
+        // private Brick[,] board; // 棋盘数据
 
 
         // 注意: 这里是全量更新
-        public void UpdateData(Brick[,] newBoard)
+        public void UpdateData(Serializable2DArray<Brick> newBoard)
         {
-            board = newBoard;
+            var board = newBoard;
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 for (int y = 0; y < board.GetLength(1); y++)
@@ -31,63 +29,6 @@ namespace UI {
                 }
             }
         }
-
-        // public void PreviewTetri(Vector2Int startPoint, int[,] tetriShape)
-        // {
-        //     bool canPlace = true;
-
-        //     // 检查是否可以放置
-        //     for (int i = 0; i < tetriShape.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < tetriShape.GetLength(1); j++)
-        //         {
-        //             if (tetriShape[i, j] != 0)
-        //             {
-        //                 int x = startPoint.x + i;
-        //                 int y = startPoint.y + j;
-
-        //                 if (x < 0 || x >= rows || y < 0 || y >= columns || board[x, y] != 0)
-        //                 {
-        //                     canPlace = false;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //         if (!canPlace)
-        //         {
-        //             break;
-        //         }
-        //     }
-
-        //     // 预显示
-        //     for (int i = 0; i < tetriShape.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < tetriShape.GetLength(1); j++)
-        //         {
-        //             if (tetriShape[i, j] != 0)
-        //             {
-        //                 int x = startPoint.x + i;
-        //                 int y = startPoint.y + j;
-
-        //                 if (canPlace)
-        //                 {
-        //                     tilemap.SetTile(new Vector3Int(x, y, 0), occupiedTile);
-        //                 }
-        //                 else
-        //                 {
-        //                     tilemap.SetTile(new Vector3Int(x, y, 0), null); // 清除预显示
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     // 通知Controller数据改变
-        //     if (canPlace)
-        //     {
-        //         // 这里可以调用Controller的方法来通知数据改变
-        //         // Controller.Instance.OnTetriPreviewChanged(startPoint, tetriShape);
-        //     }
-        // }
 
         public void OnPointerClick(PointerEventData eventData)
         {

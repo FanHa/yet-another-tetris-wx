@@ -7,20 +7,20 @@ namespace Model{
     public class Tetri : ICloneable
     {
         [SerializeField]
-        public Serializable2DArray shape;
+        public Serializable2DArray<int> shape;
 
-        public Serializable2DArray Shape => shape;
+        public Serializable2DArray<int> Shape => shape;
 
         public Tetri()
         {
-            shape = new Serializable2DArray(4, 4);
+            shape = new Serializable2DArray<int>(4, 4);
         }
 
         public object Clone()
         {
             return new Tetri
             {
-                shape = (Serializable2DArray)this.shape.Clone()
+                shape = (Serializable2DArray<int>)this.shape.Clone()
             };
         }
     }

@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7895daf45178064e91cc3c8bfd77578, type: 3}
-  m_Name: OperationTableSO
+  m_Script: {fileID: 11500000, guid: 4e5d22fcf1e2f8e4ea5b043c496e8e49, type: 3}
+  m_Name: TetrisListTemplate
   m_EditorClassIdentifier: 
-  emptyBrick: {fileID: 11400000, guid: 5b98b6cfbc1c0c44ea863777c59cc111, type: 2}
-  setedBrick: {fileID: 11400000, guid: 5ea8a4da7ffa74947a939e5c40611567, type: 2}
+  template: []

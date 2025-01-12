@@ -1,33 +1,23 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using Model;
 
 namespace Model
 {
-    [CustomEditor(typeof(TetrisResources))]
-    public class TetrisResourcesEditor : BaseListEditor
+    [CustomEditor(typeof(TetrisListTemplate))]
+    public class TetrisListTemplateEditor : BaseListEditor
     {
-        private SerializedProperty tetriListProperty;
-        private SerializedProperty usedTetriListProperty;
-        private SerializedProperty unusedTetriListProperty;
+        private SerializedProperty unusedTetriListTemplateProperty;
 
         protected override void InitializeProperties()
         {
-            tetriListProperty = serializedObject.FindProperty("tetriList");
-            usedTetriListProperty = serializedObject.FindProperty("usedTetriList");
-            unusedTetriListProperty = serializedObject.FindProperty("unusedTetriList");
+            unusedTetriListTemplateProperty = serializedObject.FindProperty("unusedTetriListTemplate");
         }
 
         protected override void DrawCustomInspector()
         {
-            DrawList(tetriListProperty, "Tetri List");
-            EditorGUILayout.Space();
-
-            DrawList(usedTetriListProperty, "Used Tetri List");
-            EditorGUILayout.Space();
-
-            DrawList(unusedTetriListProperty, "Unused Tetri List");
-            EditorGUILayout.Space();
+            DrawList(unusedTetriListTemplateProperty, "Unused Tetri List Template");
         }
 
         protected override void InitializeElement(SerializedProperty elementProperty)

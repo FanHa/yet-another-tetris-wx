@@ -7,26 +7,31 @@ public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
     [SerializeField] private TetrisResourcePanel tetrisResourcePanelUI;
-    [SerializeField] private OperationTable operationTableUI;
-    [SerializeField] private OperationTableSO operationTableSO;
+    [SerializeField] private UI.OperationTable operationTableUI;
+    [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private Model.Inventory inventoryData;
 
     [SerializeField] private CombatUnit testUnit;
+    [SerializeField] private TetrisListTemplate tetrisListTemplate;
 
     private TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
+    private static bool isInitialized = false;
 
     private void Start()
     {
+   
         // 初始化资源面板和操作表
         InitializeResourcesPanel();
         InitializeOperationTable();
+        isInitialized = true;
+        
     }
 
     private void HandleTetriDropped(TetrisResourceItem item, Vector3Int position)
     {
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
-        bool isPlaced = operationTableSO.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
+        bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
 
         // 2. 解除currentDraggingTetri状态
         currentDraggingTetri = default;
@@ -35,7 +40,7 @@ public class TetriController : MonoBehaviour
         // 3. 调用tetrisResourcesSO告诉它一个tetri已被移出了
         if (isPlaced)
         {
-            operationTableSO.CheckAndClearFullRows();
+            operationTableData.CheckAndClearFullRows();
             tetrisResourcesData.UseTetri(item.GetTetri());
             // todo 删除测试代码
 
@@ -63,20 +68,27 @@ public class TetriController : MonoBehaviour
         // 初始化资源面板
         tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
         tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
-        tetrisResourcesData.Reset();
+        if (!isInitialized)
+        {
+            tetrisResourcesData.Reset();
+            tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
+        }
         tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
     }
 
     private void InitializeOperationTable()
     {
         
-        operationTableSO.OnTableChanged += UpdateOperationTableUI;
+        operationTableData.OnTableChanged += UpdateOperationTableUI;
         operationTableUI.OnTetriDropped += HandleTetriDropped;
-        operationTableSO.OnRowCleared += HandleOperationTableRowCleared;
+        operationTableData.OnRowCleared += HandleOperationTableRowCleared;
 
         // TODO delete magic number
-        operationTableSO.Init(10, 10); // 假设操作表大小为10x10
-        operationTableUI.UpdateData(operationTableSO.GetBoardData());
+        if (!isInitialized)
+        {
+            operationTableData.Init(10, 10);
+        }
+        UpdateOperationTableUI();
     }
 
     private void HandleOperationTableRowCleared(RowClearedInfo info)
@@ -89,7 +101,7 @@ public class TetriController : MonoBehaviour
     private void UpdateOperationTableUI()
     {
         // 更新操作表UI
-        operationTableUI.UpdateData(operationTableSO.GetBoardData());
+        operationTableUI.UpdateData(operationTableData.GetBoardData());
     }
 
     private void UpdateResourcesPanelUI()
@@ -105,7 +117,7 @@ public class TetriController : MonoBehaviour
     private void OnDestroy()
     {
         // 取消监听SO数据变化
-        operationTableSO.OnTableChanged -= UpdateOperationTableUI;
+        operationTableData.OnTableChanged -= UpdateOperationTableUI;
 
         // 取消监听UI的事件
         operationTableUI.OnTetriDropped -= HandleTetriDropped;

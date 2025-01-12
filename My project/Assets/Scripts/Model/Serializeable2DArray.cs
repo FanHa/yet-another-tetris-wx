@@ -4,23 +4,23 @@ using UnityEngine;
 namespace Model
 {
     [Serializable]
-    public class Serializable2DArray : ICloneable
+    public class Serializable2DArray<T> : ICloneable
     {
         [SerializeField]
         private int rows;
         [SerializeField]
         private int cols;
         [SerializeField]
-        private int[] array;
+        private T[] array;
 
         public Serializable2DArray(int rows, int cols)
         {
             this.rows = rows;
             this.cols = cols;
-            array = new int[rows * cols];
+            array = new T[rows * cols];
         }
 
-        public int this[int row, int col]
+        public T this[int row, int col]
         {
             get { return array[row * cols + col]; }
             set { array[row * cols + col] = value; }
@@ -47,7 +47,7 @@ namespace Model
 
         public object Clone()
         {
-            Serializable2DArray clone = new Serializable2DArray(rows, cols);
+            Serializable2DArray<T> clone = new Serializable2DArray<T>(rows, cols);
             Array.Copy(array, clone.array, array.Length);
             return clone;
         }

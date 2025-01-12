@@ -58,9 +58,14 @@ namespace UI {
 
         private void ClearPanel(Transform panel)
         {
+            if (panel == null) return;
+
             foreach (Transform child in panel)
             {
-                Destroy(child.gameObject);
+                if (child != null)
+                {
+                    Destroy(child.gameObject);
+                }
             }
         }
 

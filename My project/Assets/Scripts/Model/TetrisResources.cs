@@ -17,9 +17,6 @@ namespace Model {
         private List<Tetri> usedTetriList = new List<Tetri>(); // 已使用的Tetri列表
         [SerializeField]
         private List<Tetri> unusedTetriList = new List<Tetri>(); // 未使用的Tetri列表
-        [SerializeField]
-        private List<Tetri> unusedTetriListTemplate = new List<Tetri>(); // 未使用的Tetri列表模板
-
 
         public void SetTetriDragged(Tetri tetri)
         {
@@ -93,14 +90,17 @@ namespace Model {
             return tetriList == null || tetriList.Count == 0;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             tetriList.Clear();
             usedTetriList.Clear();
             unusedTetriList.Clear();
-            // 将模板中的数据添加到unusedTetriList中
-            unusedTetriList.AddRange(unusedTetriListTemplate.Select(t => (Tetri)t.Clone()).ToList());
+            OnDataChanged?.Invoke(); // 触发数据变化事件
+        }
 
+        public void InitialUnusedTetris(List<Tetri> tetris)
+        {
+            unusedTetriList.AddRange(tetris);
             OnDataChanged?.Invoke(); // 触发数据变化事件
         }
     }
