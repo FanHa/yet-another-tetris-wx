@@ -66,27 +66,31 @@ public class TetriController : MonoBehaviour
     private void InitializeResourcesPanel()
     {
         // 初始化资源面板
-        tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
         tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
         if (!isInitialized)
         {
+            tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
             tetrisResourcesData.Reset();
             tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
         }
         tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
+        UpdateResourcesPanelUI();
     }
 
     private void InitializeOperationTable()
     {
         
-        operationTableData.OnTableChanged += UpdateOperationTableUI;
         operationTableUI.OnTetriDropped += HandleTetriDropped;
-        operationTableData.OnRowCleared += HandleOperationTableRowCleared;
 
         // TODO delete magic number
         if (!isInitialized)
         {
             operationTableData.Init(10, 10);
+            // ScriptableObject 在场景切换过程中不会被销毁，所以不需要重新初始化事件订阅
+            operationTableData.OnTableChanged += UpdateOperationTableUI;
+            operationTableData.OnRowCleared += HandleOperationTableRowCleared;
+
+
         }
         UpdateOperationTableUI();
     }

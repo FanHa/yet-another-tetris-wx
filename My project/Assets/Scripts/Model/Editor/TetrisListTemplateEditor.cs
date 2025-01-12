@@ -12,7 +12,7 @@ namespace Model
 
         protected override void InitializeProperties()
         {
-            unusedTetriListTemplateProperty = serializedObject.FindProperty("unusedTetriListTemplate");
+            unusedTetriListTemplateProperty = serializedObject.FindProperty("template");
         }
 
         protected override void DrawCustomInspector()
@@ -20,16 +20,6 @@ namespace Model
             DrawList(unusedTetriListTemplateProperty, "Unused Tetri List Template");
         }
 
-        protected override void InitializeElement(SerializedProperty elementProperty)
-        {
-            SerializedProperty shapeProperty = elementProperty.FindPropertyRelative("shape");
-            shapeProperty.FindPropertyRelative("rows").intValue = 4;
-            shapeProperty.FindPropertyRelative("cols").intValue = 4;
-            shapeProperty.FindPropertyRelative("array").arraySize = 16;
-            for (int i = 0; i < 16; i++)
-            {
-                shapeProperty.FindPropertyRelative("array").GetArrayElementAtIndex(i).intValue = 0;
-            }
-        }
+
     }
 }

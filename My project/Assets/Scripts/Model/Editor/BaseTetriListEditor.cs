@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,9 +7,7 @@ namespace Model
     public abstract class BaseListEditor : Editor
     {
 
-        private bool showList = false;
-
-        protected virtual string ListName => "List";
+        private Dictionary<string, bool> showLists = new Dictionary<string, bool>();
 
         private void OnEnable()
         {
@@ -33,8 +32,14 @@ namespace Model
 
         protected void DrawList(SerializedProperty listProperty, string listName)
         {
-            showList = EditorGUILayout.Foldout(showList, listName);
-            if (showList)
+            if (!showLists.ContainsKey(listName))
+            {
+                showLists[listName] = false;
+            }
+
+            showLists[listName] = EditorGUILayout.Foldout(showLists[listName], listName);
+       
+            if (showLists[listName])
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(15f)); // 缩进
@@ -65,6 +70,16 @@ namespace Model
             }
         }
 
-        protected abstract void InitializeElement(SerializedProperty elementProperty);
+        protected void InitializeElement(SerializedProperty elementProperty)
+        {
+            SerializedProperty shapeProperty = elementProperty.FindPropertyRelative("shape");
+            shapeProperty.FindPropertyRelative("rows").intValue = 4;
+            shapeProperty.FindPropertyRelative("cols").intValue = 4;
+            shapeProperty.FindPropertyRelative("array").arraySize = 16;
+            for (int i = 0; i < 16; i++)
+            {
+                shapeProperty.FindPropertyRelative("array").GetArrayElementAtIndex(i).intValue = 0;
+            }
+        }
     }
 }

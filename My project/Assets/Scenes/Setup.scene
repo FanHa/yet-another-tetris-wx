@@ -4579,6 +4579,7 @@ MonoBehaviour:
   assemblyMouseFollower: {fileID: 1915951891}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   testUnit: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
+  tetrisListTemplate: {fileID: 11400000, guid: 0e37b766481c6f846b6507b26dfc7a58, type: 2}
 --- !u!114 &1391442596
 MonoBehaviour:
   m_ObjectHideFlags: 0

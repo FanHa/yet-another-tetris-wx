@@ -30,16 +30,5 @@ namespace Model
             EditorGUILayout.Space();
         }
 
-        protected override void InitializeElement(SerializedProperty elementProperty)
-        {
-            SerializedProperty shapeProperty = elementProperty.FindPropertyRelative("shape");
-            shapeProperty.FindPropertyRelative("rows").intValue = 4;
-            shapeProperty.FindPropertyRelative("cols").intValue = 4;
-            shapeProperty.FindPropertyRelative("array").arraySize = 16;
-            for (int i = 0; i < 16; i++)
-            {
-                shapeProperty.FindPropertyRelative("array").GetArrayElementAtIndex(i).intValue = 0;
-            }
-        }
     }
 }
