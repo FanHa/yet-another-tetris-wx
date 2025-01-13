@@ -14,8 +14,19 @@ namespace UI {
 
         [SerializeField] private Tilemap tilemap; // Tilemap组件
 
-        // private Brick[,] board; // 棋盘数据
-
+        private void OnEnable()
+        {
+            // todo 这里为什么需要加这个?
+            // 重新获取Tilemap引用
+            if (tilemap == null)
+            {
+                tilemap = GetComponent<Tilemap>();
+                if (tilemap == null)
+                {
+                    Debug.LogError("Tilemap component not found on the GameObject.");
+                }
+            }
+        }
 
         // 注意: 这里是全量更新
         public void UpdateData(Serializable2DArray<Brick> newBoard)

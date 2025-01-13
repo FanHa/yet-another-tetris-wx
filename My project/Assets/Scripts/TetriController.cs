@@ -18,6 +18,10 @@ public class TetriController : MonoBehaviour
     private TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
     private static bool isInitialized = false;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     private void Start()
     {
    
@@ -42,12 +46,6 @@ public class TetriController : MonoBehaviour
         {
             operationTableData.CheckAndClearFullRows();
             tetrisResourcesData.UseTetri(item.GetTetri());
-            // todo 删除测试代码
-
-            if (tetrisResourcesData.IsEmpty())
-            {
-                // AddTestData();
-            }
 
         }
     }
@@ -73,8 +71,8 @@ public class TetriController : MonoBehaviour
             tetrisResourcesData.Reset();
             tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
         }
-        tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
-        UpdateResourcesPanelUI();
+        tetrisResourcesData.DrawRandomTetriFromUnusedList(6);
+        // UpdateResourcesPanelUI();
     }
 
     private void InitializeOperationTable()
@@ -89,8 +87,6 @@ public class TetriController : MonoBehaviour
             // ScriptableObject 在场景切换过程中不会被销毁，所以不需要重新初始化事件订阅
             operationTableData.OnTableChanged += UpdateOperationTableUI;
             operationTableData.OnRowCleared += HandleOperationTableRowCleared;
-
-
         }
         UpdateOperationTableUI();
     }
@@ -120,9 +116,6 @@ public class TetriController : MonoBehaviour
 
     private void OnDestroy()
     {
-        // 取消监听SO数据变化
-        operationTableData.OnTableChanged -= UpdateOperationTableUI;
-
         // 取消监听UI的事件
         operationTableUI.OnTetriDropped -= HandleTetriDropped;
     }
