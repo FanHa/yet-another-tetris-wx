@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UI;
 using UnityEditor.SearchService;
 using UnityEngine;
+using static Unit;
 
 namespace Controller {
-    public class Battlefield : MonoBehaviour
+    public class BattleField : MonoBehaviour
     {
         private Dictionary<Unit.Faction, List<Unit>> factionUnits 
             = new Dictionary<Unit.Faction, List<Unit>>();
@@ -18,9 +20,13 @@ namespace Controller {
         public Color colorFactionA = Color.red; // 阵营A的颜色
         public Color colorFactionB = Color.blue; // 阵营B的颜色
 
+        public event Action<Faction> OnFactionDefeated;
+
 
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
+        private Coroutine spawnUnitsCoroutine;
+
 
         private Scene scene;
 
@@ -39,26 +45,38 @@ namespace Controller {
             factionUnits[Unit.Faction.FactionA] = new List<Unit>();
             factionUnits[Unit.Faction.FactionB] = new List<Unit>();
 
+        }
 
+        public void StartSpawningUnits()
+        {
+            spawnUnitsCoroutine = StartCoroutine(SpawnUnits());
+        }
+
+        public void StopSpawningUnits()
+        {
+            if (spawnUnitsCoroutine != null)
+            {
+                StopCoroutine(spawnUnitsCoroutine);
+                spawnUnitsCoroutine = null;
+            }
+        }
+
+        private IEnumerator SpawnUnits()
+        {
             foreach (var inventoryItem in inventoryData.Items)
             {
                 if (inventoryItem.IsEmpty)
                 {
                     continue;
                 }
-                StartCoroutine(SpawnUnitsA(inventoryItem));
+                yield return StartCoroutine(SpawnUnitsA(inventoryItem));
             }
+
             // 启动阵营B的生成协程
             foreach (var enemyItem in enemyData.Items)
             {
-                StartCoroutine(SpawnUnitsB(enemyItem));
+                yield return StartCoroutine(SpawnUnitsB(enemyItem));
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
         }
 
         IEnumerator SpawnUnitsA(Model.InventoryItem item)
@@ -106,8 +124,8 @@ namespace Controller {
 
             // 生成随机偏移量
             Vector3 randomOffset = new Vector3(
-                Random.Range(-1f, 1f), // X轴随机偏移
-                Random.Range(-1f, 1f), // Y轴随机偏移
+                UnityEngine.Random.Range(-1f, 1f), // X轴随机偏移
+                UnityEngine.Random.Range(-1f, 1f), // Y轴随机偏移
                 0f // Z轴保持不变
             );
             Vector3 spawnPosition = spawnPoint.position + randomOffset;
@@ -142,9 +160,22 @@ namespace Controller {
                 {
                     Debug.Log(deadUnit.unitFaction + " 全部死亡");
                     // todo , 根据不同阵营全部死亡触发不同的情况
-                    scene.LoadScene("Setup");
+                    OnFactionDefeated?.Invoke(deadUnit.unitFaction);
                 }
             }
         }
+
+        public void DestroyAllUnits()
+        {
+            foreach (var faction in factionUnits.Keys)
+            {
+                foreach (var unit in factionUnits[faction])
+                {
+                    Destroy(unit.gameObject);
+                }
+                factionUnits[faction].Clear();
+            }
+        }
+        
     }
 }

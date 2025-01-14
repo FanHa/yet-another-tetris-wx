@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Model;
+using Zenject;
+using System;
+using Controller;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
@@ -14,22 +17,57 @@ public class TetriController : MonoBehaviour
 
     [SerializeField] private CombatUnit testUnit;
     [SerializeField] private TetrisListTemplate tetrisListTemplate;
+    private Scene scene;
+    private BattleField battleField;
 
     private TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
-    private static bool isInitialized = false;
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        // 获取 Scene 和 BattleField 的引用
+        scene = GetComponent<Scene>();
+        battleField = GetComponent<BattleField>();
+
+        if (scene == null)
+        {
+            Debug.LogWarning("Scene component not found on the same GameObject.");
+        }
+
+        if (battleField == null)
+        {
+            Debug.LogWarning("BattleField component not found on the same GameObject.");
+        }
     }
+
     private void Start()
     {
-   
         // 初始化资源面板和操作表
         InitializeResourcesPanel();
         InitializeOperationTable();
-        isInitialized = true;
-        
+        InitializeSceneMonitor();
+        InitializeBattleField();
+    }
+
+    private void InitializeBattleField()
+    {
+        battleField.OnFactionDefeated += HandleFactionDefeated;
+
+    }
+
+    private void HandleFactionDefeated(Unit.Faction faction)
+    {
+        scene.SwitchToOperationPhase();
+    }
+
+    private void InitializeSceneMonitor()
+    {
+        scene.OnSwitchToOperationPhase += OnSwitchToOperationPhase;
+    }
+
+    private void OnSwitchToOperationPhase()
+    {
+        battleField.DestroyAllUnits();
+        tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
     }
 
     private void HandleTetriDropped(TetrisResourceItem item, Vector3Int position)
@@ -65,29 +103,21 @@ public class TetriController : MonoBehaviour
     {
         // 初始化资源面板
         tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
-        if (!isInitialized)
-        {
-            tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
-            tetrisResourcesData.Reset();
-            tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
-        }
+        tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
+        tetrisResourcesData.Reset();
+        tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
         tetrisResourcesData.DrawRandomTetriFromUnusedList(6);
-        // UpdateResourcesPanelUI();
     }
 
     private void InitializeOperationTable()
     {
         
         operationTableUI.OnTetriDropped += HandleTetriDropped;
-
         // TODO delete magic number
-        if (!isInitialized)
-        {
-            operationTableData.Init(10, 10);
-            // ScriptableObject 在场景切换过程中不会被销毁，所以不需要重新初始化事件订阅
-            operationTableData.OnTableChanged += UpdateOperationTableUI;
-            operationTableData.OnRowCleared += HandleOperationTableRowCleared;
-        }
+        operationTableData.Init(10, 10);
+        operationTableData.OnTableChanged += UpdateOperationTableUI;
+        operationTableData.OnRowCleared += HandleOperationTableRowCleared;
+
         UpdateOperationTableUI();
     }
 
