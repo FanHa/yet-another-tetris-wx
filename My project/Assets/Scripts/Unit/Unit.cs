@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
 
     public Faction unitFaction; // 单位的阵营
     public float moveSpeed = 5f; // 移动速度
-    public float attackRange = 1.5f; // 攻击范围
+    public float attackRange = 0.5f; // 攻击范围
     public float attackCooldown = 1f; // 攻击冷却时间
     public float maxHP = 100f; // 最大生命值
     public float attackDamage = 10f; // 攻击力
@@ -26,6 +26,17 @@ public class Unit : MonoBehaviour
     protected float lastAttackTime;
     private float currentHP;
     private Rigidbody2D rb;
+    private Animator animator;
+
+    private void Awake()
+    {
+        // 获取当前对象的 Animator 组件
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogWarning("Animator component not found on the same GameObject.");
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +44,7 @@ public class Unit : MonoBehaviour
         lastAttackTime = -attackCooldown; // 确保一开始就可以攻击
         currentHP = maxHP; // 初始化当前生命值
         rb = GetComponent<Rigidbody2D>(); // 获取 Rigidbody2D 组件
+
     }
 
     // Update is called once per frame
@@ -89,6 +101,7 @@ public class Unit : MonoBehaviour
             if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
             {
                 // 发起攻击
+                animator.SetTrigger("Attack");
                 Unit enemyUnit = targetEnemy.GetComponent<Unit>();
                 enemyUnit?.TakeDamage(attackDamage);
                 lastAttackTime = Time.time;
