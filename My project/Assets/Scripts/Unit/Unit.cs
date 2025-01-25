@@ -86,6 +86,7 @@ public class Unit : MonoBehaviour
             float distance = Vector2.Distance(transform.position, targetEnemy.position);
             if (distance > attackRange && distance > minDistance)
             {
+                // todo 调整自己的方向
                 Vector2 direction = (targetEnemy.position - transform.position).normalized;
                 Vector2 newPosition = Vector2.MoveTowards(rb.position, targetEnemy.position, moveSpeed * Time.deltaTime);
                 rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法

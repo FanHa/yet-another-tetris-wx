@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8e0b0787fc68f7458172f67ff4d0719, type: 3}
-  m_Name: BaseCombatUnit
+  m_Name: CombatUnit_Circle
   m_EditorClassIdentifier: 
   <UnitName>k__BackingField: Circle
-  <UnitSprite>k__BackingField: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  <Prefab>k__BackingField: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
+  <UnitSprite>k__BackingField: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
+  <Prefab>k__BackingField: {fileID: 300802932831866235, guid: aabc82f711935b44fad150d0cded41ad, type: 3}
   <Description>k__BackingField: A Circle Unit
