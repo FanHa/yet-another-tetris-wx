@@ -107,7 +107,7 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.Shape[i, j] != 0)
+                    if (tetri.Shape[i, j].type != TetriCell.CellType.Empty)
                     {
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
@@ -127,7 +127,7 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.Shape[i, j] != 0)
+                    if (tetri.Shape[i, j].type != TetriCell.CellType.Empty)
                     {
                        
                         int x = position.x + j; // 调整行列索引

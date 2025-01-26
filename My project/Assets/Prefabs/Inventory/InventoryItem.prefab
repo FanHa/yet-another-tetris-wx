@@ -88,8 +88,6 @@ GameObject:
   - component: {fileID: 7786008145949175244}
   - component: {fileID: 6690979427351752189}
   - component: {fileID: 8026325663875849544}
-  - component: {fileID: 3079754363355422395}
-  - component: {fileID: 7934826232320187502}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: InventoryItem
@@ -172,39 +170,3 @@ MonoBehaviour:
   inventoryItemSO:
     <Unit>k__BackingField: {fileID: 0}
     spawnInterval: 0
---- !u!114 &3079754363355422395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6596615027483412549}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.09927912, g: 0.9150943, b: 0.1256811, a: 0.5}
-  m_EffectDistance: {x: 10, y: -10}
-  m_UseGraphicAlpha: 1
---- !u!114 &7934826232320187502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6596615027483412549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7103e9f862f2b341ae746f4ef67c291, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tetri:
-    shape:
-      rows: 4
-      cols: 4
-      array: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  tetriBrickGroupPrefab: {fileID: 0}
-  tetriBrickPrefab: {fileID: 0}
-  gridParent: {fileID: 0}
-  operationTableTilemap: {fileID: 0}
