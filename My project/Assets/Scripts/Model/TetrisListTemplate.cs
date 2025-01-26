@@ -7,7 +7,7 @@ namespace Model{
     public class TetrisListTemplate : ScriptableObject
     {
         [SerializeField]
-        public List<Tetri> template = new List<Tetri>(); // 未使用的Tetri列表模板
+        public List<Tetri.Tetri> template = new List<Tetri.Tetri>(); // 未使用的Tetri列表模板
 
     }
 }

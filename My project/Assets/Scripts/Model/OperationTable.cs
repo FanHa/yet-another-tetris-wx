@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Model.Tetri;
 
 namespace Model
 {
@@ -100,7 +101,7 @@ namespace Model
             return board;
         }
 
-        public bool PlaceTetri(Vector2Int position, Tetri tetri)
+        public bool PlaceTetri(Vector2Int position, Tetri.Tetri tetri)
         {
             // 检查是否可以放置Tetri
             for (int i = 0; i < tetri.Shape.GetLength(0); i++)
@@ -148,9 +149,9 @@ namespace Model
     [Serializable]
     public struct OperationTableTetri {
         public Vector2Int startPoint; // 二维坐标作为起始点
-        public Tetri tetri; // 对外部Tetri结构的引用
+        public Tetri.Tetri tetri; // 对外部Tetri结构的引用
 
-        public OperationTableTetri(Vector2Int startPoint, Tetri tetri)
+        public OperationTableTetri(Vector2Int startPoint, Tetri.Tetri tetri)
         {
             this.startPoint = startPoint;
             this.tetri = tetri;

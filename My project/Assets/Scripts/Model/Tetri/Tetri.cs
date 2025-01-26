@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Model{
+namespace Model.Tetri
+{
     [CreateAssetMenu(fileName = "Tetri", menuName = "Tetri")]
     public class Tetri : ScriptableObject, ICloneable
     {
@@ -23,8 +24,19 @@ namespace Model{
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    shape[i, j] = new TetriCell();
+                    shape[i, j] = new TetriCellBasic();
                 }
+            }
+        }
+        public void SetCell(int row, int column, TetriCell cell)
+        {
+            if (row >= 0 && row < shape.GetLength(0) && column >= 0 && column < shape.GetLength(1))
+            {
+                shape[row, column] = cell;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid row or column index.");
             }
         }
 

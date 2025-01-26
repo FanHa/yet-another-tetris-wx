@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Model;
+using Model.Tetri;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 

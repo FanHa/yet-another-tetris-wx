@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
-using Tetri = Model.Tetri;
+using Model.Tetri;
 
 
 namespace UI {
