@@ -35,7 +35,7 @@ namespace UI {
             // Update usable panel
             foreach (var tetri in usableTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, usablePanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, usablePanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
                 resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
                 itemList.Add(resourceItem);
@@ -44,14 +44,14 @@ namespace UI {
             // Update used panel
             foreach (var tetri in usedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, usedPanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, usedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
 
             // Update unused panel
             foreach (var tetri in unusedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItem.CreateInstance(tetriResourceItemPrefab, unusedPanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, unusedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
         }

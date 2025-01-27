@@ -1,9 +1,10 @@
 using System.Data;
 using UnityEditor;
 using UnityEngine;
+using Model.Tetri;
 
 namespace Model{
-    [CustomPropertyDrawer(typeof(Tetri))]
+    [CustomPropertyDrawer(typeof(Tetri.Tetri))]
     public class TetriPropertyDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

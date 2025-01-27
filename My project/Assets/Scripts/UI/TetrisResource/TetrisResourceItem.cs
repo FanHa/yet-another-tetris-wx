@@ -25,15 +25,11 @@ namespace UI {
 
 
         private TetrisResourceItem() { } // 私有构造函数，防止直接实例化
-        public static TetrisResourceItem CreateInstance(GameObject prefab, Transform parent, Tetri tetri)
+        public void Initialize(Tetri tetri)
         {
-            GameObject instance = Instantiate(prefab, parent);
-            TetrisResourceItem resourceItem = instance.GetComponent<TetrisResourceItem>();
-            resourceItem.SetTetri(tetri);
-            GameObject tetriInstance = resourceItem.CreateGridImages();
-            tetriInstance.transform.SetParent(resourceItem.gridParent, false);
-
-            return resourceItem;
+            SetTetri(tetri);
+            GameObject tetriInstance = CreateGridImages();
+            tetriInstance.transform.SetParent(gridParent, false);
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -51,7 +47,7 @@ namespace UI {
             OnItemEndDrag?.Invoke(this);
         }
 
-        public void SetTetri(Tetri newTetri)
+        private void SetTetri(Tetri newTetri)
         {
             tetri = newTetri;
         }

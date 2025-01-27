@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Model
+namespace Model.Tetri
 {
     [CreateAssetMenu(fileName = "TetriCellTypeSpriteMapping", menuName = "Tetris/TetriCellTypeSpriteMapping")]
     public class TetriCellTypeSpriteMapping : ScriptableObject
