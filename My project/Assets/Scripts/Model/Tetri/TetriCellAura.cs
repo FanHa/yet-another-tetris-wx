@@ -11,7 +11,6 @@ namespace Model.Tetri
 
         public TetriCellAura(string auraEffect)
         {
-            type = CellType.Aura;
             this.auraEffect = auraEffect;
         }
 

@@ -11,7 +11,6 @@ namespace Model.Tetri
 
         public TetriCellSkill(string skillName)
         {
-            type = CellType.Skill;
             this.skillName = skillName;
         }
 

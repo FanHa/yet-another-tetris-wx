@@ -82,7 +82,7 @@ namespace UI {
                     Image image = imageObject.GetComponent<Image>();
 
                     // 根据Tetri的形状设置Image的显示
-                    if (tetri.Shape[i, j].type != TetriCell.CellType.Empty)
+                    if (!(tetri.Shape[i, j] is TetriCellEmpty))
                     {
                         image.color = Color.black; // 设置为黑色表示有方块
                     }

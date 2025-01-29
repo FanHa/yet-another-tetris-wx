@@ -4,11 +4,11 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellBasic : TetriCell
+    public class TetriCellCharacter : TetriCell
     {
         public override object Clone()
         {
-            return new TetriCellBasic();
+            return new TetriCellCharacter();
         }
     }
 }

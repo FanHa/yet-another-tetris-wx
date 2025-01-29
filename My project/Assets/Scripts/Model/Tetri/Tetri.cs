@@ -24,7 +24,7 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    shape[i, j] = new TetriCellBasic();
+                    shape[i, j] = new TetriCellEmpty();
                 }
             }
         }

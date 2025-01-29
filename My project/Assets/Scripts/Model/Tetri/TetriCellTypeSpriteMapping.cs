@@ -10,7 +10,7 @@ namespace Model.Tetri
         [Serializable]
         public struct CellTypeSpritePair
         {
-            public TetriCell.CellType cellType;
+            public string cellTypeName; // 类类型的名称
             public Sprite sprite;
         }
 
@@ -19,7 +19,7 @@ namespace Model.Tetri
 
         public List<CellTypeSpritePair> Mappings => mappings;
 
-        private Dictionary<TetriCell.CellType, Sprite> spriteDictionary;
+        private Dictionary<Type, Sprite> spriteDictionary;
 
         private void OnEnable()
         {
@@ -28,45 +28,34 @@ namespace Model.Tetri
 
         private void InitializeDictionary()
         {
-            spriteDictionary = new Dictionary<TetriCell.CellType, Sprite>();
+            spriteDictionary = new Dictionary<Type, Sprite>();
             foreach (var pair in mappings)
             {
-                spriteDictionary[pair.cellType] = pair.sprite;
+                Type cellType = Type.GetType(pair.cellTypeName);
+                if (cellType != null)
+                {
+                    spriteDictionary[cellType] = pair.sprite;
+                }
+                else
+                {
+                    Debug.LogWarning($"Type {pair.cellTypeName} not found.");
+                }
             }
         }
 
-        public Sprite GetSprite(TetriCell.CellType type)
+        public Sprite GetSprite(Type cellType)
         {
-            if (spriteDictionary.TryGetValue(type, out var sprite))
+            if (spriteDictionary.TryGetValue(cellType, out var sprite))
             {
                 return sprite;
             }
             return null;
         }
 
-        // private void OnValidate()
-        // {
-        //     // 确保每个 CellType 都有对应的 Sprite
-        //     var cellTypes = Enum.GetValues(typeof(TetriCell.CellType));
-        //     foreach (TetriCell.CellType cellType in cellTypes)
-        //     {
-        //         bool found = false;
-        //         foreach (var pair in mappings)
-        //         {
-        //             if (pair.cellType == cellType)
-        //             {
-        //                 found = true;
-        //                 break;
-        //             }
-        //         }
-        //         if (!found)
-        //         {
-        //             Debug.LogWarning($"CellType {cellType} does not have a corresponding Sprite.");
-        //         }
-        //     }
+        public Sprite GetSprite<T>() where T : TetriCell
+        {
+            return GetSprite(typeof(T));
+        }
 
-        //     // 重新初始化字典
-        //     InitializeDictionary();
-        // }
     }
 }

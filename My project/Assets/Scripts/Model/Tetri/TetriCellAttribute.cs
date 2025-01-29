@@ -11,7 +11,6 @@ namespace Model.Tetri
 
         public TetriCellAttribute(string attribute)
         {
-            type = CellType.IndividualAttribute;
             this.attribute = attribute;
         }
 
