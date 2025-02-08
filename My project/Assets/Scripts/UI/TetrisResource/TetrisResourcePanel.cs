@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 using Model.Tetri;
 
 
-namespace UI {
+namespace UI.TetrisResource {
     public class TetrisResourcePanel : MonoBehaviour
     {
         public event Action<Tetri> OnTetriClicked;

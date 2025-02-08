@@ -14,9 +14,5 @@ namespace Model.Tetri
             this.attribute = attribute;
         }
 
-        public override object Clone()
-        {
-            return new TetriCellAttribute(attribute);
-        }
     }
 }

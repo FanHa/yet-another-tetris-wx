@@ -1,17 +1,16 @@
 using System;
+using System.Runtime.Serialization;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Model
 {
     [Serializable]
-    public class Serializable2DArray<T> : ICloneable
+    public class Serializable2DArray<T>
     {
-        [SerializeField]
-        private int rows;
-        [SerializeField]
-        private int cols;
-        [SerializeField]
-        private T[] array;
+        [SerializeField] private int rows;
+        [SerializeField] private int cols;
+        [SerializeField] private T[] array;
 
         public Serializable2DArray(int rows, int cols)
         {
@@ -43,13 +42,6 @@ namespace Model
             {
                 throw new IndexOutOfRangeException();
             }
-        }
-
-        public object Clone()
-        {
-            Serializable2DArray<T> clone = new Serializable2DArray<T>(rows, cols);
-            Array.Copy(array, clone.array, array.Length);
-            return clone;
         }
 
     }

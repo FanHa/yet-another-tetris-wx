@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(fileName = "Tetri", menuName = "Tetri")]
-    public class Tetri : ScriptableObject, ICloneable
+    [Serializable]
+    public class Tetri
     {
         [SerializeField]
         private Serializable2DArray<TetriCell> shape;
@@ -38,14 +38,6 @@ namespace Model.Tetri
             {
                 Debug.LogWarning("Invalid row or column index.");
             }
-        }
-
-        public object Clone()
-        {
-            return new Tetri
-            {
-                shape = (Serializable2DArray<TetriCell>)this.shape.Clone()
-            };
         }
     }
 }

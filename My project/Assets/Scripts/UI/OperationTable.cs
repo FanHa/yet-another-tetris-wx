@@ -10,7 +10,7 @@ using UnityEngine.Tilemaps;
 namespace UI {
     public class OperationTable : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
-        public event Action<TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
+        public event Action<UI.TetrisResource.TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
 
         [SerializeField] private Tilemap tilemap; // Tilemap组件
 
@@ -52,7 +52,7 @@ namespace UI {
             GameObject draggedObject = eventData.pointerDrag;
             if (draggedObject != null)
             {
-                TetrisResourceItem resourceItem = draggedObject.GetComponent<TetrisResourceItem>();
+                UI.TetrisResource.TetrisResourceItem resourceItem = draggedObject.GetComponent<UI.TetrisResource.TetrisResourceItem>();
                 if (resourceItem != null)
                 {
                     Vector3Int cellPosition = tilemap.WorldToCell(eventData.pointerCurrentRaycast.worldPosition);

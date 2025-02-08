@@ -1,7 +1,7 @@
 using Model.Tetri;
 using UnityEngine;
 
-namespace UI{
+namespace UI.TetrisResource{
     public class TetrisResourceItemFactory
     {
         public static TetrisResourceItem CreateInstance(GameObject prefab, Transform parent, Tetri tetri)

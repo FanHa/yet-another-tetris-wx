@@ -1,12 +1,11 @@
-using System.Data;
 using UnityEditor;
 using UnityEngine;
-using Model.Tetri;
 
 namespace Model{
-    [CustomPropertyDrawer(typeof(Tetri.Tetri))]
-    public class TetriPropertyDrawer : PropertyDrawer
+    // [CustomPropertyDrawer(typeof(Tetri.Tetri))]
+    public class TetriDrawer : PropertyDrawer
     {
+        // todo OnEnbale 赋值各个property
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -40,7 +39,7 @@ namespace Model{
                     int index = i * cols + j;
                     SerializedProperty cellProperty = arrayProperty.GetArrayElementAtIndex(index);
                     Rect cellRect = new Rect(position.x + j * cellWidth, position.y + i * cellHeight, cellWidth, cellHeight);
-                    cellProperty.intValue = EditorGUI.IntField(cellRect, cellProperty.intValue);
+                    EditorGUI.PropertyField(cellRect, cellProperty, GUIContent.none, true);
                 }
             }
 

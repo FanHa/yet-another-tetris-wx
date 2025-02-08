@@ -14,9 +14,5 @@ namespace Model.Tetri
             this.auraEffect = auraEffect;
         }
 
-        public override object Clone()
-        {
-            return new TetriCellAura(auraEffect);
-        }
     }
 }

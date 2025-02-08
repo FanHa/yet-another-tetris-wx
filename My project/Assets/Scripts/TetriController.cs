@@ -9,7 +9,7 @@ using Controller;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
-    [SerializeField] private TetrisResourcePanel tetrisResourcePanelUI;
+    [SerializeField] private UI.TetrisResource.TetrisResourcePanel tetrisResourcePanelUI;
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
@@ -20,7 +20,7 @@ public class TetriController : MonoBehaviour
     private Scene scene;
     private BattleField battleField;
 
-    private TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
+    private UI.TetrisResource.TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
 
     private void Awake()
     {
@@ -70,7 +70,7 @@ public class TetriController : MonoBehaviour
         tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
     }
 
-    private void HandleTetriDropped(TetrisResourceItem item, Vector3Int position)
+    private void HandleTetriDropped(UI.TetrisResource.TetrisResourceItem item, Vector3Int position)
     {
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
         bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
@@ -88,7 +88,7 @@ public class TetriController : MonoBehaviour
         }
     }
 
-    private void HandleTetriBeginDrag(TetrisResourceItem item)
+    private void HandleTetriBeginDrag(UI.TetrisResource.TetrisResourceItem item)
     {
         // 保存当前拖动的Tetri信息
         currentDraggingTetri = item;

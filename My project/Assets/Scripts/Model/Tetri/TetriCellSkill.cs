@@ -14,9 +14,5 @@ namespace Model.Tetri
             this.skillName = skillName;
         }
 
-        public override object Clone()
-        {
-            return new TetriCellSkill(skillName);
-        }
     }
 }

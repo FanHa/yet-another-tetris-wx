@@ -7,10 +7,5 @@ namespace Model.Tetri
     public class TetriCellCharacterSquare : TetriCellCharacter
     {
 
-
-        public override object Clone()
-        {
-            return new TetriCellCharacterSquare();
-        }
     }
 }

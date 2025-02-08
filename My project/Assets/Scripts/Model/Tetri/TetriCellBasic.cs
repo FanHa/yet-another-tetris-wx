@@ -6,9 +6,5 @@ namespace Model.Tetri
     [Serializable]
     public class TetriCellBasic : TetriCell
     {
-        public override object Clone()
-        {
-            return new TetriCellBasic();
-        }
     }
 }

@@ -20,7 +20,7 @@ namespace Model
         {
             serializedObject.Update();
 
-             DrawCustomInspector();
+            DrawCustomInspector();
 
             serializedObject.ApplyModifiedProperties();
         }

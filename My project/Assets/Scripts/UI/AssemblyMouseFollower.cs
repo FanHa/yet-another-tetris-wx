@@ -47,7 +47,7 @@ namespace UI
                 }
 
         // 设置要跟随鼠标的图像
-        public void SetFollowItem(TetrisResourceItem item)
+        public void SetFollowItem(UI.TetrisResource.TetrisResourceItem item)
         {
             // 清理原来设置的item
             foreach (Transform child in transform)
