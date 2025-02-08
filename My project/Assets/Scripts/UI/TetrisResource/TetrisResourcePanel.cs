@@ -18,7 +18,7 @@ namespace UI.TetrisResource {
         [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
         [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
     
-
+        // todo 这个itemList的作用是啥?
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
 
 

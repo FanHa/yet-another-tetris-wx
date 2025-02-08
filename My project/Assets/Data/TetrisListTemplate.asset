@@ -13,24 +13,3 @@ MonoBehaviour:
   m_Name: TetrisListTemplate
   m_EditorClassIdentifier: 
   template: []
-  tetri:
-    shape:
-      rows: 4
-      cols: 4
-      array:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
