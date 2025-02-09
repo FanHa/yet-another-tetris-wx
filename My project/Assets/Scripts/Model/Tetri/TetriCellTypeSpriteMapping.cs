@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+
 
 namespace Model.Tetri
 {
@@ -8,18 +10,20 @@ namespace Model.Tetri
     public class TetriCellTypeSpriteMapping : ScriptableObject
     {
         [Serializable]
-        public struct CellTypeSpritePair
+        public struct CellTypeResourcePair
         {
             public string cellTypeName; // 类类型的名称
             public Sprite sprite;
+            public Tile tile;
         }
 
         [SerializeField]
-        private List<CellTypeSpritePair> mappings;
+        private List<CellTypeResourcePair> mappings;
 
-        public List<CellTypeSpritePair> Mappings => mappings;
+        public List<CellTypeResourcePair> Mappings => mappings;
 
-        private Dictionary<Type, Sprite> spriteDictionary;
+        private Dictionary<Type, CellTypeResourcePair> resourceDictionary;
+
 
         private void OnEnable()
         {
@@ -28,7 +32,7 @@ namespace Model.Tetri
 
         private void InitializeDictionary()
         {
-            spriteDictionary = new Dictionary<Type, Sprite>();
+            resourceDictionary = new Dictionary<Type, CellTypeResourcePair>();
             foreach (var pair in mappings)
             {
                 string fullTypeName = $"Model.Tetri.{pair.cellTypeName}";
@@ -36,7 +40,7 @@ namespace Model.Tetri
 
                 if (cellType != null)
                 {
-                    spriteDictionary[cellType] = pair.sprite;
+                    resourceDictionary[cellType] = pair;
                 }
                 else
                 {
@@ -47,17 +51,26 @@ namespace Model.Tetri
 
         public Sprite GetSprite(Type cellType)
         {
-            if (spriteDictionary.TryGetValue(cellType, out var sprite))
+            if (resourceDictionary.TryGetValue(cellType, out var pair))
             {
-                return sprite;
+                return pair.sprite;
             }
             return null;
         }
 
-        public Sprite GetSprite<T>() where T : TetriCell
+        public Tile GetTile(Type cellType)
         {
-            return GetSprite(typeof(T));
+            if (resourceDictionary.TryGetValue(cellType, out var pair))
+            {
+                return pair.tile;
+            }
+            return null;
         }
+
+        // public Sprite GetSprite<T>() where T : TetriCell
+        // {
+        //     return GetSprite(typeof(T));
+        // }
 
     }
 }

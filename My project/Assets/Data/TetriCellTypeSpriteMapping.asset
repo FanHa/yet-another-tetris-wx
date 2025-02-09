@@ -15,3 +15,4 @@ MonoBehaviour:
   mappings:
   - cellTypeName: TetriCellBasic
     sprite: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
+    tile: {fileID: 11400000, guid: f638864a32d665f42aacd07d55727ef4, type: 2}

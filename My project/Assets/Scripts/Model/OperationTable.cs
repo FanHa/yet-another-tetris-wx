@@ -14,9 +14,9 @@ namespace Model
         public event Action<RowClearedInfo> OnRowCleared; // 定义事件，参数为RowClearedInfo
 
         [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
-        [SerializeField] private Tile setedBrickTile; // 已放置砖块的Tile
 
         [SerializeField] private Serializable2DArray<Brick> board; // 棋盘
+        [SerializeField] private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
         public void Init(int rows, int columns)
@@ -128,13 +128,13 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (!(tetri.Shape[i, j] is TetriCellEmpty))
+                    var cell = tetri.Shape[i, j];
+                    if (cell is not TetriCellEmpty)
                     {
-                       
+                        var tile = spriteMapping.GetTile(cell.GetType());
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
-
-                        board[x, y] = new Brick(setedBrickTile); // 使用一个示例Brick对象来填充棋盘
+                        board[x, y] = new Brick(tile); // 使用一个示例Brick对象来填充棋盘
                     }
                 }
             }
