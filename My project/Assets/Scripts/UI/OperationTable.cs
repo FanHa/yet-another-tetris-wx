@@ -12,7 +12,9 @@ namespace UI {
     {
         public event Action<UI.TetrisResource.TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
 
+        [SerializeField] private Tilemap baseTileMap; // Tilemap组件
         [SerializeField] private Tilemap tilemap; // Tilemap组件
+        [SerializeField] private Tile baseTile;
 
         private void OnEnable()
         {
@@ -36,6 +38,7 @@ namespace UI {
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
+                    // baseTileMap.SetTile(new Vector3Int(x, y, 0), baseTile);
                     tilemap.SetTile(new Vector3Int(x, y, 0), board[x, y].Tile);
                 }
             }
