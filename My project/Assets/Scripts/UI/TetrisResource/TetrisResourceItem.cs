@@ -20,14 +20,16 @@ namespace UI.TetrisResource {
         [SerializeField] private GameObject tetriBrickGroupPrefab;
         [SerializeField] private GameObject tetriBrickPrefab; 
         [SerializeField] private Transform gridParent; // 4x4网格的父对象
-        [SerializeField] private Tilemap operationTableTilemap; // 用于表示grid的Tilemap
+
+        private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
 
         private TetrisResourceItem() { } // 私有构造函数，防止直接实例化
-        public void Initialize(Tetri tetri)
+        public void Initialize(Tetri tetri, TetriCellTypeSpriteMapping spriteMapping)
         {
             SetTetri(tetri);
+            this.spriteMapping = spriteMapping;
             GameObject tetriInstance = CreateGridImages();
             tetriInstance.transform.SetParent(gridParent, false);
         }
@@ -82,9 +84,19 @@ namespace UI.TetrisResource {
                     Image image = imageObject.GetComponent<Image>();
 
                     // 根据Tetri的形状设置Image的显示
-                    if (tetri.Shape[i, j] is not TetriCellEmpty)
+                    TetriCell cell = tetri.Shape[i, j];
+                    if (cell is not TetriCellEmpty)
                     {
-                        image.color = Color.black; // 设置为黑色表示有方块
+                        Sprite sprite = spriteMapping.GetSprite(cell.GetType());
+                        if (sprite != null)
+                        {
+                            image.sprite = sprite;
+                            image.color = Color.green; // 设置为白色表示有方块
+                        }
+                        else
+                        {
+                            image.color = Color.black; // 设置为黑色表示有方块但没有找到对应的sprite
+                        }
                     }
                     else
                     {

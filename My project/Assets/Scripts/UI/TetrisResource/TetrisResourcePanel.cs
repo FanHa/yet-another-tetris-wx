@@ -17,7 +17,7 @@ namespace UI.TetrisResource {
         [SerializeField] private Transform usablePanelTransform;  // Panel for available Tetris pieces
         [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
         [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
-    
+        [SerializeField] private TetriCellTypeSpriteMapping tetriCellTypeSpriteMapping; // Mapping of TetriCellType to Sprite
         // todo 这个itemList的作用是啥?
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
 
@@ -35,7 +35,9 @@ namespace UI.TetrisResource {
             // Update usable panel
             foreach (var tetri in usableTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, usablePanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
+                    tetriResourceItemPrefab, usablePanelTransform, tetri,
+                    tetriCellTypeSpriteMapping);
                 resourceItem.OnItemClicked += HandleItemClicked;
                 resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
                 itemList.Add(resourceItem);
@@ -44,14 +46,18 @@ namespace UI.TetrisResource {
             // Update used panel
             foreach (var tetri in usedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, usedPanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
+                    tetriResourceItemPrefab, usedPanelTransform, tetri,
+                    tetriCellTypeSpriteMapping);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
 
             // Update unused panel
             foreach (var tetri in unusedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(tetriResourceItemPrefab, unusedPanelTransform, tetri);
+                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
+                    tetriResourceItemPrefab, unusedPanelTransform, tetri,
+                    tetriCellTypeSpriteMapping);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
         }

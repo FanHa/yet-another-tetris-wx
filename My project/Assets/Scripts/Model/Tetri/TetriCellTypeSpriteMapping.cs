@@ -31,7 +31,9 @@ namespace Model.Tetri
             spriteDictionary = new Dictionary<Type, Sprite>();
             foreach (var pair in mappings)
             {
-                Type cellType = Type.GetType(pair.cellTypeName);
+                string fullTypeName = $"Model.Tetri.{pair.cellTypeName}";
+                Type cellType = Type.GetType(fullTypeName);
+
                 if (cellType != null)
                 {
                     spriteDictionary[cellType] = pair.sprite;

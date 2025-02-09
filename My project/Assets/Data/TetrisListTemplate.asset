@@ -12,4 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e5d22fcf1e2f8e4ea5b043c496e8e49, type: 3}
   m_Name: TetrisListTemplate
   m_EditorClassIdentifier: 
-  template: []
+  template:
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4
+  - shape:
+      rows: 4
+      cols: 4

@@ -4,13 +4,15 @@ using UnityEngine;
 namespace UI.TetrisResource{
     public class TetrisResourceItemFactory
     {
-        public static TetrisResourceItem CreateInstance(GameObject prefab, Transform parent, Tetri tetri)
+        public static TetrisResourceItem CreateInstance(
+            GameObject prefab, Transform parent, Tetri tetri,
+            TetriCellTypeSpriteMapping tetriCellTypeSpriteMapping)
         {
             GameObject instance = Object.Instantiate(prefab, parent);
             TetrisResourceItem resourceItem = instance.GetComponent<TetrisResourceItem>();
             if (resourceItem != null)
             {
-                resourceItem.Initialize(tetri);
+                resourceItem.Initialize(tetri, tetriCellTypeSpriteMapping);
             }
             return resourceItem;
         }
