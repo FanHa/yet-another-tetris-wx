@@ -14,5 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mappings:
   - cellTypeName: TetriCellBasic
-    sprite: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
+    sprite: {fileID: 21300000, guid: 946ed84c2e2e1ac4593ab184093a7017, type: 3}
     tile: {fileID: 11400000, guid: f638864a32d665f42aacd07d55727ef4, type: 2}
+  - cellTypeName: TetriCellCharacterCircle
+    sprite: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
+    tile: {fileID: 11400000, guid: d22aaa6512717004888f0aac35b6a816, type: 2}
+  - cellTypeName: TetriCellCharacterTriangle
+    sprite: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
+    tile: {fileID: 11400000, guid: 958eb7d687a5f834babae3e64915b766, type: 2}
