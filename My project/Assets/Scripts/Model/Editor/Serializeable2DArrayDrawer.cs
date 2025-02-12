@@ -6,7 +6,7 @@ using Model;
 using Model.Tetri;
 
 namespace Model {
-    [CustomPropertyDrawer(typeof(Serializable2DArray<TetriCell>))]
+    [CustomPropertyDrawer(typeof(Serializable2DArray<>))]
     public class Serializable2DArrayDrawer : PropertyDrawer
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
