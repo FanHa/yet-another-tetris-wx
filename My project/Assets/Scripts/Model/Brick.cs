@@ -1,3 +1,4 @@
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,13 +7,15 @@ namespace Model
     [System.Serializable]
     public class Brick
     {
-        [SerializeField] private TileBase tile; // 砖块的Tile
+        // [SerializeField] private TileBase tile; // 砖块的Tile
+        [SerializeField] private TetriCell cell; // 砖块包含的Cell
 
-        public TileBase Tile => tile; // 只读属性
+        public TetriCell Cell => cell; // 只读属性
+        // public TileBase Tile => tile; // 只读属性
 
-        public Brick(TileBase tile)
+        public Brick(TetriCell cell)
         {
-            this.tile = tile;
+            this.cell = cell;
         }
 
     }

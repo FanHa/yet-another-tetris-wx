@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Model.Tetri;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace Model
 {
@@ -28,7 +29,7 @@ namespace Model
             {
                 for (int y = 0; y < columns; y++)
                 {
-                    board[x, y] = new Brick(emptyBrickTile); // 使用一个实例Brick对象来填充棋盘
+                    board[x, y] = new Brick(new TetriCellEmpty()); // 使用一个实例Brick对象来填充棋盘
                 }
             }
         }
@@ -41,7 +42,7 @@ namespace Model
                 bool isFullRow = true;
                 for (int x = 0; x < board.GetLength(0); x++)
                 {
-                    if (board[x, y].Tile == emptyBrickTile)
+                    if (board[x, y].Cell is TetriCellEmpty)
                     {
                         isFullRow = false;
                         break;
@@ -65,7 +66,7 @@ namespace Model
                 {
                     board[x, row] = null;
                 }
-                board[x, row] = new Brick(emptyBrickTile); 
+                board[x, row] = new Brick(new TetriCellEmpty()); // 使用一个示例Brick对象来填充棋盘
             }
 
 
@@ -82,9 +83,9 @@ namespace Model
                 string row = "";
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i, j].Tile != emptyBrickTile)
+                    if (board[i, j].Cell is not TetriCellEmpty)
                     {
-                        row += board[i, j].Tile + " ";
+                        row += board[i, j].Cell + " ";
                     }
                     else
                     {
@@ -108,13 +109,13 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (!(tetri.Shape[i, j] is TetriCellEmpty))
+                    if (tetri.Shape[i, j] is not TetriCellEmpty)
                     {
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
 
                         if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) 
-                            || board[x, y].Tile != emptyBrickTile)
+                            || board[x, y].Cell is not TetriCellEmpty)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
                             return false;
@@ -128,13 +129,13 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    var cell = tetri.Shape[i, j];
+                    TetriCell cell = tetri.Shape[i, j];
                     if (cell is not TetriCellEmpty)
                     {
-                        var tile = spriteMapping.GetTile(cell.GetType());
+                        // var tile = spriteMapping.GetTile(cell.GetType());
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
-                        board[x, y] = new Brick(tile); // 使用一个示例Brick对象来填充棋盘
+                        board[x, y] = new Brick(cell); // 使用一个示例Brick对象来填充棋盘
                     }
                 }
             }

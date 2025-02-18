@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Model;
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -15,6 +16,8 @@ namespace UI {
         [SerializeField] private Tilemap baseTileMap; // Tilemap组件
         [SerializeField] private Tilemap tilemap; // Tilemap组件
         [SerializeField] private Tile baseTile;
+        [SerializeField] private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
+
 
         private void OnEnable()
         {
@@ -38,8 +41,18 @@ namespace UI {
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    // baseTileMap.SetTile(new Vector3Int(x, y, 0), baseTile);
-                    tilemap.SetTile(new Vector3Int(x, y, 0), board[x, y].Tile);
+                    // 获取当前砖块的Cell属性
+                    TetriCell cell = board[x, y].Cell;
+                    if (cell != null)
+                    {
+                        // 根据Cell类型找到对应的Tile
+                        Tile tile = spriteMapping.GetTile(cell.GetType());
+                        tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+                    }
+                    else
+                    {
+                        tilemap.SetTile(new Vector3Int(x, y, 0), baseTile);
+                    }
                 }
             }
         }

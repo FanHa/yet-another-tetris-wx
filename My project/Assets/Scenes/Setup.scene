@@ -3152,6 +3152,7 @@ MonoBehaviour:
   baseTileMap: {fileID: 552464485}
   tilemap: {fileID: 1358694679}
   baseTile: {fileID: 11400000, guid: b49b45cb79ed20a4281cfb6a713a2f79, type: 2}
+  spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!1001 &813519626502285636
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3266,15 +3267,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00097991
+      value: 0.0006134989
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00097991
+      value: 0.0006134989
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00097991
+      value: 0.0006134989
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y
