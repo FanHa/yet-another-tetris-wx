@@ -13,7 +13,7 @@ namespace UI {
     {
         public event Action<UI.TetrisResource.TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
 
-        [SerializeField] private Tilemap baseTileMap; // Tilemap组件
+        // [SerializeField] private Tilemap baseTileMap; // Tilemap组件
         [SerializeField] private Tilemap tilemap; // Tilemap组件
         [SerializeField] private Tile baseTile;
         [SerializeField] private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
@@ -46,7 +46,7 @@ namespace UI {
                     if (cell != null)
                     {
                         // 根据Cell类型找到对应的Tile
-                        Tile tile = spriteMapping.GetTile(cell.GetType());
+                        Tile tile = spriteMapping.GetTile(cell);
                         tilemap.SetTile(new Vector3Int(x, y, 0), tile);
                     }
                     else

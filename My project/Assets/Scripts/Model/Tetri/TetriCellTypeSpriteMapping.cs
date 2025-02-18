@@ -67,10 +67,18 @@ namespace Model.Tetri
             return null;
         }
 
-        // public Sprite GetSprite<T>() where T : TetriCell
-        // {
-        //     return GetSprite(typeof(T));
-        // }
+        // 新增的重载方法，接受 TetriCell 对象作为参数
+        public Sprite GetSprite(TetriCell cell)
+        {
+            if (cell == null) return null;
+            return GetSprite(cell.GetType());
+        }
+
+        public Tile GetTile(TetriCell cell)
+        {
+            if (cell == null) return null;
+            return GetTile(cell.GetType());
+        }
 
     }
 }
