@@ -6,7 +6,7 @@ namespace UI.TetrisResource{
     {
         public static TetrisResourceItem CreateInstance(
             GameObject prefab, Transform parent, Tetri tetri,
-            TetriCellTypeSpriteMapping tetriCellTypeSpriteMapping)
+            TetriCellTypeResourceMapping tetriCellTypeSpriteMapping)
         {
             GameObject instance = Object.Instantiate(prefab, parent);
             TetrisResourceItem resourceItem = instance.GetComponent<TetrisResourceItem>();

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UI;
 using UnityEditor.SearchService;
 using UnityEngine;
-using static Unit;
+using Units;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -20,7 +20,7 @@ namespace Controller {
         public Color colorFactionA = Color.red; // 阵营A的颜色
         public Color colorFactionB = Color.blue; // 阵营B的颜色
 
-        public event Action<Faction> OnFactionDefeated;
+        public event Action<Unit.Faction> OnFactionDefeated;
 
 
         [SerializeField] private Model.Inventory inventoryData;

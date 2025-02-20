@@ -6,6 +6,7 @@ using Model;
 using Zenject;
 using System;
 using Controller;
+using Units;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
@@ -54,7 +55,7 @@ public class TetriController : MonoBehaviour
 
     }
 
-    private void HandleFactionDefeated(Unit.Faction faction)
+    private void HandleFactionDefeated(Units.Unit.Faction faction)
     {
         scene.SwitchToOperationPhase();
     }

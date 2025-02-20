@@ -17,7 +17,7 @@ namespace Model
         [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
 
         [SerializeField] private Serializable2DArray<Brick> board; // 棋盘
-        [SerializeField] private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
+        [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
         public void Init(int rows, int columns)

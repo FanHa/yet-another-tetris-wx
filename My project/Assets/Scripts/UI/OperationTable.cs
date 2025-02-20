@@ -16,7 +16,7 @@ namespace UI {
         // [SerializeField] private Tilemap baseTileMap; // Tilemap组件
         [SerializeField] private Tilemap tilemap; // Tilemap组件
         [SerializeField] private Tile baseTile;
-        [SerializeField] private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
+        [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
         private void OnEnable()

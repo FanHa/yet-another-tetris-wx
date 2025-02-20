@@ -6,8 +6,8 @@ using UnityEngine.Tilemaps;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(fileName = "TetriCellTypeSpriteMapping", menuName = "Tetris/TetriCellTypeSpriteMapping")]
-    public class TetriCellTypeSpriteMapping : ScriptableObject
+    [CreateAssetMenu(fileName = "TetriCellTypeResourceMapping", menuName = "Tetris/TetriCellTypeResourceMapping")]
+    public class TetriCellTypeResourceMapping : ScriptableObject
     {
         [Serializable]
         public struct CellTypeResourcePair
@@ -15,6 +15,7 @@ namespace Model.Tetri
             public string cellTypeName; // 类类型的名称
             public Sprite sprite;
             public Tile tile;
+            public GameObject Prefab;
         }
 
         [SerializeField]

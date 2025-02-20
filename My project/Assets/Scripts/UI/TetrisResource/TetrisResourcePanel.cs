@@ -17,7 +17,7 @@ namespace UI.TetrisResource {
         [SerializeField] private Transform usablePanelTransform;  // Panel for available Tetris pieces
         [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
         [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
-        [SerializeField] private TetriCellTypeSpriteMapping tetriCellTypeSpriteMapping; // Mapping of TetriCellType to Sprite
+        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeSpriteMapping; // Mapping of TetriCellType to Sprite
         // todo 这个itemList的作用是啥?
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
 

@@ -21,12 +21,12 @@ namespace UI.TetrisResource {
         [SerializeField] private GameObject tetriBrickPrefab; 
         [SerializeField] private Transform gridParent; // 4x4网格的父对象
 
-        private TetriCellTypeSpriteMapping spriteMapping; // TetriCellTypeSpriteMapping实例
+        private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
 
         private TetrisResourceItem() { } // 私有构造函数，防止直接实例化
-        public void Initialize(Tetri tetri, TetriCellTypeSpriteMapping spriteMapping)
+        public void Initialize(Tetri tetri, TetriCellTypeResourceMapping spriteMapping)
         {
             SetTetri(tetri);
             this.spriteMapping = spriteMapping;
