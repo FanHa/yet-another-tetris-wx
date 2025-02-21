@@ -84,13 +84,13 @@ namespace Controller {
 
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营A的Unit
-                SpawnUnit(spawnPointA, item.Unit.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
@@ -101,13 +101,13 @@ namespace Controller {
         {
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营B的Unit
-                SpawnUnit(spawnPointB, item.Unit.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);

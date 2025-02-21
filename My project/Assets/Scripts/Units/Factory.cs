@@ -9,20 +9,20 @@ namespace Units
     public class Factory : MonoBehaviour
     {
         // 定义一个方法，根据传入的 List<Brick> 生成不同的 Unit
-        public Unit CreateUnit(List<Brick> bricks)
+        public Unit CreateUnit(List<TetriCell> cells)
         {
             // 统计各个 Brick 的类型
-            Dictionary<Type, int> brickTypeCounts = new Dictionary<Type, int>();
-            foreach (var brick in bricks)
+            Dictionary<Type, int> cellTypeCounts = new Dictionary<Type, int>();
+            foreach (var cell in cells)
             {
-                var cellType = brick.Cell.GetType();
-                if (brickTypeCounts.ContainsKey(cellType))
+                var cellType = cell.GetType();
+                if (cellTypeCounts.ContainsKey(cellType))
                 {
-                    brickTypeCounts[cellType]++;
+                    cellTypeCounts[cellType]++;
                 }
                 else
                 {
-                    brickTypeCounts[cellType] = 1;
+                    cellTypeCounts[cellType] = 1;
                 }
             }
 

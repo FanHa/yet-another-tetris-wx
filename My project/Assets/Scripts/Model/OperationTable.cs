@@ -16,20 +16,20 @@ namespace Model
 
         [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
 
-        [SerializeField] private Serializable2DArray<Brick> board; // 棋盘
+        [SerializeField] private Serializable2DArray<TetriCell> board; // 棋盘
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
         public void Init(int rows, int columns)
         {
-            board = new Serializable2DArray<Brick>(rows, columns);
+            board = new Serializable2DArray<TetriCell>(rows, columns);
 
              // 初始化棋盘，将所有格子变为type为"Setable"的Brick
             for (int x = 0; x < rows; x++)
             {
                 for (int y = 0; y < columns; y++)
                 {
-                    board[x, y] = new Brick(new TetriCellEmpty()); // 使用一个实例Brick对象来填充棋盘
+                    board[x, y] = new TetriCellEmpty(); // 使用一个实例Brick对象来填充棋盘
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace Model
                 bool isFullRow = true;
                 for (int x = 0; x < board.GetLength(0); x++)
                 {
-                    if (board[x, y].Cell is TetriCellEmpty)
+                    if (board[x, y] is TetriCellEmpty)
                     {
                         isFullRow = false;
                         break;
@@ -58,21 +58,21 @@ namespace Model
 
         private void ClearRow(int row)
         {
-            List<Brick> clearedBricks = new List<Brick>();
+            List<TetriCell> clearedCells = new List<TetriCell>();
             for (int x = 0; x < board.GetLength(0); x++)
             {
-                clearedBricks.Add(board[x, row]);
-                if (board[x, row] != null)
+                clearedCells.Add(board[x, row]);
+                if (board[x, row] is not TetriCellEmpty)
                 {
-                    board[x, row] = null;
+                    board[x, row] = new TetriCellEmpty();;
                 }
-                board[x, row] = new Brick(new TetriCellEmpty()); // 使用一个示例Brick对象来填充棋盘
+                board[x, row] = new TetriCellEmpty(); // 使用一个示例Brick对象来填充棋盘
             }
 
 
             // 触发改变事件
             OnTableChanged?.Invoke();
-            OnRowCleared?.Invoke(new RowClearedInfo(row, clearedBricks));
+            OnRowCleared?.Invoke(new RowClearedInfo(row, clearedCells));
 
         }
 
@@ -83,9 +83,9 @@ namespace Model
                 string row = "";
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (board[i, j].Cell is not TetriCellEmpty)
+                    if (board[i, j] is not TetriCellEmpty)
                     {
-                        row += board[i, j].Cell + " ";
+                        row += board[i, j] + " ";
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace Model
         }
 
 
-        public Serializable2DArray<Brick> GetBoardData()
+        public Serializable2DArray<TetriCell> GetBoardData()
         {
             return board;
         }
@@ -115,7 +115,7 @@ namespace Model
                         int y = position.y - i ; // 调整行列索引
 
                         if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) 
-                            || board[x, y].Cell is not TetriCellEmpty)
+                            || board[x, y] is not TetriCellEmpty)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
                             return false;
@@ -135,7 +135,7 @@ namespace Model
                         // var tile = spriteMapping.GetTile(cell.GetType());
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
-                        board[x, y] = new Brick(cell); // 使用一个示例Brick对象来填充棋盘
+                        board[x, y] = cell; // 使用一个示例Brick对象来填充棋盘
                     }
                 }
             }
@@ -164,12 +164,12 @@ namespace Model
     public struct RowClearedInfo
     {
         public int row; // 被清除的行号
-        public List<Brick> clearedBricks; // 被清除的方块信息列表
+        public List<TetriCell> clearedCells; // 被清除的方块信息列表
 
-        public RowClearedInfo(int row, List<Brick> clearedBricks)
+        public RowClearedInfo(int row, List<TetriCell> clearedCells)
         {
             this.row = row;
-            this.clearedBricks = clearedBricks;
+            this.clearedCells = clearedCells;
         }
     }
 }

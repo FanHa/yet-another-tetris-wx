@@ -2583,11 +2583,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bdea73ea2aad548b8fa0690613bd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialCombatUnits:
-  - {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
-  - {fileID: 11400000, guid: d65ddfa7deb05254c86b4b5d42f15d58, type: 2}
+  initialInventoryItems:
+  - <UnitName>k__BackingField: Square
+    <UnitSprite>k__BackingField: {fileID: 21300000, guid: 946ed84c2e2e1ac4593ab184093a7017, type: 3}
+    <Prefab>k__BackingField: {fileID: 7887716448648515404, guid: f28b8d58ccdb14f4f85ba47c4cf2897d, type: 3}
+    <Description>k__BackingField: 'Unit Square
+
+'
+    spawnInterval: 0
   inventoryUI: {fileID: 4151451581973223046}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
+  cellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!114 &1391442595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2605,8 +2611,6 @@ MonoBehaviour:
   operationTableUI: {fileID: 2065957762}
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
   assemblyMouseFollower: {fileID: 1915951891}
-  inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
-  testUnit: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
   tetrisListTemplate: {fileID: 11400000, guid: 0e37b766481c6f846b6507b26dfc7a58, type: 2}
 --- !u!114 &1391442596
 MonoBehaviour:
@@ -3149,7 +3153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2ae6c7eef539f4983299c884db4b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTileMap: {fileID: 552464485}
   tilemap: {fileID: 1358694679}
   baseTile: {fileID: 11400000, guid: b49b45cb79ed20a4281cfb6a713a2f79, type: 2}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
@@ -3267,15 +3270,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0006134989
+      value: 0.00014382241
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0006134989
+      value: 0.00014382241
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0006134989
+      value: 0.00014382241
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

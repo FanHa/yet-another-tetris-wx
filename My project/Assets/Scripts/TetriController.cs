@@ -14,12 +14,12 @@ public class TetriController : MonoBehaviour
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
-    [SerializeField] private Model.Inventory inventoryData;
 
-    [SerializeField] private CombatUnit testUnit;
     [SerializeField] private TetrisListTemplate tetrisListTemplate;
     private Scene scene;
     private BattleField battleField;
+
+    private Controller.Inventory inventory;
 
     private UI.TetrisResource.TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
 
@@ -28,6 +28,7 @@ public class TetriController : MonoBehaviour
         // 获取 Scene 和 BattleField 的引用
         scene = GetComponent<Scene>();
         battleField = GetComponent<BattleField>();
+        inventory = GetComponent<Controller.Inventory>();
 
         if (scene == null)
         {
@@ -124,9 +125,7 @@ public class TetriController : MonoBehaviour
 
     private void HandleOperationTableRowCleared(RowClearedInfo info)
     {
-        var bricks = info.clearedBricks; //todo 创建一个工厂类,根据cleardBricks生成对应的Unit
-
-        inventoryData.AddCombatUnit(testUnit);
+        inventory.AddItemFromTetriCells(info.clearedCells);
     }
 
     private void UpdateOperationTableUI()

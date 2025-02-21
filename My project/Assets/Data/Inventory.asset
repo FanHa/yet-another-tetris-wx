@@ -12,29 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9828c61bd8484d346addb7cf5d99078a, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  items:
-  - <Unit>k__BackingField: {fileID: 11400000, guid: b14059f91ce53524b9a7b69b97306242, type: 2}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
-  - <Unit>k__BackingField: {fileID: 0}
-    spawnInterval: 0
+  items: []
   <Size>k__BackingField: 12

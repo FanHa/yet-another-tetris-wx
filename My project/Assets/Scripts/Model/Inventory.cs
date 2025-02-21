@@ -27,20 +27,18 @@ namespace Model{
             }
         }
 
-        public void AddCombatUnit(CombatUnit unit)
+        public void AddItem(InventoryItem item)
         {
-            for (int i=0; i<items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 if (items[i].IsEmpty)
                 {
-                    var newItem = new InventoryItem();
-                    newItem.Unit = unit;
-                    items[i] = newItem;
+                    items[i] = item;
+                    InformAboutChange();
                     return;
                 }
             }
             // todo 如果找不到空位，应该怎么处理？
-            InformAboutChange();
         }
 
 

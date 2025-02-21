@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Units;
 
 
 namespace Model.Tetri
@@ -15,7 +16,7 @@ namespace Model.Tetri
             public string cellTypeName; // 类类型的名称
             public Sprite sprite;
             public Tile tile;
-            public GameObject Prefab;
+            public GameObject prefab;
         }
 
         [SerializeField]
@@ -50,29 +51,20 @@ namespace Model.Tetri
             }
         }
 
-        public Sprite GetSprite(Type cellType)
-        {
-            if (resourceDictionary.TryGetValue(cellType, out var pair))
-            {
-                return pair.sprite;
-            }
-            return null;
-        }
 
-        public Tile GetTile(Type cellType)
-        {
-            if (resourceDictionary.TryGetValue(cellType, out var pair))
-            {
-                return pair.tile;
-            }
-            return null;
-        }
-
-        // 新增的重载方法，接受 TetriCell 对象作为参数
         public Sprite GetSprite(TetriCell cell)
         {
             if (cell == null) return null;
             return GetSprite(cell.GetType());
+        }
+
+        public Sprite GetSprite(Type type)
+        {
+            if (resourceDictionary.TryGetValue(type, out var pair))
+            {
+                return pair.sprite;
+            }
+            return null;
         }
 
         public Tile GetTile(TetriCell cell)
@@ -81,5 +73,31 @@ namespace Model.Tetri
             return GetTile(cell.GetType());
         }
 
+        public Tile GetTile(Type type)
+        {
+            if (resourceDictionary.TryGetValue(type, out var pair))
+            {
+                return pair.tile;
+            }
+            return null;
+        }
+
+
+        public GameObject GetPrefab(TetriCell cell)
+        {
+            if (cell == null) return null;
+            return GetPrefab(cell.GetType());
+        }
+
+        public GameObject GetPrefab(Type type)
+        {
+            if (resourceDictionary.TryGetValue(type, out var pair))
+            {
+                return pair.prefab;
+            }
+            return null;
+        }
+
+        
     }
 }

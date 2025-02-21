@@ -34,7 +34,7 @@ namespace UI {
         }
 
         // 注意: 这里是全量更新
-        public void UpdateData(Serializable2DArray<Brick> newBoard)
+        public void UpdateData(Serializable2DArray<TetriCell> newBoard)
         {
             var board = newBoard;
             for (int x = 0; x < board.GetLength(0); x++)
@@ -42,7 +42,7 @@ namespace UI {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
                     // 获取当前砖块的Cell属性
-                    TetriCell cell = board[x, y].Cell;
+                    TetriCell cell = board[x, y];
                     if (cell != null)
                     {
                         // 根据Cell类型找到对应的Tile

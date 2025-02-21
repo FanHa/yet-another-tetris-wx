@@ -48,21 +48,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5410986790312629488, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
-    - target: {fileID: 7780507553668852956, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
-    - target: {fileID: 8140681470083442678, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
     - target: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
       propertyPath: m_Name
-      value: UnitSquare
+      value: Character
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
