@@ -161,7 +161,14 @@ namespace Model{
             if (cells.Count > 0)
             {
                 var (row, col) = cells[random.Next(cells.Count)];
-                tetri.SetCell(row, col, random.Next(2) == 0 ? new TetriCellCharacterCircle() : new TetriCellCharacterTriangle());
+                var possibleCells = new List<TetriCell>
+                {
+                    new TetriCellCharacterCircle(),
+                    new TetriCellCharacterTriangle(),
+                    // new TetriCellCharacterSquare(), // 新增的方形
+                    new TetriCellAttributeHealth() // 新增的六边形
+                };
+                tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
             }
         }
     }

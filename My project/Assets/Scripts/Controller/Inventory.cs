@@ -71,7 +71,8 @@ namespace Controller {
             string description = $"Generated from {maxCount} {mostCommonCellType.Name} cells";
             int spawnInterval = 0; // 根据需要设置
 
-            return new InventoryItem(unitName, unitSprite, prefab, description, spawnInterval);
+
+            return new InventoryItem(unitName, unitSprite, prefab, description, spawnInterval, tetriCells);
         }
 
 

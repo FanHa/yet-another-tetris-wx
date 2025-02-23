@@ -5,6 +5,7 @@ using UI;
 using UnityEditor.SearchService;
 using UnityEngine;
 using Units;
+using Model.Tetri;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -84,13 +85,13 @@ namespace Controller {
 
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent, item.tetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营A的Unit
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent, item.tetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
@@ -101,20 +102,20 @@ namespace Controller {
         {
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent, item.tetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营B的Unit
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent, item.tetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
             }
         }
 
-        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Color factionColor, Transform parent)
+        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Color factionColor, Transform parent, List<TetriCell> tetriCells)
         {
             if (unitPrefab == null)
             {
@@ -130,10 +131,19 @@ namespace Controller {
             );
             Vector3 spawnPosition = spawnPoint.position + randomOffset;
             // 实例化Unit
+            
             GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
             Unit unitComponent = newUnit.GetComponent<Unit>();
             if (unitComponent != null)
             {
+                foreach (var cell in tetriCells)
+                {
+                    // 根据cell的类型或其他属性增加Unit的属性值
+                    if (cell is TetriCellAttribute attributeCell)
+                    {
+                        attributeCell.ApplyAttributes(unitComponent);
+                    }
+                }
                 unitComponent.unitFaction = faction;
                 // 监听死亡事件
                 unitComponent.OnDeath += OnUnitDeath;
