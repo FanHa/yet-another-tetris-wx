@@ -13,7 +13,7 @@ namespace Model
         [field: SerializeField] public GameObject Prefab { get; set; }
         [field: SerializeField, TextArea] public string Description { get; set; }
         [SerializeField] public int spawnInterval;
-        [SerializeField] public List<Tetri.TetriCell> tetriCells;
+        [SerializeField] public List<Tetri.TetriCell> tetriCells = new List<Tetri.TetriCell>();
 
         public bool IsEmpty => string.IsNullOrEmpty(UnitName);
 

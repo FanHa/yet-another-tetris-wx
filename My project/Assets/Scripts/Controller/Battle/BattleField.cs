@@ -136,14 +136,18 @@ namespace Controller {
             Unit unitComponent = newUnit.GetComponent<Unit>();
             if (unitComponent != null)
             {
-                foreach (var cell in tetriCells)
+                if (tetriCells != null) 
                 {
-                    // 根据cell的类型或其他属性增加Unit的属性值
-                    if (cell is TetriCellAttribute attributeCell)
+                    foreach (var cell in tetriCells)
                     {
-                        attributeCell.ApplyAttributes(unitComponent);
+                        // 根据cell的类型或其他属性增加Unit的属性值
+                        if (cell is TetriCellAttribute attributeCell)
+                        {
+                            attributeCell.ApplyAttributes(unitComponent);
+                        }
                     }
                 }
+                
                 unitComponent.unitFaction = faction;
                 // 监听死亡事件
                 unitComponent.OnDeath += OnUnitDeath;

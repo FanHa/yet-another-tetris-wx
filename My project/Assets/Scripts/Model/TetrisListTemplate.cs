@@ -165,8 +165,10 @@ namespace Model{
                 {
                     new TetriCellCharacterCircle(),
                     new TetriCellCharacterTriangle(),
-                    // new TetriCellCharacterSquare(), // 新增的方形
-                    new TetriCellAttributeHealth() // 新增的六边形
+                    new TetriCellAttributeHealth(),
+                    new TetriCellAttributeAttack(),
+                    new TetriCellAttributeHeavy(),
+                    new TetriCellAttributeSpeed()
                 };
                 tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
             }

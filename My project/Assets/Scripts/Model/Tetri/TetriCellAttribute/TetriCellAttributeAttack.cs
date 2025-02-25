@@ -1,0 +1,19 @@
+ using System;
+using Units;
+using UnityEditor.Timeline.Actions;
+using UnityEngine;
+
+namespace Model.Tetri
+{
+    [Serializable]
+    public class TetriCellAttributeAttack : TetriCellAttribute
+    {
+        [SerializeField]
+        public float attack = 3;
+
+        public override void ApplyAttributes(Unit unit)
+        {
+            unit.attackDamage += attack;
+        }
+    }
+}

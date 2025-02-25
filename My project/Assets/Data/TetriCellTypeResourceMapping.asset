@@ -29,3 +29,15 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 8021e9c9c16ecff4bb1591ff5e4796f0, type: 3}
     tile: {fileID: 11400000, guid: 1fd2a774d9e5e294aba6cdf581987e86, type: 2}
     prefab: {fileID: 0}
+  - cellTypeName: TetriCellAttributeAttack
+    sprite: {fileID: 21300000, guid: 89fbe6ed46777a545bb8de430f35ec6b, type: 3}
+    tile: {fileID: 11400000, guid: 9730fa8ade44a394f9d6b4f51f3dbc83, type: 2}
+    prefab: {fileID: 0}
+  - cellTypeName: TetriCellAttributeHeavy
+    sprite: {fileID: 21300000, guid: 185ec9e11935ec54781aae2dfa7d75df, type: 3}
+    tile: {fileID: 11400000, guid: d773d1029fdb7e64ba64f92aaca73a96, type: 2}
+    prefab: {fileID: 0}
+  - cellTypeName: TetriCellAttributeSpeed
+    sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
+    tile: {fileID: 11400000, guid: 134f3ee55494ab646a46b4b1072635a7, type: 2}
+    prefab: {fileID: 0}
