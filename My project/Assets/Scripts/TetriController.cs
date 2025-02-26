@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Model;
-using Zenject;
 using System;
 using Controller;
 using Units;
