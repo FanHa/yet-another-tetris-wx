@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -9,6 +10,11 @@ namespace Model.Tetri
     {
         [SerializeField]
         public string Name { get; }
+
+        public string Description()
+        {
+            return "Test";
+        }
 
     }
 }

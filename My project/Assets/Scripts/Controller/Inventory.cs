@@ -128,7 +128,7 @@ namespace Controller {
                 inventoryUI.ResetSelection();
                 return;
             }
-            inventoryUI.UpdateDescription(itemIndex, item.UnitSprite, item.UnitName, item.Description);
+            inventoryUI.UpdateDescription(itemIndex, item);
         }
         public void Update()
         {

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model.Tetri;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +12,9 @@ namespace UI{
         [SerializeField] private Image itemImage;
         [SerializeField] private TMP_Text title;
         [SerializeField] private TMP_Text description;
+        [SerializeField] private DescriptionItem descriptionItemPrefab;
+        [SerializeField] private Transform descriptionItemParent; // 父对象，用于存放DescriptionItem
+        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
 
         public void Awake()
         {
@@ -19,16 +24,18 @@ namespace UI{
         public void ResetDescription()
         {
             itemImage.gameObject.SetActive(false);
-            title.text = "";
-            description.text = "";
         }
 
-        public void SetDescription(Sprite sprite, string title, string description)
+        public void SetDescription(Model.InventoryItem item)
         {
-            itemImage.sprite = sprite;
-            itemImage.gameObject.SetActive(true);
-            this.title.text = title;
-            this.description.text = description;
+            // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
+            foreach (TetriCell cell in item.tetriCells)
+            {
+                // 创建一个新的DescriptionItem实例
+                DescriptionItem newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
+                // 设置DescriptionItem的属性
+                newItem.SetDescription(cellTypeResourceMapping.GetSprite(cell), cell.Description());
+            }
         }
     }
 }
