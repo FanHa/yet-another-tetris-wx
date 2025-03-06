@@ -151,7 +151,7 @@ namespace Model{
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (tetri.Shape[i, j] is TetriCellBasic)
+                    if (tetri.Shape[i, j] is not TetriCellEmpty)
                     {
                         cells.Add((i, j));
                     }
@@ -163,8 +163,6 @@ namespace Model{
                 var (row, col) = cells[random.Next(cells.Count)];
                 var possibleCells = new List<TetriCell>
                 {
-                    // new TetriCellCharacterCircle(),
-                    // new TetriCellCharacterTriangle(),
                     new TetriCellAttributeHealth(),
                     new TetriCellAttributeAttack(),
                     new TetriCellAttributeHeavy(),

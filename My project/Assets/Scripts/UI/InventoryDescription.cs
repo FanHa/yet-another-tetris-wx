@@ -35,10 +35,6 @@ namespace UI{
             // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
             foreach (TetriCell cell in item.TetriCells)
             {
-                if (cell is TetriCellCharacter)
-                {
-                    continue;
-                }
                 // 创建一个新的DescriptionItem实例
                 DescriptionItem newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
                 // 设置DescriptionItem的属性

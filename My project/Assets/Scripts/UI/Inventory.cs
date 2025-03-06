@@ -131,13 +131,6 @@ namespace UI
             ResetDraggedItem();
         }
 
-        // public void UpdateDescription(int itemIndex, Sprite unitSprite, string unitName, string description)
-        // {
-        //     itemDescription.SetDescription(unitSprite, unitName, description);
-        //     DeselectAllItems();
-        //     items[itemIndex].Select();
-        // }
-
         public void UpdateDescription(int itemIndex, Model.InventoryItem item)
         {
             itemDescription.SetDescription(item);
