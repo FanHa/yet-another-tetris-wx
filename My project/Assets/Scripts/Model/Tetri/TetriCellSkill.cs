@@ -14,5 +14,10 @@ namespace Model.Tetri
             this.skillName = skillName;
         }
 
+        public override string Description()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

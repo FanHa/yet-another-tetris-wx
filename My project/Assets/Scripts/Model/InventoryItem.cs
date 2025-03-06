@@ -13,8 +13,23 @@ namespace Model
         [field: SerializeField] public GameObject Prefab { get; set; }
         [field: SerializeField, TextArea] public string Description { get; set; }
         [SerializeField] public int spawnInterval;
-        [SerializeField] public List<Tetri.TetriCell> tetriCells = new List<Tetri.TetriCell>();
-
+        [SerializeField] private List<Tetri.TetriCell> tetriCells = new List<Tetri.TetriCell>();
+        // 公共属性确保 tetriCells 永远不为 null
+        public List<Tetri.TetriCell> TetriCells
+        {
+            get
+            {
+                if (tetriCells == null)
+                {
+                    tetriCells = new List<Tetri.TetriCell>();
+                }
+                return tetriCells;
+            }
+            set
+            {
+                tetriCells = value ?? new List<Tetri.TetriCell>();
+            }
+        }
         public bool IsEmpty => string.IsNullOrEmpty(UnitName);
 
         // 构造函数

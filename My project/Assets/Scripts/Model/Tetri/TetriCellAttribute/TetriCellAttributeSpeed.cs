@@ -15,5 +15,10 @@ namespace Model.Tetri
         {
             unit.moveSpeed += speed;
         }
+
+        public override string Description()
+        {
+            return "Speed: " + speed;
+        }
     }
 }

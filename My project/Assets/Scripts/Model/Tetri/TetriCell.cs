@@ -8,13 +8,9 @@ namespace Model.Tetri
     [Serializable]
     public abstract class TetriCell
     {
-        [SerializeField]
-        public string Name { get; }
 
-        public string Description()
-        {
-            return "Test";
-        }
+        public abstract string Description();
+
 
     }
 }

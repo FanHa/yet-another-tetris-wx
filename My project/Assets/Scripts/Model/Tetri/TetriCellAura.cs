@@ -14,5 +14,9 @@ namespace Model.Tetri
             this.auraEffect = auraEffect;
         }
 
+        public override string Description()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

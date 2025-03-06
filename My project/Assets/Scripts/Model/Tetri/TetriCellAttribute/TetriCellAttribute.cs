@@ -9,6 +9,5 @@ namespace Model.Tetri
     {
         public abstract void ApplyAttributes(Unit unit);
 
-
     }
 }

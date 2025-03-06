@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TetriCellTypeResourceMapping
   m_EditorClassIdentifier: 
   mappings:
-  - cellTypeName: TetriCellBasic
+  - cellTypeName: TetriCellCharacterSquare
     sprite: {fileID: 21300000, guid: 946ed84c2e2e1ac4593ab184093a7017, type: 3}
     tile: {fileID: 11400000, guid: f638864a32d665f42aacd07d55727ef4, type: 2}
     prefab: {fileID: 7887716448648515404, guid: 198cf747890024b499601f5c460ca6ed, type: 3}

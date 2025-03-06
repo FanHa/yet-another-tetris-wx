@@ -10,8 +10,6 @@ namespace UI{
     public class InventoryDescription : MonoBehaviour
     {
         [SerializeField] private Image itemImage;
-        [SerializeField] private TMP_Text title;
-        [SerializeField] private TMP_Text description;
         [SerializeField] private DescriptionItem descriptionItemPrefab;
         [SerializeField] private Transform descriptionItemParent; // 父对象，用于存放DescriptionItem
         [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
@@ -28,9 +26,19 @@ namespace UI{
 
         public void SetDescription(Model.InventoryItem item)
         {
-            // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
-            foreach (TetriCell cell in item.tetriCells)
+            // 清空现有的DescriptionItem
+            foreach (Transform child in descriptionItemParent)
             {
+                Destroy(child.gameObject);
+            }
+            itemImage.sprite = item.UnitSprite;
+            // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
+            foreach (TetriCell cell in item.TetriCells)
+            {
+                if (cell is TetriCellCharacter)
+                {
+                    continue;
+                }
                 // 创建一个新的DescriptionItem实例
                 DescriptionItem newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
                 // 设置DescriptionItem的属性

@@ -43,103 +43,103 @@ namespace Model{
 
         private void CreateTShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(1, 2, new TetriCellBasic());
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(1, 2, CreateBasicCell());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
         }
 
         private void CreateIShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(3, 1, new TetriCellBasic());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(3, 1, CreateBasicCell());
         }
 
         private void CreateOShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 0, new TetriCellBasic());
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
+            tetri.SetCell(0, 0, CreateBasicCell());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
         }
 
         private void CreateLShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 2, new TetriCellBasic());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 2, CreateBasicCell());
         }
 
         private void CreateJShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 0, new TetriCellBasic());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 0, CreateBasicCell());
         }
 
         private void CreateSShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 2, new TetriCellBasic());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 2, CreateBasicCell());
         }
 
         private void CreateZShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(1, 2, new TetriCellBasic());
-            tetri.SetCell(2, 0, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(1, 2, CreateBasicCell());
+            tetri.SetCell(2, 0, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
         }
 
         // 新增的U形
         private void CreateUShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 0, new TetriCellBasic());
-            tetri.SetCell(0, 2, new TetriCellBasic());
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 2, new TetriCellBasic());
-            tetri.SetCell(2, 0, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 2, new TetriCellBasic());
+            tetri.SetCell(0, 0, CreateBasicCell());
+            tetri.SetCell(0, 2, CreateBasicCell());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 2, CreateBasicCell());
+            tetri.SetCell(2, 0, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 2, CreateBasicCell());
         }
 
         // 新增的V形
         private void CreateVShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(0, 0, new TetriCellBasic());
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(2, 0, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 2, new TetriCellBasic());
-            tetri.SetCell(1, 2, new TetriCellBasic());
-            tetri.SetCell(0, 2, new TetriCellBasic());
+            tetri.SetCell(0, 0, CreateBasicCell());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(2, 0, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 2, CreateBasicCell());
+            tetri.SetCell(1, 2, CreateBasicCell());
+            tetri.SetCell(0, 2, CreateBasicCell());
         }
 
         // 新增的W形
         private void CreateWShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
-            tetri.SetCell(2, 2, new TetriCellBasic());
-            tetri.SetCell(3, 2, new TetriCellBasic());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
+            tetri.SetCell(2, 2, CreateBasicCell());
+            tetri.SetCell(3, 2, CreateBasicCell());
         }
 
         // 新增的X形
         private void CreateXShape(Tetri.Tetri tetri)
         {
-            tetri.SetCell(1, 1, new TetriCellBasic());
-            tetri.SetCell(0, 1, new TetriCellBasic());
-            tetri.SetCell(1, 0, new TetriCellBasic());
-            tetri.SetCell(1, 2, new TetriCellBasic());
-            tetri.SetCell(2, 1, new TetriCellBasic());
+            tetri.SetCell(1, 1, CreateBasicCell());
+            tetri.SetCell(0, 1, CreateBasicCell());
+            tetri.SetCell(1, 0, CreateBasicCell());
+            tetri.SetCell(1, 2, CreateBasicCell());
+            tetri.SetCell(2, 1, CreateBasicCell());
         }
 
         private void ReplaceRandomCell(Tetri.Tetri tetri)
@@ -163,8 +163,8 @@ namespace Model{
                 var (row, col) = cells[random.Next(cells.Count)];
                 var possibleCells = new List<TetriCell>
                 {
-                    new TetriCellCharacterCircle(),
-                    new TetriCellCharacterTriangle(),
+                    // new TetriCellCharacterCircle(),
+                    // new TetriCellCharacterTriangle(),
                     new TetriCellAttributeHealth(),
                     new TetriCellAttributeAttack(),
                     new TetriCellAttributeHeavy(),
@@ -172,6 +172,18 @@ namespace Model{
                 };
                 tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
             }
+        }
+
+        private TetriCell CreateBasicCell()
+        {
+            var possibleCells = new List<TetriCell>
+            {
+                new TetriCellCharacterCircle(),
+                new TetriCellCharacterTriangle(),
+                new TetriCellCharacterSquare()
+            };
+            var random = new System.Random();
+            return possibleCells[random.Next(possibleCells.Count)];
         }
     }
 }

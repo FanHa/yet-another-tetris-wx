@@ -15,5 +15,10 @@ namespace Model.Tetri
         {
             unit.maxHP += health;
         }
+
+        public override string Description()
+        {
+            return "Health: " + health;
+        }
     }
 }

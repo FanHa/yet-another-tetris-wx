@@ -15,5 +15,12 @@ namespace Model.Tetri
         {
             unit.attackDamage += attack;
         }
+
+        public override string Description()
+        {
+            return "Attack: " + attack;
+        }
+
+        
     }
 }

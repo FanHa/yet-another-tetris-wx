@@ -10,5 +10,10 @@ namespace Model.Tetri
         {
             // 可以在这里添加初始化逻辑
         }
+
+        public override string Description()
+        {
+            return "Empty"; // 返回一个字符串
+        }
     }
 }

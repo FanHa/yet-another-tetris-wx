@@ -21,5 +21,10 @@ namespace Model.Tetri
                 rb.mass *= multiMass;
             }
         }
+
+        public override string Description()
+        {
+            return "Heavy: *" + multiMass;
+        }
     }
 }
