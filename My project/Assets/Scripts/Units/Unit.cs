@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 
 namespace Units
@@ -29,6 +30,7 @@ namespace Units
         private float currentHP;
         private Rigidbody2D rb;
         private Animator animator;
+        private HealthBar healthBar;
 
         private void Awake()
         {
@@ -38,6 +40,7 @@ namespace Units
             {
                 Debug.LogWarning("Animator component not found on the same GameObject.");
             }
+            healthBar = GetComponentInChildren<HealthBar>();
         }
 
         // Start is called before the first frame update
@@ -115,6 +118,7 @@ namespace Units
         public void TakeDamage(float damage)
         {
             currentHP -= damage;
+            healthBar.UpdateHealthBar(currentHP, maxHP);
             CheckHealth();
         }
 
