@@ -905,3 +905,4 @@ MonoBehaviour:
   maxHP: 100
   attackDamage: 10
   minDistance: 0.2
+  bodySpriteRenderer: {fileID: 5410986790312629488}

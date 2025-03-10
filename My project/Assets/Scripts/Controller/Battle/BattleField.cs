@@ -17,9 +17,7 @@ namespace Controller {
         public Transform spawnPointB; // 阵营B的复活点
         public Transform factionAParent; // 阵营A的父对象
         public Transform factionBParent; // 阵营B的父对象
-        
-        public Color colorFactionA = Color.red; // 阵营A的颜色
-        public Color colorFactionB = Color.blue; // 阵营B的颜色
+
 
         public event Action<Unit.Faction> OnFactionDefeated;
 
@@ -85,13 +83,13 @@ namespace Controller {
 
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent, item.TetriCells);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, factionAParent, item.TetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营A的Unit
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, colorFactionA, factionAParent, item.TetriCells);
+                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, factionAParent, item.TetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
@@ -102,20 +100,20 @@ namespace Controller {
         {
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent, item.TetriCells);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, factionBParent, item.TetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营B的Unit
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, colorFactionB, factionBParent, item.TetriCells);
+                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, factionBParent, item.TetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
             }
         }
 
-        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Color factionColor, Transform parent, List<TetriCell> tetriCells)
+        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Transform parent, List<TetriCell> tetriCells)
         {
             if (unitPrefab == null)
             {
@@ -148,19 +146,13 @@ namespace Controller {
                     }
                 }
                 
-                unitComponent.unitFaction = faction;
+                unitComponent.SetFaction(faction);
                 // 监听死亡事件
                 unitComponent.OnDeath += OnUnitDeath;
                 // 加入到列表
                 factionUnits[faction].Add(unitComponent);
             }
 
-            // 设置SpriteRenderer的颜色
-            SpriteRenderer spriteRenderer = newUnit.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.color = factionColor;
-            }
         }
 
         private void OnUnitDeath(Unit deadUnit)

@@ -31,6 +31,8 @@ namespace Units
         private Rigidbody2D rb;
         private Animator animator;
         private HealthBar healthBar;
+  
+        [SerializeField] private SpriteRenderer bodySpriteRenderer;
 
         private void Awake()
         {
@@ -140,6 +142,12 @@ namespace Units
             // 绘制攻击范围的Gizmos
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
+
+        public void SetFaction(Faction faction)
+        {
+            this.unitFaction = faction;
+            bodySpriteRenderer.color = faction == Faction.FactionA ? Color.blue : Color.red;
         }
     }
 }
