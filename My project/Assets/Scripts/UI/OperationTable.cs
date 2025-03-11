@@ -13,7 +13,6 @@ namespace UI {
     {
         public event Action<UI.TetrisResource.TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
 
-        // [SerializeField] private Tilemap baseTileMap; // Tilemap组件
         [SerializeField] private Tilemap tilemap; // Tilemap组件
         [SerializeField] private Tile baseTile;
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
