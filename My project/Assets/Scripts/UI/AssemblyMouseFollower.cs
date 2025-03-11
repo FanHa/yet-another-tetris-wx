@@ -32,19 +32,13 @@ namespace UI
 
                 // 判断鼠标是否在OperationTable的Tile上
                 Vector3Int cellPosition = operationTableTilemap.WorldToCell(worldPosition);
-                if (operationTableTilemap.HasTile(cellPosition))
-                {
-                    // 将位置调整为格子的中心
-                    Vector3 cellCenterPosition = operationTableTilemap.GetCellCenterWorld(cellPosition);
-                    transform.position = cellCenterPosition;
-                }
-                else
-                {
-                    // 如果不在Tile上，使用原始位置
-                    transform.position = worldPosition;
-                }
-                    }
-                }
+
+                // 将位置调整为格子的中心
+                Vector3 cellCenterPosition = operationTableTilemap.GetCellCenterWorld(cellPosition);
+                transform.position = cellCenterPosition;
+
+            }
+        }
 
         // 设置要跟随鼠标的图像
         public void SetFollowItem(UI.TetrisResource.TetrisResourceItem item)

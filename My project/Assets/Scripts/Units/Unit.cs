@@ -144,10 +144,16 @@ namespace Units
             Gizmos.DrawWireSphere(transform.position, attackRange);
         }
 
+        /// <summary>
+        /// Sets the faction of the unit and updates the color of the body sprite renderer accordingly.
+        /// </summary>
+        /// <param name="faction">The faction to set for the unit.</param>
         public void SetFaction(Faction faction)
         {
             this.unitFaction = faction;
             bodySpriteRenderer.color = faction == Faction.FactionA ? Color.blue : Color.red;
         }
+
+        
     }
 }
