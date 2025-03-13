@@ -10,7 +10,7 @@ namespace Model
     {
         [SerializeField] private int rows;
         [SerializeField] private int cols;
-        [SerializeField] private T[] array;
+        [SerializeField] private T[] array; // 改成SerializeReference
 
         public Serializable2DArray(int rows, int cols)
         {

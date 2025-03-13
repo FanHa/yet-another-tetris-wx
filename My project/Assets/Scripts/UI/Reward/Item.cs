@@ -1,32 +1,37 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour
+namespace UI.Reward
 {
-    [SerializeField] private TMP_Text rewardText;
-    private string reward;
-    private Panel panel;
-
-    void Start()
+    public class Item : MonoBehaviour, IPointerClickHandler
     {
-        panel = GetComponentInParent<Panel>();
-        GetComponent<Button>().onClick.AddListener(OnClick);
-    }
+        [SerializeField] private TMP_Text rewardText;
+        private string reward;
+        // private Panel panel;
 
-    public void SetReward(string reward)
-    {
-        this.reward = reward;
-        rewardText.text = reward;
-    }
+        public event Action<Item> OnItemClicked;
 
-    public string GetReward()
-    {
-        return reward;
-    }
+        public void SetReward(string reward)
+        {
+            this.reward = reward;
+            rewardText.text = reward;
+        }
 
-    private void OnClick()
-    {
-        panel.OnItemClicked(this);
+        public string GetReward()
+        {
+            return reward;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.pointerEnter == gameObject)
+            {
+                Debug.Log("Item clicked: " + reward);
+                OnItemClicked?.Invoke(this);
+            }
+        }
     }
 }

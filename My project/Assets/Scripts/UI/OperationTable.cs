@@ -58,7 +58,10 @@ namespace UI {
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            throw new System.NotImplementedException();
+            if (eventData.pointerEnter == gameObject)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         public void OnDrop(PointerEventData eventData)

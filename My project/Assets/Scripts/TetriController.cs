@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Model;
-using System;
 using Controller;
-using Units;
 using UI.TetrisResource;
+using UI.Reward;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
@@ -14,6 +13,7 @@ public class TetriController : MonoBehaviour
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
+    [SerializeField] private Panel rewardPanel;
 
     [SerializeField] private TetrisListTemplate tetrisListTemplate;
     private Scene scene;
@@ -59,6 +59,23 @@ public class TetriController : MonoBehaviour
     private void HandleFactionDefeated(Units.Unit.Faction faction)
     {
         scene.SwitchToOperationPhase();
+        ShowRewardPanel(new List<string> { "Reward1", "Reward2", "Reward3" }); // 示例奖励列表
+    }
+
+    private void ShowRewardPanel(List<string> rewards)
+    {
+        rewardPanel.gameObject.SetActive(true);
+        rewardPanel.SetRewards(rewards);
+        rewardPanel.OnRewardSelected += HandleRewardSelected;
+    }
+
+    private void HandleRewardSelected(string reward)
+    {
+        rewardPanel.OnRewardSelected -= HandleRewardSelected;
+        rewardPanel.gameObject.SetActive(false);
+        // 继续游戏逻辑
+        Debug.Log("Reward selected: " + reward);
+        // ...这里可以添加更多逻辑，例如通知外部controller...
     }
 
     private void InitializeSceneMonitor()
