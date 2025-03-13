@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,7 @@ namespace Controller
         [SerializeField] private Transform battleFieldTransform;
         [SerializeField] private GameObject tetrisResourcePanel; // 新增引用
         [SerializeField] private GameObject operationTable; // 新增引用
+        [SerializeField] private Model.Inventory inventory; // 新增引用
         public event Action OnSwitchToOperationPhase;
 
         private BattleField battleField; // 添加对 BattleField 的引用
@@ -57,5 +59,14 @@ namespace Controller
             OnSwitchToOperationPhase?.Invoke();
         }
 
+        // 新增方法
+        private List<Model.InventoryItem> GenerateItemsFromTable()
+        {
+            List<Model.InventoryItem> items = new List<Model.InventoryItem>();
+            // 根据 operationTable 数据生成新的 inventoryItem
+            // 这里假设 operationTable 有一个方法 GetItems() 返回 List<InventoryItem>
+            // items = operationTable.GetComponent<OperationTable>().GetItems();
+            return items;
+        }
     }
 }

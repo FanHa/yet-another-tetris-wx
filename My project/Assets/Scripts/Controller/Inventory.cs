@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Model;
 using Model.Tetri;
-using Units;
 
 namespace Controller {
     public class Inventory : MonoBehaviour
@@ -26,15 +25,8 @@ namespace Controller {
             }
         }
 
-        // 新增的方法，根据 List<TetriCell> 生成一个 InventoryItem 并添加到库存中
-        public void AddItemFromTetriCells(List<TetriCell> tetriCells)
-        {
 
-            InventoryItem newItem = GenerateInventoryItemFromTetriCells(tetriCells);
-            inventoryData.AddItem(newItem);
-        }
-
-        private InventoryItem GenerateInventoryItemFromTetriCells(List<TetriCell> tetriCells)
+        public InventoryItem GenerateInventoryItemFromTetriCells(List<TetriCell> tetriCells)
         {
             Dictionary<Type, int> cellTypeCounts = new Dictionary<Type, int>();
 
@@ -70,7 +62,6 @@ namespace Controller {
             GameObject prefab = cellTypeResourceMapping.GetPrefab(mostCommonCellType); // 根据需要设置
             string description = $"Generated from {maxCount} {mostCommonCellType.Name} cells";
             int spawnInterval = 0; // 根据需要设置
-
 
             return new InventoryItem(unitName, unitSprite, prefab, description, spawnInterval, tetriCells);
         }
@@ -130,10 +121,7 @@ namespace Controller {
             }
             inventoryUI.UpdateDescription(itemIndex, item);
         }
-        public void Update()
-        {
-            
-        }
+
         public void ToggleInventory()
         {
             if (inventoryUI.gameObject.activeSelf)
@@ -148,6 +136,11 @@ namespace Controller {
                     inventoryUI.UpdateData(item.Key, item.Value.UnitSprite);
                 }
             }
+        }
+
+        public void ResetInventoryData(List<InventoryItem> newItems)
+        {
+            inventoryData.ResetInventoryData(newItems);
         }
     }
 }

@@ -6,6 +6,8 @@ using Model;
 using Controller;
 using UI.TetrisResource;
 using UI.Reward;
+using UnityEditor.Search;
+using Model.Tetri;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private TetrisResources tetrisResourcesData;
@@ -80,10 +82,10 @@ public class TetriController : MonoBehaviour
 
     private void InitializeSceneMonitor()
     {
-        scene.OnSwitchToOperationPhase += OnSwitchToOperationPhase;
+        scene.OnSwitchToOperationPhase += HandleSwitchToOperationPhase;
     }
 
-    private void OnSwitchToOperationPhase()
+    private void HandleSwitchToOperationPhase()
     {
         battleField.DestroyAllUnits();
         tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
@@ -101,7 +103,7 @@ public class TetriController : MonoBehaviour
         // 3. 调用tetrisResourcesSO告诉它一个tetri已被移出了
         if (isPlaced)
         {
-            operationTableData.CheckAndClearFullRows();
+            // operationTableData.CheckAndClearFullRows();
             tetrisResourcesData.UseTetri(item.GetTetri());
 
         }
@@ -135,14 +137,32 @@ public class TetriController : MonoBehaviour
         // TODO delete magic number
         operationTableData.Init(10, 10);
         operationTableData.OnTableChanged += UpdateOperationTableUI;
-        operationTableData.OnRowCleared += HandleOperationTableRowCleared;
 
         UpdateOperationTableUI();
     }
 
-    private void HandleOperationTableRowCleared(RowClearedInfo info)
+    public void HandleBattleClicked()
     {
-        inventory.AddItemFromTetriCells(info.clearedCells);
+        GenerateAndResetInventoryData();
+        scene.SwitchToBattlePhase();
+    }
+
+    public void HandleInventoryClicked()
+    {
+        GenerateAndResetInventoryData();
+        inventory.ToggleInventory();
+    }
+
+    private void GenerateAndResetInventoryData()
+    {
+        List<Model.InventoryItem> items = new List<Model.InventoryItem>();
+        List<List<TetriCell>> fullRows = operationTableData.GetFullRows();
+        foreach (var rowCells in fullRows)
+        {
+            Model.InventoryItem item = inventory.GenerateInventoryItemFromTetriCells(rowCells);
+            items.Add(item);
+        }
+        inventory.ResetInventoryData(items);
     }
 
     private void UpdateOperationTableUI()

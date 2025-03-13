@@ -240,9 +240,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1391442594}
-        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
-        m_MethodName: ToggleInventory
+      - m_Target: {fileID: 1391442595}
+        m_TargetAssemblyTypeName: TetriController, Assembly-CSharp
+        m_MethodName: HandleInventoryClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -663,9 +663,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1391442596}
-        m_TargetAssemblyTypeName: Controller.Scene, Assembly-CSharp
-        m_MethodName: SwitchToBattlePhase
+      - m_Target: {fileID: 1391442595}
+        m_TargetAssemblyTypeName: TetriController, Assembly-CSharp
+        m_MethodName: HandleBattleClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3709,6 +3709,7 @@ MonoBehaviour:
   battleFieldTransform: {fileID: 943837599}
   tetrisResourcePanel: {fileID: 415430544}
   operationTable: {fileID: 2065957758}
+  inventory: {fileID: 0}
 --- !u!114 &1391442597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4453,15 +4454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00061535137
+      value: 0.000012880869
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00061535137
+      value: 0.000012880869
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00061535137
+      value: 0.000012880869
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

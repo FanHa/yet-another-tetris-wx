@@ -74,6 +74,13 @@ namespace Model{
         {
             OnInventoryChanged?.Invoke(GetCurrentInventoryState());
         }
+
+        internal void ResetInventoryData(List<InventoryItem> newItems)
+        {
+            items = newItems;
+            Size = newItems.Count;
+            InformAboutChange();
+        }
     }
 
 }

@@ -12,12 +12,10 @@ namespace Model
     public class OperationTable : ScriptableObject
     {
         public event Action OnTableChanged;
-        public event Action<RowClearedInfo> OnRowCleared; // 定义事件，参数为RowClearedInfo
 
         [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
 
         [SerializeField] private Serializable2DArray<TetriCell> board; // 棋盘
-        [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
         public void Init(int rows, int columns)
@@ -34,47 +32,6 @@ namespace Model
             }
         }
 
-
-        public void CheckAndClearFullRows()
-        {
-            for (int y = 0; y < board.GetLength(1); y++)
-            {
-                bool isFullRow = true;
-                for (int x = 0; x < board.GetLength(0); x++)
-                {
-                    if (board[x, y] is TetriCellEmpty)
-                    {
-                        isFullRow = false;
-                        break;
-                    }
-                }
-
-                if (isFullRow)
-                {
-                    ClearRow(y);
-                }
-            }
-        }
-
-        private void ClearRow(int row)
-        {
-            List<TetriCell> clearedCells = new List<TetriCell>();
-            for (int x = 0; x < board.GetLength(0); x++)
-            {
-                clearedCells.Add(board[x, row]);
-                if (board[x, row] is not TetriCellEmpty)
-                {
-                    board[x, row] = new TetriCellEmpty();;
-                }
-                board[x, row] = new TetriCellEmpty(); // 使用一个示例Brick对象来填充棋盘
-            }
-
-
-            // 触发改变事件
-            OnTableChanged?.Invoke();
-            OnRowCleared?.Invoke(new RowClearedInfo(row, clearedCells));
-
-        }
 
         public void PrintBoard()
         {
@@ -132,7 +89,6 @@ namespace Model
                     TetriCell cell = tetri.Shape[i, j];
                     if (cell is not TetriCellEmpty)
                     {
-                        // var tile = spriteMapping.GetTile(cell.GetType());
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
                         board[x, y] = cell; // 使用一个示例Brick对象来填充棋盘
@@ -145,7 +101,34 @@ namespace Model
             OnTableChanged?.Invoke();
             return true;
         }
+
+        public List<List<TetriCell>> GetFullRows()
+        {
+            List<List<TetriCell>> fullRows = new List<List<TetriCell>>();
+            for (int y = 0; y < board.GetLength(1); y++)
+            {
+                bool isFullRow = true;
+                List<TetriCell> rowCells = new List<TetriCell>();
+                for (int x = 0; x < board.GetLength(0); x++)
+                {
+                    if (board[x, y] is TetriCellEmpty)
+                    {
+                        isFullRow = false;
+                        break;
+                    }
+                    rowCells.Add(board[x, y]);
+                }
+
+                if (isFullRow)
+                {
+                    fullRows.Add(rowCells);
+                }
+            }
+            return fullRows;
+        }
     }
+
+    
 
     [Serializable]
     public struct OperationTableTetri {
