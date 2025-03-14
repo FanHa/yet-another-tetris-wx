@@ -71,8 +71,7 @@ namespace Model
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
 
-                        if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) 
-                            || board[x, y] is not TetriCellEmpty)
+                        if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) )
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
                             return false;
@@ -91,7 +90,7 @@ namespace Model
                     {
                         int x = position.x + j; // 调整行列索引
                         int y = position.y - i ; // 调整行列索引
-                        board[x, y] = cell; // 使用一个示例Brick对象来填充棋盘
+                        board[x, y] = cell;
                     }
                 }
             }

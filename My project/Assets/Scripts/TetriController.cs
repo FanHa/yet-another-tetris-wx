@@ -149,7 +149,9 @@ public class TetriController : MonoBehaviour
 
     public void HandleInventoryClicked()
     {
+         // todo 这里只在打开inventory时resetdata
         GenerateAndResetInventoryData();
+       
         inventory.ToggleInventory();
     }
 

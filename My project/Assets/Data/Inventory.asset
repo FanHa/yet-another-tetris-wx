@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9828c61bd8484d346addb7cf5d99078a, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  items: []
-  <Size>k__BackingField: 12
+  items:
+  - <UnitName>k__BackingField: Generated Unit (TetriCellCharacterCircle)
+    <UnitSprite>k__BackingField: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
+    <Prefab>k__BackingField: {fileID: 300802932831866235, guid: aabc82f711935b44fad150d0cded41ad, type: 3}
+    <Description>k__BackingField: Generated from 4 TetriCellCharacterCircle cells
+    spawnInterval: 0
+  <Size>k__BackingField: 10
