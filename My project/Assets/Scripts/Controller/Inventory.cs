@@ -7,7 +7,6 @@ using Model.Tetri;
 namespace Controller {
     public class Inventory : MonoBehaviour
     {
-        public List<InventoryItem> initialInventoryItems = new List<InventoryItem>();
         [SerializeField] private UI.Inventory inventoryUI;
         [SerializeField] private Model.Inventory inventoryData;
 
@@ -78,9 +77,7 @@ namespace Controller {
         }
         private void PrepareInventoryData()
         {
-            inventoryData.Initialize();
             inventoryData.OnInventoryChanged += UpdateInventoryUI;
-            inventoryData.AddItems(initialInventoryItems);
         }
         private void UpdateInventoryUI(Dictionary<int, Model.InventoryItem> inventoryState)
         {
@@ -119,11 +116,12 @@ namespace Controller {
             inventoryUI.UpdateDescription(itemIndex, item);
         }
 
-        public void ToggleInventory()
+        public bool ToggleInventory()
         {
             if (inventoryUI.gameObject.activeSelf)
             {
                 inventoryUI.Hide();
+                return false;
             }
             else
             {
@@ -132,6 +130,7 @@ namespace Controller {
                 {
                     inventoryUI.UpdateData(item.Key, item.Value.UnitSprite);
                 }
+                return true;
             }
         }
 

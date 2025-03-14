@@ -149,10 +149,11 @@ public class TetriController : MonoBehaviour
 
     public void HandleInventoryClicked()
     {
-         // todo 这里只在打开inventory时resetdata
-        GenerateAndResetInventoryData();
-       
-        inventory.ToggleInventory();
+        bool isOpend = inventory.ToggleInventory();
+        if (isOpend)
+        {
+            GenerateAndResetInventoryData();
+        }
     }
 
     private void GenerateAndResetInventoryData()

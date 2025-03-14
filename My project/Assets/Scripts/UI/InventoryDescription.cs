@@ -22,6 +22,11 @@ namespace UI{
         public void ResetDescription()
         {
             itemImage.gameObject.SetActive(false);
+            // 清空现有的DescriptionItem
+            foreach (Transform child in descriptionItemParent)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         public void SetDescription(Model.InventoryItem item)
