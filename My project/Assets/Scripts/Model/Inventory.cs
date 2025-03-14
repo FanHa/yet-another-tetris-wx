@@ -27,20 +27,27 @@ namespace Model{
             }
         }
 
-        public void AddItem(InventoryItem item)
+        private void AddItem(InventoryItem item)
         {
             for (int i = 0; i < items.Count; i++)
             {
                 if (items[i].IsEmpty)
                 {
                     items[i] = item;
-                    InformAboutChange();
                     return;
                 }
             }
             // todo 如果找不到空位，应该怎么处理？
         }
 
+        public void AddItems(List<InventoryItem> newItems)
+        {
+            foreach (var item in newItems)
+            {
+                AddItem(item);
+            }
+            InformAboutChange();
+        }
 
         public Dictionary<int, InventoryItem> GetCurrentInventoryState()
         {
@@ -75,11 +82,10 @@ namespace Model{
             OnInventoryChanged?.Invoke(GetCurrentInventoryState());
         }
 
-        internal void ResetInventoryData(List<InventoryItem> newItems)
+        public void ResetInventoryData(List<InventoryItem> newItems)
         {
-            items = newItems;
-            Size = newItems.Count;
-            InformAboutChange();
+            Initialize();
+            AddItems(newItems);
         }
     }
 

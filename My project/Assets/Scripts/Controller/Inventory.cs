@@ -80,10 +80,7 @@ namespace Controller {
         {
             inventoryData.Initialize();
             inventoryData.OnInventoryChanged += UpdateInventoryUI;
-            foreach (var item in initialInventoryItems)
-            {
-                inventoryData.AddItem(item);
-            }
+            inventoryData.AddItems(initialInventoryItems);
         }
         private void UpdateInventoryUI(Dictionary<int, Model.InventoryItem> inventoryState)
         {
