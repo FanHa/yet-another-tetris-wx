@@ -8,6 +8,7 @@ namespace Model{
     public class TetrisListTemplate : ScriptableObject
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
+        private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
 
         private void OnEnable()
         {   
@@ -18,17 +19,17 @@ namespace Model{
         {
             var shapes = new List<System.Action<Tetri.Tetri>>
             {
-                CreateTShape,
-                CreateIShape,
-                CreateOShape,
-                CreateLShape,
-                CreateJShape,
-                CreateSShape,
-                CreateZShape,
-                CreateUShape, // 新增的U形
-                CreateVShape, // 新增的V形
-                CreateWShape, // 新增的W形
-                CreateXShape  // 新增的X形
+                _tetriCellFactory.CreateTShape,
+                _tetriCellFactory.CreateIShape,
+                _tetriCellFactory.CreateOShape,
+                _tetriCellFactory.CreateLShape,
+                _tetriCellFactory.CreateJShape,
+                _tetriCellFactory.CreateSShape,
+                _tetriCellFactory.CreateZShape,
+                _tetriCellFactory.CreateUShape, // 新增的U形
+                _tetriCellFactory.CreateVShape, // 新增的V形
+                _tetriCellFactory.CreateWShape, // 新增的W形
+                _tetriCellFactory.CreateXShape  // 新增的X形
             };
 
             foreach (var createShape in shapes)
@@ -39,107 +40,6 @@ namespace Model{
                 ReplaceRandomCell(tetri);
                 template.Add(tetri);
             }
-        }
-
-        private void CreateTShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-        }
-
-        private void CreateIShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(3, 1, CreateBasicCell());
-        }
-
-        private void CreateOShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 0, CreateBasicCell());
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-        }
-
-        private void CreateLShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-        }
-
-        private void CreateJShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-        }
-
-        private void CreateSShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-        }
-
-        private void CreateZShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-        }
-
-        // 新增的U形
-        private void CreateUShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 0, CreateBasicCell());
-            tetri.SetCell(0, 2, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-        }
-
-        // 新增的V形
-        private void CreateVShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(0, 0, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(0, 2, CreateBasicCell());
-        }
-
-        // 新增的W形
-        private void CreateWShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-            tetri.SetCell(3, 2, CreateBasicCell());
-        }
-
-        // 新增的X形
-        private void CreateXShape(Tetri.Tetri tetri)
-        {
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
         }
 
         private void ReplaceRandomCell(Tetri.Tetri tetri)

@@ -17,6 +17,7 @@ namespace Model
 
         [SerializeField] private Serializable2DArray<TetriCell> board; // 棋盘
 
+        private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
 
         public void Init(int rows, int columns)
         {
@@ -30,26 +31,13 @@ namespace Model
                     board[x, y] = new TetriCellEmpty(); // 使用一个实例Brick对象来填充棋盘
                 }
             }
-        }
 
-
-        public void PrintBoard()
-        {
-            for (int i = 0; i < board.GetLength(0); i++)
+            // 随机选一行，使用TetriCellFactory的CreateBasicCell填充
+            var random = new System.Random();
+            int randomRow = random.Next(rows);
+            for (int x = 0; x < columns; x++)
             {
-                string row = "";
-                for (int j = 0; j < board.GetLength(1); j++)
-                {
-                    if (board[i, j] is not TetriCellEmpty)
-                    {
-                        row += board[i, j] + " ";
-                    }
-                    else
-                    {
-                        row += "Empty ";
-                    }
-                }
-                Debug.Log(row);
+                board[x, randomRow] = _tetriCellFactory.CreateBasicCell();
             }
         }
 
@@ -124,34 +112,6 @@ namespace Model
                 }
             }
             return fullRows;
-        }
-    }
-
-    
-
-    [Serializable]
-    public struct OperationTableTetri {
-        public Vector2Int startPoint; // 二维坐标作为起始点
-        public Tetri.Tetri tetri; // 对外部Tetri结构的引用
-
-        public OperationTableTetri(Vector2Int startPoint, Tetri.Tetri tetri)
-        {
-            this.startPoint = startPoint;
-            this.tetri = tetri;
-        }
-    }
-
-
-    [Serializable]
-    public struct RowClearedInfo
-    {
-        public int row; // 被清除的行号
-        public List<TetriCell> clearedCells; // 被清除的方块信息列表
-
-        public RowClearedInfo(int row, List<TetriCell> clearedCells)
-        {
-            this.row = row;
-            this.clearedCells = clearedCells;
         }
     }
 }
