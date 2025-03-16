@@ -30,6 +30,7 @@ public class TetriController : MonoBehaviour
         scene = GetComponent<Scene>();
         battleField = GetComponent<BattleField>();
         inventory = GetComponent<Controller.Inventory>();
+        reward = GetComponent<Controller.Reward>();
 
         if (scene == null)
         {
