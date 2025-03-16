@@ -6,30 +6,31 @@ using UnityEngine.UI;
 
 namespace UI.Reward
 {
-    public class Item : MonoBehaviour, IPointerClickHandler
+    public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TMP_Text rewardText;
-        private string reward;
+
+        private Model.Reward.Item item;
         // private Panel panel;
 
-        public event Action<Item> OnItemClicked;
+        public event Action<ItemSlot> OnItemClicked;
 
-        public void SetReward(string reward)
+        public void SetReward(Model.Reward.Item reward)
         {
-            this.reward = reward;
-            rewardText.text = reward;
+            item = reward;
+            // rewardText.text = reward;
         }
 
-        public string GetReward()
+        public Model.Reward.Item GetReward()
         {
-            return reward;
+            return item;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             if (eventData.pointerEnter == gameObject)
             {
-                Debug.Log("Item clicked: " + reward);
+                Debug.Log("Item clicked: " + item);
                 OnItemClicked?.Invoke(this);
             }
         }

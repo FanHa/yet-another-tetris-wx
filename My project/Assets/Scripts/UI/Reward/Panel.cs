@@ -9,25 +9,25 @@ namespace UI.Reward
     {
         public GameObject itemPrefab;
         public Transform itemParent;
-        public event Action<string> OnRewardSelected;
-        public void SetRewards(List<string> rewards)
+        public event Action<Model.Reward.Item> OnItemSelected;
+        public void SetRewards(List<Model.Reward.Item> rewards)
         {
             foreach (Transform child in itemParent)
             {
                 Destroy(child.gameObject);
             }
-            foreach (string reward in rewards)
+            foreach (Model.Reward.Item reward in rewards)
             {
                 GameObject itemObject = Instantiate(itemPrefab, itemParent);
-                Item item = itemObject.GetComponent<Item>();
+                ItemSlot item = itemObject.GetComponent<ItemSlot>();
                 item.SetReward(reward);
                 item.OnItemClicked += HandleItemClicked;
             }
         }
-        public void HandleItemClicked(Item item)
+        public void HandleItemClicked(ItemSlot ItemSlot)
         {
-            Debug.Log("Item clicked: " + item.GetReward());
-            OnRewardSelected?.Invoke(item.GetReward());
+            Debug.Log("Item clicked: " + ItemSlot.GetReward());
+            OnItemSelected?.Invoke(ItemSlot.GetReward());
         }
     }
 }
