@@ -25,7 +25,6 @@ namespace Model.Tetri
             tetri.SetCell(1, 1, CreateBasicCell());
             tetri.SetCell(1, 2, CreateBasicCell());
             tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
         }
 
         public void CreateIShape(Tetri tetri)
@@ -73,46 +72,6 @@ namespace Model.Tetri
             tetri.SetCell(1, 1, CreateBasicCell());
             tetri.SetCell(1, 2, CreateBasicCell());
             tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-        }
-
-        public void CreateUShape(Tetri tetri)
-        {
-            tetri.SetCell(0, 0, CreateBasicCell());
-            tetri.SetCell(0, 2, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-        }
-
-        public void CreateVShape(Tetri tetri)
-        {
-            tetri.SetCell(0, 0, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(2, 0, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
-            tetri.SetCell(0, 2, CreateBasicCell());
-        }
-
-        public void CreateWShape(Tetri tetri)
-        {
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(2, 1, CreateBasicCell());
-            tetri.SetCell(2, 2, CreateBasicCell());
-            tetri.SetCell(3, 2, CreateBasicCell());
-        }
-
-        public void CreateXShape(Tetri tetri)
-        {
-            tetri.SetCell(1, 1, CreateBasicCell());
-            tetri.SetCell(0, 1, CreateBasicCell());
-            tetri.SetCell(1, 0, CreateBasicCell());
-            tetri.SetCell(1, 2, CreateBasicCell());
             tetri.SetCell(2, 1, CreateBasicCell());
         }
     }

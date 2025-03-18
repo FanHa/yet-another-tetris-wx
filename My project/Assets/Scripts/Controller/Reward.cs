@@ -8,7 +8,9 @@ namespace Controller
     public class Reward : MonoBehaviour
     {
         [SerializeField] private Panel rewardPanel;
+        [SerializeField] private Controller.TetriResource tetriResource;
         public event System.Action OnRewardSelected;
+
 
         public void EnterRewardSelectionPhase()
         {
@@ -31,21 +33,28 @@ namespace Controller
         public List<Model.Reward.Item> GenerateRewards()
         {
             // 生成奖励列表的逻辑
-            List<Model.Reward.Item> rewards = new List<Model.Reward.Item>
+            List<Model.Reward.Item> rewards = new List<Model.Reward.Item>();
+            var tetriFactory = new Model.Tetri.TetriCellFactory();
+
+            for (int i = 1; i <= 3; i++)
             {
-                new Model.Reward.SpecificRewardItem("Reward1", "Description1"),
-                new Model.Reward.SpecificRewardItem("Reward2", "Description2"),
-                new Model.Reward.SpecificRewardItem("Reward3", "Description3")
-            };
+                var tetri = new Model.Tetri.Tetri();
+                tetriFactory.CreateTShape(tetri); // Example: Generate a T-shaped Tetri
+                rewards.Add(new Model.Reward.Item($"Reward{i}", $"Description{i}", tetri));
+            }
+
             return rewards;
         }
 
-        public void ApplyReward(Model.Reward.Item reward)
+        private void ApplyReward(Model.Reward.Item reward)
         {
-            reward.ApplyReward();
+            if (reward.GeneratedTetri != null)
+            {
+                tetriResource.AddUsableTetri(reward.GeneratedTetri);
+            }
+
             Debug.Log("Reward applied: " + reward.Name);
             OnRewardSelected?.Invoke();
-
         }
     }
 }

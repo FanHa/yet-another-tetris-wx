@@ -26,16 +26,12 @@ namespace Model{
                 _tetriCellFactory.CreateJShape,
                 _tetriCellFactory.CreateSShape,
                 _tetriCellFactory.CreateZShape,
-                _tetriCellFactory.CreateUShape, // 新增的U形
-                _tetriCellFactory.CreateVShape, // 新增的V形
-                _tetriCellFactory.CreateWShape, // 新增的W形
-                _tetriCellFactory.CreateXShape  // 新增的X形
+
             };
 
             foreach (var createShape in shapes)
             {
                 var tetri = new Tetri.Tetri();
-                tetri.InitializeShape();
                 createShape(tetri);
                 ReplaceRandomCell(tetri);
                 template.Add(tetri);

@@ -183,9 +183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7103e9f862f2b341ae746f4ef67c291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tetriBrickGroupPrefab: {fileID: 7578777165251633043, guid: 7738e5ee486b77242b9ba0d2d6a3ab5e, type: 3}
-  tetriBrickPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
-  gridParent: {fileID: 3510008846991077897}
+  tetri:
+    shape:
+      rows: 4
+      cols: 4
+  previewParent: {fileID: 3510008846991077897}
 --- !u!1001 &7574658331365094782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -292,7 +294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7578777165251633043, guid: 7738e5ee486b77242b9ba0d2d6a3ab5e, type: 3}
       propertyPath: m_Name
-      value: Panel
+      value: Preview
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using Model.Tetri;
-
+using WeChatWASM;
 
 namespace UI.TetrisResource {
     public class TetrisResourcePanel : MonoBehaviour
@@ -18,9 +18,10 @@ namespace UI.TetrisResource {
         [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
         [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeSpriteMapping; // Mapping of TetriCellType to Sprite
+        [SerializeField] private Controller.Tetris tetrisFactory;
+
         // todo 这个itemList的作用是啥?
         private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
-
 
         public void UpdatePanels(List<Tetri> usableTetriList, List<Tetri> usedTetriList, List<Tetri> unusedTetriList)
         {
@@ -35,9 +36,8 @@ namespace UI.TetrisResource {
             // Update usable panel
             foreach (var tetri in usableTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
-                    tetriResourceItemPrefab, usablePanelTransform, tetri,
-                    tetriCellTypeSpriteMapping);
+                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                    usablePanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
                 resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
                 itemList.Add(resourceItem);
@@ -46,20 +46,30 @@ namespace UI.TetrisResource {
             // Update used panel
             foreach (var tetri in usedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
-                    tetriResourceItemPrefab, usedPanelTransform, tetri,
-                    tetriCellTypeSpriteMapping);
+                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                    usedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
 
             // Update unused panel
             foreach (var tetri in unusedTetriList)
             {
-                TetrisResourceItem resourceItem = TetrisResourceItemFactory.CreateInstance(
-                    tetriResourceItemPrefab, unusedPanelTransform, tetri,
-                    tetriCellTypeSpriteMapping);
+                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                    unusedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
+        }
+
+        public TetrisResourceItem CreateTetrisResourceItem(Transform parent, Tetri tetri)
+        {
+            GameObject instance = Instantiate(tetriResourceItemPrefab, parent);
+            TetrisResourceItem resourceItem = instance.GetComponent<TetrisResourceItem>();
+            if (resourceItem != null)
+            {
+                GameObject preview = tetrisFactory.GenerateTetriPreview(tetri);
+                resourceItem.Initialize(tetri, preview);
+            }
+            return resourceItem;
         }
 
         private void ClearPanel(Transform panel)

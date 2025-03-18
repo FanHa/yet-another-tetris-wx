@@ -12,17 +12,14 @@ namespace Model.Tetri
 
         public Serializable2DArray<TetriCell> Shape => shape;
 
-        public void InitializeShape()
+        public Tetri()
         {
-            if (shape == null)
+            shape = new Serializable2DArray<TetriCell>(4, 4);
+            for (int i = 0; i < shape.GetLength(0); i++)
             {
-                shape = new Serializable2DArray<TetriCell>(4, 4);
-                for (int i = 0; i < shape.GetLength(0); i++)
+                for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    for (int j = 0; j < shape.GetLength(1); j++)
-                    {
-                        shape[i, j] = new TetriCellEmpty();
-                    }
+                    shape[i, j] = new TetriCellEmpty();
                 }
             }
         }

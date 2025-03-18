@@ -1,21 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UI;
-using Model;
 using Controller;
 using UI.TetrisResource;
-using UI.Reward;
-using UnityEditor.Search;
 using Model.Tetri;
 public class TetriController : MonoBehaviour
 {
-    [SerializeField] private TetrisResources tetrisResourcesData;
-    [SerializeField] private UI.TetrisResource.TetrisResourcePanel tetrisResourcePanelUI;
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
-    [SerializeField] private TetrisListTemplate tetrisListTemplate;
+    private TetriResource tetriResource;
     private Scene scene;
     private BattleField battleField;
     private Controller.Reward reward;
@@ -31,6 +25,7 @@ public class TetriController : MonoBehaviour
         battleField = GetComponent<BattleField>();
         inventory = GetComponent<Controller.Inventory>();
         reward = GetComponent<Controller.Reward>();
+        tetriResource = GetComponent<TetriResource>();
 
         if (scene == null)
         {
@@ -80,7 +75,7 @@ public class TetriController : MonoBehaviour
     private void HandleSwitchToOperationPhase()
     {
         battleField.DestroyAllUnits();
-        tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
+        tetriResource.PrepareNewRound();
     }
 
     private void HandleTetriDropped(TetrisResourceItem item, Vector3Int position)
@@ -92,11 +87,9 @@ public class TetriController : MonoBehaviour
         currentDraggingTetri = default;
         assemblyMouseFollower.StopFollowing();
 
-        // 3. 调用tetrisResourcesSO告诉它一个tetri已被移出了
         if (isPlaced)
         {
-            // operationTableData.CheckAndClearFullRows();
-            tetrisResourcesData.UseTetri(item.GetTetri());
+            tetriResource.UseTetri(item);
 
         }
     }
@@ -107,19 +100,12 @@ public class TetriController : MonoBehaviour
         currentDraggingTetri = item;
         assemblyMouseFollower.SetFollowItem(item);
         assemblyMouseFollower.StartFollowing();
-
-        // 调用TetrisResourcesSO的方法设置某个Tetri被拖动
-        tetrisResourcesData.SetTetriDragged(item.GetTetri());
     }
 
     private void InitializeResourcesPanel()
     {
-        // 初始化资源面板
-        tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
-        tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
-        tetrisResourcesData.Reset();
-        tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
-        tetrisResourcesData.DrawRandomTetriFromUnusedList(6);
+        tetriResource.Initialize();
+        tetriResource.OnTetriBegainDrag += HandleTetriBeginDrag;
     }
 
     private void InitializeOperationTable()
@@ -164,16 +150,6 @@ public class TetriController : MonoBehaviour
     {
         // 更新操作表UI
         operationTableUI.UpdateData(operationTableData.GetBoardData());
-    }
-
-    private void UpdateResourcesPanelUI()
-    {
-        
-        // 更新资源面板UI
-        tetrisResourcePanelUI.UpdatePanels(
-            tetrisResourcesData.GetUsableTetris(),
-            tetrisResourcesData.GetUsedTetris(),
-            tetrisResourcesData.GetUnusedTetris());
     }
 
     private void OnDestroy()

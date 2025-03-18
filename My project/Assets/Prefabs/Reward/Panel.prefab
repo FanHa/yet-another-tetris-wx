@@ -118,3 +118,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 6576333266436504844, guid: 274894f655a6d5e4abea15e994c128db, type: 3}
   itemParent: {fileID: 5029703269579320121}
+  tetriCellTypeSpriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}

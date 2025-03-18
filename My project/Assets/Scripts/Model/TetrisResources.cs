@@ -64,6 +64,12 @@ namespace Model {
             OnDataChanged?.Invoke();
         }
 
+        public void AddUsableTetri(Tetri.Tetri tetri)
+        {
+            tetriList.Add(tetri);
+            OnDataChanged?.Invoke(); // 触发数据变化事件
+        }
+
         
         public void UseTetri(Tetri.Tetri tetri)
         {

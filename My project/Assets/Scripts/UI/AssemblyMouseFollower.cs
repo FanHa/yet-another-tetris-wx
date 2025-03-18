@@ -8,6 +8,7 @@ namespace UI
     {
         [SerializeField] private Canvas canvas; // 画布
         [SerializeField] private Tilemap operationTableTilemap; 
+        [SerializeField] private Controller.Tetris tetrisFactory;
         private bool isFollowing = false; // 开关，控制图像是否跟随鼠标
 
         // Start is called before the first frame update
@@ -48,7 +49,7 @@ namespace UI
             {
                 Destroy(child.gameObject);
             }
-            GameObject shadow = item.CreateGridImages(new Vector2(100,100)); // todo magic number
+            GameObject shadow = tetrisFactory.GenerateTetriPreview(item.GetTetri(), new Vector2(100,100)); // todo magic number
             shadow.transform.SetParent(transform, false);
             
         }
