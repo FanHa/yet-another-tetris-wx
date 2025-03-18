@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 1348527630117588553}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: Panel
+  m_Name: Preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,7 +391,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e3479081ce5e349bf4bb19c0777af1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
   rewardText: {fileID: 2831706377353458285}
-  gridParent: {fileID: 3102996747171545002}
-  tetrisResourceItemPrefab: {fileID: 6386779146583494405, guid: 395e80561a5ad554995d30459173b742, type: 3}
+  previewParent: {fileID: 3102996747171545002}

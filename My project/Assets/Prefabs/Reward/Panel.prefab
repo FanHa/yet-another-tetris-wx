@@ -116,6 +116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fda929aa5a79014bb1455af049a1b38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 6576333266436504844, guid: 274894f655a6d5e4abea15e994c128db, type: 3}
+  itemPrefab: {fileID: 1551924660376688632, guid: 274894f655a6d5e4abea15e994c128db, type: 3}
   itemParent: {fileID: 5029703269579320121}
-  tetriCellTypeSpriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  tetris: {fileID: 0}

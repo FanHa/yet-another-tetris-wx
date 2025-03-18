@@ -458,6 +458,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6567412683862646430, guid: fd0d2f31c3b7dfa4296d30c903eb4e55, type: 3}
+      propertyPath: tetris
+      value: 
+      objectReference: {fileID: 10660679}
+    - target: {fileID: 6567412683862646430, guid: fd0d2f31c3b7dfa4296d30c903eb4e55, type: 3}
+      propertyPath: itemPrefab
+      value: 
+      objectReference: {fileID: 1551924660376688632, guid: 274894f655a6d5e4abea15e994c128db, type: 3}
     - target: {fileID: 6979966022842306645, guid: fd0d2f31c3b7dfa4296d30c903eb4e55, type: 3}
       propertyPath: m_Name
       value: RewardPanel
@@ -3317,7 +3325,40 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 10660678}
+  - {fileID: 739051605}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &739051604
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 739051605}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: Resource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &739051605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739051604}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 707241304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &943837598
 GameObject:
@@ -3812,7 +3853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardPanel: {fileID: 314842519}
-  tetriResource: {fileID: 0}
+  tetriResource: {fileID: 1391442599}
 --- !u!114 &1391442599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4555,15 +4596,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.010692486
+      value: 0.00012828027
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.010692486
+      value: 0.00012828027
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.010692486
+      value: 0.00012828027
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Model;
 using UI.Reward;
+using Model.Tetri;
 
 namespace Controller
 {
@@ -9,8 +10,13 @@ namespace Controller
     {
         [SerializeField] private Panel rewardPanel;
         [SerializeField] private Controller.TetriResource tetriResource;
+        private Controller.TetrisFactory tetrisFactory;
         public event System.Action OnRewardSelected;
 
+        private void Start()
+        {
+            tetrisFactory = new TetrisFactory();
+        } 
 
         public void EnterRewardSelectionPhase()
         {
@@ -34,12 +40,10 @@ namespace Controller
         {
             // 生成奖励列表的逻辑
             List<Model.Reward.Item> rewards = new List<Model.Reward.Item>();
-            var tetriFactory = new Model.Tetri.TetriCellFactory();
 
             for (int i = 1; i <= 3; i++)
             {
-                var tetri = new Model.Tetri.Tetri();
-                tetriFactory.CreateTShape(tetri); // Example: Generate a T-shaped Tetri
+                Tetri tetri = tetrisFactory.CreateIShape();
                 rewards.Add(new Model.Reward.Item($"Reward{i}", $"Description{i}", tetri));
             }
 

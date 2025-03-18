@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System;
 using Model.Tetri;
+using WeChatWASM;
 
 namespace UI.Reward
 {
     public class Panel : MonoBehaviour
     {
         
-        public GameObject itemPrefab;
+        public ItemSlot itemPrefab;
         public Transform itemParent;
         public event Action<Model.Reward.Item> OnItemSelected;
-        [SerializeField] TetriCellTypeResourceMapping tetriCellTypeSpriteMapping;
+        [SerializeField] private Controller.Tetris tetris;
         public void SetRewards(List<Model.Reward.Item> rewards)
         {
             foreach (Transform child in itemParent)
@@ -21,9 +22,10 @@ namespace UI.Reward
             }
             foreach (Model.Reward.Item reward in rewards)
             {
-                GameObject itemObject = Instantiate(itemPrefab, itemParent);
-                ItemSlot item = itemObject.GetComponent<ItemSlot>();
-                item.SetReward(reward, tetriCellTypeSpriteMapping);
+                ItemSlot item = Instantiate(itemPrefab, itemParent);
+                // ItemSlot item = itemObject.GetComponent<ItemSlot>();
+                
+                item.SetReward(reward, tetris.GenerateTetriPreview(reward.GeneratedTetri));
                 item.OnItemClicked += HandleItemClicked;
             }
         }

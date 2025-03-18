@@ -10,25 +10,17 @@ namespace UI.Reward
 {
     public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField] private Image icon;
         [SerializeField] private TMP_Text rewardText;
-        [SerializeField] private Transform gridParent; // Parent for the Tetri preview grid
+        [SerializeField] private Transform previewParent; // Parent for the Tetri preview grid
 
-        private Model.Reward.Item item;
-        private Model.Tetri.TetriCellTypeResourceMapping spriteMapping; // Mapping for TetriCellType to Sprite
-        
+        private Model.Reward.Item item;        
         public event Action<ItemSlot> OnItemClicked;
 
-        public void SetReward(Model.Reward.Item reward, TetriCellTypeResourceMapping mapping)
+        public void SetReward(Model.Reward.Item reward, GameObject preview)
         {
             item = reward;
             rewardText.text = reward.Name;
-            spriteMapping = mapping;
-
-            if (reward.GeneratedTetri != null)
-            {
-                // CreateGridImages(reward.GeneratedTetri);
-            }
+            preview.transform.SetParent(previewParent, false);
         }
 
         public Model.Reward.Item GetReward()
@@ -45,20 +37,6 @@ namespace UI.Reward
             }
         }
 
-        // private void CreateGridImages(Model.Tetri.Tetri tetri)
-        // {
-        //     // Clear existing grid
-        //     foreach (Transform child in gridParent)
-        //     {
-        //         Destroy(child.gameObject);
-        //     }
 
-        //     TetrisResourceItemFactory tetrisResourceItemFactory = new TetrisResourceItemFactory();
-        //     tetrisResourceItemFactory.CreateInstance(tetri, gridParent, spriteMapping);
-        //     // Use TetrisResourceItem's CreateGridImages method
-        //     var tempResourceItem = Instantiate(tetrisResourceItemPrefab, gridParent, false);
-        //     tempResourceItem.Initialize(tetri, spriteMapping);
-        //     Destroy(tempResourceItem.gameObject); // Only use it to generate the grid, then destroy
-        // }
     }
 }

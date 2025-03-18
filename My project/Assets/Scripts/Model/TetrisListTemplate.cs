@@ -8,7 +8,7 @@ namespace Model{
     public class TetrisListTemplate : ScriptableObject
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
-        private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
+        private Controller.TetrisFactory _tetrisFactory = new Controller.TetrisFactory();
 
         private void OnEnable()
         {   
@@ -17,22 +17,22 @@ namespace Model{
         }
         private void GenerateAllShapes()
         {
-            var shapes = new List<System.Action<Tetri.Tetri>>
+            var shapes = new List<System.Func<Model.Tetri.Tetri>>
             {
-                _tetriCellFactory.CreateTShape,
-                _tetriCellFactory.CreateIShape,
-                _tetriCellFactory.CreateOShape,
-                _tetriCellFactory.CreateLShape,
-                _tetriCellFactory.CreateJShape,
-                _tetriCellFactory.CreateSShape,
-                _tetriCellFactory.CreateZShape,
-
+                _tetrisFactory.CreateTShape,
+                _tetrisFactory.CreateIShape,
+                _tetrisFactory.CreateOShape,
+                _tetrisFactory.CreateLShape,
+                _tetrisFactory.CreateJShape,
+                _tetrisFactory.CreateSShape,
+                _tetrisFactory.CreateZShape,
             };
 
-            foreach (var createShape in shapes)
+            var random = new System.Random();
+            for (int i = 0; i < shapes.Count; i++)
             {
-                var tetri = new Tetri.Tetri();
-                createShape(tetri);
+                var createShape = shapes[random.Next(shapes.Count)];
+                Model.Tetri.Tetri tetri = createShape();
                 ReplaceRandomCell(tetri);
                 template.Add(tetri);
             }
@@ -66,18 +66,6 @@ namespace Model{
                 };
                 tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
             }
-        }
-
-        private TetriCell CreateBasicCell()
-        {
-            var possibleCells = new List<TetriCell>
-            {
-                new TetriCellCharacterCircle(),
-                new TetriCellCharacterTriangle(),
-                new TetriCellCharacterSquare()
-            };
-            var random = new System.Random();
-            return possibleCells[random.Next(possibleCells.Count)];
         }
     }
 }
