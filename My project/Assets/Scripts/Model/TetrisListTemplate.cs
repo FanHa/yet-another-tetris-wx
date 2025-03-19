@@ -8,7 +8,7 @@ namespace Model{
     public class TetrisListTemplate : ScriptableObject
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
-        private Controller.TetrisFactory _tetrisFactory = new Controller.TetrisFactory();
+        private Model.Tetri.TetrisFactory _tetrisFactory = new Model.Tetri.TetrisFactory();
 
         private void OnEnable()
         {   

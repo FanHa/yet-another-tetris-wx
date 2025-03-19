@@ -34,5 +34,21 @@ namespace Model.Tetri
                 Debug.LogWarning("Invalid row or column index.");
             }
         }
+
+        internal IEnumerable<Vector2Int> GetOccupiedPositions()
+        {
+            var occupiedPositions = new List<Vector2Int>();
+            for (int i = 0; i < shape.GetLength(0); i++)
+            {
+                for (int j = 0; j < shape.GetLength(1); j++)
+                {
+                    if (!(shape[i, j] is TetriCellEmpty))
+                    {
+                    occupiedPositions.Add(new Vector2Int(i, j));
+                    }
+                }
+            }
+            return occupiedPositions;
+        }
     }
 }
