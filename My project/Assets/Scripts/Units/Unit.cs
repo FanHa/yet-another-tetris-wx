@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
 
@@ -31,8 +32,10 @@ namespace Units
         private Rigidbody2D rb;
         private Animator animator;
         private HealthBar healthBar;
-  
+
+        [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
+        [SerializeField] private Canvas unitCanvas; // Unit的Canvas
 
         private void Awake()
         {
@@ -120,8 +123,41 @@ namespace Units
         public void TakeDamage(float damage)
         {
             currentHP -= damage;
+            ShowDamageText(damage);
             healthBar.UpdateHealthBar(currentHP, maxHP);
             CheckHealth();
+        }
+
+        private void ShowDamageText(float damage)
+        {
+            if (damageTextPrefab != null && unitCanvas != null)
+            {
+                GameObject damageTextInstance = Instantiate(damageTextPrefab, unitCanvas.transform); // 指定Canvas为父对象
+                damageTextInstance.transform.localPosition = Vector3.zero; // 可根据需要调整位置
+                TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
+                if (damageText != null)
+                {
+                    damageText.text = damage.ToString();
+                    StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
+                }
+            }
+        }
+
+        private IEnumerator FadeAndDestroyDamageText(GameObject damageTextInstance, TextMeshProUGUI damageText)
+        {
+            Color originalColor = damageText.color;
+            float duration = 1f; // 显示时间为1秒
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration); // 渐变透明度
+                damageText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+                yield return null;
+            }
+
+            Destroy(damageTextInstance); // 销毁实例
         }
 
         private void CheckHealth()
