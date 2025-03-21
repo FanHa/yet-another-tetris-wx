@@ -6,33 +6,52 @@ using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 
 namespace UI {
     public class OperationTable : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
-        public event Action<UI.TetrisResource.TetrisResourceItem, Vector3Int> OnTetriDropped; // 定义事件
+        public event Action<UI.TetrisResource.TetrisResourceItem, Vector2Int> OnTetriDropped; // 定义事件
 
-        [SerializeField] private Tilemap tilemap; // Tilemap组件
-        [SerializeField] private Tile baseTile;
+        private GridLayoutGroup gridLayout; // 用于布局的GridLayoutGroup
+        [SerializeField] private GameObject cellPrefab; // 单元格预制体
+        private Dictionary<Vector2Int, Image> cellImages = new Dictionary<Vector2Int, Image>(); // 存储单元格的Image组件
+
+
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
-
-        private void OnEnable()
+        private void Awake()
         {
-            // todo 这里为什么需要加这个?
-            // 重新获取Tilemap引用
-            if (tilemap == null)
+            gridLayout = GetComponent<GridLayoutGroup>();
+            InitializeGrid(10, 10);
+        }
+        // 初始化网格
+        private void InitializeGrid(int width, int height)
+        {
+            // 清空现有单元格
+            foreach (Transform child in gridLayout.transform)
             {
-                tilemap = GetComponent<Tilemap>();
-                if (tilemap == null)
+                Destroy(child.gameObject);
+            }
+            cellImages.Clear();
+
+            // 创建新的单元格
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
                 {
-                    Debug.LogError("Tilemap component not found on the GameObject.");
+                    GameObject cell = Instantiate(cellPrefab, gridLayout.transform);
+                    Image cellImage = cell.GetComponent<Image>();
+                    if (cellImage != null)
+                    {
+                        cellImages[new Vector2Int(x, y)] = cellImage;
+                    }
                 }
             }
         }
 
-        // 注意: 这里是全量更新
+        // 更新网格数据
         public void UpdateData(Serializable2DArray<TetriCell> newBoard)
         {
             var board = newBoard;
@@ -40,17 +59,15 @@ namespace UI {
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    // 获取当前砖块的Cell属性
                     TetriCell cell = board[x, y];
                     if (cell != null)
                     {
-                        // 根据Cell类型找到对应的Tile
-                        Tile tile = spriteMapping.GetTile(cell);
-                        tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+                        Sprite sprite = spriteMapping.GetSprite(cell);
+                        cellImages[new Vector2Int(x, y)].sprite = sprite;
                     }
                     else
                     {
-                        tilemap.SetTile(new Vector3Int(x, y, 0), baseTile);
+                        cellImages[new Vector2Int(x, y)].sprite = null; // 设置为空
                     }
                 }
             }
@@ -66,22 +83,45 @@ namespace UI {
 
         public void OnDrop(PointerEventData eventData)
         {
-            // 检查被拖动到当前区域的物体是否是TetrisResourceItem
             GameObject draggedObject = eventData.pointerDrag;
             if (draggedObject != null)
             {
                 UI.TetrisResource.TetrisResourceItem resourceItem = draggedObject.GetComponent<UI.TetrisResource.TetrisResourceItem>();
                 if (resourceItem != null)
                 {
-                    Vector3Int cellPosition = tilemap.WorldToCell(eventData.pointerCurrentRaycast.worldPosition);
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        gridLayout.GetComponent<RectTransform>(),
+                        eventData.position,
+                        eventData.pressEventCamera,
+                        out Vector2 localPoint
+                    );
+
+                    // 计算单元格位置
+                    Vector2Int cellPosition = new Vector2Int(
+                        Mathf.FloorToInt(localPoint.x / gridLayout.cellSize.x),
+                        Mathf.FloorToInt(localPoint.y / gridLayout.cellSize.y)
+                    );
+
                     // 触发事件，通知订阅者
                     OnTetriDropped?.Invoke(resourceItem, cellPosition);
                 }
             }
-            else {
+            else
+            {
                 Debug.Log("Invalid object dropped in the operation table.");
             }
-            
+        }
+
+        public Vector2 CellSize => gridLayout.cellSize; // 暴露单元格大小
+
+        public Vector3 GetCellCenterWorld(Vector2Int cellPosition)
+        {
+            Vector3 localPosition = new Vector3(
+                cellPosition.x * gridLayout.cellSize.x + gridLayout.cellSize.x / 2,
+                cellPosition.y * gridLayout.cellSize.y + gridLayout.cellSize.y / 2,
+                0
+            );
+            return gridLayout.transform.TransformPoint(localPosition);
         }
     }
 }

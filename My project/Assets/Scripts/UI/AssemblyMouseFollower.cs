@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 namespace UI
@@ -7,7 +6,7 @@ namespace UI
     public class AssemblyMouseFollower : MonoBehaviour
     {
         [SerializeField] private Canvas canvas; // 画布
-        [SerializeField] private Tilemap operationTableTilemap; 
+        [SerializeField] private OperationTable operationTable; // 替换Tilemap为OperationTable
         [SerializeField] private Controller.Tetris tetrisFactory;
         private bool isFollowing = false; // 开关，控制图像是否跟随鼠标
 
@@ -21,24 +20,43 @@ namespace UI
         // Update is called once per frame
         void Update()
         {
-            if (isFollowing)
+            if (!isFollowing) return;
+
+            // 将物体移动到鼠标所在位置
+            Vector2 mouseLocalPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                Input.mousePosition,
+                canvas.worldCamera,
+                out mouseLocalPosition
+            );
+            transform.position = canvas.transform.TransformPoint(mouseLocalPosition);
+
+            // 如果鼠标在 OperationTable 上，调整位置到对应单元格中心
+            if (RectTransformUtility.RectangleContainsScreenPoint(
+                    operationTable.GetComponent<RectTransform>(),
+                    Input.mousePosition,
+                    canvas.worldCamera))
             {
-                Vector2 position;
+                Vector2 operationTableLocalPoint;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    canvas.transform as RectTransform, 
-                    Input.mousePosition, 
-                    canvas.worldCamera, 
-                    out position);
-                Vector3 worldPosition = canvas.transform.TransformPoint(position);
+                    operationTable.GetComponent<RectTransform>(),
+                    Input.mousePosition,
+                    canvas.worldCamera,
+                    out operationTableLocalPoint
+                );
 
-                // 判断鼠标是否在OperationTable的Tile上
-                Vector3Int cellPosition = operationTableTilemap.WorldToCell(worldPosition);
+                // 计算单元格位置
+                Vector2Int cellPosition = new Vector2Int(
+                    Mathf.FloorToInt(operationTableLocalPoint.x / operationTable.CellSize.x),
+                    Mathf.FloorToInt(operationTableLocalPoint.y / operationTable.CellSize.y)
+                );
 
-                // 将位置调整为格子的中心
-                Vector3 cellCenterPosition = operationTableTilemap.GetCellCenterWorld(cellPosition);
+                // 获取单元格中心位置并更新物体位置
+                Vector3 cellCenterPosition = operationTable.GetCellCenterWorld(cellPosition);
                 transform.position = cellCenterPosition;
-
             }
+
         }
 
         // 设置要跟随鼠标的图像

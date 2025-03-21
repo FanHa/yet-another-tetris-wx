@@ -56,8 +56,8 @@ namespace Model
                 {
                     if (tetri.Shape[i, j] is not TetriCellEmpty)
                     {
-                        int x = position.x + j; // 调整行列索引
-                        int y = position.y - i ; // 调整行列索引
+                        int x = position.x + i; // 调整行列索引
+                        int y = position.y + j ; // 调整行列索引
 
                         if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) )
                         {
@@ -76,8 +76,8 @@ namespace Model
                     TetriCell cell = tetri.Shape[i, j];
                     if (cell is not TetriCellEmpty)
                     {
-                        int x = position.x + j; // 调整行列索引
-                        int y = position.y - i ; // 调整行列索引
+                        int x = position.x + i; // 调整行列索引
+                        int y = position.y + j ; // 调整行列索引
                         board[x, y] = cell;
                     }
                 }
