@@ -400,13 +400,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1483789568}
   m_Father: {fileID: 1776533871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -700}
-  m_SizeDelta: {x: 1300, y: 1300}
+  m_SizeDelta: {x: 1600, y: 1600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &262366950
 MonoBehaviour:
@@ -420,7 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2ae6c7eef539f4983299c884db4b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+  emptyCellPrefab: {fileID: 3373743052066175582, guid: 9dbbc72d70669784da50ed8f9aff90f3, type: 3}
+  placedCellPrefab: {fileID: 6454661091256024416, guid: 784e0592cc3ec7a4bb80cf1e2e54f94f, type: 3}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!114 &262366951
 MonoBehaviour:
@@ -4114,6 +4116,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1417879071}
   m_CullTransparentMesh: 1
+--- !u!1 &1483789567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1483789568}
+  m_Layer: 5
+  m_HasEditorInfo: 1
+  m_Name: GridLayout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1483789568
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483789567}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 262366949}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1000, y: 1000}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1776533867
 GameObject:
   m_ObjectHideFlags: 0
@@ -4556,7 +4594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2ae6c7eef539f4983299c884db4b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefab: {fileID: 0}
+  emptyCellPrefab: {fileID: 0}
+  placedCellPrefab: {fileID: 0}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!1001 &813519626502285636
 PrefabInstance:
@@ -4672,15 +4711,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000012142907
+      value: 0.0001822024
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000012142907
+      value: 0.0001822024
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000012142907
+      value: 0.0001822024
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

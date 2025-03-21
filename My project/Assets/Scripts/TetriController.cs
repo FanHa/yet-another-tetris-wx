@@ -78,7 +78,7 @@ public class TetriController : MonoBehaviour
         tetriResource.PrepareNewRound();
     }
 
-    private void HandleTetriDropped(TetrisResourceItem item, Vector2Int position)
+    private void HandleTetriDrop(TetrisResourceItem item, Vector2Int position)
     {
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
         bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
@@ -110,11 +110,11 @@ public class TetriController : MonoBehaviour
 
     private void InitializeOperationTable()
     {
-        operationTableUI.OnTetriDropped += HandleTetriDropped;
+        
         // TODO delete magic number
         operationTableData.Init(10, 10);
         operationTableData.OnTableChanged += UpdateOperationTableUI;
-
+        operationTableUI.OnTetriDrop += HandleTetriDrop;
         UpdateOperationTableUI();
     }
 
@@ -154,6 +154,6 @@ public class TetriController : MonoBehaviour
     private void OnDestroy()
     {
         // 取消监听UI的事件
-        operationTableUI.OnTetriDropped -= HandleTetriDropped;
+        operationTableUI.OnTetriDrop -= HandleTetriDrop;
     }
 }
