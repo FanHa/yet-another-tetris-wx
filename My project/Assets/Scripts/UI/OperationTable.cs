@@ -14,7 +14,7 @@ namespace UI {
     {
         public event Action<UI.TetrisResource.TetrisResourceItem, Vector2Int> OnTetriDrop; // 定义事件
 
-        private GridLayoutGroup gridLayout; // 用于布局的GridLayoutGroup
+        [SerializeField] private GridLayoutGroup container; // 用于布局的GridLayoutGroup
         [SerializeField] private GameObject emptyCellPrefab; // 单元格预制体
         [SerializeField] private GameObject placedCellPrefab; // 放置的单元格预制体
 
@@ -23,41 +23,12 @@ namespace UI {
 
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
-        private void Awake()
-        {
-            gridLayout = GetComponent<GridLayoutGroup>();
-            InitializeGrid(10, 10);
-        }
-        // 初始化网格
-        private void InitializeGrid(int width, int height)
-        {
-            // 清空现有单元格
-            foreach (Transform child in gridLayout.transform)
-            {
-                Destroy(child.gameObject);
-            }
-            cellImages.Clear();
-
-            // 创建新的单元格
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    GameObject cell = Instantiate(emptyCellPrefab, gridLayout.transform);
-                    Image cellImage = cell.GetComponent<Image>();
-                    if (cellImage != null)
-                    {
-                        cellImages[new Vector2Int(x, y)] = cellImage;
-                    }
-                }
-            }
-        }
 
         // 更新网格数据
         public void UpdateData(Serializable2DArray<TetriCell> newBoard)
         {
             // 清空现有单元格
-            foreach (Transform child in gridLayout.transform)
+            foreach (Transform child in container.transform)
             {
                 Destroy(child.gameObject);
             }
@@ -74,7 +45,7 @@ namespace UI {
                     if (cell is not TetriCellEmpty)
                     {
                         // 创建 placedCell
-                        newCell = Instantiate(placedCellPrefab, gridLayout.transform);
+                        newCell = Instantiate(placedCellPrefab, container.transform);
                         Image placedCellImage = newCell.GetComponent<Image>();
                         if (placedCellImage != null)
                         {
@@ -85,7 +56,7 @@ namespace UI {
                     else
                     {
                         // 创建 emptyCell
-                        newCell = Instantiate(emptyCellPrefab, gridLayout.transform);
+                        newCell = Instantiate(emptyCellPrefab, container.transform);
                         Image emptyCellImage = newCell.GetComponent<Image>();
                         if (emptyCellImage != null)
                         {
@@ -114,23 +85,22 @@ namespace UI {
                 if (resourceItem != null)
                 {
                     RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                        gridLayout.GetComponent<RectTransform>(),
+                        container.GetComponent<RectTransform>(),
                         eventData.position,
                         eventData.pressEventCamera,
                         out Vector2 localPoint
                     );
 
                     // 获取 GridLayoutGroup 的 padding
-                    RectOffset padding = gridLayout.padding;
-
+                    RectOffset padding = container.padding;
                     // 考虑 padding 的偏移量
-                    float adjustedX = localPoint.x + (gridLayout.GetComponent<RectTransform>().rect.width / 2) - padding.left;
-                    float adjustedY = localPoint.y - (gridLayout.GetComponent<RectTransform>().rect.height / 2) + padding.top;
+                    float adjustedX = localPoint.x + container.GetComponent<RectTransform>().rect.width / 2 - padding.left;
+                    float adjustedY = -localPoint.y + container.GetComponent<RectTransform>().rect.height / 2 - padding.top;
 
                     // 计算单元格位置
                     Vector2Int cellPosition = new Vector2Int(
-                        Mathf.FloorToInt(adjustedX / gridLayout.cellSize.x),
-                        Mathf.FloorToInt(-adjustedY / gridLayout.cellSize.y) // Y 轴方向需要反转
+                        Mathf.FloorToInt(adjustedY / container.cellSize.y), // Y 轴方向需要反转,
+                        Mathf.FloorToInt(adjustedX / container.cellSize.x)
                     );
 
                     // 触发事件，通知订阅者
@@ -143,16 +113,16 @@ namespace UI {
             }
         }
 
-        public Vector2 CellSize => gridLayout.cellSize; // 暴露单元格大小
+        public Vector2 CellSize => container.cellSize; // 暴露单元格大小
 
         public Vector3 GetCellCenterWorld(Vector2Int cellPosition)
         {
             Vector3 localPosition = new Vector3(
-                cellPosition.x * gridLayout.cellSize.x + gridLayout.cellSize.x / 2,
-                cellPosition.y * gridLayout.cellSize.y + gridLayout.cellSize.y / 2,
+                cellPosition.x * container.cellSize.x + container.cellSize.x / 2,
+                cellPosition.y * container.cellSize.y + container.cellSize.y / 2,
                 0
             );
-            return gridLayout.transform.TransformPoint(localPosition);
+            return container.transform.TransformPoint(localPosition);
         }
     }
 }

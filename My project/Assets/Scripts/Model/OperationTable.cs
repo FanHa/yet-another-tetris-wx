@@ -23,7 +23,6 @@ namespace Model
         {
             board = new Serializable2DArray<TetriCell>(rows, columns);
 
-             // 初始化棋盘，将所有格子变为type为"Setable"的Brick
             for (int x = 0; x < rows; x++)
             {
                 for (int y = 0; y < columns; y++)
@@ -35,9 +34,9 @@ namespace Model
             // 随机选一行，使用TetriCellFactory的CreateBasicCell填充
             var random = new System.Random();
             int randomRow = random.Next(rows);
-            for (int x = 0; x < columns; x++)
+            for (int c = 0; c < columns; c++)
             {
-                board[x, randomRow] = _tetriCellFactory.CreateBasicCell();
+                board[randomRow, c] = _tetriCellFactory.CreateBasicCell();
             }
         }
 

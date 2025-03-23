@@ -9,12 +9,12 @@ public class TetriController : MonoBehaviour
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
+    [SerializeField] private BattleField battleField;
     private TetriResource tetriResource;
     private Scene scene;
-    private BattleField battleField;
     private Controller.Reward reward;
 
-    private Controller.Inventory inventory;
+    [SerializeField] private Controller.Inventory inventory;
 
     private UI.TetrisResource.TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
 
@@ -22,8 +22,6 @@ public class TetriController : MonoBehaviour
     {
         // 获取 Scene 和 BattleField 的引用
         scene = GetComponent<Scene>();
-        battleField = GetComponent<BattleField>();
-        inventory = GetComponent<Controller.Inventory>();
         reward = GetComponent<Controller.Reward>();
         tetriResource = GetComponent<TetriResource>();
 
@@ -121,7 +119,9 @@ public class TetriController : MonoBehaviour
     public void HandleBattleClicked()
     {
         GenerateAndResetInventoryData();
-        scene.SwitchToBattlePhase();
+        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
+        battleField.StartSpawningUnits();
+
     }
 
     public void HandleInventoryClicked()
@@ -129,7 +129,10 @@ public class TetriController : MonoBehaviour
         bool isOpend = inventory.ToggleInventory();
         if (isOpend)
         {
+            operationTableUI.gameObject.SetActive(false);
             GenerateAndResetInventoryData();
+        } else {
+            operationTableUI.gameObject.SetActive(true);
         }
     }
 

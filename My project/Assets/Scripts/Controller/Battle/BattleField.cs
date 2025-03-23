@@ -26,20 +26,9 @@ namespace Controller {
         [SerializeField] private Model.Inventory enemyData;
         private Coroutine spawnUnitsCoroutine;
 
-
-        private Scene scene;
-
         // Start is called before the first frame update
         void Start()
         {
-             // 获取Scene组件
-            scene = GetComponent<Scene>();
-            if (scene == null)
-            {
-                Debug.LogError("Scene component not found on the object.");
-                return;
-            }
-
             // 初始化字典
             factionUnits[Unit.Faction.FactionA] = new List<Unit>();
             factionUnits[Unit.Faction.FactionB] = new List<Unit>();

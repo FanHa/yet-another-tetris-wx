@@ -30,21 +30,6 @@ namespace Controller
             
         }
 
-        public void SwitchToBattlePhase()
-        {
-            if (battleFieldTransform != null)
-            {
-                Camera.main.transform.position = new Vector3(battleFieldTransform.position.x, battleFieldTransform.position.y, Camera.main.transform.position.z);                
-                battleField.StartSpawningUnits();
-                tetrisResourcePanel.SetActive(false);
-                operationTable.SetActive(false);
-            }
-            else
-            {
-                Debug.LogWarning("battleFieldTransform is not set.");
-            }
-        }
-
         public void SwitchToOperationPhase()
         {
             battleField.StopSpawningUnits();
@@ -56,14 +41,5 @@ namespace Controller
             OnSwitchToOperationPhase?.Invoke();
         }
 
-        // 新增方法
-        private List<Model.InventoryItem> GenerateItemsFromTable()
-        {
-            List<Model.InventoryItem> items = new List<Model.InventoryItem>();
-            // 根据 operationTable 数据生成新的 inventoryItem
-            // 这里假设 operationTable 有一个方法 GetItems() 返回 List<InventoryItem>
-            // items = operationTable.GetComponent<OperationTable>().GetItems();
-            return items;
-        }
     }
 }
