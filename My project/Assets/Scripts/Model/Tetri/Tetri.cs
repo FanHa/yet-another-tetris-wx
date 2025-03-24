@@ -35,7 +35,7 @@ namespace Model.Tetri
             }
         }
 
-        internal IEnumerable<Vector2Int> GetOccupiedPositions()
+        internal List<Vector2Int> GetOccupiedPositions()
         {
             var occupiedPositions = new List<Vector2Int>();
             for (int i = 0; i < shape.GetLength(0); i++)
@@ -44,7 +44,7 @@ namespace Model.Tetri
                 {
                     if (!(shape[i, j] is TetriCellEmpty))
                     {
-                    occupiedPositions.Add(new Vector2Int(i, j));
+                        occupiedPositions.Add(new Vector2Int(i, j));
                     }
                 }
             }

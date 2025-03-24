@@ -13,9 +13,9 @@ namespace Model.Tetri
         [Serializable]
         public struct CellTypeResourcePair
         {
+            // todo 做成选项
             public string cellTypeName; // 类类型的名称
             public Sprite sprite;
-            public Tile tile;
             public GameObject prefab;
         }
 
@@ -63,21 +63,6 @@ namespace Model.Tetri
             if (resourceDictionary.TryGetValue(type, out var pair))
             {
                 return pair.sprite;
-            }
-            return null;
-        }
-
-        public Tile GetTile(TetriCell cell)
-        {
-            if (cell == null) return null;
-            return GetTile(cell.GetType());
-        }
-
-        public Tile GetTile(Type type)
-        {
-            if (resourceDictionary.TryGetValue(type, out var pair))
-            {
-                return pair.tile;
             }
             return null;
         }
