@@ -24,14 +24,17 @@ namespace Model.Reward
 
         private BaseReward CreateRandomReward()
         {
-            return random.Next(4) switch
+            var rewardTypes = new List<Func<BaseReward>>
             {
-                0 => new AttackReward(),
-                1 => new HealthReward(),
-                2 => new HeavyReward(),
-                3 => new SpeedReward(),
-                _ => new AttackReward() // Default case
+                () => new AttackReward(),
+                // () => new HealthReward(),
+                // () => new HeavyReward(),
+                // () => new SpeedReward(),
+                () => new RangeAttack()
             };
+
+            int index = random.Next(rewardTypes.Count);
+            return rewardTypes[index]();
         }
     }
 }

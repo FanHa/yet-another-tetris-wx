@@ -14,6 +14,7 @@ namespace Model.Tetri
         public override void ApplyAttributes(Unit unit)
         {
             unit.attackRange += distance;
+            unit.isRanged = true;
         }
 
         public override string Description()

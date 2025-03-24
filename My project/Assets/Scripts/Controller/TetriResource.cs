@@ -17,7 +17,7 @@ namespace Controller
             tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
             tetrisResourcesData.Reset();
             tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
-            tetrisResourcesData.DrawRandomTetriFromUnusedList(1);
+            tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
         }
 
         public void PrepareNewRound()

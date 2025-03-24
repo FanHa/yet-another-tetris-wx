@@ -35,5 +35,5 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
     prefab: {fileID: 0}
   - cellTypeName: RangeAttack
-    sprite: {fileID: 21300000, guid: 9fe04d843be393a4f8e4f041ad081864, type: 3}
+    sprite: {fileID: 21300000, guid: ba135f836894d1a4da27bb84e3c5f57d, type: 3}
     prefab: {fileID: 0}

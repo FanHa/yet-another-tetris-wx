@@ -30,8 +30,13 @@ namespace Controller {
             Dictionary<Type, int> cellTypeCounts = new Dictionary<Type, int>();
 
             // 统计不同TetriCell衍生类型的数量
+            // todo characterCell为0的情况处理
             foreach (var cell in tetriCells)
             {
+                if (cell is not TetriCellCharacter)
+                {
+                    continue;
+                }
                 Type cellType = cell.GetType();
                 if (cellTypeCounts.ContainsKey(cellType))
                 {

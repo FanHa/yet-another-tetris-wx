@@ -37,6 +37,10 @@ namespace Units
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
         [SerializeField] private Canvas unitCanvas; // Unit的Canvas
 
+        public bool isRanged; // 是否为远程单位
+        public GameObject projectilePrefab; // 投射物预制体
+        public Transform projectileSpawnPoint; // 投射物生成位置
+
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -110,12 +114,39 @@ namespace Units
             {
                 float distance = Vector2.Distance(transform.position, targetEnemy.position);
                 if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
-                {
-                    // 发起攻击
-                    animator.SetTrigger("Attack");
+                {                    
                     Unit enemyUnit = targetEnemy.GetComponent<Unit>();
-                    enemyUnit?.TakeDamage(attackDamage);
+                    Attack(enemyUnit);
                     lastAttackTime = Time.time;
+                }
+            }
+        }
+
+        public void Attack(Unit target)
+        {
+            animator.SetTrigger("Attack");
+            if (isRanged)
+            {
+                // 发射投射物
+                FireProjectile(target);
+            }
+            else
+            {
+                // 近战攻击逻辑
+                target.TakeDamage(attackDamage);
+            }
+        }
+
+        private void FireProjectile(Unit target)
+        {
+            if (projectilePrefab != null && projectileSpawnPoint != null)
+            {
+                GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                Projectile projectile = projectileObject.GetComponent<Projectile>();
+                if (projectile != null)
+                {
+                    projectile.target = target.transform;
+                    projectile.damage = attackDamage;
                 }
             }
         }
@@ -134,6 +165,7 @@ namespace Units
             {
                 GameObject damageTextInstance = Instantiate(damageTextPrefab, unitCanvas.transform); // 指定Canvas为父对象
                 damageTextInstance.transform.localPosition = Vector3.zero; // 可根据需要调整位置
+                damageTextInstance.transform.rotation = Quaternion.identity; // 确保文本不随物体旋转
                 TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
                 if (damageText != null)
                 {

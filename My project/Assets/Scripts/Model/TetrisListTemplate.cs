@@ -59,10 +59,11 @@ namespace Model{
                 var (row, col) = cells[random.Next(cells.Count)];
                 var possibleCells = new List<TetriCell>
                 {
+                    new RangeAttack(),
                     new TetriCellAttributeHealth(),
                     new TetriCellAttributeAttack(),
                     new TetriCellAttributeHeavy(),
-                    new TetriCellAttributeSpeed()
+                    new TetriCellAttributeSpeed(),
                 };
                 tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
             }
