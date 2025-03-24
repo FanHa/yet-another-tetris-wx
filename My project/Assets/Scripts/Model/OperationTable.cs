@@ -91,11 +91,11 @@ namespace Model
         public List<List<TetriCell>> GetFullRows()
         {
             List<List<TetriCell>> fullRows = new List<List<TetriCell>>();
-            for (int y = 0; y < board.GetLength(1); y++)
+            for (int x = 0; x < board.GetLength(0); x++)
             {
                 bool isFullRow = true;
                 List<TetriCell> rowCells = new List<TetriCell>();
-                for (int x = 0; x < board.GetLength(0); x++)
+                for (int y = 0; y < board.GetLength(1); y++)
                 {
                     if (board[x, y] is TetriCellEmpty)
                     {

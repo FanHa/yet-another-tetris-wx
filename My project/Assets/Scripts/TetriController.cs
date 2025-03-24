@@ -11,7 +11,6 @@ public class TetriController : MonoBehaviour
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private BattleField battleField;
     private TetriResource tetriResource;
-    private Scene scene;
     private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
@@ -21,14 +20,8 @@ public class TetriController : MonoBehaviour
     private void Awake()
     {
         // 获取 Scene 和 BattleField 的引用
-        scene = GetComponent<Scene>();
         reward = GetComponent<Controller.Reward>();
         tetriResource = GetComponent<TetriResource>();
-
-        if (scene == null)
-        {
-            Debug.LogWarning("Scene component not found on the same GameObject.");
-        }
 
         if (battleField == null)
         {
@@ -41,7 +34,6 @@ public class TetriController : MonoBehaviour
         // 初始化资源面板和操作表
         InitializeResourcesPanel();
         InitializeOperationTable();
-        InitializeSceneMonitor();
         InitializeBattleField();
     }
 
@@ -53,7 +45,6 @@ public class TetriController : MonoBehaviour
 
     private void HandleFactionDefeated(Units.Unit.Faction faction)
     {
-        scene.SwitchToOperationPhase();
         reward.EnterRewardSelectionPhase();
         reward.OnRewardSelected += HandleRewardSelected;
     }
@@ -61,20 +52,14 @@ public class TetriController : MonoBehaviour
     private void HandleRewardSelected()
     {
         reward.OnRewardSelected -= HandleRewardSelected;
+        Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
+
+        battleField.DestroyAllUnits();
+        tetriResource.PrepareNewRound();
         // 继续游戏逻辑
         Debug.Log("Reward selected: " + reward);
     }
 
-    private void InitializeSceneMonitor()
-    {
-        scene.OnSwitchToOperationPhase += HandleSwitchToOperationPhase;
-    }
-
-    private void HandleSwitchToOperationPhase()
-    {
-        battleField.DestroyAllUnits();
-        tetriResource.PrepareNewRound();
-    }
 
     private void HandleTetriDrop(TetrisResourceItem item, Vector2Int position)
     {

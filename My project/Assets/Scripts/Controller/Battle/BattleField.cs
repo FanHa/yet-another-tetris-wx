@@ -40,7 +40,7 @@ namespace Controller {
             spawnUnitsCoroutine = StartCoroutine(SpawnUnits());
         }
 
-        public void StopSpawningUnits()
+        private void StopSpawningUnits()
         {
             if (spawnUnitsCoroutine != null)
             {
@@ -154,6 +154,7 @@ namespace Controller {
                 if (factionUnits[deadUnit.unitFaction].Count == 0)
                 {
                     Debug.Log(deadUnit.unitFaction + " 全部死亡");
+                    StopSpawningUnits();
                     // todo , 根据不同阵营全部死亡触发不同的情况
                     OnFactionDefeated?.Invoke(deadUnit.unitFaction);
                 }

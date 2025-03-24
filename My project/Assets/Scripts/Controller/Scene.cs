@@ -30,16 +30,5 @@ namespace Controller
             
         }
 
-        public void SwitchToOperationPhase()
-        {
-            battleField.StopSpawningUnits();
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-            tetrisResourcePanel.SetActive(true);
-            operationTable.SetActive(true);
-
-            // 触发事件
-            OnSwitchToOperationPhase?.Invoke();
-        }
-
     }
 }
