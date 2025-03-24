@@ -65,8 +65,12 @@ namespace Units
         protected void Update()
         {
             FindClosestEnemy();
-            MoveTowardsEnemy();
             AttackEnemy();
+        }
+
+        protected void FixedUpdate()
+        {
+            MoveTowardsEnemy();
         }
 
         protected void FindClosestEnemy()

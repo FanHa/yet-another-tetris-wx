@@ -14,6 +14,7 @@ public class TetriController : MonoBehaviour
     private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
+    [SerializeField] private Controller.Level levelController; // 引用Level控制器
 
     private UI.TetrisResource.TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
 
@@ -56,7 +57,10 @@ public class TetriController : MonoBehaviour
 
         battleField.DestroyAllUnits();
         tetriResource.PrepareNewRound();
-        // 继续游戏逻辑
+
+        // Advance to the next level
+        levelController.AdvanceToNextLevel();
+
         Debug.Log("Reward selected: " + reward);
     }
 
@@ -103,10 +107,17 @@ public class TetriController : MonoBehaviour
 
     public void HandleBattleClicked()
     {
+        LoadLevelData();
         GenerateAndResetInventoryData();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
         battleField.StartSpawningUnits();
 
+    }
+
+    private void LoadLevelData()
+    {
+        Model.LevelConfig currentLevelConfig = levelController.GetCurrentLevelConfig();
+        battleField.SetEnemyData(currentLevelConfig.enemyData); // Pass enemy data to BattleField
     }
 
     public void HandleInventoryClicked()

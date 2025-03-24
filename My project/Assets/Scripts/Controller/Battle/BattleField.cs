@@ -35,6 +35,11 @@ namespace Controller {
 
         }
 
+        public void SetEnemyData(List<Model.InventoryItem> enemyData)
+        {
+            this.enemyData.Items = enemyData; // 替换敌人数据
+        }
+
         public void StartSpawningUnits()
         {
             spawnUnitsCoroutine = StartCoroutine(SpawnUnits());

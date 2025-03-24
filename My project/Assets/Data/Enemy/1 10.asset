@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b45bc9cc2adf348b66418a2dc64dfa, type: 3}
+  m_Name: 1 10
+  m_EditorClassIdentifier: 
+  levelName: 1
+  enemyData:
+  - <UnitName>k__BackingField: 
+    <UnitSprite>k__BackingField: {fileID: 0}
+    <Prefab>k__BackingField: {fileID: 7887716448648515404, guid: 198cf747890024b499601f5c460ca6ed, type: 3}
+    <Description>k__BackingField: 
+    spawnInterval: 0

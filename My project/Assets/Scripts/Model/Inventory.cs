@@ -14,8 +14,11 @@ namespace Model{
         [field: SerializeField]
         public int Size { get; private set; } = 12;
 
-        public IReadOnlyList<InventoryItem> Items => items;
-
+        public List<InventoryItem> Items
+        {
+            get => items;
+            set => items = value;
+        }
         public event Action<Dictionary<int, InventoryItem>> OnInventoryChanged;
 
         public void Initialize()
