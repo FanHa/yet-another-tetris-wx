@@ -68,6 +68,13 @@ namespace Model
                             Debug.LogWarning("Cannot place Tetri at the specified position.");
                             return false;
                         }
+
+                        // 检查是否会覆盖 TetriCellCharacter
+                        if (board[x, y] is TetriCellCharacter)
+                        {
+                            Debug.LogWarning("Cannot place Tetri at the specified position: Overlaps with TetriCellCharacter.");
+                            return false;
+                        }
                     }
                 }
             }
