@@ -28,7 +28,7 @@ namespace Controller {
 
         public InventoryItem GenerateInventoryItemFromTetriCells(List<TetriCell> tetriCells)
         {
-            TetriCellCharacter characterCell = tetriCells.OfType<TetriCellCharacter>().FirstOrDefault();
+            Character characterCell = tetriCells.OfType<Character>().FirstOrDefault();
 
             // 根据唯一的 TetriCellCharacter 生成 InventoryItem
             Type characterType = characterCell.GetType();

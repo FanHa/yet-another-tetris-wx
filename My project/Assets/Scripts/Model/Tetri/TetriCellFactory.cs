@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Tetri;
 
 namespace Model.Tetri
 {
@@ -15,9 +14,9 @@ namespace Model.Tetri
         // 静态构造函数，用于初始化缓存
         static TetriCellFactory()
         {
-            CachedCharacterTypes = typeof(TetriCellCharacter).Assembly
+            CachedCharacterTypes = typeof(Character).Assembly
                 .GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(TetriCellCharacter)) && !type.IsAbstract)
+                .Where(type => type.IsSubclassOf(typeof(Character)) && !type.IsAbstract)
                 .ToList();
 
             if (CachedCharacterTypes.Count == 0)
@@ -39,4 +38,5 @@ namespace Model.Tetri
         }
 
     }
+
 }

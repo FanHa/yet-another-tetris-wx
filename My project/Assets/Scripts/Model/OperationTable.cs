@@ -70,7 +70,7 @@ namespace Model
                         }
 
                         // 检查是否会覆盖 TetriCellCharacter
-                        if (board[x, y] is TetriCellCharacter)
+                        if (board[x, y] is Character)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position: Overlaps with TetriCellCharacter.");
                             return false;
@@ -122,7 +122,7 @@ namespace Model
                     }
 
                     // 判断是否包含 TetriCellCharacter
-                    if (cell is TetriCellCharacter)
+                    if (cell is Character)
                     {
                         containsCharacter = true;
                     }

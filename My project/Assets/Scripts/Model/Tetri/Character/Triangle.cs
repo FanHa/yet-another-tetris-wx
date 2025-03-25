@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellCharacterTriangle : TetriCellCharacter
+    public class Triangle : Character
     {
         public override string Description()
         {

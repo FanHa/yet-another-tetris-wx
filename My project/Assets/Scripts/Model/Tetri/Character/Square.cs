@@ -4,11 +4,11 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellCharacterCircle : TetriCellCharacter
+    public class Square : Character
     {
         public override string Description()
         {
-            return "Circle"; // 返回一个字符串
+            return "Square"; // 返回一个字符串
         }
     }
 }
