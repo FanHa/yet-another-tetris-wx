@@ -96,25 +96,40 @@ namespace Model
         public List<List<TetriCell>> GetFullRows()
         {
             List<List<TetriCell>> fullRows = new List<List<TetriCell>>();
+
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 bool isFullRow = true;
+                bool containsCharacter = false;
                 List<TetriCell> rowCells = new List<TetriCell>();
+
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    if (board[x, y] is TetriCellEmpty)
+                    TetriCell cell = board[x, y];
+
+                    // 判断是否为空单元格
+                    if (cell is TetriCellEmpty)
                     {
                         isFullRow = false;
                         break;
                     }
-                    rowCells.Add(board[x, y]);
+
+                    // 判断是否包含 TetriCellCharacter
+                    if (cell is TetriCellCharacter)
+                    {
+                        containsCharacter = true;
+                    }
+
+                    rowCells.Add(cell);
                 }
 
-                if (isFullRow)
+                // 如果行已满且包含至少一个 TetriCellCharacter，则加入结果
+                if (isFullRow && containsCharacter)
                 {
                     fullRows.Add(rowCells);
                 }
             }
+
             return fullRows;
         }
     }

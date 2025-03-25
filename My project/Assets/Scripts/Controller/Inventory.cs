@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Model;
 using Model.Tetri;
+using System.Linq;
 
 namespace Controller {
     public class Inventory : MonoBehaviour
@@ -27,44 +28,14 @@ namespace Controller {
 
         public InventoryItem GenerateInventoryItemFromTetriCells(List<TetriCell> tetriCells)
         {
-            Dictionary<Type, int> cellTypeCounts = new Dictionary<Type, int>();
+            TetriCellCharacter characterCell = tetriCells.OfType<TetriCellCharacter>().FirstOrDefault();
 
-            // 统计不同TetriCell衍生类型的数量
-            // todo characterCell为0的情况处理
-            foreach (var cell in tetriCells)
-            {
-                if (cell is not TetriCellCharacter)
-                {
-                    continue;
-                }
-                Type cellType = cell.GetType();
-                if (cellTypeCounts.ContainsKey(cellType))
-                {
-                    cellTypeCounts[cellType]++;
-                }
-                else
-                {
-                    cellTypeCounts[cellType] = 1;
-                }
-            }
-
-            // 找到数量最多的类型
-            Type mostCommonCellType = null;
-            int maxCount = 0;
-            foreach (var kvp in cellTypeCounts)
-            {
-                if (kvp.Value > maxCount)
-                {
-                    mostCommonCellType = kvp.Key;
-                    maxCount = kvp.Value;
-                }
-            }
-
-            // 根据最多的类型生成一个InventoryItem
-            string unitName = $"Generated Unit ({mostCommonCellType.Name})";
-            Sprite unitSprite = cellTypeResourceMapping.GetSprite(mostCommonCellType); // 根据需要设置
-            GameObject prefab = cellTypeResourceMapping.GetPrefab(mostCommonCellType); // 根据需要设置
-            string description = $"Generated from {maxCount} {mostCommonCellType.Name} cells";
+            // 根据唯一的 TetriCellCharacter 生成 InventoryItem
+            Type characterType = characterCell.GetType();
+            string unitName = $"Generated Unit ({characterType.Name})";
+            Sprite unitSprite = cellTypeResourceMapping.GetSprite(characterType); // 根据需要设置
+            GameObject prefab = cellTypeResourceMapping.GetPrefab(characterType); // 根据需要设置
+            string description = $"Generated from {characterType.Name} cell";
             int spawnInterval = 0; // 根据需要设置
 
             return new InventoryItem(unitName, unitSprite, prefab, description, spawnInterval, tetriCells);
