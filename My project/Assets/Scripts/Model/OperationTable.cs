@@ -27,20 +27,25 @@ namespace Model
             {
                 for (int y = 0; y < columns; y++)
                 {
-                    board[x, y] = new TetriCellEmpty(); // 使用一个实例Brick对象来填充棋盘
+                    board[x, y] = new TetriCellEmpty(); 
                 }
             }
 
-            // 随机选一行，使用TetriCellFactory的CreateBasicCell填充
-            var random = new System.Random();
-            int randomRow = random.Next(rows);
+            int targetRow = 4;
+            int targetCol = 4;
             for (int c = 0; c < columns; c++)
             {
-                board[randomRow, c] = _tetriCellFactory.CreateBasicCell();
+                if (c == targetCol) 
+                {
+                    board[targetRow, c] = _tetriCellFactory.CreateRandomCharacter();
+                }
+                else
+                {
+                    board[targetRow, c] = _tetriCellFactory.CreatePadding(); 
+                }
             }
+
         }
-
-
         public Serializable2DArray<TetriCell> GetBoardData()
         {
             return board;

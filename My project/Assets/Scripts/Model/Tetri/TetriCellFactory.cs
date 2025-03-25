@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Model.Tetri;
 
 namespace Model.Tetri
@@ -8,15 +9,33 @@ namespace Model.Tetri
     {
         private readonly Random _random = new Random();
 
-        public TetriCell CreateBasicCell()
+         // 缓存所有 TetriCellCharacter 的子类
+        private static readonly List<Type> CachedCharacterTypes;
+
+        // 静态构造函数，用于初始化缓存
+        static TetriCellFactory()
         {
-            var possibleCells = new List<TetriCell>
+            CachedCharacterTypes = typeof(TetriCellCharacter).Assembly
+                .GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(TetriCellCharacter)) && !type.IsAbstract)
+                .ToList();
+
+            if (CachedCharacterTypes.Count == 0)
             {
-                new TetriCellCharacterCircle(),
-                new TetriCellCharacterTriangle(),
-                new TetriCellCharacterSquare()
-            };
-            return possibleCells[_random.Next(possibleCells.Count)];
+                throw new InvalidOperationException("No subclasses of TetriCellCharacter found.");
+            }
+        }
+
+        public TetriCell CreateRandomCharacter()
+        {
+            // 随机选择一个子类并创建实例
+            var selectedType = CachedCharacterTypes[_random.Next(CachedCharacterTypes.Count)];
+            return (TetriCell)Activator.CreateInstance(selectedType);
+        }
+
+        public TetriCell CreatePadding()
+        {
+            return new Padding();
         }
 
     }
