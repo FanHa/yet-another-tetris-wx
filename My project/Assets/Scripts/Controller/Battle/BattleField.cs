@@ -6,6 +6,7 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using Units;
 using Model.Tetri;
+using System.Linq;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -130,13 +131,19 @@ namespace Controller {
             {
                 if (tetriCells != null) 
                 {
-                    foreach (var cell in tetriCells)
+                    // 先处理 TetriCellAttribute 类型
+                    foreach (var cell in tetriCells.OfType<TetriCellAttribute>())
                     {
-                        // 根据cell的类型或其他属性增加Unit的属性值
-                        if (cell is TetriCellAttribute attributeCell)
-                        {
-                            attributeCell.ApplyAttributes(unitComponent);
-                        }
+                        cell.ApplyAttributes(unitComponent);
+                    }
+
+                    // 再处理 Character 类型
+                    foreach (var cell in tetriCells.OfType<Character>())
+                    {
+                        // 根据 Character 类型的逻辑处理
+                        // 例如：设置角色的特殊属性或行为
+                        cell.ApplyAttributes(unitComponent);
+
                     }
                 }
                 

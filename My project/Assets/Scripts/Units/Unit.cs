@@ -126,7 +126,7 @@ namespace Units
             }
         }
 
-        public void Attack(Unit target)
+        public virtual void Attack(Unit target)
         {
             animator.SetTrigger("Attack");
             if (isRanged)
@@ -137,7 +137,7 @@ namespace Units
             else
             {
                 // 近战攻击逻辑
-                target.TakeDamage(attackDamage);
+                target.TakeDamage(attackDamage); // Use attackDamage instead of attackDamage
             }
         }
 
@@ -150,16 +150,17 @@ namespace Units
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
-                    projectile.damage = attackDamage;
+                    projectile.damage = attackDamage; // Use attackDamage instead of attackDamage
                 }
             }
         }
 
-        public void TakeDamage(float damage)
+
+        public virtual void TakeDamage(float damage)
         {
             currentHP -= damage;
             ShowDamageText(damage);
-            healthBar.UpdateHealthBar(currentHP, maxHP);
+            healthBar.UpdateHealthBar(currentHP, maxHP); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }
 

@@ -8,7 +8,12 @@ namespace Model.Tetri
     {
         public override string Description()
         {
-            return "Square"; // 返回一个字符串
+            return "Base Character"; // 返回一个字符串
+        }
+
+        public override void ApplyAttributes(Units.Unit unitComponent)
+        {
+            // Do nothing
         }
     }
 }

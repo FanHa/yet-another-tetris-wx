@@ -13,27 +13,48 @@ MonoBehaviour:
   m_Name: TetriCellTypeResourceMapping
   m_EditorClassIdentifier: 
   mappings:
-  - cellTypeName: TetriCellCharacterSquare
+  - cellType:
+      typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 946ed84c2e2e1ac4593ab184093a7017, type: 3}
     prefab: {fileID: 7887716448648515404, guid: 198cf747890024b499601f5c460ca6ed, type: 3}
-  - cellTypeName: TetriCellCharacterCircle
+  - cellType:
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
     prefab: {fileID: 300802932831866235, guid: aabc82f711935b44fad150d0cded41ad, type: 3}
-  - cellTypeName: TetriCellCharacterTriangle
+  - cellType:
+      typeName: Model.Tetri.Triangle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
     prefab: {fileID: 7887716448648515404, guid: f28b8d58ccdb14f4f85ba47c4cf2897d, type: 3}
-  - cellTypeName: TetriCellAttributeHealth
+  - cellType:
+      typeName: Model.Tetri.TetriCellAttributeHealth, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 8021e9c9c16ecff4bb1591ff5e4796f0, type: 3}
     prefab: {fileID: 0}
-  - cellTypeName: TetriCellAttributeAttack
+  - cellType:
+      typeName: Model.Tetri.TetriCellAttributeAttack, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 89fbe6ed46777a545bb8de430f35ec6b, type: 3}
     prefab: {fileID: 0}
-  - cellTypeName: TetriCellAttributeHeavy
+  - cellType:
+      typeName: Model.Tetri.TetriCellAttributeHeavy, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 185ec9e11935ec54781aae2dfa7d75df, type: 3}
     prefab: {fileID: 0}
-  - cellTypeName: TetriCellAttributeSpeed
+  - cellType:
+      typeName: Model.Tetri.TetriCellAttributeSpeed, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
     prefab: {fileID: 0}
-  - cellTypeName: RangeAttack
+  - cellType:
+      typeName: Model.Tetri.RangeAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: ba135f836894d1a4da27bb84e3c5f57d, type: 3}
+    prefab: {fileID: 0}
+  - cellType:
+      typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 21300000, guid: 1f154552f0361304197c9882be8470cd, type: 3}
     prefab: {fileID: 0}
