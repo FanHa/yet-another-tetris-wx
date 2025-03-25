@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Model.Tetri;
 
 namespace Model.Reward
@@ -24,17 +26,20 @@ namespace Model.Reward
 
         private BaseReward CreateRandomReward()
         {
-            var rewardTypes = new List<Func<BaseReward>>
-            {
-                () => new AttackReward(),
-                // () => new HealthReward(),
-                // () => new HeavyReward(),
-                // () => new SpeedReward(),
-                () => new RangeAttack()
-            };
+            // 获取所有 BaseReward 的非抽象子类
+            var rewardTypes = Assembly.GetAssembly(typeof(BaseReward))
+                .GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(BaseReward)) && !type.IsAbstract)
+                .ToList();
 
+            if (rewardTypes.Count == 0)
+            {
+                throw new InvalidOperationException("No subclasses of BaseReward found.");
+            }
+
+            // 随机选择一个子类并创建实例
             int index = random.Next(rewardTypes.Count);
-            return rewardTypes[index]();
+            return (BaseReward)Activator.CreateInstance(rewardTypes[index]);
         }
     }
 }

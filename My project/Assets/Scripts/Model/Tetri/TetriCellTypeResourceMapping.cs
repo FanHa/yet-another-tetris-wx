@@ -14,7 +14,7 @@ namespace Model.Tetri
         public struct CellTypeResourcePair
         {
             // todo 做成选项
-            public string cellTypeName; // 类类型的名称
+            public Model.TypeReference cellType; // 类类型的名称
             public Sprite sprite;
             public GameObject prefab;
         }
@@ -37,20 +37,16 @@ namespace Model.Tetri
             resourceDictionary = new Dictionary<Type, CellTypeResourcePair>();
             foreach (var pair in mappings)
             {
-                string fullTypeName = $"Model.Tetri.{pair.cellTypeName}";
-                Type cellType = Type.GetType(fullTypeName);
-
-                if (cellType != null)
+                if (pair.cellType.Type != null)
                 {
-                    resourceDictionary[cellType] = pair;
+                    resourceDictionary[pair.cellType.Type] = pair;
                 }
                 else
                 {
-                    Debug.LogWarning($"Type {pair.cellTypeName} not found.");
+                    Debug.LogWarning("Invalid type in CellTypeResourcePair.");
                 }
             }
         }
-
 
         public Sprite GetSprite(TetriCell cell)
         {

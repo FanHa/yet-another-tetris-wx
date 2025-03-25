@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Model.Tetri;
 using UnityEngine;
 
@@ -57,15 +58,22 @@ namespace Model{
             if (cells.Count > 0)
             {
                 var (row, col) = cells[random.Next(cells.Count)];
-                var possibleCells = new List<TetriCell>
+
+                // 动态获取所有 TetriCellAttribute 的子类
+                var attributeTypes = typeof(TetriCellAttribute).Assembly
+                    .GetTypes()
+                    .Where(type => type.IsSubclassOf(typeof(TetriCellAttribute)) && !type.IsAbstract)
+                    .ToList();
+
+                if (attributeTypes.Count > 0)
                 {
-                    new RangeAttack(),
-                    new TetriCellAttributeHealth(),
-                    new TetriCellAttributeAttack(),
-                    new TetriCellAttributeHeavy(),
-                    new TetriCellAttributeSpeed(),
-                };
-                tetri.SetCell(row, col, possibleCells[random.Next(possibleCells.Count)]);
+                    // 随机选择一个子类并创建实例
+                    var selectedType = attributeTypes[random.Next(attributeTypes.Count)];
+                    var attributeInstance = (TetriCell)Activator.CreateInstance(selectedType);
+
+                    // 替换单元格
+                    tetri.SetCell(row, col, attributeInstance);
+                }
             }
         }
     }
