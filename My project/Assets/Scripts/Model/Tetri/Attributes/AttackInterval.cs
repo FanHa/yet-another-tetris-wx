@@ -5,19 +5,19 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Attack : Attribute
+    public class AttackInterval : Attribute
     {
         [SerializeField]
-        public float attack = 3;
+        public float IntervalBonus = 0.3f;
 
         public override void ApplyAttributes(Unit unit)
         {
-            unit.attackDamage += attack;
+            unit.attackCooldown -= IntervalBonus;
         }
 
         public override string Description()
         {
-            return "Attack: " + attack;
+            return "Attack CoolDown : -" + IntervalBonus;
         }
     }
 }
