@@ -2,13 +2,13 @@ using Model.Tetri;
 
 namespace Model.Reward
 {
-    public class HealthReward : BaseReward
+    public class Health : Reward
     {
         protected override void FillCells(Tetri.Tetri tetri)
         {
             foreach (var position in tetri.GetOccupiedPositions())
             {
-                tetri.SetCell(position.x, position.y, new Health());
+                tetri.SetCell(position.x, position.y, new Tetri.Health());
             }
         }
 

@@ -17,29 +17,29 @@ namespace Model.Reward
 
             for (int i = 1; i <= rewardCount; i++)
             {
-                BaseReward reward = CreateRandomReward();
+                Reward reward = CreateRandomReward();
                 rewards.Add(reward.GenerateItem());
             }
 
             return rewards;
         }
 
-        private BaseReward CreateRandomReward()
+        private Reward CreateRandomReward()
         {
-            // 获取所有 BaseReward 的非抽象子类
-            var rewardTypes = Assembly.GetAssembly(typeof(BaseReward))
+            // 获取所有 Reward 的非抽象子类
+            var rewardTypes = Assembly.GetAssembly(typeof(Reward))
                 .GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(BaseReward)) && !type.IsAbstract)
+                .Where(type => type.IsSubclassOf(typeof(Reward)) && !type.IsAbstract)
                 .ToList();
 
             if (rewardTypes.Count == 0)
             {
-                throw new InvalidOperationException("No subclasses of BaseReward found.");
+                throw new InvalidOperationException("No subclasses of Reward found.");
             }
 
             // 随机选择一个子类并创建实例
             int index = random.Next(rewardTypes.Count);
-            return (BaseReward)Activator.CreateInstance(rewardTypes[index]);
+            return (Reward)Activator.CreateInstance(rewardTypes[index]);
         }
     }
 }

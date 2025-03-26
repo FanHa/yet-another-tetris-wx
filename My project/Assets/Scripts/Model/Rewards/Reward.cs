@@ -2,11 +2,9 @@ using Model.Tetri;
 
 namespace Model.Reward
 {
-    public abstract class BaseReward
+    public abstract class Reward
     {
         protected readonly TetrisFactory tetrisFactory = new TetrisFactory();
-        protected readonly TetriCellFactory cellFactory = new TetriCellFactory();
-
         public Item GenerateItem()
         {
             Tetri.Tetri tetri = CreateRandomTetri();

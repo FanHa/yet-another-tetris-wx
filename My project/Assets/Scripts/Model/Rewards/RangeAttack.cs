@@ -1,10 +1,7 @@
-using System;
-using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
+
 namespace Model.Reward
 {
-    public class RangeAttack : BaseReward
+    public class RangeAttack : Reward
     {
         protected override void FillCells(Tetri.Tetri tetri)
         {

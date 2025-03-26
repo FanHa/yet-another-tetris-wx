@@ -2,13 +2,13 @@ using Model.Tetri;
 
 namespace Model.Reward
 {
-    public class SpeedReward : BaseReward
+    public class Speed : Reward
     {
         protected override void FillCells(Tetri.Tetri tetri)
         {
             foreach (var position in tetri.GetOccupiedPositions())
             {
-                tetri.SetCell(position.x, position.y, new Speed());
+                tetri.SetCell(position.x, position.y, new Tetri.Speed());
             }
         }
 
