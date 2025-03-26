@@ -59,10 +59,10 @@ namespace Model{
             {
                 var (row, col) = cells[random.Next(cells.Count)];
 
-                // 动态获取所有 TetriCellAttribute 的子类
-                var attributeTypes = typeof(TetriCellAttribute).Assembly
+                // 动态获取所有 Model.Tetri.Attribute 的子类
+                var attributeTypes = typeof(Model.Tetri.Attribute).Assembly
                     .GetTypes()
-                    .Where(type => type.IsSubclassOf(typeof(TetriCellAttribute)) && !type.IsAbstract)
+                    .Where(type => type.IsSubclassOf(typeof(Model.Tetri.Attribute)) && !type.IsAbstract)
                     .ToList();
 
                 if (attributeTypes.Count > 0)

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellAttributeAttack : TetriCellAttribute
+    public class Attack : Attribute
     {
         [SerializeField]
         public float attack = 3;

@@ -8,7 +8,7 @@ namespace Model.Reward
         {
             foreach (var position in tetri.GetOccupiedPositions())
             {
-                tetri.SetCell(position.x, position.y, new TetriCellAttributeHealth());
+                tetri.SetCell(position.x, position.y, new Health());
             }
         }
 

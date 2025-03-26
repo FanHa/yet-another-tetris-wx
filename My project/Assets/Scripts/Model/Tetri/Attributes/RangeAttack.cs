@@ -6,19 +6,22 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellAttributeSpeed : TetriCellAttribute
+    public class RangeAttack : Attribute
     {
         [SerializeField]
-        public float speed = 2;
+        public float distance = 3;
 
         public override void ApplyAttributes(Unit unit)
         {
-            unit.moveSpeed += speed;
+            unit.attackRange += distance;
+            unit.isRanged = true;
         }
 
         public override string Description()
         {
-            return "Speed: " + speed;
+            return "Attack Range: + " + distance;
         }
+
+        
     }
 }

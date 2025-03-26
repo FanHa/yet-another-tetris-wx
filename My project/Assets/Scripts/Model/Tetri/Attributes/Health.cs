@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellAttributeHealth : TetriCellAttribute
+    public class Health : Attribute
     {
         [SerializeField]
         public float health = 20;

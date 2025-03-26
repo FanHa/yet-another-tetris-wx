@@ -131,8 +131,8 @@ namespace Controller {
             {
                 if (tetriCells != null) 
                 {
-                    // 先处理 TetriCellAttribute 类型
-                    foreach (var cell in tetriCells.OfType<TetriCellAttribute>())
+                    // 先处理 Attribute 类型
+                    foreach (var cell in tetriCells.OfType<Model.Tetri.Attribute>())
                     {
                         cell.ApplyAttributes(unitComponent);
                     }

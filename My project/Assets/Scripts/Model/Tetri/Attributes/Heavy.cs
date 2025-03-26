@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellAttributeHeavy : TetriCellAttribute
+    public class Heavy : Attribute
     {
         [SerializeField]
         public float multiMass = 2;
