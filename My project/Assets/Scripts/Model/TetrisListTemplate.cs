@@ -9,8 +9,7 @@ namespace Model{
     public class TetrisListTemplate : ScriptableObject
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
-        private Model.Tetri.TetrisFactory _tetrisFactory = new Model.Tetri.TetrisFactory();
-
+        private TetrisFactory tetrisFactory = new TetrisFactory();
         private void OnEnable()
         {   
             template = new();
@@ -20,13 +19,13 @@ namespace Model{
         {
             var shapes = new List<System.Func<Model.Tetri.Tetri>>
             {
-                _tetrisFactory.CreateTShape,
-                _tetrisFactory.CreateIShape,
-                _tetrisFactory.CreateOShape,
-                _tetrisFactory.CreateLShape,
-                _tetrisFactory.CreateJShape,
-                _tetrisFactory.CreateSShape,
-                _tetrisFactory.CreateZShape,
+                tetrisFactory.CreateTShape,
+                tetrisFactory.CreateIShape,
+                tetrisFactory.CreateOShape,
+                tetrisFactory.CreateLShape,
+                tetrisFactory.CreateJShape,
+                tetrisFactory.CreateSShape,
+                tetrisFactory.CreateZShape,
             };
 
             var random = new System.Random();

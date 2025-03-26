@@ -12,20 +12,27 @@ namespace UI.Reward
         
         public ItemSlot itemPrefab;
         public Transform itemParent;
-        public event Action<Model.Reward.Item> OnItemSelected;
+        public event Action<Model.Rewards.Reward> OnItemSelected;
         [SerializeField] private Controller.Tetris tetris;
-        public void SetRewards(List<Model.Reward.Item> rewards)
+        public void SetRewards(List<Model.Rewards.Reward> rewards)
         {
             foreach (Transform child in itemParent)
             {
                 Destroy(child.gameObject);
             }
-            foreach (Model.Reward.Item reward in rewards)
+            foreach (Model.Rewards.Reward reward in rewards)
             {
                 ItemSlot item = Instantiate(itemPrefab, itemParent);
-                // ItemSlot item = itemObject.GetComponent<ItemSlot>();
                 
-                item.SetReward(reward, tetris.GenerateTetriPreview(reward.GeneratedTetri));
+                item.SetReward(reward);
+                if (reward is Model.Rewards.Tetri tetriReward)
+                {
+                    item.SetPreview(tetris.GenerateTetriPreview(tetriReward.GetTetri()));
+                }
+                if (reward is Model.Rewards.Character characterReward)
+                {
+                    item.SetPreview(tetris.GenerateCharacterPreview(characterReward.GetCharacter()));
+                }
                 item.OnItemClicked += HandleItemClicked;
             }
         }

@@ -13,17 +13,21 @@ namespace UI.Reward
         [SerializeField] private TMP_Text rewardText;
         [SerializeField] private Transform previewParent; // Parent for the Tetri preview grid
 
-        private Model.Reward.Item item;        
+        private Model.Rewards.Reward item;        
         public event Action<ItemSlot> OnItemClicked;
 
-        public void SetReward(Model.Reward.Item reward, GameObject preview)
+        public void SetReward(Model.Rewards.Reward reward)
         {
             item = reward;
-            rewardText.text = reward.Name;
+            rewardText.text = reward.GetName();
+        }
+
+        public void SetPreview(GameObject preview)
+        {
             preview.transform.SetParent(previewParent, false);
         }
 
-        public Model.Reward.Item GetReward()
+        public Model.Rewards.Reward GetReward()
         {
             return item;
         }
@@ -32,7 +36,7 @@ namespace UI.Reward
         {
             if (eventData.pointerEnter == gameObject)
             {
-                Debug.Log("Item clicked: " + item.Name);
+                Debug.Log("Item clicked: " + item.GetName());
                 OnItemClicked?.Invoke(this);
             }
         }

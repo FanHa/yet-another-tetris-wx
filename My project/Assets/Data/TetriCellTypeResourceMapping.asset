@@ -29,23 +29,23 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
     prefab: {fileID: 7887716448648515404, guid: f28b8d58ccdb14f4f85ba47c4cf2897d, type: 3}
   - cellType:
-      typeName: Model.Tetri.TetriCellAttributeHealth, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 8021e9c9c16ecff4bb1591ff5e4796f0, type: 3}
     prefab: {fileID: 0}
   - cellType:
-      typeName: Model.Tetri.TetriCellAttributeAttack, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      typeName: Model.Tetri.Attack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 89fbe6ed46777a545bb8de430f35ec6b, type: 3}
     prefab: {fileID: 0}
   - cellType:
-      typeName: Model.Tetri.TetriCellAttributeHeavy, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      typeName: Model.Tetri.Heavy, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 185ec9e11935ec54781aae2dfa7d75df, type: 3}
     prefab: {fileID: 0}
   - cellType:
-      typeName: Model.Tetri.TetriCellAttributeSpeed, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
+      typeName: Model.Tetri.Speed, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
     prefab: {fileID: 0}
   - cellType:

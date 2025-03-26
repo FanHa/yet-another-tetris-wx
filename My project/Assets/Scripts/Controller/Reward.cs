@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Model;
-using Model.Reward;
+using Model.Rewards;
 using UI.Reward;
 
 namespace Controller
@@ -10,6 +10,7 @@ namespace Controller
     {
         [SerializeField] private Panel rewardPanel;
         [SerializeField] private Controller.TetriResource tetriResource;
+        [SerializeField] private Model.OperationTable operationTableData;
         private RewardFactory rewardFactory;
         public event System.Action OnRewardSelected;
 
@@ -22,28 +23,33 @@ namespace Controller
         {
             if (rewardPanel != null)
             {
-                List<Item> rewards = rewardFactory.GenerateRewards();
+                List<Model.Rewards.Reward> rewards = rewardFactory.GenerateRewards();
                 rewardPanel.SetRewards(rewards); // todo 这里UI知道数据的具体信息,合理吗
                 rewardPanel.gameObject.SetActive(true);
                 rewardPanel.OnItemSelected += HandleItemSelectd;
             }
         }
 
-        private void HandleItemSelectd(Item reward)
+        private void HandleItemSelectd(Model.Rewards.Reward reward)
         {
             rewardPanel.OnItemSelected -= HandleItemSelectd;
             ApplyReward(reward);
             rewardPanel.gameObject.SetActive(false);
         }
 
-        private void ApplyReward(Item reward)
+        private void ApplyReward(Model.Rewards.Reward reward)
         {
-            if (reward.GeneratedTetri != null)
+            if (reward is Model.Rewards.Tetri tetriReward)
             {
-                tetriResource.AddUsableTetri(reward.GeneratedTetri);
+                tetriResource.AddUsableTetri(tetriReward.GetTetri());
             }
 
-            Debug.Log("Reward applied: " + reward.Name);
+            if (reward is Model.Rewards.Character characterReward)
+            {
+                operationTableData.PlaceCharacterInRandomRow(characterReward.GetCharacter());
+            }
+            // todo 其他类型的reward和错误处理
+            Debug.Log("Reward applied: " + reward.GetName());
             OnRewardSelected?.Invoke();
         }
     }

@@ -11,7 +11,7 @@ public class TetriController : MonoBehaviour
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private BattleField battleField;
     private TetriResource tetriResource;
-    private Controller.Reward reward;
+    [SerializeField] private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Controller.Level levelController; // 引用Level控制器
@@ -20,14 +20,8 @@ public class TetriController : MonoBehaviour
 
     private void Awake()
     {
-        // 获取 Scene 和 BattleField 的引用
-        reward = GetComponent<Controller.Reward>();
         tetriResource = GetComponent<TetriResource>();
 
-        if (battleField == null)
-        {
-            Debug.LogWarning("BattleField component not found on the same GameObject.");
-        }
     }
 
     private void Start()

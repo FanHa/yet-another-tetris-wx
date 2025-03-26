@@ -2,10 +2,10 @@ using System;
 
 namespace Model.Tetri
 {
-    public class TetrisFactory {
-        private TetriCellFactory cellFactory = new TetriCellFactory();
+    public  class TetrisFactory {
+        private  TetriCellFactory cellFactory = new TetriCellFactory();
 
-        public Tetri CreateTShape()
+        public  Tetri CreateTShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(1, 0, cellFactory.CreatePadding());
@@ -15,7 +15,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateIShape()
+        public  Tetri CreateIShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(0, 1, cellFactory.CreatePadding());
@@ -25,7 +25,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateOShape()
+        public  Tetri CreateOShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(0, 0, cellFactory.CreatePadding());
@@ -35,7 +35,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateLShape()
+        public  Tetri CreateLShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(0, 1, cellFactory.CreatePadding());
@@ -45,7 +45,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateJShape()
+        public  Tetri CreateJShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(0, 1, cellFactory.CreatePadding());
@@ -55,7 +55,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateSShape()
+        public  Tetri CreateSShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(1, 0, cellFactory.CreatePadding());
@@ -65,7 +65,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateZShape()
+        public  Tetri CreateZShape()
         {
             Tetri tetri = new Tetri();
             tetri.SetCell(1, 1, cellFactory.CreatePadding());
@@ -75,7 +75,7 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateRandomShape()
+        public  Tetri CreateRandomShape()
         {
             return new Random().Next(7) switch
             {

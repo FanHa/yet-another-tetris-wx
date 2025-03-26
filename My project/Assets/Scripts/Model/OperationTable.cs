@@ -13,8 +13,6 @@ namespace Model
     {
         public event Action OnTableChanged;
 
-        [SerializeField] private Tile emptyBrickTile; // 空砖块的Tile
-
         [SerializeField] private Serializable2DArray<TetriCell> board; // 棋盘
 
         private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
@@ -94,6 +92,75 @@ namespace Model
                 }
             }
 
+
+            // 触发事件
+            OnTableChanged?.Invoke();
+            return true;
+        }
+
+        public bool PlaceCharacterInRandomRow(Character characterCell)
+        {
+            List<int> validRows = new List<int>();
+            List<int> characterRows = new List<int>();
+
+            // 找到所有包含 Character 的行
+            for (int x = 0; x < board.GetLength(0); x++)
+            {
+                bool hasCharacter = false;
+
+                for (int y = 0; y < board.GetLength(1); y++)
+                {
+                    if (board[x, y] is Character)
+                    {
+                        hasCharacter = true;
+                        break;
+                    }
+                }
+
+                if (hasCharacter)
+                {
+                    characterRows.Add(x);
+                }
+            }
+
+            // 根据包含 Character 的行，寻找上方或下方的空行
+            foreach (int characterRow in characterRows)
+            {
+                // 检查上方的行
+                if (characterRow > 0  && !characterRows.Contains(characterRow - 1))
+                {
+                    validRows.Add(characterRow - 1);
+                }
+
+                // 检查下方的行
+                if (characterRow < board.GetLength(0) - 1  && !characterRows.Contains(characterRow + 1))
+                {
+                    validRows.Add(characterRow + 1);
+                }
+            }
+
+            // 如果没有找到有效行，返回 false
+            if (validRows.Count == 0)
+            {
+                Debug.LogWarning("No valid rows available to place the CharacterCell.");
+                return false;
+            }
+
+            // 随机选择一行
+            int randomRow = validRows[UnityEngine.Random.Range(0, validRows.Count)];
+
+            // 设置 [randomRow, y] 为 CharacterCell
+            for (int y = 0; y < board.GetLength(1); y++)
+            {
+                if (y == randomRow)
+                {
+                    board[randomRow, y] = characterCell;
+                }
+                else if (board[randomRow, y] is TetriCellEmpty)
+                {
+                    board[randomRow, y] = _tetriCellFactory.CreatePadding();
+                }
+            }
 
             // 触发事件
             OnTableChanged?.Invoke();

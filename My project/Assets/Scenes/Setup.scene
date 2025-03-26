@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewPrefab: {fileID: 7578777165251633043, guid: 7738e5ee486b77242b9ba0d2d6a3ab5e, type: 3}
-  tetriBrickPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+  tetriCellPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!1 &28250502
 GameObject:
@@ -1145,12 +1145,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 10660678}
-  - {fileID: 739051605}
   - {fileID: 559597913}
   - {fileID: 1353304960}
+  - {fileID: 718020251}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &739051604
+--- !u!1 &718020250
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1158,22 +1158,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 7
   m_Component:
-  - component: {fileID: 739051605}
+  - component: {fileID: 718020251}
+  - component: {fileID: 718020252}
   m_Layer: 0
   m_HasEditorInfo: 1
-  m_Name: Resource
+  m_Name: Reward
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &739051605
+--- !u!4 &718020251
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739051604}
+  m_GameObject: {fileID: 718020250}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1182,6 +1183,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 707241304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &718020252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718020250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07190743a5e940438a84a2a47bff042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rewardPanel: {fileID: 314842519}
+  tetriResource: {fileID: 1391442599}
+  operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
 --- !u!224 &845765252 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5091017088072240176, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
@@ -1553,7 +1569,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1391442593}
   - component: {fileID: 1391442595}
-  - component: {fileID: 1391442598}
   - component: {fileID: 1391442599}
   m_Layer: 0
   m_HasEditorInfo: 1
@@ -1594,22 +1609,9 @@ MonoBehaviour:
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
   assemblyMouseFollower: {fileID: 1915951891}
   battleField: {fileID: 943837600}
+  reward: {fileID: 718020252}
   inventory: {fileID: 559597914}
   levelController: {fileID: 1353304961}
---- !u!114 &1391442598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391442591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07190743a5e940438a84a2a47bff042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rewardPanel: {fileID: 314842519}
-  tetriResource: {fileID: 1391442599}
 --- !u!114 &1391442599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2361,15 +2363,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00000756979
+      value: 0.00004230785
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00000756979
+      value: 0.00004230785
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00000756979
+      value: 0.00004230785
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

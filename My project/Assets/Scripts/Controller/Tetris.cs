@@ -6,10 +6,8 @@ using System;
 namespace Controller {
     public class Tetris : MonoBehaviour {
         [SerializeField] private GameObject previewPrefab;
-        [SerializeField] private GameObject tetriBrickPrefab;
+        [SerializeField] private GameObject tetriCellPrefab;
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping;
-
-        private TetrisFactory tetrisFactory = new TetrisFactory();
 
         public GameObject GenerateTetriPreview(Tetri tetri, Vector2? gridSize = null)
         {
@@ -27,7 +25,7 @@ namespace Controller {
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    GameObject brick = Instantiate(tetriBrickPrefab, preview.transform);
+                    GameObject brick = Instantiate(tetriCellPrefab, preview.transform);
                     Image image = brick.GetComponent<Image>();
 
                     // Set image display based on Tetri shape
@@ -55,13 +53,13 @@ namespace Controller {
             return preview;
         }
 
-        public Tetri CreateTShape() => tetrisFactory.CreateTShape();
-        public Tetri CreateIShape() => tetrisFactory.CreateIShape();
-        public Tetri CreateOShape() => tetrisFactory.CreateOShape();
-        public Tetri CreateLShape() => tetrisFactory.CreateLShape();
-        public Tetri CreateJShape() => tetrisFactory.CreateJShape();
-        public Tetri CreateSShape() => tetrisFactory.CreateSShape();
-        public Tetri CreateZShape() => tetrisFactory.CreateZShape();
+        public GameObject GenerateCharacterPreview(TetriCell character, Vector2? gridSize = null)
+        {
+            GameObject preview = Instantiate(tetriCellPrefab);
+            Image image = preview.GetComponent<Image>();
+            Sprite sprite = spriteMapping.GetSprite(character);
+            image.sprite = sprite;
+            return preview;
+        }
     }
-
 }
