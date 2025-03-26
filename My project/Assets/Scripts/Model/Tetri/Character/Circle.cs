@@ -9,17 +9,24 @@ namespace Model.Tetri
         [SerializeField]
         private float healthBoostPercentage = 100f; // 直接表示提升的百分比
 
+        [SerializeField]
+        private float damageReductionPercentage = 50f; // 表示降低的百分比
+
         public override string Description()
         {
-            // 动态生成描述字符串，反映当前的提升百分比
-            return $"{healthBoostPercentage:F1}% health boost";
+            // 动态生成描述字符串，反映当前的提升和降低百分比
+            return $"{healthBoostPercentage:F1}% health boost, {damageReductionPercentage:F1}% damage reduction";
         }
 
         public override void ApplyAttributes(Units.Unit unitComponent)
         {
-            // 将百分比转换为倍率并应用
-            float multiplier = 1 + (healthBoostPercentage / 100f);
-            unitComponent.maxHP *= multiplier;
+            // 增加血量
+            float healthMultiplier = 1 + (healthBoostPercentage / 100f);
+            unitComponent.maxHP *= healthMultiplier;
+
+            // 降低伤害
+            float damageMultiplier = 1 - (damageReductionPercentage / 100f);
+            unitComponent.attackDamage *= damageMultiplier;
         }
     }
 }

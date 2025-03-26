@@ -7,19 +7,26 @@ namespace Model.Tetri
     public class Triangle : Character
     {
         [SerializeField]
-        private float damageBoostPercentage = 20f; // 直接表示提升的百分比
+        private float damageBoostPercentage = 30f; // 直接表示提升的百分比
+
+        [SerializeField]
+        private float healthReductionPercentage = 40f; // 表示降低的百分比
 
         public override string Description()
         {
-            // 动态生成描述字符串，反映当前的提升百分比
-            return $"{damageBoostPercentage:F1}% damage boost";
+            // 动态生成描述字符串，反映当前的提升和降低百分比
+            return $"{damageBoostPercentage:F1}% damage boost, {healthReductionPercentage:F1}% health reduction";
         }
 
         public override void ApplyAttributes(Units.Unit unitComponent)
         {
-            // 将百分比转换为倍率并应用
-            float multiplier = 1 + (damageBoostPercentage / 100f);
-            unitComponent.attackDamage *= multiplier;
+            // 增加伤害
+            float damageMultiplier = 1 + (damageBoostPercentage / 100f);
+            unitComponent.attackDamage *= damageMultiplier;
+
+            // 降低血量
+            float healthMultiplier = 1 - (healthReductionPercentage / 100f);
+            unitComponent.maxHP *= healthMultiplier;
         }
     }
 }
