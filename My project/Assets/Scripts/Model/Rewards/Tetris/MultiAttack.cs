@@ -1,11 +1,12 @@
 
+using UnityEngine;
 
 namespace Model.Rewards
 {
-    public class RangeAttack : Tetri
+    public class MultiAttack : Tetri
     {
-        public override string GetName() => "Range Attack";
-        public override string GetDescription() => "Increases attack range";
+        public override string GetName() => "Multi Attack";
+        public override string GetDescription() => "Increases attack target number";
 
         public override void FillCells()
         {
@@ -15,7 +16,7 @@ namespace Model.Rewards
             {
                 var random = new System.Random();
                 var randomPosition = occupiedPositions[random.Next(occupiedPositions.Count)];
-                tetriInstance.SetCell(randomPosition.x, randomPosition.y, new Model.Tetri.RangeAttack());
+                tetriInstance.SetCell(randomPosition.x, randomPosition.y, new Model.Tetri.MultiAttack());
             }
         }
     }

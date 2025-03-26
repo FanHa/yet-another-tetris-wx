@@ -58,3 +58,13 @@ MonoBehaviour:
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 1f154552f0361304197c9882be8470cd, type: 3}
     prefab: {fileID: 0}
+  - cellType:
+      typeName: Model.Tetri.AttackInterval, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 21300000, guid: b6d4ba64283d6eb4182fb242ad32cdb3, type: 3}
+    prefab: {fileID: 0}
+  - cellType:
+      typeName: Model.Tetri.MultiAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 21300000, guid: 73c1d9932ecd9374182327367c2fbc4b, type: 3}
+    prefab: {fileID: 0}

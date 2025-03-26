@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -23,10 +24,11 @@ namespace Units
         public float attackCooldown = 1f; // 攻击冷却时间
         public float maxHP = 100f; // 最大生命值
         public float attackDamage = 10f; // 攻击力
-        public float minDistance = 0.5f; // 与敌人保持的最小距离
+        public float minDistance = 0.1f; // 与敌人保持的最小距离
+        public float attackTargetNumber = 1; // 攻击目标数量
 
         private float detectionRadius = 30f;
-        protected Transform targetEnemy;
+        
         protected float lastAttackTime;
         private float currentHP;
         private Rigidbody2D rb;
@@ -40,6 +42,7 @@ namespace Units
         public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
         public Transform projectileSpawnPoint; // 投射物生成位置
+        private List<Transform> targetEnemies;
 
         private void Awake()
         {
@@ -64,8 +67,8 @@ namespace Units
         // Update is called once per frame
         protected void Update()
         {
-            FindClosestEnemy();
-            AttackEnemy();
+            FindClosestEnemies();
+            AttackEnemies();
         }
 
         protected void FixedUpdate()
@@ -73,57 +76,73 @@ namespace Units
             MoveTowardsEnemy();
         }
 
-        protected void FindClosestEnemy()
+        protected void FindClosestEnemies()
         {
             // todo 缩小范围,只检测某个object下的enemy
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
-            float closestDistance = Mathf.Infinity;
-            Transform closestEnemy = null;
-
+            List<Transform> enemiesInRange = new List<Transform>();
+            
             foreach (Collider2D collider in colliders)
             {
                 Unit unit = collider.GetComponent<Unit>();
                 if (unit != null && unit.unitFaction != unitFaction) // 判断是否为敌对阵营
                 {
-                    float distance = Vector2.Distance(transform.position, collider.transform.position);
-                    if (distance < closestDistance)
-                    {
-                        closestDistance = distance;
-                        closestEnemy = collider.transform;
-                    }
+                    enemiesInRange.Add(collider.transform);
                 }
             }
 
-            targetEnemy = closestEnemy;
+            // 按距离排序并选择最近的 attackTargetNumber 个敌人
+            targetEnemies = enemiesInRange
+                .OrderBy(enemy => Vector2.Distance(transform.position, enemy.position))
+                .Take((int)attackTargetNumber)
+                .ToList();
         }
 
         protected virtual void MoveTowardsEnemy()
         {
-            if (targetEnemy != null)
+            if (targetEnemies != null && targetEnemies.Count > 0)
             {
-                float distance = Vector2.Distance(transform.position, targetEnemy.position);
-                if (distance > attackRange && distance > minDistance)
+                Transform closestEnemy = targetEnemies.FirstOrDefault();
+                if (closestEnemy != null)
                 {
-                    // todo 调整自己的方向
-                    Vector2 direction = (targetEnemy.position - transform.position).normalized;
-                    Vector2 newPosition = Vector2.MoveTowards(rb.position, targetEnemy.position, moveSpeed * Time.deltaTime);
-                    rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法
+                    float distance = Vector2.Distance(transform.position, closestEnemy.position);
+
+                    // 如果距离大于攻击范围和最小距离，则移动
+                    if (distance > attackRange && distance > minDistance)
+                    {
+                        // 调整自己的方向
+                        Vector2 direction = (closestEnemy.position - transform.position).normalized;
+                        Vector2 newPosition = Vector2.MoveTowards(rb.position, closestEnemy.position, moveSpeed * Time.deltaTime);
+                        rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法
+                    }
                 }
             }
         }
 
-        protected void AttackEnemy()
+        protected void AttackEnemies()
         {
-            if (targetEnemy != null)
+            if (targetEnemies != null && targetEnemies.Count > 0)
             {
-                float distance = Vector2.Distance(transform.position, targetEnemy.position);
-                if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
-                {                    
-                    Unit enemyUnit = targetEnemy.GetComponent<Unit>();
-                    Attack(enemyUnit);
+                bool attacked = false;
+                foreach (var target in targetEnemies)
+                {
+                    float distance = Vector2.Distance(transform.position, target.position);
+                    if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
+                    {
+                        Unit enemyUnit = target.GetComponent<Unit>();
+                        if (enemyUnit != null)
+                        {
+                            Attack(enemyUnit);
+                            attacked = true;
+                        }
+                    }
+                }
+                if (attacked)
+                {
                     lastAttackTime = Time.time;
                 }
             }
+
         }
 
         public virtual void Attack(Unit target)
