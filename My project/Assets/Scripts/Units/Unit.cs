@@ -26,8 +26,6 @@ namespace Units
         public float attackDamage = 10f; // 攻击力
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
-
-        private float detectionRadius = 30f;
         
         protected float lastAttackTime;
         private float currentHP;
@@ -43,6 +41,8 @@ namespace Units
         public GameObject projectilePrefab; // 投射物预制体
         public Transform projectileSpawnPoint; // 投射物生成位置
         private List<Transform> targetEnemies;
+        private Transform factionAParent;
+        private Transform factionBParent;
 
         private void Awake()
         {
@@ -76,18 +76,28 @@ namespace Units
             MoveTowardsEnemy();
         }
 
+        public void SetFactionParent(Transform factionA, Transform factionB)
+        {
+            factionAParent = factionA;
+            factionBParent = factionB;
+        }
+
         protected void FindClosestEnemies()
         {
-            // todo 缩小范围,只检测某个object下的enemy
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
+            Transform enemyParent = unitFaction == Faction.FactionA ? factionBParent : factionAParent;
+            if (enemyParent == null)
+            {
+                Debug.LogWarning("Enemy parent is not set for this unit.");
+                return;
+            }
             List<Transform> enemiesInRange = new List<Transform>();
             
-            foreach (Collider2D collider in colliders)
+            foreach (Transform enemy in enemyParent)
             {
-                Unit unit = collider.GetComponent<Unit>();
+                Unit unit = enemy.GetComponent<Unit>();
                 if (unit != null && unit.unitFaction != unitFaction) // 判断是否为敌对阵营
                 {
-                    enemiesInRange.Add(collider.transform);
+                    enemiesInRange.Add(enemy);
                 }
             }
 
@@ -227,9 +237,6 @@ namespace Units
 
         void OnDrawGizmosSelected()
         {
-            // 绘制检测范围的Gizmos
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
             // 绘制攻击范围的Gizmos
             Gizmos.color = Color.blue;

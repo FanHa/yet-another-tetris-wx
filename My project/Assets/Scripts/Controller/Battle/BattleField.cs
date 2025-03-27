@@ -129,6 +129,7 @@ namespace Controller {
             Unit unitComponent = newUnit.GetComponent<Unit>();
             if (unitComponent != null)
             {
+                unitComponent.SetFactionParent(factionAParent, factionBParent);
                 if (tetriCells != null) 
                 {
                     // 先处理 Attribute 类型
