@@ -8,13 +8,13 @@ namespace Model.Tetri
     public class Tetri
     {
         [SerializeField]
-        private Serializable2DArray<TetriCell> shape;
+        private Serializable2DArray<Cell> shape;
 
-        public Serializable2DArray<TetriCell> Shape => shape;
+        public Serializable2DArray<Cell> Shape => shape;
 
         public Tetri()
         {
-            shape = new Serializable2DArray<TetriCell>(4, 4);
+            shape = new Serializable2DArray<Cell>(4, 4);
             for (int i = 0; i < shape.GetLength(0); i++)
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
@@ -23,7 +23,7 @@ namespace Model.Tetri
                 }
             }
         }
-        public void SetCell(int row, int column, TetriCell cell)
+        public void SetCell(int row, int column, Cell cell)
         {
             if (row >= 0 && row < shape.GetLength(0) && column >= 0 && column < shape.GetLength(1))
             {

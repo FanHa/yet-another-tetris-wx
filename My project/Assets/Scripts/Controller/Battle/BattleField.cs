@@ -108,7 +108,7 @@ namespace Controller {
             }
         }
 
-        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Transform parent, List<TetriCell> tetriCells)
+        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Transform parent, List<Cell> tetriCells)
         {
             if (unitPrefab == null)
             {
@@ -133,17 +133,17 @@ namespace Controller {
                 if (tetriCells != null) 
                 {
                     // 先处理 Attribute 类型
-                    foreach (var cell in tetriCells.OfType<Model.Tetri.Attribute>())
+                    foreach (var cell in tetriCells.OfType<Model.Tetri.IBaseAttribute>())
                     {
                         cell.ApplyAttributes(unitComponent);
                     }
 
                     // 再处理 Character 类型
-                    foreach (var cell in tetriCells.OfType<Character>())
+                    foreach (var cell in tetriCells.OfType<ICharacterFeature>())
                     {
                         // 根据 Character 类型的逻辑处理
                         // 例如：设置角色的特殊属性或行为
-                        cell.ApplyAttributes(unitComponent);
+                        cell.ApplyFeatures(unitComponent);
 
                     }
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellSkill : TetriCell
+    public class TetriCellSkill : Cell
     {
         [SerializeField]
         public string skillName; // 技能名称

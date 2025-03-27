@@ -29,7 +29,7 @@ namespace Controller {
                     Image image = brick.GetComponent<Image>();
 
                     // Set image display based on Tetri shape
-                    TetriCell cell = tetri.Shape[i, j];
+                    Cell cell = tetri.Shape[i, j];
                     if (cell is not TetriCellEmpty)
                     {
                         Sprite sprite = spriteMapping.GetSprite(cell.GetType());
@@ -53,7 +53,7 @@ namespace Controller {
             return preview;
         }
 
-        public GameObject GenerateCharacterPreview(TetriCell character, Vector2? gridSize = null)
+        public GameObject GenerateCharacterPreview(Cell character, Vector2? gridSize = null)
         {
             GameObject preview = Instantiate(tetriCellPrefab);
             Image image = preview.GetComponent<Image>();

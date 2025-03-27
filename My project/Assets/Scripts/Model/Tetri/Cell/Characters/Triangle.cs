@@ -18,7 +18,7 @@ namespace Model.Tetri
             return $"{damageBoostPercentage:F1}% damage boost, {healthReductionPercentage:F1}% health reduction";
         }
 
-        public override void ApplyAttributes(Units.Unit unitComponent)
+        public override void ApplyFeatures(Units.Unit unitComponent)
         {
             // 增加伤害
             float damageMultiplier = 1 + (damageBoostPercentage / 100f);

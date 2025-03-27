@@ -25,14 +25,14 @@ namespace Model.Tetri
             }
         }
 
-        public TetriCell CreateRandomCharacter()
+        public Cell CreateRandomCharacter()
         {
             // 随机选择一个子类并创建实例
             var selectedType = CachedCharacterTypes[_random.Next(CachedCharacterTypes.Count)];
-            return (TetriCell)Activator.CreateInstance(selectedType);
+            return (Cell)Activator.CreateInstance(selectedType);
         }
 
-        public TetriCell CreatePadding()
+        public Cell CreatePadding()
         {
             return new Padding();
         }

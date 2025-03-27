@@ -11,7 +11,7 @@ namespace Model.Tetri
             return "Base Character"; // 返回一个字符串
         }
 
-        public override void ApplyAttributes(Units.Unit unitComponent)
+        public override void ApplyFeatures(Units.Unit unitComponent)
         {
             // Do nothing
         }

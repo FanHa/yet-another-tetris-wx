@@ -13,13 +13,13 @@ namespace Model
     {
         public event Action OnTableChanged;
 
-        [SerializeField] private Serializable2DArray<TetriCell> board; // 棋盘
+        [SerializeField] private Serializable2DArray<Cell> board; // 棋盘
 
         private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
 
         public void Init(int rows, int columns)
         {
-            board = new Serializable2DArray<TetriCell>(rows, columns);
+            board = new Serializable2DArray<Cell>(rows, columns);
 
             for (int x = 0; x < rows; x++)
             {
@@ -44,7 +44,7 @@ namespace Model
             }
 
         }
-        public Serializable2DArray<TetriCell> GetBoardData()
+        public Serializable2DArray<Cell> GetBoardData()
         {
             return board;
         }
@@ -82,7 +82,7 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    TetriCell cell = tetri.Shape[i, j];
+                    Cell cell = tetri.Shape[i, j];
                     if (cell is not TetriCellEmpty)
                     {
                         int x = position.x + i; // 调整行列索引
@@ -167,19 +167,19 @@ namespace Model
             return true;
         }
 
-        public List<List<TetriCell>> GetFullRows()
+        public List<List<Cell>> GetFullRows()
         {
-            List<List<TetriCell>> fullRows = new List<List<TetriCell>>();
+            List<List<Cell>> fullRows = new List<List<Cell>>();
 
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 bool isFullRow = true;
                 bool containsCharacter = false;
-                List<TetriCell> rowCells = new List<TetriCell>();
+                List<Cell> rowCells = new List<Cell>();
 
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    TetriCell cell = board[x, y];
+                    Cell cell = board[x, y];
 
                     // 判断是否为空单元格
                     if (cell is TetriCellEmpty)

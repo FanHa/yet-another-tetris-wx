@@ -25,7 +25,7 @@ namespace UI {
 
 
         // 更新网格数据
-        public void UpdateData(Serializable2DArray<TetriCell> newBoard)
+        public void UpdateData(Serializable2DArray<Cell> newBoard)
         {
             // 清空现有单元格
             foreach (Transform child in container.transform)
@@ -39,7 +39,7 @@ namespace UI {
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    TetriCell cell = board[x, y];
+                    Cell cell = board[x, y];
                     GameObject newCell;
 
                     if (cell is not TetriCellEmpty)

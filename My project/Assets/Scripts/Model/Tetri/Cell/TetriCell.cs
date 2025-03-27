@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public abstract class TetriCell
+    public abstract class Cell
     {
 
         public abstract string Description();

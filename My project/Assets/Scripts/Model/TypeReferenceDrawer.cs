@@ -19,10 +19,10 @@ namespace Model
 
         private static void CacheTetriCellTypes()
         {
-            // 缓存所有 TetriCell 的子类
+            // 缓存所有 Cell 的子类
             cachedTetriCellTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => type.IsSubclassOf(typeof(Model.Tetri.TetriCell)) && !type.IsAbstract)
+                .Where(type => type.IsSubclassOf(typeof(Model.Tetri.Cell)) && !type.IsAbstract)
                 .ToList();
 
             // 缓存子类名称

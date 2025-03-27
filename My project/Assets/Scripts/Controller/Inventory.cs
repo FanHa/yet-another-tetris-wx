@@ -26,7 +26,7 @@ namespace Controller {
         }
 
 
-        public InventoryItem GenerateInventoryItemFromTetriCells(List<TetriCell> tetriCells)
+        public InventoryItem GenerateInventoryItemFromTetriCells(List<Cell> tetriCells)
         {
             Character characterCell = tetriCells.OfType<Character>().FirstOrDefault();
 

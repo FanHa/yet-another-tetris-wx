@@ -13,21 +13,21 @@ namespace Model
         [field: SerializeField] public GameObject Prefab { get; set; }
         [field: SerializeField, TextArea] public string Description { get; set; }
         [SerializeField] public int spawnInterval;
-        [SerializeField] private List<Tetri.TetriCell> tetriCells = new List<Tetri.TetriCell>();
+        [SerializeField] private List<Tetri.Cell> tetriCells = new List<Tetri.Cell>();
         // 公共属性确保 tetriCells 永远不为 null
-        public List<Tetri.TetriCell> TetriCells
+        public List<Tetri.Cell> TetriCells
         {
             get
             {
                 if (tetriCells == null)
                 {
-                    tetriCells = new List<Tetri.TetriCell>();
+                    tetriCells = new List<Tetri.Cell>();
                 }
                 return tetriCells;
             }
             set
             {
-                tetriCells = value ?? new List<Tetri.TetriCell>();
+                tetriCells = value ?? new List<Tetri.Cell>();
             }
         }
         public bool IsEmpty => string.IsNullOrEmpty(UnitName);
@@ -39,14 +39,14 @@ namespace Model
             GameObject prefab = null, 
             string description = null, 
             int spawnInterval = 0,
-            List<Tetri.TetriCell> tetriCells = null)
+            List<Tetri.Cell> tetriCells = null)
         {
             UnitName = unitName;
             UnitSprite = unitSprite;
             Prefab = prefab;
             Description = description;
             this.spawnInterval = spawnInterval;
-            this.tetriCells = tetriCells ?? new List<Tetri.TetriCell>(); // 确保 tetriCells 不为 null
+            this.tetriCells = tetriCells ?? new List<Tetri.Cell>(); // 确保 tetriCells 不为 null
         }
     }
     

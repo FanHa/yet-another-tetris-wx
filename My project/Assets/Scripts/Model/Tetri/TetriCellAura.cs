@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellAura : TetriCell
+    public class TetriCellAura : Cell
     {
         [SerializeField]
         public string auraEffect; // 光环效果

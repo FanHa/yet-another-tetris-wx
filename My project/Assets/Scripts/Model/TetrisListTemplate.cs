@@ -68,7 +68,7 @@ namespace Model{
                 {
                     // 随机选择一个子类并创建实例
                     var selectedType = attributeTypes[random.Next(attributeTypes.Count)];
-                    var attributeInstance = (TetriCell)Activator.CreateInstance(selectedType);
+                    var attributeInstance = (Cell)Activator.CreateInstance(selectedType);
 
                     // 替换单元格
                     tetri.SetCell(row, col, attributeInstance);

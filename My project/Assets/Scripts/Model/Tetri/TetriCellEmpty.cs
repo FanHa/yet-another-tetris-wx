@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellEmpty : TetriCell
+    public class TetriCellEmpty : Cell
     {
         public TetriCellEmpty()
         {

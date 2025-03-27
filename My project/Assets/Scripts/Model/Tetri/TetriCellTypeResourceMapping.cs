@@ -48,7 +48,7 @@ namespace Model.Tetri
             }
         }
 
-        public Sprite GetSprite(TetriCell cell)
+        public Sprite GetSprite(Cell cell)
         {
             if (cell == null) return null;
             return GetSprite(cell.GetType());
@@ -64,7 +64,7 @@ namespace Model.Tetri
         }
 
 
-        public GameObject GetPrefab(TetriCell cell)
+        public GameObject GetPrefab(Cell cell)
         {
             if (cell == null) return null;
             return GetPrefab(cell.GetType());

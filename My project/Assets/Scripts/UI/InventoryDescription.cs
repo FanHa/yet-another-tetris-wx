@@ -38,7 +38,7 @@ namespace UI{
             }
             itemImage.sprite = item.UnitSprite;
             // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
-            foreach (TetriCell cell in item.TetriCells)
+            foreach (Cell cell in item.TetriCells)
             {
                 // 创建一个新的DescriptionItem实例
                 DescriptionItem newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
