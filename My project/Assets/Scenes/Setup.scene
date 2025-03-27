@@ -1148,6 +1148,7 @@ Transform:
   - {fileID: 559597913}
   - {fileID: 1353304960}
   - {fileID: 718020251}
+  - {fileID: 1760741502}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &718020250
@@ -1198,6 +1199,17 @@ MonoBehaviour:
   rewardPanel: {fileID: 314842519}
   tetriResource: {fileID: 1391442599}
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
+--- !u!114 &778035657 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3623927393384968520, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
+  m_PrefabInstance: {fileID: 813519626502285636}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 072b22b9a7551184b91936bf72239a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &845765252 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5091017088072240176, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
@@ -1609,6 +1621,7 @@ MonoBehaviour:
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
   assemblyMouseFollower: {fileID: 1915951891}
   battleField: {fileID: 943837600}
+  tetriResource: {fileID: 1760741503}
   reward: {fileID: 718020252}
   inventory: {fileID: 559597914}
   levelController: {fileID: 1353304961}
@@ -1868,6 +1881,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a305993f0ab65df4e88d1642b23f7fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1760741501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1760741502}
+  - component: {fileID: 1760741503}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: Resource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1760741502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760741501}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 707241304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1760741503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760741501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751cf3bf4d51f6648b3b26d60655ea7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tetrisResourcesData: {fileID: 11400000, guid: 273c05945e59e604f8b633b5e8ce89a7, type: 2}
+  tetrisResourcePanelUI: {fileID: 512681429}
+  tetrisListTemplate: {fileID: 11400000, guid: 0e37b766481c6f846b6507b26dfc7a58, type: 2}
 --- !u!1 &1776533867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,15 +2424,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00004230785
+      value: -0.000001225585
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00004230785
+      value: -0.000001225585
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00004230785
+      value: -0.000001225585
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3141,6 +3202,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6646894370660056544, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
+      propertyPath: tabsManager
+      value: 
+      objectReference: {fileID: 778035657}
     - target: {fileID: 6646894370660056544, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: tetrisFactory
       value: 

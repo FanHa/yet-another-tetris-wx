@@ -7,21 +7,21 @@ using UnityEngine.Tilemaps;
 using Model.Tetri;
 using WeChatWASM;
 
-namespace UI.TetrisResource {
-    public class TetrisResourcePanel : MonoBehaviour
+namespace UI.Resource {
+    public class Panel : MonoBehaviour
     {
         public event Action<Tetri> OnTetriClicked;
-        public event Action<TetrisResourceItem> OnTetriResourceItemBeginDrag;
+        public event Action<ItemSlot> OnTetriResourceItemBeginDrag;
         [SerializeField] private GameObject tetriResourceItemPrefab; // 用于显示Tetri的预制件
 
         [SerializeField] private Transform usablePanelTransform;  // Panel for available Tetris pieces
         [SerializeField] private Transform usedPanelTransform;    // Panel for used Tetris pieces
         [SerializeField] private Transform unusedPanelTransform;  // Panel for unused/locked Tetris pieces
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeSpriteMapping; // Mapping of TetriCellType to Sprite
+        [SerializeField] private TabsManager tabsManager;
         [SerializeField] private Controller.Tetris tetrisFactory;
 
         // todo 这个itemList的作用是啥?
-        private List<TetrisResourceItem> itemList = new List<TetrisResourceItem>();
+        private List<ItemSlot> itemList = new List<ItemSlot>();
 
         public void UpdatePanels(List<Tetri> usableTetriList, List<Tetri> usedTetriList, List<Tetri> unusedTetriList)
         {
@@ -36,7 +36,7 @@ namespace UI.TetrisResource {
             // Update usable panel
             foreach (var tetri in usableTetriList)
             {
-                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                ItemSlot resourceItem = CreateTetrisResourceItem(
                     usablePanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
                 resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
@@ -46,7 +46,7 @@ namespace UI.TetrisResource {
             // Update used panel
             foreach (var tetri in usedTetriList)
             {
-                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                ItemSlot resourceItem = CreateTetrisResourceItem(
                     usedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
@@ -54,16 +54,16 @@ namespace UI.TetrisResource {
             // Update unused panel
             foreach (var tetri in unusedTetriList)
             {
-                TetrisResourceItem resourceItem = CreateTetrisResourceItem(
+                ItemSlot resourceItem = CreateTetrisResourceItem(
                     unusedPanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
         }
 
-        public TetrisResourceItem CreateTetrisResourceItem(Transform parent, Tetri tetri)
+        public ItemSlot CreateTetrisResourceItem(Transform parent, Tetri tetri)
         {
             GameObject instance = Instantiate(tetriResourceItemPrefab, parent);
-            TetrisResourceItem resourceItem = instance.GetComponent<TetrisResourceItem>();
+            ItemSlot resourceItem = instance.GetComponent<ItemSlot>();
             if (resourceItem != null)
             {
                 GameObject preview = tetrisFactory.GenerateTetriPreview(tetri);
@@ -85,7 +85,7 @@ namespace UI.TetrisResource {
             }
         }
 
-        private void HandleItemBeginDrag(TetrisResourceItem item)
+        private void HandleItemBeginDrag(ItemSlot item)
         {
             int index = itemList.IndexOf(item);
             if (index == -1)
@@ -101,11 +101,16 @@ namespace UI.TetrisResource {
             throw new NotImplementedException();
         }
 
-        private void HandleItemClicked(TetrisResourceItem item)
+        private void HandleItemClicked(ItemSlot item)
         {
             // int index = item.transform.GetSiblingIndex();
             // Tetri tetri = tetriList[index];
             // OnTetriClicked?.Invoke(tetri);
+        }
+
+        internal void ResetTab()
+        {
+            tabsManager.SwitchTab(0);
         }
     }
 }

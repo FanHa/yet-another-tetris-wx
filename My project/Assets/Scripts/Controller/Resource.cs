@@ -1,16 +1,16 @@
 using System;
 using Model.Tetri;
-using UI.TetrisResource;
+using UI.Resource;
 using UnityEngine;
 
 namespace Controller
 {
-    public class TetriResource : MonoBehaviour
+    public class Resource : MonoBehaviour
     {
         [SerializeField] private Model.TetrisResources tetrisResourcesData;
-        [SerializeField] private UI.TetrisResource.TetrisResourcePanel tetrisResourcePanelUI;
+        [SerializeField] private UI.Resource.Panel tetrisResourcePanelUI;
         [SerializeField] private Model.TetrisListTemplate tetrisListTemplate;
-        public event Action<TetrisResourceItem> OnTetriBegainDrag;
+        public event Action<ItemSlot> OnTetriBegainDrag;
         public void Initialize()
         {
             tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
@@ -23,9 +23,10 @@ namespace Controller
         public void PrepareNewRound()
         {
             tetrisResourcesData.DrawRandomTetriFromUnusedList(1);
+            tetrisResourcePanelUI.ResetTab();
         }
 
-        public void UseTetri(TetrisResourceItem item)
+        public void UseTetri(ItemSlot item)
         {
             tetrisResourcesData.UseTetri(item.GetTetri());
         }
@@ -35,12 +36,12 @@ namespace Controller
             tetrisResourcesData.AddUsableTetri(tetri);
         }
 
-        public UI.TetrisResource.TetrisResourceItem GetTetriResourceItem(Transform parent, Tetri tetri)
-        {
-            return tetrisResourcePanelUI.CreateTetrisResourceItem(parent, tetri);
-        }
+        // public UI.TetrisResource.TetrisResourceItem GetTetriResourceItem(Transform parent, Tetri tetri)
+        // {
+        //     return tetrisResourcePanelUI.CreateTetrisResourceItem(parent, tetri);
+        // }
 
-        private void HandleTetriBeginDrag(TetrisResourceItem item)
+        private void HandleTetriBeginDrag(ItemSlot item)
         {
 
             // 调用TetrisResourcesSO的方法设置某个Tetri被拖动

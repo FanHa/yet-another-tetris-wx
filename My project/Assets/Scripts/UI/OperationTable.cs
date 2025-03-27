@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace UI {
     public class OperationTable : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
-        public event Action<UI.TetrisResource.TetrisResourceItem, Vector2Int> OnTetriDrop; // 定义事件
+        public event Action<UI.Resource.ItemSlot, Vector2Int> OnTetriDrop; // 定义事件
 
         [SerializeField] private GridLayoutGroup container; // 用于布局的GridLayoutGroup
         [SerializeField] private GameObject emptyCellPrefab; // 单元格预制体
@@ -81,7 +81,7 @@ namespace UI {
             GameObject draggedObject = eventData.pointerDrag;
             if (draggedObject != null)
             {
-                UI.TetrisResource.TetrisResourceItem resourceItem = draggedObject.GetComponent<UI.TetrisResource.TetrisResourceItem>();
+                UI.Resource.ItemSlot resourceItem = draggedObject.GetComponent<UI.Resource.ItemSlot>();
                 if (resourceItem != null)
                 {
                     RectTransformUtility.ScreenPointToLocalPointInRectangle(

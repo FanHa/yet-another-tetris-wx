@@ -1,7 +1,6 @@
 using System;
 using Model.Tetri;
 using TMPro;
-using UI.TetrisResource;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

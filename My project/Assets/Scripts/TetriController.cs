@@ -2,27 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Controller;
-using UI.TetrisResource;
 using Model.Tetri;
+using UI.Resource;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private BattleField battleField;
-    private TetriResource tetriResource;
+    [SerializeField] private Resource tetriResource;
     [SerializeField] private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Controller.Level levelController; // 引用Level控制器
 
-    private UI.TetrisResource.TetrisResourceItem currentDraggingTetri; // 保存当前拖动的Tetri
-
-    private void Awake()
-    {
-        tetriResource = GetComponent<TetriResource>();
-
-    }
+    private UI.Resource.ItemSlot currentDraggingTetri; // 保存当前拖动的Tetri
 
     private void Start()
     {
@@ -59,7 +53,7 @@ public class TetriController : MonoBehaviour
     }
 
 
-    private void HandleTetriDrop(TetrisResourceItem item, Vector2Int position)
+    private void HandleTetriDrop(ItemSlot item, Vector2Int position)
     {
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
         bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
@@ -75,7 +69,7 @@ public class TetriController : MonoBehaviour
         }
     }
 
-    private void HandleTetriBeginDrag(TetrisResourceItem item)
+    private void HandleTetriBeginDrag(ItemSlot item)
     {
         // 保存当前拖动的Tetri信息
         currentDraggingTetri = item;

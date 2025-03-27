@@ -4,18 +4,18 @@ using UnityEngine.EventSystems;
 using Model.Tetri;
 
 
-namespace UI.TetrisResource {
-    public class TetrisResourceItem : MonoBehaviour, IPointerClickHandler, 
+namespace UI.Resource {
+    public class ItemSlot : MonoBehaviour, IPointerClickHandler, 
         IBeginDragHandler, IEndDragHandler, IDragHandler
     {
-        public Action<TetrisResourceItem> OnItemClicked; // 定义点击事件
-        public Action<TetrisResourceItem> OnItemBeginDrag; // 定义开始拖动事件
-        public Action<TetrisResourceItem> OnItemEndDrag; // 定义结束拖动事件
+        public Action<ItemSlot> OnItemClicked; // 定义点击事件
+        public Action<ItemSlot> OnItemBeginDrag; // 定义开始拖动事件
+        public Action<ItemSlot> OnItemEndDrag; // 定义结束拖动事件
 
         [SerializeField] private Tetri tetri; // Tetri数据
         [SerializeField] private Transform previewParent; 
 
-        private TetrisResourceItem() { } // 私有构造函数，防止直接实例化
+        private ItemSlot() { } // 私有构造函数，防止直接实例化
         public void Initialize(Tetri tetri, GameObject preview)
         {
             SetTetri(tetri);

@@ -9,7 +9,7 @@ namespace Controller
     public class Reward : MonoBehaviour
     {
         [SerializeField] private Panel rewardPanel;
-        [SerializeField] private Controller.TetriResource tetriResource;
+        [SerializeField] private Controller.Resource tetriResource;
         [SerializeField] private Model.OperationTable operationTableData;
         private RewardFactory rewardFactory;
         public event System.Action OnRewardSelected;
