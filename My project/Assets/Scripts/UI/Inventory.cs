@@ -105,6 +105,8 @@ namespace UI
 
         public void Show()
         {
+            // todo 很奇怪的问题，这里必须调用两次在能在第一次show时显示出来，不然就不行
+            gameObject.SetActive(true);
             gameObject.SetActive(true);
             ResetSelection();
         }
