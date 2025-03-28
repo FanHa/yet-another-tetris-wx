@@ -25,6 +25,7 @@ namespace Controller {
 
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
+        [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
         private Coroutine spawnUnitsCoroutine;
 
         // Start is called before the first frame update
@@ -59,10 +60,6 @@ namespace Controller {
         {
             foreach (var inventoryItem in inventoryData.Items)
             {
-                if (inventoryItem.IsEmpty)
-                {
-                    continue;
-                }
                 yield return StartCoroutine(SpawnUnitsA(inventoryItem));
             }
 
@@ -78,13 +75,13 @@ namespace Controller {
 
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, factionAParent, item.TetriCells);
+                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionA, factionAParent, item.TetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营A的Unit
-                SpawnUnit(spawnPointA, item.Prefab, Unit.Faction.FactionA, factionAParent, item.TetriCells);
+                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionA, factionAParent, item.TetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);
@@ -95,13 +92,13 @@ namespace Controller {
         {
             if (item.spawnInterval <= 0)
             {
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, factionBParent, item.TetriCells);
+                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionB, factionBParent, item.TetriCells);
                 yield break;
             }
             while (true)
             {
                 // 刷新阵营B的Unit
-                SpawnUnit(spawnPointB, item.Prefab, Unit.Faction.FactionB, factionBParent, item.TetriCells);
+                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionB, factionBParent, item.TetriCells);
 
                 // 等待一段时间后再次刷新
                 yield return new WaitForSeconds(item.spawnInterval);

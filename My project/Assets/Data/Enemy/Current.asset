@@ -13,9 +13,5 @@ MonoBehaviour:
   m_Name: Current
   m_EditorClassIdentifier: 
   items:
-  - <UnitName>k__BackingField: Circle
-    <UnitSprite>k__BackingField: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
-    <Prefab>k__BackingField: {fileID: 300802932831866235, guid: aabc82f711935b44fad150d0cded41ad, type: 3}
-    <Description>k__BackingField: 
-    spawnInterval: 0
-  <Size>k__BackingField: 12
+  - spawnInterval: 0
+  - spawnInterval: 0

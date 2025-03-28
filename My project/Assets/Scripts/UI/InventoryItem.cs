@@ -10,7 +10,7 @@ namespace UI {
         IBeginDragHandler, IEndDragHandler, IDropHandler, IDragHandler
     {
         [SerializeField] private Image itemImage;
-        [SerializeField] private Model.InventoryItem inventoryItemSO;
+        public Model.InventoryItem Data;
 
         private Outline outline;
 
@@ -40,11 +40,9 @@ namespace UI {
             // todo
         }
 
-        public void SetData(Sprite sprite)
+        public void SetData(Model.InventoryItem item)
         {
-            itemImage.sprite = sprite;
-            itemImage.gameObject.SetActive(true);
-            empty = false;
+            Data = item;
         }
 
         public void Select()

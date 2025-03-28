@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: 1
   enemyData:
-  - <UnitName>k__BackingField: 
-    <UnitSprite>k__BackingField: {fileID: 0}
-    <Prefab>k__BackingField: {fileID: 7887716448648515404, guid: 198cf747890024b499601f5c460ca6ed, type: 3}
-    <Description>k__BackingField: 
+  - character:
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
     spawnInterval: 0
+    tetriCells: []

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Units;
 
-
 namespace Model.Tetri
 {
     [CreateAssetMenu(fileName = "TetriCellTypeResourceMapping", menuName = "Tetris/TetriCellTypeResourceMapping")]
@@ -13,10 +12,9 @@ namespace Model.Tetri
         [Serializable]
         public struct CellTypeResourcePair
         {
-            // todo 做成选项
-            public Model.TypeReference cellType; // 类类型的名称
-            public Sprite sprite;
-            public GameObject prefab;
+            public Model.CellTypeReference cellType; // Class type reference
+            public Sprite sprite; // Sprite associated with the cell type
+            // Future extensibility: Add other fields here if needed
         }
 
         [SerializeField]
@@ -25,7 +23,6 @@ namespace Model.Tetri
         public List<CellTypeResourcePair> Mappings => mappings;
 
         private Dictionary<Type, CellTypeResourcePair> resourceDictionary;
-
 
         private void OnEnable()
         {
@@ -62,23 +59,5 @@ namespace Model.Tetri
             }
             return null;
         }
-
-
-        public GameObject GetPrefab(Cell cell)
-        {
-            if (cell == null) return null;
-            return GetPrefab(cell.GetType());
-        }
-
-        public GameObject GetPrefab(Type type)
-        {
-            if (resourceDictionary.TryGetValue(type, out var pair))
-            {
-                return pair.prefab;
-            }
-            return null;
-        }
-
-        
     }
 }

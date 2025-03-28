@@ -105,7 +105,7 @@ public class TetriController : MonoBehaviour
     private void LoadLevelData()
     {
         Model.LevelConfig currentLevelConfig = levelController.GetCurrentLevelConfig();
-        battleField.SetEnemyData(currentLevelConfig.enemyData); // Pass enemy data to BattleField
+        battleField.SetEnemyData(currentLevelConfig.GetEnemyData()); // Pass enemy data to BattleField
     }
 
     public void HandleInventoryClicked()

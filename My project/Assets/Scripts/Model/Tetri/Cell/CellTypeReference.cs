@@ -3,7 +3,7 @@ using System;
 namespace Model
 {
     [Serializable]
-    public class TypeReference
+    public class CellTypeReference
     {
         public string typeName;
 
@@ -12,5 +12,7 @@ namespace Model
             get => Type.GetType(typeName);
             set => typeName = value?.AssemblyQualifiedName;
         }
+
+        // public bool IsCellType => Type != null && Type.IsSubclassOf(typeof(Model.Tetri.Cell));
     }
 }

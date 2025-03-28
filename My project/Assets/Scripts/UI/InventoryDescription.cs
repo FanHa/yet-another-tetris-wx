@@ -10,6 +10,7 @@ namespace UI{
     public class InventoryDescription : MonoBehaviour
     {
         [SerializeField] private Image itemImage;
+        [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private DescriptionItem descriptionItemPrefab;
         [SerializeField] private Transform descriptionItemParent; // 父对象，用于存放DescriptionItem
         [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
@@ -36,7 +37,9 @@ namespace UI{
             {
                 Destroy(child.gameObject);
             }
-            itemImage.sprite = item.UnitSprite;
+            itemImage.sprite = cellTypeResourceMapping.GetSprite(item.CharacterCell);
+            descriptionText.text = item.CharacterCell.Description();
+
             // 遍历item里的TetriCells，为每一个Cell创建一个DescriptionItem
             foreach (Cell cell in item.TetriCells)
             {
