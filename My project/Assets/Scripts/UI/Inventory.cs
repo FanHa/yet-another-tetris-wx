@@ -17,6 +17,7 @@ namespace UI
         [SerializeField] private InventoryMouseFollower mouseFollower;
         List<InventoryItem> items = new List<InventoryItem>();
         private int currentlyDraggedItemIndex = -1;
+        private Dictionary<int, Model.InventoryItem> inventoryData; // Store inventory data locally
 
         private void Awake()
         {
@@ -24,25 +25,38 @@ namespace UI
             mouseFollower.Toggle(false);
             itemDescription.ResetDescription();
         }
-        public void InitializeInventory(int size)
-        {
-            for (int i = 0; i < size; i++)
-            {
-                InventoryItem item = Instantiate(itemPrefab, contentPanel);
-                items.Add(item);
-                item.OnItemClicked += HandleItemSelection;
-                item.OnItemDroppedOn += HandleSwap;
-                item.OnItemBeginDrag += HandleBeginDrag;
-                item.OnItemEndDrag += HandleEndDrag;
-                item.OnRightMouseBtnClick += HandleShowItemActions;
-            }
-        }
 
-        public void UpdateData(int itemIndex, Sprite itemSprite)
+        public void UpdateData(Dictionary<int, Model.InventoryItem> inventoryState)
         {
-            if (items.Count > itemIndex)
+            inventoryData = inventoryState; // Save the data locally
+
+            // Clear excess UI elements
+            while (items.Count > inventoryState.Count)
             {
-                items[itemIndex].SetData(itemSprite);
+                Destroy(items[items.Count - 1].gameObject);
+                items.RemoveAt(items.Count - 1);
+            }
+
+            // Update or create UI elements
+            int index = 0;
+            foreach (var kvp in inventoryState)
+            {
+                if (index < items.Count)
+                {
+                    items[index].SetData(kvp.Value.UnitSprite);
+                }
+                else
+                {
+                    InventoryItem item = Instantiate(itemPrefab, contentPanel);
+                    item.SetData(kvp.Value.UnitSprite);
+                    items.Add(item);
+                    item.OnItemClicked += HandleItemSelection;
+                    item.OnItemDroppedOn += HandleSwap;
+                    item.OnItemBeginDrag += HandleBeginDrag;
+                    item.OnItemEndDrag += HandleEndDrag;
+                    item.OnRightMouseBtnClick += HandleShowItemActions;
+                }
+                index++;
             }
         }
 
@@ -100,7 +114,18 @@ namespace UI
                 Debug.LogError("Item not found");
                 return;
             }
-            OnDescriptionRequested?.Invoke(index);
+
+            if (inventoryData.TryGetValue(index, out var selectedItem))
+            {
+                itemDescription.SetDescription(selectedItem); // Directly set the description
+                DeselectAllItems();
+                items[index].Select();
+                OnDescriptionRequested?.Invoke(index);
+            }
+            else
+            {
+                Debug.LogError("Item data not found");
+            }
         }
 
         public void Show()
@@ -131,20 +156,13 @@ namespace UI
             ResetDraggedItem();
         }
 
-        public void UpdateDescription(int itemIndex, Model.InventoryItem item)
-        {
-            itemDescription.SetDescription(item);
-            DeselectAllItems();
-            items[itemIndex].Select();
-        }
-
-        internal void ResetAllItems()
+        public void ResetAllItems()
         {
             foreach (var item in items)
             {
-                item.ResetData();
-                item.Deselect();
+                Destroy(item.gameObject);
             }
+            items.Clear();
         }
     }
 }

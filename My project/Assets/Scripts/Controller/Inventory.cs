@@ -45,8 +45,6 @@ namespace Controller {
 
         private void PrepareUI()
         {
-            inventoryUI.InitializeInventory(inventoryData.Size);
-            inventoryUI.OnDescriptionRequested += HandleDescriptionRequest;
             inventoryUI.OnSwapItems += HandleSwapItems;
             inventoryUI.OnStartDragging += HandleStartDragging;
             inventoryUI.OnItemActionRequested += HandleItemActionRequest;
@@ -58,10 +56,7 @@ namespace Controller {
         private void UpdateInventoryUI(Dictionary<int, Model.InventoryItem> inventoryState)
         {
             inventoryUI.ResetAllItems();
-            foreach (var item in inventoryState)
-            {
-                inventoryUI.UpdateData(item.Key, item.Value.UnitSprite);
-            }
+            inventoryUI.UpdateData(inventoryState);
         }
         private void HandleItemActionRequest(int itemIndex)
         {
@@ -81,16 +76,6 @@ namespace Controller {
         {
             inventoryData.SwapItems(itemIndex_1, itemIndex_2);
         }
-        private void HandleDescriptionRequest(int itemIndex)
-        {
-            InventoryItem item = inventoryData.GetItemAt(itemIndex);
-            if (item.IsEmpty)
-            {
-                inventoryUI.ResetSelection();
-                return;
-            }
-            inventoryUI.UpdateDescription(itemIndex, item);
-        }
 
         public bool ToggleInventory()
         {
@@ -102,10 +87,7 @@ namespace Controller {
             else
             {
                 inventoryUI.Show();
-                foreach (var item in inventoryData.GetCurrentInventoryState())
-                {
-                    inventoryUI.UpdateData(item.Key, item.Value.UnitSprite);
-                }
+                inventoryUI.UpdateData(inventoryData.GetCurrentInventoryState());
                 return true;
             }
         }
