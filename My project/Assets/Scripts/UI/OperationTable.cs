@@ -42,7 +42,7 @@ namespace UI {
                     Cell cell = board[x, y];
                     GameObject newCell;
 
-                    if (cell is not TetriCellEmpty)
+                    if (cell is not Empty)
                     {
                         // 创建 placedCell
                         newCell = Instantiate(placedCellPrefab, container.transform);

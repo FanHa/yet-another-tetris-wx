@@ -25,7 +25,7 @@ namespace Model
             {
                 for (int y = 0; y < columns; y++)
                 {
-                    board[x, y] = new TetriCellEmpty(); 
+                    board[x, y] = new Empty(); 
                 }
             }
 
@@ -56,7 +56,7 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.Shape[i, j] is not TetriCellEmpty)
+                    if (tetri.Shape[i, j] is not Empty)
                     {
                         int x = position.x + i; // 调整行列索引
                         int y = position.y + j ; // 调整行列索引
@@ -83,7 +83,7 @@ namespace Model
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
                     Cell cell = tetri.Shape[i, j];
-                    if (cell is not TetriCellEmpty)
+                    if (cell is not Empty)
                     {
                         int x = position.x + i; // 调整行列索引
                         int y = position.y + j ; // 调整行列索引
@@ -156,7 +156,7 @@ namespace Model
                 {
                     board[randomRow, y] = characterCell;
                 }
-                else if (board[randomRow, y] is TetriCellEmpty)
+                else if (board[randomRow, y] is Empty)
                 {
                     board[randomRow, y] = _tetriCellFactory.CreatePadding();
                 }
@@ -182,7 +182,7 @@ namespace Model
                     Cell cell = board[x, y];
 
                     // 判断是否为空单元格
-                    if (cell is TetriCellEmpty)
+                    if (cell is Empty)
                     {
                         isFullRow = false;
                         break;

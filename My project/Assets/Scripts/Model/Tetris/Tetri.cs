@@ -19,7 +19,7 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    shape[i, j] = new TetriCellEmpty();
+                    shape[i, j] = new Empty();
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    if (!(shape[i, j] is TetriCellEmpty))
+                    if (!(shape[i, j] is Empty))
                     {
                         occupiedPositions.Add(new Vector2Int(i, j));
                     }

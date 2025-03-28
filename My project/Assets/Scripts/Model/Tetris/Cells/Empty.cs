@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class TetriCellEmpty : Cell
+    public class Empty : Cell
     {
-        public TetriCellEmpty()
+        public Empty()
         {
             // 可以在这里添加初始化逻辑
         }

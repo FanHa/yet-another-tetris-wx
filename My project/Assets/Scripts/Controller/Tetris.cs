@@ -30,7 +30,7 @@ namespace Controller {
 
                     // Set image display based on Tetri shape
                     Cell cell = tetri.Shape[i, j];
-                    if (cell is not TetriCellEmpty)
+                    if (cell is not Empty)
                     {
                         Sprite sprite = spriteMapping.GetSprite(cell.GetType());
                         if (sprite != null)

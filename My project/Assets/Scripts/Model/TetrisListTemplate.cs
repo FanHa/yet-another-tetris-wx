@@ -47,7 +47,7 @@ namespace Model{
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (tetri.Shape[i, j] is not TetriCellEmpty)
+                    if (tetri.Shape[i, j] is not Empty)
                     {
                         cells.Add((i, j));
                     }
