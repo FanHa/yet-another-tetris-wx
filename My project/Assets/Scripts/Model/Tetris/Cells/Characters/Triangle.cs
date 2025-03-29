@@ -28,5 +28,10 @@ namespace Model.Tetri
             float healthMultiplier = 1 - (healthReductionPercentage / 100f);
             unitComponent.maxHP *= healthMultiplier;
         }
+
+        public override string CharacterDescription()
+        {
+            return Description();
+        }
     }
 }

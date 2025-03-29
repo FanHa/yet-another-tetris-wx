@@ -6,8 +6,7 @@ using System;
 using UnityEngine.EventSystems;
 
 namespace UI {
-    public class InventoryItem : MonoBehaviour, IPointerClickHandler, 
-        IBeginDragHandler, IEndDragHandler, IDropHandler, IDragHandler
+    public class InventoryItem : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image itemImage;
         public Model.InventoryItem Data;
@@ -16,11 +15,9 @@ namespace UI {
 
         public event Action<InventoryItem> 
             OnItemClicked, OnItemDroppedOn, OnItemBeginDrag, OnItemEndDrag, OnRightMouseBtnClick;
-        private bool empty = true;
 
         public void Awake()
         {
-            ResetData();
             Deselect();
         }
 
@@ -29,20 +26,16 @@ namespace UI {
             outline = GetComponent<Outline>();
         }
 
-        public void ResetData()
-        {
-            itemImage.gameObject.SetActive(false);
-            empty = true;
-        }
 
         public void Deselect()
         {
             // todo
         }
 
-        public void SetData(Model.InventoryItem item)
+        public void SetData(Model.InventoryItem item , Sprite sprite)
         {
             Data = item;
+            itemImage.sprite = sprite;
         }
 
         public void Select()
@@ -62,25 +55,6 @@ namespace UI {
             }
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if (empty) return;
-            OnItemBeginDrag?.Invoke(this);
-        }
 
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            OnItemEndDrag?.Invoke(this);
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            OnItemDroppedOn?.Invoke(this);
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-
-        }
     }
 }

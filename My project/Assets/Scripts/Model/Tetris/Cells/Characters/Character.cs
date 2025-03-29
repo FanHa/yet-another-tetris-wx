@@ -9,5 +9,7 @@ namespace Model.Tetri
     {
         public abstract void ApplyFeatures(Unit unitComponent);
 
+        public abstract string CharacterDescription();
+
     }
 }

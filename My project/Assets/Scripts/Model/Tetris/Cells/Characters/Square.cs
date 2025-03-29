@@ -15,5 +15,10 @@ namespace Model.Tetri
         {
             // Do nothing
         }
+
+        public override string CharacterDescription()
+        {
+            return Description();
+        }
     }
 }

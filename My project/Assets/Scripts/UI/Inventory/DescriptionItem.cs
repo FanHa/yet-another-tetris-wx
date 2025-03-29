@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,11 +8,23 @@ namespace UI {
     public class DescriptionItem : MonoBehaviour
     {
         [SerializeField] private Image image;
-        [SerializeField] private TMPro.TMP_Text title;
-        public void SetDescription(Sprite sprite, string titleText)
+        [SerializeField] private TextMeshProUGUI numberText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
+        public void SetDescription(Sprite sprite, int number, string description)
         {
             image.sprite = sprite;
-            title.text = titleText;
+            if (number > 1)
+            {
+                numberText.gameObject.SetActive(true);
+            }
+            else
+            {
+                numberText.gameObject.SetActive(false);
+            }
+            this.numberText.text = "x" + number.ToString();
+            descriptionText.text = description;
+            
+            
         }
     }
 }

@@ -28,5 +28,10 @@ namespace Model.Tetri
             float damageMultiplier = 1 - (damageReductionPercentage / 100f);
             unitComponent.attackDamage *= damageMultiplier;
         }
+
+        public override string CharacterDescription()
+        {
+            return Description();
+        }
     }
 }

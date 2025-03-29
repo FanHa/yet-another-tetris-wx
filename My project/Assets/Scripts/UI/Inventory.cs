@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +15,13 @@ namespace UI
         [SerializeField] private InventoryItem itemPrefab;
         [SerializeField] private Transform contentPanel;
         [SerializeField] private InventoryDescription itemDescription;
+        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         List<InventoryItem> items = new List<InventoryItem>();
+
 
         private void Awake()
         {
             Hide();
-            itemDescription.ResetDescription();
         }
 
         public void UpdateData(List<Model.InventoryItem> inventoryState)
@@ -30,7 +32,7 @@ namespace UI
             foreach (Model.InventoryItem item in inventoryState)
             {
                 UI.InventoryItem itemUI = Instantiate(itemPrefab, contentPanel);
-                itemUI.SetData(item);
+                itemUI.SetData(item, tetriCellTypeResourceMapping.GetSprite(item.CharacterCell));
                 items.Add(itemUI);
                 itemUI.OnItemClicked += HandleItemSelection;
             }
