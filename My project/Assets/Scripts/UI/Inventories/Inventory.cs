@@ -5,16 +5,15 @@ using Model.Tetri;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Inventories
 {
 
     public class Inventory : MonoBehaviour
     {
-        public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
-        public event Action<int, int> OnSwapItems;
+        public event Action<int> OnDescriptionRequested;
         [SerializeField] private InventoryItem itemPrefab;
         [SerializeField] private Transform contentPanel;
-        [SerializeField] private InventoryDescription itemDescription;
+        [SerializeField] private Description.Description itemDescription;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         List<InventoryItem> items = new List<InventoryItem>();
 
@@ -31,7 +30,7 @@ namespace UI
             // Update or create UI elements
             foreach (Model.InventoryItem item in inventoryState)
             {
-                UI.InventoryItem itemUI = Instantiate(itemPrefab, contentPanel);
+                UI.Inventories.InventoryItem itemUI = Instantiate(itemPrefab, contentPanel);
                 itemUI.SetData(item, tetriCellTypeResourceMapping.GetSprite(item.CharacterCell));
                 items.Add(itemUI);
                 itemUI.OnItemClicked += HandleItemSelection;

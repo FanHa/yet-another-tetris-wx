@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI {
-    public class DescriptionItem : MonoBehaviour
+namespace UI.Inventories.Description
+{
+    public class Item : MonoBehaviour
     {
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI numberText;

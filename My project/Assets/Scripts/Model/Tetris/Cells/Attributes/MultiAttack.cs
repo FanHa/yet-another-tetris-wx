@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
+    // todo 拆分最终修改属性的Feature 与 character
     public class MultiAttack : Attribute, ICharacterFeature
     {
         [SerializeField]
@@ -28,6 +29,11 @@ namespace Model.Tetri
             // 降低伤害
             float damageMultiplier = 1 - (damageReductionPercentage / 100f);
             unitComponent.attackDamage *= damageMultiplier;
+        }
+
+        public string CharacterDescription()
+        {
+            return Description();
         }
     }
 }

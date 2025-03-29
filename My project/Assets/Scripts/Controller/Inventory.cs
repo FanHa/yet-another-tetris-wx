@@ -8,7 +8,7 @@ using System.Linq;
 namespace Controller {
     public class Inventory : MonoBehaviour
     {
-        [SerializeField] private UI.Inventory inventoryUI;
+        [SerializeField] private UI.Inventories.Inventory inventoryUI;
         [SerializeField] private Model.Inventory inventoryData;
 
         [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;

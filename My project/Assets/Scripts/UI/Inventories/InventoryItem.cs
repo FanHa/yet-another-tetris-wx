@@ -5,7 +5,8 @@ using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
 
-namespace UI {
+namespace UI.Inventories
+{
     public class InventoryItem : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image itemImage;

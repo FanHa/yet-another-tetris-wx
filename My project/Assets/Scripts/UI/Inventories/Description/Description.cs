@@ -6,12 +6,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI{
-    public class InventoryDescription : MonoBehaviour
+namespace UI.Inventories.Description
+{
+    public class Description : MonoBehaviour
     {
         [SerializeField] private Image itemImage;
         [SerializeField] private TextMeshProUGUI descriptionText;
-        [SerializeField] private DescriptionItem descriptionItemPrefab;
+        [SerializeField] private Item descriptionItemPrefab;
         [SerializeField] private Transform descriptionItemParent; // 父对象，用于存放DescriptionItem
         [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
 
@@ -58,7 +59,7 @@ namespace UI{
                 int count = kvp.Value;
 
                 // 创建一个新的 DescriptionItem 实例
-                DescriptionItem newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
+                Item newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
 
                 // 获取类型对应的一个实例（可以从 TetriCells 中找到第一个匹配的实例）
                 Cell exampleCell = item.TetriCells.Find(c => c.GetType() == cellType);
