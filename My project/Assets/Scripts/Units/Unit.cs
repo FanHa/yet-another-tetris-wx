@@ -20,10 +20,17 @@ namespace Units
 
         public Faction unitFaction; // 单位的阵营
         public float moveSpeed = 5f; // 移动速度
+        public List<int> moveSpeedPercentageModifiers = new List<int>(); // 移动速度百分比修正列表
         public float attackRange = 0.5f; // 攻击范围
         public float attackCooldown = 1f; // 攻击冷却时间
         public float maxHP = 100f; // 最大生命值
-        public float attackDamage = 10f; // 攻击力
+        public List<int> maxHPPercentageModifiers = new List<int>(); // 百分比修正列表
+
+        public float attackPower = 10f; // 攻击力
+        public List<int> attackPowerPercentageModifiers = new List<int>(); // 百分比修正列表
+
+        public List<int> massPercentageModifiers = new List<int>(); // 百分比修正列表
+
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
@@ -53,15 +60,33 @@ namespace Units
                 Debug.LogWarning("Animator component not found on the same GameObject.");
             }
             healthBar = GetComponentInChildren<HealthBar>();
+            rb = GetComponent<Rigidbody2D>(); // 获取 Rigidbody2D 组件
         }
 
         // Start is called before the first frame update
         void Start()
         {
             lastAttackTime = -attackCooldown; // 确保一开始就可以攻击
+            int totalMaxHPPercentage = 100; // 初始化总百分比
+            foreach (int modifier in maxHPPercentageModifiers) {
+                totalMaxHPPercentage += modifier; // 计算总百分比修正值
+            }
+            maxHP *= totalMaxHPPercentage / 100f; // 应用百分比修正
             currentHP = maxHP; // 初始化当前生命值
-            rb = GetComponent<Rigidbody2D>(); // 获取 Rigidbody2D 组件
+            
+            int totalMassPercentage = 100; // 初始化总百分比
+            foreach (int modifier in massPercentageModifiers)
+            {
+                totalMassPercentage += modifier; // 计算总百分比修正值
+            }
+            rb.mass *= totalMassPercentage / 100f; // 应用百分比修正
 
+            int totalMoveSpeedPercentage = 100; // 初始化总百分比
+            foreach (int modifier in moveSpeedPercentageModifiers)
+            {
+                totalMoveSpeedPercentage += modifier; // 计算总百分比修正值
+            }
+            moveSpeed *= totalMoveSpeedPercentage / 100f; // 应用百分比修正
         }
 
         // Update is called once per frame
@@ -74,6 +99,19 @@ namespace Units
         protected void FixedUpdate()
         {
             MoveTowardsEnemy();
+        }
+
+
+        private float GetFinalAttackPower()
+        {
+            int totalPercentage = 100;
+            foreach (var modifier in attackPowerPercentageModifiers)
+            {
+                totalPercentage += modifier;
+            }
+
+            // 应用百分比修正
+            return attackPower * (totalPercentage / 100f)/ attackTargetNumber;
         }
 
         public void SetFactionParent(Transform factionA, Transform factionB)
@@ -131,13 +169,15 @@ namespace Units
 
         protected void AttackEnemies()
         {
+            if (Time.time < lastAttackTime + attackCooldown) 
+                return; // 检查攻击冷却时间
             if (targetEnemies != null && targetEnemies.Count > 0)
             {
                 bool attacked = false;
                 foreach (var target in targetEnemies)
                 {
                     float distance = Vector2.Distance(transform.position, target.position);
-                    if (distance <= attackRange && Time.time >= lastAttackTime + attackCooldown)
+                    if (distance <= attackRange)
                     {
                         Unit enemyUnit = target.GetComponent<Unit>();
                         if (enemyUnit != null)
@@ -152,25 +192,25 @@ namespace Units
                     lastAttackTime = Time.time;
                 }
             }
-
         }
 
         public virtual void Attack(Unit target)
         {
             animator.SetTrigger("Attack");
+            float finalAttackPower = GetFinalAttackPower(); // 获取修正后的攻击力
             if (isRanged)
             {
                 // 发射投射物
-                FireProjectile(target);
+                FireProjectile(target, finalAttackPower);
             }
             else
             {
                 // 近战攻击逻辑
-                target.TakeDamage(attackDamage); // Use attackDamage instead of attackDamage
+                target.TakeDamage(finalAttackPower);
             }
         }
 
-        private void FireProjectile(Unit target)
+        private void FireProjectile(Unit target, float damage)
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)
             {
@@ -179,21 +219,22 @@ namespace Units
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
-                    projectile.damage = attackDamage; // Use attackDamage instead of attackDamage
+                    projectile.damage = damage; // 使用修正后的攻击力
                 }
             }
         }
 
 
-        public virtual void TakeDamage(float damage)
+
+        public virtual void TakeDamage(float damageReceived)
         {
-            currentHP -= damage;
-            ShowDamageText(damage);
+            currentHP -= damageReceived;
+            ShowDamageText(damageReceived);
             healthBar.UpdateHealthBar(currentHP, maxHP); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }
 
-        private void ShowDamageText(float damage)
+        private void ShowDamageText(float damageReceived)
         {
             if (damageTextPrefab != null && unitCanvas != null)
             {
@@ -203,7 +244,7 @@ namespace Units
                 TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
                 if (damageText != null)
                 {
-                    damageText.text = damage.ToString();
+                    damageText.text = damageReceived.ToString();
                     StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
                 }
             }

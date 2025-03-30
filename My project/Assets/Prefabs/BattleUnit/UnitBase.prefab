@@ -899,12 +899,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitFaction: 0
-  moveSpeed: 5
+  moveSpeed: 3
+  moveSpeedPercentageModifiers: 
   attackRange: 0.4
-  attackCooldown: 1
+  attackCooldown: 3
   maxHP: 100
-  attackDamage: 10
+  maxHPPercentageModifiers: 
+  attackPower: 10
+  attackPowerPercentageModifiers: 
+  massPercentageModifiers: 
   minDistance: 0.2
+  attackTargetNumber: 1
   damageTextPrefab: {fileID: 3087921832634182325, guid: 7f1d8dfb9dd524f48a4c732123f15de8, type: 3}
   bodySpriteRenderer: {fileID: 5410986790312629488}
   unitCanvas: {fileID: 5817835895303416901}

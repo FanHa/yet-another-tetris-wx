@@ -8,14 +8,8 @@ namespace Model.Tetri
     {
         public override string Description()
         {
-            return "Base Character"; // 返回一个字符串
+            return "base moderation character"; // 返回一个字符串
         }
-
-        public override void ApplyFeatures(Units.Unit unitComponent)
-        {
-            // Do nothing
-        }
-
         public override string CharacterDescription()
         {
             return Description();

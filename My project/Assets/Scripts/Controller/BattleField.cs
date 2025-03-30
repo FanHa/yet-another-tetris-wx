@@ -134,15 +134,6 @@ namespace Controller {
                     {
                         cell.ApplyAttributes(unitComponent);
                     }
-
-                    // 再处理 Character 类型
-                    foreach (var cell in tetriCells.OfType<ICharacterFeature>())
-                    {
-                        // 根据 Character 类型的逻辑处理
-                        // 例如：设置角色的特殊属性或行为
-                        cell.ApplyFeatures(unitComponent);
-
-                    }
                 }
                 
                 unitComponent.SetFaction(faction);

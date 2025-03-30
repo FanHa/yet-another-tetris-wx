@@ -9,16 +9,16 @@ namespace Model.Tetri
     public class Health : Attribute
     {
         [SerializeField]
-        public float health = 20;
+        private int HealthPercentageModifier = 60;
 
         public override void ApplyAttributes(Unit unit)
         {
-            unit.maxHP += health;
+            unit.maxHPPercentageModifiers.Add(HealthPercentageModifier);
         }
 
         public override string Description()
         {
-            return "Health: " + health;
+            return $"MaxHP bonus: {HealthPercentageModifier}%";
         }
     }
 }

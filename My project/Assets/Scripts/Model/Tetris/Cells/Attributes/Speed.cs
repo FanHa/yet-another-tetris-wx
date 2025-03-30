@@ -1,6 +1,5 @@
- using System;
+using System;
 using Units;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -9,16 +8,16 @@ namespace Model.Tetri
     public class Speed : Attribute
     {
         [SerializeField]
-        public float speed = 2;
+        private int moveSpeedPercentageModifier = 100; // 移动速度百分比修正值
 
         public override void ApplyAttributes(Unit unit)
         {
-            unit.moveSpeed += speed;
+            unit.moveSpeedPercentageModifiers.Add(moveSpeedPercentageModifier);
         }
 
         public override string Description()
         {
-            return "Speed: " + speed;
+            return $"Speed Bonus: {moveSpeedPercentageModifier}%";
         }
     }
 }

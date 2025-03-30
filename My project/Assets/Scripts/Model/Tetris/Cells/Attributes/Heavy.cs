@@ -1,4 +1,4 @@
- using System;
+using System;
 using Units;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
@@ -9,22 +9,16 @@ namespace Model.Tetri
     public class Heavy : Attribute
     {
         [SerializeField]
-        public float multiMass = 2;
+        private int massPercentageModifier = 100; // 质量百分比修正值
 
         public override void ApplyAttributes(Unit unit)
         {
-            // 获取Unit的Rigidbody2D组件
-            Rigidbody2D rb = unit.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                // 修改mass属性，乘以multiMass
-                rb.mass *= multiMass;
-            }
+            unit.massPercentageModifiers.Add(massPercentageModifier); // 添加修正值到列表
         }
 
         public override string Description()
         {
-            return "Heavy: *" + multiMass;
+            return $"Mass Bonus: +{massPercentageModifier}%";
         }
     }
 }

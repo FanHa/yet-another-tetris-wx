@@ -8,16 +8,18 @@ namespace Model.Tetri
     public class Attack : Attribute
     {
         [SerializeField]
-        public float attack = 3;
+        private int attackPercentageModifier = 20; // 攻击力百分比修正值
+
 
         public override void ApplyAttributes(Unit unit)
         {
-            unit.attackDamage += attack;
+            unit.attackPowerPercentageModifiers.Add(attackPercentageModifier);
         }
 
         public override string Description()
         {
-            return "Attack: " + attack;
+            return $"Attack Power Bonus: {attackPercentageModifier}%";
+
         }
     }
 }
