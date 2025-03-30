@@ -8,7 +8,7 @@ namespace Model.Tetri
     public class Speed : Cell, IBaseAttribute
     {
         [SerializeField]
-        private int moveSpeedPercentageModifier = 100; // 移动速度百分比修正值
+        private int moveSpeedPercentageModifier = 50; // 移动速度百分比修正值
 
         public void ApplyAttributes(Unit unit)
         {
@@ -17,7 +17,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"Speed Bonus: {moveSpeedPercentageModifier}%";
+            return $"移动速度 +{moveSpeedPercentageModifier}%";
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Model.Rewards
 {
     public class Attack : Tetri
     {
+        private Model.Tetri.Attack cellTemplate = new Model.Tetri.Attack();
         public override void FillCells()
         {
             foreach (var position in tetriInstance.GetOccupiedPositions())
@@ -13,8 +14,7 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "Attack Boost";
-        public override string GetDescription() => "Increases attack power";
-
+        public override string GetName() => "更锋利的武器";
+        public override string GetDescription() => $"{cellTemplate.Description()}";
     }
 }

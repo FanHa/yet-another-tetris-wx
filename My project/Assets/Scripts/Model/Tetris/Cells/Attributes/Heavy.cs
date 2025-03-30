@@ -18,7 +18,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"Mass Bonus: +{massPercentageModifier}%";
+            return $"重量 +{massPercentageModifier}%";
         }
     }
 }

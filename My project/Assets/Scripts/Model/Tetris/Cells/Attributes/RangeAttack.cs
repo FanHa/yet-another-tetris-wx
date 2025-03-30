@@ -19,7 +19,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "Attack Range: + " + distance;
+            return "攻击距离 +" + distance;
         }
 
         

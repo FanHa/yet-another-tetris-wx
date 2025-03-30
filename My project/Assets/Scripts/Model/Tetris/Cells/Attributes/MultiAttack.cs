@@ -18,7 +18,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"Attack target Number: + {attackTargetAddition}, Distribute damage value to target number"; ;
+            return $"同时攻击目标 +{attackTargetAddition}, 将原有攻击力分摊到每个目标身上"; ;
         }
 
     }

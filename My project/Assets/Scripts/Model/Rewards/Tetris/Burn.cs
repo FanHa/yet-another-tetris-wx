@@ -13,7 +13,7 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "Burn Attack";
+        public override string GetName() => "灼烧";
         public override string GetDescription() => "attack add burn effect";
     }
 }

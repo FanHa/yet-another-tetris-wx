@@ -18,7 +18,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"MaxHP bonus: {HealthPercentageModifier}%";
+            return $"最大生命值 +{HealthPercentageModifier}%";
         }
     }
 }

@@ -2,12 +2,12 @@ namespace Units
 {
     public class Burn : Debuff
     {
-        public int damagePerTurn = 2; // 每回合造成的伤害
+        public int damagePerSecond = 2; // 每回合造成的伤害
         private float duration = 5f; // 持续时间
 
         public override void ApplyEffect(Unit target)
         {
-            target.TakeDamage(damagePerTurn);
+            target.TakeDamage(damagePerSecond);
         }
         
         public override string Name()
@@ -22,7 +22,7 @@ namespace Units
 
         public override string Description()
         {
-            return $"Burn: {damagePerTurn} damage per turn for {duration} seconds.";
+            return $"Burn: {damagePerSecond} damage per turn for {duration} seconds.";
         }
     }
 }

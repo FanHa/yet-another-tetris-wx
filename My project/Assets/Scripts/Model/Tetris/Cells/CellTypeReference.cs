@@ -1,4 +1,5 @@
 using System;
+using Model.Tetri;
 
 namespace Model
 {
@@ -13,6 +14,9 @@ namespace Model
             set => typeName = value?.AssemblyQualifiedName;
         }
 
-        // public bool IsCellType => Type != null && Type.IsSubclassOf(typeof(Model.Tetri.Cell));
+        internal Cell CreateInstance()
+        {
+            return (Cell)Activator.CreateInstance(Type);
+        }
     }
 }

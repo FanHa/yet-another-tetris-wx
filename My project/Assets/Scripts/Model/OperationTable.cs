@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using Model.Tetri;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace Model
 {
@@ -14,6 +11,8 @@ namespace Model
         public event Action OnTableChanged;
 
         [SerializeField] private Serializable2DArray<Cell> board; // 棋盘
+        [SerializeField] private List<CellTypeReference> initialCells;
+
 
         private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
 
@@ -31,6 +30,7 @@ namespace Model
 
             int targetRow = 4;
             int targetCol = 4;
+            int initialCellIndex = 0;
             for (int c = 0; c < columns; c++)
             {
                 if (c == targetCol) 
@@ -39,7 +39,15 @@ namespace Model
                 }
                 else
                 {
-                    board[targetRow, c] = _tetriCellFactory.CreatePadding(); 
+                    if (initialCellIndex < initialCells.Count)
+                    {
+                        board[targetRow, c] = initialCells[initialCellIndex].CreateInstance();
+                        initialCellIndex++;
+                    } else 
+                    {
+                        board[targetRow, c] = _tetriCellFactory.CreatePadding(); 
+
+                    }
                 }
             }
 

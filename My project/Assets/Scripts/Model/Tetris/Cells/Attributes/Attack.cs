@@ -18,7 +18,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"Attack Power Bonus: {attackPercentageModifier}%";
+            return $"攻击力 +{attackPercentageModifier}%";
 
         }
     }

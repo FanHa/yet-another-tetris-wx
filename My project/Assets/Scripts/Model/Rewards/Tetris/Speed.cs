@@ -5,7 +5,7 @@ namespace Model.Rewards
 {
     public class Speed : Tetri
     {
-
+        private Model.Tetri.Speed cellTemplate;
         public override void FillCells()
         {
             foreach (var position in tetriInstance.GetOccupiedPositions())
@@ -13,8 +13,8 @@ namespace Model.Rewards
                 tetriInstance.SetCell(position.x, position.y, new Model.Tetri.Speed());
             }
         }
-        public override string GetName() => "Speed Boost";
-        public override string GetDescription() => "Increases speed";
+        public override string GetName() => "兵贵神速";
+        public override string GetDescription() => cellTemplate.Description();
 
     }
 }
