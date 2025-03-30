@@ -51,6 +51,10 @@ namespace Units
         private Transform factionAParent;
         private Transform factionBParent;
 
+        private List<Debuff> attackEffects = new List<Debuff>(); // 攻击效果列表
+        private List<Debuff> activeDebuffs = new List<Debuff>(); // Track active debuffs
+        private Dictionary<Debuff, Coroutine> activeDebuffCoroutines = new Dictionary<Debuff, Coroutine>(); // Track active debuff coroutines
+
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -90,17 +94,45 @@ namespace Units
         }
 
         // Update is called once per frame
-        protected void Update()
+        void Update()
         {
             FindClosestEnemies();
             AttackEnemies();
         }
 
-        protected void FixedUpdate()
+        void FixedUpdate()
         {
             MoveTowardsEnemy();
         }
 
+        public void AddDebuff(Debuff debuff)
+        {
+            if (activeDebuffCoroutines.TryGetValue(debuff, out var existingCoroutine))
+            {
+                // Stop the existing coroutine if the debuff is already active
+                StopCoroutine(existingCoroutine);
+                activeDebuffCoroutines.Remove(debuff);
+            }
+
+            // Start a new coroutine for the debuff and store its reference
+            var coroutine = StartCoroutine(ApplyDebuff(debuff));
+            activeDebuffCoroutines[debuff] = coroutine;
+        }
+
+        private IEnumerator ApplyDebuff(Debuff debuff)
+        {
+            float elapsedTime = 0f;
+            while (elapsedTime < debuff.Duration)
+            {
+                debuff.ApplyEffect(this); // Apply the debuff effect to the unit
+                yield return new WaitForSeconds(debuff.Interval); // Wait for the configured interval
+                elapsedTime += debuff.Interval;
+            }
+
+            // Remove the debuff and its coroutine reference after its duration ends
+            activeDebuffCoroutines.Remove(debuff);
+            activeDebuffs.Remove(debuff);
+        }
 
         private float GetFinalAttackPower()
         {
@@ -207,6 +239,11 @@ namespace Units
             {
                 // 近战攻击逻辑
                 target.TakeDamage(finalAttackPower);
+                // 触发所有攻击效果
+                foreach (var effect in attackEffects)
+                {
+                    target.AddDebuff(effect); // 添加效果到目标单位
+                }
             }
         }
 
@@ -286,7 +323,6 @@ namespace Units
 
         /// <summary>
         /// Sets the faction of the unit and updates the color of the body sprite renderer accordingly.
-        /// </summary>
         /// <param name="faction">The faction to set for the unit.</param>
         public void SetFaction(Faction faction)
         {

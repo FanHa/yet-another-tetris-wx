@@ -10,10 +10,21 @@ namespace Model{
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
         private TetrisFactory tetrisFactory = new TetrisFactory();
+        private static List<Type> attributeTypes;
         private void OnEnable()
         {   
             template = new();
             GenerateAllShapes();
+            // 初始化缓存的 attributeTypes
+            if (attributeTypes == null)
+            {
+                attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
+                    .GetTypes()
+                    .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
+                                    && !type.IsAbstract // 排除抽象类
+                                    && !type.IsInterface) // 排除接口本身
+                    .ToList();
+            }
         }
         private void GenerateAllShapes()
         {
@@ -58,17 +69,12 @@ namespace Model{
             {
                 var (row, col) = cells[random.Next(cells.Count)];
 
-                // 动态获取所有 Model.Tetri.Attribute 的子类
-                var attributeTypes = typeof(Model.Tetri.Attribute).Assembly
-                    .GetTypes()
-                    .Where(type => type.IsSubclassOf(typeof(Model.Tetri.Attribute)) && !type.IsAbstract)
-                    .ToList();
 
                 if (attributeTypes.Count > 0)
                 {
                     // 随机选择一个子类并创建实例
-                    var selectedType = attributeTypes[random.Next(attributeTypes.Count)];
-                    var attributeInstance = (Cell)Activator.CreateInstance(selectedType);
+                    Type selectedType = attributeTypes[random.Next(attributeTypes.Count)];
+                    Model.Tetri.Cell attributeInstance = (Cell)Activator.CreateInstance(selectedType);
 
                     // 替换单元格
                     tetri.SetCell(row, col, attributeInstance);

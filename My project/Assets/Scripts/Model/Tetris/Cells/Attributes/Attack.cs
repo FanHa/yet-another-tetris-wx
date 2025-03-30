@@ -5,13 +5,13 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Attack : Attribute
+    public class Attack : Cell, IBaseAttribute
     {
         [SerializeField]
         private int attackPercentageModifier = 20; // 攻击力百分比修正值
 
 
-        public override void ApplyAttributes(Unit unit)
+        public void ApplyAttributes(Unit unit)
         {
             unit.attackPowerPercentageModifiers.Add(attackPercentageModifier);
         }

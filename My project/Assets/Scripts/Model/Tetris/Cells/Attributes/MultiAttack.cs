@@ -5,13 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    // todo 拆分最终修改属性的Feature 与 character
-    public class MultiAttack : Attribute
+    public class MultiAttack : Cell, IBaseAttribute
     {
         [SerializeField]
         public float attackTargetAddition = 1;
 
-        public override void ApplyAttributes(Unit unit)
+        public void ApplyAttributes(Unit unit)
         {
             unit.attackTargetNumber += attackTargetAddition;
         }
@@ -22,9 +21,5 @@ namespace Model.Tetri
             return $"Attack target Number: + {attackTargetAddition}, Distribute damage value to target number"; ;
         }
 
-        public string CharacterDescription()
-        {
-            return Description();
-        }
     }
 }

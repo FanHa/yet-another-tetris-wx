@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class AttackInterval : Attribute
+    public class AttackInterval : Cell, IBaseAttribute
     {
         [SerializeField]
         public float IntervalBonus = 0.5f;
 
-        public override void ApplyAttributes(Unit unit)
+        public void ApplyAttributes(Unit unit)
         {
             unit.attackCooldown -= IntervalBonus;
             if (unit.attackCooldown < 0.1f)
