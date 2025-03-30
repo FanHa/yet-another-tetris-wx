@@ -48,8 +48,6 @@ public class TetriController : MonoBehaviour
 
         // Advance to the next level
         levelController.AdvanceToNextLevel();
-
-        Debug.Log("Reward selected: " + reward);
     }
 
 

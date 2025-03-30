@@ -266,6 +266,7 @@ namespace Units
                 {
                     projectile.target = target.transform;
                     projectile.damage = damage; // 使用修正后的攻击力
+                    projectile.debuffs = new List<Debuff>(attackEffects); // 传递攻击效果作为Debuff
                 }
             }
         }

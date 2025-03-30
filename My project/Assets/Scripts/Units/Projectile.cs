@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Units
 {
@@ -12,6 +13,9 @@ namespace Units
 
         // 伤害值
         public float damage = 10;
+
+        // List of debuffs to apply on hit
+        public List<Debuff> debuffs = new List<Debuff>();
 
         void Update()
         {
@@ -43,6 +47,12 @@ namespace Units
             if (targetUnit != null)
             {
                 targetUnit.TakeDamage(damage);
+
+                // Apply debuffs to the target
+                foreach (var debuff in debuffs)
+                {
+                    targetUnit.AddDebuff(debuff);
+                }
             }
 
             // 销毁投射物
