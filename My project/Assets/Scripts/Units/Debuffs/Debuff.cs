@@ -5,26 +5,23 @@ namespace Units
 {
     public abstract class Debuff
     {
-        public float Duration { get; private set; } // Duration of the debuff
-        public float Interval = 1;
+        public abstract float Duration(); // Duration of the debuff
+    
+        public abstract string Name();
+        private float startTime = 0; // Time when the debuff was applied
 
         public abstract void ApplyEffect(Unit unit);
 
         public abstract string Description();
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Debuff otherDebuff)
-            {
-                return GetType() == otherDebuff.GetType();
-
-            }
-            return false;
+        public void Start(){
+            startTime = Time.time; // Record the time when the debuff was applied
         }
 
-        public override int GetHashCode()
+        public bool IsExpired()
         {
-            return GetType()?.GetHashCode() ?? 0;
+            // Check if the debuff has expired based on its duration and the time it was applied
+            return Time.time - startTime >= Duration();
         }
     }
 }

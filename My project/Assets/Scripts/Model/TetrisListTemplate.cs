@@ -10,21 +10,19 @@ namespace Model{
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
         private TetrisFactory tetrisFactory = new TetrisFactory();
-        private static List<Type> attributeTypes;
+        private List<Type> attributeTypes = new();
         private void OnEnable()
         {   
             template = new();
             GenerateAllShapes();
             // 初始化缓存的 attributeTypes
-            if (attributeTypes == null)
-            {
-                attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
-                    .GetTypes()
-                    .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
-                                    && !type.IsAbstract // 排除抽象类
-                                    && !type.IsInterface) // 排除接口本身
-                    .ToList();
-            }
+            attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
+                .GetTypes()
+                .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
+                                && !type.IsAbstract // 排除抽象类
+                                && !type.IsInterface) // 排除接口本身
+                .ToList();
+            
         }
         private void GenerateAllShapes()
         {
@@ -49,8 +47,22 @@ namespace Model{
             }
         }
 
+        private void EnsureAttributeTypesInitialized()
+        {
+            if (attributeTypes == null || attributeTypes.Count == 0)
+            {
+                attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
+                    .GetTypes()
+                    .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
+                                    && !type.IsAbstract // 排除抽象类
+                                    && !type.IsInterface) // 排除接口本身
+                    .ToList();
+            }
+        }
+
         private void ReplaceRandomCell(Tetri.Tetri tetri)
         {
+            EnsureAttributeTypesInitialized();
             var random = new System.Random();
             var cells = new List<(int, int)>();
 

@@ -51,9 +51,11 @@ namespace Units
         private Transform factionAParent;
         private Transform factionBParent;
 
-        private List<Debuff> attackEffects = new List<Debuff>(); // 攻击效果列表
-        private List<Debuff> activeDebuffs = new List<Debuff>(); // Track active debuffs
-        private Dictionary<Debuff, Coroutine> activeDebuffCoroutines = new Dictionary<Debuff, Coroutine>(); // Track active debuff coroutines
+        public List<Debuff> attackEffects = new List<Debuff>(); // 攻击效果列表
+
+        [SerializeField] private Dictionary<string, Debuff> activeDebuffs = new Dictionary<string, Debuff>(); // 使用 Dictionary 存储 Debuff
+
+        private float debuffTimer = 0f; // 用于控制每秒触发一次 Debuff
 
         private void Awake()
         {
@@ -98,6 +100,7 @@ namespace Units
         {
             FindClosestEnemies();
             AttackEnemies();
+            DebuffEffect();
         }
 
         void FixedUpdate()
@@ -105,34 +108,40 @@ namespace Units
             MoveTowardsEnemy();
         }
 
+        private void DebuffEffect()
+        {
+            debuffTimer += Time.deltaTime;
+            if (debuffTimer >= 1f)
+            {
+                debuffTimer = 0f; // 重置计时器
+
+                var expiredDebuffs = new List<string>(); // 用于存储已过期的 Debuff 键
+                foreach (var kvp in activeDebuffs)
+                {
+                    var debuff = kvp.Value;
+                    debuff.ApplyEffect(this); // 触发 Debuff 效果
+
+                    if (debuff.IsExpired())
+                    {
+                        expiredDebuffs.Add(kvp.Key); // 标记为已过期
+                    }
+                }
+
+                // 移除已过期的 Debuff
+                foreach (var debuffName in expiredDebuffs)
+                {
+                    activeDebuffs.Remove(debuffName);
+                }
+            }
+        }
+
         public void AddDebuff(Debuff debuff)
         {
-            if (activeDebuffCoroutines.TryGetValue(debuff, out var existingCoroutine))
-            {
-                // Stop the existing coroutine if the debuff is already active
-                StopCoroutine(existingCoroutine);
-                activeDebuffCoroutines.Remove(debuff);
-            }
-
-            // Start a new coroutine for the debuff and store its reference
-            var coroutine = StartCoroutine(ApplyDebuff(debuff));
-            activeDebuffCoroutines[debuff] = coroutine;
+            debuff.Start(); // 启动 Debuff
+            activeDebuffs[debuff.Name()] = debuff; // 添加或更新 Debuff
         }
 
-        private IEnumerator ApplyDebuff(Debuff debuff)
-        {
-            float elapsedTime = 0f;
-            while (elapsedTime < debuff.Duration)
-            {
-                debuff.ApplyEffect(this); // Apply the debuff effect to the unit
-                yield return new WaitForSeconds(debuff.Interval); // Wait for the configured interval
-                elapsedTime += debuff.Interval;
-            }
 
-            // Remove the debuff and its coroutine reference after its duration ends
-            activeDebuffCoroutines.Remove(debuff);
-            activeDebuffs.Remove(debuff);
-        }
 
         private float GetFinalAttackPower()
         {
