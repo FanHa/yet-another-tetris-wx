@@ -4,11 +4,11 @@ namespace Units
     {
         private float moveSpeedReductionPercentage = 20f;
         private float attackSpeedReductionPercentage = 20f;
-        public float freezeDurationSeconds = 3f; // 冻结持续时间
+        public float freezeDurationSeconds = 4f; // 冻结持续时间
 
         public override string Name()
         {
-            return "冻结";
+            return "凛风";
         }
 
         public override float Duration()
@@ -23,17 +23,18 @@ namespace Units
 
         public override void Apply(Unit unit)
         {
-            throw new System.NotImplementedException();
+            unit.moveSpeed.AddPercentageModifier(this, -moveSpeedReductionPercentage); // 减少移动速度
+            unit.attacksPerTenSeconds.AddPercentageModifier(this, -attackSpeedReductionPercentage);
         }
 
         public override void Remove(Unit unit)
         {
-            throw new System.NotImplementedException();
+            unit.moveSpeed.RemovePercentageModifier(this);
+            unit.attacksPerTenSeconds.RemovePercentageModifier(this);
         }
 
         public override void Affect(Unit unit)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -10,7 +10,6 @@ using WeChatWASM;
 namespace UI.Resource {
     public class Panel : MonoBehaviour
     {
-        public event Action<Tetri> OnTetriClicked;
         public event Action<ItemSlot> OnTetriResourceItemBeginDrag;
         [SerializeField] private GameObject tetriResourceItemPrefab; // 用于显示Tetri的预制件
 

@@ -7,7 +7,7 @@ namespace Units
 
         public override void Apply(Unit target)
         {
-            RefreshDuration();
+            
         }
         
         public override string Name()

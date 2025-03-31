@@ -8,20 +8,17 @@ namespace Model.Tetri
     public class AttackInterval : Cell, IBaseAttribute
     {
         [SerializeField]
-        public float IntervalBonus = 0.5f;
+        public float AttackSpeedBonusPercentage = 20f;
 
         public void ApplyAttributes(Unit unit)
         {
-            unit.attackCooldown -= IntervalBonus;
-            if (unit.attackCooldown < 0.1f)
-            {
-                unit.attackCooldown = 0.1f; // 限制最小攻击间隔
-            }
+            // 增加百分比攻速
+            unit.attacksPerTenSeconds.AddPercentageModifier(this, AttackSpeedBonusPercentage);
         }
 
         public override string Description()
         {
-            return "Attack CoolDown : -" + IntervalBonus;
+            return "Attack Speed: +" + AttackSpeedBonusPercentage + "%";
         }
     }
 }

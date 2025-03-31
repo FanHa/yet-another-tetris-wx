@@ -19,10 +19,14 @@ namespace Units
         public event Action<Unit> OnDeath;
 
         public Faction unitFaction; // 单位的阵营
-        public float moveSpeed = 5f; // 移动速度
-        public List<int> moveSpeedPercentageModifiers = new List<int>(); // 移动速度百分比修正列表
+
+        public Attribute moveSpeed = new Attribute(5f); // 移动速度
+        
+        public Attribute attacksPerTenSeconds = new Attribute(4f);
+        protected float lastAttackTime = 0;
+
         public float attackRange = 0.5f; // 攻击范围
-        public float attackCooldown = 1f; // 攻击冷却时间
+        // public float attackCooldown = 1f; // 攻击冷却时间
         public float maxHP = 100f; // 最大生命值
         public List<int> maxHPPercentageModifiers = new List<int>(); // 百分比修正列表
 
@@ -34,7 +38,6 @@ namespace Units
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
-        protected float lastAttackTime;
         private float currentHP;
         private Rigidbody2D rb;
         private Animator animator;
@@ -54,7 +57,6 @@ namespace Units
         public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
-        private float buffTimer = 0f; // 用于控制每秒触发一次 Debuff
 
         private void Awake()
         {
@@ -71,7 +73,6 @@ namespace Units
         // Start is called before the first frame update
         void Start()
         {
-            lastAttackTime = -attackCooldown; // 确保一开始就可以攻击
             int totalMaxHPPercentage = 100; // 初始化总百分比
             foreach (int modifier in maxHPPercentageModifiers) {
                 totalMaxHPPercentage += modifier; // 计算总百分比修正值
@@ -85,13 +86,9 @@ namespace Units
                 totalMassPercentage += modifier; // 计算总百分比修正值
             }
             rb.mass *= totalMassPercentage / 100f; // 应用百分比修正
+            InvokeRepeating("BuffEffect", 1f, 1f);
 
-            int totalMoveSpeedPercentage = 100; // 初始化总百分比
-            foreach (int modifier in moveSpeedPercentageModifiers)
-            {
-                totalMoveSpeedPercentage += modifier; // 计算总百分比修正值
-            }
-            moveSpeed *= totalMoveSpeedPercentage / 100f; // 应用百分比修正
+
         }
 
         // Update is called once per frame
@@ -100,7 +97,6 @@ namespace Units
             FindClosestEnemies();
             AttackEnemies();
             // todo 协程或invokeRepeating
-            BuffEffect(Time.deltaTime);
         }
 
         void FixedUpdate()
@@ -119,38 +115,30 @@ namespace Units
             {
                 // 添加新的状态并立即应用
                 activeBuffs[buff.Name()] = buff;
+                buff.RefreshDuration();
                 buff.Apply(this);
             }
         }
 
-        private void BuffEffect(float deltaTime)
+        private void BuffEffect()
         {
-            buffTimer += deltaTime;
-            if (buffTimer >= 1f)
+            var expiredBuffs = new List<string>();
+            foreach (var kvp in activeBuffs)
             {
-
-                var expiredBuffs = new List<string>();
-
-                foreach (var kvp in activeBuffs)
+                var buff = kvp.Value;
+                if (buff.IsExpired())
                 {
-                    var buff = kvp.Value;
-                    if (buff.IsExpired())
-                    {
-                        buff.Remove(this);
-                        expiredBuffs.Add(kvp.Key);
-                    } else {
-                        buff.Affect(this);
-                    } 
-                }
-
-                // 移除已过期的状态
-                foreach (var buffName in expiredBuffs)
-                {
-                    activeBuffs.Remove(buffName);
-                }
-                buffTimer = 0f;
-
+                    buff.Remove(this);
+                    expiredBuffs.Add(kvp.Key);
+                } else {
+                    buff.Affect(this);
+                } 
             }
+            // 移除已过期的状态
+            foreach (var buffName in expiredBuffs)
+            {
+                activeBuffs.Remove(buffName);
+            }   
         }
 
 
@@ -213,7 +201,7 @@ namespace Units
                     {
                         // 调整自己的方向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
-                        Vector2 newPosition = Vector2.MoveTowards(rb.position, closestEnemy.position, moveSpeed * Time.deltaTime);
+                        Vector2 newPosition = Vector2.MoveTowards(rb.position, closestEnemy.position, moveSpeed.finalValue * Time.deltaTime);
                         rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法
                     }
                 }
@@ -222,6 +210,7 @@ namespace Units
 
         protected void AttackEnemies()
         {
+            float attackCooldown = 10f / attacksPerTenSeconds.finalValue;
             if (Time.time < lastAttackTime + attackCooldown) 
                 return; // 检查攻击冷却时间
             if (targetEnemies != null && targetEnemies.Count > 0)

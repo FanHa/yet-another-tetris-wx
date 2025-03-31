@@ -15,7 +15,7 @@ namespace UI.Inventories
         private Outline outline;
 
         public event Action<InventoryItem> 
-            OnItemClicked, OnItemDroppedOn, OnItemBeginDrag, OnItemEndDrag, OnRightMouseBtnClick;
+            OnItemClicked;
 
         public void Awake()
         {
@@ -48,7 +48,6 @@ namespace UI.Inventories
         {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
-                OnRightMouseBtnClick?.Invoke(this);
             }
             else
             {
