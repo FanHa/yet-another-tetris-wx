@@ -15,7 +15,7 @@ namespace Units
         public float damage = 10;
 
         // List of debuffs to apply on hit
-        public List<Debuff> debuffs = new List<Debuff>();
+        public List<Buff> debuffs = new List<Buff>();
 
         void Update()
         {
@@ -51,7 +51,7 @@ namespace Units
                 // Apply debuffs to the target
                 foreach (var debuff in debuffs)
                 {
-                    targetUnit.AddDebuff(debuff);
+                    targetUnit.AddBuff(debuff);
                 }
             }
 

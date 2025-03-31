@@ -51,11 +51,10 @@ namespace Units
         private Transform factionAParent;
         private Transform factionBParent;
 
-        public List<Debuff> attackEffects = new List<Debuff>(); // 攻击效果列表
+        public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
 
-        [SerializeField] private Dictionary<string, Debuff> activeDebuffs = new Dictionary<string, Debuff>(); // 使用 Dictionary 存储 Debuff
-
-        private float debuffTimer = 0f; // 用于控制每秒触发一次 Debuff
+        [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
+        private float buffTimer = 0f; // 用于控制每秒触发一次 Debuff
 
         private void Awake()
         {
@@ -100,7 +99,8 @@ namespace Units
         {
             FindClosestEnemies();
             AttackEnemies();
-            DebuffEffect();
+            // todo 协程或invokeRepeating
+            BuffEffect(Time.deltaTime);
         }
 
         void FixedUpdate()
@@ -108,37 +108,49 @@ namespace Units
             MoveTowardsEnemy();
         }
 
-        private void DebuffEffect()
+        public void AddBuff(Units.Buff buff)
         {
-            debuffTimer += Time.deltaTime;
-            if (debuffTimer >= 1f)
+            if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
             {
-                debuffTimer = 0f; // 重置计时器
-
-                var expiredDebuffs = new List<string>(); // 用于存储已过期的 Debuff 键
-                foreach (var kvp in activeDebuffs)
-                {
-                    var debuff = kvp.Value;
-                    debuff.ApplyEffect(this); // 触发 Debuff 效果
-
-                    if (debuff.IsExpired())
-                    {
-                        expiredDebuffs.Add(kvp.Key); // 标记为已过期
-                    }
-                }
-
-                // 移除已过期的 Debuff
-                foreach (var debuffName in expiredDebuffs)
-                {
-                    activeDebuffs.Remove(debuffName);
-                }
+                // 如果状态已存在，则刷新持续时间
+                existingBuff.RefreshDuration();
+            }
+            else
+            {
+                // 添加新的状态并立即应用
+                activeBuffs[buff.Name()] = buff;
+                buff.Apply(this);
             }
         }
 
-        public void AddDebuff(Debuff debuff)
+        private void BuffEffect(float deltaTime)
         {
-            debuff.Start(); // 启动 Debuff
-            activeDebuffs[debuff.Name()] = debuff; // 添加或更新 Debuff
+            buffTimer += deltaTime;
+            if (buffTimer >= 1f)
+            {
+
+                var expiredBuffs = new List<string>();
+
+                foreach (var kvp in activeBuffs)
+                {
+                    var buff = kvp.Value;
+                    if (buff.IsExpired())
+                    {
+                        buff.Remove(this);
+                        expiredBuffs.Add(kvp.Key);
+                    } else {
+                        buff.Affect(this);
+                    } 
+                }
+
+                // 移除已过期的状态
+                foreach (var buffName in expiredBuffs)
+                {
+                    activeBuffs.Remove(buffName);
+                }
+                buffTimer = 0f;
+
+            }
         }
 
 
@@ -251,7 +263,7 @@ namespace Units
                 // 触发所有攻击效果
                 foreach (var effect in attackEffects)
                 {
-                    target.AddDebuff(effect); // 添加效果到目标单位
+                    target.AddBuff(effect); // 添加效果到目标单位
                 }
             }
         }
@@ -266,7 +278,7 @@ namespace Units
                 {
                     projectile.target = target.transform;
                     projectile.damage = damage; // 使用修正后的攻击力
-                    projectile.debuffs = new List<Debuff>(attackEffects); // 传递攻击效果作为Debuff
+                    projectile.debuffs = new List<Buff>(attackEffects); // 传递攻击效果作为Debuff
                 }
             }
         }
