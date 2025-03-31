@@ -57,6 +57,11 @@ namespace Controller {
             }
         }
 
+        public void Hide()
+        {
+            inventoryUI.Hide();
+        }
+
         public void ResetInventoryData(List<InventoryItem> newItems)
         {
             inventoryData.ResetInventoryData(newItems);

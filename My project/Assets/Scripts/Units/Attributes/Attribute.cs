@@ -36,7 +36,7 @@ namespace Units
         {
             if (flatModifiers.ContainsKey(source))
             {
-                flatModifiers[source] += value;
+                
             }
             else
             {
@@ -64,7 +64,7 @@ namespace Units
         {
             if (percentageModifiers.ContainsKey(source))
             {
-                percentageModifiers[source] += percentage;
+                
             }
             else
             {

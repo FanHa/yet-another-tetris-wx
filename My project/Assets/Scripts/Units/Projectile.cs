@@ -9,7 +9,7 @@ namespace Units
         public Transform target;
 
         // 移动速度
-        public float speed = 5f;
+        public float speed = 4f;
 
         // 伤害值
         public float damage = 10;
@@ -33,7 +33,7 @@ namespace Units
                 transform.position += direction * speed * Time.deltaTime;
 
                 // 检测是否触碰到目标
-                if (Vector3.Distance(transform.position, target.position) < 0.1f)
+                if (Vector3.Distance(transform.position, target.position) < 0.2f)
                 {
                     OnHitTarget();
                 }

@@ -8,17 +8,17 @@ namespace Model.Tetri
     public class Attack : Cell, IBaseAttribute
     {
         [SerializeField]
-        private int attackPercentageModifier = 20; // 攻击力百分比修正值
+        private int attackPowerPercentageModifier = 20; // 攻击力百分比修正值
 
 
         public void ApplyAttributes(Unit unit)
         {
-            unit.attackPowerPercentageModifiers.Add(attackPercentageModifier);
+            unit.attackPower.AddPercentageModifier(this, attackPowerPercentageModifier); // 添加攻击力修正值
         }
 
         public override string Description()
         {
-            return $"攻击力 +{attackPercentageModifier}%";
+            return $"攻击力 +{attackPowerPercentageModifier}%";
 
         }
     }

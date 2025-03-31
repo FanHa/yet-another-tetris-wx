@@ -20,7 +20,7 @@ namespace Units
 
         public Faction unitFaction; // 单位的阵营
 
-        public Attribute moveSpeed = new Attribute(5f); // 移动速度
+        public Attribute moveSpeed = new Attribute(3f); // 移动速度
         
         public Attribute attacksPerTenSeconds = new Attribute(4f);
         protected float lastAttackTime = 0;
@@ -30,8 +30,7 @@ namespace Units
         public float maxHP = 100f; // 最大生命值
         public List<int> maxHPPercentageModifiers = new List<int>(); // 百分比修正列表
 
-        public float attackPower = 10f; // 攻击力
-        public List<int> attackPowerPercentageModifiers = new List<int>(); // 百分比修正列表
+        public Attribute attackPower = new Attribute(10f); // 攻击力
 
         public List<int> massPercentageModifiers = new List<int>(); // 百分比修正列表
 
@@ -142,19 +141,6 @@ namespace Units
         }
 
 
-
-        private float GetFinalAttackPower()
-        {
-            int totalPercentage = 100;
-            foreach (var modifier in attackPowerPercentageModifiers)
-            {
-                totalPercentage += modifier;
-            }
-
-            // 应用百分比修正
-            return attackPower * (totalPercentage / 100f)/ attackTargetNumber;
-        }
-
         public void SetFactionParent(Transform factionA, Transform factionB)
         {
             factionAParent = factionA;
@@ -239,7 +225,7 @@ namespace Units
         public virtual void Attack(Unit target)
         {
             animator.SetTrigger("Attack");
-            float finalAttackPower = GetFinalAttackPower(); // 获取修正后的攻击力
+            float finalAttackPower = attackPower.finalValue; // 获取修正后的攻击力
             if (isRanged)
             {
                 // 发射投射物

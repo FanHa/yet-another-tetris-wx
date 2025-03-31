@@ -45,6 +45,7 @@ public class TetriController : MonoBehaviour
 
         battleField.DestroyAllUnits();
         tetriResource.PrepareNewRound();
+        inventory.Hide();
 
         // Advance to the next level
         levelController.AdvanceToNextLevel();
