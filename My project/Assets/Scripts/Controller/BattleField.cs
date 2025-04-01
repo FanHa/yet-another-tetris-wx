@@ -141,6 +141,7 @@ namespace Controller {
                 unitComponent.OnDeath += OnUnitDeath;
                 // 加入到列表
                 factionUnits[faction].Add(unitComponent);
+                unitComponent.Initialized();
             }
 
         }

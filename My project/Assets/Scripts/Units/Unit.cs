@@ -27,9 +27,9 @@ namespace Units
         protected float lastAttackTime = 0;
 
         public float attackRange = 0.5f; // 攻击范围
-        // public float attackCooldown = 1f; // 攻击冷却时间
-        public float maxHP = 100f; // 最大生命值
-        public List<int> maxHPPercentageModifiers = new List<int>(); // 百分比修正列表
+
+        public Attribute maxCore = new Attribute(100f); // 最大生命值
+        public float currentCore;
 
         public Attribute attackPower = new Attribute(10f); // 攻击力
 
@@ -38,7 +38,7 @@ namespace Units
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
-        private float currentHP;
+        // private float currentHP;
         private Rigidbody2D rb;
         private Animator animator;
         private HealthBar healthBar;
@@ -75,29 +75,13 @@ namespace Units
         // Start is called before the first frame update
         void Start()
         {
-            int totalMaxHPPercentage = 100; // 初始化总百分比
-            foreach (int modifier in maxHPPercentageModifiers) {
-                totalMaxHPPercentage += modifier; // 计算总百分比修正值
-            }
-            maxHP *= totalMaxHPPercentage / 100f; // 应用百分比修正
-            currentHP = maxHP; // 初始化当前生命值
-            
             int totalMassPercentage = 100; // 初始化总百分比
             foreach (int modifier in massPercentageModifiers)
             {
                 totalMassPercentage += modifier; // 计算总百分比修正值
             }
             rb.mass *= totalMassPercentage / 100f; // 应用百分比修正
-            InvokeRepeating(nameof(BuffEffect), 1f, 1f);
-            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
-
-            foreach (Units.Skills.Skill skill in skills)
-            {
-                skill.Init();
-            }
-            InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
-
-
+            
         }
 
         // Update is called once per frame
@@ -112,6 +96,19 @@ namespace Units
             MoveTowardsEnemy();
         }
 
+        public void Initialized()
+        {
+            currentCore = maxCore.finalValue; // 初始化当前核心值
+            InvokeRepeating(nameof(BuffEffect), 1f, 1f);
+            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
+
+            foreach (Units.Skills.Skill skill in skills)
+            {
+                skill.Init();
+            }
+            InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
+
+        }
         public void AddBuff(Units.Buff buff)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
@@ -282,9 +279,9 @@ namespace Units
 
         public virtual void TakeDamage(float damageReceived)
         {
-            currentHP -= damageReceived;
+            currentCore -= damageReceived;
             ShowDamageText(damageReceived);
-            healthBar.UpdateHealthBar(currentHP, maxHP); // Use GetMaxHP() instead of maxHP
+            healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }
 
@@ -323,7 +320,7 @@ namespace Units
 
         private void CheckHealth()
         {
-            if (currentHP <= 0)
+            if (currentCore <= 0)
             {
                 OnDeath?.Invoke(this);
                 Destroy(gameObject);

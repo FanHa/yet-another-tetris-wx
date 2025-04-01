@@ -9,16 +9,16 @@ namespace Model.Tetri
     public class Health : Cell, IBaseAttribute
     {
         [SerializeField]
-        private int HealthPercentageModifier = 60;
+        private int CorePercentageModifier = 60;
 
         public void ApplyAttributes(Unit unit)
         {
-            unit.maxHPPercentageModifiers.Add(HealthPercentageModifier);
+            unit.maxCore.AddPercentageModifier(this, CorePercentageModifier);
         }
 
         public override string Description()
         {
-            return $"最大生命值 +{HealthPercentageModifier}%";
+            return $"最大生命值 +{CorePercentageModifier}%";
         }
     }
 }
