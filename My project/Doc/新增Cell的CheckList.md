@@ -2,3 +2,4 @@
 - Model.Tetri中创建新Cell类
 - CellResourceMapping中新增CellType 与 图标的对应关系
 - Model.Rewards中创建对应的reward类
+- OprationTable 中的initial cells 新增Bomb,方便测试

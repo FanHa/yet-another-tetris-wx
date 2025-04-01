@@ -2,12 +2,12 @@ namespace Units
 {
     public class Burn : Buff
     {
-        public int damagePerSecond = 2; // 每回合造成的伤害
+        private int damagePerSecond = 2; // 每秒伤害
         private float duration = 5f; // 持续时间
 
         public override void Apply(Unit target)
         {
-            
+
         }
         
         public override string Name()

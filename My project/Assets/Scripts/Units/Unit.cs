@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Tetri;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Units
 
         public event Action<Unit> OnDeath;
 
-        public Faction unitFaction; // 单位的阵营
+        public Faction faction; // 单位的阵营
 
         public Attribute moveSpeed = new Attribute(3f); // 移动速度
         
@@ -48,12 +49,14 @@ namespace Units
 
         public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
+        public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
         public Transform projectileSpawnPoint; // 投射物生成位置
-        private List<Transform> targetEnemies;
+        public List<Transform> targetEnemies;
         private Transform factionAParent;
         private Transform factionBParent;
 
         public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
+        public List<Skills.Skill> skills = new List<Skills.Skill>(); // 技能列表
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
 
@@ -85,7 +88,14 @@ namespace Units
                 totalMassPercentage += modifier; // 计算总百分比修正值
             }
             rb.mass *= totalMassPercentage / 100f; // 应用百分比修正
-            InvokeRepeating("BuffEffect", 1f, 1f);
+            InvokeRepeating(nameof(BuffEffect), 1f, 1f);
+            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
+
+            foreach (Units.Skills.Skill skill in skills)
+            {
+                skill.Init();
+            }
+            InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
 
 
         }
@@ -93,7 +103,6 @@ namespace Units
         // Update is called once per frame
         void Update()
         {
-            FindClosestEnemies();
             AttackEnemies();
             // todo 协程或invokeRepeating
         }
@@ -140,6 +149,17 @@ namespace Units
             }   
         }
 
+        private void CastSkills()
+        {
+            foreach (var skill in skills)
+            {
+                if (skill.IsReady())
+                {
+                    skill.Execute(this);
+                }
+            }
+        }
+
 
         public void SetFactionParent(Transform factionA, Transform factionB)
         {
@@ -149,7 +169,7 @@ namespace Units
 
         protected void FindClosestEnemies()
         {
-            Transform enemyParent = unitFaction == Faction.FactionA ? factionBParent : factionAParent;
+            Transform enemyParent = faction == Faction.FactionA ? factionBParent : factionAParent;
             if (enemyParent == null)
             {
                 Debug.LogWarning("Enemy parent is not set for this unit.");
@@ -160,7 +180,7 @@ namespace Units
             foreach (Transform enemy in enemyParent)
             {
                 Unit unit = enemy.GetComponent<Unit>();
-                if (unit != null && unit.unitFaction != unitFaction) // 判断是否为敌对阵营
+                if (unit != null && unit.faction != faction) // 判断是否为敌对阵营
                 {
                     enemiesInRange.Add(enemy);
                 }
@@ -248,11 +268,11 @@ namespace Units
             if (projectilePrefab != null && projectileSpawnPoint != null)
             {
                 GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
-                Projectile projectile = projectileObject.GetComponent<Projectile>();
+                Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
-                    projectile.damage = damage; // 使用修正后的攻击力
+                    projectile.damage = damage;
                     projectile.debuffs = new List<Buff>(attackEffects); // 传递攻击效果作为Debuff
                 }
             }
@@ -323,7 +343,7 @@ namespace Units
         /// <param name="faction">The faction to set for the unit.</param>
         public void SetFaction(Faction faction)
         {
-            this.unitFaction = faction;
+            this.faction = faction;
             bodySpriteRenderer.color = faction == Faction.FactionA ? Color.blue : Color.red;
         }
 

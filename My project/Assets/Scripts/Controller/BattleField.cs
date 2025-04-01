@@ -148,16 +148,16 @@ namespace Controller {
         private void OnUnitDeath(Unit deadUnit)
         {
             // 从对应阵营里移除死亡单位
-            if (factionUnits.ContainsKey(deadUnit.unitFaction))
+            if (factionUnits.ContainsKey(deadUnit.faction))
             {
-                factionUnits[deadUnit.unitFaction].Remove(deadUnit);
+                factionUnits[deadUnit.faction].Remove(deadUnit);
                 // 如果某阵营单位列表为空，则表示该阵营全部阵亡
-                if (factionUnits[deadUnit.unitFaction].Count == 0)
+                if (factionUnits[deadUnit.faction].Count == 0)
                 {
-                    Debug.Log(deadUnit.unitFaction + " 全部死亡");
+                    Debug.Log(deadUnit.faction + " 全部死亡");
                     StopSpawningUnits();
                     // todo , 根据不同阵营全部死亡触发不同的情况
-                    OnFactionDefeated?.Invoke(deadUnit.unitFaction);
+                    OnFactionDefeated?.Invoke(deadUnit.faction);
                 }
             }
         }

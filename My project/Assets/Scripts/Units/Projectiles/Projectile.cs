@@ -1,21 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Units
+namespace Units.Projectiles
 {
     public class Projectile : MonoBehaviour
     {
-        // 目标物体
-        public Transform target;
+        public Transform target; // 目标物体
+        public float speed = 4f; // 移动速度
+        public float damage = 10; // 伤害值
+        public List<Buff> debuffs = new List<Buff>(); // 命中时附加的Debuff
 
-        // 移动速度
-        public float speed = 4f;
-
-        // 伤害值
-        public float damage = 10;
-
-        // List of debuffs to apply on hit
-        public List<Buff> debuffs = new List<Buff>();
 
         void Update()
         {
@@ -26,18 +20,15 @@ namespace Units
                 return;
             }
 
-            // 如果目标存在，朝目标移动
-            if (target != null)
-            {
-                Vector3 direction = (target.position - transform.position).normalized;
-                transform.position += direction * speed * Time.deltaTime;
 
-                // 检测是否触碰到目标
-                if (Vector3.Distance(transform.position, target.position) < 0.2f)
-                {
-                    OnHitTarget();
-                }
+            Vector3 direction = (target.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
+            // 检测是否触碰到目标
+            if (Vector3.Distance(transform.position, target.position) < 0.2f)
+            {
+                OnHitTarget();
             }
+            
         }
 
         private void OnHitTarget()
