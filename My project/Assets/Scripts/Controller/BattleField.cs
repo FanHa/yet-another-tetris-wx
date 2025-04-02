@@ -157,6 +157,17 @@ namespace Controller {
                 {
                     Debug.Log(deadUnit.faction + " 全部死亡");
                     StopSpawningUnits();
+                    // 调用其他阵营所有幸存单位的 StopAction 方法
+                    foreach (var faction in factionUnits.Keys)
+                    {
+                        if (faction != deadUnit.faction) // 排除已死亡的阵营
+                        {
+                            foreach (var unit in factionUnits[faction])
+                            {
+                                unit.StopAction();
+                            }
+                        }
+                    }
                     // todo , 根据不同阵营全部死亡触发不同的情况
                     OnFactionDefeated?.Invoke(deadUnit.faction);
                 }

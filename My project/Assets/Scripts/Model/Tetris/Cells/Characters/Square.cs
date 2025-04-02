@@ -5,20 +5,16 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Square : Character, IBaseAttribute
+    public class Square : Character
     {
         [SerializeField] private float attackPowerValue = 10f; // 攻击力参数
         [SerializeField] private float maxCoreValue = 100f;   
         public override string Description()
         {
-            return $"Attack Power: {attackPowerValue}, Max Core: {maxCoreValue}";
-        }
-        public override string CharacterDescription()
-        {
-            return Description();
+            return $"攻击力: {attackPowerValue}, 生命值: {maxCoreValue}";
         }
 
-        public void ApplyAttributes(Unit unit)
+        public override void ApplyCharacterFeature(Unit unit)
         {
             unit.attackPower.SetBaseValue(attackPowerValue);
             unit.maxCore.SetBaseValue(maxCoreValue);

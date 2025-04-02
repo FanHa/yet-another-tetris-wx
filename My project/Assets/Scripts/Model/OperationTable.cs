@@ -106,7 +106,7 @@ namespace Model
             return true;
         }
 
-        public bool PlaceCharacterInRandomRow(Character characterCell)
+        public bool PlaceCharacterInRandomRow(Cell characterCell)
         {
             List<int> validRows = new List<int>();
             List<int> characterRows = new List<int>();

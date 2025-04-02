@@ -42,7 +42,7 @@ namespace Model.Tetri
             }
         }
 
-        public GameObject GetPrefab(Cell cell)
+        public GameObject GetPrefab(Character cell)
         {
             if (cell == null) return null;
             return GetPrefab(cell.GetType());

@@ -16,13 +16,13 @@ namespace UI.Inventories.Description
             image.sprite = sprite;
             if (number > 1)
             {
-                numberText.gameObject.SetActive(true);
+                this.numberText.text = "x" + number.ToString();
             }
             else
             {
-                numberText.gameObject.SetActive(false);
+                this.numberText.text = "";
             }
-            this.numberText.text = "x" + number.ToString();
+            
             descriptionText.text = description;
             
             

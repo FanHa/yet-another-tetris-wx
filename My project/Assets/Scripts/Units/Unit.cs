@@ -59,7 +59,7 @@ namespace Units
         public List<Skills.Skill> skills = new List<Skills.Skill>(); // 技能列表
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
-
+        private bool isActive = false; // 是否处于活动状态
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -87,13 +87,18 @@ namespace Units
         // Update is called once per frame
         void Update()
         {
-            AttackEnemies();
-            // todo 协程或invokeRepeating
+            if (isActive) {
+                AttackEnemies();
+            }
         }
 
         void FixedUpdate()
         {
-            MoveTowardsEnemy();
+            if (isActive)
+            {
+                MoveTowardsEnemy();
+
+            }
         }
 
         public void Initialized()
@@ -107,8 +112,18 @@ namespace Units
                 skill.Init();
             }
             InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
-
+            isActive = true;
         }
+
+        public void StopAction()
+        {
+            CancelInvoke(nameof(BuffEffect));
+            CancelInvoke(nameof(FindClosestEnemies));
+            CancelInvoke(nameof(CastSkills));
+            isActive = false;
+        }
+
+
         public void AddBuff(Units.Buff buff)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))

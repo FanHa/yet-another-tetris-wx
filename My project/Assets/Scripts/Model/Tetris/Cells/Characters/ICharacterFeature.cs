@@ -4,6 +4,6 @@ namespace Model.Tetri
 {
     public interface ICharacterFeature
     {
-        public string CharacterDescription();
+        public void ApplyCharacterFeature(Unit unit);
     }
 }

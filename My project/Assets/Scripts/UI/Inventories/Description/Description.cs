@@ -35,7 +35,7 @@ namespace UI.Inventories.Description
             }
             itemImage.sprite = cellTypeResourceMapping.GetSprite(item.CharacterCell);
             itemImage.gameObject.SetActive(true);
-            descriptionText.text = item.CharacterCell.CharacterDescription();
+            descriptionText.text = item.CharacterCell.Description();
 
              // 对 TetriCells 进行分组，按类型合并并记录数量
             Dictionary<Type, int> groupedCells = new Dictionary<System.Type, int>();
