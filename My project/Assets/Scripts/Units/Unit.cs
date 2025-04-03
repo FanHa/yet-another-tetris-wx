@@ -18,6 +18,7 @@ namespace Units
         }
 
         public event Action<Unit> OnDeath;
+        public event Action<Transform, float> OnDamageTaken;
 
         public Faction faction; // 单位的阵营
 
@@ -41,7 +42,7 @@ namespace Units
         private Animator animator;
         private HealthBar healthBar;
 
-        [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
+        // [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
         [SerializeField] private Canvas unitCanvas; // Unit的Canvas
 
@@ -325,42 +326,9 @@ namespace Units
         public void TakeDamage(float damageReceived)
         {
             currentCore -= damageReceived;
-            ShowDamageText(damageReceived);
+            OnDamageTaken?.Invoke(transform, damageReceived); // 触发伤害事件
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();
-        }
-
-        private void ShowDamageText(float damageReceived)
-        {
-            if (damageTextPrefab != null && unitCanvas != null)
-            {
-                GameObject damageTextInstance = Instantiate(damageTextPrefab, unitCanvas.transform); // 指定Canvas为父对象
-                damageTextInstance.transform.localPosition = Vector3.zero; // 可根据需要调整位置
-                damageTextInstance.transform.rotation = Quaternion.identity; // 确保文本不随物体旋转
-                TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
-                if (damageText != null)
-                {
-                    damageText.text = damageReceived.ToString();
-                    StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
-                }
-            }
-        }
-
-        private IEnumerator FadeAndDestroyDamageText(GameObject damageTextInstance, TextMeshProUGUI damageText)
-        {
-            Color originalColor = damageText.color;
-            float duration = 1f; // 显示时间为1秒
-            float elapsedTime = 0f;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration); // 渐变透明度
-                damageText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-                yield return null;
-            }
-
-            Destroy(damageTextInstance); // 销毁实例
         }
 
         private void CheckHealth()
