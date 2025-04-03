@@ -219,11 +219,18 @@ namespace Units
                     {
                         // 调整自己的方向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
+                        AdjustLookDirection(direction);
                         Vector2 newPosition = Vector2.MoveTowards(rb.position, closestEnemy.position, moveSpeed.finalValue * Time.deltaTime);
                         rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法
                     }
                 }
             }
+        }
+
+        private void AdjustLookDirection(Vector2 direction)
+        {
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 计算角度
+            transform.rotation = Quaternion.Euler(0, 0, angle-90f);//设置自身旋转
         }
 
         protected void AttackEnemies()
@@ -284,7 +291,7 @@ namespace Units
             else
             {
                 // 近战攻击逻辑
-                target.TakeDamage(damage, attackEffects);
+                target.TakeHit(damage, attackEffects);
             }
         }
 
@@ -292,7 +299,7 @@ namespace Units
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)
             {
-                GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
                 if (projectile != null)
                 {
@@ -305,13 +312,18 @@ namespace Units
 
 
 
-        public virtual void TakeDamage(float damageReceived, List<Buff> buffs)
+        public virtual void TakeHit(float damageReceived, List<Buff> buffs)
         {
-            currentCore -= damageReceived;
             foreach (var buff in buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上
             }
+            TakeDamage(damageReceived); // 扣除生命值
+        }
+
+        public void TakeDamage(float damageReceived)
+        {
+            currentCore -= damageReceived;
             ShowDamageText(damageReceived);
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();

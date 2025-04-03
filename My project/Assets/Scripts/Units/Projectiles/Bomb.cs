@@ -41,8 +41,7 @@ namespace Units.Projectiles
                 if (unit != null && unit.faction != faction)
                 {
                     // 对敌人造成伤害
-                    unit.TakeDamage(damage, new List<Buff>());
-
+                    unit.TakeDamage(damage);
                 }
             }
             // 显示爆炸效果（可选）

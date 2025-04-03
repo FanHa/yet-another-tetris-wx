@@ -906,8 +906,10 @@ MonoBehaviour:
     baseValue: 4
     finalValue: 4
   attackRange: 0.4
-  maxHP: 100
-  maxHPPercentageModifiers: 
+  maxCore:
+    baseValue: 100
+    finalValue: 100
+  currentCore: 0
   attackPower:
     baseValue: 10
     finalValue: 10

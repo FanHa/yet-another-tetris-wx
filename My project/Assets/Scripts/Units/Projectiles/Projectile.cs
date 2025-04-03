@@ -37,7 +37,7 @@ namespace Units.Projectiles
             var targetUnit = target.GetComponent<Unit>();
             if (targetUnit != null)
             {
-                targetUnit.TakeDamage(damage, debuffs);
+                targetUnit.TakeHit(damage, debuffs);
 
             }
 

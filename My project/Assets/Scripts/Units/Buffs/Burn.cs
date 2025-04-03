@@ -34,7 +34,7 @@ namespace Units
 
         public override void Affect(Unit target)
         {
-            target.TakeDamage(damagePerSecond, new List<Buff>());
+            target.TakeDamage(damagePerSecond);
         }
     }
 }

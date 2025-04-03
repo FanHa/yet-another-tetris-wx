@@ -43,7 +43,8 @@ namespace Model
                     {
                         board[targetRow, c] = initialCells[initialCellIndex].CreateInstance();
                         initialCellIndex++;
-                    } else 
+                    } 
+                    else 
                     {
                         board[targetRow, c] = _tetriCellFactory.CreatePadding(); 
 
@@ -156,19 +157,7 @@ namespace Model
 
             // 随机选择一行
             int randomRow = validRows[UnityEngine.Random.Range(0, validRows.Count)];
-
-            // 设置 [randomRow, y] 为 CharacterCell
-            for (int y = 0; y < board.GetLength(1); y++)
-            {
-                if (y == randomRow)
-                {
-                    board[randomRow, y] = characterCell;
-                }
-                else if (board[randomRow, y] is Empty)
-                {
-                    board[randomRow, y] = _tetriCellFactory.CreatePadding();
-                }
-            }
+            board[randomRow, randomRow] = characterCell;
 
             // 触发事件
             OnTableChanged?.Invoke();
