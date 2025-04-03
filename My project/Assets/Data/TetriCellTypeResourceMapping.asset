@@ -69,3 +69,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 3f4fe7b756ccfc14caa0f79acfcf00bb, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 21300000, guid: 23071cc0a68e5bc439ab14596531d7a1, type: 3}

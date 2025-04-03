@@ -38,8 +38,6 @@ namespace Units
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
-        // private float currentHP;
-        private Rigidbody2D rb;
         private Animator animator;
         private HealthBar healthBar;
 
@@ -60,6 +58,7 @@ namespace Units
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
         private bool isActive = false; // 是否处于活动状态
+        public bool moveable = true;
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -69,7 +68,6 @@ namespace Units
                 Debug.LogWarning("Animator component not found on the same GameObject.");
             }
             healthBar = GetComponentInChildren<HealthBar>();
-            rb = GetComponent<Rigidbody2D>(); // 获取 Rigidbody2D 组件
         }
 
         // Start is called before the first frame update
@@ -80,7 +78,6 @@ namespace Units
             {
                 totalMassPercentage += modifier; // 计算总百分比修正值
             }
-            rb.mass *= totalMassPercentage / 100f; // 应用百分比修正
             
         }
 
@@ -97,7 +94,6 @@ namespace Units
             if (isActive)
             {
                 MoveTowardsEnemy();
-
             }
         }
 
@@ -207,6 +203,8 @@ namespace Units
 
         protected virtual void MoveTowardsEnemy()
         {
+            if (!moveable) 
+                return; // 如果不可移动，则直接返回
             if (targetEnemies != null && targetEnemies.Count > 0)
             {
                 Transform closestEnemy = targetEnemies.FirstOrDefault();
@@ -220,8 +218,11 @@ namespace Units
                         // 调整自己的方向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
                         AdjustLookDirection(direction);
-                        Vector2 newPosition = Vector2.MoveTowards(rb.position, closestEnemy.position, moveSpeed.finalValue * Time.deltaTime);
-                        rb.MovePosition(newPosition); // 使用 Rigidbody2D 的 MovePosition 方法
+                        // 计算下一步位置
+                        Vector2 newPosition = Vector2.MoveTowards(transform.position, closestEnemy.position, moveSpeed.finalValue * Time.deltaTime);
+
+                        // 更新位置
+                        transform.position = newPosition;
                     }
                 }
             }

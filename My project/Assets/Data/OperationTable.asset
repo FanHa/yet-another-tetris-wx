@@ -16,5 +16,5 @@ MonoBehaviour:
     rows: 10
     cols: 10
   initialCells:
-  - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+  - typeName: Model.Tetri.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
