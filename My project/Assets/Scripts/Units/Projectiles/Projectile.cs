@@ -37,13 +37,8 @@ namespace Units.Projectiles
             var targetUnit = target.GetComponent<Unit>();
             if (targetUnit != null)
             {
-                targetUnit.TakeDamage(damage);
+                targetUnit.TakeDamage(damage, debuffs);
 
-                // Apply debuffs to the target
-                foreach (var debuff in debuffs)
-                {
-                    targetUnit.AddBuff(debuff);
-                }
             }
 
             // 销毁投射物

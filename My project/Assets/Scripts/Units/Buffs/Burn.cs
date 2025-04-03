@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Units
 {
     public class Burn : Buff
@@ -32,7 +34,7 @@ namespace Units
 
         public override void Affect(Unit target)
         {
-            target.TakeDamage(damagePerSecond);
+            target.TakeDamage(damagePerSecond, new List<Buff>());
         }
     }
 }

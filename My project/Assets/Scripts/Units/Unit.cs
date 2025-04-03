@@ -124,7 +124,7 @@ namespace Units
         }
 
 
-        public void AddBuff(Units.Buff buff)
+        private void AddBuff(Units.Buff buff)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
             {
@@ -233,45 +233,58 @@ namespace Units
                 return; // 检查攻击冷却时间
             if (targetEnemies != null && targetEnemies.Count > 0)
             {
-                bool attacked = false;
+                Transform closestEnemy = targetEnemies[0]; // 获取最近的敌人
+                if (closestEnemy != null)
+                {
+                    float distance = Vector2.Distance(transform.position, closestEnemy.position);
+                    if (distance <= attackRange) // 检查最近的敌人是否在攻击范围内
+                    {
+                        TriggerAttack();
+                        lastAttackTime = Time.time; // 更新攻击时间
+                    }
+                }
+            }
+        }
+
+        private void TriggerAttack()
+        {
+            animator.SetTrigger("Attack");
+            
+        }
+
+        // 这个方法会被animator的event触发
+        public void HandleAttackActionHit()
+        {
+            if (targetEnemies != null && targetEnemies.Count > 0)
+            {
                 foreach (var target in targetEnemies)
                 {
+                    if (target == null) continue; // 检查目标是否已被销毁
+
                     float distance = Vector2.Distance(transform.position, target.position);
                     if (distance <= attackRange)
                     {
                         Unit enemyUnit = target.GetComponent<Unit>();
                         if (enemyUnit != null)
                         {
-                            Attack(enemyUnit);
-                            attacked = true;
+                            Attack(enemyUnit, attackPower.finalValue/targetEnemies.Count); // 执行攻击逻辑
                         }
                     }
-                }
-                if (attacked)
-                {
-                    lastAttackTime = Time.time;
                 }
             }
         }
 
-        public virtual void Attack(Unit target)
+        private void Attack(Unit target, float damage)
         {
-            animator.SetTrigger("Attack");
-            float finalAttackPower = attackPower.finalValue; // 获取修正后的攻击力
             if (isRanged)
             {
                 // 发射投射物
-                FireProjectile(target, finalAttackPower);
+                FireProjectile(target, damage);
             }
             else
             {
                 // 近战攻击逻辑
-                target.TakeDamage(finalAttackPower);
-                // 触发所有攻击效果
-                foreach (var effect in attackEffects)
-                {
-                    target.AddBuff(effect); // 添加效果到目标单位
-                }
+                target.TakeDamage(damage, attackEffects);
             }
         }
 
@@ -292,9 +305,13 @@ namespace Units
 
 
 
-        public virtual void TakeDamage(float damageReceived)
+        public virtual void TakeDamage(float damageReceived, List<Buff> buffs)
         {
             currentCore -= damageReceived;
+            foreach (var buff in buffs)
+            {
+                AddBuff(buff); // 添加Debuff到自己身上
+            }
             ShowDamageText(damageReceived);
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();

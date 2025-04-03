@@ -41,7 +41,7 @@ namespace Units.Projectiles
                 if (unit != null && unit.faction != faction)
                 {
                     // 对敌人造成伤害
-                    unit.TakeDamage(damage);
+                    unit.TakeDamage(damage, new List<Buff>());
 
                 }
             }
