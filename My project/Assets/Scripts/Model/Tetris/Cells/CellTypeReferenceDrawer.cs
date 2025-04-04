@@ -17,6 +17,14 @@ namespace Model
             CacheCellTypes();
         }
 
+        void OnEnable()
+        {
+            if (cachedCellTypes == null || cachedTypeNames == null)
+            {
+                CacheCellTypes();
+            }
+        }
+
         private static void CacheCellTypes()
         {
             cachedCellTypes = AppDomain.CurrentDomain.GetAssemblies()

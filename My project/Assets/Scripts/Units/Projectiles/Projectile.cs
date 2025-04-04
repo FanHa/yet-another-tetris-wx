@@ -23,6 +23,10 @@ namespace Units.Projectiles
 
             Vector3 direction = (target.position - transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
+
+            // 设置投射物的正前方（transform.up）朝向目标方向
+            transform.up = direction;
+
             // 检测是否触碰到目标
             if (Vector3.Distance(transform.position, target.position) < 0.2f)
             {
@@ -31,7 +35,7 @@ namespace Units.Projectiles
             
         }
 
-        private void OnHitTarget()
+        protected virtual void OnHitTarget()
         {
             // 对目标造成伤害
             var targetUnit = target.GetComponent<Unit>();

@@ -49,6 +49,7 @@ namespace Units
         public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
         public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
+        public GameObject PrecisionArrowPrefab;
         public Transform projectileSpawnPoint; // 投射物生成位置
         public List<Transform> targetEnemies;
         private Transform factionAParent;
