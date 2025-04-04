@@ -56,7 +56,8 @@ namespace Units
         private Transform factionBParent;
 
         public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
-        public List<Skills.Skill> skills = new List<Skills.Skill>(); // 技能列表
+        private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
+        public IReadOnlyList<Skills.Skill> Skills => _skills; // 只读属性
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
         private bool isActive = false; // 是否处于活动状态
@@ -105,12 +106,23 @@ namespace Units
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
 
-            foreach (Units.Skills.Skill skill in skills)
+            foreach (Units.Skills.Skill skill in _skills)
             {
                 skill.Init();
             }
             InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
             isActive = true;
+        }
+
+        public void AddSkill(Skills.Skill newSkill)
+        {
+            // 检查是否已经存在相同类型的技能
+            if (_skills.Any(skill => skill.GetType() == newSkill.GetType()))
+            {
+                return;
+            }
+
+            _skills.Add(newSkill);
         }
 
         public void StopAction()
@@ -161,7 +173,7 @@ namespace Units
 
         private void CastSkills()
         {
-            foreach (var skill in skills)
+            foreach (var skill in _skills)
             {
                 if (skill.IsReady())
                 {

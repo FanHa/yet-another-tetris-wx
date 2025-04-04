@@ -8,12 +8,14 @@ namespace Model.Tetri
         public Units.Skills.PrecisionShoot skillInstance = new (); 
         public void ApplyAttributes(Unit unit)
         {
-            unit.skills.Add(skillInstance);
+            unit.AddSkill(skillInstance);
         }
 
         public override string Description()
         {
-            return "技能: 精准射击, 向射程内初始血量最低的敌人射出一支箭, 造成自身基础攻击*4的伤害,该技能冷却时间为10秒";
+            return $"技能: 精准射击.向射程内初始血量最低的敌人射出一支箭," +
+           $"造成基础攻击力 x {skillInstance.attackPowerMultiplier} 的伤害, " +
+           $"冷却时间: {skillInstance.cooldown} 秒.";        
         }
     }
 }

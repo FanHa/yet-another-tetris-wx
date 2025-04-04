@@ -6,17 +6,12 @@ namespace Units.Skills
 {
     public class Rush : Skill
     {
-        private float cooldown = 10f;
-        private float rushDuration = 1f;
-        private float speedMultiplier = 1.5f; // 冲刺速度倍数
-        private float damageMultipierBySpeed = 2; // 伤害倍数
+        public override float cooldown => 10f;
+        public float rushDuration = 1f;
+        public float speedMultiplier = 1.5f; // 冲刺速度倍数
+        public float damageMultipierBySpeed = 2; // 伤害倍数
         private HashSet<Unit> hitEnemies = new HashSet<Unit>(); // 记录已碰撞的敌人
 
-
-        public override float Cooldown()
-        {
-            return cooldown;
-        }
 
         public override void Execute(Unit caster)
         {

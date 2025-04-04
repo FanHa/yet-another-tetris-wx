@@ -5,14 +5,10 @@ namespace Units.Skills
 {
     public class PrecisionShoot : Skill
     {
-        private float attackPowerMultiplier = 4f; // 攻击力倍数
-        private float cooldown = 10f;
-        private float speed = 2f;
+        public float attackPowerMultiplier = 4f; // 攻击力倍数
+        public override float cooldown => 10f;
+        public float speed = 2f;
 
-        public override float Cooldown()
-        {
-            return cooldown;
-        }
 
         public override void Execute(Unit caster)
         {

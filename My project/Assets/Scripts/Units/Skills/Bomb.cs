@@ -6,13 +6,8 @@ namespace Units.Skills
     {
         public float damage = 50f; // 炸弹伤害
         public float explosionRadius = 2f; // 爆炸范围
-        private float cooldown = 10f;
+        public override float cooldown => 10f;
         private float speed = 2f;
-
-        public override float Cooldown()
-        {
-            return cooldown;
-        }
 
         public override void Execute(Unit caster)
         {

@@ -133,9 +133,16 @@ namespace Controller {
                 if (tetriCells != null) 
                 {
                     // 先处理 Attribute 类型
-                    foreach (var cell in tetriCells.OfType<Model.Tetri.IBaseAttribute>())
+                    foreach (Cell cell in tetriCells)
                     {
-                        cell.ApplyAttributes(unitComponent);
+                        if (cell is IBaseAttribute attributeCell)
+                        {
+                            attributeCell.ApplyAttributes(unitComponent);
+                        }
+                        if (cell is ICharacterFeature featureCell)
+                        {
+                            featureCell.ApplyCharacterFeature(unitComponent);
+                        }
                     }
                 }
                 
