@@ -14,6 +14,7 @@ namespace Controller {
     {
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private Canvas damageCanvas;
+        [SerializeField] private Controller.Statistics statisticsController; // 统计控制器
         private Dictionary<Unit.Faction, List<Unit>> factionUnits 
             = new Dictionary<Unit.Faction, List<Unit>>();
 
@@ -31,7 +32,6 @@ namespace Controller {
         [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
         private Coroutine spawnUnitsCoroutine;
 
-        // Start is called before the first frame update
         void Start()
         {
             // 初始化字典
@@ -196,6 +196,7 @@ namespace Controller {
 
         private void OnUnitDeath(Unit deadUnit)
         {
+            statisticsController.AddScore(1);// todo 以后根据不同单位设置不同分数
             // 从对应阵营里移除死亡单位
             if (factionUnits.ContainsKey(deadUnit.faction))
             {
@@ -205,6 +206,14 @@ namespace Controller {
                 {
                     Debug.Log(deadUnit.faction + " 全部死亡");
                     StopSpawningUnits();
+
+                    // 如果是 FactionA 全部死亡，更新生命值
+                    if (deadUnit.faction == Unit.Faction.FactionA)
+                    {
+                        statisticsController.DecreaseLife(1); // 减少生命值
+                        Debug.Log("FactionA 全部死亡，生命值减少 1");
+                    }
+                    
                     // 调用其他阵营所有幸存单位的 StopAction 方法
                     foreach (var faction in factionUnits.Keys)
                     {

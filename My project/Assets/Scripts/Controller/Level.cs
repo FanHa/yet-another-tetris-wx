@@ -5,6 +5,7 @@ namespace Controller
     public class Level : MonoBehaviour
     {
         [SerializeField] private Model.LevelConfig[] levels; // 所有关卡配置
+        [SerializeField] private Statistics statisticsController; // 统计控制器
         private int currentLevelIndex = 0;
 
         public Model.LevelConfig GetCurrentLevelConfig()
@@ -20,14 +21,15 @@ namespace Controller
 
         public void AdvanceToNextLevel()
         {
-            if (currentLevelIndex + 1 < levels.Length)
+            currentLevelIndex++;
+            if (currentLevelIndex < levels.Length)
             {
-                currentLevelIndex++;
-                Debug.Log("Advanced to next level: " + levels[currentLevelIndex].levelName);
+                statisticsController.SetLevel(currentLevelIndex + 1); // 更新UI
+                Debug.Log("Level increased to: " + (currentLevelIndex + 1));
             }
             else
             {
-                Debug.LogWarning("No more levels to advance to.");
+                Debug.LogWarning("No more levels available.");
             }
         }
     }

@@ -10,11 +10,12 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Model.OperationTable operationTableData;
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private BattleField battleField;
-    [SerializeField] private Resource tetriResource;
+    [SerializeField] private Controller.Resource tetriResource;
     [SerializeField] private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Controller.Level levelController; // 引用Level控制器
+    
 
     private UI.Resource.ItemSlot currentDraggingTetri; // 保存当前拖动的Tetri
 
