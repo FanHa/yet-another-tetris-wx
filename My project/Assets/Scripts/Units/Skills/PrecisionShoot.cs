@@ -35,7 +35,7 @@ namespace Units.Skills
 
              // 创建炸弹实例
             GameObject projectileInstance = Object.Instantiate(caster.PrecisionArrowPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
-            var projectile = projectileInstance.GetComponent<Units.Projectiles.PrecisionArrow>();
+            var projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
                 projectile.target = targetEnemy.transform; // 创建目标位置

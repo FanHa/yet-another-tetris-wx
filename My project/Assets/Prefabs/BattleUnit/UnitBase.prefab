@@ -753,7 +753,7 @@ MonoBehaviour:
   unitCanvas: {fileID: 5817835895303416901}
   isRanged: 0
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
-  bombPrefab: {fileID: 6524986292476145452, guid: d7331313ae4033c40a4f1615ea126c78, type: 3}
+  bombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
   PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
   projectileSpawnPoint: {fileID: 1587690522871941135}
   targetEnemies: []

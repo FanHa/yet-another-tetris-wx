@@ -1,37 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace Units.Projectiles
 {
-    public class Bomb : MonoBehaviour
+    public class Bomb : Projectile
     {
         public Units.Unit.Faction faction; // 所属阵营
-        public Transform target; // 目标物体
-        public float speed = 4f; // 移动速度
-        public float damage = 50; // 伤害值
         public float explosionRadius = 2f; // 爆炸范围
 
-        protected void Update()
-        {
-            // 如果目标位置不存在，销毁自身
-            if (target == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
 
-            // 朝目标位置移动
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-
-            // 检测是否到达目标位置
-            if (Vector3.Distance(transform.position, target.position) < 0.2f)
-            {
-                Explode();
-            }
-        }
-
-        private void Explode()
+        protected override void OnHitTarget()
         {
             // 在爆炸范围内查找敌人
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
@@ -49,6 +28,7 @@ namespace Units.Projectiles
 
             // 销毁投射物
             Destroy(gameObject);
+            Destroy(target.gameObject);
         }
 
         private void OnDrawGizmosSelected()

@@ -6,7 +6,8 @@ namespace Units.Skills
     {
         public float damage = 50f; // 炸弹伤害
         public float explosionRadius = 2f; // 爆炸范围
-        private float cooldown = 5f;
+        private float cooldown = 10f;
+        private float speed = 2f;
 
         public override float Cooldown()
         {
@@ -39,6 +40,7 @@ namespace Units.Skills
                 bomb.target.position = targetEnemy.position; // 设置目标位置为敌人位置
                 bomb.damage = damage; // 设置炸弹伤害
                 bomb.explosionRadius = explosionRadius; // 设置爆炸范围
+                bomb.speed = speed; // 设置炸弹速度
             }
             lastUsedTime = Time.time; // 更新上次使用时间
         }
