@@ -731,6 +731,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f4d142d97d4d24291c684373f2b3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  factionAColor: {r: 0.050418302, g: 0.9716981, b: 0.8677388, a: 1}
+  factionBColor: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
   faction: 0
   moveSpeed:
     baseValue: 3

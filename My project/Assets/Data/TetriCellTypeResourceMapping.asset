@@ -77,3 +77,7 @@ MonoBehaviour:
       typeName: Model.Tetri.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: fc237a7ebf2a9f64da1be74cc80b0528, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Spike, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 2761841243735719389, guid: b6b8a35868512504b9779d073e1ff71f, type: 3}

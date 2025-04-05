@@ -16,6 +16,8 @@ namespace Units
             FactionA,
             FactionB
         }
+        [SerializeField] private Color factionAColor;
+        [SerializeField] private Color factionBColor;
 
         public event Action<Unit> OnDeath;
         public event Action<Transform, float> OnDamageTaken;
@@ -31,6 +33,8 @@ namespace Units
 
         public Attribute maxCore = new Attribute(100f); // 最大生命值
         public float currentCore;
+        private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
+
 
         public Attribute attackPower = new Attribute(10f); // 攻击力
 
@@ -131,6 +135,16 @@ namespace Units
             CancelInvoke(nameof(FindClosestEnemies));
             CancelInvoke(nameof(CastSkills));
             isActive = false;
+        }
+
+        public void AddDamageBehavior(ITakeDamageBehavior behavior)
+        {
+            damageBehaviors.Add(behavior);
+        }
+
+        public void RemoveDamageBehavior(ITakeDamageBehavior behavior)
+        {
+            damageBehaviors.Remove(behavior);
         }
 
 
@@ -306,7 +320,7 @@ namespace Units
             else
             {
                 // 近战攻击逻辑
-                target.TakeHit(damage, attackEffects);
+                target.TakeHit(this, damage, attackEffects);
             }
         }
 
@@ -321,23 +335,28 @@ namespace Units
                     projectile.target = target.transform;
                     projectile.damage = damage;
                     projectile.debuffs = new List<Buff>(attackEffects); // 传递攻击效果作为Debuff
+                    projectile.caster = this; // 设置投射物的施法者
                 }
             }
         }
 
 
 
-        public virtual void TakeHit(float damageReceived, List<Buff> buffs)
+        public virtual void TakeHit(Unit source, float damageReceived, List<Buff> buffs)
         {
             foreach (var buff in buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上
             }
-            TakeDamage(damageReceived); // 扣除生命值
+            TakeDamage(source, damageReceived); // 扣除生命值
         }
 
-        public void TakeDamage(float damageReceived)
+        public void TakeDamage(Unit source, float damageReceived)
         {
+            foreach (var behavior in damageBehaviors)
+            {
+                damageReceived = behavior.ModifyDamage(source, damageReceived);
+            }
             currentCore -= damageReceived;
             OnDamageTaken?.Invoke(transform, damageReceived); // 触发伤害事件
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
@@ -367,7 +386,7 @@ namespace Units
         public void SetFaction(Faction faction)
         {
             this.faction = faction;
-            bodySpriteRenderer.color = faction == Faction.FactionA ? Color.blue : Color.red;
+            bodySpriteRenderer.color = faction == Faction.FactionA ? factionAColor : factionBColor;
         }
 
         

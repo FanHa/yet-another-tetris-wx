@@ -64,7 +64,7 @@ namespace Units.Skills
                                     rushSpeed * damageMultipierBySpeed;
 
                         // 对敌人造成伤害
-                        enemyUnit.TakeHit(damage, caster.attackEffects);
+                        enemyUnit.TakeHit(caster, damage, caster.attackEffects);
 
                         // 记录已碰撞的敌人
                         hitEnemies.Add(enemyUnit);

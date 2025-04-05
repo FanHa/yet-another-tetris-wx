@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 85712745}
   - component: {fileID: 85712744}
   - component: {fileID: 85712743}
+  - component: {fileID: 85712747}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: StatisticsCanvas
@@ -441,6 +442,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &85712747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85712742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61c024726f8b6d64fbd190e0e6fc2510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelText: {fileID: 1160405203}
+  scoreText: {fileID: 2038811810}
+  lifeText: {fileID: 1750361647}
 --- !u!1 &131970431
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,7 +1357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rewardPanel: {fileID: 314842519}
-  tetriResource: {fileID: 1391442599}
+  tetriResource: {fileID: 1760741503}
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
 --- !u!114 &778035657 stripped
 MonoBehaviour:
@@ -1409,6 +1425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageTextPrefab: {fileID: 3087921832634182325, guid: 7f1d8dfb9dd524f48a4c732123f15de8, type: 3}
   damageCanvas: {fileID: 1176676513}
+  statisticsController: {fileID: 85712747}
   spawnPointA: {fileID: 656560514}
   spawnPointB: {fileID: 131970432}
   factionAParent: {fileID: 28250503}
@@ -1954,6 +1971,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eeee41faf9b4a394f97bcc0efa3a1ba7, type: 2}
   - {fileID: 11400000, guid: a0cf4f6c6fd276c42ba64cba820a07f5, type: 2}
   - {fileID: 11400000, guid: 81533fa19d235664d8743677bad527f0, type: 2}
+  statisticsController: {fileID: 85712747}
 --- !u!1 &1391442591
 GameObject:
   m_ObjectHideFlags: 0
@@ -1964,7 +1982,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1391442593}
   - component: {fileID: 1391442595}
-  - component: {fileID: 1391442599}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: Controller
@@ -2008,21 +2025,6 @@ MonoBehaviour:
   reward: {fileID: 718020252}
   inventory: {fileID: 559597914}
   levelController: {fileID: 1353304961}
---- !u!114 &1391442599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391442591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 751cf3bf4d51f6648b3b26d60655ea7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tetrisResourcesData: {fileID: 11400000, guid: 273c05945e59e604f8b633b5e8ce89a7, type: 2}
-  tetrisResourcePanelUI: {fileID: 512681429}
-  tetrisListTemplate: {fileID: 11400000, guid: 0e37b766481c6f846b6507b26dfc7a58, type: 2}
 --- !u!1 &1407102698
 GameObject:
   m_ObjectHideFlags: 0
@@ -3061,15 +3063,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000026702888
+      value: 0.00028393685
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000026702888
+      value: 0.00028393685
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000026702888
+      value: 0.00028393685
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

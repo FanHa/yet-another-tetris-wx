@@ -10,6 +10,8 @@ namespace Units.Projectiles
         public float damage = 10; // 伤害值
         public List<Buff> debuffs = new List<Buff>(); // 命中时附加的Debuff
 
+        public Unit caster;
+
 
         void Update()
         {
@@ -41,7 +43,7 @@ namespace Units.Projectiles
             var targetUnit = target.GetComponent<Unit>();
             if (targetUnit != null)
             {
-                targetUnit.TakeHit(damage, debuffs);
+                targetUnit.TakeHit(caster, damage, debuffs);
 
             }
 
