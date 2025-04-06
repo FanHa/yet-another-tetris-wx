@@ -31,6 +31,7 @@ namespace Controller {
         [SerializeField] private Model.Inventory enemyData;
         [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
         private Coroutine spawnUnitsCoroutine;
+        private Dictionary<string, Units.Statistics> unitStatistics = new Dictionary<string, Units.Statistics>(); // 使用单位名称作为键
 
         void Start()
         {
@@ -160,6 +161,14 @@ namespace Controller {
         private void HandleDamageTaken(Units.Damages.EventArgs args)
         {
             ShowDamageText(args.Target.transform.position, args.Damage.Value);
+            if (args.Source == null) 
+                return;
+            string sourceName = args.Source.name;
+            if (!unitStatistics.ContainsKey(sourceName))
+            {
+                unitStatistics[sourceName] = new Units.Statistics(sourceName);
+            }
+            unitStatistics[sourceName].AddDamage(args.Damage.DamageType, args.Damage.Value);
         }
 
         private void ShowDamageText(Vector3 worldPosition, float damage)
@@ -247,6 +256,20 @@ namespace Controller {
                     Destroy(unit.gameObject);
                 }
                 factionUnits[faction].Clear();
+            }
+        }
+
+        public void LogDamageStatistics()
+        {
+            Debug.Log("Damage Statistics for this battle:");
+
+            foreach (var stat in unitStatistics.Values)
+            {
+                Debug.Log($"Unit: {stat.UnitName}");
+                foreach (var damageType in stat.DamageByType)
+                {
+                    Debug.Log($"  - {damageType.Key}: {damageType.Value} damage");
+                }
             }
         }
         

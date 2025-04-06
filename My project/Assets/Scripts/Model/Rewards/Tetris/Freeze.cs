@@ -2,7 +2,7 @@ namespace Model.Rewards
 {
     public class Freeze : Tetri
     {
-        private Model.Tetri.Freeze cellTemplate;
+        private Model.Tetri.Freeze cellTemplate = new Model.Tetri.Freeze();
 
         public override void FillCells()
         {

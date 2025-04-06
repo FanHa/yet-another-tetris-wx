@@ -30,6 +30,7 @@ namespace Units.Skills
             var bomb = bombInstance.GetComponent<Units.Projectiles.Bomb>();
             if (bomb != null)
             {
+                bomb.caster = caster;
                 bomb.faction = caster.faction; // 设置炸弹的阵营
                 bomb.target = new GameObject("BombTarget").transform; // 创建目标位置
                 bomb.target.position = targetEnemy.position; // 设置目标位置为敌人位置

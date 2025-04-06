@@ -2,7 +2,7 @@ namespace Model.Rewards
 {
     public class Spike : Tetri
     {
-        private Model.Tetri.Spike cellTemplate;
+        private Model.Tetri.Spike cellTemplate = new Model.Tetri.Spike();
         public override void FillCells()
         {
             
@@ -14,7 +14,7 @@ namespace Model.Rewards
                 tetriInstance.SetCell(randomPosition.x, randomPosition.y, new Model.Tetri.Spike());
             }
         }
-        public override string GetName() => "尖刺";
+        public override string GetName() => cellTemplate.Name();
         public override string GetDescription() => cellTemplate.Description();
 
     }

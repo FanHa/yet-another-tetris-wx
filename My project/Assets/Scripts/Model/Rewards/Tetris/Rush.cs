@@ -2,6 +2,8 @@ namespace Model.Rewards
 {
     public class Rush : Tetri
     {
+        private Model.Tetri.Rush cellTemplate = new Model.Tetri.Rush();
+
         public override void FillCells()
         {
             var occupiedPositions = tetriInstance.GetOccupiedPositions();
@@ -13,7 +15,7 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "冲锋";
-        public override string GetDescription() => "冲锋并对敌人造成伤害";
+        public override string GetName() => cellTemplate.Name();
+        public override string GetDescription() => cellTemplate.Description();
     }
 }

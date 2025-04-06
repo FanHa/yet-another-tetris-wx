@@ -35,6 +35,7 @@ public class TetriController : MonoBehaviour
 
     private void HandleFactionDefeated(Units.Unit.Faction faction)
     {
+    
         reward.EnterRewardSelectionPhase();
         reward.OnRewardSelected += HandleRewardSelected;
     }
@@ -44,6 +45,7 @@ public class TetriController : MonoBehaviour
         reward.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
 
+        battleField.LogDamageStatistics();
         battleField.DestroyAllUnits();
         tetriResource.PrepareNewRound();
         inventory.Hide();

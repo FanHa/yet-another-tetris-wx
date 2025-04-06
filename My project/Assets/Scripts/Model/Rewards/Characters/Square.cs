@@ -12,12 +12,12 @@ namespace Model.Rewards
 
         public override string GetDescription()
         {
-            return "Base character";
+            return characterCellInstance.Description();
         }
 
         public override string GetName()
         {
-            return "Character Square";
+            return characterCellInstance.Name();
         }
     }
 }
