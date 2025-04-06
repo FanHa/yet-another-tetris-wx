@@ -20,7 +20,9 @@ namespace Units
         [SerializeField] private Color factionBColor;
 
         public event Action<Unit> OnDeath;
-        public event Action<Transform, float> OnDamageTaken;
+
+        
+        public event Action<Damages.EventArgs> OnDamageTaken;
 
         public Faction faction; // 单位的阵营
 
@@ -66,6 +68,8 @@ namespace Units
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
+        public bool CanReflectDamage = false; // 是否可以反弹伤害
+        public float ReflectDamagePercentage = 0f; // 反弹伤害百分比
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -320,7 +324,7 @@ namespace Units
             else
             {
                 // 近战攻击逻辑
-                target.TakeHit(this, damage, attackEffects);
+                target.TakeHit(this, new Damages.Damage(damage, "近战攻击", true), attackEffects);
             }
         }
 
@@ -333,7 +337,7 @@ namespace Units
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
-                    projectile.damage = damage;
+                    projectile.damage = new Damages.Damage(damage, "远程攻击", true); // 设置投射物的伤害
                     projectile.debuffs = new List<Buff>(attackEffects); // 传递攻击效果作为Debuff
                     projectile.caster = this; // 设置投射物的施法者
                 }
@@ -342,7 +346,7 @@ namespace Units
 
 
 
-        public virtual void TakeHit(Unit source, float damageReceived, List<Buff> buffs)
+        public virtual void TakeHit(Unit source, Units.Damages.Damage  damageReceived, List<Buff> buffs)
         {
             foreach (var buff in buffs)
             {
@@ -351,14 +355,23 @@ namespace Units
             TakeDamage(source, damageReceived); // 扣除生命值
         }
 
-        public void TakeDamage(Unit source, float damageReceived)
-        {
+        public void TakeDamage(Unit source, Units.Damages.Damage damageReceived)
+        {   
             foreach (var behavior in damageBehaviors)
             {
                 damageReceived = behavior.ModifyDamage(source, damageReceived);
             }
-            currentCore -= damageReceived;
-            OnDamageTaken?.Invoke(transform, damageReceived); // 触发伤害事件
+
+            if (CanReflectDamage && damageReceived.CanBeReflected)
+            {
+                Damages.Damage reflectDamage = new Damages.Damage(damageReceived.Value*ReflectDamagePercentage/100, "尖刺", false);
+                source.TakeDamage(this, reflectDamage); // 反弹伤害
+            }
+
+
+            currentCore -= damageReceived.Value;
+            OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
+
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }

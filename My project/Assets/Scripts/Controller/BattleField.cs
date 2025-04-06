@@ -157,9 +157,9 @@ namespace Controller {
 
         }
 
-        private void HandleDamageTaken(Transform unitTransform, float damage)
+        private void HandleDamageTaken(Units.Damages.EventArgs args)
         {
-            ShowDamageText(unitTransform.position, damage);
+            ShowDamageText(args.Target.transform.position, args.Damage.Value);
         }
 
         private void ShowDamageText(Vector3 worldPosition, float damage)

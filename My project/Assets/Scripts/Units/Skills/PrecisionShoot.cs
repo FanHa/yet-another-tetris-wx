@@ -35,7 +35,7 @@ namespace Units.Skills
             if (projectile != null)
             {
                 projectile.target = targetEnemy.transform; // 创建目标位置
-                projectile.damage = caster.attackPower.finalValue * attackPowerMultiplier; // 设置炸弹伤害
+                projectile.damage = new Damages.Damage(caster.attackPower.finalValue * attackPowerMultiplier, "精准射击", false); // 设置炸弹伤害
                 projectile.speed = speed;
             }
             lastUsedTime = Time.time; // 更新上次使用时间

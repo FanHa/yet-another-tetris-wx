@@ -33,7 +33,7 @@ namespace Units.Skills
                 bomb.faction = caster.faction; // 设置炸弹的阵营
                 bomb.target = new GameObject("BombTarget").transform; // 创建目标位置
                 bomb.target.position = targetEnemy.position; // 设置目标位置为敌人位置
-                bomb.damage = damage; // 设置炸弹伤害
+                bomb.damage = new Damages.Damage(damage, "炸弹", false); // 设置炸弹伤害
                 bomb.explosionRadius = explosionRadius; // 设置爆炸范围
                 bomb.speed = speed; // 设置炸弹速度
             }

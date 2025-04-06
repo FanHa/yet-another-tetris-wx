@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Collections;
 
 namespace Units.Projectiles
 {
@@ -9,9 +10,17 @@ namespace Units.Projectiles
         public Units.Unit.Faction faction; // 所属阵营
         public float explosionRadius = 2f; // 爆炸范围
 
-
         protected override void OnHitTarget()
         {
+            StartCoroutine(ExplodeAfterDelay(2f));
+
+        }
+
+        private IEnumerator ExplodeAfterDelay(float delay)
+        {
+            // 停留在目标位置
+            yield return new WaitForSeconds(delay);
+
             // 在爆炸范围内查找敌人
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
             foreach (var collider in hitColliders)
@@ -23,6 +32,7 @@ namespace Units.Projectiles
                     unit.TakeDamage(caster, damage);
                 }
             }
+
             // 显示爆炸效果（可选）
             Debug.Log("Explosion at " + transform.position);
 

@@ -4,6 +4,7 @@ namespace Units
 {
     public class Burn : Buff
     {
+        public Units.Unit source; // 施加灼烧效果的单位
         private int damagePerSecond = 2; // 每秒伤害
         private float duration = 5f; // 持续时间
 
@@ -34,7 +35,7 @@ namespace Units
 
         public override void Affect(Unit target)
         {
-            target.TakeDamage(null, damagePerSecond);
+            target.TakeDamage(source, new Damages.Damage(damagePerSecond, Name(), false)); // 施加伤害
         }
     }
 }

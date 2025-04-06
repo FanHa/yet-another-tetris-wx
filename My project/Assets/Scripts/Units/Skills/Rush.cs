@@ -6,6 +6,7 @@ namespace Units.Skills
 {
     public class Rush : Skill
     {
+        private const string skillName = "冲锋"; // 技能名称
         public override float cooldown => 10f;
         public float rushDuration = 1f;
         public float speedMultiplier = 1.5f; // 冲刺速度倍数
@@ -59,9 +60,11 @@ namespace Units.Skills
                     Unit enemyUnit = hit.GetComponent<Unit>();
                     if (enemyUnit != null && enemyUnit.faction != caster.faction && !hitEnemies.Contains(enemyUnit))
                     {
-                        // 计算伤害
-                        float damage = caster.attackPower.finalValue +
-                                    rushSpeed * damageMultipierBySpeed;
+                        Units.Damages.Damage damage = new Units.Damages.Damage(
+                             caster.attackPower.finalValue + rushSpeed * damageMultipierBySpeed,
+                             "冲锋",
+                             false
+                        );
 
                         // 对敌人造成伤害
                         enemyUnit.TakeHit(caster, damage, caster.attackEffects);
