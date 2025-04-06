@@ -19,5 +19,10 @@ namespace Model.Tetri
         {
             return $"移动速度 +{moveSpeedPercentageModifier}%";
         }
+
+        public override string Name()
+        {
+            return "兵贵神速";
+        }
     }
 }

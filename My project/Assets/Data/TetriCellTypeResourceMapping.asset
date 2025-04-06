@@ -34,10 +34,6 @@ MonoBehaviour:
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 89fbe6ed46777a545bb8de430f35ec6b, type: 3}
   - cellType:
-      typeName: Model.Tetri.Heavy, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 185ec9e11935ec54781aae2dfa7d75df, type: 3}
-  - cellType:
       typeName: Model.Tetri.Speed, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
@@ -50,7 +46,7 @@ MonoBehaviour:
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 1f154552f0361304197c9882be8470cd, type: 3}
   - cellType:
-      typeName: Model.Tetri.AttackInterval, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.AttackFrequency, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: b6d4ba64283d6eb4182fb242ad32cdb3, type: 3}
   - cellType:

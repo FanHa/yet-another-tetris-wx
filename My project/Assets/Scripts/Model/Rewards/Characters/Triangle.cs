@@ -3,7 +3,7 @@
 namespace Model.Rewards
 {
     public class Triangle : Character
-    {
+    {   
         public Triangle()
         {
             characterCellInstance = new Model.Tetri.Triangle();
@@ -11,12 +11,12 @@ namespace Model.Rewards
 
         public override string GetDescription()
         {
-            return "increase attak, decrease health";
+            return characterCellInstance.Description();
         }
 
         public override string GetName()
         {
-            return "Character Triangle";
+            return characterCellInstance.Name();
         }
     }
 }

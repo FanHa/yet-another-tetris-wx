@@ -21,5 +21,10 @@ namespace Model.Tetri
             return $"攻击力 +{attackPowerPercentageModifier}%";
 
         }
+
+        public override string Name()
+        {
+            return "武器";
+        }
     }
 }

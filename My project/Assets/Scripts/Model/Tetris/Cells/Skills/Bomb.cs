@@ -13,10 +13,14 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "技能: 爆破炸弹," +
-                   "技能冷却时间: " + skillInstance.cooldown + "秒," +
+            return "技能冷却时间: " + skillInstance.cooldown + "秒," +
                    "技能伤害: " + skillInstance.damage + "," +
                    "技能范围: " + skillInstance.explosionRadius + ",";
+        }
+
+        public override string Name()
+        {
+            return "技能: 爆破";
         }
     }
 }

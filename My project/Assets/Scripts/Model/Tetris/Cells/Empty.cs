@@ -15,5 +15,10 @@ namespace Model.Tetri
         {
             return "Empty"; // 返回一个字符串
         }
+
+        public override string Name()
+        {
+            return "Empty";
+        }
     }
 }

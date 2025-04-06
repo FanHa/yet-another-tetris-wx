@@ -22,6 +22,11 @@ namespace Model.Tetri
             return "攻击距离 +" + distance;
         }
 
+        public override string Name()
+        {
+            return "技能: 远程攻击";
+        }
+
         
     }
 }

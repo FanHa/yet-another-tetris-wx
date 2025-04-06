@@ -13,9 +13,14 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"技能: 冲锋, 向前冲刺 {skillInstance.rushDuration} 秒, 对碰撞到的敌人造成 " +
+            return $"向前冲刺 {skillInstance.rushDuration} 秒, 对碰撞到的敌人造成 " +
                 $"基础攻击力 + (冲刺速度 × {skillInstance.damageMultipierBySpeed}) 的伤害. " +
                 $"技能冷却时间: {skillInstance.cooldown} 秒.";
+        }
+
+        public override string Name()
+        {
+            return "技能: 冲锋";
         }
     }
 }

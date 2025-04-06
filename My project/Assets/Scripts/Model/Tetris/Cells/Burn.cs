@@ -14,7 +14,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return burnInstance.Name() + burnInstance.Description();
+            return burnInstance.Description();
+        }
+
+        public override string Name()
+        {
+            return "技能: " + burnInstance.Name();
         }
     }
 }

@@ -5,8 +5,9 @@ namespace Model.Rewards
 {
     public class MultiAttack : Tetri
     {
-        public override string GetName() => "Multi Attack";
-        public override string GetDescription() => "Increases attack target number";
+        private Model.Tetri.MultiAttack cellTemplate;
+        public override string GetName() => cellTemplate.Name();
+        public override string GetDescription() => cellTemplate.Description();
 
         public override void FillCells()
         {

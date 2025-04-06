@@ -21,5 +21,9 @@ namespace Model.Tetri
             return $"同时攻击目标 +{attackTargetAddition}, 将原有攻击力分摊到每个目标";
         }
 
+        public override string Name()
+        {
+            return "技能: 多重攻击";
+        }
     }
 }

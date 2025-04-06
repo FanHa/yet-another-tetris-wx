@@ -5,7 +5,12 @@ namespace Model.Tetri
     {
         public override string Description()
         {
-            return "Padding";
+            return "没什么特别的用处.";
+        }
+
+        public override string Name()
+        {
+            return "填充物";
         }
     }
 }

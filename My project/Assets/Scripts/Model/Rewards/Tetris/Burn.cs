@@ -2,6 +2,8 @@ namespace Model.Rewards
 {
     public class Burn : Tetri
     {
+        private Model.Tetri.Burn cellTemplate;
+
         public override void FillCells()
         {
             var occupiedPositions = tetriInstance.GetOccupiedPositions();
@@ -13,7 +15,7 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "灼烧";
-        public override string GetDescription() => "attack add burn effect";
+        public override string GetName() => cellTemplate.Name();
+        public override string GetDescription() => cellTemplate.Description();
     }
 }

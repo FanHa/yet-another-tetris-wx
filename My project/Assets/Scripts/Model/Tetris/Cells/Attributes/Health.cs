@@ -20,5 +20,10 @@ namespace Model.Tetri
         {
             return $"最大生命值 +{CorePercentageModifier}%";
         }
+
+        public override string Name()
+        {
+            return "生命值";
+        }
     }
 }

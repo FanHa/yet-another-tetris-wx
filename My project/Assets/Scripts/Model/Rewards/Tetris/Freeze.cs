@@ -2,6 +2,8 @@ namespace Model.Rewards
 {
     public class Freeze : Tetri
     {
+        private Model.Tetri.Freeze cellTemplate;
+
         public override void FillCells()
         {
             var occupiedPositions = tetriInstance.GetOccupiedPositions();
@@ -13,7 +15,7 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "冰霜";
-        public override string GetDescription() => "attack add Freeze effect";
+        public override string GetName() => cellTemplate.Name();
+        public override string GetDescription() => cellTemplate.Description();
     }
 }

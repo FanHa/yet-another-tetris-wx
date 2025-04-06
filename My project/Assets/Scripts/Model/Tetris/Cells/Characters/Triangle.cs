@@ -20,5 +20,10 @@ namespace Model.Tetri
             unit.attackPower.SetBaseValue(attackPowerValue);
             unit.maxCore.SetBaseValue(maxCoreValue);
         }
+
+        public override string Name()
+        {
+            return "三角形核心";
+        }
     }
 }

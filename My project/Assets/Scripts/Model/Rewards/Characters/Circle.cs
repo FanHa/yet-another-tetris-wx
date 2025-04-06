@@ -10,12 +10,12 @@ namespace Model.Rewards
 
         public override string GetDescription()
         {
-            return "decrease attak, increase health";
+            return characterCellInstance.Description();
         }
 
         public override string GetName()
         {
-            return "Character Circle";
+            return characterCellInstance.Name();
         }
     }
 }

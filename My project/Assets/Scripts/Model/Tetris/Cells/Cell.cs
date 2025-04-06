@@ -10,7 +10,7 @@ namespace Model.Tetri
     {
 
         public abstract string Description();
-
+        public abstract string Name();
 
     }
 }

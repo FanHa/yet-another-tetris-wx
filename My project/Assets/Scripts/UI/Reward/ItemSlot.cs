@@ -9,7 +9,8 @@ namespace UI.Reward
 {
     public class ItemSlot : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField] private TMP_Text rewardText;
+        [SerializeField] private TextMeshProUGUI nameText;
+        [SerializeField] private TextMeshProUGUI detailText;
         [SerializeField] private Transform previewParent; // Parent for the Tetri preview grid
 
         private Model.Rewards.Reward item;        
@@ -18,7 +19,8 @@ namespace UI.Reward
         public void SetReward(Model.Rewards.Reward reward)
         {
             item = reward;
-            rewardText.text = reward.GetName();
+            nameText.text = reward.GetName();
+            detailText.text = reward.GetDescription();
         }
 
         public void SetPreview(GameObject preview)

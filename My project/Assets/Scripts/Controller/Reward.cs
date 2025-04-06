@@ -49,7 +49,6 @@ namespace Controller
                 operationTableData.PlaceCharacterInRandomRow(characterReward.GetCharacter());
             }
             // todo 其他类型的reward和错误处理
-            Debug.Log("Reward applied: " + reward.GetName());
             OnRewardSelected?.Invoke();
         }
     }

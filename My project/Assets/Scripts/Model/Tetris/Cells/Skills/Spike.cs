@@ -14,14 +14,14 @@ namespace Model.Tetri
             unit.ReflectDamagePercentage = reflectPercentage; // 设置反弹伤害百分比
         }
 
-        public string Name()
+        public override string Name()
         {
-            return "尖刺";
+            return "技能: 尖刺";
         }
 
         public override string Description()
         {
-            return $"技能: {Name()}. 受到伤害时反弹 {reflectPercentage * 100}% 伤害给攻击者";
+            return $"受到伤害时反弹 {reflectPercentage * 100}% 伤害给攻击者";
         }
 
     }

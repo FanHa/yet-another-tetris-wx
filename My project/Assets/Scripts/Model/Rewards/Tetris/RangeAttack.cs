@@ -5,7 +5,7 @@ namespace Model.Rewards
     public class RangeAttack : Tetri
     {
         private Model.Tetri.RangeAttack cellTemplate;
-        public override string GetName() => "放风筝";
+        public override string GetName() => cellTemplate.Name();
         public override string GetDescription() => cellTemplate.Description();
 
         public override void FillCells()
