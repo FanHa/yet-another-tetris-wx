@@ -2,7 +2,7 @@ namespace Model.Rewards
 {
     public class Burn : Tetri
     {
-        private Model.Tetri.Burn cellTemplate;
+        private Model.Tetri.Burn cellTemplate = new Model.Tetri.Burn();
 
         public override void FillCells()
         {

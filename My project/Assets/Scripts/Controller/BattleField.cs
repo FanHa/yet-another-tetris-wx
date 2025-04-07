@@ -23,16 +23,16 @@ namespace Controller {
         public Transform factionAParent; // 阵营A的父对象
         public Transform factionBParent; // 阵营B的父对象
 
-
-        public event Action<Unit.Faction> OnFactionDefeated;
-
+        public event Action OnFactionDefeated;
 
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
         [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
         private Coroutine spawnUnitsCoroutine;
         private Dictionary<string, Units.Statistics> unitStatistics = new Dictionary<string, Units.Statistics>(); // 使用单位名称作为键
-
+        [SerializeField] private GameObject statisticsPanel; // 统计面板
+        [SerializeField] private GameObject unitStatisticPrefab; // 单位统计预制体
+        [SerializeField] private GameObject damageTypeStatisticPrefab; // 伤害类型统计预制体
         void Start()
         {
             // 初始化字典
@@ -161,7 +161,7 @@ namespace Controller {
         private void HandleDamageTaken(Units.Damages.EventArgs args)
         {
             ShowDamageText(args.Target.transform.position, args.Damage.Value);
-            if (args.Source == null) 
+            if (args.Source == null || args.Source.faction != Unit.Faction.FactionA)
                 return;
             string sourceName = args.Source.name;
             if (!unitStatistics.ContainsKey(sourceName))
@@ -241,8 +241,7 @@ namespace Controller {
                             }
                         }
                     }
-                    // todo , 根据不同阵营全部死亡触发不同的情况
-                    OnFactionDefeated?.Invoke(deadUnit.faction);
+                    ShowBattleStatistics();
                 }
             }
         }
@@ -259,19 +258,71 @@ namespace Controller {
             }
         }
 
-        public void LogDamageStatistics()
+        public void ShowBattleStatistics()
         {
-            Debug.Log("Damage Statistics for this battle:");
-
-            foreach (var stat in unitStatistics.Values)
+            statisticsPanel.SetActive(true);
+            Transform contentTransform = statisticsPanel.transform.Find("Content");
+            // 清空统计面板
+            foreach (Transform child in contentTransform)
             {
-                Debug.Log($"Unit: {stat.UnitName}");
-                foreach (var damageType in stat.DamageByType)
+                Destroy(child.gameObject);
+            }
+
+            var sortedUnitStatistics = unitStatistics.Values
+                .OrderByDescending(stat => stat.DamageByType.Values.Sum())
+                .ToList();
+
+            // 遍历每个单位的统计数据
+            foreach (var stat in sortedUnitStatistics)
+            {
+                // 创建 UnitStatisticPrefab
+                GameObject unitStatInstance = Instantiate(unitStatisticPrefab, contentTransform.transform);
+                var leftSide = unitStatInstance.transform.Find("LeftSide");
+                if (leftSide == null)
                 {
-                    Debug.Log($"  - {damageType.Key}: {damageType.Value} damage");
+                    Debug.LogError("LeftSide object not found in UnitStatisticPrefab!");
+                    continue;
+                }
+
+                // 获取 NameText 和 TotalDamageText
+                var unitNameText = leftSide.Find("NameText").GetComponent<TextMeshProUGUI>();
+                var totalDamageText = leftSide.Find("TotalDamageText").GetComponent<TextMeshProUGUI>();
+                var damageTypePanel = unitStatInstance.transform.Find("DamageTypePanel");
+
+
+                // 设置单位名称
+                unitNameText.text = stat.UnitName;
+
+                // 计算总伤害
+                float totalDamage = stat.DamageByType.Values.Sum();
+                totalDamageText.text = Mathf.RoundToInt(totalDamage).ToString(); // 转换为整数并设置文本
+
+
+                // 按伤害值排序伤害类型
+                var sortedDamageTypes = stat.DamageByType
+                    .OrderByDescending(damageType => damageType.Value)
+                    .ToList();
+                // 遍历单位的伤害类型统计
+                foreach (var damageType in sortedDamageTypes)
+                {
+                    // 创建 DamageTypeStatisticPrefab
+                    GameObject damageTypeStatInstance = Instantiate(damageTypeStatisticPrefab, damageTypePanel);
+                    var damageTypeText = damageTypeStatInstance.transform.Find("TypeText").GetComponent<TextMeshProUGUI>();
+                    var damageValueText = damageTypeStatInstance.transform.Find("ValueText").GetComponent<TextMeshProUGUI>();
+
+                    // 设置伤害类型和伤害值
+                    damageTypeText.text = damageType.Key;
+                    damageValueText.text = Mathf.RoundToInt(damageType.Value).ToString(); // 转换为整数
                 }
             }
         }
+
+        public void EndStatistics()
+        {
+            statisticsPanel.SetActive(false);
+            OnFactionDefeated?.Invoke();
+        }
+
         
     }
 }

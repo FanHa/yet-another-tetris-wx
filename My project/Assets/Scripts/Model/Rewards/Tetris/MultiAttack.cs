@@ -5,7 +5,7 @@ namespace Model.Rewards
 {
     public class MultiAttack : Tetri
     {
-        private Model.Tetri.MultiAttack cellTemplate;
+        private Model.Tetri.MultiAttack cellTemplate = new Model.Tetri.MultiAttack();
         public override string GetName() => cellTemplate.Name();
         public override string GetDescription() => cellTemplate.Description();
 

@@ -5,7 +5,7 @@ namespace Model.Rewards
 {
     public class Speed : Tetri
     {
-        private Model.Tetri.Speed cellTemplate;
+        private Model.Tetri.Speed cellTemplate = new Model.Tetri.Speed();
         public override void FillCells()
         {
             foreach (var position in tetriInstance.GetOccupiedPositions())

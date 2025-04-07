@@ -4,10 +4,12 @@ namespace Units.Skills
 {
     public class Bomb : Skill
     {
+
         public float damage = 50f; // 炸弹伤害
         public float explosionRadius = 2f; // 爆炸范围
         public override float cooldown => 10f;
         private float speed = 2f;
+        public string name = "爆破"; 
 
         public override void Execute(Unit caster)
         {
@@ -34,7 +36,7 @@ namespace Units.Skills
                 bomb.faction = caster.faction; // 设置炸弹的阵营
                 bomb.target = new GameObject("BombTarget").transform; // 创建目标位置
                 bomb.target.position = targetEnemy.position; // 设置目标位置为敌人位置
-                bomb.damage = new Damages.Damage(damage, "炸弹", false); // 设置炸弹伤害
+                bomb.damage = new Damages.Damage(damage, name, false); // 设置炸弹伤害
                 bomb.explosionRadius = explosionRadius; // 设置爆炸范围
                 bomb.speed = speed; // 设置炸弹速度
             }

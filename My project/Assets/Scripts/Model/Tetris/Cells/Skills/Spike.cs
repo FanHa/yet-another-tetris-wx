@@ -21,7 +21,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"受到伤害时反弹 {reflectPercentage * 100}% 伤害给攻击者";
+            return $"受到伤害时反弹 {reflectPercentage}% 伤害给攻击者";
         }
 
     }
