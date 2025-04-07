@@ -50,7 +50,8 @@ namespace Units
 
         // [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
-        [SerializeField] private Canvas unitCanvas; // Unit的Canvas
+        [SerializeField] private SpriteRenderer Fist1SpriteRenderer;
+        [SerializeField] private SpriteRenderer Fist2SpriteRenderer;
 
         public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
@@ -63,7 +64,6 @@ namespace Units
 
         public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
         private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
-        public IReadOnlyList<Skills.Skill> Skills => _skills; // 只读属性
 
         [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
         private bool isActive = false; // 是否处于活动状态
@@ -368,7 +368,7 @@ namespace Units
                 source.TakeDamage(this, reflectDamage); // 反弹伤害
             }
 
-            float finalDamage = Mathf.Max(1, damageReceived.Value);
+            float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
             currentCore -= finalDamage;
             OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
@@ -400,7 +400,10 @@ namespace Units
         public void SetFaction(Faction faction)
         {
             this.faction = faction;
-            bodySpriteRenderer.color = faction == Faction.FactionA ? factionAColor : factionBColor;
+            Color color = faction == Faction.FactionA ? factionAColor : factionBColor;
+            bodySpriteRenderer.color = color;
+            Fist1SpriteRenderer.color = color;
+            Fist2SpriteRenderer.color = color;
         }
 
         

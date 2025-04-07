@@ -752,6 +752,8 @@ MonoBehaviour:
   minDistance: 0.2
   attackTargetNumber: 1
   bodySpriteRenderer: {fileID: 5410986790312629488}
+  Fist1SpriteRenderer: {fileID: 7780507553668852956}
+  Fist2SpriteRenderer: {fileID: 8140681470083442678}
   unitCanvas: {fileID: 5817835895303416901}
   isRanged: 0
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}

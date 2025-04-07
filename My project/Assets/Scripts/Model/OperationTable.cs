@@ -96,6 +96,12 @@ namespace Model
                     {
                         int x = position.x + i; // 调整行列索引
                         int y = position.y + j ; // 调整行列索引
+
+                        // 仅在目标位置是 Empty 时放置 Padding
+                        if (cell is Padding && board[x, y] is not Empty)
+                        {
+                            continue;
+                        }
                         board[x, y] = cell;
                     }
                 }

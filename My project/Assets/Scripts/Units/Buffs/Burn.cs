@@ -25,7 +25,7 @@ namespace Units
 
         public override string Description()
         {
-            return $"{damagePerSecond} 伤害/秒, 持续{duration}秒";
+            return $"攻击附带灼烧效果, 造成{damagePerSecond} 伤害每秒, 持续{duration}秒";
         }
 
         public override void Remove(Unit unit)

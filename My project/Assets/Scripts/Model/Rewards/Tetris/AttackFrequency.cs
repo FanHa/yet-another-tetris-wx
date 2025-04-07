@@ -5,7 +5,7 @@ namespace Model.Rewards
 {
     public class AttackFrequency : Tetri
     {
-        private Model.Tetri.AttackFrequency cellTemplate;
+        private Model.Tetri.AttackFrequency cellTemplate = new();
 
         public override void FillCells()
         {
