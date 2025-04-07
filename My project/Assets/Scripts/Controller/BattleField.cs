@@ -175,8 +175,10 @@ namespace Controller {
         {
             if (damageTextPrefab != null && damageCanvas != null)
             {
-                float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f); // 随机偏移范围
-                Vector3 offsetPosition = worldPosition + new Vector3(randomOffsetX, 0f, 0f);
+                float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f); // X轴随机偏移范围
+                float randomOffsetY = UnityEngine.Random.Range(-0.1f, 0.1f); // Y轴随机偏移范围（X的一半）
+                Vector3 offsetPosition = worldPosition + new Vector3(randomOffsetX, randomOffsetY, 0f);
+
 
                 // 创建伤害文本实例
                 GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);

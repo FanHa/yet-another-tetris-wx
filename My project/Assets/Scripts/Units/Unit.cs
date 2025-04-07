@@ -368,8 +368,9 @@ namespace Units
                 source.TakeDamage(this, reflectDamage); // 反弹伤害
             }
 
+            float finalDamage = Mathf.Max(1, damageReceived.Value);
 
-            currentCore -= damageReceived.Value;
+            currentCore -= finalDamage;
             OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
 
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
