@@ -6,7 +6,7 @@ namespace Units.Skills
 {
     public class Rush : Skill
     {
-        private const string skillName = "冲锋"; // 技能名称
+        public string skillName = "冲锋"; // 技能名称
         public override float cooldown => 10f;
         public float rushDuration = 1f;
         public float speedMultiplier = 1.5f; // 冲刺速度倍数
@@ -62,7 +62,7 @@ namespace Units.Skills
                     {
                         Units.Damages.Damage damage = new Units.Damages.Damage(
                              caster.attackPower.finalValue + rushSpeed * damageMultipierBySpeed,
-                             "冲锋",
+                             skillName,
                              false
                         );
 

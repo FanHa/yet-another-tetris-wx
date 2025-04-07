@@ -22,7 +22,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "正方形核心";
+            return "方形核心";
         }
     }
 }

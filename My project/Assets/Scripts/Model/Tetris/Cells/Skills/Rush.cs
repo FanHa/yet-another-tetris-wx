@@ -5,7 +5,7 @@ namespace Model.Tetri
     [Serializable]
     public class Rush : Cell, IBaseAttribute
     {
-        public Units.Skills.Rush skillInstance = new (); // 实例化一个Burn对象
+        private Units.Skills.Rush skillInstance = new (); // 实例化一个Burn对象
         public void ApplyAttributes(Unit unit)
         {
             unit.AddSkill(skillInstance);
@@ -20,7 +20,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能: 冲锋";
+            return skillInstance.skillName;
         }
     }
 }

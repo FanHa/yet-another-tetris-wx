@@ -295,7 +295,7 @@ namespace Controller {
 
                 // 计算总伤害
                 float totalDamage = stat.DamageByType.Values.Sum();
-                totalDamageText.text = Mathf.RoundToInt(totalDamage).ToString(); // 转换为整数并设置文本
+                totalDamageText.text = "总伤害:" + Mathf.RoundToInt(totalDamage).ToString(); // 转换为整数并设置文本
 
 
                 // 按伤害值排序伤害类型
