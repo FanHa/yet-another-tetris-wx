@@ -18,7 +18,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能:" + freezeInstance.Name();
+            return freezeInstance.Name();
         }
     }
 }

@@ -2,6 +2,7 @@ namespace Model.Rewards
 {
     public class PrecisionShoot : Tetri
     {
+        private Model.Tetri.PrecisionShoot cellTemplate = new();
         public override void FillCells()
         {
             var occupiedPositions = tetriInstance.GetOccupiedPositions();
@@ -13,7 +14,8 @@ namespace Model.Rewards
             }
         }
 
-        public override string GetName() => "精准射击";
-        public override string GetDescription() => "attack add burn effect";
+        
+        public override string GetName() => cellTemplate.Name();
+        public override string GetDescription() => cellTemplate.Description();
     }
 }

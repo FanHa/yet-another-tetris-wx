@@ -20,7 +20,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能: 精准射击";
+            return "精准打击";
         }
     }
 }

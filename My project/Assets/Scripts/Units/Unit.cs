@@ -40,8 +40,6 @@ namespace Units
 
         public Attribute attackPower = new Attribute(10f); // 攻击力
 
-        public List<int> massPercentageModifiers = new List<int>(); // 百分比修正列表
-
         public float minDistance = 0.1f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
@@ -79,17 +77,6 @@ namespace Units
                 Debug.LogWarning("Animator component not found on the same GameObject.");
             }
             healthBar = GetComponentInChildren<HealthBar>();
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            int totalMassPercentage = 100; // 初始化总百分比
-            foreach (int modifier in massPercentageModifiers)
-            {
-                totalMassPercentage += modifier; // 计算总百分比修正值
-            }
-            
         }
 
         // Update is called once per frame
@@ -152,7 +139,7 @@ namespace Units
         }
 
 
-        private void AddBuff(Units.Buff buff)
+        public void AddBuff(Units.Buff buff)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
             {
