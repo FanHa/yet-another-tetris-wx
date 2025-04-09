@@ -13,14 +13,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return $"向射程内初始血量最低的敌人射出一支箭," +
-           $"造成基础攻击力 x {skillInstance.attackPowerMultiplier} 的伤害, " +
-           $"冷却时间: {skillInstance.cooldown} 秒.";        
+            return skillInstance.Description();        
         }
 
         public override string Name()
         {
-            return "精准打击";
+            return skillInstance.skillName;
         }
     }
 }

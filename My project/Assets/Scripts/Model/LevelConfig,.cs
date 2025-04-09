@@ -14,6 +14,13 @@ namespace Model
         public List<EnemyData> enemyData; // 敌人数据列表
         [SerializeField] private List<CharacterTypeReference> availableCharacters; // 可用的角色类型
         [SerializeField] private List<CellTypeReference> availableTetriCells; // 可用的 TetriCell 类型
+        
+        [SerializeField] private int levelsPerEnemyIncrease = 3; // 每增加一个敌人的关卡数
+        [SerializeField] private int maxEnemyCount = 10; // 最大敌人数量
+        [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
+        [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
+
+        
         private void OnEnable()
         {
             // 初始化 availableCharacters
@@ -65,7 +72,7 @@ namespace Model
             }
 
             // 计算当前关卡的敌人数量
-            int enemyCount = Mathf.Min(1 + (currentLevel - 1) / 3, 10); // 每3关增加一个敌人，最多10个
+            int enemyCount = Mathf.Min(1 + (currentLevel - 1) / levelsPerEnemyIncrease, maxEnemyCount);
 
             // 确保敌人数量足够
             while (enemyData.Count < enemyCount)
@@ -79,8 +86,14 @@ namespace Model
                 });
             }
 
+            // 如果是第 0 关，直接返回，不增加 TetriCells
+            if (currentLevel == 0)
+            {
+                return;
+            }
+
             // 为随机敌人增加 TetriCells
-            int additionalCells = Mathf.Min((currentLevel - 1) / 10 + 1, 10); // 每10关增加一个随机 TetriCell，最多10个
+            int additionalCells = Mathf.Min((currentLevel - 1) / levelsPerCellIncrease + 1, maxAddedCellCount); // 每10关增加一个随机 TetriCell，最多10个
             for (int i = 0; i < additionalCells; i++)
             {
                 // 随机选择一个敌人

@@ -16,7 +16,6 @@ public class TetriController : MonoBehaviour
 
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
-    // [SerializeField] private Controller.Level levelController; // 引用Level控制器
     
 
     private UI.Resource.ItemSlot currentDraggingTetri; // 保存当前拖动的Tetri
@@ -100,7 +99,7 @@ public class TetriController : MonoBehaviour
         LoadLevelData();
         GenerateAndResetInventoryData();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
-        battleField.StartSpawningUnits();
+        battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
     }
 

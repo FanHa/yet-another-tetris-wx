@@ -5,6 +5,7 @@ namespace Units.Skills
 {
     public class PrecisionShoot : Skill
     {
+        public string skillName => "精准射击"; // 技能名称
         public float attackPowerMultiplier = 4f; // 攻击力倍数
         public override float cooldown => 10f;
         public float speed = 2f;

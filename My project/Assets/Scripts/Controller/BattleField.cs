@@ -12,6 +12,8 @@ using TMPro;
 namespace Controller {
     public class BattleField : MonoBehaviour
     {
+        [SerializeField] private Transform battlefieldMinBounds; // 战场的最小边界
+        [SerializeField] private Transform battlefieldMaxBounds; // 战场的最大边界
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private Canvas damageCanvas;
         [SerializeField] private Controller.Statistics statisticsController; // 统计控制器
@@ -41,15 +43,13 @@ namespace Controller {
 
         public void SetEnemyData(List<Model.InventoryItem> enemyData)
         {
-            // if (this.enemyData.Items == null)
-            // {
-            //     this.enemyData.Items = new List<Model.InventoryItem>();
-            // }
             this.enemyData.Items = enemyData; // 替换敌人数据
         }
 
-        public void StartSpawningUnits()
+        public void StartNewLevelBattle(int level)
         {
+            statisticsController.SetLevel(level); // 设置当前关卡
+            unitStatistics.Clear();
             SpawnUnits();
         }
 
@@ -110,6 +110,7 @@ namespace Controller {
                 }
                 
                 unitComponent.SetFaction(faction);
+                unitComponent.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
                 // 监听死亡事件
                 unitComponent.OnDeath += OnUnitDeath;
                 unitComponent.OnDamageTaken += HandleDamageTaken;

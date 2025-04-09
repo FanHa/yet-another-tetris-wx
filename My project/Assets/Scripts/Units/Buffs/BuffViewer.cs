@@ -18,6 +18,11 @@ namespace Units.Buffs
 
         private void Update()
         {
+            // 如果父对象存在，更新中心点为父对象的位置
+            if (transform.parent != null)
+            {
+                centerPosition = transform.parent.position;
+            }
             // 累计时间
             elapsedTime += Time.deltaTime;
 

@@ -20,6 +20,9 @@ namespace Units
         [SerializeField] private Color factionAColor;
         [SerializeField] private Color factionBColor;
 
+        private Transform battlefieldMinBounds; // 战场的最小边界
+        private Transform battlefieldMaxBounds; // 战场的最大边界
+
         public event Action<Unit> OnDeath;
 
         public event Action<Damages.EventArgs> OnDamageTaken;
@@ -42,7 +45,7 @@ namespace Units
 
         public Attribute attackPower = new Attribute(10f); // 攻击力
 
-        public float minDistance = 0.1f; // 与敌人保持的最小距离
+        public float minDistance = 0.2f; // 与敌人保持的最小距离
         public float attackTargetNumber = 1; // 攻击目标数量
         
         private Animator animator;
@@ -98,6 +101,7 @@ namespace Units
             {
                 MoveTowardsEnemy();
             }
+            ClampPositionToBattlefield();
         }
 
         public void Initialized()
@@ -113,7 +117,29 @@ namespace Units
             InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
             isActive = true;
         }
+        public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
+        {
+            battlefieldMinBounds = minBounds;
+            battlefieldMaxBounds = maxBounds;
+        }
 
+        /// <summary>
+        /// 限制单位位置在战场边界内
+        /// </summary>
+        private void ClampPositionToBattlefield()
+        {
+            if (battlefieldMinBounds == null || battlefieldMaxBounds == null)
+            {
+                Debug.LogWarning("Battlefield bounds are not set for this unit.");
+                return;
+            }
+
+            Vector3 clampedPosition = transform.position;
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, battlefieldMinBounds.position.x, battlefieldMaxBounds.position.x);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, battlefieldMinBounds.position.y, battlefieldMaxBounds.position.y);
+            transform.position = clampedPosition;
+        }
+        
         public void AddSkill(Skills.Skill newSkill)
         {
             // 检查是否已经存在相同类型的技能
@@ -248,20 +274,63 @@ namespace Units
                 {
                     float distance = Vector2.Distance(transform.position, closestEnemy.position);
 
-                    // 如果距离大于攻击范围和最小距离，则移动
                     if (distance > attackRange && distance > minDistance)
                     {
                         // 调整自己的方向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
-                        AdjustLookDirection(direction);
+
+                        // 检查与友方单位的距离，避免扎堆
+                        Vector2 adjustedDirection = AdjustDirectionToAvoidAllies(direction);
+
                         // 计算下一步位置
-                        Vector2 newPosition = Vector2.MoveTowards(transform.position, closestEnemy.position, moveSpeed.finalValue * Time.deltaTime);
+                        Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, moveSpeed.finalValue * Time.deltaTime);
 
                         // 更新位置
                         transform.position = newPosition;
+
+                        // 调整朝向
+                        AdjustLookDirection(adjustedDirection);
                     }
                 }
             }
+        }
+
+        private Vector2 AdjustDirectionToAvoidAllies(Vector2 originalDirection)
+        {
+            // 获取所有友方单位
+            Collider2D[] nearbyUnits = Physics2D.OverlapCircleAll(transform.position, minDistance);
+
+            Vector2 avoidanceVector = Vector2.zero;
+            int avoidanceCount = 0;
+
+            foreach (var collider in nearbyUnits)
+            {
+                if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit otherUnit))
+                {
+                    // 检查是否为友方单位
+                    if (otherUnit.faction == faction)
+                    {
+                        // 计算与友方单位的方向
+                        Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
+
+                        // 累加避让方向
+                        avoidanceVector += toOtherUnit.normalized;
+                        avoidanceCount++;
+                    }
+                }
+            }
+
+            if (avoidanceCount > 0)
+            {
+                // 平均避让方向
+                avoidanceVector /= avoidanceCount;
+
+                // 调整原始方向，加入避让向量
+                return (originalDirection + avoidanceVector).normalized;
+            }
+
+            // 如果没有需要避让的单位，返回原始方向
+            return originalDirection;
         }
 
         private void AdjustLookDirection(Vector2 direction)
