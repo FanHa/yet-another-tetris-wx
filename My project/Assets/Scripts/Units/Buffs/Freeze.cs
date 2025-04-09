@@ -1,3 +1,5 @@
+using System;
+
 namespace Units.Buffs
 {
     public class Freeze : Buff
@@ -36,5 +38,7 @@ namespace Units.Buffs
         public override void Affect(Unit unit)
         {
         }
+
+        public override Type TetriCellType => typeof(Model.Tetri.Freeze); // Return the Type of the corresponding TetriCell
     }
 }

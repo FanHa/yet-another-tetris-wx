@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -25,6 +26,7 @@ namespace Units.Buffs
         }
         private DamageIncreaseBehavior damageIncreaseBehavior;
 
+        public override Type TetriCellType => typeof(Model.Tetri.Weak); // Return the Type of the corresponding TetriCell
 
         public override string Name()
         {

@@ -126,7 +126,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: FreezeShield
     originalName: 
-    pivot: {x: 0.51811594, y: -0.14973262}
+    pivot: {x: 0.37572518, y: 0.46786633}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Units.Buffs
@@ -37,5 +38,7 @@ namespace Units.Buffs
         {
             target.TakeDamage(source, new Damages.Damage(damagePerSecond, Name(), false)); // 施加伤害
         }
+
+        public override Type TetriCellType => typeof(Model.Tetri.Burn); // Return the Type of the corresponding TetriCell
     }
 }

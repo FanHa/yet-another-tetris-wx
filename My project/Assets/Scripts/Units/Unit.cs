@@ -5,6 +5,7 @@ using System.Linq;
 using Model.Tetri;
 using TMPro;
 using UI;
+using Units.Buffs;
 using UnityEngine;
 
 namespace Units
@@ -64,7 +65,10 @@ namespace Units
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
 
+        [SerializeField] private BuffViewer buffViewerPrefab; // Buff预制体
+        [SerializeField] private Transform buffViewerParent; 
         [SerializeField] private Dictionary<string, Buffs.Buff> activeBuffs = new Dictionary<string, Buffs.Buff>();
+        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         public bool CanReflectDamage = false; // 是否可以反弹伤害
@@ -153,6 +157,9 @@ namespace Units
                 activeBuffs[buff.Name()] = buff;
                 buff.RefreshDuration();
                 buff.Apply(this);
+                BuffViewer buffViewerInstance = Instantiate(buffViewerPrefab, buffViewerParent.transform);
+                buffViewerInstance.name = buff.Name(); // 设置名字为 Buff 的类型名
+                buffViewerInstance.SetBuffSprite(tetriCellTypeResourceMapping.GetSprite(buff.TetriCellType)); // 设置图标
             }
         }
 
@@ -166,15 +173,24 @@ namespace Units
                 {
                     buff.Remove(this);
                     expiredBuffs.Add(kvp.Key);
+                    // 直接通过子对象名字找到对应的 BuffViewer 并销毁
+                    Transform child = buffViewerParent.transform.Find(buff.Name());
+                    if (child != null)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    
                 } else {
                     buff.Affect(this);
                 } 
             }
-            // 移除已过期的状态
-            foreach (var buffName in expiredBuffs)
+
+            // 注: 不能直接在dictionary循环里里Remove,否则会报错,所以先记录后删除
+            foreach (var buffKey in expiredBuffs)
             {
-                activeBuffs.Remove(buffName);
-            }   
+                activeBuffs.Remove(buffKey);
+            }
+
         }
 
         private void CastSkills()

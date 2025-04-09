@@ -239,6 +239,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1967185549965992934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 7858934183165652001}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: BuffViewer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7858934183165652001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967185549965992934}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4503421608668510641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2768629011979689127
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +727,7 @@ Transform:
   - {fileID: 6119845601876610124}
   - {fileID: 5945643945167726814}
   - {fileID: 1587690522871941135}
+  - {fileID: 7858934183165652001}
   - {fileID: 5606919347248128722}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -748,19 +781,20 @@ MonoBehaviour:
   attackPower:
     baseValue: 10
     finalValue: 10
-  massPercentageModifiers: 
   minDistance: 0.2
   attackTargetNumber: 1
   bodySpriteRenderer: {fileID: 5410986790312629488}
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
-  unitCanvas: {fileID: 5817835895303416901}
   isRanged: 0
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
   bombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
   PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
   projectileSpawnPoint: {fileID: 1587690522871941135}
   targetEnemies: []
+  buffViewerPrefab: {fileID: 8274040249548898299, guid: edd429be709cf0648806abc88f4856bb, type: 3}
+  buffViewerParent: {fileID: 7858934183165652001}
+  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
   moveable: 1
   CanReflectDamage: 0
   ReflectDamagePercentage: 0
