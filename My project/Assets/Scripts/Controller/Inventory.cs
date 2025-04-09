@@ -28,8 +28,7 @@ namespace Controller {
         public Model.InventoryItem GenerateInventoryItemFromTetriCells(List<Cell> tetriCells)
         {
             Character characterCell = tetriCells.OfType<Character>().FirstOrDefault();
-            int spawnInterval = 0; // 根据需要设置
-            return new Model.InventoryItem(characterCell, spawnInterval, tetriCells);
+            return new Model.InventoryItem(characterCell, tetriCells);
         }
 
    

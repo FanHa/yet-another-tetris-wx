@@ -28,7 +28,6 @@ namespace Controller {
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
         [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
-        private Coroutine spawnUnitsCoroutine;
         private Dictionary<string, Units.Statistics> unitStatistics = new Dictionary<string, Units.Statistics>(); // 使用单位名称作为键
         [SerializeField] private GameObject statisticsPanel; // 统计面板
         [SerializeField] private GameObject unitStatisticPrefab; // 单位统计预制体
@@ -38,76 +37,39 @@ namespace Controller {
             // 初始化字典
             factionUnits[Unit.Faction.FactionA] = new List<Unit>();
             factionUnits[Unit.Faction.FactionB] = new List<Unit>();
-
         }
 
         public void SetEnemyData(List<Model.InventoryItem> enemyData)
         {
+            // if (this.enemyData.Items == null)
+            // {
+            //     this.enemyData.Items = new List<Model.InventoryItem>();
+            // }
             this.enemyData.Items = enemyData; // 替换敌人数据
         }
 
         public void StartSpawningUnits()
         {
-            spawnUnitsCoroutine = StartCoroutine(SpawnUnits());
+            SpawnUnits();
         }
 
-        private void StopSpawningUnits()
-        {
-            if (spawnUnitsCoroutine != null)
-            {
-                StopCoroutine(spawnUnitsCoroutine);
-                spawnUnitsCoroutine = null;
-            }
-        }
-
-        private IEnumerator SpawnUnits()
+        private  void SpawnUnits()
         {
             foreach (var inventoryItem in inventoryData.Items)
             {
-                yield return StartCoroutine(SpawnUnitsA(inventoryItem));
+                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(inventoryItem.CharacterCell), Unit.Faction.FactionA, factionAParent, inventoryItem.TetriCells);
+
             }
 
             // 启动阵营B的生成协程
             foreach (var enemyItem in enemyData.Items)
             {
-                yield return StartCoroutine(SpawnUnitsB(enemyItem));
+                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(enemyItem.CharacterCell), Unit.Faction.FactionB, factionBParent, enemyItem.TetriCells);
+
             }
         }
 
-        IEnumerator SpawnUnitsA(Model.InventoryItem item)
-        {   
 
-            if (item.spawnInterval <= 0)
-            {
-                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionA, factionAParent, item.TetriCells);
-                yield break;
-            }
-            while (true)
-            {
-                // 刷新阵营A的Unit
-                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionA, factionAParent, item.TetriCells);
-
-                // 等待一段时间后再次刷新
-                yield return new WaitForSeconds(item.spawnInterval);
-            }
-        }
-
-        IEnumerator SpawnUnitsB(Model.InventoryItem item)
-        {
-            if (item.spawnInterval <= 0)
-            {
-                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionB, factionBParent, item.TetriCells);
-                yield break;
-            }
-            while (true)
-            {
-                // 刷新阵营B的Unit
-                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(item.CharacterCell), Unit.Faction.FactionB, factionBParent, item.TetriCells);
-
-                // 等待一段时间后再次刷新
-                yield return new WaitForSeconds(item.spawnInterval);
-            }
-        }
 
         void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Transform parent, List<Cell> tetriCells)
         {
@@ -222,9 +184,6 @@ namespace Controller {
                 // 如果某阵营单位列表为空，则表示该阵营全部阵亡
                 if (factionUnits[deadUnit.faction].Count == 0)
                 {
-                    Debug.Log(deadUnit.faction + " 全部死亡");
-                    StopSpawningUnits();
-
                     // 如果是 FactionA 全部死亡，更新生命值
                     if (deadUnit.faction == Unit.Faction.FactionA)
                     {

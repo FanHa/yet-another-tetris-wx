@@ -4,6 +4,7 @@ using UI;
 using Controller;
 using Model.Tetri;
 using UI.Resource;
+using Model;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
@@ -14,7 +15,8 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Controller.Reward reward;
 
     [SerializeField] private Controller.Inventory inventory;
-    [SerializeField] private Controller.Level levelController; // 引用Level控制器
+    [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
+    // [SerializeField] private Controller.Level levelController; // 引用Level控制器
     
 
     private UI.Resource.ItemSlot currentDraggingTetri; // 保存当前拖动的Tetri
@@ -25,6 +27,7 @@ public class TetriController : MonoBehaviour
         InitializeResourcesPanel();
         InitializeOperationTable();
         InitializeBattleField();
+        levelConfig.Reset();
     }
 
     private void InitializeBattleField()
@@ -47,9 +50,8 @@ public class TetriController : MonoBehaviour
         battleField.DestroyAllUnits();
         tetriResource.PrepareNewRound();
         inventory.Hide();
+        levelConfig.AdvanceToNextLevel(); // 关卡增加
 
-        // Advance to the next level
-        levelController.AdvanceToNextLevel();
     }
 
 
@@ -104,8 +106,8 @@ public class TetriController : MonoBehaviour
 
     private void LoadLevelData()
     {
-        Model.LevelConfig currentLevelConfig = levelController.GetCurrentLevelConfig();
-        battleField.SetEnemyData(currentLevelConfig.GetEnemyData()); // Pass enemy data to BattleField
+        List<InventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
     }
 
     public void HandleInventoryClicked()
