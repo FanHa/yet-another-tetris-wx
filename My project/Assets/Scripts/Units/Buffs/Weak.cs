@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Units
+namespace Units.Buffs
 {
-    public class Week : Buff
+    public class Weak : Buff
     {
         public float attackReductionPercentage = 10f; // 攻击力减少百分比
         public float damageTakenIncreasePercentage = 10f; // 受到的伤害增加百分比

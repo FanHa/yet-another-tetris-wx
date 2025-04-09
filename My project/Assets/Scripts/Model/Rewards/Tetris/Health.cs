@@ -8,13 +8,10 @@ namespace Model.Rewards
 
         public override void FillCells()
         {
-            foreach (var position in tetriInstance.GetOccupiedPositions())
-            {
-                tetriInstance.SetCell(position.x, position.y, new Model.Tetri.Health());
-            }
+            SetRandomCell<Model.Tetri.Health>();
         }
 
-        public override string GetName() => cellTemplate.Name();
-        public override string GetDescription() => cellTemplate.Description();
+        public override string Name() => cellTemplate.Name();
+        public override string Description() => cellTemplate.Description();
     }
 }

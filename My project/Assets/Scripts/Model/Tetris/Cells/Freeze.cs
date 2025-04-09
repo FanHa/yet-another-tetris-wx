@@ -5,7 +5,7 @@ namespace Model.Tetri
     [Serializable]
     public class Freeze : Cell, IBaseAttribute
     {
-        public Units.Freeze freezeInstance = new Units.Freeze();
+        public Units.Buffs.Freeze freezeInstance = new Units.Buffs.Freeze();
         public void ApplyAttributes(Unit unit)
         {
             unit.attackEffects.Add(freezeInstance);

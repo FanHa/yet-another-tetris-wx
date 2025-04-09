@@ -17,6 +17,17 @@ namespace Model.Rewards
             tetriInstance = tetri;
         }
 
+        public void SetRandomCell<T>() where T : Model.Tetri.Cell, new()
+        {
+            var occupiedPositions = tetriInstance.GetOccupiedPositions();
+            if (occupiedPositions.Count > 0)
+            {
+                var random = new System.Random();
+                var randomPosition = occupiedPositions[random.Next(occupiedPositions.Count)];
+                tetriInstance.SetCell(randomPosition.x, randomPosition.y, new T());
+            }
+        }
+
         public abstract void FillCells();
     }
 }

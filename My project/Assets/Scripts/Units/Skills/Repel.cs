@@ -67,5 +67,12 @@ namespace Units.Skills
             targetUnit.moveable = true;
 
         }
+
+        public override string Description()
+        {
+            return $"对目标敌人施加击退效果，将其击退 {repelDistance} 米，" +
+                $"击退过程持续 {repelDuration} 秒。" +
+                $"技能冷却时间为 {cooldown} 秒。";
+        }
     }
 }

@@ -1,12 +1,14 @@
+using UnityEngine;
+
 namespace Model.Rewards
 {
-    public class Burn : Tetri
+    public class FreezeShield : Tetri
     {
-        private Model.Tetri.Burn cellTemplate = new Model.Tetri.Burn();
+        private Model.Tetri.FreezeShield cellTemplate = new Model.Tetri.FreezeShield();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Burn>();
+            SetRandomCell<Model.Tetri.FreezeShield>();
         }
 
         public override string Name() => cellTemplate.Name();

@@ -4,15 +4,15 @@ using Units;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Week : Cell, IBaseAttribute
+    public class Weak : Cell, IBaseAttribute
     {
-        private Units.Skills.Week skillInstance = new(); // 实例化一个 Week 技能对象
-        private static Units.Week sharedBuff = new(); // 共享的 Buff 实例
+        private Units.Skills.Weak skillInstance = new(); // 实例化一个 Weak 技能对象
+        private static Units.Buffs.Weak sharedBuff = new(); // 共享的 Buff 实例
 
 
         public void ApplyAttributes(Unit unit)
         {
-            unit.AddSkill(skillInstance); // 为单位添加 Week 技能
+            unit.AddSkill(skillInstance); // 为单位添加 Weak 技能
         }
 
         public override string Description()

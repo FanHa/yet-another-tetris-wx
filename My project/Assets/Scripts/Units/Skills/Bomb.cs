@@ -4,7 +4,6 @@ namespace Units.Skills
 {
     public class Bomb : Skill
     {
-
         public float damage = 50f; // 炸弹伤害
         public float explosionRadius = 2f; // 爆炸范围
         public override float cooldown => 10f;
@@ -41,6 +40,13 @@ namespace Units.Skills
                 bomb.speed = speed; // 设置炸弹速度
             }
             lastUsedTime = Time.time; // 更新上次使用时间
+        }
+
+        public override string Description()
+        {
+            return $"投掷一枚炸弹，对目标区域内的敌人造成 {damage} 点伤害，" +
+                $"爆炸范围为 {explosionRadius} 米。" +
+                $"技能冷却时间为 {cooldown} 秒。";
         }
     }
 }

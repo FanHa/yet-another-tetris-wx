@@ -40,5 +40,12 @@ namespace Units.Skills
             }
             lastUsedTime = Time.time; // 更新上次使用时间
         }
+
+        public override string Description()
+        {
+            return $"对射程范围内生命值最低的敌人发射精准箭矢，" +
+                $"造成攻击力的 {attackPowerMultiplier} 倍伤害。" +
+                $"技能冷却时间为 {cooldown} 秒。";
+        }
     }
 }

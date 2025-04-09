@@ -1,12 +1,12 @@
 namespace Model.Rewards
 {
-    public class Burn : Tetri
+    public class Weak : Tetri
     {
-        private Model.Tetri.Burn cellTemplate = new Model.Tetri.Burn();
+        private Model.Tetri.Weak cellTemplate = new Model.Tetri.Weak();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Burn>();
+            SetRandomCell<Model.Tetri.Weak>();
         }
 
         public override string Name() => cellTemplate.Name();

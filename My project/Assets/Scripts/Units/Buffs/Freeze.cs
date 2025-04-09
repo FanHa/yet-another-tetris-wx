@@ -1,14 +1,14 @@
-namespace Units
+namespace Units.Buffs
 {
     public class Freeze : Buff
     {
         private float moveSpeedReductionPercentage = 20f;
         private float attackSpeedReductionPercentage = 20f;
-        public float freezeDurationSeconds = 4f; // 冻结持续时间
+        public float freezeDurationSeconds = 8f; // 冻结持续时间
 
         public override string Name()
         {
-            return "凛风";
+            return "冰霜";
         }
 
         public override float Duration()

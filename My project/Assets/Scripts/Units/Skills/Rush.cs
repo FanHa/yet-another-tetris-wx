@@ -84,5 +84,14 @@ namespace Units.Skills
             caster.moveable = true;
             hitEnemies.Clear(); // 清空已碰撞的敌人记录
         }
+
+        public override string Description()
+        {
+            return $"向目标敌人冲锋，持续 {rushDuration} 秒，" +
+                $"冲刺速度为正常速度的 {speedMultiplier} 倍。" +
+                $"冲刺过程中与敌人碰撞会造成基于速度的额外伤害，" +
+                $"伤害为攻击力加上速度的 {damageMultipierBySpeed} 倍。" +
+                $"技能冷却时间为 {cooldown} 秒。";
+        }
     }
 }

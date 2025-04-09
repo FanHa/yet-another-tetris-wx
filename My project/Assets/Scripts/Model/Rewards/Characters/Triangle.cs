@@ -9,12 +9,12 @@ namespace Model.Rewards
             characterCellInstance = new Model.Tetri.Triangle();
         }
 
-        public override string GetDescription()
+        public override string Description()
         {
             return characterCellInstance.Description();
         }
 
-        public override string GetName()
+        public override string Name()
         {
             return characterCellInstance.Name();
         }

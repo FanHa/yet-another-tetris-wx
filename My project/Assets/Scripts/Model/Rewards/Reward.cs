@@ -5,7 +5,7 @@ namespace Model.Rewards
 {
     public abstract class Reward
     {
-        public abstract string GetName();
-        public abstract string GetDescription();
+        public abstract string Name();
+        public abstract string Description();
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Units
+namespace Units.Buffs
 {
     public class Burn : Buff
     {

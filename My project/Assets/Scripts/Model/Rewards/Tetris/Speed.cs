@@ -13,8 +13,8 @@ namespace Model.Rewards
                 tetriInstance.SetCell(position.x, position.y, new Model.Tetri.Speed());
             }
         }
-        public override string GetName() => "兵贵神速";
-        public override string GetDescription() => cellTemplate.Description();
+        public override string Name() => "兵贵神速";
+        public override string Description() => cellTemplate.Description();
 
     }
 }

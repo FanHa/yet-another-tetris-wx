@@ -21,8 +21,9 @@ namespace Units
 
         public event Action<Unit> OnDeath;
 
-        
         public event Action<Damages.EventArgs> OnDamageTaken;
+
+        public event Action<Unit> OnAttacked; // 被攻击事件
 
         public Faction faction; // 单位的阵营
 
@@ -60,10 +61,10 @@ namespace Units
         private Transform factionAParent;
         private Transform factionBParent;
 
-        public List<Buff> attackEffects = new List<Buff>(); // 攻击效果列表
+        public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
 
-        [SerializeField] private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
+        [SerializeField] private Dictionary<string, Buffs.Buff> activeBuffs = new Dictionary<string, Buffs.Buff>();
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         public bool CanReflectDamage = false; // 是否可以反弹伤害
@@ -139,7 +140,7 @@ namespace Units
         }
 
 
-        public void AddBuff(Units.Buff buff)
+        public void AddBuff(Units.Buffs.Buff buff)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
             {
@@ -325,7 +326,7 @@ namespace Units
                 {
                     projectile.target = target.transform;
                     projectile.damage = new Damages.Damage(damage, "远程攻击", true); // 设置投射物的伤害
-                    projectile.debuffs = new List<Buff>(attackEffects); // 传递攻击效果作为Debuff
+                    projectile.debuffs = new List<Buffs.Buff>(attackEffects); // 传递攻击效果作为Debuff
                     projectile.caster = this; // 设置投射物的施法者
                 }
             }
@@ -333,13 +334,14 @@ namespace Units
 
 
 
-        public virtual void TakeHit(Unit source, Units.Damages.Damage  damageReceived, List<Buff> buffs)
+        public virtual void TakeHit(Unit source, Units.Damages.Damage  damageReceived, List<Buffs.Buff> buffs)
         {
             foreach (var buff in buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上
             }
             TakeDamage(source, damageReceived); // 扣除生命值
+            OnAttacked?.Invoke(source); // 触发被攻击事件
         }
 
         public void TakeDamage(Unit source, Units.Damages.Damage damageReceived)

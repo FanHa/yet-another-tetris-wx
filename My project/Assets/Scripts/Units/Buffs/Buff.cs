@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Units
+namespace Units.Buffs
 {
     public abstract class Buff
     {

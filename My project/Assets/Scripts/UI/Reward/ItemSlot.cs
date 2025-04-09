@@ -19,8 +19,8 @@ namespace UI.Reward
         public void SetReward(Model.Rewards.Reward reward)
         {
             item = reward;
-            nameText.text = reward.GetName();
-            detailText.text = reward.GetDescription();
+            nameText.text = reward.Name();
+            detailText.text = reward.Description();
         }
 
         public void SetPreview(GameObject preview)
@@ -37,7 +37,7 @@ namespace UI.Reward
         {
             if (eventData.pointerEnter == gameObject)
             {
-                Debug.Log("Item clicked: " + item.GetName());
+                Debug.Log("Item clicked: " + item.Name());
                 OnItemClicked?.Invoke(this);
             }
         }
