@@ -13,7 +13,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return freezeInstance.Description();
+            return "攻击附带效果: " + freezeInstance.Description();
         }
 
         public override string Name()
