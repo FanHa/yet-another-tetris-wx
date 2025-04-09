@@ -23,10 +23,10 @@ namespace Model.Tetri
             float duration = sharedBuff.Duration();
 
             // 返回技能描述
-            return $"随机对射程范围内的一个敌人施加虚弱效果，" +
-                   $"减少其攻击力 {attackReduction}% 并增加其受到的伤害 {damageIncrease}%，" +
-                   $"持续 {duration} 秒。" +
-                   $"技能冷却时间: {skillInstance.cooldown} 秒。";
+            return $"随机对射程范围内的一个敌人施加虚弱效果," +
+                   $"减少其攻击力 {attackReduction}% 并增加其受到的伤害 {damageIncrease}%," +
+                   $"持续 {duration} 秒," +
+                   $"技能冷却时间: {skillInstance.cooldown} 秒,";
         }
 
         public override string Name()

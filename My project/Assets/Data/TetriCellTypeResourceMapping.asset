@@ -81,3 +81,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Repel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -1599670373071065104, guid: 5c866afa287a5ab48ae272ad5eaf82b1, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Week, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 21300000, guid: a3c8de2a746fdd14697b6a5f8a5016d3, type: 3}
