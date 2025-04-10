@@ -4,11 +4,11 @@ namespace Model.Rewards
 {
     public class FreezeShield : Tetri
     {
-        private Model.Tetri.FreezeShield cellTemplate = new Model.Tetri.FreezeShield();
+        private Model.Tetri.Skills.FreezeShield cellTemplate = new Model.Tetri.Skills.FreezeShield();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.FreezeShield>();
+            SetRandomCell<Model.Tetri.Skills.FreezeShield>();
         }
 
         public override string Name() => cellTemplate.Name();

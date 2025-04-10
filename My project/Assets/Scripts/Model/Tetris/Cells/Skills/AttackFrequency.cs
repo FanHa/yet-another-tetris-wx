@@ -1,19 +1,22 @@
 using System;
 using Units;
+
 namespace Model.Tetri.Skills
 {
     [Serializable]
-    public class Bomb : Cell, IBaseAttribute
+    public class AttackFrequency : Cell, IBaseAttribute
     {
-        public Units.Skills.Bomb skillInstance = new (); // 实例化一个Burn对象
+        private Units.Skills.AttackFrequency skillInstance = new(); // 实例化一个AttackFrequency对象
+
         public void ApplyAttributes(Unit unit)
         {
-            unit.AddSkill(skillInstance);
+            unit.AddSkill(skillInstance); // 为单位添加AttackFrequency技能
+            
         }
 
         public override string Description()
         {
-            return skillInstance.Description(); // 返回技能描述
+            return skillInstance.Description();
         }
 
         public override string Name()

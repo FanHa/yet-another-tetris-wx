@@ -32,7 +32,7 @@ namespace Model
                 .Where(type => type.IsSubclassOf(typeof(Model.Tetri.Cell)) && !type.IsAbstract)
                 .ToList();
 
-            cachedTypeNames = cachedCellTypes.Select(type => type.Name).ToArray();
+            cachedTypeNames = cachedCellTypes.Select(type => type.FullName).ToArray();
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

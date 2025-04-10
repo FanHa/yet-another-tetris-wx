@@ -50,6 +50,6 @@ namespace Units.Buffs
             
         }
 
-        public override Type TetriCellType => typeof(Model.Tetri.FreezeShield); // Return the Type of the corresponding TetriCell
+        public override Type TetriCellType => typeof(Model.Tetri.Skills.FreezeShield); // Return the Type of the corresponding TetriCell
     }
 }

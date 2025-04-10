@@ -2,11 +2,11 @@ namespace Model.Rewards
 {
     public class Rush : Tetri
     {
-        private Model.Tetri.Rush cellTemplate = new Model.Tetri.Rush();
+        private Model.Tetri.Skills.Rush cellTemplate = new Model.Tetri.Skills.Rush();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Rush>();
+            SetRandomCell<Model.Tetri.Skills.Rush>();
         }
 
         public override string Name() => cellTemplate.Name();

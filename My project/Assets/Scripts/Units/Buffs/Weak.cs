@@ -26,7 +26,7 @@ namespace Units.Buffs
         }
         private DamageIncreaseBehavior damageIncreaseBehavior;
 
-        public override Type TetriCellType => typeof(Model.Tetri.Weak); // Return the Type of the corresponding TetriCell
+        public override Type TetriCellType => typeof(Model.Tetri.Skills.Weak); // Return the Type of the corresponding TetriCell
 
         public override string Name()
         {

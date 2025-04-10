@@ -2,11 +2,11 @@ namespace Model.Rewards
 {
     public class Repel : Tetri
     {
-        private Model.Tetri.Repel cellTemplate = new();
+        private Model.Tetri.Skills.Repel cellTemplate = new();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Repel>();
+            SetRandomCell<Model.Tetri.Skills.Repel>();
         }
 
         public override string Name() => cellTemplate.Name();

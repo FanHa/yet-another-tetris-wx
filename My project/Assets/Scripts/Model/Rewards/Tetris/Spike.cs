@@ -2,11 +2,11 @@ namespace Model.Rewards
 {
     public class Spike : Tetri
     {
-        private Model.Tetri.Spike cellTemplate = new Model.Tetri.Spike();
+        private Model.Tetri.Skills.Spike cellTemplate = new Model.Tetri.Skills.Spike();
 
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Spike>();
+            SetRandomCell<Model.Tetri.Skills.Spike>();
         }
 
         public override string Name() => cellTemplate.Name();

@@ -1,7 +1,7 @@
 using System;
 using Units;
 
-namespace Model.Tetri
+namespace Model.Tetri.Skills
 {
     [Serializable]
     public class Weak : Cell, IBaseAttribute

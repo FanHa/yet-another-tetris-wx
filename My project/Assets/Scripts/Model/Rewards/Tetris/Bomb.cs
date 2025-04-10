@@ -4,7 +4,7 @@ namespace Model.Rewards
     {
         public override void FillCells()
         {
-            SetRandomCell<Model.Tetri.Bomb>();
+            SetRandomCell<Model.Tetri.Skills.Bomb>();
         }
 
         public override string Name() => "爆破";
