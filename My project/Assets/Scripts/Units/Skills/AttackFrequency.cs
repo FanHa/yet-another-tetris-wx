@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class AttackFrequency : Skill
     {
-        public string skillName = "攻速模块"; // 技能名称
         public override float cooldown => 10f; // 技能冷却时间
         private Units.Buffs.AttackFrequency buffTemplate = new();
 
@@ -19,26 +18,21 @@ namespace Units.Skills
                 $"技能冷却时间为 {cooldown} 秒";
         }
 
-        public override void Execute(Unit caster)
+        protected override void ExecuteCore(Unit caster)
         {
-            // 找到射程范围内的所有友方单位
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(caster.transform.position, caster.attackRange);
-            var alliesInRange = colliders
-                .Select(collider => collider.GetComponent<Unit>())
-                .Where(ally => ally != null && ally.faction == caster.faction)
-                .ToList();
-
-            if (alliesInRange.Count == 0)
+            Unit targetAlly = FindRandomAlly(caster, caster.attackRange);
+            if (targetAlly == null)
             {
-                Debug.LogWarning("No valid allies found within range for FreezeShield.");
+                Debug.LogWarning("No valid allies found within range for AttackFrequency.");
                 return;
             }
 
-            Unit targetAlly = alliesInRange[Random.Range(0, alliesInRange.Count)];
             targetAlly.AddBuff(new Units.Buffs.AttackFrequency());
-
-            lastUsedTime = Time.time; // 更新上次使用时间
         }
 
+        public override string Name()
+        {
+            return "攻速模块"; // 返回技能名称
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using Units;
 using Units.Damages;
-namespace Model.Tetri.Skills
+namespace Model.Tetri
 {
     [Serializable]
     public class Spike : Cell, IBaseAttribute

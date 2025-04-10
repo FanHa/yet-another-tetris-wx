@@ -6,30 +6,21 @@ namespace Units.Skills
 {
     public class Repel : Skill
     {
-        public string skillName = "击退"; // 技能名称
         public override float cooldown => 10f;
         public float repelDistance = 3f; // 击退距离
         public float repelDuration = 0.5f; // 击退持续时间
 
-        public override void Execute(Unit caster)
+        protected override void ExecuteCore(Unit caster)
         {
-            if (caster.targetEnemies == null || caster.targetEnemies.Count == 0)
+            var enemiesInRange = FindEnemiesInRange(caster, caster.attackRange);
+            if (enemiesInRange.Count == 0)
             {
-                Debug.LogWarning("No target enemies to rush towards.");
+                Debug.LogWarning("No valid targets found within range for Repel.");
                 return;
             }
 
-            // 获取目标敌人的位置（这里选择第一个敌人）
-            Transform targetEnemy = caster.targetEnemies[0];
-            if (targetEnemy == null)
-            {
-                Debug.LogWarning("Target enemy is null.");
-                return;
-            }
-
-            // 开始冲刺协程
+            Transform targetEnemy = enemiesInRange[0].transform;
             caster.StartCoroutine(RepelTargetEnemy(caster, targetEnemy));
-            lastUsedTime = Time.time; // 更新上次使用时间
         }
 
         private IEnumerator RepelTargetEnemy(Unit caster, Transform targetEnemy)
@@ -73,6 +64,11 @@ namespace Units.Skills
             return $"对目标敌人施加击退效果，将其击退 {repelDistance} 米，" +
                 $"击退过程持续 {repelDuration} 秒。" +
                 $"技能冷却时间为 {cooldown} 秒。";
+        }
+
+        public override string Name()
+        {
+            return "击退";
         }
     }
 }

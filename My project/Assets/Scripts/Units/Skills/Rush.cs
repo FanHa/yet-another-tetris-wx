@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class Rush : Skill
     {
-        public string skillName = "冲锋"; // 技能名称
         public override float cooldown => 10f;
         public float rushDuration = 1f;
         public float speedMultiplier = 1.5f; // 冲刺速度倍数
@@ -14,7 +13,7 @@ namespace Units.Skills
         private HashSet<Unit> hitEnemies = new HashSet<Unit>(); // 记录已碰撞的敌人
 
 
-        public override void Execute(Unit caster)
+        protected override void ExecuteCore(Unit caster)
         {
             if (caster.targetEnemies == null || caster.targetEnemies.Count == 0)
             {
@@ -32,7 +31,6 @@ namespace Units.Skills
 
             // 开始冲刺协程
             caster.StartCoroutine(RushTowardsTarget(caster, targetEnemy));
-            lastUsedTime = Time.time; // 更新上次使用时间
         }
 
         private IEnumerator RushTowardsTarget(Unit caster, Transform targetEnemy)
@@ -62,7 +60,7 @@ namespace Units.Skills
                     {
                         Units.Damages.Damage damage = new Units.Damages.Damage(
                              caster.attackPower.finalValue + rushSpeed * damageMultipierBySpeed,
-                             skillName,
+                             Name(),
                              false
                         );
 
@@ -92,6 +90,11 @@ namespace Units.Skills
                 $"冲刺过程中与敌人碰撞会造成基于速度的额外伤害，" +
                 $"伤害为攻击力加上速度的 {damageMultipierBySpeed} 倍。" +
                 $"技能冷却时间为 {cooldown} 秒。";
+        }
+
+        public override string Name()
+        {
+            return "冲锋";
         }
     }
 }

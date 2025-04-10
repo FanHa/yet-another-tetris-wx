@@ -1,24 +1,11 @@
 using System;
 using Units;
+
 namespace Model.Tetri.Skills
 {
     [Serializable]
-    public class Repel : Cell, IBaseAttribute
+    public class Repel : SkillBase
     {
-        private Units.Skills.Repel skillInstance = new (); // 实例化一个Burn对象
-        public void ApplyAttributes(Unit unit)
-        {
-            unit.AddSkill(skillInstance);
-        }
-
-        public override string Description()
-        {
-            return $"击退目标," + $"技能冷却时间: {skillInstance.cooldown} 秒";
-        }
-
-        public override string Name()
-        {
-            return skillInstance.skillName;
-        }
+        protected override Units.Skills.Skill SkillInstance { get; } = new Units.Skills.Repel();
     }
 }
