@@ -2,14 +2,14 @@ namespace Model.Rewards
 {
     public class Burn : Tetri
     {
-        private Model.Tetri.Burn cellTemplate = new Model.Tetri.Burn();
+        public Burn()
+        {
+            InitializeCellTemplate<Model.Tetri.Burn>();
+        }
 
         public override void FillCells()
         {
             SetRandomCell<Model.Tetri.Burn>();
         }
-
-        public override string Name() => cellTemplate.Name();
-        public override string Description() => cellTemplate.Description();
     }
 }

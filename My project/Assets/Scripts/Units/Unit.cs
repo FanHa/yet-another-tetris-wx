@@ -74,8 +74,6 @@ namespace Units
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
-        public bool CanReflectDamage = false; // 是否可以反弹伤害
-        public float ReflectDamagePercentage = 0f; // 反弹伤害百分比
         private void Awake()
         {
             // 获取当前对象的 Animator 组件
@@ -434,12 +432,6 @@ namespace Units
             foreach (var behavior in damageBehaviors)
             {
                 damageReceived = behavior.ModifyDamage(source, damageReceived);
-            }
-
-            if (CanReflectDamage && damageReceived.CanBeReflected)
-            {
-                Damages.Damage reflectDamage = new Damages.Damage(damageReceived.Value*ReflectDamagePercentage/100, "尖刺", false);
-                source.TakeDamage(this, reflectDamage); // 反弹伤害
             }
 
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));

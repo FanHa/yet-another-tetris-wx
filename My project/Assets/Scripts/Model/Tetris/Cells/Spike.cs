@@ -1,6 +1,7 @@
 using System;
 using Units;
 using Units.Damages;
+
 namespace Model.Tetri
 {
     [Serializable]
@@ -10,8 +11,16 @@ namespace Model.Tetri
 
         public void ApplyAttributes(Unit unit)
         {
-            unit.CanReflectDamage = true; // 允许反弹伤害
-            unit.ReflectDamagePercentage = reflectPercentage; // 设置反弹伤害百分比
+            unit.OnDamageTaken += HandleReflectDamage;
+        }
+
+        private void HandleReflectDamage(Units.Damages.EventArgs args)
+        {
+            if (args.Damage.CanBeReflected)
+            {
+                var reflectDamage = new Damage(args.Damage.Value * reflectPercentage / 100, "尖刺", false);
+                args.Source.TakeDamage(args.Target, reflectDamage);
+            }
         }
 
         public override string Name()
@@ -23,6 +32,5 @@ namespace Model.Tetri
         {
             return $"受到伤害时反弹 {reflectPercentage}% 伤害给攻击者";
         }
-
     }
 }

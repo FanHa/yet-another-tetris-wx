@@ -6,6 +6,7 @@ namespace Model.Rewards
     public abstract class Tetri : Reward
     {
         protected Model.Tetri.Tetri tetriInstance;
+        protected Model.Tetri.Cell cellTemplate;
 
         public Model.Tetri.Tetri GetTetri()
         {
@@ -16,6 +17,14 @@ namespace Model.Rewards
         {
             tetriInstance = tetri;
         }
+
+        public void InitializeCellTemplate<T>() where T : Model.Tetri.Cell, new()
+        {
+            cellTemplate = new T();
+        }
+
+        public override string Name() => cellTemplate.Name();
+        public override string Description() => cellTemplate.Description();
 
         public void SetRandomCell<T>() where T : Model.Tetri.Cell, new()
         {
