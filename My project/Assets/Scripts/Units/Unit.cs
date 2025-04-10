@@ -405,12 +405,22 @@ namespace Units
             {
                 GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
+                
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
                     projectile.damage = new Damages.Damage(damage, "远程攻击", true); // 设置投射物的伤害
                     projectile.debuffs = new List<Buffs.Buff>(attackEffects); // 传递攻击效果作为Debuff
                     projectile.caster = this; // 设置投射物的施法者
+
+                    // 设置投射物的 Sprite 为 Fist1SpriteRenderer 的 Sprite
+                    SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
+                    if (projectileSpriteRenderer != null && Fist1SpriteRenderer != null)
+                    {
+                        projectileSpriteRenderer.sprite = Fist1SpriteRenderer.sprite;
+                    }
+                    projectileObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
                 }
             }
         }
