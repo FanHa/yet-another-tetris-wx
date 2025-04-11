@@ -4,11 +4,11 @@ using Units;
 namespace Model.Tetri.Skills
 {
     [Serializable]
-    public abstract class Skill : Cell, IBaseAttribute
+    public abstract class Skill : Cell
     {
         protected abstract Units.Skills.Skill SkillInstance { get; }
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.AddSkill(SkillInstance); // 为单位添加技能
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public abstract class Character : Cell, ICharacterFeature
+    public abstract class Character : Cell
     {
         [SerializeField] private string characterName; // 永久角色名
         public string CharacterName => characterName; // 只读属性，获取角色名
@@ -20,6 +20,5 @@ namespace Model.Tetri
             return $"{Name()}_{Guid.NewGuid().ToString("N").Substring(0, 8)}"; // 生成基于角色类型和GUID的唯一名称
         }
 
-        public abstract void ApplyCharacterFeature(Unit unit);
     }
 }

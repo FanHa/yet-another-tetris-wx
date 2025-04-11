@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class MultiAttack : Cell, IBaseAttribute
+    public class MultiAttack : Attribute
     {
         [SerializeField]
         public float attackTargetAddition = 1;
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.attackTargetNumber += attackTargetAddition;
         }

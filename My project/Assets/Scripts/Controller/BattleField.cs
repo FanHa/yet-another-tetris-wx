@@ -98,13 +98,9 @@ namespace Controller {
                     // 先处理 Attribute 类型
                     foreach (Cell cell in tetriCells)
                     {
-                        if (cell is IBaseAttribute attributeCell)
-                        {
-                            attributeCell.ApplyAttributes(unitComponent);
-                        }
+                        cell.Apply(unitComponent);
                         if (cell is Character featureCell)
                         {
-                            featureCell.ApplyCharacterFeature(unitComponent);
                             newUnit.name = featureCell.CharacterName; // 设置单位名称
                         }
                     }

@@ -5,11 +5,11 @@ using Units.Damages;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Spike : Cell, IBaseAttribute
+    public class Spike : Cell
     {
         private float reflectPercentage = 10; // 反弹伤害百分比
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.OnDamageTaken += HandleReflectDamage;
         }

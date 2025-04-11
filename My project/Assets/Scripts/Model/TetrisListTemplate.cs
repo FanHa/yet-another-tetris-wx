@@ -16,9 +16,9 @@ namespace Model{
             template = new();
             GenerateAllShapes();
             // 初始化缓存的 attributeTypes
-            attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
+            attributeTypes = typeof(Model.Tetri.Attribute).Assembly
                 .GetTypes()
-                .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
+                .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
                                 && !type.IsAbstract // 排除抽象类
                                 && !type.IsInterface) // 排除接口本身
                 .ToList();
@@ -51,9 +51,9 @@ namespace Model{
         {
             if (attributeTypes == null || attributeTypes.Count == 0)
             {
-                attributeTypes = typeof(Model.Tetri.IBaseAttribute).Assembly
+                attributeTypes = typeof(Model.Tetri.Attribute).Assembly
                     .GetTypes()
-                    .Where(type => typeof(Model.Tetri.IBaseAttribute).IsAssignableFrom(type) // 检查是否实现了接口
+                    .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
                                     && !type.IsAbstract // 排除抽象类
                                     && !type.IsInterface) // 排除接口本身
                     .ToList();

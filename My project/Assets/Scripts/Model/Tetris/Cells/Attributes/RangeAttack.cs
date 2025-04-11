@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class RangeAttack : Cell, IBaseAttribute // 远程攻击属性类
+    public class RangeAttack : Attribute
     {
         [SerializeField]
         public float distance = 3;
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.attackRange += distance;
             unit.isRanged = true;

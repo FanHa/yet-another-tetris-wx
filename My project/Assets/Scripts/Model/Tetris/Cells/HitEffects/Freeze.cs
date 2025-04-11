@@ -3,10 +3,10 @@ using Units;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Freeze : Cell, IBaseAttribute
+    public class Freeze : Cell
     {
         public Units.Buffs.Freeze freezeInstance = new Units.Buffs.Freeze();
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.attackEffects.Add(freezeInstance);
         }

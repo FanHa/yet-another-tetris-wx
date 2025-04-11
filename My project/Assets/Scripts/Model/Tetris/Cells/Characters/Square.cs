@@ -14,7 +14,7 @@ namespace Model.Tetri
             return $"攻击力: {attackPowerValue}, 生命值: {maxCoreValue}";
         }
 
-        public override void ApplyCharacterFeature(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.attackPower.SetBaseValue(attackPowerValue);
             unit.maxCore.SetBaseValue(maxCoreValue);

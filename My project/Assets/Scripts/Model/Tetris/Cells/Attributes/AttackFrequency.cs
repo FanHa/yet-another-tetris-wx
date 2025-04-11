@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class AttackFrequency : Cell, IBaseAttribute
+    public class AttackFrequency : Attribute
     {
         [SerializeField]
         public float AttackSpeedBonusPercentage = 20f;
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.attacksPerTenSeconds.AddPercentageModifier(this, AttackSpeedBonusPercentage);
         }

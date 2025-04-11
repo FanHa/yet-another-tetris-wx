@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Speed : Cell, IBaseAttribute
+    public class Speed : Attribute
     {
         [SerializeField]
         private int moveSpeedPercentageModifier = 50; // 移动速度百分比修正值
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.moveSpeed.AddPercentageModifier(this, moveSpeedPercentageModifier); // 添加移动速度修正值
         }

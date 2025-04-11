@@ -12,5 +12,7 @@ namespace Model.Tetri
         public abstract string Description();
         public abstract string Name();
 
+        public abstract void Apply(Units.Unit unit); // Apply方法返回一个字符串，表示应用效果的描述
+
     }
 }

@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Health : Cell, IBaseAttribute
+    public class Health : Attribute
     {
         [SerializeField]
         private int CorePercentageModifier = 60;
 
-        public void ApplyAttributes(Unit unit)
+        public override void Apply(Unit unit)
         {
             unit.maxCore.AddPercentageModifier(this, CorePercentageModifier);
         }
