@@ -1,42 +1,40 @@
+using System;
 using Controller;
 using UnityEngine;
 
 namespace Model.Rewards
 {
-    public abstract class Tetri : Reward
+    public class AddTetri: Reward
     {
         protected Model.Tetri.Tetri tetriInstance;
         protected Model.Tetri.Cell cellTemplate;
+
+        public AddTetri(Model.Tetri.Tetri tetri, Model.Tetri.Cell cell)
+        {
+            tetriInstance = tetri;
+            cellTemplate = cell;
+            SetRandomCell();
+        }
 
         public Model.Tetri.Tetri GetTetri()
         {
             return tetriInstance;
         }
 
-        public void SetTetri(Model.Tetri.Tetri tetri)
-        {
-            tetriInstance = tetri;
-        }
-
-        public void InitializeCellTemplate<T>() where T : Model.Tetri.Cell, new()
-        {
-            cellTemplate = new T();
-        }
 
         public override string Name() => cellTemplate.Name();
         public override string Description() => cellTemplate.Description();
 
-        public void SetRandomCell<T>() where T : Model.Tetri.Cell, new()
+        private void SetRandomCell()
         {
             var occupiedPositions = tetriInstance.GetOccupiedPositions();
             if (occupiedPositions.Count > 0)
             {
                 var random = new System.Random();
                 var randomPosition = occupiedPositions[random.Next(occupiedPositions.Count)];
-                tetriInstance.SetCell(randomPosition.x, randomPosition.y, new T());
+                var newCell = (Model.Tetri.Cell)Activator.CreateInstance(cellTemplate.GetType());
+                tetriInstance.SetCell(randomPosition.x, randomPosition.y, newCell);
             }
         }
-
-        public abstract void FillCells();
     }
 }

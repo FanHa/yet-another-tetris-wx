@@ -2,9 +2,15 @@ using UnityEngine;
 
 namespace Model.Rewards
 {
-    public abstract class Character : Reward
+    public class NewCharacter: Reward
     {
         protected Model.Tetri.Character characterCellInstance;
+
+        public NewCharacter(Model.Tetri.Character character)
+        {
+            characterCellInstance = character;
+        }
+
 
         public Model.Tetri.Character GetCharacter()
         {

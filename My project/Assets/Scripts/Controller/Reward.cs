@@ -39,12 +39,12 @@ namespace Controller
 
         private void ApplyReward(Model.Rewards.Reward reward)
         {
-            if (reward is Model.Rewards.Tetri tetriReward)
+            if (reward is Model.Rewards.AddTetri tetriReward)
             {
                 tetriResource.AddUsableTetri(tetriReward.GetTetri());
             }
 
-            if (reward is Model.Rewards.Character characterReward)
+            if (reward is Model.Rewards.NewCharacter characterReward)
             {
                 operationTableData.PlaceCharacterInRandomRow(characterReward.GetCharacter());
             }

@@ -13,14 +13,14 @@ namespace Model.Rewards
         private int rewardCount = 3;
         private TetrisFactory tetrisFactory = new TetrisFactory();
 
-        private static readonly List<Type> characterRewardTypes = Assembly.GetAssembly(typeof(Reward))
+        private static readonly List<Type> characterTypes = Assembly.GetAssembly(typeof(Cell))
             .GetTypes()
-            .Where(type => type.IsSubclassOf(typeof(Reward)) && !type.IsAbstract && type.IsSubclassOf(typeof(Character)))
+            .Where(type => type.IsSubclassOf(typeof(Model.Tetri.Character)) && !type.IsAbstract )
             .ToList();
 
-        private static readonly List<Type> tetriRewardTypes = Assembly.GetAssembly(typeof(Reward))
+        private static readonly List<Type> cellTypes = Assembly.GetAssembly(typeof(Cell))
             .GetTypes()
-            .Where(type => type.IsSubclassOf(typeof(Reward)) && !type.IsAbstract && type.IsSubclassOf(typeof(Tetri)))
+            .Where(type => type.IsSubclassOf(typeof(Cell)) && !type.IsSubclassOf(typeof(Character)) && !type.IsAbstract)
             .ToList();
 
         public List<Reward> GenerateRewards()
@@ -39,22 +39,57 @@ namespace Model.Rewards
 
         private Reward CreateRandomReward()
         {
-            var allRewardTypes = characterRewardTypes.Concat(tetriRewardTypes).ToList();
+            // 随机决定生成哪种奖励类型
+            bool isTetriReward = random.Next(2) == 0;
 
-            if (allRewardTypes.Count == 0)
+            if (isTetriReward)
             {
-                throw new InvalidOperationException("No subclasses of Reward found.");
+                return CreateTetriReward();
+            }
+            else
+            {
+                return CreateCharacterReward();
             }
 
-            // 随机选择一个子类并创建实例
-            int index = random.Next(allRewardTypes.Count);
-            Reward reward = (Reward)Activator.CreateInstance(allRewardTypes[index]);
-            if (reward is Tetri tetriReward)
+        }
+
+        private Reward CreateTetriReward()
+        {
+            if (cellTypes.Count == 0)
             {
-                tetriReward.SetTetri(tetrisFactory.CreateRandomShape());
-                tetriReward.FillCells();
+                throw new InvalidOperationException("No Tetri subclasses found.");
             }
-            return reward;
+
+            // 随机选择一个 Tetri 类型
+            int index = random.Next(cellTypes.Count);
+            Type cellType = cellTypes[index];
+
+            // 创建一个新的 Tetri 实例
+            var tetriInstance = tetrisFactory.CreateRandomShape();
+
+            // 使用 Activator 创建 Cell 实例
+            var cellTemplate = (Cell)Activator.CreateInstance(cellType);
+
+            // 创建 AddTetri 奖励
+            return new AddTetri(tetriInstance, cellTemplate);
+        }
+
+        private Reward CreateCharacterReward()
+        {
+            if (characterTypes.Count == 0)
+            {
+                throw new InvalidOperationException("No Character subclasses found.");
+            }
+
+            // 随机选择一个 Character 类型
+            int index = random.Next(characterTypes.Count);
+            Type characterType = characterTypes[index];
+
+            // 使用 Activator 创建 Character 实例
+            var characterInstance = (Model.Tetri.Character)Activator.CreateInstance(characterType);
+
+            // 创建 NewCharacter 奖励
+            return new NewCharacter(characterInstance);
         }
     }
 }

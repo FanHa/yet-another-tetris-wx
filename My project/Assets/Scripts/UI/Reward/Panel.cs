@@ -25,11 +25,11 @@ namespace UI.Reward
                 ItemSlot item = Instantiate(itemPrefab, itemParent);
                 
                 item.SetReward(reward);
-                if (reward is Model.Rewards.Tetri tetriReward)
+                if (reward is Model.Rewards.AddTetri tetriReward)
                 {
                     item.SetPreview(tetris.GenerateTetriPreview(tetriReward.GetTetri()));
                 }
-                if (reward is Model.Rewards.Character characterReward)
+                if (reward is Model.Rewards.NewCharacter characterReward)
                 {
                     item.SetPreview(tetris.GenerateCharacterPreview(characterReward.GetCharacter()));
                 }
