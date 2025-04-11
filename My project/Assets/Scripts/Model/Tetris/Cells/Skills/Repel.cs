@@ -4,7 +4,7 @@ using Units;
 namespace Model.Tetri.Skills
 {
     [Serializable]
-    public class Repel : SkillBase
+    public class Repel : Skill
     {
         protected override Units.Skills.Skill SkillInstance { get; } = new Units.Skills.Repel();
     }

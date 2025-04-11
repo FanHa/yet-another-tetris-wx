@@ -458,7 +458,7 @@ namespace Units
             if (currentCore <= 0)
             {
                 OnDeath?.Invoke(this);
-                Destroy(gameObject);
+                gameObject.SetActive(false); // 将 GameObject 设置为失活
             }
         }
 

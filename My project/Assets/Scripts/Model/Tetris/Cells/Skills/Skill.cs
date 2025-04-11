@@ -4,7 +4,7 @@ using Units;
 namespace Model.Tetri.Skills
 {
     [Serializable]
-    public abstract class SkillBase : Cell, IBaseAttribute
+    public abstract class Skill : Cell, IBaseAttribute
     {
         protected abstract Units.Skills.Skill SkillInstance { get; }
 
