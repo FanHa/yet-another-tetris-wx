@@ -27,8 +27,9 @@ namespace Units.Skills
             if (projectile != null)
             {
                 projectile.target = targetEnemy.transform;
-                projectile.damage = new Damages.Damage(caster.attackPower.finalValue * attackPowerMultiplier, "精准射击", false);
+                projectile.damage = new Damages.Damage(caster.attackPower.finalValue * attackPowerMultiplier, Name(), false);
                 projectile.speed = speed;
+                projectile.caster = caster;
             }
         }
 
@@ -41,7 +42,7 @@ namespace Units.Skills
 
         public override string Name()
         {
-            return "精准射击"; // 返回技能名称
+            return "精准打击"; // 返回技能名称
         }
     }
 }

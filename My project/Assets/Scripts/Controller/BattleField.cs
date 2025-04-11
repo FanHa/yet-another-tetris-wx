@@ -102,9 +102,10 @@ namespace Controller {
                         {
                             attributeCell.ApplyAttributes(unitComponent);
                         }
-                        if (cell is ICharacterFeature featureCell)
+                        if (cell is Character featureCell)
                         {
                             featureCell.ApplyCharacterFeature(unitComponent);
+                            newUnit.name = featureCell.CharacterName; // 设置单位名称
                         }
                     }
                 }
@@ -152,7 +153,8 @@ namespace Controller {
                 TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
                 if (damageText != null)
                 {
-                    damageText.text = damage.ToString();
+                    int roundedDamage = Mathf.RoundToInt(damage); // 将伤害值取整
+                    damageText.text = roundedDamage.ToString();
                     StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
                 }
             }

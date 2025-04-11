@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 223b93729a3e761459b28b135ba391bc, type: 3}
     - target: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
       propertyPath: m_Name
-      value: Bomb 1
+      value: Bomb
       objectReference: {fileID: 0}
     - target: {fileID: 6680883607149148754, guid: 96371a052d742a441b0873e49df158b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7858423843027690403, guid: 96371a052d742a441b0873e49df158b3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3f4fe7b756ccfc14caa0f79acfcf00bb, type: 3}
     m_RemovedComponents:
     - {fileID: 6639960923789183456, guid: 96371a052d742a441b0873e49df158b3, type: 3}
     m_RemovedGameObjects: []
@@ -84,6 +88,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   speed: 4
-  damage: 10
+  caster: {fileID: 0}
   faction: 0
   explosionRadius: 2

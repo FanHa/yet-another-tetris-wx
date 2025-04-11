@@ -62,30 +62,34 @@ MonoBehaviour:
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 2602fcc039d611748a555bc56750f508, type: 3}
   - cellType:
-      typeName: Model.Tetri.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Skills.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 3f4fe7b756ccfc14caa0f79acfcf00bb, type: 3}
   - cellType:
-      typeName: Model.Tetri.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: 23071cc0a68e5bc439ab14596531d7a1, type: 3}
   - cellType:
-      typeName: Model.Tetri.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
+      typeName: Model.Tetri.Skills.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: fc237a7ebf2a9f64da1be74cc80b0528, type: 3}
   - cellType:
       typeName: Model.Tetri.Spike, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 2761841243735719389, guid: b6b8a35868512504b9779d073e1ff71f, type: 3}
   - cellType:
-      typeName: Model.Tetri.Repel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Skills.Repel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -1599670373071065104, guid: 5c866afa287a5ab48ae272ad5eaf82b1, type: 3}
   - cellType:
-      typeName: Model.Tetri.Weak, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Skills.Weak, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 21300000, guid: a3c8de2a746fdd14697b6a5f8a5016d3, type: 3}
   - cellType:
-      typeName: Model.Tetri.FreezeShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
+      typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 3487433227025612565, guid: 29ef00118e2b1034fa8dbc2602a19185, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Skills.AttackFrequency, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    sprite: {fileID: -7564692533757840442, guid: 410f599027107704994ced6a997f58cb, type: 3}
