@@ -846,10 +846,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodySpriteRenderer: {fileID: 5410986790312629488}
   hitColor: {r: 1, g: 0, b: 0, a: 1}
-  flashDuration: 0.05
   scaleFactor: 0.9
-  scaleDuration: 0.1
-  shakeStrength: 0.3
+  shakeStrength: 0.05
   shakeDuration: 0.1
   hitEffectPrefab: {fileID: 0}
   ghostPrefab: {fileID: 0}

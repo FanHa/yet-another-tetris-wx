@@ -13,10 +13,9 @@ namespace Units
 
         [Header("Scale Punch")]
         [SerializeField] private float scaleFactor = 0.9f;
-        [SerializeField] private float scaleDuration = 0.1f;
 
         [Header("Shake")]
-        [SerializeField] private float shakeStrength = 0.3f;
+        [SerializeField] private float shakeStrength = 0.05f;
         [SerializeField] private float shakeDuration = 0.1f;
 
         [Header("Particle / Ghost")]
@@ -30,6 +29,8 @@ namespace Units
         private Color originalColor;
         private Vector3 originalScale;
         private Vector3 originalPosition;
+        private Vector3 effectOffset;
+
 
         private void Awake()
         {
@@ -42,6 +43,15 @@ namespace Units
             originalScale = bodySpriteRenderer.transform.localScale;
             originalPosition = bodySpriteRenderer.transform.localPosition;
        
+        }
+
+        // 在 LateUpdate 中应用效果
+        private void LateUpdate()
+        {
+            if (bodySpriteRenderer != null)
+            {
+                bodySpriteRenderer.transform.localPosition += effectOffset;
+            }
         }
 
         public void PlayAll()
@@ -83,6 +93,7 @@ namespace Units
 
             bodySpriteRenderer.color = hitColor;
             bodySpriteRenderer.transform.localScale = originalScale * scaleFactor;
+            effectOffset = Vector3.zero;
 
             while (elapsed < shakeDuration)
             {
@@ -99,7 +110,7 @@ namespace Units
 
                 // 震动逻辑
                 Vector2 offset = Random.insideUnitCircle * shakeStrength;
-                bodySpriteRenderer.transform.localPosition = originalPosition + (Vector3)offset;
+                effectOffset = (Vector3)offset;
 
                 elapsed += Time.deltaTime;
 
@@ -110,7 +121,7 @@ namespace Units
             // 恢复原状
             bodySpriteRenderer.color = originalColor;
             bodySpriteRenderer.transform.localScale = originalScale;
-            bodySpriteRenderer.transform.localPosition = originalPosition;
+            effectOffset = Vector3.zero;
       
         }
     }

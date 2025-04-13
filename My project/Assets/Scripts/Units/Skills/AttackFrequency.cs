@@ -13,7 +13,7 @@ namespace Units.Skills
         {
 
             // 返回技能描述
-            return $"为射程范围内的一个随机友方单位（包括自己）添加攻速模块buff," +
+            return $"为射程范围内的一个随机友方单位（包括自己）安装攻速模块," +
                 $"{buffTemplate.Description()}" +
                 $"技能冷却时间为 {cooldown} 秒";
         }
@@ -32,7 +32,7 @@ namespace Units.Skills
 
         public override string Name()
         {
-            return "攻速模块"; // 返回技能名称
+            return "安装攻速模块"; // 返回技能名称
         }
     }
 }
