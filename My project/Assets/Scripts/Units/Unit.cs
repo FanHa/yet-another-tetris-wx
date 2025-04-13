@@ -16,6 +16,7 @@ namespace Units
         private Units.Buffs.Manager buffManager;// Buff管理器
         private Movement movementController;
         private Units.Skills.Manager skillManager = new(); // 技能管理器
+        private AnimationController animationController;
 
         public enum Faction
         {
@@ -37,7 +38,6 @@ namespace Units
 
         private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
         
-        private Animator animator;
         private HealthBar healthBar;
 
         // [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
@@ -58,12 +58,12 @@ namespace Units
         public bool moveable = true;
         private void Awake()
         {
-            // 获取当前对象的 Animator 组件
-            animator = GetComponent<Animator>();
-            if (animator == null)
+            animationController = GetComponent<AnimationController>();
+            if (animationController == null)
             {
-                Debug.LogWarning("Animator component not found on the same GameObject.");
+                Debug.LogWarning("AnimationController component not found on the same GameObject.");
             }
+
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
             Attributes.OnHealthChanged += UpdateHealthBar;
@@ -153,9 +153,6 @@ namespace Units
 
         }
 
-
-
-
         public void SetFactionParent(Transform factionA, Transform factionB)
         {
             factionAParent = factionA;
@@ -201,6 +198,10 @@ namespace Units
                     float distance = Vector2.Distance(transform.position, closestEnemy.position);
                     if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
                     {
+                        // 调整朝向
+                        Vector2 direction = (closestEnemy.position - transform.position).normalized;
+                        animationController.SetLookDirection(direction);
+                        
                         TriggerAttack();
                         lastAttackTime = Time.time; // 更新攻击时间
                     }
@@ -210,8 +211,7 @@ namespace Units
 
         private void TriggerAttack()
         {
-            animator.SetTrigger("Attack");
-            
+            animationController.TriggerAttack();
         }
 
         // 这个方法会被animator的event触发
