@@ -94,8 +94,9 @@ namespace Units
             ClampPositionToBattlefield();
         }
 
-        public void Initialized()
+        public void Initialize()
         {
+            Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
 

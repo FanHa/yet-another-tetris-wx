@@ -115,7 +115,7 @@ namespace Controller {
                 // 加入到列表
                 factionUnits[faction].Add(unitComponent);
                 allUnits.Add(unitComponent);
-                unitComponent.Initialized();
+                unitComponent.Initialize();
             }
 
         }
