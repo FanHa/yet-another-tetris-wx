@@ -26,7 +26,7 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            var enemiesInRange = FindEnemiesInRange(caster, caster.attackRange);
+            var enemiesInRange = FindEnemiesInRange(caster, caster.Attributes.AttackRange);
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for Weak.");

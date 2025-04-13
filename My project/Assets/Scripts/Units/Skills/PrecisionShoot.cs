@@ -11,8 +11,8 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            var enemiesInRange = FindEnemiesInRange(caster, caster.attackRange)
-                .OrderBy(enemy => enemy.maxCore.finalValue)
+            var enemiesInRange = FindEnemiesInRange(caster, caster.Attributes.AttackRange)
+                .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .ToList();
 
             if (enemiesInRange.Count == 0)
@@ -27,7 +27,7 @@ namespace Units.Skills
             if (projectile != null)
             {
                 projectile.target = targetEnemy.transform;
-                projectile.damage = new Damages.Damage(caster.attackPower.finalValue * attackPowerMultiplier, Name(), false);
+                projectile.damage = new Damages.Damage(caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, Name(), false);
                 projectile.speed = speed;
                 projectile.caster = caster;
             }

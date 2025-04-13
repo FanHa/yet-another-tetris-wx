@@ -12,7 +12,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.attackTargetNumber += attackTargetAddition;
+            unit.Attributes.AttackTargetNumber += attackTargetAddition;
         }
 
 

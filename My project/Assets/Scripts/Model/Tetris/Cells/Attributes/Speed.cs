@@ -12,7 +12,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.moveSpeed.AddPercentageModifier(this, moveSpeedPercentageModifier); // 添加移动速度修正值
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, moveSpeedPercentageModifier); // 添加移动速度修正值
         }
 
         public override string Description()

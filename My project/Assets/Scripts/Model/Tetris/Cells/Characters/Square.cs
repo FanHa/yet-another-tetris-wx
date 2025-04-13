@@ -16,8 +16,8 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.attackPower.SetBaseValue(attackPowerValue);
-            unit.maxCore.SetBaseValue(maxCoreValue);
+            unit.Attributes.AttackPower.SetBaseValue(attackPowerValue);
+            unit.Attributes.MaxHealth.SetBaseValue(maxCoreValue);
         }
 
         public override string Name()

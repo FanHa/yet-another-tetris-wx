@@ -24,12 +24,12 @@ namespace Units.Buffs
 
         public override void Apply(Unit unit)
         {
-            unit.attacksPerTenSeconds.AddPercentageModifier(this, attackSpeedIncreasePercentage);
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, attackSpeedIncreasePercentage);
         }
 
         public override void Remove(Unit unit)
         {
-            unit.attacksPerTenSeconds.RemovePercentageModifier(this);
+            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
 
         }
 

@@ -46,7 +46,7 @@ namespace Units.Buffs
         public override void Apply(Unit unit)
         {
             // 减少攻击力
-            unit.attackPower.AddPercentageModifier(this, -attackReductionPercentage);
+            unit.Attributes.AttackPower.AddPercentageModifier(this, -attackReductionPercentage);
 
             // 增加受到的伤害
             damageIncreaseBehavior = new DamageIncreaseBehavior(damageTakenIncreasePercentage);
@@ -56,7 +56,7 @@ namespace Units.Buffs
         public override void Remove(Unit unit)
         {
             // 恢复攻击力
-            unit.attackPower.RemovePercentageModifier(this);
+            unit.Attributes.AttackPower.RemovePercentageModifier(this);
 
             // 移除增加伤害的行为
             if (damageIncreaseBehavior != null)

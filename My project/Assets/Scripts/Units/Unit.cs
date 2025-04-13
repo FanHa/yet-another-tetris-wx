@@ -12,6 +12,8 @@ namespace Units
 {
     public class Unit : MonoBehaviour
     {
+        public Attributes Attributes;
+
         public enum Faction
         {
             FactionA,
@@ -26,29 +28,16 @@ namespace Units
         public event Action<Unit> OnDeath;
 
         public event Action<Damages.EventArgs> OnDamageTaken;
-        private Coroutine hitEffectCoroutine;
 
 
         public event Action<Unit> OnAttacked; // 被攻击事件
 
         public Faction faction; // 单位的阵营
-
-        public Attribute moveSpeed = new Attribute(3f); // 移动速度
-        
-        public Attribute attacksPerTenSeconds = new Attribute(4f);
         protected float lastAttackTime = 0;
 
-        public float attackRange = 0.5f; // 攻击范围
-
-        public Attribute maxCore = new Attribute(100f); // 最大生命值
-        public float currentCore;
         private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
 
-
-        public Attribute attackPower = new Attribute(10f); // 攻击力
-
         public float minDistance = 0.2f; // 与敌人保持的最小距离
-        public float attackTargetNumber = 1; // 攻击目标数量
         
         private Animator animator;
         private HealthBar healthBar;
@@ -58,8 +47,6 @@ namespace Units
         [SerializeField] private SpriteRenderer Fist1SpriteRenderer;
         [SerializeField] private SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
-
-        public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
         public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
         public GameObject PrecisionArrowPrefab;
@@ -87,6 +74,7 @@ namespace Units
             }
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
+            Attributes.OnHealthChanged += UpdateHealthBar;
         }
 
         // Update is called once per frame
@@ -108,7 +96,6 @@ namespace Units
 
         public void Initialized()
         {
-            currentCore = maxCore.finalValue; // 初始化当前核心值
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
 
@@ -118,6 +105,10 @@ namespace Units
             }
             InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
             isActive = true;
+        }
+        private void UpdateHealthBar(float currentHealth, float maxHealth)
+        {
+            healthBar.UpdateHealthBar(currentHealth, maxHealth);
         }
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
@@ -261,7 +252,7 @@ namespace Units
             // 按距离排序并选择最近的 attackTargetNumber 个敌人
             targetEnemies = enemiesInRange
                 .OrderBy(enemy => Vector2.Distance(transform.position, enemy.position))
-                .Take((int)attackTargetNumber)
+                .Take((int)Attributes.AttackTargetNumber)
                 .ToList();
         }
 
@@ -276,7 +267,7 @@ namespace Units
                 {
                     float distance = Vector2.Distance(transform.position, closestEnemy.position);
 
-                    if (distance > attackRange && distance > minDistance)
+                    if (distance > Attributes.AttackRange && distance > minDistance)
                     {
                         // 调整自己的方向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
@@ -285,7 +276,7 @@ namespace Units
                         Vector2 adjustedDirection = AdjustDirectionToAvoidAllies(direction);
 
                         // 计算下一步位置
-                        Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, moveSpeed.finalValue * Time.deltaTime);
+                        Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, Attributes.MoveSpeed.finalValue * Time.deltaTime);
 
                         // 更新位置
                         transform.position = newPosition;
@@ -343,7 +334,7 @@ namespace Units
 
         protected void AttackEnemies()
         {
-            float attackCooldown = 10f / attacksPerTenSeconds.finalValue;
+            float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
             if (Time.time < lastAttackTime + attackCooldown) 
                 return; // 检查攻击冷却时间
             if (targetEnemies != null && targetEnemies.Count > 0)
@@ -352,7 +343,7 @@ namespace Units
                 if (closestEnemy != null)
                 {
                     float distance = Vector2.Distance(transform.position, closestEnemy.position);
-                    if (distance <= attackRange) // 检查最近的敌人是否在攻击范围内
+                    if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
                     {
                         TriggerAttack();
                         lastAttackTime = Time.time; // 更新攻击时间
@@ -377,12 +368,12 @@ namespace Units
                     if (target == null) continue; // 检查目标是否已被销毁
 
                     float distance = Vector2.Distance(transform.position, target.position);
-                    if (distance <= attackRange)
+                    if (distance <= Attributes.AttackRange)
                     {
                         Unit enemyUnit = target.GetComponent<Unit>();
                         if (enemyUnit != null)
                         {
-                            Attack(enemyUnit, attackPower.finalValue/targetEnemies.Count); // 执行攻击逻辑
+                            Attack(enemyUnit, Attributes.AttackPower.finalValue/targetEnemies.Count); // 执行攻击逻辑
                         }
                     }
                 }
@@ -391,7 +382,7 @@ namespace Units
 
         private void Attack(Unit target, float damage)
         {
-            if (isRanged)
+            if (Attributes.IsRanged)
             {
                 // 发射投射物
                 FireProjectile(target, damage);
@@ -451,18 +442,17 @@ namespace Units
 
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
-            currentCore -= finalDamage;
+            Attributes.CurrentHealth -= finalDamage;
             
             OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
 
-            healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }
 
 
         private void CheckHealth()
         {
-            if (currentCore <= 0)
+            if (Attributes.CurrentHealth <= 0)
             {
                 OnDeath?.Invoke(this);
                 gameObject.SetActive(false); // 将 GameObject 设置为失活
@@ -474,7 +464,7 @@ namespace Units
 
             // 绘制攻击范围的Gizmos
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.DrawWireSphere(transform.position, Attributes.AttackRange);
         }
 
         /// <summary>

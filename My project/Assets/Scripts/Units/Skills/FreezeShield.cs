@@ -20,7 +20,7 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            Unit targetAlly = FindRandomAlly(caster, caster.attackRange);
+            Unit targetAlly = FindRandomAlly(caster, caster.Attributes.AttackRange);
             if (targetAlly == null)
             {
                 Debug.LogWarning("No valid allies found within range for FreezeShield.");

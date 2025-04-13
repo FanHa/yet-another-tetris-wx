@@ -39,7 +39,7 @@ namespace Units.Skills
             Vector2 targetPosition = targetEnemy.position;
 
             float elapsedTime = 0f; // 已经过的时间
-            float rushSpeed = caster.moveSpeed.finalValue * speedMultiplier; // 冲刺速度基于自身移动速度
+            float rushSpeed = caster.Attributes.MoveSpeed.finalValue * speedMultiplier; // 冲刺速度基于自身移动速度
             Vector2 direction = (targetPosition - startPosition).normalized; // 冲刺方向在循环外计算
             caster.moveable = false; // 暂时禁用其他行为
 
@@ -59,7 +59,7 @@ namespace Units.Skills
                     if (enemyUnit != null && enemyUnit.faction != caster.faction && !hitEnemies.Contains(enemyUnit))
                     {
                         Units.Damages.Damage damage = new Units.Damages.Damage(
-                             caster.attackPower.finalValue + rushSpeed * damageMultipierBySpeed,
+                             caster.Attributes.AttackPower.finalValue + rushSpeed * damageMultipierBySpeed,
                              Name(),
                              false
                         );

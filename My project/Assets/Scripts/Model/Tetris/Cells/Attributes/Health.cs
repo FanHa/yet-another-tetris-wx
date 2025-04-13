@@ -13,7 +13,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.maxCore.AddPercentageModifier(this, CorePercentageModifier);
+            unit.Attributes.MaxHealth.AddPercentageModifier(this, CorePercentageModifier);
         }
 
         public override string Description()

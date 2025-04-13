@@ -12,7 +12,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.attacksPerTenSeconds.AddPercentageModifier(this, AttackSpeedBonusPercentage);
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, AttackSpeedBonusPercentage);
         }
 
         public override string Description()

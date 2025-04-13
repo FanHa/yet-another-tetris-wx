@@ -13,7 +13,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.attackPower.AddPercentageModifier(this, attackPowerPercentageModifier); // 添加攻击力修正值
+            unit.Attributes.AttackPower.AddPercentageModifier(this, attackPowerPercentageModifier); // 添加攻击力修正值
         }
 
         public override string Description()

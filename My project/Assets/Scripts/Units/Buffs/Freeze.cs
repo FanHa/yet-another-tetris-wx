@@ -25,14 +25,14 @@ namespace Units.Buffs
 
         public override void Apply(Unit unit)
         {
-            unit.moveSpeed.AddPercentageModifier(this, -moveSpeedReductionPercentage); // 减少移动速度
-            unit.attacksPerTenSeconds.AddPercentageModifier(this, -attackSpeedReductionPercentage);
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, -moveSpeedReductionPercentage); // 减少移动速度
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -attackSpeedReductionPercentage);
         }
 
         public override void Remove(Unit unit)
         {
-            unit.moveSpeed.RemovePercentageModifier(this);
-            unit.attacksPerTenSeconds.RemovePercentageModifier(this);
+            unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
         }
 
         public override void Affect(Unit unit)
