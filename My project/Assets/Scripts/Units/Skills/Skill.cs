@@ -12,12 +12,12 @@ namespace Units.Skills
 
         public virtual float cooldown { get; protected set; } = 0f;
         
-        public bool IsReady()
+        public virtual bool IsReady()
         {
             return Time.time >= lastUsedTime + cooldown;
         }
 
-        public void Execute(Unit caster)
+        public virtual void Execute(Unit caster)
         {
             ExecuteCore(caster);
             lastUsedTime = Time.time; // 自动更新上次使用时间
@@ -27,7 +27,7 @@ namespace Units.Skills
 
         public abstract string Description();
 
-        public void Init(){
+        public virtual void Init(){
             // 初始化技能
             lastUsedTime = Time.time;
         }

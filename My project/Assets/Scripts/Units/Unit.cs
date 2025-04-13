@@ -15,6 +15,7 @@ namespace Units
         public Attributes Attributes;
         private Units.Buffs.Manager buffManager;// Buff管理器
         private Movement movementController;
+        private Units.Skills.Manager skillManager = new(); // 技能管理器
 
         public enum Faction
         {
@@ -53,8 +54,6 @@ namespace Units
         private Transform factionBParent;
 
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
-        private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
-
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         private void Awake()
@@ -101,10 +100,7 @@ namespace Units
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
 
-            foreach (Units.Skills.Skill skill in _skills)
-            {
-                skill.Init();
-            }
+            skillManager.Initialize(this); // 初始化技能管理器
             InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
             isActive = true;
         }
@@ -120,13 +116,11 @@ namespace Units
         
         public void AddSkill(Skills.Skill newSkill)
         {
-            // 检查是否已经存在相同类型的技能
-            if (_skills.Any(skill => skill.GetType() == newSkill.GetType()))
-            {
-                return;
-            }
-
-            _skills.Add(newSkill);
+            skillManager.AddSkill(newSkill); // 添加技能
+        }
+        private void CastSkills()
+        {
+            skillManager.CastSkills(); // 释放技能
         }
 
         public void StopAction()
@@ -159,16 +153,7 @@ namespace Units
 
         }
 
-        private void CastSkills()
-        {
-            foreach (var skill in _skills)
-            {
-                if (skill.IsReady())
-                {
-                    skill.Execute(this);
-                }
-            }
-        }
+
 
 
         public void SetFactionParent(Transform factionA, Transform factionB)
