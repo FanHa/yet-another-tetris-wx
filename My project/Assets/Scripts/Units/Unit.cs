@@ -13,6 +13,8 @@ namespace Units
     public class Unit : MonoBehaviour
     {
         public Attributes Attributes;
+        private Units.Buffs.Manager buffManager;// Buff管理器
+        private Movement movementController;
 
         public enum Faction
         {
@@ -21,9 +23,6 @@ namespace Units
         }
         [SerializeField] private Color factionAColor;
         [SerializeField] private Color factionBColor;
-
-        private Transform battlefieldMinBounds; // 战场的最小边界
-        private Transform battlefieldMaxBounds; // 战场的最大边界
 
         public event Action<Unit> OnDeath;
 
@@ -36,8 +35,6 @@ namespace Units
         protected float lastAttackTime = 0;
 
         private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
-
-        public float minDistance = 0.2f; // 与敌人保持的最小距离
         
         private Animator animator;
         private HealthBar healthBar;
@@ -58,10 +55,6 @@ namespace Units
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private List<Skills.Skill> _skills = new List<Skills.Skill>(); // 私有字段
 
-        [SerializeField] private BuffViewer buffViewerPrefab; // Buff预制体
-        [SerializeField] private Transform buffViewerParent; 
-        [SerializeField] private Dictionary<string, Buffs.Buff> activeBuffs = new Dictionary<string, Buffs.Buff>();
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         private void Awake()
@@ -75,6 +68,10 @@ namespace Units
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
             Attributes.OnHealthChanged += UpdateHealthBar;
+            buffManager = GetComponent<Units.Buffs.Manager>();
+            movementController = GetComponent<Movement>();
+            movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
+
         }
 
         // Update is called once per frame
@@ -89,9 +86,13 @@ namespace Units
         {
             if (isActive)
             {
-                MoveTowardsEnemy();
+                if (targetEnemies != null && targetEnemies.Count > 0)
+                {
+                    Transform closestEnemy = targetEnemies[0];
+                    movementController.MoveTowardsEnemy(closestEnemy, targetEnemies, faction);
+                }
+                movementController.ClampPositionToBattlefield();
             }
-            ClampPositionToBattlefield();
         }
 
         public void Initialize()
@@ -113,26 +114,9 @@ namespace Units
         }
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
-            battlefieldMinBounds = minBounds;
-            battlefieldMaxBounds = maxBounds;
+           movementController.SetBattlefieldBounds(minBounds, maxBounds);
         }
 
-        /// <summary>
-        /// 限制单位位置在战场边界内
-        /// </summary>
-        private void ClampPositionToBattlefield()
-        {
-            if (battlefieldMinBounds == null || battlefieldMaxBounds == null)
-            {
-                Debug.LogWarning("Battlefield bounds are not set for this unit.");
-                return;
-            }
-
-            Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, battlefieldMinBounds.position.x, battlefieldMaxBounds.position.x);
-            clampedPosition.y = Mathf.Clamp(clampedPosition.y, battlefieldMinBounds.position.y, battlefieldMaxBounds.position.y);
-            transform.position = clampedPosition;
-        }
         
         public void AddSkill(Skills.Skill newSkill)
         {
@@ -166,50 +150,12 @@ namespace Units
 
         public void AddBuff(Units.Buffs.Buff buff)
         {
-            if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
-            {
-                // 如果状态已存在，则刷新持续时间
-                existingBuff.RefreshDuration();
-            }
-            else
-            {
-                // 添加新的状态并立即应用
-                activeBuffs[buff.Name()] = buff;
-                buff.RefreshDuration();
-                buff.Apply(this);
-                BuffViewer buffViewerInstance = Instantiate(buffViewerPrefab, buffViewerParent.transform);
-                buffViewerInstance.name = buff.Name(); // 设置名字为 Buff 的类型名
-                buffViewerInstance.SetBuffSprite(tetriCellTypeResourceMapping.GetSprite(buff.TetriCellType)); // 设置图标
-            }
+            buffManager.AddBuff(buff, this);
         }
 
         private void BuffEffect()
         {
-            var expiredBuffs = new List<string>();
-            foreach (var kvp in activeBuffs)
-            {
-                var buff = kvp.Value;
-                if (buff.IsExpired())
-                {
-                    buff.Remove(this);
-                    expiredBuffs.Add(kvp.Key);
-                    // 直接通过子对象名字找到对应的 BuffViewer 并销毁
-                    Transform child = buffViewerParent.transform.Find(buff.Name());
-                    if (child != null)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                    
-                } else {
-                    buff.Affect(this);
-                } 
-            }
-
-            // 注: 不能直接在dictionary循环里里Remove,否则会报错,所以先记录后删除
-            foreach (var buffKey in expiredBuffs)
-            {
-                activeBuffs.Remove(buffKey);
-            }
+            buffManager.UpdateBuffs(this);
 
         }
 
@@ -255,82 +201,6 @@ namespace Units
                 .OrderBy(enemy => Vector2.Distance(transform.position, enemy.position))
                 .Take((int)Attributes.AttackTargetNumber)
                 .ToList();
-        }
-
-        protected virtual void MoveTowardsEnemy()
-        {
-            if (!moveable) 
-                return; // 如果不可移动，则直接返回
-            if (targetEnemies != null && targetEnemies.Count > 0)
-            {
-                Transform closestEnemy = targetEnemies.FirstOrDefault();
-                if (closestEnemy != null)
-                {
-                    float distance = Vector2.Distance(transform.position, closestEnemy.position);
-
-                    if (distance > Attributes.AttackRange && distance > minDistance)
-                    {
-                        // 调整自己的方向
-                        Vector2 direction = (closestEnemy.position - transform.position).normalized;
-
-                        // 检查与友方单位的距离，避免扎堆
-                        Vector2 adjustedDirection = AdjustDirectionToAvoidAllies(direction);
-
-                        // 计算下一步位置
-                        Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, Attributes.MoveSpeed.finalValue * Time.deltaTime);
-
-                        // 更新位置
-                        transform.position = newPosition;
-
-                        // 调整朝向
-                        AdjustLookDirection(adjustedDirection);
-                    }
-                }
-            }
-        }
-
-        private Vector2 AdjustDirectionToAvoidAllies(Vector2 originalDirection)
-        {
-            // 获取所有友方单位
-            Collider2D[] nearbyUnits = Physics2D.OverlapCircleAll(transform.position, minDistance);
-
-            Vector2 avoidanceVector = Vector2.zero;
-            int avoidanceCount = 0;
-
-            foreach (var collider in nearbyUnits)
-            {
-                if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit otherUnit))
-                {
-                    // 检查是否为友方单位
-                    if (otherUnit.faction == faction)
-                    {
-                        // 计算与友方单位的方向
-                        Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
-
-                        // 累加避让方向
-                        avoidanceVector += toOtherUnit.normalized;
-                        avoidanceCount++;
-                    }
-                }
-            }
-
-            if (avoidanceCount > 0)
-            {
-                // 平均避让方向
-                avoidanceVector /= avoidanceCount;
-
-                // 调整原始方向，加入避让向量
-                return (originalDirection + avoidanceVector).normalized;
-            }
-
-            // 如果没有需要避让的单位，返回原始方向
-            return originalDirection;
-        }
-
-        private void AdjustLookDirection(Vector2 direction)
-        {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 计算角度
-            transform.rotation = Quaternion.Euler(0, 0, angle-90f);//设置自身旋转
         }
 
         protected void AttackEnemies()

@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 7858934183165652001}
   m_Layer: 0
   m_HasEditorInfo: 1
-  m_Name: BuffViewer
+  m_Name: BuffViewerParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -704,6 +704,8 @@ GameObject:
   - component: {fileID: 3650917277825002224}
   - component: {fileID: 8368620811269264414}
   - component: {fileID: 1902576528534209003}
+  - component: {fileID: 769437360241263465}
+  - component: {fileID: 6290326116337189822}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: UnitBase
@@ -765,37 +767,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f4d142d97d4d24291c684373f2b3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Attributes:
+    AttackTargetNumber: 1
+    AttackRange: 0.5
+    IsRanged: 0
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0
-  moveSpeed:
-    baseValue: 3
-    finalValue: 3
-  attacksPerTenSeconds:
-    baseValue: 4
-    finalValue: 4
-  attackRange: 0.4
-  maxCore:
-    baseValue: 100
-    finalValue: 100
-  currentCore: 0
-  attackPower:
-    baseValue: 10
-    finalValue: 10
   minDistance: 0.2
-  attackTargetNumber: 1
   bodySpriteRenderer: {fileID: 5410986790312629488}
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
-  isRanged: 0
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
   bombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
   PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
   projectileSpawnPoint: {fileID: 1587690522871941135}
   targetEnemies: []
-  buffViewerPrefab: {fileID: 8274040249548898299, guid: edd429be709cf0648806abc88f4856bb, type: 3}
-  buffViewerParent: {fileID: 7858934183165652001}
-  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
   moveable: 1
 --- !u!58 &8368620811269264414
 CircleCollider2D:
@@ -853,3 +840,31 @@ MonoBehaviour:
   ghostPrefab: {fileID: 0}
   hitSound: {fileID: 0}
   audioSource: {fileID: 0}
+--- !u!114 &769437360241263465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 169ef0e1fc24f064da3dda77bd563ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buffViewerParent: {fileID: 7858934183165652001}
+  buffViewerPrefab: {fileID: 8274040249548898299, guid: edd429be709cf0648806abc88f4856bb, type: 3}
+  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+--- !u!114 &6290326116337189822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f535c46b225a34eb7e06df16afca74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDistance: 0.3
