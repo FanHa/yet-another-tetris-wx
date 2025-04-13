@@ -26,6 +26,8 @@ namespace Units
         public event Action<Unit> OnDeath;
 
         public event Action<Damages.EventArgs> OnDamageTaken;
+        private Coroutine hitEffectCoroutine;
+
 
         public event Action<Unit> OnAttacked; // 被攻击事件
 
@@ -55,6 +57,7 @@ namespace Units
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
         [SerializeField] private SpriteRenderer Fist1SpriteRenderer;
         [SerializeField] private SpriteRenderer Fist2SpriteRenderer;
+        private HitEffect hitEffect;
 
         public bool isRanged; // 是否为远程单位
         public GameObject projectilePrefab; // 投射物预制体
@@ -83,6 +86,7 @@ namespace Units
                 Debug.LogWarning("Animator component not found on the same GameObject.");
             }
             healthBar = GetComponentInChildren<HealthBar>();
+            hitEffect = GetComponent<HitEffect>();
         }
 
         // Update is called once per frame
@@ -434,6 +438,7 @@ namespace Units
                 AddBuff(buff); // 添加Debuff到自己身上
             }
             TakeDamage(source, damageReceived); // 扣除生命值
+            hitEffect.PlayAll();
             OnAttacked?.Invoke(source); // 触发被攻击事件
         }
 
@@ -447,11 +452,13 @@ namespace Units
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
             currentCore -= finalDamage;
+            
             OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
 
             healthBar.UpdateHealthBar(currentCore, maxCore.finalValue); // Use GetMaxHP() instead of maxHP
             CheckHealth();
         }
+
 
         private void CheckHealth()
         {

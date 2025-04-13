@@ -703,6 +703,7 @@ GameObject:
   - component: {fileID: 2675846051053125839}
   - component: {fileID: 3650917277825002224}
   - component: {fileID: 8368620811269264414}
+  - component: {fileID: 1902576528534209003}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: UnitBase
@@ -720,7 +721,7 @@ Transform:
   m_GameObject: {fileID: 8661248642372273568}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0034114737, y: 0.0018220374, z: -0.000449999}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -796,8 +797,6 @@ MonoBehaviour:
   buffViewerParent: {fileID: 7858934183165652001}
   tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
   moveable: 1
-  CanReflectDamage: 0
-  ReflectDamagePercentage: 0
 --- !u!58 &8368620811269264414
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -833,3 +832,26 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!114 &1902576528534209003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11ce46b2523d89f48877b63a8a3231e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodySpriteRenderer: {fileID: 5410986790312629488}
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.05
+  scaleFactor: 0.9
+  scaleDuration: 0.1
+  shakeStrength: 0.3
+  shakeDuration: 0.1
+  hitEffectPrefab: {fileID: 0}
+  ghostPrefab: {fileID: 0}
+  hitSound: {fileID: 0}
+  audioSource: {fileID: 0}

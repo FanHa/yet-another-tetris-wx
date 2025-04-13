@@ -31,11 +31,11 @@ public class TetriController : MonoBehaviour
 
     private void InitializeBattleField()
     {
-        battleField.OnFactionDefeated += HandleFactionDefeated;
+        battleField.OnBattleEnd += HandleBattleEnd;
 
     }
 
-    private void HandleFactionDefeated()
+    private void HandleBattleEnd()
     {
         reward.EnterRewardSelectionPhase();
         reward.OnRewardSelected += HandleRewardSelected;
@@ -46,7 +46,6 @@ public class TetriController : MonoBehaviour
         reward.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
 
-        battleField.DestroyAllUnits();
         tetriResource.PrepareNewRound();
         inventory.Hide();
         levelConfig.AdvanceToNextLevel(); // 关卡增加

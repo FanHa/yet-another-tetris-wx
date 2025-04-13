@@ -19,13 +19,14 @@ namespace Controller {
         [SerializeField] private Controller.Statistics statisticsController; // 统计控制器
         private Dictionary<Unit.Faction, List<Unit>> factionUnits 
             = new Dictionary<Unit.Faction, List<Unit>>();
+        private List<Unit> allUnits = new List<Unit>();
 
         public Transform spawnPointA; // 阵营A的复活点
         public Transform spawnPointB; // 阵营B的复活点
         public Transform factionAParent; // 阵营A的父对象
         public Transform factionBParent; // 阵营B的父对象
 
-        public event Action OnFactionDefeated;
+        public event Action OnBattleEnd;
 
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
@@ -113,6 +114,7 @@ namespace Controller {
                 unitComponent.OnDamageTaken += HandleDamageTaken;
                 // 加入到列表
                 factionUnits[faction].Add(unitComponent);
+                allUnits.Add(unitComponent);
                 unitComponent.Initialized();
             }
 
@@ -193,27 +195,31 @@ namespace Controller {
                     // 调用其他阵营所有幸存单位的 StopAction 方法
                     foreach (var faction in factionUnits.Keys)
                     {
-                        if (faction != deadUnit.faction) // 排除已死亡的阵营
+
+                        foreach (var unit in factionUnits[faction])
                         {
-                            foreach (var unit in factionUnits[faction])
-                            {
-                                unit.StopAction();
-                            }
+                            unit.StopAction();
                         }
+                        
                     }
                     ShowBattleStatistics();
                 }
             }
         }
 
-        public void DestroyAllUnits()
+        private void DestroyAllUnits()
         {
-            foreach (var faction in factionUnits.Keys)
+            foreach (var unit in allUnits)
             {
-                foreach (var unit in factionUnits[faction])
+                if (unit != null)
                 {
                     Destroy(unit.gameObject);
                 }
+            }
+            allUnits.Clear();
+
+            foreach (var faction in factionUnits.Keys)
+            {
                 factionUnits[faction].Clear();
             }
         }
@@ -277,10 +283,12 @@ namespace Controller {
             }
         }
 
+        // todo 使用代码绑定,而不是在inspector里绑定
         public void EndStatistics()
         {
             statisticsPanel.SetActive(false);
-            OnFactionDefeated?.Invoke();
+            DestroyAllUnits(); // 销毁所有单位
+            OnBattleEnd?.Invoke();
         }
 
         
