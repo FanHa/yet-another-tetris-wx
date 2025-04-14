@@ -9,14 +9,12 @@ namespace Controller
     {
         [SerializeField] private Model.TetrisResources tetrisResourcesData;
         [SerializeField] private UI.Resource.Panel tetrisResourcePanelUI;
-        [SerializeField] private Model.TetrisListTemplate tetrisListTemplate;
         public event Action<ItemSlot> OnTetriBegainDrag;
         public void Initialize()
         {
             tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
             tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
             tetrisResourcesData.Reset();
-            tetrisResourcesData.InitialUnusedTetris(tetrisListTemplate.template);
             tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
         }
 
@@ -30,12 +28,6 @@ namespace Controller
         {
             tetrisResourcesData.UseTetri(item.GetTetri());
         }
-
-        public void AddUsableTetri(Tetri tetri)
-        {
-            tetrisResourcesData.AddUsableTetri(tetri);
-        }
-
 
         private void HandleTetriBeginDrag(ItemSlot item)
         {

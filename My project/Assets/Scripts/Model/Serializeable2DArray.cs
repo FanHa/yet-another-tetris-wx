@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Model.Tetri;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine;
 namespace Model
 {
     [Serializable]
-    public class Serializable2DArray<T>
+    public class Serializable2DArray<T> : IEnumerable<T>
     {
         [SerializeField] private int rows;
         [SerializeField] private int cols;
@@ -28,6 +30,14 @@ namespace Model
         public int Rows => rows;
         public int Cols => cols;
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var item in array)
+            {
+                yield return item;
+            }
+        }
+
         public int GetLength(int v)
         {
             if (v == 0)
@@ -42,6 +52,11 @@ namespace Model
             {
                 throw new IndexOutOfRangeException();
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

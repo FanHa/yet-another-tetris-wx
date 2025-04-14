@@ -24,7 +24,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能: 远程攻击";
+            return "远程攻击";
         }
 
         

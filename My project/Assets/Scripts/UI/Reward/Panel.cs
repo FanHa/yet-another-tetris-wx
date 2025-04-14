@@ -33,6 +33,14 @@ namespace UI.Reward
                 {
                     item.SetPreview(tetris.GenerateCharacterPreview(characterReward.GetCharacter()));
                 }
+                if (reward is Model.Rewards.UpgradeTetri upgradeTetriReward)
+                {
+                    GameObject upgradePreview = tetris.GenerateUpgradeTetriPreview(
+                        upgradeTetriReward.GetTargetTetri(),
+                        upgradeTetriReward.GetTargetPosition(),
+                        upgradeTetriReward.GetNewCell());
+                    item.SetPreview(upgradePreview);
+                }
                 item.OnItemClicked += HandleItemClicked;
             }
         }
