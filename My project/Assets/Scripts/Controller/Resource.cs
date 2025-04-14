@@ -36,10 +36,6 @@ namespace Controller
             tetrisResourcesData.AddUsableTetri(tetri);
         }
 
-        // public UI.TetrisResource.TetrisResourceItem GetTetriResourceItem(Transform parent, Tetri tetri)
-        // {
-        //     return tetrisResourcePanelUI.CreateTetrisResourceItem(parent, tetri);
-        // }
 
         private void HandleTetriBeginDrag(ItemSlot item)
         {

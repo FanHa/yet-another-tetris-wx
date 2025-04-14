@@ -7,13 +7,15 @@ namespace Model.Tetri
     [Serializable]
     public class Tetri
     {
-        [SerializeField]
-        private Serializable2DArray<Cell> shape;
+        [SerializeField] private Serializable2DArray<Cell> shape;
 
         public Serializable2DArray<Cell> Shape => shape;
+        [SerializeField] private bool isDisposable;
+        public bool IsDisposable => isDisposable;
 
-        public Tetri()
+        public Tetri(bool isDisposable = false)
         {
+            this.isDisposable = isDisposable;
             shape = new Serializable2DArray<Cell>(4, 4);
             for (int i = 0; i < shape.GetLength(0); i++)
             {

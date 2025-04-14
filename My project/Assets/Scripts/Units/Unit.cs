@@ -98,10 +98,10 @@ namespace Units
         {
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
-            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.1f);
+            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.5f);
 
             skillManager.Initialize(this); // 初始化技能管理器
-            InvokeRepeating(nameof(CastSkills) , 0f, 0.2f); // 每秒调用一次技能
+            InvokeRepeating(nameof(CastSkills) , 0f, 1f); // 每秒调用一次技能
             isActive = true;
         }
         private void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -180,7 +180,7 @@ namespace Units
 
             // 按距离排序并选择最近的 attackTargetNumber 个敌人
             targetEnemies = enemiesInRange
-                .OrderBy(enemy => Vector2.Distance(transform.position, enemy.position))
+                .OrderBy(enemy => Vector2.SqrMagnitude(enemy.position - transform.position)) // 使用平方距离排序
                 .Take((int)Attributes.AttackTargetNumber)
                 .ToList();
         }

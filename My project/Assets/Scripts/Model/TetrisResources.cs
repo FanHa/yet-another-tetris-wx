@@ -74,7 +74,10 @@ namespace Model {
         public void UseTetri(Tetri.Tetri tetri)
         {
             tetriList.Remove(tetri);
-            usedTetriList.Add(tetri);
+            if (!tetri.IsDisposable)
+            {
+                usedTetriList.Add(tetri);
+            }
             OnDataChanged?.Invoke(); // 触发数据变化事件
         }
 
