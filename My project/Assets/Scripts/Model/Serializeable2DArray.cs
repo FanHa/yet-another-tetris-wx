@@ -43,6 +43,5 @@ namespace Model
                 throw new IndexOutOfRangeException();
             }
         }
-
     }
 }

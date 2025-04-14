@@ -97,6 +97,8 @@ namespace Units
         public void Initialize()
         {
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
+            lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
+
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.5f);
 

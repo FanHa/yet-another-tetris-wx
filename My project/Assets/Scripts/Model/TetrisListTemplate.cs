@@ -10,87 +10,55 @@ namespace Model{
     {
         public List<Tetri.Tetri> template = new(); // 未使用的Tetri列表模板
         private TetrisFactory tetrisFactory = new TetrisFactory();
-        private List<Type> attributeTypes = new();
+        private List<Type> attributeTypes;
         private void OnEnable()
         {   
-            template = new();
+            template.Clear();
+            InitializeAttributeTypes();
             GenerateAllShapes();
-            // 初始化缓存的 attributeTypes
-            attributeTypes = typeof(Model.Tetri.Attribute).Assembly
-                .GetTypes()
-                .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
-                                && !type.IsAbstract // 排除抽象类
-                                && !type.IsInterface) // 排除接口本身
-                .ToList();
             
         }
+
         private void GenerateAllShapes()
         {
-            var shapes = new List<System.Func<Model.Tetri.Tetri>>
+            // 假设需要生成固定数量的随机形状
+            int shapeCount = 7; // 或者根据需求调整数量
+            for (int i = 0; i < shapeCount; i++)
             {
-                tetrisFactory.CreateTShape,
-                tetrisFactory.CreateIShape,
-                tetrisFactory.CreateOShape,
-                tetrisFactory.CreateLShape,
-                tetrisFactory.CreateJShape,
-                tetrisFactory.CreateSShape,
-                tetrisFactory.CreateZShape,
-            };
-
-            var random = new System.Random();
-            for (int i = 0; i < shapes.Count; i++)
-            {
-                var createShape = shapes[random.Next(shapes.Count)];
-                Model.Tetri.Tetri tetri = createShape();
+                var tetri = tetrisFactory.CreateRandomShape(); // 使用工厂的随机生成方法
                 ReplaceRandomCell(tetri);
                 template.Add(tetri);
             }
         }
 
-        private void EnsureAttributeTypesInitialized()
+        private void InitializeAttributeTypes()
         {
-            if (attributeTypes == null || attributeTypes.Count == 0)
-            {
-                attributeTypes = typeof(Model.Tetri.Attribute).Assembly
-                    .GetTypes()
-                    .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
-                                    && !type.IsAbstract // 排除抽象类
-                                    && !type.IsInterface) // 排除接口本身
-                    .ToList();
-            }
+            // 初始化 attributeTypes，仅在为空时加载一次
+            attributeTypes ??= typeof(Model.Tetri.Attribute).Assembly
+                .GetTypes()
+                .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
+                                && !type.IsAbstract // 排除抽象类
+                                && !type.IsInterface) // 排除接口本身
+                .ToList();
         }
-
         private void ReplaceRandomCell(Tetri.Tetri tetri)
         {
-            EnsureAttributeTypesInitialized();
             var random = new System.Random();
-            var cells = new List<(int, int)>();
-
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    if (tetri.Shape[i, j] is not Empty)
-                    {
-                        cells.Add((i, j));
-                    }
-                }
-            }
+            var cells = tetri.GetOccupiedPositions(); // 获取非空单元格的位置
 
             if (cells.Count > 0)
             {
-                var (row, col) = cells[random.Next(cells.Count)];
+                // 随机选择一个非空单元格的位置
+                var randomCellPosition = cells[random.Next(cells.Count)];
 
+                // 随机从 attributeTypes 中选择一个类型
+                var randomAttributeType = attributeTypes[random.Next(attributeTypes.Count)];
 
-                if (attributeTypes.Count > 0)
-                {
-                    // 随机选择一个子类并创建实例
-                    Type selectedType = attributeTypes[random.Next(attributeTypes.Count)];
-                    Model.Tetri.Cell attributeInstance = (Cell)Activator.CreateInstance(selectedType);
+                // 创建该类型的实例
+                var attributeInstance = (Cell)Activator.CreateInstance(randomAttributeType);
 
-                    // 替换单元格
-                    tetri.SetCell(row, col, attributeInstance);
-                }
+                // 将实例设置到随机单元格中
+                tetri.SetCell(randomCellPosition.x, randomCellPosition.y, attributeInstance);
             }
         }
     }

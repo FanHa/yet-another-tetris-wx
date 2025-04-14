@@ -1,93 +1,49 @@
 using System;
+using System.Collections.Generic;
 
 namespace Model.Tetri
 {
-    public  class TetrisFactory {
-        private  TetriCellFactory cellFactory = new TetriCellFactory();
+    public class TetrisFactory
+    {
+        private TetriCellFactory cellFactory = new TetriCellFactory();
 
-        public  Tetri CreateTShape()
+        private readonly Dictionary<string, List<(int, int)>> shapeDefinitions = new()
         {
+            { "T", new List<(int, int)> { (1, 0), (1, 1), (1, 2), (0, 1) } },
+            { "I", new List<(int, int)> { (0, 1), (1, 1), (2, 1), (3, 1) } },
+            { "O", new List<(int, int)> { (0, 0), (0, 1), (1, 0), (1, 1) } },
+            { "L", new List<(int, int)> { (0, 1), (1, 1), (2, 1), (2, 2) } },
+            { "J", new List<(int, int)> { (0, 1), (1, 1), (2, 1), (2, 0) } },
+            { "S", new List<(int, int)> { (1, 0), (1, 1), (2, 1), (2, 2) } },
+            { "Z", new List<(int, int)> { (1, 1), (1, 2), (2, 0), (2, 1) } }
+        };
+
+        public Tetri CreateShape(string shapeKey)
+        {
+            if (!shapeDefinitions.ContainsKey(shapeKey))
+                throw new ArgumentException($"Invalid shape key: {shapeKey}");
+
             Tetri tetri = new Tetri();
-            tetri.SetCell(1, 0, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 2, cellFactory.CreatePadding());
-            tetri.SetCell(0, 1, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateIShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(0, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 1, cellFactory.CreatePadding());
-            tetri.SetCell(3, 1, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateOShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(0, 0, cellFactory.CreatePadding());
-            tetri.SetCell(0, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 0, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateLShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(0, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 2, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateJShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(0, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 0, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateSShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(1, 0, cellFactory.CreatePadding());
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 1, cellFactory.CreatePadding());
-            tetri.SetCell(2, 2, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateZShape()
-        {
-            Tetri tetri = new Tetri();
-            tetri.SetCell(1, 1, cellFactory.CreatePadding());
-            tetri.SetCell(1, 2, cellFactory.CreatePadding());
-            tetri.SetCell(2, 0, cellFactory.CreatePadding());
-            tetri.SetCell(2, 1, cellFactory.CreatePadding());
-            return tetri;
-        }
-
-        public  Tetri CreateRandomShape()
-        {
-            return new Random().Next(7) switch
+            foreach (var (row, col) in shapeDefinitions[shapeKey])
             {
-                0 => CreateTShape(),
-                1 => CreateIShape(),
-                2 => CreateOShape(),
-                3 => CreateLShape(),
-                4 => CreateJShape(),
-                5 => CreateSShape(),
-                6 => CreateZShape(),
-                _ => CreateTShape() // Default case
-            };
+                tetri.SetCell(row, col, cellFactory.CreatePadding());
+            }
+            return tetri;
+        }
+
+        public Tetri CreateTShape() => CreateShape("T");
+        public Tetri CreateIShape() => CreateShape("I");
+        public Tetri CreateOShape() => CreateShape("O");
+        public Tetri CreateLShape() => CreateShape("L");
+        public Tetri CreateJShape() => CreateShape("J");
+        public Tetri CreateSShape() => CreateShape("S");
+        public Tetri CreateZShape() => CreateShape("Z");
+
+        public Tetri CreateRandomShape()
+        {
+            var shapeKeys = new List<string> { "T", "I", "O", "L", "J", "S", "Z" };
+            var randomKey = shapeKeys[new Random().Next(shapeKeys.Count)];
+            return CreateShape(randomKey);
         }
     }
 }

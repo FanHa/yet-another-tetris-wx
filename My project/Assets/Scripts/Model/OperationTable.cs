@@ -108,101 +108,47 @@ namespace Model
             return true;
         }
 
-        public bool PlaceCharacterInRandomRow(Cell characterCell)
+        public List<List<Cell>> GetCharacterCellGroups()
         {
-            List<int> validRows = new List<int>();
-            List<int> characterRows = new List<int>();
+            List<List<Cell>> cellGroups = new List<List<Cell>>();
 
-            // 找到所有包含 Character 的行
             for (int x = 0; x < board.GetLength(0); x++)
             {
-                bool hasCharacter = false;
-
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
                     if (board[x, y] is Character)
                     {
-                        hasCharacter = true;
-                        break;
+                        List<Cell> group = new List<Cell>();
+
+                        // 添加当前 CharacterCell
+                        group.Add(board[x, y]);
+
+                        // 获取周围一圈的非 CharacterCell
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            for (int dy = -1; dy <= 1; dy++)
+                            {
+                                if (dx == 0 && dy == 0) continue; // 跳过中心点
+                                int nx = x + dx;
+                                int ny = y + dy;
+
+                                if (nx >= 0 && nx < board.GetLength(0) && ny >= 0 && ny < board.GetLength(1))
+                                {
+                                    if (!(board[nx, ny] is Character))
+                                    {
+                                        group.Add(board[nx, ny]);
+                                    }
+                                }
+                            }
+                        }
+
+                        // 将打包的组添加到结果中
+                        cellGroups.Add(group);
                     }
                 }
-
-                if (hasCharacter)
-                {
-                    characterRows.Add(x);
-                }
             }
 
-            // 根据包含 Character 的行，寻找上方或下方的空行
-            foreach (int characterRow in characterRows)
-            {
-                // 检查上方的行
-                if (characterRow > 0  && !characterRows.Contains(characterRow - 1))
-                {
-                    validRows.Add(characterRow - 1);
-                }
-
-                // 检查下方的行
-                if (characterRow < board.GetLength(0) - 1  && !characterRows.Contains(characterRow + 1))
-                {
-                    validRows.Add(characterRow + 1);
-                }
-            }
-
-            // 如果没有找到有效行，返回 false
-            if (validRows.Count == 0)
-            {
-                Debug.LogWarning("No valid rows available to place the CharacterCell.");
-                return false;
-            }
-
-            // 随机选择一行
-            int randomRow = validRows[UnityEngine.Random.Range(0, validRows.Count)];
-            board[randomRow, randomRow] = characterCell;
-
-            // 触发事件
-            OnTableChanged?.Invoke();
-            return true;
-        }
-
-        public List<List<Cell>> GetFullRows()
-        {
-            List<List<Cell>> fullRows = new List<List<Cell>>();
-
-            for (int x = 0; x < board.GetLength(0); x++)
-            {
-                bool isFullRow = true;
-                bool containsCharacter = false;
-                List<Cell> rowCells = new List<Cell>();
-
-                for (int y = 0; y < board.GetLength(1); y++)
-                {
-                    Cell cell = board[x, y];
-
-                    // 判断是否为空单元格
-                    if (cell is Empty)
-                    {
-                        isFullRow = false;
-                        break;
-                    }
-
-                    // 判断是否包含 TetriCellCharacter
-                    if (cell is Character)
-                    {
-                        containsCharacter = true;
-                    }
-
-                    rowCells.Add(cell);
-                }
-
-                // 如果行已满且包含至少一个 TetriCellCharacter，则加入结果
-                if (isFullRow && containsCharacter)
-                {
-                    fullRows.Add(rowCells);
-                }
-            }
-
-            return fullRows;
+            return cellGroups;
         }
     }
 }

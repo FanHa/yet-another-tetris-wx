@@ -123,7 +123,7 @@ public class TetriController : MonoBehaviour
     private void GenerateAndResetInventoryData()
     {
         List<Model.InventoryItem> items = new List<Model.InventoryItem>();
-        List<List<Cell>> fullRows = operationTableData.GetFullRows();
+        List<List<Cell>> fullRows = operationTableData.GetCharacterCellGroups();
         foreach (var rowCells in fullRows)
         {
             Model.InventoryItem item = inventory.GenerateInventoryItemFromTetriCells(rowCells);

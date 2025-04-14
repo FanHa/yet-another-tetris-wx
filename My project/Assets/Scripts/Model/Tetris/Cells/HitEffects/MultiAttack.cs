@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class MultiAttack : Attribute
+    public class MultiAttack : Cell
     {
         [SerializeField]
         public float attackTargetAddition = 1;

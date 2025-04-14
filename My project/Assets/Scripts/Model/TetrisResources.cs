@@ -19,6 +19,10 @@ namespace Model {
         private List<Tetri.Tetri> usedTetriList = new List<Tetri.Tetri>(); // 已使用的Tetri列表
         [SerializeField]
         private List<Tetri.Tetri> unusedTetriList = new List<Tetri.Tetri>(); // 未使用的Tetri列表
+        // 用于跟踪当前存在的 Cell 类型
+        private HashSet<Type> cellTypes = new HashSet<Type>();
+
+        public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
 
         public void SetTetriDragged(Tetri.Tetri tetri)
         {
@@ -49,25 +53,25 @@ namespace Model {
                 tetriList.Add(tetri);
             }
 
-            OnDataChanged?.Invoke();
+            RecalculateCellTypes();
         }
 
         public void AddUnusedTetri(Tetri.Tetri tetri)
         {
             unusedTetriList.Add(tetri);
-            OnDataChanged?.Invoke();
+            RecalculateCellTypes();
         }
 
         public void AddUnusedTetriRange(List<Tetri.Tetri> tetriRange)
         {
             unusedTetriList.AddRange(tetriRange);
-            OnDataChanged?.Invoke();
+            RecalculateCellTypes();
         }
 
         public void AddUsableTetri(Tetri.Tetri tetri)
         {
             tetriList.Add(tetri);
-            OnDataChanged?.Invoke(); // 触发数据变化事件
+            RecalculateCellTypes();
         }
 
         
@@ -78,7 +82,7 @@ namespace Model {
             {
                 usedTetriList.Add(tetri);
             }
-            OnDataChanged?.Invoke(); // 触发数据变化事件
+            RecalculateCellTypes();
         }
 
         public List<Tetri.Tetri> GetUsableTetris()
@@ -106,13 +110,31 @@ namespace Model {
             tetriList.Clear();
             usedTetriList.Clear();
             unusedTetriList.Clear();
-            OnDataChanged?.Invoke(); // 触发数据变化事件
+            RecalculateCellTypes();
         }
 
         public void InitialUnusedTetris(List<Tetri.Tetri> tetris)
         {
             unusedTetriList.AddRange(tetris);
-            OnDataChanged?.Invoke(); // 触发数据变化事件
+            RecalculateCellTypes();
+        }
+
+        private void RecalculateCellTypes()
+        {
+            cellTypes.Clear(); // 清空当前的 cellTypes
+
+            // 遍历所有 Tetri 列表，重新计算包含的 Cell 类型
+            foreach (var tetri in tetriList.Concat(unusedTetriList).Concat(usedTetriList))
+            {
+                foreach (var position in tetri.GetOccupiedPositions())
+                {
+                    Cell cell = tetri.Shape[position.x, position.y];
+                    cellTypes.Add(cell.GetType());
+                }
+            }
+
+            // 触发数据变化事件
+            OnDataChanged?.Invoke();
         }
     }
 }

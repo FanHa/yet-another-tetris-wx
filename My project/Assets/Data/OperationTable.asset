@@ -18,5 +18,5 @@ MonoBehaviour:
   initialCells:
   - typeName: Model.Tetri.Skills.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - typeName: Model.Tetri.Spike, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null

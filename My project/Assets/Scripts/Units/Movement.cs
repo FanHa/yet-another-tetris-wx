@@ -27,7 +27,10 @@ namespace Units
             if (closestEnemy == null) return;
 
             float distance = Vector2.Distance(transform.position, closestEnemy.position);
-
+            if (distance <= attributes.AttackRange)
+            {
+                return;
+            }
             if (distance > minDistance)
             {
                 // 调整自己的方向
