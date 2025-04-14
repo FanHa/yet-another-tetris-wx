@@ -32,8 +32,7 @@ namespace Model.Rewards
             {
                 var random = new System.Random();
                 var randomPosition = occupiedPositions[random.Next(occupiedPositions.Count)];
-                var newCell = (Model.Tetri.Cell)Activator.CreateInstance(cellTemplate.GetType());
-                tetriInstance.SetCell(randomPosition.x, randomPosition.y, newCell);
+                tetriInstance.SetCell(randomPosition.x, randomPosition.y, cellTemplate);
             }
         }
     }

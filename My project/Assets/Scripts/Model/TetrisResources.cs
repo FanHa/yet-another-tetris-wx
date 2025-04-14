@@ -11,7 +11,6 @@ namespace Model {
     public class TetrisResources : ScriptableObject
     {
         public event Action OnDataChanged;
-        private Tetri.Tetri draggedTetri; // 保存当前被拖动的Tetri
 
         [SerializeField]
         private List<Tetri.Tetri> tetriList = new List<Tetri.Tetri>(); // 管理Tetri列表
@@ -30,6 +29,11 @@ namespace Model {
         {
             InitializeAttributeTypes();
             GenerateInitialTetris();
+        }
+        
+        TetrisResources()
+        {
+            OnEnable();
         }
 
         private void InitializeAttributeTypes()
@@ -100,7 +104,6 @@ namespace Model {
 
         public void SetTetriDragged(Tetri.Tetri tetri)
         {
-            draggedTetri = tetri;
         }
 
         public void DrawRandomTetriFromUnusedList(int count)

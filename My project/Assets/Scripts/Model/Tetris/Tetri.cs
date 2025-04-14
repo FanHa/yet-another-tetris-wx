@@ -37,7 +37,7 @@ namespace Model.Tetri
             }
         }
 
-        internal List<Vector2Int> GetOccupiedPositions()
+        public List<Vector2Int> GetOccupiedPositions()
         {
             var occupiedPositions = new List<Vector2Int>();
             for (int i = 0; i < shape.GetLength(0); i++)
