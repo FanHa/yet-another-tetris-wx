@@ -10,7 +10,7 @@ namespace Model.Rewards
         public NewCharacter(Model.Tetri.Character character)
         {
             characterCellInstance = character;
-            tetriInstance = new Model.Tetri.Tetri(true);
+            tetriInstance = new Model.Tetri.Tetri(Tetri.Tetri.TetriType.Character, true);
             tetriInstance.SetCell(1, 1, character); // Place the character at (0, 0)
         }
 

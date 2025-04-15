@@ -23,7 +23,7 @@ namespace Model.Tetri
             if (!shapeDefinitions.ContainsKey(shapeKey))
                 throw new ArgumentException($"Invalid shape key: {shapeKey}");
 
-            Tetri tetri = new Tetri();
+            Tetri tetri = new Tetri(Tetri.TetriType.Normal);
             foreach (var (row, col) in shapeDefinitions[shapeKey])
             {
                 tetri.SetCell(row, col, cellFactory.CreatePadding());

@@ -43,7 +43,7 @@ namespace UI.Resource {
             }
 
             // Update used panel
-            foreach (var tetri in usedTetriList)
+            foreach (Model.Tetri.Tetri tetri in usedTetriList)
             {
                 ItemSlot resourceItem = CreateTetrisResourceItem(
                     usedPanelTransform, tetri);
@@ -51,7 +51,7 @@ namespace UI.Resource {
             }
 
             // Update unused panel
-            foreach (var tetri in unusedTetriList)
+            foreach (Model.Tetri.Tetri tetri in unusedTetriList)
             {
                 ItemSlot resourceItem = CreateTetrisResourceItem(
                     unusedPanelTransform, tetri);
@@ -67,8 +67,24 @@ namespace UI.Resource {
             {
                 GameObject preview = tetrisFactory.GenerateTetriPreview(tetri);
                 resourceItem.Initialize(tetri, preview);
+                resourceItem.OnRotateRequested += HandleRotateRequest;
             }
             return resourceItem;
+        }
+
+        private void HandleRotateRequest(ItemSlot itemSlot)
+        {
+            // 获取当前 Tetri
+            Tetri tetri = itemSlot.GetTetri();
+
+            // 执行旋转逻辑
+            tetri.Rotate();
+
+            // 重新生成 Preview
+            GameObject newPreview = tetrisFactory.GenerateTetriPreview(tetri);
+
+            // 更新 ItemSlot 的 Preview
+            itemSlot.Initialize(tetri, newPreview);
         }
 
         private void ClearPanel(Transform panel)
