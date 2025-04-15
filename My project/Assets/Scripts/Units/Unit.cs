@@ -56,6 +56,7 @@ namespace Units
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
+        public bool isFrozen = false;
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
@@ -76,6 +77,7 @@ namespace Units
         // Update is called once per frame
         void Update()
         {
+            if (isFrozen) return; // 如果被冻结，直接返回
             if (isActive) {
                 AttackEnemies();
             }

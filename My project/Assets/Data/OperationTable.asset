@@ -16,7 +16,7 @@ MonoBehaviour:
     rows: 10
     cols: 10
   initialCells:
-  - typeName: Model.Tetri.Skills.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  - typeName: Model.Tetri.Skills.IceRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null

@@ -28,26 +28,34 @@ namespace Model
                 }
             }
 
-            int targetRow = 4;
-            int targetCol = 4;
-            int initialCellIndex = 0;
-            for (int c = 0; c < columns; c++)
-            {
-                if (c == targetCol) 
-                {
-                    board[targetRow, c] = _tetriCellFactory.CreateRandomCharacter();
-                }
-                else
-                {
-                    if (initialCellIndex < initialCells.Count)
-                    {
-                        board[targetRow, c] = initialCells[initialCellIndex].CreateInstance();
-                        initialCellIndex++;
-                    } 
-                    else 
-                    {
-                        board[targetRow, c] = _tetriCellFactory.CreatePadding(); 
+            // 确定 Character 的位置
+            int targetRow = rows / 2; // 中间行
+            int targetCol = columns / 2; // 中间列
+            board[targetRow, targetCol] = _tetriCellFactory.CreateRandomCharacter();
 
+            int initialCellIndex = 0;
+            for (int dx = -1; dx <= 1; dx++)
+            {
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    // 跳过 Character 自己的位置
+                    if (dx == 0 && dy == 0) continue;
+
+                    int x = targetRow + dx;
+                    int y = targetCol + dy;
+
+                    // 检查是否在棋盘范围内
+                    if (x >= 0 && x < rows && y >= 0 && y < columns)
+                    {
+                        if (initialCellIndex < initialCells.Count)
+                        {
+                            board[x, y] = initialCells[initialCellIndex].CreateInstance();
+                            initialCellIndex++;
+                        }
+                        else
+                        {
+                            board[x, y] = _tetriCellFactory.CreatePadding();
+                        }
                     }
                 }
             }

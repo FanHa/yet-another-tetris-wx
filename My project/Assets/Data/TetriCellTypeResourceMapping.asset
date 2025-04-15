@@ -93,3 +93,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Skills.AttackFrequency, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     sprite: {fileID: -7564692533757840442, guid: 410f599027107704994ced6a997f58cb, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Skills.IceRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -2757998378745276550, guid: 3e3707d1c23064a42ab96568ce3e0727, type: 3}
