@@ -11,7 +11,7 @@ namespace Model
     public class LevelConfig : ScriptableObject
     {
         public int currentLevel = 0;
-        public List<EnemyData> enemyData; // 敌人数据列表
+        public List<EnemyData> enemyDatas; // 敌人数据列表
         [SerializeField] private List<CharacterTypeReference> availableCharacters; // 可用的角色类型
         [SerializeField] private List<CellTypeReference> availableTetriCells; // 可用的 TetriCell 类型
         
@@ -66,23 +66,32 @@ namespace Model
         private void GenerateEnemyData()
         {
             // 确保敌人数据列表不为空
-            if (enemyData == null)
+            if (enemyDatas == null)
             {
-                enemyData = new List<EnemyData>();
+                enemyDatas = new List<EnemyData>();
             }
 
             // 计算当前关卡的敌人数量
             int enemyCount = Mathf.Min(1 + (currentLevel - 1) / levelsPerEnemyIncrease, maxEnemyCount);
 
             // 确保敌人数量足够
-            while (enemyData.Count < enemyCount)
+            while (enemyDatas.Count < enemyCount)
             {
                 // 添加一个随机敌人
                 var randomCharacter = availableCharacters[UnityEngine.Random.Range(0, availableCharacters.Count)];
-                enemyData.Add(new EnemyData
+                var tetriCells = new List<CellTypeReference>();
+                // tetriCells.Add(randomCharacter);
+                // EnemyData enemyData = new EnemyData
+                // {
+                //     character = randomCharacter,
+                //     tetriCells = new List<CellTypeReference>()
+                // };
+
+                enemyDatas.Add(new EnemyData
                 {
                     character = randomCharacter,
                     tetriCells = new List<CellTypeReference>()
+                    
                 });
             }
 
@@ -97,8 +106,8 @@ namespace Model
             for (int i = 0; i < additionalCells; i++)
             {
                 // 随机选择一个敌人
-                int randomEnemyIndex = UnityEngine.Random.Range(0, enemyData.Count);
-                var randomEnemy = enemyData[randomEnemyIndex];
+                int randomEnemyIndex = UnityEngine.Random.Range(0, enemyDatas.Count);
+                var randomEnemy = enemyDatas[randomEnemyIndex];
 
                 // 随机添加一个 TetriCell
                 var randomCell = availableTetriCells[UnityEngine.Random.Range(0, availableTetriCells.Count)];
@@ -113,7 +122,7 @@ namespace Model
         {
             // 转换为 InventoryItem 列表
             List<InventoryItem> inventoryItems = new List<InventoryItem>();
-            foreach (var enemy in enemyData)
+            foreach (var enemy in enemyDatas)
             {
                 var characterInstance = (Tetri.Character)Activator.CreateInstance(enemy.character.Type);
 
@@ -136,9 +145,9 @@ namespace Model
             currentLevel = 0;
 
             // 清空敌人数据
-            if (enemyData != null)
+            if (enemyDatas != null)
             {
-                enemyData.Clear();
+                enemyDatas.Clear();
             }
 
             // 重新生成关卡 0 的敌人数据

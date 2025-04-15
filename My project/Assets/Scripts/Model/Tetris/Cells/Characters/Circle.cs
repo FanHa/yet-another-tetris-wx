@@ -23,6 +23,7 @@ namespace Model.Tetri
         {
             unit.Attributes.AttackPower.SetBaseValue(attackPowerValue);
             unit.Attributes.MaxHealth.SetBaseValue(maxCoreValue);
+            unit.name = CharacterName;
             
         }
 

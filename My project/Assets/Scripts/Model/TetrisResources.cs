@@ -24,16 +24,11 @@ namespace Model {
         public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
         private TetrisFactory tetrisFactory = new TetrisFactory(); // 用于生成随机 Tetri 的工厂
         private List<Type> attributeTypes; // 用于随机替换单元格的类型
-
-        private void OnEnable()
-        {
-            InitializeAttributeTypes();
-            GenerateInitialTetris();
-        }
         
         TetrisResources()
         {
-            OnEnable();
+            InitializeAttributeTypes();
+            GenerateInitialTetris();
         }
 
         private void InitializeAttributeTypes()

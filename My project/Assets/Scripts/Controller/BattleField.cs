@@ -12,29 +12,42 @@ using TMPro;
 namespace Controller {
     public class BattleField : MonoBehaviour
     {
-        [SerializeField] private Transform battlefieldMinBounds; // 战场的最小边界
-        [SerializeField] private Transform battlefieldMaxBounds; // 战场的最大边界
+        [Header("Battlefield Bounds")]
+        [SerializeField] private Transform battlefieldMinBounds;
+        [SerializeField] private Transform battlefieldMaxBounds;
+
+        [Header("UI Elements")]
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private Canvas damageCanvas;
-        [SerializeField] private Controller.Statistics statisticsController; // 统计控制器
-        private Dictionary<Unit.Faction, List<Unit>> factionUnits 
-            = new Dictionary<Unit.Faction, List<Unit>>();
-        private List<Unit> allUnits = new List<Unit>();
+        [SerializeField] private GameObject statisticsPanel;
+        [SerializeField] private GameObject unitStatisticPrefab;
+        [SerializeField] private GameObject damageTypeStatisticPrefab;
 
-        public Transform spawnPointA; // 阵营A的复活点
-        public Transform spawnPointB; // 阵营B的复活点
-        public Transform factionAParent; // 阵营A的父对象
-        public Transform factionBParent; // 阵营B的父对象
+        [Header("Controllers")]
+        [SerializeField] private Controller.Statistics statisticsController;
 
-        public event Action OnBattleEnd;
+        [Header("Spawn Points")]
+        public Transform spawnPointA;
+        public Transform spawnPointB;
+        public Transform factionAParent;
+        public Transform factionBParent;
 
+        [Header("Data")]
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
         [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
-        private Dictionary<string, Units.Statistics> unitStatistics = new Dictionary<string, Units.Statistics>(); // 使用单位名称作为键
-        [SerializeField] private GameObject statisticsPanel; // 统计面板
-        [SerializeField] private GameObject unitStatisticPrefab; // 单位统计预制体
-        [SerializeField] private GameObject damageTypeStatisticPrefab; // 伤害类型统计预制体
+
+
+        private Dictionary<Unit.Faction, List<Unit>> factionUnits = new();
+        private List<Unit> allUnits = new();
+        private Dictionary<string, Units.Statistics> unitStatistics = new();
+
+        public event Action OnBattleEnd;
+
+        private const float DamageTextFadeDuration = 1f;
+        private const float RandomOffsetRangeX = 1f;
+        private const float RandomOffsetRangeY = 0.5f;
+
         void Start()
         {
             // 初始化字典
@@ -54,70 +67,77 @@ namespace Controller {
             SpawnUnits();
         }
 
-        private  void SpawnUnits()
+
+        private void SpawnUnits()
         {
-            foreach (var inventoryItem in inventoryData.Items)
+            SpawnFactionUnits(inventoryData.Items, spawnPointA, Unit.Faction.FactionA, factionAParent);
+            SpawnFactionUnits(enemyData.Items, spawnPointB, Unit.Faction.FactionB, factionBParent);
+        }
+
+        private void SpawnFactionUnits(List<Model.InventoryItem> items, Transform spawnPoint, Unit.Faction faction, Transform parent)
+        {
+            foreach (Model.InventoryItem item in items)
             {
-                SpawnUnit(spawnPointA, characterTypePrefabMapping.GetPrefab(inventoryItem.CharacterCell), Unit.Faction.FactionA, factionAParent, inventoryItem.TetriCells);
-
-            }
-
-            // 启动阵营B的生成协程
-            foreach (var enemyItem in enemyData.Items)
-            {
-                SpawnUnit(spawnPointB, characterTypePrefabMapping.GetPrefab(enemyItem.CharacterCell), Unit.Faction.FactionB, factionBParent, enemyItem.TetriCells);
-
+                SpawnUnit(spawnPoint, item.CharacterCell, faction, parent, item.TetriCells);
             }
         }
 
 
 
-        void SpawnUnit(Transform spawnPoint, GameObject unitPrefab, Unit.Faction faction, Transform parent, List<Cell> tetriCells)
+        private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Cell> tetriCells)
         {
+            GameObject unitPrefab = characterTypePrefabMapping.GetPrefab(characterCell);
             if (unitPrefab == null)
             {
-                Debug.LogWarning("Unit prefab is null for faction: " + faction);
+                Debug.LogWarning($"Unit prefab is null for faction: {faction}");
                 return;
             }
 
-            // 生成随机偏移量
-            Vector3 randomOffset = new Vector3(
-                UnityEngine.Random.Range(-1f, 1f), // X轴随机偏移
-                UnityEngine.Random.Range(-1f, 1f), // Y轴随机偏移
-                0f // Z轴保持不变
-            );
-            Vector3 spawnPosition = spawnPoint.position + randomOffset;
-            // 实例化Unit
-            
+            Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
             GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
             Unit unitComponent = newUnit.GetComponent<Unit>();
+            characterCell.Apply(unitComponent);
+
             if (unitComponent != null)
             {
-                unitComponent.SetFactionParent(factionAParent, factionBParent);
-                if (tetriCells != null) 
-                {
-                    // 先处理 Attribute 类型
-                    foreach (Cell cell in tetriCells)
-                    {
-                        cell.Apply(unitComponent);
-                        if (cell is Character featureCell)
-                        {
-                            newUnit.name = featureCell.CharacterName; // 设置单位名称
-                        }
-                    }
-                }
-                
-                unitComponent.SetFaction(faction);
-                unitComponent.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
-                // 监听死亡事件
-                unitComponent.OnDeath += OnUnitDeath;
-                unitComponent.OnDamageTaken += HandleDamageTaken;
-                // 加入到列表
-                factionUnits[faction].Add(unitComponent);
-                allUnits.Add(unitComponent);
-                unitComponent.Initialize();
+                InitializeUnit(unitComponent, faction, tetriCells, newUnit);
             }
 
+        }
+
+        private Vector3 GetRandomSpawnPosition(Vector3 basePosition)
+        {
+            return basePosition + new Vector3(
+                UnityEngine.Random.Range(-RandomOffsetRangeX, RandomOffsetRangeX),
+                UnityEngine.Random.Range(-RandomOffsetRangeY, RandomOffsetRangeY),
+                0f
+            );
+        }
+
+        private void InitializeUnit(Unit unit, Unit.Faction faction, List<Cell> tetriCells, GameObject unitObject)
+        {
+            unit.SetFactionParent(factionAParent, factionBParent);
+            unit.SetFaction(faction);
+            unit.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
+
+
+            if (tetriCells != null)
+            {
+                foreach (Cell cell in tetriCells)
+                {
+                    cell.Apply(unit);
+                    if (cell is Character featureCell)
+                    {
+                        unitObject.name = featureCell.CharacterName;
+                    }
+                }
+            }
+
+            unit.OnDeath += OnUnitDeath;
+            unit.OnDamageTaken += HandleDamageTaken;
+            factionUnits[faction].Add(unit);
+            allUnits.Add(unit);
+            unit.Initialize();
         }
 
         private void HandleDamageTaken(Units.Damages.EventArgs args)

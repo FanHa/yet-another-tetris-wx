@@ -9,7 +9,7 @@ namespace Units.Skills
         public override float cooldown => 10f;
         public float rushDuration = 1f;
         public float speedMultiplier = 1.5f; // 冲刺速度倍数
-        public float damageMultipierBySpeed = 2; // 伤害倍数
+        public float damageMultipierBySpeed = 10; // 伤害倍数
         private HashSet<Unit> hitEnemies = new HashSet<Unit>(); // 记录已碰撞的敌人
 
 
@@ -86,7 +86,6 @@ namespace Units.Skills
         public override string Description()
         {
             return $"向目标敌人冲锋，持续 {rushDuration} 秒，" +
-                $"冲刺速度为正常速度的 {speedMultiplier} 倍。" +
                 $"冲刺过程中与敌人碰撞会造成基于速度的额外伤害，" +
                 $"伤害为攻击力加上速度的 {damageMultipierBySpeed} 倍。" +
                 $"技能冷却时间为 {cooldown} 秒。";

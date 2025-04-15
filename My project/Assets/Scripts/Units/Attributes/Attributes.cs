@@ -6,10 +6,16 @@ namespace Units
     [System.Serializable]
     public class Attributes
     {
-        public Attribute MoveSpeed { get; private set; } = new Attribute(3f);
-        public Attribute AttackPower { get; private set; } = new Attribute(10f);
-        public Attribute MaxHealth { get; private set; } = new Attribute(100f);
-        public Attribute AttacksPerTenSeconds { get; private set; } = new Attribute(3f);
+        [SerializeField] private Attribute moveSpeed = new Attribute(3f);
+        [SerializeField] private Attribute attackPower = new Attribute(10f);
+        [SerializeField] private Attribute maxHealth = new Attribute(100f);
+        [SerializeField] private Attribute attacksPerTenSeconds = new Attribute(3f);
+
+        public Attribute MoveSpeed => moveSpeed;
+        public Attribute AttackPower => attackPower;
+        public Attribute MaxHealth => maxHealth;
+        public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
+
         public float AttackTargetNumber = 1; // 攻击目标数量
         public float AttackRange = 0.5f; // 攻击范围
         public bool IsRanged; // 是否为远程单位

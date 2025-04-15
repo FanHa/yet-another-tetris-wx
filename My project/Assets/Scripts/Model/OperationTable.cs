@@ -118,25 +118,28 @@ namespace Model
                 {
                     if (board[x, y] is Character)
                     {
-                        List<Cell> group = new List<Cell>();
-
-                        // 添加当前 CharacterCell
-                        group.Add(board[x, y]);
+                        List<Cell> group = new List<Cell>
+                        {
+                            // 添加当前 CharacterCell
+                            board[x, y]
+                        };
 
                         // 获取周围一圈的非 CharacterCell
                         for (int dx = -1; dx <= 1; dx++)
                         {
                             for (int dy = -1; dy <= 1; dy++)
                             {
-                                if (dx == 0 && dy == 0) continue; // 跳过中心点
+                                if (dx == 0 && dy == 0) 
+                                    continue; // 跳过中心点
                                 int nx = x + dx;
                                 int ny = y + dy;
 
                                 if (nx >= 0 && nx < board.GetLength(0) && ny >= 0 && ny < board.GetLength(1))
                                 {
-                                    if (!(board[nx, ny] is Character))
+                                    Cell neighborCell = board[nx, ny];
+                                    if (!(neighborCell is Character) && !(neighborCell is Empty))
                                     {
-                                        group.Add(board[nx, ny]);
+                                        group.Add(neighborCell);
                                     }
                                 }
                             }

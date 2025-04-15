@@ -28,7 +28,9 @@ namespace Controller {
         public Model.InventoryItem GenerateInventoryItemFromTetriCells(List<Cell> tetriCells)
         {
             Character characterCell = tetriCells.OfType<Character>().FirstOrDefault();
-            return new Model.InventoryItem(characterCell, tetriCells);
+            List<Cell> remainingCells = tetriCells.Where(cell => cell != characterCell).ToList();
+
+            return new Model.InventoryItem(characterCell, remainingCells);
         }
 
    
