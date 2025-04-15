@@ -10,7 +10,6 @@ namespace Model.Rewards
 {
     public class RewardFactory
     {
-        private readonly System.Random random = new System.Random();
         private int rewardCount = 3;
         private TetrisFactory tetrisFactory = new TetrisFactory();
         private readonly TetrisResources tetrisResources;
@@ -27,10 +26,13 @@ namespace Model.Rewards
 
         private static readonly List<Type> cellTypes = Assembly.GetAssembly(typeof(Cell))
             .GetTypes()
-            .Where(type => type.IsSubclassOf(typeof(Cell)) && !type.IsSubclassOf(typeof(Character)) && !type.IsAbstract)
+            .Where(type => type.IsSubclassOf(typeof(Cell))
+                            && !type.IsSubclassOf(typeof(Character))
+                            && type != typeof(Empty) 
+                             && type != typeof(Padding)
+                            && !type.IsAbstract)
             .ToList();
         
-        // todo upgradeCellTypes
 
         public List<Reward> GenerateRewards()
         {
@@ -39,7 +41,7 @@ namespace Model.Rewards
             for (int i = 1; i <= rewardCount; i++)
             {
                 // 随机决定奖励类型
-                int rewardType = random.Next(3); // 0: Tetri, 1: Character, 2: UpgradeTetri
+                int rewardType = UnityEngine.Random.Range(0, 3); // 0: Tetri, 1: Character, 2: UpgradeTetri
 
                 Reward reward = rewardType switch
                 {
@@ -57,20 +59,26 @@ namespace Model.Rewards
 
         private Reward CreateAddTetriReward()
         {
-            if (cellTypes.Count == 0)
+            List<Type> existingCellTypes = tetrisResources.CellTypes.ToList();
+
+            List<Type> availableCellTypes = cellTypes
+                .Where(type => !existingCellTypes.Contains(type))
+                .ToList();
+            if (availableCellTypes.Count == 0)
             {
-                throw new InvalidOperationException("No Tetri subclasses found.");
+                // todo 不要报错,是正常游戏进行中可能会遇到的事情
+                throw new InvalidOperationException("No Tetri subclasses available for creation.");
             }
 
             // 随机选择一个 Tetri 类型
-            int index = random.Next(cellTypes.Count);
-            Type cellType = cellTypes[index];
+            int index = UnityEngine.Random.Range(0, availableCellTypes.Count);
+            Type cellType = availableCellTypes[index];
 
             // 创建一个新的 Tetri 实例
-            var tetriInstance = tetrisFactory.CreateRandomShape();
+            Model.Tetri.Tetri tetriInstance = tetrisFactory.CreateRandomShape();
 
             // 使用 Activator 创建 Cell 实例
-            var cellTemplate = (Cell)Activator.CreateInstance(cellType);
+            Cell cellTemplate = (Cell)Activator.CreateInstance(cellType);
 
             // 创建 AddTetri 奖励
             return new AddTetri(tetriInstance, cellTemplate);
@@ -84,7 +92,7 @@ namespace Model.Rewards
             }
 
             // 随机选择一个 Character 类型
-            int index = random.Next(characterTypes.Count);
+            int index = UnityEngine.Random.Range(0, characterTypes.Count);
             Type characterType = characterTypes[index];
 
             // 使用 Activator 创建 Character 实例
@@ -102,7 +110,7 @@ namespace Model.Rewards
             }
 
             // 随机选择一个 Cell 类型
-            int cellTypeIndex = random.Next(availableCellTypes.Count);
+            int cellTypeIndex = UnityEngine.Random.Range(0, availableCellTypes.Count);
             Type cellType = availableCellTypes[cellTypeIndex];
 
             // 从 TetrisResources 中随机挑选一个包含 PaddingCell 的 Tetri
@@ -126,7 +134,7 @@ namespace Model.Rewards
                 throw new InvalidOperationException("No PaddingCell found in the selected Tetri.");
             }
 
-            int positionIndex = random.Next(paddingPositions.Count);
+            int positionIndex = UnityEngine.Random.Range(0, paddingPositions.Count);
             Vector2Int targetPosition = paddingPositions[positionIndex];
 
             // 创建用于升级的 Cell 实例
