@@ -26,7 +26,7 @@ namespace Controller {
                 for (int j = 0; j < 4; j++)
                 {
                     GameObject brick = Instantiate(tetriCellPrefab, preview.transform);
-                    Image image = brick.GetComponent<Image>();
+                    UI.Cell cellComponent = brick.GetComponent<UI.Cell>();
 
                     // Set image display based on Tetri shape
                     Cell cell = tetri.Shape[i, j];
@@ -35,17 +35,9 @@ namespace Controller {
                         Sprite sprite = spriteMapping.GetSprite(cell.GetType());
                         if (sprite != null)
                         {
-                            image.sprite = sprite;
-                            image.color = Color.green; // Set green color for blocks
+                            cellComponent.SetImage(sprite); // Set the image for the cell
                         }
-                        else
-                        {
-                            image.color = Color.black; // Set black color if sprite is missing
-                        }
-                    }
-                    else
-                    {
-                        image.color = Color.clear; // Set transparent for empty cells
+
                     }
                 }
             }
