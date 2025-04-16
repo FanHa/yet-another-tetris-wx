@@ -98,6 +98,8 @@ namespace Model
 
         public bool PlaceTetri(Vector2Int position, Tetri.Tetri tetri)
         {
+            // 调整 position，使其以 (1,1) 为基准
+            position -= new Vector2Int(1, 1);
             // 检查是否可以放置Tetri
             for (int i = 0; i < tetri.Shape.GetLength(0); i++)
             {

@@ -37,7 +37,10 @@ namespace Controller {
                         {
                             cellComponent.SetImage(sprite); // Set the image for the cell
                         }
-
+                    }
+                    else 
+                    {
+                        cellComponent.SetTransparent(); // Set the cell to be transparent
                     }
                 }
             }
@@ -48,9 +51,10 @@ namespace Controller {
         public GameObject GenerateCharacterPreview(Cell character, Vector2? gridSize = null)
         {
             GameObject preview = Instantiate(tetriCellPrefab);
-            Image image = preview.GetComponent<Image>();
+            UI.Cell cellComponent = preview.GetComponent<UI.Cell>();
+
             Sprite sprite = spriteMapping.GetSprite(character);
-            image.sprite = sprite;
+            cellComponent.SetImage(sprite); // Set the image for the character cell
             return preview;
         }
 
@@ -71,7 +75,7 @@ namespace Controller {
                 for (int j = 0; j < 4; j++)
                 {
                     GameObject brick = Instantiate(tetriCellPrefab, preview.transform);
-                    Image image = brick.GetComponent<Image>();
+                    UI.Cell cellComponent = brick.GetComponent<UI.Cell>();
 
                     // 获取当前单元格
                     Cell cell = tetri.Shape[i, j];
@@ -82,12 +86,8 @@ namespace Controller {
                         Sprite sprite = spriteMapping.GetSprite(newCell.GetType());
                         if (sprite != null)
                         {
-                            image.sprite = sprite;
-                            image.color = Color.yellow; // 用黄色表示升级的 Cell
-                        }
-                        else
-                        {
-                            image.color = Color.black; // 如果没有对应的 Sprite，显示黑色
+                            cellComponent.SetImage(sprite); // 设置新单元格的图像
+                            cellComponent.ShowOutline(); // 显示轮廓
                         }
                     }
                     else if (cell is not Empty) // 如果是普通的非空单元格
@@ -95,17 +95,12 @@ namespace Controller {
                         Sprite sprite = spriteMapping.GetSprite(cell.GetType());
                         if (sprite != null)
                         {
-                            image.sprite = sprite;
-                            image.color = Color.green; // 用绿色表示普通的 Cell
-                        }
-                        else
-                        {
-                            image.color = Color.black; // 如果没有对应的 Sprite，显示黑色
+                            cellComponent.SetImage(sprite);
                         }
                     }
-                    else
+                    else 
                     {
-                        image.color = Color.clear; // 空单元格设置为透明
+                        cellComponent.SetTransparent(); // Set the cell to be transparent
                     }
                 }
             }

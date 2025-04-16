@@ -88,7 +88,7 @@ namespace UI {
 
                     // 计算单元格位置
                     Vector2Int cellPosition = new Vector2Int(
-                        Mathf.FloorToInt(adjustedY / container.cellSize.y), // Y 轴方向需要反转,
+                        Mathf.FloorToInt(adjustedY / container.cellSize.y),
                         Mathf.FloorToInt(adjustedX / container.cellSize.x)
                     );
 
@@ -108,7 +108,7 @@ namespace UI {
         {
             Vector3 localPosition = new Vector3(
                 cellPosition.x * container.cellSize.x + container.cellSize.x / 2,
-                cellPosition.y * container.cellSize.y + container.cellSize.y / 2,
+                cellPosition.y * container.cellSize.y + container.cellSize.y / 2 ,
                 0
             );
             return container.transform.TransformPoint(localPosition);

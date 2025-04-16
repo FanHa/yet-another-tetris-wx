@@ -18,9 +18,6 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     
-
-    private UI.Resource.ItemSlot currentDraggingTetri; // 保存当前拖动的Tetri
-
     private void Start()
     {
         // 初始化资源面板和操作表
@@ -73,15 +70,12 @@ public class TetriController : MonoBehaviour
 
     private void HandleTetriBeginDrag(ItemSlot item)
     {
-        // 保存当前拖动的Tetri信息
-        currentDraggingTetri = item;
         assemblyMouseFollower.SetFollowItem(item);
         assemblyMouseFollower.StartFollowing();
     }
 
     private void HandleTetriEndDrag(ItemSlot item)
     {
-        currentDraggingTetri = default;
         assemblyMouseFollower.StopFollowing();
     }
 
