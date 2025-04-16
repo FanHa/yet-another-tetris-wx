@@ -1743,6 +1743,9 @@ MonoBehaviour:
   battlefieldMaxBounds: {fileID: 1157705436}
   damageTextPrefab: {fileID: 3087921832634182325, guid: 7f1d8dfb9dd524f48a4c732123f15de8, type: 3}
   damageCanvas: {fileID: 1176676513}
+  statisticsPanel: {fileID: 634437513}
+  unitStatisticPrefab: {fileID: 7092723629812944549, guid: e1445c937c7fb0d4cbc22628f032255e, type: 3}
+  damageTypeStatisticPrefab: {fileID: 1972183809924222590, guid: 3e0712c1894ddef4d968d2f9af078622, type: 3}
   statisticsController: {fileID: 85712747}
   spawnPointA: {fileID: 656560514}
   spawnPointB: {fileID: 131970432}
@@ -1751,9 +1754,6 @@ MonoBehaviour:
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
   characterTypePrefabMapping: {fileID: 11400000, guid: bd78c9cbc2ccde24b80765fede311b21, type: 2}
-  statisticsPanel: {fileID: 634437513}
-  unitStatisticPrefab: {fileID: 7092723629812944549, guid: e1445c937c7fb0d4cbc22628f032255e, type: 3}
-  damageTypeStatisticPrefab: {fileID: 1972183809924222590, guid: 3e0712c1894ddef4d968d2f9af078622, type: 3}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,15 +3496,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000044399872
+      value: 0.000031583626
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000044399872
+      value: 0.000031583626
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000044399872
+      value: 0.000031583626
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

@@ -115,6 +115,7 @@ namespace Model.Rewards
 
             // 从 TetrisResources 中随机挑选一个包含 PaddingCell 的 Tetri
             var targetTetri = tetrisResources.GetUnusedTetris()
+                .Concat(tetrisResources.GetUsedTetris())
                 .Where(tetri => tetri.Shape.Cast<Model.Tetri.Cell>().Any(cell => cell is Model.Tetri.Padding))
                 .OrderBy(_ => Guid.NewGuid())
                 .FirstOrDefault();

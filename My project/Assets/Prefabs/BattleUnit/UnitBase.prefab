@@ -769,6 +769,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Attributes:
+    moveSpeed:
+      baseValue: 3
+      finalValue: 3
+    attackPower:
+      baseValue: 10
+      finalValue: 10
+    maxHealth:
+      baseValue: 100
+      finalValue: 100
+    attacksPerTenSeconds:
+      baseValue: 3
+      finalValue: 3
     AttackTargetNumber: 1
     AttackRange: 0.5
     IsRanged: 0
@@ -781,9 +793,11 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
   bombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
   PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
+  chainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
   projectileSpawnPoint: {fileID: 1587690522871941135}
   targetEnemies: []
   moveable: 1
+  isFrozen: 0
 --- !u!58 &8368620811269264414
 CircleCollider2D:
   m_ObjectHideFlags: 0
