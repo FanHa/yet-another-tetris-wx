@@ -25,8 +25,8 @@ namespace Model.Rewards
         }
 
 
-        public override string Name() => $"Upgrade {newCell.Name()}";
-        public override string Description() => $"Upgrade a PaddingCell to {newCell.Description()}";
+        public override string Name() => $"升级 {newCell.Name()}";
+        public override string Description() => $"升级一个填充物成为 {newCell.Name()}";
         public Model.Tetri.Tetri GetTargetTetri() => targetTetri;
 
         public Vector2Int GetTargetPosition() => targetPosition;

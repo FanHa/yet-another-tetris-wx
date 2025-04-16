@@ -13,9 +13,11 @@ namespace Model.Rewards
         private int rewardCount = 3;
         private TetrisFactory tetrisFactory = new TetrisFactory();
         private readonly TetrisResources tetrisResources;
+        private readonly OperationTable operationTable;
 
-        public RewardFactory(TetrisResources tetrisResources)
+        public RewardFactory(TetrisResources tetrisResources, OperationTable operationTable)
         {
+            this.operationTable = operationTable;   
             this.tetrisResources = tetrisResources;
         }
 
@@ -90,16 +92,48 @@ namespace Model.Rewards
             {
                 throw new InvalidOperationException("No Character subclasses found.");
             }
+            // 获取当前角色类型的数量
+            Dictionary<Type, int> characterCounts = operationTable.GetCharacterCounts();
 
-            // 随机选择一个 Character 类型
-            int index = UnityEngine.Random.Range(0, characterTypes.Count);
-            Type characterType = characterTypes[index];
+            // 计算权重：数量越多，权重越低
+            Dictionary<Type, float> weights = new Dictionary<Type, float>();
+            foreach (var characterType in characterTypes)
+            {
+                int count = characterCounts.ContainsKey(characterType) ? characterCounts[characterType] : 0;
 
+                // 初始权重为 1
+                float baseWeight = 1f;
+
+                // 如果已有实例，权重减半
+                weights[characterType] = count > 0 ? baseWeight / (1+count) : baseWeight;
+            }
+
+            // 根据权重随机选择角色类型
+            Type selectedCharacterType = GetRandomTypeByWeight(weights);
             // 使用 Activator 创建 Character 实例
-            var characterInstance = (Model.Tetri.Character)Activator.CreateInstance(characterType);
+            var characterInstance = (Model.Tetri.Character)Activator.CreateInstance(selectedCharacterType);
 
             // 创建 NewCharacter 奖励
             return new NewCharacter(characterInstance);
+        }
+
+        private Type GetRandomTypeByWeight(Dictionary<Type, float> weights)
+        {
+            float totalWeight = weights.Values.Sum();
+            float randomValue = UnityEngine.Random.Range(0, totalWeight);
+
+            float cumulativeWeight = 0f;
+            foreach (var kvp in weights)
+            {
+                cumulativeWeight += kvp.Value;
+                if (randomValue <= cumulativeWeight)
+                {
+                    return kvp.Key;
+                }
+            }
+
+            // 默认返回第一个（理论上不会到这里）
+            return weights.Keys.First();
         }
         private Reward CreateUpgradeTetriReward()
         {

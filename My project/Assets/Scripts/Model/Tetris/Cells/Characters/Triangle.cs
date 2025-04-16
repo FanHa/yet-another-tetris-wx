@@ -24,7 +24,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "三角形核心";
+            return "小三";
         }
     }
 }

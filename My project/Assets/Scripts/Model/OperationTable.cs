@@ -66,6 +66,36 @@ namespace Model
             return board;
         }
 
+        /// <summary>
+        /// 获取当前 table 中各种角色的数量
+        /// </summary>
+        /// <returns>字典，键为角色类型，值为数量</returns>
+        public Dictionary<Type, int> GetCharacterCounts()
+        {
+            Dictionary<Type, int> characterCounts = new Dictionary<Type, int>();
+
+            for (int x = 0; x < board.GetLength(0); x++)
+            {
+                for (int y = 0; y < board.GetLength(1); y++)
+                {
+                    if (board[x, y] is Character character)
+                    {
+                        Type characterType = character.GetType();
+                        if (characterCounts.ContainsKey(characterType))
+                        {
+                            characterCounts[characterType]++;
+                        }
+                        else
+                        {
+                            characterCounts[characterType] = 1;
+                        }
+                    }
+                }
+            }
+
+            return characterCounts;
+        }
+
         public bool PlaceTetri(Vector2Int position, Tetri.Tetri tetri)
         {
             // 检查是否可以放置Tetri

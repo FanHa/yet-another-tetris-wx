@@ -177,7 +177,7 @@ namespace Units
             foreach (Transform enemy in enemyParent)
             {
                 Unit unit = enemy.GetComponent<Unit>();
-                if (unit != null && unit.faction != faction) // 判断是否为敌对阵营
+                if (unit != null && unit.faction != faction && unit.isActiveAndEnabled) // 判断是否为敌对阵营
                 {
                     enemiesInRange.Add(enemy);
                 }
@@ -315,6 +315,7 @@ namespace Units
         {
             if (Attributes.CurrentHealth <= 0)
             {
+                StopAction();
                 OnDeath?.Invoke(this);
                 gameObject.SetActive(false); // 将 GameObject 设置为失活
             }

@@ -16,7 +16,7 @@ namespace Controller
 
         private void Start()
         {
-            rewardFactory = new RewardFactory(tetriResourceData);
+            rewardFactory = new RewardFactory(tetriResourceData, operationTableData);
         } 
 
         public void EnterRewardSelectionPhase()

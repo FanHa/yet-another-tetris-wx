@@ -12,12 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b45bc9cc2adf348b66418a2dc64dfa, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  currentLevel: 0
-  enemyData:
+  currentLevel: 6
+  enemyDatas:
   - character:
-      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    tetriCells: []
+    tetriCells:
+    - typeName: Model.Tetri.Freeze, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Attack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.AttackFrequency, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - character:
+      typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    tetriCells:
+    - typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - character:
+      typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    tetriCells:
+    - typeName: Model.Tetri.Freeze, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   availableCharacters:
   - typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
@@ -68,7 +90,7 @@ MonoBehaviour:
       PublicKeyToken=null
   - typeName: Model.Tetri.Skills.Weak, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  levelsPerEnemyIncrease: 3
+  levelsPerEnemyIncrease: 2
   maxEnemyCount: 10
-  levelsPerCellIncrease: 8
+  levelsPerCellIncrease: 5
   maxAddedCellCount: 10

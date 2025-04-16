@@ -12,7 +12,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "圆形核心";
+            return "小圆";
         }
         public override string Description()
         {
