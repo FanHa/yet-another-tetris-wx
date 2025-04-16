@@ -39,7 +39,7 @@ namespace UI.Inventories.Description
 
              // 对 TetriCells 进行分组，按类型合并并记录数量
             Dictionary<Type, int> groupedCells = new Dictionary<System.Type, int>();
-            foreach (Cell cell in item.TetriCells)
+            foreach (Model.Tetri.Cell cell in item.TetriCells)
             {
                 var cellType = cell.GetType(); // 获取 Cell 的类型
                 if (groupedCells.ContainsKey(cellType))
@@ -62,7 +62,7 @@ namespace UI.Inventories.Description
                 Item newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
 
                 // 获取类型对应的一个实例（可以从 TetriCells 中找到第一个匹配的实例）
-                Cell exampleCell = item.TetriCells.Find(c => c.GetType() == cellType);
+                Model.Tetri.Cell exampleCell = item.TetriCells.Find(c => c.GetType() == cellType);
 
                 // 设置 DescriptionItem 的属性，包括图片、描述和数量
                 newItem.SetDescription(cellTypeResourceMapping.GetSprite(exampleCell), count, exampleCell.Description());

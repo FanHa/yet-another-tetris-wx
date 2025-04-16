@@ -84,7 +84,7 @@ namespace Controller {
 
 
 
-        private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Cell> tetriCells)
+        private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
         {
             GameObject unitPrefab = characterTypePrefabMapping.GetPrefab(characterCell);
             if (unitPrefab == null)
@@ -114,7 +114,7 @@ namespace Controller {
             );
         }
 
-        private void InitializeUnit(Unit unit, Unit.Faction faction, List<Cell> tetriCells, GameObject unitObject)
+        private void InitializeUnit(Unit unit, Unit.Faction faction, List<Model.Tetri.Cell> tetriCells, GameObject unitObject)
         {
             unit.SetFactionParent(factionAParent, factionBParent);
             unit.SetFaction(faction);
@@ -123,7 +123,7 @@ namespace Controller {
 
             if (tetriCells != null)
             {
-                foreach (Cell cell in tetriCells)
+                foreach (Model.Tetri.Cell cell in tetriCells)
                 {
                     cell.Apply(unit);
                     if (cell is Character featureCell)

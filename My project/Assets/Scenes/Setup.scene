@@ -675,8 +675,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 1479043306}
-  emptyCellPrefab: {fileID: 3373743052066175582, guid: 9dbbc72d70669784da50ed8f9aff90f3, type: 3}
-  placedCellPrefab: {fileID: 6454661091256024416, guid: 784e0592cc3ec7a4bb80cf1e2e54f94f, type: 3}
+  CellPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+  EmptyCellPrefab: {fileID: 0}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
 --- !u!1001 &314842518
 PrefabInstance:
@@ -3496,15 +3496,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000031583626
+      value: 0.000021047794
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000031583626
+      value: 0.000021047794
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000031583626
+      value: 0.000021047794
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

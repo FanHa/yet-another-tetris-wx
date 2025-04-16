@@ -137,7 +137,9 @@ namespace Model.Rewards
         }
         private Reward CreateUpgradeTetriReward()
         {
-            var availableCellTypes = tetrisResources.CellTypes.ToList();
+            var availableCellTypes = tetrisResources.CellTypes
+                .Where(type => type != typeof(Model.Tetri.Padding)) // 排除 Padding 类型
+                .ToList();
             if (availableCellTypes.Count == 0)
             {
                 throw new InvalidOperationException("No usable Cell types found in TetrisResources.");
