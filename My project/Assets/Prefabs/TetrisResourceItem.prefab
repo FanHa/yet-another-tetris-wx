@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2398757970211864409}
   - component: {fileID: 4452184010742769427}
   - component: {fileID: 6560266590254046998}
+  - component: {fileID: 101586120604317771}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: Button
@@ -30,7 +31,7 @@ RectTransform:
   m_GameObject: {fileID: 260098285168318002}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7640948889788478379}
@@ -136,6 +137,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 3
   m_AspectRatio: 1
+--- !u!114 &101586120604317771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260098285168318002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076edebeac19ec74189c541a8f50ff01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1078202629140361031
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tetri:
+    tetriType: 0
     shape:
       rows: 4
       cols: 4

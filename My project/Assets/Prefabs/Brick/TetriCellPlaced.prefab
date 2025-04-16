@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
       propertyPath: m_Name
-      value: TetriCell
+      value: TetriCellPlaced
       objectReference: {fileID: 0}
     - target: {fileID: 3212719076665117547, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
       propertyPath: m_Pivot.x
@@ -91,6 +91,18 @@ PrefabInstance:
     - target: {fileID: 3212719076665117547, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3410502591710730724, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3410502591710730724, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3410502591710730724, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -5,6 +5,7 @@ using Controller;
 using Model.Tetri;
 using UI.Resource;
 using Model;
+using System.Collections;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
@@ -58,15 +59,16 @@ public class TetriController : MonoBehaviour
         // 1. 调用OperationTableSO的方法设置一个新的Tetri
         bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
 
-        // 2. 解除currentDraggingTetri状态
-        currentDraggingTetri = default;
-        assemblyMouseFollower.StopFollowing();
-
         if (isPlaced)
         {
-            tetriResource.UseTetri(item);
-
+            StartCoroutine(DelayedUseTetri(item));
         }
+    }
+
+    private IEnumerator DelayedUseTetri(ItemSlot item)
+    {
+        yield return new WaitForEndOfFrame(); // 等待当前帧结束
+        tetriResource.UseTetri(item);
     }
 
     private void HandleTetriBeginDrag(ItemSlot item)
@@ -77,10 +79,17 @@ public class TetriController : MonoBehaviour
         assemblyMouseFollower.StartFollowing();
     }
 
+    private void HandleTetriEndDrag(ItemSlot item)
+    {
+        currentDraggingTetri = default;
+        assemblyMouseFollower.StopFollowing();
+    }
+
     private void InitializeResourcesPanel()
     {
         tetriResource.Initialize();
         tetriResource.OnTetriBegainDrag += HandleTetriBeginDrag;
+        tetriResource.OnTetriEndDrag += HandleTetriEndDrag;
     }
 
     private void InitializeOperationTable()

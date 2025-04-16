@@ -11,6 +11,7 @@ namespace UI.Resource {
     public class Panel : MonoBehaviour
     {
         public event Action<ItemSlot> OnTetriResourceItemBeginDrag;
+        public event Action<ItemSlot> OnTetriResourceItemEndDrag; // 事件：当Tetri资源项被拖动时触发
         [SerializeField] private GameObject tetriResourceItemPrefab; // 用于显示Tetri的预制件
 
         [SerializeField] private Transform usablePanelTransform;  // Panel for available Tetris pieces
@@ -39,6 +40,7 @@ namespace UI.Resource {
                     usablePanelTransform, tetri);
                 resourceItem.OnItemClicked += HandleItemClicked;
                 resourceItem.OnItemBeginDrag += HandleItemBeginDrag;
+                resourceItem.OnItemEndDrag += HandleItemEndDrag;
                 itemList.Add(resourceItem);
             }
 
@@ -58,6 +60,8 @@ namespace UI.Resource {
                 resourceItem.OnItemClicked += HandleItemClicked;
             }
         }
+
+        
 
         public ItemSlot CreateTetrisResourceItem(Transform parent, Tetri tetri)
         {
@@ -102,25 +106,19 @@ namespace UI.Resource {
 
         private void HandleItemBeginDrag(ItemSlot item)
         {
-            int index = itemList.IndexOf(item);
-            if (index == -1)
-            {
-                // ResetDraggedItem();
-                return;
-            }
-            OnTetriResourceItemBeginDrag?.Invoke(itemList[index]);
+            
+            OnTetriResourceItemBeginDrag?.Invoke(item);
         }
 
-        private void ResetDraggedItem()
+        private void HandleItemEndDrag(ItemSlot item)
         {
-            throw new NotImplementedException();
+            OnTetriResourceItemEndDrag?.Invoke(item);
         }
+
 
         private void HandleItemClicked(ItemSlot item)
         {
-            // int index = item.transform.GetSiblingIndex();
-            // Tetri tetri = tetriList[index];
-            // OnTetriClicked?.Invoke(tetri);
+            
         }
 
         internal void ResetTab()

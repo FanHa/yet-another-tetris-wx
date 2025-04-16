@@ -97,10 +97,6 @@ namespace Model {
             }
         }
 
-        public void SetTetriDragged(Tetri.Tetri tetri)
-        {
-        }
-
         public void DrawRandomTetriFromUnusedList(int count)
         {
             if (unusedTetriList.Count < count)
@@ -219,5 +215,6 @@ namespace Model {
                 unusedTetriList.Remove(tetri);
             }
         }
+
     }
 }

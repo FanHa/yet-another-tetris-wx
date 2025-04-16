@@ -10,9 +10,11 @@ namespace Controller
         [SerializeField] private Model.TetrisResources tetrisResourcesData;
         [SerializeField] private UI.Resource.Panel tetrisResourcePanelUI;
         public event Action<ItemSlot> OnTetriBegainDrag;
+        public event Action<ItemSlot> OnTetriEndDrag;
         public void Initialize()
         {
             tetrisResourcePanelUI.OnTetriResourceItemBeginDrag += HandleTetriBeginDrag;
+            tetrisResourcePanelUI.OnTetriResourceItemEndDrag += HandleTetriEndDrag;
             tetrisResourcesData.OnDataChanged += UpdateResourcesPanelUI;
             tetrisResourcesData.Reset();
             tetrisResourcesData.DrawRandomTetriFromUnusedList(3);
@@ -31,11 +33,13 @@ namespace Controller
 
         private void HandleTetriBeginDrag(ItemSlot item)
         {
-
-            // 调用TetrisResourcesSO的方法设置某个Tetri被拖动
-            tetrisResourcesData.SetTetriDragged(item.GetTetri());
             OnTetriBegainDrag?.Invoke(item);
 
+        }
+
+        private void HandleTetriEndDrag(ItemSlot item)
+        {
+            OnTetriEndDrag?.Invoke(item);
         }
 
         private void UpdateResourcesPanelUI()

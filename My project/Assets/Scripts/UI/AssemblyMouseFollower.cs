@@ -83,6 +83,10 @@ namespace UI
         // 关闭跟随
         public void StopFollowing()
         {
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
             isFollowing = false;
             transform.gameObject.SetActive(false);
         }
