@@ -10,9 +10,6 @@ namespace UI
 
         private void Awake() {
             outline = GetComponent<Outline>(); // 获取轮廓组件
-            if (outline != null) {
-                outline.enabled = false; // 初始化时禁用轮廓
-            }
         }
         public void SetImage(Sprite sprite) {
             if (image != null) {
@@ -34,12 +31,11 @@ namespace UI
             }
         }
 
-        public void ShowOutline() {
+        public void SetCellOutLineColor(Color color){
             if (outline != null) {
-                outline.enabled = true; // 显示轮廓
+                outline.effectColor = color; // 设置轮廓颜色为红色
             }
         }
-
 
     }
 }

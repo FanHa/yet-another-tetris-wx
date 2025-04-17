@@ -172,6 +172,8 @@ MonoBehaviour:
   previewPrefab: {fileID: 7578777165251633043, guid: 7738e5ee486b77242b9ba0d2d6a3ab5e, type: 3}
   tetriCellPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
   spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  colorNew: {r: 0.21960784, g: 0.8509804, b: 0.6627451, a: 1}
+  colorUpgrade: {r: 0.9607843, g: 0.7607843, b: 0.25882354, a: 1}
 --- !u!1 &28250502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3509,15 +3511,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00035146085
+      value: 0.00027347766
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00035146085
+      value: 0.00027347766
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00035146085
+      value: 0.00027347766
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

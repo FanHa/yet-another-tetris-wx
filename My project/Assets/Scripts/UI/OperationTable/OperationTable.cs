@@ -16,8 +16,7 @@ namespace UI {
 
         [SerializeField] private GridLayoutGroup container; // 用于布局的GridLayoutGroup
         [SerializeField] private GameObject CellPrefab;
-        [SerializeField] private GameObject EmptyCellPrefab;
-
+        [SerializeField] private GameObject CharacterHaloPrefab; // 角色光环预制件
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
@@ -35,23 +34,28 @@ namespace UI {
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    Model.Tetri.Cell cell = board[x, y];
-                    GameObject newCell;
-                    
-
-                    if (cell is not Empty)
+                    Model.Tetri.Cell cellData = board[x, y];
+                    GameObject newCell = Instantiate(CellPrefab, container.transform);
+                    UI.Cell cellComponent = newCell.GetComponent<UI.Cell>();
+                    if (cellData is not Empty)
                     {
-                        // 创建 placedCell
-                        newCell = Instantiate(CellPrefab, container.transform);
-                        UI.Cell cellComponent = newCell.GetComponent<UI.Cell>();
+                        
                         if (cellComponent != null)
                         {
-                            cellComponent.SetImage(spriteMapping.GetSprite(cell));
+                            cellComponent.SetImage(spriteMapping.GetSprite(cellData));
+                        }
+                        if (cellData is Model.Tetri.Character)
+                        {
+                            GameObject halo = Instantiate(CharacterHaloPrefab, newCell.transform);
+                            Canvas haloCanvas = halo.AddComponent<Canvas>();
+                            haloCanvas.overrideSorting = true;
+                            haloCanvas.sortingOrder = 100; // 设置较高的排序值
+                            halo.transform.localPosition = Vector3.zero; // 确保光环居中
                         }
                     }
                     else
                     {
-                        Instantiate(CellPrefab, container.transform);
+                        cellComponent.SetTransparent(); // 设置单元格为透明
                     }
                 }
             }

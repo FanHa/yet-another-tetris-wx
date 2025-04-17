@@ -8,6 +8,8 @@ namespace Controller {
         [SerializeField] private GameObject previewPrefab;
         [SerializeField] private GameObject tetriCellPrefab;
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping;
+        [SerializeField] private Color colorNew;
+        [SerializeField] private Color colorUpgrade;
 
         public GameObject GenerateTetriPreview(Tetri tetri, Vector2? gridSize = null)
         {
@@ -36,6 +38,7 @@ namespace Controller {
                         if (sprite != null)
                         {
                             cellComponent.SetImage(sprite); // Set the image for the cell
+                            cellComponent.SetCellOutLineColor(colorNew); // Show outline
                         }
                     }
                     else 
@@ -55,6 +58,7 @@ namespace Controller {
 
             Sprite sprite = spriteMapping.GetSprite(character);
             cellComponent.SetImage(sprite); // Set the image for the character cell
+            cellComponent.SetCellOutLineColor(colorNew); // Show outline
             return preview;
         }
 
@@ -87,7 +91,7 @@ namespace Controller {
                         if (sprite != null)
                         {
                             cellComponent.SetImage(sprite); // 设置新单元格的图像
-                            cellComponent.ShowOutline(); // 显示轮廓
+                            cellComponent.SetCellOutLineColor(colorUpgrade); // 显示轮廓
                         }
                     }
                     else if (cell is not Empty) // 如果是普通的非空单元格
