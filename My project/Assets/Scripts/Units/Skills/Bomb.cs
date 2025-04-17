@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
@@ -23,11 +24,17 @@ namespace Units.Skills
             var bomb = bombInstance.GetComponent<Units.Projectiles.Bomb>();
             if (bomb != null)
             {
-                bomb.caster = caster;
                 bomb.faction = caster.faction;
                 bomb.target = new GameObject("BombTarget").transform;
                 bomb.target.position = targetEnemy.position;
-                bomb.damage = new Damages.Damage(damage, Name(), false);
+                bomb.damage = new Damages.Damage(
+                    damage, 
+                    Name(),
+                    Damages.DamageType.Skill,
+                    caster,
+                    null,
+                    new List<Buffs.Buff>()
+                );
                 bomb.explosionRadius = explosionRadius;
                 bomb.speed = speed;
             }

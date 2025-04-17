@@ -26,7 +26,7 @@ namespace Units.Buffs
 
         public override string Description()
         {
-            return $"攻击附带灼烧效果, 造成{damagePerSecond} 伤害每秒, 持续{duration}秒";
+            return $"{damagePerSecond} 伤害每秒, 持续{duration}秒";
         }
 
         public override void Remove(Unit unit)
@@ -36,7 +36,14 @@ namespace Units.Buffs
 
         public override void Affect(Unit target)
         {
-            target.TakeDamage(source, new Damages.Damage(damagePerSecond, Name(), false)); // 施加伤害
+            target.TakeDamage(new Damages.Damage(
+                damagePerSecond,
+                Name(),
+                Damages.DamageType.Skill,
+                source,
+                target,
+                new List<Buffs.Buff>())
+            ); // 施加伤害
         }
 
         public override Type TetriCellType => typeof(Model.Tetri.Burn); // Return the Type of the corresponding TetriCell

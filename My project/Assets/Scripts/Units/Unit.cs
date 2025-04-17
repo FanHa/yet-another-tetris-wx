@@ -28,10 +28,7 @@ namespace Units
 
         public event Action<Unit> OnDeath;
 
-        public event Action<Damages.EventArgs> OnDamageTaken;
-
-
-        public event Action<Unit> OnAttacked; // 被攻击事件
+        public event Action<Damages.Damage> OnDamageTaken;
 
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
@@ -241,21 +238,28 @@ namespace Units
             }
         }
 
-        private void Attack(Unit target, float damage)
+        private void Attack(Unit target, float damageValue)
         {
             if (Attributes.IsRanged)
             {
                 // 发射投射物
-                FireProjectile(target, damage);
+                FireProjectile(target, damageValue);
             }
             else
             {
                 // 近战攻击逻辑
-                target.TakeHit(this, new Damages.Damage(damage, "近战攻击", true), attackEffects);
+                Damages.Damage damage = new Damages.Damage(
+                    damageValue, 
+                    "近战攻击",
+                    Damages.DamageType.Hit,
+                    this,
+                    target,
+                    attackEffects);
+                target.TakeDamage(damage);
             }
         }
 
-        private void FireProjectile(Unit target, float damage)
+        private void FireProjectile(Unit target, float damageValue)
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)
             {
@@ -265,9 +269,13 @@ namespace Units
                 if (projectile != null)
                 {
                     projectile.target = target.transform;
-                    projectile.damage = new Damages.Damage(damage, "远程攻击", true); // 设置投射物的伤害
-                    projectile.debuffs = new List<Buffs.Buff>(attackEffects); // 传递攻击效果作为Debuff
-                    projectile.caster = this; // 设置投射物的施法者
+                    projectile.damage = new Damages.Damage(
+                        damageValue,
+                        "远程攻击",
+                        Damages.DamageType.Hit,
+                        this,
+                        target,
+                        attackEffects); // 设置投射物的伤害
 
                     // 设置投射物的 Sprite 为 Fist1SpriteRenderer 的 Sprite
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
@@ -283,30 +291,32 @@ namespace Units
 
 
 
-        public virtual void TakeHit(Unit source, Units.Damages.Damage  damageReceived, List<Buffs.Buff> buffs)
-        {
-            foreach (var buff in buffs)
+        // public virtual void TakeHit(Units.Damages.Damage  damageReceived)
+        // {
+        //     foreach (Buff buff in damageReceived.Buffs)
+        //     {
+        //         AddBuff(buff); // 添加Debuff到自己身上
+        //     }
+        //     TakeDamage(damageReceived); // 扣除生命值
+        //     hitEffect.PlayAll();
+        // }
+
+        public void TakeDamage(Units.Damages.Damage damageReceived)
+        {   foreach (Buff buff in damageReceived.Buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上
             }
-            TakeDamage(source, damageReceived); // 扣除生命值
-            hitEffect.PlayAll();
-            OnAttacked?.Invoke(source); // 触发被攻击事件
-        }
-
-        public void TakeDamage(Unit source, Units.Damages.Damage damageReceived)
-        {   
             foreach (var behavior in damageBehaviors)
             {
-                damageReceived = behavior.ModifyDamage(source, damageReceived);
+                damageReceived = behavior.ModifyDamage(damageReceived);
             }
 
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
             Attributes.CurrentHealth -= finalDamage;
             
-            OnDamageTaken?.Invoke(new Damages.EventArgs(source, this, damageReceived));
-
+            OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
+            hitEffect.PlayAll();
             CheckHealth();
         }
 

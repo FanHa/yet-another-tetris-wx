@@ -140,17 +140,16 @@ namespace Controller {
             unit.Initialize();
         }
 
-        private void HandleDamageTaken(Units.Damages.EventArgs args)
+        private void HandleDamageTaken(Units.Damages.Damage damage)
         {
-            ShowDamageText(args.Target.transform.position, args.Damage.Value);
-            if (args.Source == null || args.Source.faction != Unit.Faction.FactionA)
+            ShowDamageText(damage.TargetUnit.transform.position, damage.Value);
+            if (damage.SourceName == null || damage.SourceUnit.faction != Unit.Faction.FactionA)
                 return;
-            string sourceName = args.Source.name;
-            if (!unitStatistics.ContainsKey(sourceName))
+            if (!unitStatistics.ContainsKey(damage.SourceName))
             {
-                unitStatistics[sourceName] = new Units.Statistics(sourceName);
+                unitStatistics[damage.SourceName] = new Units.Statistics(damage.SourceName);
             }
-            unitStatistics[sourceName].AddDamage(args.Damage.DamageType, args.Damage.Value);
+            unitStatistics[damage.SourceName].AddDamage(damage.SourceName, damage.Value);
         }
 
         private void ShowDamageText(Vector3 worldPosition, float damage)

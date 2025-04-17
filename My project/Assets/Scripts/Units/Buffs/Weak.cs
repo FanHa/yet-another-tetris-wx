@@ -17,11 +17,18 @@ namespace Units.Buffs
                 this.damageIncreasePercentage = damageIncreasePercentage;
             }
 
-            public Damages.Damage ModifyDamage(Unit source, Damages.Damage damage)
+            public Damages.Damage ModifyDamage(Damages.Damage damage)
             {
                 // 增加伤害
                 float increasedDamage = damage.Value * (1 + damageIncreasePercentage / 100f);
-                return new Damages.Damage(increasedDamage, damage.DamageType, damage.CanBeReflected);
+                return new Damages.Damage(
+                    increasedDamage,
+                    damage.SourceName, // 继承原始伤害的来源名称
+                    damage.Type,       // 继承原始伤害的类型
+                    damage.SourceUnit, // 继承原始伤害的来源单位
+                    damage.TargetUnit, // 继承原始伤害的目标单位
+                    damage.Buffs       // 继承原始伤害的 Buff 列表
+                );
             }
         }
         private DamageIncreaseBehavior damageIncreaseBehavior;

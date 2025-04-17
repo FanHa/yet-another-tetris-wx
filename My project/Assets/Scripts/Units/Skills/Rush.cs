@@ -61,11 +61,14 @@ namespace Units.Skills
                         Units.Damages.Damage damage = new Units.Damages.Damage(
                              caster.Attributes.AttackPower.finalValue + rushSpeed * damageMultipierBySpeed,
                              Name(),
-                             false
+                            Units.Damages.DamageType.Skill,
+                            caster,
+                            enemyUnit,
+                            new List<Units.Buffs.Buff>() // 这里可以添加 Buffs
                         );
 
                         // 对敌人造成伤害
-                        enemyUnit.TakeHit(caster, damage, caster.attackEffects);
+                        enemyUnit.TakeDamage(damage);
 
                         // 记录已碰撞的敌人
                         hitEnemies.Add(enemyUnit);

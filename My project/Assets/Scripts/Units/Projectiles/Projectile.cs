@@ -8,9 +8,6 @@ namespace Units.Projectiles
         public Transform target; // 目标物体
         public float speed = 4f; // 移动速度
         public Units.Damages.Damage damage; // 伤害值
-        public List<Buffs.Buff> debuffs = new List<Buffs.Buff>(); // 命中时附加的Debuff
-        public Unit caster;
-
 
         void Update()
         {
@@ -42,7 +39,7 @@ namespace Units.Projectiles
             var targetUnit = target.GetComponent<Unit>();
             if (targetUnit != null)
             {
-                targetUnit.TakeHit(caster, damage, debuffs);
+                targetUnit.TakeDamage(damage);
             }
             // 销毁投射物
             Destroy(gameObject);

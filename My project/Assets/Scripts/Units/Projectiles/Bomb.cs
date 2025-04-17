@@ -28,8 +28,17 @@ namespace Units.Projectiles
                 var unit = collider.GetComponent<Unit>();
                 if (unit != null && unit.faction != faction)
                 {
+                    var explosionDamage = new Units.Damages.Damage(
+                        damage.Value,
+                        damage.SourceName,
+                        damage.Type,
+                        damage.SourceUnit,
+                        unit, // 设置为当前爆炸范围内的敌人
+                        new List<Buffs.Buff>()
+                    );
+
                     // 对敌人造成伤害
-                    unit.TakeDamage(caster, damage);
+                    unit.TakeDamage(explosionDamage);
                 }
             }
 

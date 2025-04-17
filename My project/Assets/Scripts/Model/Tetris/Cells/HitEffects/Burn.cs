@@ -14,7 +14,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return burnInstance.Description();
+            return "攻击附带效果: " + burnInstance.Description();
         }
 
         public override string Name()

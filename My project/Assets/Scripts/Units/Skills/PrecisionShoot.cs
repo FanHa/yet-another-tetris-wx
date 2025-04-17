@@ -23,13 +23,18 @@ namespace Units.Skills
 
             Unit targetEnemy = enemiesInRange.First();
             GameObject projectileInstance = Object.Instantiate(caster.PrecisionArrowPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
-            var projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
+            Units.Projectiles.Projectile projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
                 projectile.target = targetEnemy.transform;
-                projectile.damage = new Damages.Damage(caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, Name(), false);
+                projectile.damage = new Damages.Damage(
+                    caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, 
+                    Name(),
+                    Damages.DamageType.Hit,
+                    caster,
+                    targetEnemy,
+                    caster.attackEffects);
                 projectile.speed = speed;
-                projectile.caster = caster;
             }
         }
 

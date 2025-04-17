@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Units;
 using Units.Damages;
 
@@ -14,23 +15,29 @@ namespace Model.Tetri
             unit.OnDamageTaken += HandleReflectDamage;
         }
 
-        private void HandleReflectDamage(Units.Damages.EventArgs args)
+        private void HandleReflectDamage(Units.Damages.Damage damage)
         {
-            if (args.Damage.CanBeReflected)
+            if (damage.Type == DamageType.Hit)
             {
-                var reflectDamage = new Damage(args.Damage.Value * reflectPercentage / 100, "尖刺", false);
-                args.Source.TakeDamage(args.Target, reflectDamage);
+                var reflectDamage = new Damage(
+                    damage.Value * reflectPercentage / 100, 
+                    Name(), 
+                    DamageType.Skill,
+                    damage.TargetUnit,
+                    damage.SourceUnit,
+                    new List<Units.Buffs.Buff>());
+                damage.SourceUnit.TakeDamage(reflectDamage);
             }
         }
 
         public override string Name()
         {
-            return "技能: 尖刺";
+            return "尖刺";
         }
 
         public override string Description()
         {
-            return $"受到伤害时反弹 {reflectPercentage}% 伤害给攻击者";
+            return $"受到攻击伤害时反弹 {reflectPercentage}% 伤害给攻击者";
         }
     }
 }

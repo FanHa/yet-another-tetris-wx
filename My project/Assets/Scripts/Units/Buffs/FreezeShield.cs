@@ -1,4 +1,5 @@
 using System;
+using Units.Damages;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -25,24 +26,25 @@ namespace Units.Buffs
         public override void Apply(Unit unit)
         {
             // 绑定 OnAttacked 事件，当单位被攻击时触发
-            unit.OnAttacked += ApplyFreezeDebuff;
+            unit.OnDamageTaken += ApplyFreezeDebuff;
         }
 
         public override void Remove(Unit unit)
         {
             // 解绑 OnAttacked 事件
-            unit.OnAttacked -= ApplyFreezeDebuff;
+            unit.OnDamageTaken -= ApplyFreezeDebuff;
         }
 
-        private void ApplyFreezeDebuff(Unit attacker)
+        private void ApplyFreezeDebuff(Damage damage)
         {
-            if (attacker == null) return;
+            if (damage.Type == DamageType.Hit) {
+                Buff freezeDebuff = new Freeze();
+                // 给攻击者添加 Freeze Debuff
+                damage.SourceUnit.AddBuff(freezeDebuff);
+            }
 
-            // 创建 Freeze Debuff
-            Buff freezeDebuff = new Freeze();
 
-            // 给攻击者添加 Freeze Debuff
-            attacker.AddBuff(freezeDebuff);
+            
         }
 
         public override void Affect(Unit unit)
