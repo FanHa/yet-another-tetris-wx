@@ -86,12 +86,12 @@ namespace Units
         {
             if (isActive)
             {
+                // 如果有目标敌人，移动到最近的敌人
                 if (targetEnemies != null && targetEnemies.Count > 0)
                 {
                     Transform closestEnemy = targetEnemies[0];
-                    movementController.MoveTowardsEnemy(closestEnemy, targetEnemies, faction);
+                    movementController.MoveTowardsEnemy(closestEnemy);
                 }
-                movementController.ClampPositionToBattlefield();
             }
         }
 
@@ -181,10 +181,12 @@ namespace Units
                 }
             }
 
-            // 按距离排序并选择最近的 attackTargetNumber 个敌人
-            targetEnemies = enemiesInRange
-                .OrderBy(enemy => Vector2.SqrMagnitude(enemy.position - transform.position)) // 使用平方距离排序
-                .Take((int)Attributes.AttackTargetNumber)
+            // 查找所有敌人并按距离排序
+            targetEnemies = enemyParent
+                .GetComponentsInChildren<Transform>()
+                .Where(enemy => enemy != transform && enemy.TryGetComponent<Unit>(out Unit unit) && unit.faction != faction && unit.isActiveAndEnabled)
+                .OrderBy(enemy => Vector2.SqrMagnitude(enemy.position - transform.position)) // 按平方距离排序
+                .Take((int)Attributes.AttackTargetNumber) // 选择最近的目标
                 .ToList();
         }
 
@@ -265,7 +267,7 @@ namespace Units
         {
             OnAttackHit?.Invoke(damage); // 触发攻击命中事件
         }
-        
+
         private void FireProjectile(Unit target, float damageValue)
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)

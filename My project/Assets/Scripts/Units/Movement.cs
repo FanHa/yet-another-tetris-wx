@@ -22,7 +22,7 @@ namespace Units
             battlefieldMaxBounds = maxBounds;
         }
 
-        public void MoveTowardsEnemy(Transform closestEnemy, List<Transform> targetEnemies, Faction faction)
+        public void MoveTowardsEnemy(Transform closestEnemy)
         {
             if (closestEnemy == null) return;
 
@@ -31,26 +31,22 @@ namespace Units
             {
                 return;
             }
-            if (distance > minDistance)
-            {
-                // 调整自己的方向
-                Vector2 direction = (closestEnemy.position - transform.position).normalized;
+            // 计算移动方向
+            Vector2 direction = (closestEnemy.position - transform.position).normalized;
 
-                // 检查与友方单位的距离，避免扎堆
-                Vector2 adjustedDirection = AdjustDirectionToAvoidAllies(direction, faction);
+            // 调整方向以避免扎堆
+            Vector2 adjustedDirection = AdjustDirectionToAvoidUnits(direction);
 
-                // 计算下一步位置
-                Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, attributes.MoveSpeed.finalValue * Time.deltaTime);
+            // 移动单位
+            Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, attributes.MoveSpeed.finalValue * Time.deltaTime);
+            transform.position = newPosition;
 
-                // 更新位置
-                transform.position = newPosition;
-
-                // 调整朝向
-                AdjustLookDirection(adjustedDirection);
-            }
+            // 调整朝向
+            AdjustLookDirection(adjustedDirection);
+            ClampPositionToBattlefield();
         }
 
-        public void ClampPositionToBattlefield()
+        private void ClampPositionToBattlefield()
         {
             if (battlefieldMinBounds == null || battlefieldMaxBounds == null)
             {
@@ -64,9 +60,9 @@ namespace Units
             transform.position = clampedPosition;
         }
 
-        private Vector2 AdjustDirectionToAvoidAllies(Vector2 originalDirection, Faction faction)
+        private Vector2 AdjustDirectionToAvoidUnits(Vector2 originalDirection)
         {
-            // 获取所有友方单位
+            // 获取附近的单位
             Collider2D[] nearbyUnits = Physics2D.OverlapCircleAll(transform.position, minDistance);
 
             Vector2 avoidanceVector = Vector2.zero;
@@ -76,16 +72,10 @@ namespace Units
             {
                 if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit otherUnit))
                 {
-                    // 检查是否为友方单位
-                    if (otherUnit.faction == faction)
-                    {
-                        // 计算与友方单位的方向
-                        Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
-
-                        // 累加避让方向
-                        avoidanceVector += toOtherUnit.normalized;
-                        avoidanceCount++;
-                    }
+                    // 计算避让方向
+                    Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
+                    avoidanceVector += toOtherUnit.normalized;
+                    avoidanceCount++;
                 }
             }
 
@@ -94,7 +84,7 @@ namespace Units
                 // 平均避让方向
                 avoidanceVector /= avoidanceCount;
 
-                // 调整原始方向，加入避让向量
+                // 调整原始方向
                 return (originalDirection + avoidanceVector).normalized;
             }
 

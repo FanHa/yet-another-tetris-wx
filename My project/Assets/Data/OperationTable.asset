@@ -18,5 +18,5 @@ MonoBehaviour:
   initialCells:
   - typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  - typeName: Model.Tetri.RangeAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
