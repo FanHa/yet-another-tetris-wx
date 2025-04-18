@@ -29,6 +29,7 @@ namespace Units
         public event Action<Unit> OnDeath;
 
         public event Action<Damages.Damage> OnDamageTaken;
+        public event Action<Damages.Damage> OnAttackHit;
 
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
@@ -39,7 +40,7 @@ namespace Units
 
         // [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
         [SerializeField] private SpriteRenderer bodySpriteRenderer;
-        [SerializeField] private SpriteRenderer Fist1SpriteRenderer;
+        public SpriteRenderer Fist1SpriteRenderer;
         [SerializeField] private SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
         public GameObject projectilePrefab; // 投射物预制体
@@ -256,9 +257,15 @@ namespace Units
                     target,
                     attackEffects);
                 target.TakeDamage(damage);
+                OnAttackHit?.Invoke(damage);
             }
         }
 
+        public void TriggerOnAttackHit(Damages.Damage damage)
+        {
+            OnAttackHit?.Invoke(damage); // 触发攻击命中事件
+        }
+        
         private void FireProjectile(Unit target, float damageValue)
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)
@@ -290,16 +297,6 @@ namespace Units
         }
 
 
-
-        // public virtual void TakeHit(Units.Damages.Damage  damageReceived)
-        // {
-        //     foreach (Buff buff in damageReceived.Buffs)
-        //     {
-        //         AddBuff(buff); // 添加Debuff到自己身上
-        //     }
-        //     TakeDamage(damageReceived); // 扣除生命值
-        //     hitEffect.PlayAll();
-        // }
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {   foreach (Buff buff in damageReceived.Buffs)

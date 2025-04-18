@@ -145,11 +145,11 @@ namespace Controller {
             ShowDamageText(damage.TargetUnit.transform.position, damage.Value);
             if (damage.SourceName == null || damage.SourceUnit.faction != Unit.Faction.FactionA)
                 return;
-            if (!unitStatistics.ContainsKey(damage.SourceName))
+            if (!unitStatistics.ContainsKey(damage.SourceUnit.name))
             {
-                unitStatistics[damage.SourceName] = new Units.Statistics(damage.SourceName);
+                unitStatistics[damage.SourceUnit.name] = new Units.Statistics(damage.SourceUnit.name);
             }
-            unitStatistics[damage.SourceName].AddDamage(damage.SourceName, damage.Value);
+            unitStatistics[damage.SourceUnit.name].AddDamage(damage.SourceName, damage.Value);
         }
 
         private void ShowDamageText(Vector3 worldPosition, float damage)

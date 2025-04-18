@@ -101,3 +101,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Skills.ChainLightning, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 21300000, guid: b13f12d7859bcc74e916e790b066b1d6, type: 3}
+  - cellType:
+      typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -7827631244116426395, guid: 3271294aa4f615740840c8006e5d234e, type: 3}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Units.Projectiles
 {
@@ -36,10 +37,13 @@ namespace Units.Projectiles
         protected virtual void OnHitTarget()
         {
             // 对目标造成伤害
-            var targetUnit = target.GetComponent<Unit>();
+            Unit targetUnit = damage.TargetUnit;
             if (targetUnit != null)
             {
                 targetUnit.TakeDamage(damage);
+                damage.SourceUnit.TriggerOnAttackHit( damage);
+
+
             }
             // 销毁投射物
             Destroy(gameObject);
