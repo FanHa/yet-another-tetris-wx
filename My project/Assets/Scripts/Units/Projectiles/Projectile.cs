@@ -7,7 +7,7 @@ namespace Units.Projectiles
     public class Projectile : MonoBehaviour
     {
         public Transform target; // 目标物体
-        public float speed = 4f; // 移动速度
+        public float speed; // 移动速度
         public Units.Damages.Damage damage; // 伤害值
 
         void Update()

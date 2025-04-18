@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 6680883607149148754}
   - component: {fileID: 6639960923789183456}
   - component: {fileID: 7858423843027690403}
-  - component: {fileID: 8218584219183622619}
+  - component: {fileID: -5405870382564043041}
+  - component: {fileID: -6820976116993920824}
+  - component: {fileID: 8186533931151600296}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: Projectile
@@ -48,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 5
+  speed: 4
 --- !u!212 &7858423843027690403
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -103,7 +105,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!96 &8218584219183622619
+--- !u!114 &-5405870382564043041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524986292476145452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceca5621463eefa4ca308efae268af52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostPrefab: {fileID: 6524986292476145452, guid: e059b992e6d820d4e803dd09a9206402, type: 3}
+  spawnRate: 0.05
+--- !u!96 &-6820976116993920824
 TrailRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -126,7 +142,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,8 +163,8 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.2
-  m_PreviewTimeScale: 0.5
+  m_Time: 0.3
+  m_PreviewTimeScale: 0
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -156,8 +172,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.3472252
+        time: 0.006095886
+        value: 0.090278625
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -203,7 +219,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -218,3 +234,15 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &8186533931151600296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6524986292476145452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d146c41231dfbd04493f785575ca351f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
