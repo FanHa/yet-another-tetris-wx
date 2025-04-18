@@ -9,14 +9,16 @@ namespace Units
     public class Attribute
     {
         [SerializeField] private float baseValue; // 基础值
-        [SerializeField] private Dictionary<object, float> flatModifiers = new Dictionary<object, float>(); // 绝对值修改来源
-        [SerializeField] private Dictionary<object, float> percentageModifiers = new Dictionary<object, float>(); // 百分比修改来源
+        [SerializeField] private Dictionary<object, float> flatModifiers; // 绝对值修改来源
+        [SerializeField] private Dictionary<object, float> percentageModifiers; // 百分比修改来源
 
         [SerializeField] public float finalValue;
 
         public Attribute(float baseValue)
         {
             this.baseValue = baseValue;
+            this.flatModifiers = new Dictionary<object, float>();
+            this.percentageModifiers = new Dictionary<object, float>();
             RecalculateFinalValue();
         }
 
