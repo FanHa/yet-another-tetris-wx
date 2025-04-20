@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Units.Skills
         public int SkillsCount => skills.Count;
         
         public float CooldownRevisePercentage = 100f;
+        private Skill readySkill;
 
         public void Initialize(Unit owner)
         {
@@ -32,16 +34,24 @@ namespace Units.Skills
             skills.Add(newSkill);
         }
 
-        public void CastSkills()
+        public void CastSkill()
         {
-            foreach (var skill in skills)
+            if (readySkill != null)
             {
-                if (skill.IsReady())
-                {
-                    skill.Execute(owner);
-                }
+                readySkill.Execute(owner); // 执行保存的技能
+                readySkill = null; // 重置就绪技能
             }
         }
 
+        public bool IsSkillReady()
+        {
+            if (readySkill != null)
+            {
+                return false;
+            }
+            readySkill = skills.FirstOrDefault(skill => skill.IsReady()); // 找到第一个就绪的技能
+            return readySkill != null; // 如果找到就绪技能，返回 true
+
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace Units
             animator.SetTrigger("Attack");
         }
 
+        public void TriggerCastSkill()
+        {
+            animator.SetTrigger("CastSkill");
+        }
+
         public void SetLookDirection(Vector2 direction)
         {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

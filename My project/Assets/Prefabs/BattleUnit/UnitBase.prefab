@@ -1171,6 +1171,7 @@ MonoBehaviour:
     AttackTargetNumber: 1
     AttackRange: 0.5
     IsRanged: 0
+  BuffManager: {fileID: 0}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0
@@ -1256,6 +1257,7 @@ MonoBehaviour:
   buffViewerParent: {fileID: 7858934183165652001}
   buffViewerPrefab: {fileID: 8274040249548898299, guid: edd429be709cf0648806abc88f4856bb, type: 3}
   tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  DurationRevisePercentage: 100
 --- !u!114 &2563475565724937826
 MonoBehaviour:
   m_ObjectHideFlags: 0

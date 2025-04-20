@@ -8,7 +8,7 @@ namespace Units.Buffs
         protected float durationSeconds; // Duration of the buff
         public float DurationRevisePercentage = 100f;
 
-        public virtual float Duration() => durationSeconds * DurationRevisePercentage; // Virtual method for duration
+        public virtual float Duration() => durationSeconds * DurationRevisePercentage / 100; // Virtual method for duration
     
         public abstract string Name();
         private float startTime = 0; // Time when the buff was applied

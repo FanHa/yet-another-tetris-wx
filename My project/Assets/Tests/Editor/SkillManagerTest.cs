@@ -50,7 +50,7 @@ public class SkillManagerTests
         skillManager.Initialize(mockUnit);
 
         // Act
-        skillManager.CastSkills();
+        skillManager.CastSkill();
 
         // Assert
         Assert.IsTrue(mockSkill.IsExecuted, "Skill should be executed if it is ready.");
@@ -73,11 +73,11 @@ public class SkillManagerTests
     public void CastSkills_ShouldDoNothing_WhenNoSkillsAreAdded()
     {
         // Act
-        skillManager.CastSkills();
+        skillManager.CastSkill();
 
         // Assert
         // 如果没有技能，CastSkills 不应该抛出异常或执行任何操作
-        Assert.Pass("CastSkills executed without errors when no skills were added.");
+        Assert.Pass("CastSkill executed without errors when no skills were added.");
     }
 
     [Test]
@@ -89,8 +89,8 @@ public class SkillManagerTests
         skillManager.Initialize(mockUnit);
 
         // Act
-        skillManager.CastSkills(); // 第一次释放技能
-        skillManager.CastSkills(); // 再次尝试释放技能
+        skillManager.CastSkill(); // 第一次释放技能
+        skillManager.CastSkill(); // 再次尝试释放技能
 
         // Assert
         Assert.AreEqual(1, skillWithCooldown.ExecutionCount, "Skill should not execute again if it is not ready.");
@@ -107,16 +107,16 @@ public class SkillManagerTests
         skillManager.Initialize(mockUnit);
 
         // Act
-        skillManager.CastSkills(); // 第一次释放技能
+        skillManager.CastSkill(); // 第一次释放技能
         skillWithCooldown.AdvanceCooldown(1f); // 模拟冷却时间推进 1 秒
-        skillManager.CastSkills(); // 再次尝试释放技能
+        skillManager.CastSkill(); // 再次尝试释放技能
 
         // Assert
         Assert.AreEqual(1, skillWithCooldown.ExecutionCount, "Skill should not execute again if cooldown is not fully reduced.");
         
         // 模拟冷却时间推进足够时间
         skillWithCooldown.AdvanceCooldown(skillWithCooldown.OriginalCooldown / 2f);
-        skillManager.CastSkills(); // 再次尝试释放技能
+        skillManager.CastSkill(); // 再次尝试释放技能
         Assert.AreEqual(2, skillWithCooldown.ExecutionCount, "Skill should execute again after cooldown is reduced by CooldownRevisePercentage.");
     }
 
