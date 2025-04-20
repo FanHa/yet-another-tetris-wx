@@ -6,16 +6,14 @@ namespace Units.Buffs
 {
     public class FreezeShield : Buff
     {
-        private float duration = 8f; // Freeze Debuff 持续时间
+        public FreezeShield()
+        {
+            durationSeconds = 8f; // Freeze Debuff 持续时间
+        }
 
         public override string Name()
         {
             return "冰霜护盾";
-        }
-
-        public override float Duration()
-        {
-            return duration; // Buff 的持续时间
         }
 
         public override string Description()

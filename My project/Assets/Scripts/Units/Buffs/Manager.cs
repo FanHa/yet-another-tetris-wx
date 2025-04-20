@@ -13,7 +13,7 @@ namespace Units.Buffs
         private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>();
         private Dictionary<string, BuffViewer> buffViewers = new Dictionary<string, BuffViewer>();
 
-
+        public float DurationRevisePercentage;
         public void AddBuff(Buff buff, Unit unit)
         {
             if (activeBuffs.TryGetValue(buff.Name(), out var existingBuff))
@@ -25,6 +25,7 @@ namespace Units.Buffs
             {
                 // 添加新的状态并立即应用
                 activeBuffs[buff.Name()] = buff;
+                buff.DurationRevisePercentage = DurationRevisePercentage;
                 buff.RefreshDuration();
                 buff.Apply(unit);
 

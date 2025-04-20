@@ -7,7 +7,12 @@ namespace Units.Buffs
     {
         public float attackReductionPercentage = 10f; // 攻击力减少百分比
         public float damageTakenIncreasePercentage = 10f; // 受到的伤害增加百分比
-        private float duration = 10f; // 持续时间
+
+        public Weak()
+        {
+            durationSeconds = 10f; // 持续时间
+        }
+
         private class DamageIncreaseBehavior : ITakeDamageBehavior
         {
             private float damageIncreasePercentage;
@@ -40,14 +45,9 @@ namespace Units.Buffs
             return "虚弱";
         }
 
-        public override float Duration()
-        {
-            return duration;
-        }
-
         public override string Description()
         {
-            return $"减少目标攻击力{attackReductionPercentage}%，增加目标受到的伤害{damageTakenIncreasePercentage}%，持续{duration}秒";
+            return $"减少目标攻击力{attackReductionPercentage}%，增加目标受到的伤害{damageTakenIncreasePercentage}%，持续{durationSeconds}秒";
         }
 
         public override void Apply(Unit unit)

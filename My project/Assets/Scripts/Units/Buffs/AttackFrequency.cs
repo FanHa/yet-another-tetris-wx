@@ -5,16 +5,15 @@ namespace Units.Buffs
     public class AttackFrequency : Buff
     {
         private float attackSpeedIncreasePercentage = 50f; // 攻速增加百分比
-        private float durationSeconds = 10f; // 持续时间
+
+        public AttackFrequency()
+        {
+            durationSeconds = 10f; // 持续时间
+        }
 
         public override string Name()
         {
             return "攻击频率模块";
-        }
-
-        public override float Duration()
-        {
-            return durationSeconds;
         }
 
         public override string Description()
@@ -30,7 +29,6 @@ namespace Units.Buffs
         public override void Remove(Unit unit)
         {
             unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-
         }
 
         public override void Affect(Unit unit)

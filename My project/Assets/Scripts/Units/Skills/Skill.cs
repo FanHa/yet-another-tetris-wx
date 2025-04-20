@@ -27,9 +27,10 @@ namespace Units.Skills
 
         public abstract string Description();
 
-        public virtual void Init(){
+        public virtual void Init(float baseCoolDownPercentage){
             // 初始化技能
             lastUsedTime = Time.time;
+            cooldown = cooldown * baseCoolDownPercentage / 100;
         }
 
         /// <summary>

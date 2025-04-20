@@ -6,21 +6,20 @@ namespace Units.Buffs
     {
         private float moveSpeedReductionPercentage = 20f;
         private float attackSpeedReductionPercentage = 20f;
-        public float freezeDurationSeconds = 8f; // 冻结持续时间
+
+        public Freeze()
+        {
+            durationSeconds = 8f; // 冻结持续时间
+        }
 
         public override string Name()
         {
             return "冰霜";
         }
 
-        public override float Duration()
-        {
-            return freezeDurationSeconds;
-        }
-
         public override string Description()
         {
-            return $"降低目标移动速度{moveSpeedReductionPercentage}%, 降低目标攻击速度{attackSpeedReductionPercentage}%, 持续{freezeDurationSeconds}秒";
+            return $"降低目标移动速度{moveSpeedReductionPercentage}%, 降低目标攻击速度{attackSpeedReductionPercentage}%, 持续{durationSeconds}秒";
         }
 
         public override void Apply(Unit unit)

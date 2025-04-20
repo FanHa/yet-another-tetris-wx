@@ -9,7 +9,7 @@ public class MockSkill : Skill
     public Unit BoundUnit { get; private set; }
 
 
-    public override void Init()
+    public override void Init(float baseCoolDownPercentage)
     {
         IsInitialized = true;
     }
@@ -43,23 +43,30 @@ public class MockSkill : Skill
 
 public class MockSkillWithCooldown : Skill
 {
-    public int ExecutionCount { get; private set; }
-    private float lastExecutionTime;
+    public int ExecutionCount { get; private set; } = 0;
+    public float OriginalCooldown  = 2f; // 原始冷却时间
+    private float remainingCooldown = 0f;
 
-    public override void Init()
+    public override void Init(float cooldownRevisePercentage)
     {
-        lastExecutionTime = -10f; // 初始化为冷却完成状态
+        OriginalCooldown *= cooldownRevisePercentage / 100f;
+        remainingCooldown = 0f;
     }
 
     public override bool IsReady()
     {
-        return Time.time >= lastExecutionTime + 5f; // 冷却时间为 5 秒
+        return remainingCooldown <= 0f;
     }
 
-    public override void Execute(Unit unit)
+    public override void Execute(Unit owner)
     {
-        lastExecutionTime = Time.time;
         ExecutionCount++;
+        remainingCooldown = OriginalCooldown;
+    }
+
+    public void AdvanceCooldown(float time)
+    {
+        remainingCooldown -= time;
     }
 
     public override string Name()

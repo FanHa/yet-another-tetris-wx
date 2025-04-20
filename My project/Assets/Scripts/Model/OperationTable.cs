@@ -157,57 +157,6 @@ namespace Model
             OnTableChanged?.Invoke();
             return true;
         }
-        // public bool PlaceTetri(Vector2Int position, Tetri.Tetri tetri)
-        // {
-        //     // 调整 position，使其以 (1,1) 为基准
-        //     position -= new Vector2Int(1, 1);
-        //     // 检查是否可以放置Tetri
-        //     for (int i = 0; i < tetri.Shape.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < tetri.Shape.GetLength(1); j++)
-        //         {
-        //             if (tetri.Shape[i, j] is not Empty)
-        //             {
-        //                 int x = position.x + i; // 调整行列索引
-        //                 int y = position.y + j ; // 调整行列索引
-
-        //                 if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1) )
-        //                 {
-        //                     Debug.LogWarning("Cannot place Tetri at the specified position.");
-        //                     return false;
-        //                 }
-
-        //                 // 检查是否会覆盖 TetriCellCharacter
-        //                 if (board[x, y] is Character)
-        //                 {
-        //                     Debug.LogWarning("Cannot place Tetri at the specified position: Overlaps with TetriCellCharacter.");
-        //                     return false;
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     // 放置Tetri
-        //     for (int i = 0; i < tetri.Shape.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < tetri.Shape.GetLength(1); j++)
-        //         {
-        //             Cell cell = tetri.Shape[i, j];
-        //             if (cell is not Empty)
-        //             {
-        //                 int x = position.x + i; // 调整行列索引
-        //                 int y = position.y + j ; // 调整行列索引
-
-        //                 board[x, y] = cell;
-        //             }
-        //         }
-        //     }
-
-
-        //     // 触发事件
-        //     OnTableChanged?.Invoke();
-        //     return true;
-        // }
 
         public void UndoLastPlacement()
         {

@@ -96,4 +96,28 @@ public class SkillManagerTests
         Assert.AreEqual(1, skillWithCooldown.ExecutionCount, "Skill should not execute again if it is not ready.");
     }
 
+    [Test]
+    public void CooldownRevisePercentage_ShouldAffectSkillCooldown()
+    {
+        // Arrange
+        var skillWithCooldown = new MockSkillWithCooldown();
+        skillWithCooldown.OriginalCooldown = 3f;
+        skillManager.AddSkill(skillWithCooldown);
+        skillManager.CooldownRevisePercentage = 50f; // 冷却时间减少 50%
+        skillManager.Initialize(mockUnit);
+
+        // Act
+        skillManager.CastSkills(); // 第一次释放技能
+        skillWithCooldown.AdvanceCooldown(1f); // 模拟冷却时间推进 1 秒
+        skillManager.CastSkills(); // 再次尝试释放技能
+
+        // Assert
+        Assert.AreEqual(1, skillWithCooldown.ExecutionCount, "Skill should not execute again if cooldown is not fully reduced.");
+        
+        // 模拟冷却时间推进足够时间
+        skillWithCooldown.AdvanceCooldown(skillWithCooldown.OriginalCooldown / 2f);
+        skillManager.CastSkills(); // 再次尝试释放技能
+        Assert.AreEqual(2, skillWithCooldown.ExecutionCount, "Skill should execute again after cooldown is reduced by CooldownRevisePercentage.");
+    }
+
 }

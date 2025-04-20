@@ -9,13 +9,15 @@ namespace Units.Skills
         private List<Skill> skills = new List<Skill>();
         private Unit owner;
         public int SkillsCount => skills.Count;
+        
+        public float CooldownRevisePercentage = 100f;
 
         public void Initialize(Unit owner)
         {
             this.owner = owner;
             foreach (var skill in skills)
             {
-                skill.Init();
+                skill.Init(CooldownRevisePercentage);
             }
         }
 
@@ -40,5 +42,6 @@ namespace Units.Skills
                 }
             }
         }
+
     }
 }

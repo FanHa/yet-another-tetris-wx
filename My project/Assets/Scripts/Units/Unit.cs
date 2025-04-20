@@ -13,9 +13,9 @@ namespace Units
     public class Unit : MonoBehaviour
     {
         public Attributes Attributes;
-        private Units.Buffs.Manager buffManager;// Buff管理器
+        public Units.Buffs.Manager BuffManager;// Buff管理器
         private Movement movementController;
-        private Units.Skills.Manager skillManager = new(); // 技能管理器
+        public Units.Skills.Manager SkillManager = new(); // 技能管理器
         private AnimationController animationController;
 
         public enum Faction
@@ -67,7 +67,7 @@ namespace Units
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
             Attributes.OnHealthChanged += UpdateHealthBar;
-            buffManager = GetComponent<Units.Buffs.Manager>();
+            BuffManager = GetComponent<Units.Buffs.Manager>();
             movementController = GetComponent<Movement>();
             movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
 
@@ -103,7 +103,7 @@ namespace Units
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.5f);
 
-            skillManager.Initialize(this); // 初始化技能管理器
+            SkillManager.Initialize(this); // 初始化技能管理器
             InvokeRepeating(nameof(CastSkills) , 0f, 1f); // 每秒调用一次技能
             isActive = true;
         }
@@ -119,11 +119,11 @@ namespace Units
         
         public void AddSkill(Skills.Skill newSkill)
         {
-            skillManager.AddSkill(newSkill); // 添加技能
+            SkillManager.AddSkill(newSkill); // 添加技能
         }
         private void CastSkills()
         {
-            skillManager.CastSkills(); // 释放技能
+            SkillManager.CastSkills(); // 释放技能
         }
 
         public void StopAction()
@@ -147,12 +147,12 @@ namespace Units
 
         public void AddBuff(Units.Buffs.Buff buff)
         {
-            buffManager.AddBuff(buff, this);
+            BuffManager.AddBuff(buff, this);
         }
 
         private void BuffEffect()
         {
-            buffManager.UpdateBuffs(this);
+            BuffManager.UpdateBuffs(this);
 
         }
 
