@@ -24,7 +24,7 @@ namespace Model {
         public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
         private TetrisFactory tetrisFactory = new TetrisFactory(); // 用于生成随机 Tetri 的工厂
         private List<Type> attributeTypes; // 用于随机替换单元格的类型
-        
+        private Stack<Tetri.Tetri> usedTetriHistory = new Stack<Tetri.Tetri>();
         TetrisResources()
         {
             InitializeAttributeTypes();
@@ -119,18 +119,6 @@ namespace Model {
             RecalculateCellTypes();
         }
 
-        public void AddUnusedTetri(Tetri.Tetri tetri)
-        {
-            unusedTetriList.Add(tetri);
-            RecalculateCellTypes();
-        }
-
-        public void AddUnusedTetriRange(List<Tetri.Tetri> tetriRange)
-        {
-            unusedTetriList.AddRange(tetriRange);
-            RecalculateCellTypes();
-        }
-
         public void AddUsableTetri(Tetri.Tetri tetri)
         {
             tetriList.Add(tetri);
@@ -144,8 +132,24 @@ namespace Model {
             if (!tetri.IsDisposable)
             {
                 usedTetriList.Add(tetri);
+                usedTetriHistory.Push(tetri); // 记录到历史栈
+
             }
             RecalculateCellTypes();
+        }
+        public void UndoLastUseTetri()
+        {
+            if (usedTetriHistory.Count > 0)
+            {
+                Tetri.Tetri lastUsedTetri = usedTetriHistory.Pop(); // 取出最近使用的 Tetri
+                usedTetriList.Remove(lastUsedTetri); // 从已使用列表中移除
+                tetriList.Add(lastUsedTetri); // 恢复到可用列表
+                RecalculateCellTypes();
+            }
+            else
+            {
+                Debug.LogWarning("No Tetri to undo.");
+            }
         }
 
         public List<Tetri.Tetri> GetUsableTetris()
@@ -216,5 +220,9 @@ namespace Model {
             }
         }
 
+        internal void ClearHistory()
+        {
+            usedTetriHistory.Clear();
+        }
     }
 }

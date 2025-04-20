@@ -31,6 +31,16 @@ namespace Controller
             tetrisResourcesData.UseTetri(item.GetTetri());
         }
 
+        internal void ClearHistory()
+        {
+            tetrisResourcesData.ClearHistory();
+        }
+
+        internal void UndoLastUseTetri()
+        {
+            tetrisResourcesData.UndoLastUseTetri();
+        }
+
         private void HandleTetriBeginDrag(ItemSlot item)
         {
             OnTetriBegainDrag?.Invoke(item);

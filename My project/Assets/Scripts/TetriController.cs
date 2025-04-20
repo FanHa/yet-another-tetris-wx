@@ -6,6 +6,7 @@ using Model.Tetri;
 using UI.Resource;
 using Model;
 using System.Collections;
+using UnityEngine.UI;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
@@ -17,6 +18,12 @@ public class TetriController : MonoBehaviour
 
     [SerializeField] private Controller.Inventory inventory;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
+    private Controller.Commands.CommandManager commandManager = new(); // 添加命令管理器
+
+    [SerializeField] private Button revokeOperationButton;
+    [SerializeField] private Button battleButton;
+    [SerializeField] private Button unitPreviewButton;
+
     
     private void Start()
     {
@@ -25,6 +32,8 @@ public class TetriController : MonoBehaviour
         InitializeOperationTable();
         InitializeBattleField();
         levelConfig.Reset();
+        // 绑定撤销操作按钮的点击事件
+        revokeOperationButton.onClick.AddListener(UndoLastPlacement);
     }
 
     private void InitializeBattleField()
@@ -44,6 +53,10 @@ public class TetriController : MonoBehaviour
         reward.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
 
+        commandManager.ClearHistory();
+        operationTableData.ClearHistory(); // 添加清空 OperationTable 的历史记录
+        tetriResource.ClearHistory(); 
+
         tetriResource.PrepareNewRound();
         inventory.Hide();
         levelConfig.AdvanceToNextLevel(); // 关卡增加
@@ -53,13 +66,23 @@ public class TetriController : MonoBehaviour
 
     private void HandleTetriDrop(ItemSlot item, Vector2Int position)
     {
-        // 1. 调用OperationTableSO的方法设置一个新的Tetri
-        bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
+        var placeCommand = new Controller.Commands.PlaceTetri(operationTableData, item, position, tetriResource);
 
-        if (isPlaced)
-        {
-            StartCoroutine(DelayedUseTetri(item));
-        }
+        // 执行放置命令
+        commandManager.ExecuteCommand(placeCommand);
+        assemblyMouseFollower.StopFollowing();
+        // // 1. 调用OperationTableSO的方法设置一个新的Tetri
+        // bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
+
+        // if (isPlaced)
+        // {
+        //     StartCoroutine(DelayedUseTetri(item));
+        // }
+    }
+
+    public void UndoLastPlacement()
+    {
+        commandManager.Undo(); // 调用命令管理器的撤销方法
     }
 
     private IEnumerator DelayedUseTetri(ItemSlot item)
