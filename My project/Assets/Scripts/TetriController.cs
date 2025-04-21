@@ -23,6 +23,7 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Button revokeOperationButton;
     [SerializeField] private Button battleButton;
     [SerializeField] private Button unitPreviewButton;
+    [SerializeField] private Button trainGroundButton;
 
     
     private void Start()
@@ -34,7 +35,11 @@ public class TetriController : MonoBehaviour
         levelConfig.Reset();
         // 绑定撤销操作按钮的点击事件
         revokeOperationButton.onClick.AddListener(UndoLastPlacement);
+        battleButton.onClick.AddListener(HandleBattleClicked);
+        unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
+        trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
     }
+    
 
     private void InitializeBattleField()
     {
@@ -71,13 +76,6 @@ public class TetriController : MonoBehaviour
         // 执行放置命令
         commandManager.ExecuteCommand(placeCommand);
         assemblyMouseFollower.StopFollowing();
-        // // 1. 调用OperationTableSO的方法设置一个新的Tetri
-        // bool isPlaced = operationTableData.PlaceTetri(new Vector2Int(position.x, position.y), item.GetTetri());
-
-        // if (isPlaced)
-        // {
-        //     StartCoroutine(DelayedUseTetri(item));
-        // }
     }
 
     public void UndoLastPlacement()
@@ -119,7 +117,7 @@ public class TetriController : MonoBehaviour
         UpdateOperationTableUI();
     }
 
-    public void HandleBattleClicked()
+    private void HandleBattleClicked()
     {
         LoadLevelData();
         GenerateAndResetInventoryData();
@@ -128,13 +126,20 @@ public class TetriController : MonoBehaviour
 
     }
 
+    private void HandleTrainGroundClicked()
+    {
+        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
+        battleField.StartTrainGroundBattle();
+    }
+
+
     private void LoadLevelData()
     {
         List<InventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
         battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
     }
 
-    public void HandleInventoryClicked()
+    private void HandleUnitPreviewClicked()
     {
         bool isOpend = inventory.ToggleInventory();
         if (isOpend)
@@ -146,6 +151,7 @@ public class TetriController : MonoBehaviour
         }
     }
 
+    
     private void GenerateAndResetInventoryData()
     {
         List<Model.InventoryItem> items = new List<Model.InventoryItem>();

@@ -2283,8 +2283,8 @@ MonoBehaviour:
   inventory: {fileID: 559597914}
   levelConfig: {fileID: 11400000, guid: 51ba4ce3e20e5e143a814062bb766830, type: 2}
   revokeOperationButton: {fileID: 525380211}
-  battleButton: {fileID: 0}
-  unitPreviewButton: {fileID: 0}
+  battleButton: {fileID: 433783001}
+  unitPreviewButton: {fileID: 38341087}
 --- !u!1 &1407102698
 GameObject:
   m_ObjectHideFlags: 0
@@ -3393,15 +3393,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00006873042
+      value: 0.00006238946
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00006873042
+      value: 0.00006238946
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00006873042
+      value: 0.00006238946
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y

@@ -33,7 +33,7 @@ namespace Controller {
         [Header("Data")]
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
-        // [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
+        [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
 
@@ -44,6 +44,9 @@ namespace Controller {
 
         private const float RandomOffsetRangeX = 1f;
         private const float RandomOffsetRangeY = 0.5f;
+
+        private List<InventoryItem> factionAConfig;
+        private List<InventoryItem> factionBConfig;
 
 
         void Start()
@@ -59,17 +62,45 @@ namespace Controller {
             this.enemyData.Items = enemyData; // 替换敌人数据
         }
 
+        public void SetFactionAConfig(List<InventoryItem> items)
+        {
+            factionAConfig = items;
+        }
+        public void SetFactionBConfig(List<InventoryItem> items)
+        {
+            factionBConfig = items;
+        }
+
+        
+
         public void StartNewLevelBattle(int level)
         {
             statisticsController.SetLevel(level); // 设置当前关卡
+            factionAConfig = inventoryData.Items;
+            
+            factionBConfig = enemyData.Items;
+            SpawnUnits();
+        }
+
+        internal void StartTrainGroundBattle()
+        {
+            // 将 FactionAUnits 转换为 InventoryItem 列表
+            factionAConfig = trainGroundSetup.FactionAUnits
+                .Select(unitConfig => unitConfig.ToInventoryItem())
+                .ToList();
+
+            // 将 FactionBUnits 转换为 InventoryItem 列表
+            factionBConfig = trainGroundSetup.FactionBUnits
+                .Select(unitConfig => unitConfig.ToInventoryItem())
+                .ToList();
             SpawnUnits();
         }
 
 
         private void SpawnUnits()
         {
-            SpawnFactionUnits(inventoryData.Items, spawnPointA, Unit.Faction.FactionA, factionAParent);
-            SpawnFactionUnits(enemyData.Items, spawnPointB, Unit.Faction.FactionB, factionBParent);
+            SpawnFactionUnits(factionAConfig, spawnPointA, Unit.Faction.FactionA, factionAParent);
+            SpawnFactionUnits(factionBConfig, spawnPointB, Unit.Faction.FactionB, factionBParent);
         }
 
         private void SpawnFactionUnits(List<Model.InventoryItem> items, Transform spawnPoint, Unit.Faction faction, Transform parent)

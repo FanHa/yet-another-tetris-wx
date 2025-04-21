@@ -1,5 +1,6 @@
 using System;
 
+
 namespace Model
 {
     [Serializable]
@@ -12,6 +13,9 @@ namespace Model
             get => Type.GetType(typeName);
             set => typeName = value?.AssemblyQualifiedName;
         }
-
+        internal Model.Tetri.Character CreateInstance()
+        {
+            return (Model.Tetri.Character)Activator.CreateInstance(Type);
+        }
     }
 }

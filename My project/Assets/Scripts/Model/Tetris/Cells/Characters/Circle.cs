@@ -8,7 +8,7 @@ namespace Model.Tetri
     public class Circle : Character
     {
         [SerializeField] private float attackPowerValue = 7f; // 攻击力参数
-        [SerializeField] private float maxCoreValue = 180f;
+        [SerializeField] private float maxCoreValue = 150f;
 
         public override string Name()
         {
