@@ -7,6 +7,7 @@ using Model.Tetri;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
+using Model;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -32,7 +33,9 @@ namespace Controller {
         [Header("Data")]
         [SerializeField] private Model.Inventory inventoryData;
         [SerializeField] private Model.Inventory enemyData;
-        [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
+        // [SerializeField] private CharacterTypePrefabMapping characterTypePrefabMapping;
+        [SerializeField] private GameObject unitPrefab;
+        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
 
 
         private Dictionary<Unit.Faction, List<Unit>> factionUnits = new();
@@ -81,21 +84,14 @@ namespace Controller {
 
         private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
         {
-            GameObject unitPrefab = characterTypePrefabMapping.GetPrefab(characterCell);
-            if (unitPrefab == null)
-            {
-                Debug.LogWarning($"Unit prefab is null for faction: {faction}");
-                return;
-            }
 
             Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
             GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
             Unit unitComponent = newUnit.GetComponent<Unit>();
-            characterCell.Apply(unitComponent);
 
             if (unitComponent != null)
             {
-                InitializeUnit(unitComponent, faction, tetriCells, newUnit);
+                InitializeUnit(unitComponent, faction, characterCell, tetriCells, newUnit);
             }
 
         }
@@ -109,13 +105,18 @@ namespace Controller {
             );
         }
 
-        private void InitializeUnit(Unit unit, Unit.Faction faction, List<Model.Tetri.Cell> tetriCells, GameObject unitObject)
+        private void InitializeUnit(Unit unit, Unit.Faction faction, Model.Tetri.Character characterCell, List<Model.Tetri.Cell> tetriCells, GameObject unitObject)
         {
             unit.SetFactionParent(factionAParent, factionBParent);
             unit.SetFaction(faction);
             unit.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
+            var characterSprite = tetriCellTypeResourceMapping.GetSprite(characterCell);
+            unit.BodySpriteRenderer.sprite = characterSprite;
+            unit.Fist1SpriteRenderer.sprite = characterSprite;
+            unit.Fist2SpriteRenderer.sprite = characterSprite;
 
 
+            characterCell.Apply(unit);
             if (tetriCells != null)
             {
                 foreach (Model.Tetri.Cell cell in tetriCells)

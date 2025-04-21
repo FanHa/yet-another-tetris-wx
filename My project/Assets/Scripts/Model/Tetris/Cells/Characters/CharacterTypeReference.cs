@@ -13,6 +13,5 @@ namespace Model
             set => typeName = value?.AssemblyQualifiedName;
         }
 
-        // public bool IsCharacterType => Type != null && Type.IsSubclassOf(typeof(Model.Tetri.Character));
     }
 }

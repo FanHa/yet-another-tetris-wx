@@ -1175,7 +1175,7 @@ MonoBehaviour:
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0
-  bodySpriteRenderer: {fileID: 5410986790312629488}
+  BodySpriteRenderer: {fileID: 5410986790312629488}
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
   projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}

@@ -38,10 +38,9 @@ namespace Units
         
         private HealthBar healthBar;
 
-        // [SerializeField] private GameObject damageTextPrefab; // 伤害显示的Prefab
-        [SerializeField] private SpriteRenderer bodySpriteRenderer;
+        public SpriteRenderer BodySpriteRenderer;
         public SpriteRenderer Fist1SpriteRenderer;
-        [SerializeField] private SpriteRenderer Fist2SpriteRenderer;
+        public SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
         public GameObject projectilePrefab; // 投射物预制体
         public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
@@ -354,7 +353,7 @@ namespace Units
         {
             this.faction = faction;
             Color color = faction == Faction.FactionA ? factionAColor : factionBColor;
-            bodySpriteRenderer.color = color;
+            BodySpriteRenderer.color = color;
             Fist1SpriteRenderer.color = color;
             Fist2SpriteRenderer.color = color;
         }
