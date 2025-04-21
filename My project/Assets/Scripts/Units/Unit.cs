@@ -123,7 +123,7 @@ namespace Units
         }
         private void CastSkills()
         {
-            if (SkillManager.SkillsCount > 0 && SkillManager.IsSkillReady()) // 检查是否有技能可以释放
+            if (SkillManager.HasSkillToTrigger()) // 检查是否有技能可以释放
             {
                 animationController.TriggerCastSkill(); // 触发技能释放动画
             }

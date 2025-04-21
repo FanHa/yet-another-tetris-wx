@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UI;
-using UnityEditor.SearchService;
 using UnityEngine;
 using Units;
 using Model.Tetri;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -19,9 +18,7 @@ namespace Controller {
         [Header("UI Elements")]
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private Canvas damageCanvas;
-        [SerializeField] private GameObject statisticsPanel;
-        [SerializeField] private GameObject unitStatisticPrefab;
-        [SerializeField] private GameObject damageTypeStatisticPrefab;
+        [SerializeField] private BattleStatistics battleStatistics;
 
         [Header("Controllers")]
         [SerializeField] private Controller.Statistics statisticsController;
@@ -40,19 +37,18 @@ namespace Controller {
 
         private Dictionary<Unit.Faction, List<Unit>> factionUnits = new();
         private List<Unit> allUnits = new();
-        private Dictionary<string, Units.Statistics> unitStatistics = new();
-
         public event Action OnBattleEnd;
 
-        private const float DamageTextFadeDuration = 1f;
         private const float RandomOffsetRangeX = 1f;
         private const float RandomOffsetRangeY = 0.5f;
 
+
         void Start()
         {
-            // 初始化字典
             factionUnits[Unit.Faction.FactionA] = new List<Unit>();
             factionUnits[Unit.Faction.FactionB] = new List<Unit>();
+            battleStatistics.OnEndStatistics += EndStatistics;
+            
         }
 
         public void SetEnemyData(List<Model.InventoryItem> enemyData)
@@ -63,7 +59,6 @@ namespace Controller {
         public void StartNewLevelBattle(int level)
         {
             statisticsController.SetLevel(level); // 设置当前关卡
-            unitStatistics.Clear();
             SpawnUnits();
         }
 
@@ -142,14 +137,8 @@ namespace Controller {
 
         private void HandleDamageTaken(Units.Damages.Damage damage)
         {
+            battleStatistics.AddRecord(damage);
             ShowDamageText(damage.TargetUnit.transform.position, damage.Value);
-            if (damage.SourceName == null || damage.SourceUnit.faction != Unit.Faction.FactionA)
-                return;
-            if (!unitStatistics.ContainsKey(damage.SourceUnit.name))
-            {
-                unitStatistics[damage.SourceUnit.name] = new Units.Statistics(damage.SourceUnit.name);
-            }
-            unitStatistics[damage.SourceUnit.name].AddDamage(damage.SourceName, damage.Value);
         }
 
         private void ShowDamageText(Vector3 worldPosition, float damage)
@@ -221,7 +210,8 @@ namespace Controller {
                         }
                         
                     }
-                    ShowBattleStatistics();
+                    battleStatistics.gameObject.SetActive(true);
+                    battleStatistics.SetChoosenFaction(Units.Unit.Faction.FactionA);
                 }
             }
         }
@@ -243,69 +233,10 @@ namespace Controller {
             }
         }
 
-        public void ShowBattleStatistics()
-        {
-            statisticsPanel.SetActive(true);
-            Transform contentTransform = statisticsPanel.transform.Find("Content");
-            // 清空统计面板
-            foreach (Transform child in contentTransform)
-            {
-                Destroy(child.gameObject);
-            }
 
-            var sortedUnitStatistics = unitStatistics.Values
-                .OrderByDescending(stat => stat.DamageByType.Values.Sum())
-                .ToList();
-
-            // 遍历每个单位的统计数据
-            foreach (var stat in sortedUnitStatistics)
-            {
-                // 创建 UnitStatisticPrefab
-                GameObject unitStatInstance = Instantiate(unitStatisticPrefab, contentTransform.transform);
-                var leftSide = unitStatInstance.transform.Find("LeftSide");
-                if (leftSide == null)
-                {
-                    Debug.LogError("LeftSide object not found in UnitStatisticPrefab!");
-                    continue;
-                }
-
-                // 获取 NameText 和 TotalDamageText
-                var unitNameText = leftSide.Find("NameText").GetComponent<TextMeshProUGUI>();
-                var totalDamageText = leftSide.Find("TotalDamageText").GetComponent<TextMeshProUGUI>();
-                var damageTypePanel = unitStatInstance.transform.Find("DamageTypePanel");
-
-
-                // 设置单位名称
-                unitNameText.text = stat.UnitName;
-
-                // 计算总伤害
-                float totalDamage = stat.DamageByType.Values.Sum();
-                totalDamageText.text = "总伤害:" + Mathf.RoundToInt(totalDamage).ToString(); // 转换为整数并设置文本
-
-
-                // 按伤害值排序伤害类型
-                var sortedDamageTypes = stat.DamageByType
-                    .OrderByDescending(damageType => damageType.Value)
-                    .ToList();
-                // 遍历单位的伤害类型统计
-                foreach (var damageType in sortedDamageTypes)
-                {
-                    // 创建 DamageTypeStatisticPrefab
-                    GameObject damageTypeStatInstance = Instantiate(damageTypeStatisticPrefab, damageTypePanel);
-                    var damageTypeText = damageTypeStatInstance.transform.Find("TypeText").GetComponent<TextMeshProUGUI>();
-                    var damageValueText = damageTypeStatInstance.transform.Find("ValueText").GetComponent<TextMeshProUGUI>();
-
-                    // 设置伤害类型和伤害值
-                    damageTypeText.text = damageType.Key;
-                    damageValueText.text = Mathf.RoundToInt(damageType.Value).ToString(); // 转换为整数
-                }
-            }
-        }
-
-        // todo 使用代码绑定,而不是在inspector里绑定
         public void EndStatistics()
         {
-            statisticsPanel.SetActive(false);
+            battleStatistics.gameObject.SetActive(false);
             DestroyAllUnits(); // 销毁所有单位
             OnBattleEnd?.Invoke();
         }

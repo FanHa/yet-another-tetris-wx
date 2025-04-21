@@ -105,3 +105,7 @@ MonoBehaviour:
       typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -7827631244116426395, guid: 3271294aa4f615740840c8006e5d234e, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Hourglass, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -7003098779552009737, guid: aba5b67bd2734a74e9e996abc4f05043, type: 3}

@@ -43,10 +43,13 @@ namespace Units.Skills
             }
         }
 
-        public bool IsSkillReady()
+        public bool HasSkillToTrigger()
         {
             if (readySkill != null)
             {
+                return false;
+            }
+            if (skills.Count <= 0) {
                 return false;
             }
             readySkill = skills.FirstOrDefault(skill => skill.IsReady()); // 找到第一个就绪的技能
