@@ -8,6 +8,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine.UI;
 using Model;
+using Units.Damages;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -180,24 +181,26 @@ namespace Controller {
         {
             if (damageTextPrefab != null && damageCanvas != null)
             {
-                float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f); // X轴随机偏移范围
-                float randomOffsetY = UnityEngine.Random.Range(-0.1f, 0.1f); // Y轴随机偏移范围（X的一半）
-                Vector3 offsetPosition = worldPosition + new Vector3(randomOffsetX, randomOffsetY, 0f);
+                // float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f); // X轴随机偏移范围
+                // float randomOffsetY = UnityEngine.Random.Range(-0.1f, 0.1f); // Y轴随机偏移范围（X的一半）
+                // Vector3 offsetPosition = worldPosition + new Vector3(randomOffsetX, randomOffsetY, 0f);
 
 
                 // 创建伤害文本实例
                 GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
-
+                DamageView damageview = damageTextInstance.GetComponent<DamageView>();
                 // 将世界坐标转换为屏幕坐标
-                damageTextInstance.transform.position = offsetPosition;
+                // damageTextInstance.transform.position = offsetPosition;
+                damageview.Initialize(damage, worldPosition);
 
-                TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
-                if (damageText != null)
-                {
-                    int roundedDamage = Mathf.RoundToInt(damage); // 将伤害值取整
-                    damageText.text = roundedDamage.ToString();
-                    StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
-                }
+
+                // TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
+                // if (damageText != null)
+                // {
+                //     int roundedDamage = Mathf.RoundToInt(damage); // 将伤害值取整
+                //     damageText.text = roundedDamage.ToString();
+                //     StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
+                // }
             }
         }
 
