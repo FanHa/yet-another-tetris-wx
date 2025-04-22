@@ -39,7 +39,7 @@ namespace Controller {
 
 
         private Dictionary<Unit.Faction, List<Unit>> factionUnits = new();
-        private List<Unit> allUnits = new();
+        // private List<Unit> allUnits = new();
         public event Action OnBattleEnd;
 
         private const float RandomOffsetRangeX = 1f;
@@ -167,7 +167,6 @@ namespace Controller {
             unit.OnDeath += OnUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;
             factionUnits[faction].Add(unit);
-            allUnits.Add(unit);
             unit.Initialize();
         }
 
@@ -246,26 +245,32 @@ namespace Controller {
                         }
                         
                     }
-                    battleStatistics.gameObject.SetActive(true);
-                    battleStatistics.SetChoosenFaction(Units.Unit.Faction.FactionA);
+                    StartCoroutine(ShowBattleStatisticsWithDelay(2f)); // 延迟 2 秒
                 }
             }
         }
 
+        private IEnumerator ShowBattleStatisticsWithDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+
+            battleStatistics.gameObject.SetActive(true);
+            battleStatistics.ShowChoosenFaction(Units.Unit.Faction.FactionA);
+        }
+
         private void DestroyAllUnits()
         {
-            foreach (var unit in allUnits)
-            {
-                if (unit != null)
-                {
-                    Destroy(unit.gameObject);
-                }
-            }
-            allUnits.Clear();
 
-            foreach (var faction in factionUnits.Keys)
+            foreach (List<Unit> faction in factionUnits.Values)
             {
-                factionUnits[faction].Clear();
+                foreach (Unit unit in faction)
+                {
+                    if (unit != null)
+                    {
+                        Destroy(unit.gameObject);
+                    }
+                }
+                faction.Clear();
             }
         }
 

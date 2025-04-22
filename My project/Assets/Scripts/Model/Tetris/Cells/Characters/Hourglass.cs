@@ -32,7 +32,7 @@ namespace Model.Tetri
         public override string Description()
         {
             return base.Description()+
-                $"减少技能冷却时间 {CooldownReductionPercentage}%，延长 Buff 持续时间 {BuffDurationIncreasePercentage}%。";
+                $"减少技能冷却时间 {CooldownReductionPercentage}%，延长 Buff 持续时间 {BuffDurationIncreasePercentage}%";
         }
     }
 }

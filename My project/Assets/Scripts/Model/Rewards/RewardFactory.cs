@@ -39,6 +39,7 @@ namespace Model.Rewards
         public List<Reward> GenerateRewards()
         {
             List<Reward> rewards = new List<Reward>();
+            bool characterRewardGenerated = false; // 标志是否已经生成过 CreateCharacterReward
 
             for (int i = 1; i <= rewardCount; i++)
             {
@@ -48,14 +49,20 @@ namespace Model.Rewards
                 Reward reward = rewardType switch
                 {
                     0 => CreateAddTetriReward(),
-                    1 => CreateCharacterReward(),
+                    1 when !characterRewardGenerated => // 仅当未生成过 Character 奖励时调用
+                        CreateCharacterReward(),
                     2 => CreateUpgradeTetriReward(),
-                    _ => throw new InvalidOperationException("Invalid reward type.")
+                    _ => CreateAddTetriReward() // 如果已经生成过 Character 奖励，默认生成 AddTetri 奖励
                 };
+
+                // 如果生成的是 Character 奖励，更新标志
+                if (reward is NewCharacter)
+                {
+                    characterRewardGenerated = true;
+                }
 
                 rewards.Add(reward);
             }
-
             return rewards;
         }
 
@@ -111,7 +118,7 @@ namespace Model.Rewards
                 float baseWeight = 1f;
 
                 // 如果已有实例，权重减半
-                weights[characterType] = count > 0 ? baseWeight / (1+count) : baseWeight;
+                weights[characterType] = count > 0 ? baseWeight / (3+count) : baseWeight;
             }
 
             // 根据权重随机选择角色类型

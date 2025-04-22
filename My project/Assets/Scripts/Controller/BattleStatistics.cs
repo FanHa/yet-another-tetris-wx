@@ -29,15 +29,15 @@ namespace Controller
             endStatistics.onClick.AddListener(EndStatistics);
             ChooseFactionA.onClick.AddListener(() =>
             {
-                SetChoosenFaction(Unit.Faction.FactionA);
+                ShowChoosenFaction(Unit.Faction.FactionA);
             });
             ChooseFactionB.onClick.AddListener(() =>
             {
-                SetChoosenFaction(Unit.Faction.FactionB);
+                ShowChoosenFaction(Unit.Faction.FactionB);
             });
         }
 
-        public void SetChoosenFaction(Unit.Faction faction)
+        public void ShowChoosenFaction(Unit.Faction faction)
         {
             choosenFaction = faction;
             ShowBattleStatistics();
