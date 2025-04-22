@@ -146,19 +146,23 @@ namespace Controller {
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;
 
-
             characterCell.Apply(unit);
+
+            Model.Tetri.GarbageReuse garbageReuseCell = null; // 用于存储 GarbageReuse 类型的 Cell
+
             if (tetriCells != null)
             {
                 foreach (Model.Tetri.Cell cell in tetriCells)
                 {
                     cell.Apply(unit);
-                    if (cell is Character featureCell)
+                    if (cell is Model.Tetri.GarbageReuse garbageReuse)
                     {
-                        unitObject.name = featureCell.CharacterName;
+                        garbageReuseCell = garbageReuse; // 暂存 GarbageReuse 类型的 Cell
                     }
                 }
             }
+            garbageReuseCell?.Reuse(tetriCells, unit); // 调用 GarbageReuse 的方法，并传入 tetriCells
+
 
             unit.OnDeath += OnUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;

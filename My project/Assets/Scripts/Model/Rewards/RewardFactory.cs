@@ -75,12 +75,18 @@ namespace Model.Rewards
             // 随机选择一个 Tetri 类型
             int index = UnityEngine.Random.Range(0, availableCellTypes.Count);
             Type cellType = availableCellTypes[index];
-
-            // 创建一个新的 Tetri 实例
-            Model.Tetri.Tetri tetriInstance = tetrisFactory.CreateRandomShape();
-
             // 使用 Activator 创建 Cell 实例
             Cell cellTemplate = (Cell)Activator.CreateInstance(cellType);
+            Model.Tetri.Tetri tetriInstance;
+            if (cellTemplate is GarbageReuse)
+            {
+                tetriInstance = tetrisFactory.CreateCircleShape();
+            }
+            else
+            {
+                
+                tetriInstance = tetrisFactory.CreateRandomBaseShape();
+            }
 
             // 创建 AddTetri 奖励
             return new AddTetri(tetriInstance, cellTemplate);

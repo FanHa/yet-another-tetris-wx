@@ -113,3 +113,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Aim, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 3544725380317974027, guid: 8e674b28de170b24e832629515f396de, type: 3}
+  - cellType:
+      typeName: Model.Tetri.GarbageReuse, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 3200374790000820769, guid: 59a56695ee879d84391ed56bcefaf593, type: 3}

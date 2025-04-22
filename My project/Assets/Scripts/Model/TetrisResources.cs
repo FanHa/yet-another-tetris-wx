@@ -50,7 +50,7 @@ namespace Model {
             // 确保每种 attributeType 至少在一个 Tetri 中出现
             foreach (var attributeType in attributeTypes)
             {
-                var tetri = tetrisFactory.CreateRandomShape(); // 使用工厂的随机生成方法
+                var tetri = tetrisFactory.CreateRandomBaseShape(); // 使用工厂的随机生成方法
                 ReplaceSpecificCell(tetri, attributeType); // 确保包含该 attributeType
                 unusedTetriList.Add(tetri);
             }
@@ -58,7 +58,7 @@ namespace Model {
             // 生成剩余的随机 Tetri
             for (int i = attributeTypes.Count; i < initialTetriCount; i++)
             {
-                var tetri = tetrisFactory.CreateRandomShape(); // 使用工厂的随机生成方法
+                var tetri = tetrisFactory.CreateRandomBaseShape(); // 使用工厂的随机生成方法
                 ReplaceRandomCell(tetri); // 随机替换单元格
                 unusedTetriList.Add(tetri);
             }

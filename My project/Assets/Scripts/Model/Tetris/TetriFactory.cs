@@ -39,11 +39,30 @@ namespace Model.Tetri
         public Tetri CreateSShape() => CreateShape("S");
         public Tetri CreateZShape() => CreateShape("Z");
 
-        public Tetri CreateRandomShape()
+        public Tetri CreateRandomBaseShape()
         {
             var shapeKeys = new List<string> { "T", "I", "O", "L", "J", "S", "Z" };
             var randomKey = shapeKeys[new Random().Next(shapeKeys.Count)];
             return CreateShape(randomKey);
+        }
+
+        public Tetri CreateCircleShape()
+        {
+
+            Tetri tetri = new Tetri(Tetri.TetriType.Normal);
+
+
+            var circlePattern = new List<(int, int)>
+            {
+                (0, 0), (0, 1), (0, 2),
+                (1, 0),         (1, 2),
+                (2, 0), (2, 1), (2, 2)
+            };            
+            foreach (var (row, col) in circlePattern)
+            {
+                tetri.SetCell(row, col, cellFactory.CreatePadding());
+            }
+            return tetri;
         }
     }
 }
