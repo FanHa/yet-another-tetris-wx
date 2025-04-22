@@ -7,24 +7,16 @@ namespace Model.Tetri
     [Serializable]
     public class Circle : Character
     {
-        [SerializeField] private float attackPowerValue = 7f; // 攻击力参数
-        [SerializeField] private float maxCoreValue = 150f;
+        public Circle()
+        {
+            // 设置基类的字段
+            AttackPowerValue = 7f;  // 设置攻击力
+            MaxCoreValue = 150f;   // 设置最大生命值
+        }
 
         public override string Name()
         {
             return "小圆";
-        }
-        public override string Description()
-        {
-            return $"攻击力: {attackPowerValue}, 生命值: {maxCoreValue}";
-        }
-
-        public override void Apply(Unit unit)
-        {
-            unit.Attributes.AttackPower.SetBaseValue(attackPowerValue);
-            unit.Attributes.MaxHealth.SetBaseValue(maxCoreValue);
-            unit.name = CharacterName;
-            
         }
 
 

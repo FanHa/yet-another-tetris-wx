@@ -7,21 +7,12 @@ namespace Model.Tetri
     [Serializable]
     public class Triangle : Character
     {
-        [SerializeField] private float attackPowerValue = 15f; // 攻击力参数
-        [SerializeField] private float maxCoreValue = 60f;    
-        public override string Description()
+        public Triangle()
         {
-            // 动态生成描述字符串，反映当前的攻击力和最大核心值
-            return $"攻击力: {attackPowerValue}, 生命值: {maxCoreValue}";
+            AttackPowerValue = 15f;
+            MaxCoreValue = 60f;
         }
-
-        public override void Apply(Unit unit)
-        {
-            unit.Attributes.AttackPower.SetBaseValue(attackPowerValue);
-            unit.Attributes.MaxHealth.SetBaseValue(maxCoreValue);
-            unit.name = CharacterName;
-        }
-
+        
         public override string Name()
         {
             return "小三";

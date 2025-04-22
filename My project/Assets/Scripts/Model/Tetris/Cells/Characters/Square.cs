@@ -7,19 +7,6 @@ namespace Model.Tetri
     [Serializable]
     public class Square : Character
     {
-        [SerializeField] private float attackPowerValue = 10f; // 攻击力参数
-        [SerializeField] private float maxCoreValue = 100f;   
-        public override string Description()
-        {
-            return $"攻击力: {attackPowerValue}, 生命值: {maxCoreValue}";
-        }
-
-        public override void Apply(Unit unit)
-        {
-            unit.Attributes.AttackPower.SetBaseValue(attackPowerValue);
-            unit.Attributes.MaxHealth.SetBaseValue(maxCoreValue);
-            unit.name = CharacterName;
-        }
 
         public override string Name()
         {
