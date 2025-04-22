@@ -253,6 +253,7 @@ namespace Units
         {
             if (Attributes.IsRanged)
             {
+                
                 // 发射投射物
                 FireProjectile(target, damageValue);
             }
@@ -285,6 +286,7 @@ namespace Units
                 
                 if (projectile != null)
                 {
+                    damageValue = Attributes.RangeAttackDamagePercentage * damageValue / 100;
                     projectile.target = target.transform;
                     projectile.damage = new Damages.Damage(
                         damageValue,

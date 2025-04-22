@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FactionAUnits:
   - CharacterCell:
-      typeName: Model.Tetri.Hourglass, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Aim, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     TetriCells:
     - typeName: Model.Tetri.Freeze, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,

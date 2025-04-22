@@ -7,8 +7,8 @@ namespace Model.Tetri
     [Serializable]
     public class Hourglass : Character
     {
-        private const float CooldownReductionPercentage = 10f; // 技能冷却时间减少百分比
-        private const float BuffDurationIncreasePercentage = 10f; // Buff 持续时间增加百分比
+        public float CooldownReductionPercentage = 10f; // 技能冷却时间减少百分比
+        public float BuffDurationIncreasePercentage = 10f; // Buff 持续时间增加百分比
 
         public Hourglass()
         {

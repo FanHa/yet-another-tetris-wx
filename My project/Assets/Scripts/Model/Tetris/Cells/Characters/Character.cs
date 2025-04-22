@@ -15,6 +15,8 @@ namespace Model.Tetri
         public float MaxCoreValue = 100f;  // 默认最大生命值
         public float MoveSpeedValue = 1f;
         public float AttacksPerTenSeconds = 3f;
+        public float RangeAttackDamagePercentage = 70f;
+        public bool IsRanged = false;
 
 
         public Character()
@@ -33,6 +35,8 @@ namespace Model.Tetri
             unit.Attributes.MaxHealth.SetBaseValue(MaxCoreValue);
             unit.Attributes.AttacksPerTenSeconds.SetBaseValue(AttacksPerTenSeconds);
             unit.Attributes.MoveSpeed.SetBaseValue(MoveSpeedValue);
+            unit.Attributes.RangeAttackDamagePercentage = RangeAttackDamagePercentage;
+            unit.Attributes.IsRanged = IsRanged;
             unit.name = characterName;
         }
 
