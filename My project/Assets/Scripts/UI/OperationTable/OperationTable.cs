@@ -46,11 +46,7 @@ namespace UI {
                         }
                         if (cellData is Model.Tetri.Character)
                         {
-                            GameObject halo = Instantiate(CharacterHaloPrefab, newCell.transform);
-                            Canvas haloCanvas = halo.AddComponent<Canvas>();
-                            haloCanvas.overrideSorting = true;
-                            haloCanvas.sortingOrder = 100; // 设置较高的排序值
-                            halo.transform.localPosition = Vector3.zero; // 确保光环居中
+                            Instantiate(CharacterHaloPrefab, newCell.transform);
                         }
                     }
                     else
