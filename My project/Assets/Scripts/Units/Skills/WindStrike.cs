@@ -67,11 +67,17 @@ namespace Units.Skills
 
         private void CreateAreaEffect(Unit caster, Vector3 centerPosition)
         {
+            // 获取 WindStrikeAreaEffectPrefab 并实例化
+            GameObject areaEffect = Object.Instantiate(
+                caster.VisualEffectConfig.WindStrikeAreaEffectPrefab, 
+                centerPosition, 
+                Quaternion.identity
+            );
             // 开始区域效果协程
-            caster.StartCoroutine(AreaEffect(caster, centerPosition));
+            caster.StartCoroutine(AreaEffect(caster, centerPosition, areaEffect));
         }
 
-        private IEnumerator AreaEffect(Unit caster, Vector3 centerPosition)
+        private IEnumerator AreaEffect(Unit caster, Vector3 centerPosition, GameObject areaEffect)
         {
             float elapsedTime = 0f;
             float damagePerTick = caster.Attributes.MoveSpeed.finalValue * damageMultiplier; 
@@ -99,6 +105,10 @@ namespace Units.Skills
 
                 elapsedTime += damageInterval;
                 yield return new WaitForSeconds(damageInterval); // 等待下一次检测
+            }
+            if (areaEffect != null)
+            {
+                Object.Destroy(areaEffect);
             }
         }
     }

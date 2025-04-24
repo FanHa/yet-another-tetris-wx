@@ -1171,7 +1171,9 @@ MonoBehaviour:
     AttackTargetNumber: 1
     AttackRange: 0.5
     IsRanged: 0
+    RangeAttackDamagePercentage: 0
   BuffManager: {fileID: 0}
+  VisualEffectConfig: {fileID: 11400000, guid: bed103acc2cbb594e8d4d2b2d04e3a2c, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0

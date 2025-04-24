@@ -17,7 +17,8 @@ namespace Units
         private Movement movementController;
         public Units.Skills.Manager SkillManager = new(); // 技能管理器
         private AnimationController animationController;
-
+        public VisualEffectConfig VisualEffectConfig;
+        
         public enum Faction
         {
             FactionA,
