@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e07e896c4fbc6449b29369200fad56e, type: 3}
   m_Name: VisualEffectConfig
   m_EditorClassIdentifier: 
-  WindStrikeOrbitEffectPrefab: {fileID: 0}
-  WindStrikeAreaEffectPrefab: {fileID: 0}
+  WindStrikeAreaEffectPrefab: {fileID: 5929057783576628894, guid: d8741053768bdef44a3c99111efa27ab, type: 3}
