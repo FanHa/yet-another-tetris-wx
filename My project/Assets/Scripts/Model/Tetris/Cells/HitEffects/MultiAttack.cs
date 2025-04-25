@@ -23,7 +23,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能: 多重攻击";
+            return "多重攻击";
         }
     }
 }

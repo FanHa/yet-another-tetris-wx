@@ -11,12 +11,13 @@ namespace Controller
         [SerializeField] private Panel rewardPanel;
         [SerializeField] private Model.TetrisResources tetriResourceData;
         [SerializeField] private Model.OperationTable operationTableData;
+        [SerializeField] private Model.Tetri.CellGroupConfig cellGroupConfig;
         private RewardFactory rewardFactory;
         public event System.Action OnRewardSelected;
 
         private void Start()
         {
-            rewardFactory = new RewardFactory(tetriResourceData, operationTableData);
+            rewardFactory = new RewardFactory(tetriResourceData, operationTableData, cellGroupConfig);
         } 
 
         public void EnterRewardSelectionPhase()

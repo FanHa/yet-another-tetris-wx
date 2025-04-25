@@ -22,7 +22,7 @@ namespace Model.Rewards
         }
 
 
-        public override string Name() => cellTemplate.Name();
+        public override string Name() => cellTemplate.Name() + tetriInstance.Group;
         public override string Description() => cellTemplate.Description();
 
         private void SetRandomCell()

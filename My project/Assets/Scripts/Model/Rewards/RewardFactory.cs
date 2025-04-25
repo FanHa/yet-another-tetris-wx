@@ -14,11 +14,13 @@ namespace Model.Rewards
         private TetrisFactory tetrisFactory = new TetrisFactory();
         private readonly TetrisResources tetrisResources;
         private readonly OperationTable operationTable;
+        private readonly CellGroupConfig cellGroupConfig;
 
-        public RewardFactory(TetrisResources tetrisResources, OperationTable operationTable)
+        public RewardFactory(TetrisResources tetrisResources, OperationTable operationTable, CellGroupConfig cellGroupConfig)
         {
             this.operationTable = operationTable;   
             this.tetrisResources = tetrisResources;
+            this.cellGroupConfig = cellGroupConfig;
         }
 
         private static readonly List<Type> characterTypes = Assembly.GetAssembly(typeof(Cell))
@@ -31,7 +33,7 @@ namespace Model.Rewards
             .Where(type => type.IsSubclassOf(typeof(Cell))
                             && !type.IsSubclassOf(typeof(Character))
                             && type != typeof(Empty) 
-                             && type != typeof(Padding)
+                            && type != typeof(Padding)
                             && !type.IsAbstract)
             .ToList();
         
@@ -68,35 +70,94 @@ namespace Model.Rewards
 
         private Reward CreateAddTetriReward()
         {
-            List<Type> existingCellTypes = tetrisResources.CellTypes.ToList();
+            List<Type> availableCellTypes;
+            CellGroupConfig.Group group = CellGroupConfig.Group.None;
+            // 定义普通 Tetri 和专精 Tetri 的概率
+            float normalTetriProbability = 0.7f; // 普通 Tetri 的概率
+            float specializedTetriProbability = 0.3f; // 专精 Tetri 的概率
 
-            List<Type> availableCellTypes = cellTypes
-                .Where(type => !existingCellTypes.Contains(type))
+            float randomValue = UnityEngine.Random.value;
+            List<Type> existingCellTypes = tetrisResources.CellTypes
+                .Where(type => type != typeof(Model.Tetri.Padding) && type != typeof(Model.Tetri.Empty)) // 排除 Padding 和 Empty
                 .ToList();
-            if (availableCellTypes.Count == 0)
+            if (randomValue <= normalTetriProbability)
             {
-                // todo 不要报错,是正常游戏进行中可能会遇到的事情
-                throw new InvalidOperationException("No Tetri subclasses available for creation.");
-            }
+                
+                availableCellTypes = cellTypes
+                    .Where(type => !existingCellTypes.Contains(type))
+                    .ToList();
+                if (availableCellTypes.Count == 0)
+                {
+                    // todo 不要报错,是正常游戏进行中可能会遇到的事情
+                    throw new InvalidOperationException("No Tetri subclasses available for creation.");
+                }
 
-            // 随机选择一个 Tetri 类型
-            int index = UnityEngine.Random.Range(0, availableCellTypes.Count);
-            Type cellType = availableCellTypes[index];
-            // 使用 Activator 创建 Cell 实例
-            Cell cellTemplate = (Cell)Activator.CreateInstance(cellType);
-            Model.Tetri.Tetri tetriInstance;
-            if (cellTemplate is GarbageReuse)
+                // 随机选择一个 Tetri 类型
+            }
+            else if (randomValue <= normalTetriProbability + specializedTetriProbability)
             {
-                tetriInstance = tetrisFactory.CreateCircleShape();
+                group = GetRandomUnusedGroup();
+
+                // 从 CellGroupConfig 中获取属于该 Group 的所有 CellType
+                availableCellTypes = cellGroupConfig.GetCellsForGroup(group);
+
+                if (availableCellTypes == null || availableCellTypes.Count == 0)
+                {
+                    throw new InvalidOperationException($"No CellTypes found for group {group} in CellGroupConfig.");
+                }
             }
             else
             {
-                
-                tetriInstance = tetrisFactory.CreateRandomBaseShape();
+                // 默认返回 null（理论上不会到这里, todo log warn
+                return null;
             }
+
+            Type selectedCellType;
+            if (availableCellTypes.Count > 0)
+            {
+                selectedCellType = availableCellTypes[UnityEngine.Random.Range(0, availableCellTypes.Count)];
+            }
+            else
+            {
+                // todo log
+                selectedCellType = existingCellTypes[UnityEngine.Random.Range(0, existingCellTypes.Count)];
+            }
+                // 随机选择一个 CellType
+
+            // 使用 Activator 创建 Cell 实例
+            Cell cellTemplate = (Cell)Activator.CreateInstance(selectedCellType);
+
+            // 创建一个 Tetri 实例
+            Model.Tetri.Tetri tetriInstance = tetrisFactory.CreateRandomBaseShape();
+            tetriInstance.Group = group;
 
             // 创建 AddTetri 奖励
             return new AddTetri(tetriInstance, cellTemplate);
+        }
+
+        private CellGroupConfig.Group GetRandomUnusedGroup()
+        {
+            // 获取所有已配置的 CellGroup
+            var allConfiguredGroups = cellGroupConfig.Groups
+                .Select(groupConfig => groupConfig.group)
+                .Where(group => group != CellGroupConfig.Group.None) // 排除 None
+                .ToList();
+
+            // 获取当前 TetrisResources 中已存在的 Groups
+            var existingGroups = tetrisResources.TetriGroups;
+
+            // 找到所有不存在于 TetrisResources 中的 Groups
+            var unusedGroups = allConfiguredGroups
+                .Where(group => !existingGroups.Contains(group))
+                .ToList();
+
+            if (unusedGroups.Count == 0)
+            {
+                return CellGroupConfig.Group.None;
+            }
+
+            // 随机挑选一个未使用的 Group
+            return unusedGroups[UnityEngine.Random.Range(0, unusedGroups.Count)];
         }
 
         private Reward CreateCharacterReward()
@@ -145,25 +206,14 @@ namespace Model.Rewards
                 }
             }
 
-            // 默认返回第一个（理论上不会到这里）
+            // todo log 默认返回第一个（理论上不会到这里）
             return weights.Keys.First();
         }
+
         private Reward CreateUpgradeTetriReward()
         {
-            var availableCellTypes = tetrisResources.CellTypes
-                .Where(type => type != typeof(Model.Tetri.Padding)) // 排除 Padding 类型
-                .ToList();
-            if (availableCellTypes.Count == 0)
-            {
-                throw new InvalidOperationException("No usable Cell types found in TetrisResources.");
-            }
-
-            // 随机选择一个 Cell 类型
-            int cellTypeIndex = UnityEngine.Random.Range(0, availableCellTypes.Count);
-            Type cellType = availableCellTypes[cellTypeIndex];
-
             // 从 TetrisResources 中随机挑选一个包含 PaddingCell 的 Tetri
-            var targetTetri = tetrisResources.GetUnusedTetris()
+            Tetri.Tetri targetTetri = tetrisResources.GetUnusedTetris()
                 .Concat(tetrisResources.GetUsedTetris())
                 .Where(tetri => tetri.Shape.Cast<Model.Tetri.Cell>().Any(cell => cell is Model.Tetri.Padding))
                 .OrderBy(_ => Guid.NewGuid())
@@ -187,8 +237,49 @@ namespace Model.Rewards
             int positionIndex = UnityEngine.Random.Range(0, paddingPositions.Count);
             Vector2Int targetPosition = paddingPositions[positionIndex];
 
-            // 创建用于升级的 Cell 实例
-            var newCell = (Model.Tetri.Cell)Activator.CreateInstance(cellType);
+            Model.Tetri.CellGroupConfig.Group group = targetTetri.Group;
+            List<Type> availableCellTypes;
+
+            if (group != CellGroupConfig.Group.None)
+            {
+                // 当 Group 不是 None 时，使用现有逻辑
+                List<Type> sameGroupCellTypes = cellGroupConfig.GetCellsForGroup(group);
+
+                var existCells = targetTetri.Shape.Cast<Model.Tetri.Cell>()
+                    .Where(cell => cell != null
+                        && cell is not Padding
+                        && cell is not Empty)
+                    .ToList();
+
+                if (existCells.Count == 0)
+                {
+                    throw new InvalidOperationException("No non-Padding Cell found in the selected Tetri.");
+                }
+
+                availableCellTypes = sameGroupCellTypes
+                    .Where(type => !existCells.Any(cell => cell.GetType() == type))
+                    .ToList();
+
+                if (availableCellTypes.Count == 0)
+                {
+                    throw new InvalidOperationException("No available cell types found in the same group that are not already in existCells.");
+                }
+            }
+            else
+            {
+                // 当 Group 为 None 时，从 TetrisResources 的 cellTypes 中随机取一个
+                availableCellTypes = tetrisResources.CellTypes
+                    .Where(type => type != typeof(Model.Tetri.Padding) && type != typeof(Model.Tetri.Empty)) // 排除 Padding 和 Empty
+                    .ToList();
+                if (availableCellTypes.Count == 0)
+                {
+                    throw new InvalidOperationException("No available cell types found in TetrisResources.");
+                }
+            }
+
+            var selectedCellType = availableCellTypes[UnityEngine.Random.Range(0, availableCellTypes.Count)];
+            var newCell = (Model.Tetri.Cell)Activator.CreateInstance(selectedCellType);
+
 
             // 创建 UpgradeTetri 奖励
             return new UpgradeTetri(targetTetri, targetPosition, newCell);

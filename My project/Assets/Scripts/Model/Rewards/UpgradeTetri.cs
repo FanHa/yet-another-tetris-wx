@@ -25,7 +25,7 @@ namespace Model.Rewards
         }
 
 
-        public override string Name() => $"升级 {newCell.Name()}";
+        public override string Name() => $"升级 {newCell.Name()}" + targetTetri.Group;
         public override string Description() => $"升级一个填充物成为 {newCell.Name()}";
         public Model.Tetri.Tetri GetTargetTetri() => targetTetri;
 

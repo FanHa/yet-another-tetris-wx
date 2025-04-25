@@ -312,7 +312,8 @@ namespace Units
 
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
-        {   foreach (Buff buff in damageReceived.Buffs)
+        {   
+            foreach (Buff buff in damageReceived.Buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上
             }
@@ -322,7 +323,7 @@ namespace Units
             }
 
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
-
+        
             Attributes.CurrentHealth -= finalDamage;
             
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件

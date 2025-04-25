@@ -1412,6 +1412,7 @@ MonoBehaviour:
   rewardPanel: {fileID: 314842519}
   tetriResourceData: {fileID: 11400000, guid: 273c05945e59e604f8b633b5e8ce89a7, type: 2}
   operationTableData: {fileID: 11400000, guid: ff513e60d344c274cb9664789821831d, type: 2}
+  cellGroupConfig: {fileID: 11400000, guid: 3fe0bd6406cea564185c2c9f0b9ba49b, type: 2}
 --- !u!114 &778035657 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3623927393384968520, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
@@ -3629,15 +3630,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000010728824
+      value: 0.000034648925
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000010728824
+      value: 0.000034648925
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000010728824
+      value: 0.000034648925
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y
