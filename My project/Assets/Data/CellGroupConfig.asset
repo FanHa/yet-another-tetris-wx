@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CellGroupConfig
   m_EditorClassIdentifier: 
   Groups:
-  - Description: "\u51B0\u7CFB"
+  - Description: "\u51B0\u7CFB\u4E13\u7CBE"
     group: 6
     cellTypes:
     - typeName: Model.Tetri.Freeze, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,

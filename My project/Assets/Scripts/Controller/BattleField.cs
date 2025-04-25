@@ -38,9 +38,7 @@ namespace Controller {
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
 
-
-        private Dictionary<Unit.Faction, List<Unit>> factionUnits = new();
-        // private List<Unit> allUnits = new();
+        [SerializeField] private UnitManager unitManager;
         public event Action OnBattleEnd;
 
         private const float RandomOffsetRangeX = 1f;
@@ -49,13 +47,9 @@ namespace Controller {
         private List<InventoryItem> factionAConfig;
         private List<InventoryItem> factionBConfig;
 
-
         void Start()
         {
-            factionUnits[Unit.Faction.FactionA] = new List<Unit>();
-            factionUnits[Unit.Faction.FactionB] = new List<Unit>();
             battleStatistics.OnEndStatistics += EndStatistics;
-            
         }
 
         public void SetEnemyData(List<Model.InventoryItem> enemyData)
@@ -63,16 +57,6 @@ namespace Controller {
             this.enemyData.Items = enemyData; // 替换敌人数据
         }
 
-        public void SetFactionAConfig(List<InventoryItem> items)
-        {
-            factionAConfig = items;
-        }
-        public void SetFactionBConfig(List<InventoryItem> items)
-        {
-            factionBConfig = items;
-        }
-
-        
 
         public void StartNewLevelBattle(int level)
         {
@@ -112,8 +96,6 @@ namespace Controller {
             }
         }
 
-
-
         private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
         {
 
@@ -123,7 +105,8 @@ namespace Controller {
 
             if (unitComponent != null)
             {
-                InitializeUnit(unitComponent, faction, characterCell, tetriCells, newUnit);
+                InitializeUnit(unitComponent, faction, characterCell, tetriCells);
+                
             }
 
         }
@@ -137,9 +120,9 @@ namespace Controller {
             );
         }
 
-        private void InitializeUnit(Unit unit, Unit.Faction faction, Model.Tetri.Character characterCell, List<Model.Tetri.Cell> tetriCells, GameObject unitObject)
+        private void InitializeUnit(Unit unit, Unit.Faction faction, Model.Tetri.Character characterCell, List<Model.Tetri.Cell> tetriCells)
         {
-            unit.SetFactionParent(factionAParent, factionBParent);
+            unit.unitManager = unitManager;
             unit.SetFaction(faction);
             unit.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
             var characterSprite = tetriCellTypeResourceMapping.GetSprite(characterCell);
@@ -167,7 +150,7 @@ namespace Controller {
 
             unit.OnDeath += OnUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;
-            factionUnits[faction].Add(unit);
+            unitManager.Register(unit);
             unit.Initialize();
         }
 
@@ -181,75 +164,30 @@ namespace Controller {
         {
             if (damageTextPrefab != null && damageCanvas != null)
             {
-                // float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f); // X轴随机偏移范围
-                // float randomOffsetY = UnityEngine.Random.Range(-0.1f, 0.1f); // Y轴随机偏移范围（X的一半）
-                // Vector3 offsetPosition = worldPosition + new Vector3(randomOffsetX, randomOffsetY, 0f);
-
-
-                // 创建伤害文本实例
                 GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
                 DamageView damageview = damageTextInstance.GetComponent<DamageView>();
-                // 将世界坐标转换为屏幕坐标
-                // damageTextInstance.transform.position = offsetPosition;
                 damageview.Initialize(damage, worldPosition);
-
-
-                // TextMeshProUGUI damageText = damageTextInstance.GetComponent<TextMeshProUGUI>();
-                // if (damageText != null)
-                // {
-                //     int roundedDamage = Mathf.RoundToInt(damage); // 将伤害值取整
-                //     damageText.text = roundedDamage.ToString();
-                //     StartCoroutine(FadeAndDestroyDamageText(damageTextInstance, damageText));
-                // }
             }
-        }
-
-        private IEnumerator FadeAndDestroyDamageText(GameObject damageTextInstance, TextMeshProUGUI damageText)
-        {
-            Color originalColor = damageText.color;
-            float duration = 1f; // 显示时间为1秒
-            float elapsedTime = 0f;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration); // 渐变透明度
-                damageText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-                yield return null;
-            }
-
-            Destroy(damageTextInstance); // 销毁实例
         }
 
         private void OnUnitDeath(Unit deadUnit)
         {
             statisticsController.AddScore(1);// todo 以后根据不同单位设置不同分数
-            // 从对应阵营里移除死亡单位
-            if (factionUnits.ContainsKey(deadUnit.faction))
+            unitManager.Unregister(deadUnit);
+            List<Unit> survivals = deadUnit.faction == Unit.Faction.FactionA 
+                ? unitManager.GetFactionAUnits() : unitManager.GetFactionBUnits();
+            if (survivals.Count == 0)
             {
-                factionUnits[deadUnit.faction].Remove(deadUnit);
-                // 如果某阵营单位列表为空，则表示该阵营全部阵亡
-                if (factionUnits[deadUnit.faction].Count == 0)
+                if (deadUnit.faction == Unit.Faction.FactionA)
                 {
-                    // 如果是 FactionA 全部死亡，更新生命值
-                    if (deadUnit.faction == Unit.Faction.FactionA)
-                    {
-                        statisticsController.DecreaseLife(1); // 减少生命值
-                        Debug.Log("FactionA 全部死亡，生命值减少 1");
-                    }
-                    
-                    // 调用其他阵营所有幸存单位的 StopAction 方法
-                    foreach (var faction in factionUnits.Keys)
-                    {
-
-                        foreach (var unit in factionUnits[faction])
-                        {
-                            unit.StopAction();
-                        }
-                        
-                    }
-                    StartCoroutine(ShowBattleStatisticsWithDelay(2f)); // 延迟 2 秒
+                    statisticsController.DecreaseLife(1);
+                    Debug.Log("FactionA 全部死亡，生命值减少 1");
                 }
+                foreach (Unit unit in unitManager.GetAllUnits())
+                {
+                    unit.StopAction();
+                }
+                StartCoroutine(ShowBattleStatisticsWithDelay(2f));
             }
         }
 
@@ -263,18 +201,20 @@ namespace Controller {
 
         private void DestroyAllUnits()
         {
-
-            foreach (List<Unit> faction in factionUnits.Values)
+            // 遍历 factionAParent 的所有子对象并销毁
+            foreach (Transform child in factionAParent)
             {
-                foreach (Unit unit in faction)
-                {
-                    if (unit != null)
-                    {
-                        Destroy(unit.gameObject);
-                    }
-                }
-                faction.Clear();
+                Destroy(child.gameObject);
             }
+
+            // 遍历 factionBParent 的所有子对象并销毁
+            foreach (Transform child in factionBParent)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // 重置 UnitManager
+            unitManager.Reset();
         }
 
 

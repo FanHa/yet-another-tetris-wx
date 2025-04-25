@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Controller;
 using Model.Tetri;
 using TMPro;
 using UI;
@@ -48,9 +49,10 @@ namespace Units
         public GameObject PrecisionArrowPrefab;
         public GameObject chainLightningPrefab;
         public Transform projectileSpawnPoint; // 投射物生成位置
-        public List<Transform> targetEnemies;
-        private Transform factionAParent;
-        private Transform factionBParent;
+        
+        public List<Unit> enemyUnits = new();
+
+        public UnitManager unitManager;
 
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private bool isActive = false; // 是否处于活动状态
@@ -87,9 +89,9 @@ namespace Units
             if (isActive)
             {
                 // 如果有目标敌人，移动到最近的敌人
-                if (targetEnemies != null && targetEnemies.Count > 0)
+                if (enemyUnits != null && enemyUnits.Count > 0)
                 {
-                    Transform closestEnemy = targetEnemies[0];
+                    Transform closestEnemy = enemyUnits[0].transform;
                     movementController.MoveTowardsEnemy(closestEnemy);
                 }
             }
@@ -115,8 +117,7 @@ namespace Units
         {
            movementController.SetBattlefieldBounds(minBounds, maxBounds);
         }
-
-        
+   
         public void AddSkill(Skills.Skill newSkill)
         {
             SkillManager.AddSkill(newSkill); // 添加技能
@@ -165,37 +166,13 @@ namespace Units
 
         }
 
-        public void SetFactionParent(Transform factionA, Transform factionB)
+        private void FindClosestEnemies()
         {
-            factionAParent = factionA;
-            factionBParent = factionB;
-        }
+            List<Unit> rawEnemyUnits = faction == Faction.FactionA? unitManager.GetFactionBUnits() : unitManager.GetFactionAUnits(); 
 
-        protected void FindClosestEnemies()
-        {
-            Transform enemyParent = faction == Faction.FactionA ? factionBParent : factionAParent;
-            if (enemyParent == null)
-            {
-                Debug.LogWarning("Enemy parent is not set for this unit.");
-                return;
-            }
-            List<Transform> enemiesInRange = new List<Transform>();
-            
-            foreach (Transform enemy in enemyParent)
-            {
-                Unit unit = enemy.GetComponent<Unit>();
-                if (unit != null && unit.faction != faction && unit.isActiveAndEnabled) // 判断是否为敌对阵营
-                {
-                    enemiesInRange.Add(enemy);
-                }
-            }
-
-            // 查找所有敌人并按距离排序
-            targetEnemies = enemyParent
-                .GetComponentsInChildren<Transform>()
-                .Where(enemy => enemy != transform && enemy.TryGetComponent<Unit>(out Unit unit) && unit.faction != faction && unit.isActiveAndEnabled)
-                .OrderBy(enemy => Vector2.SqrMagnitude(enemy.position - transform.position)) // 按平方距离排序
-                .Take((int)Attributes.AttackTargetNumber) // 选择最近的目标
+            // 按距离从小到大排序
+            enemyUnits = rawEnemyUnits
+                .OrderBy(unit => Vector2.SqrMagnitude(unit.transform.position - transform.position)) // 按平方距离排序
                 .ToList();
         }
 
@@ -204,9 +181,9 @@ namespace Units
             float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
             if (Time.time < lastAttackTime + attackCooldown) 
                 return; // 检查攻击冷却时间
-            if (targetEnemies != null && targetEnemies.Count > 0)
+            if (enemyUnits != null && enemyUnits.Count > 0)
             {
-                Transform closestEnemy = targetEnemies[0]; // 获取最近的敌人
+                Transform closestEnemy = enemyUnits[0].transform; // 获取最近的敌人
                 if (closestEnemy != null)
                 {
                     float distance = Vector2.Distance(transform.position, closestEnemy.position);
@@ -231,22 +208,19 @@ namespace Units
         // 这个方法会被animator的event触发
         public void HandleAttackActionHit()
         {
-            if (targetEnemies != null && targetEnemies.Count > 0)
-            {
-                foreach (var target in targetEnemies)
-                {
-                    if (target == null) continue; // 检查目标是否已被销毁
+            int attackTargetCount = Mathf.Min(enemyUnits.Count, (int)Attributes.AttackTargetNumber);
 
-                    float distance = Vector2.Distance(transform.position, target.position);
-                    if (distance <= Attributes.AttackRange)
-                    {
-                        Unit enemyUnit = target.GetComponent<Unit>();
-                        if (enemyUnit != null)
-                        {
-                            Attack(enemyUnit, Attributes.AttackPower.finalValue/targetEnemies.Count); // 执行攻击逻辑
-                        }
-                    }
+            for (int i = 0; i < attackTargetCount; i++)
+            {
+                Unit target = enemyUnits[i];
+                if (target == null) 
+                    continue; // todo 这里其实要检查目标是否还活着
+                float distance = Vector2.Distance(transform.position, target.transform.position);
+                if (distance <= Attributes.AttackRange)
+                {
+                    Attack(target, Attributes.AttackPower.finalValue / attackTargetCount); // 执行攻击逻辑
                 }
+
             }
         }
 
@@ -323,7 +297,7 @@ namespace Units
             }
 
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
-        
+
             Attributes.CurrentHealth -= finalDamage;
             
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件

@@ -8,21 +8,21 @@ namespace Units.Skills
     {
         public override float cooldown => 10f;
         public float rushDuration = 1f;
-        public float speedMultiplier = 1.5f; // 冲刺速度倍数
+        public float speedMultiplier = 2f; // 冲刺速度倍数
         public float damageMultipierBySpeed = 10; // 伤害倍数
         private HashSet<Unit> hitEnemies = new HashSet<Unit>(); // 记录已碰撞的敌人
 
 
         protected override void ExecuteCore(Unit caster)
         {
-            if (caster.targetEnemies == null || caster.targetEnemies.Count == 0)
+            if (caster.enemyUnits == null || caster.enemyUnits.Count == 0)
             {
                 Debug.LogWarning("No target enemies to rush towards.");
                 return;
             }
 
             // 获取目标敌人的位置（这里选择第一个敌人）
-            Transform targetEnemy = caster.targetEnemies[0];
+            Transform targetEnemy = caster.enemyUnits[0].transform;
             if (targetEnemy == null)
             {
                 Debug.LogWarning("Target enemy is null.");

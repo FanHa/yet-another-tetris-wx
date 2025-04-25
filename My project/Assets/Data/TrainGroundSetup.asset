@@ -17,21 +17,49 @@ MonoBehaviour:
       typeName: Model.Tetri.Hourglass, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     TetriCells:
-    - typeName: Model.Tetri.Skills.WindStrike, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - CharacterCell:
+      typeName: Model.Tetri.Aim, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    TetriCells:
+    - typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Burn, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
   FactionBUnits:
+  - CharacterCell:
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    TetriCells:
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - CharacterCell:
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    TetriCells:
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
   - CharacterCell:
       typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null

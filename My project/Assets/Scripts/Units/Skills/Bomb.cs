@@ -6,7 +6,7 @@ namespace Units.Skills
     public class Bomb : Skill
     {
         public float damage = 50f; // 炸弹伤害
-        public float explosionRadius = 2f; // 爆炸范围
+        public float explosionRadius = 1f; // 爆炸范围
         public override float cooldown => 10f;
         private float speed = 2f;
 

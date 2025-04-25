@@ -19,7 +19,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "单位转变为远程攻击,攻击距离 +" + distance + ",但会衰减";
+            return "单位转变为远程攻击,攻击距离 +" + distance + ",但伤害会衰减";
         }
 
         public override string Name()
