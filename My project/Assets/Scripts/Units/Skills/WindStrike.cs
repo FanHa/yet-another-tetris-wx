@@ -73,43 +73,20 @@ namespace Units.Skills
                 centerPosition, 
                 Quaternion.identity
             );
-            // 开始区域效果协程
-            caster.StartCoroutine(AreaEffect(caster, centerPosition, areaEffect));
-        }
-
-        private IEnumerator AreaEffect(Unit caster, Vector3 centerPosition, GameObject areaEffect)
-        {
-            float elapsedTime = 0f;
-            float damagePerTick = caster.Attributes.MoveSpeed.finalValue * damageMultiplier; 
-            while (elapsedTime < effectDuration)
+            // 初始化区域效果
+            var areaEffectScript = areaEffect.GetComponent<Units.VisualEffects.WindStrikeArea>();
+            if (areaEffectScript != null)
             {
-                // 检测范围内的敌人
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(centerPosition, orbitRadius);
-                foreach (var collider in colliders)
-                {
-                    Unit enemy = collider.GetComponent<Unit>();
-                    if (enemy != null && enemy.faction != caster.faction)
-                    {
-                        // 对敌人造成伤害
-                        Units.Damages.Damage damage = new Units.Damages.Damage(
-                            damagePerTick,
-                            "风刃伤害",
-                            Units.Damages.DamageType.Skill,
-                            caster,
-                            enemy,
-                            new List<Units.Buffs.Buff>()
-                        );
-                        enemy.TakeDamage(damage);
-                    }
-                }
-
-                elapsedTime += damageInterval;
-                yield return new WaitForSeconds(damageInterval); // 等待下一次检测
-            }
-            if (areaEffect != null)
-            {
-                Object.Destroy(areaEffect);
+                areaEffectScript.Initialize(
+                    caster,
+                    effectDuration,
+                    damageInterval,
+                    damageMultiplier,
+                    orbitRadius
+                );
             }
         }
+
+        
     }
 }
