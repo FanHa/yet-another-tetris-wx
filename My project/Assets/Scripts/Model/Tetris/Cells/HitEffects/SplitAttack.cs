@@ -58,7 +58,7 @@ namespace Model.Tetri
                     projectile.target = targetEnemy.transform;
                     projectile.damage = new Damage(
                         splitDamage,
-                        "分裂攻击",
+                        Name(),
                         DamageType.Skill,
                         damage.SourceUnit,
                         targetEnemy,
@@ -82,7 +82,7 @@ namespace Model.Tetri
 
         public override string Name()
         {
-            return "技能: 分裂攻击";
+            return "分裂攻击";
         }
     }
 }

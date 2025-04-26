@@ -103,7 +103,7 @@ namespace Units
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
 
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
-            InvokeRepeating(nameof(FindClosestEnemies), 0f, 0.5f);
+            InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
 
             SkillManager.Initialize(this); // 初始化技能管理器
             InvokeRepeating(nameof(CastSkills) , 0f, 1f); // 每秒调用一次技能
@@ -139,7 +139,7 @@ namespace Units
         public void StopAction()
         {
             CancelInvoke(nameof(BuffEffect));
-            CancelInvoke(nameof(FindClosestEnemies));
+            CancelInvoke(nameof(UpdateEnemiesDistance));
             CancelInvoke(nameof(CastSkills));
             isActive = false;
         }
@@ -166,7 +166,7 @@ namespace Units
 
         }
 
-        private void FindClosestEnemies()
+        private void UpdateEnemiesDistance()
         {
             List<Unit> rawEnemyUnits = faction == Faction.FactionA? unitManager.GetFactionBUnits() : unitManager.GetFactionAUnits(); 
 

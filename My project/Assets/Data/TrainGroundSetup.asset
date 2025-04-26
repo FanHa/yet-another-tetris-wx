@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FactionAUnits:
   - CharacterCell:
-      typeName: Model.Tetri.Hourglass, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     TetriCells:
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -23,7 +23,7 @@ MonoBehaviour:
         PublicKeyToken=null
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    - typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
@@ -65,6 +65,16 @@ MonoBehaviour:
         PublicKeyToken=null
     TetriCells:
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - CharacterCell:
+      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    TetriCells:
+    - typeName: Model.Tetri.RangeAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null

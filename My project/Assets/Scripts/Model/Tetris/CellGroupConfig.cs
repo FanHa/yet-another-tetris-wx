@@ -17,7 +17,8 @@ namespace Model.Tetri
             RangeAttack,
             Health,
             AttackFrequency,
-            Ice
+            Ice,
+            Wind,
         }
         [Serializable]
         public class GroupConfig

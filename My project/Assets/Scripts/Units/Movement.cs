@@ -7,8 +7,8 @@ namespace Units
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float minDistance; // 与敌人保持的最小距离
-        private Transform battlefieldMinBounds;
-        private Transform battlefieldMaxBounds;
+        public Transform BattlefieldMinBounds;
+        public Transform BattlefieldMaxBounds;
         private Attributes attributes;
 
         public void Initialize(Attributes attributes)
@@ -18,8 +18,22 @@ namespace Units
 
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
-            battlefieldMinBounds = minBounds;
-            battlefieldMaxBounds = maxBounds;
+            BattlefieldMinBounds = minBounds;
+            BattlefieldMaxBounds = maxBounds;
+        }
+
+        public (Vector2 minBounds, Vector2 maxBounds) GetBattlefieldBounds()
+        {
+            if (BattlefieldMinBounds == null || BattlefieldMaxBounds == null)
+            {
+                Debug.LogWarning("Battlefield bounds are not set.");
+                return (Vector2.zero, Vector2.zero); // 返回默认值
+            }
+
+            Vector2 minBounds = BattlefieldMinBounds.position;
+            Vector2 maxBounds = BattlefieldMaxBounds.position;
+
+            return (minBounds, maxBounds);
         }
 
         public void MoveTowardsEnemy(Transform closestEnemy)
@@ -48,15 +62,15 @@ namespace Units
 
         private void ClampPositionToBattlefield()
         {
-            if (battlefieldMinBounds == null || battlefieldMaxBounds == null)
+            if (BattlefieldMinBounds == null || BattlefieldMaxBounds == null)
             {
                 Debug.LogWarning("Battlefield bounds are not set.");
                 return;
             }
 
             Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, battlefieldMinBounds.position.x, battlefieldMaxBounds.position.x);
-            clampedPosition.y = Mathf.Clamp(clampedPosition.y, battlefieldMinBounds.position.y, battlefieldMaxBounds.position.y);
+            clampedPosition.x = Mathf.Clamp(clampedPosition.x, BattlefieldMinBounds.position.x, BattlefieldMaxBounds.position.x);
+            clampedPosition.y = Mathf.Clamp(clampedPosition.y, BattlefieldMinBounds.position.y, BattlefieldMaxBounds.position.y);
             transform.position = clampedPosition;
         }
 

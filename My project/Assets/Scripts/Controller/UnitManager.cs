@@ -11,6 +11,10 @@ namespace Controller
         private List<Unit> factionB = new();
         private List<Unit> deaded = new();
 
+        [SerializeField] private GameObject unitPrefab;
+        [SerializeField] private Transform factionAParent;
+        [SerializeField] private Transform factionBParent;
+
         public void Register(Unit unit)
         {
 

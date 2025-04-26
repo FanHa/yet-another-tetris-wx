@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Units.Skills
@@ -21,14 +22,7 @@ namespace Units.Skills
                 return;
             }
 
-            // 获取目标敌人的位置（这里选择第一个敌人）
-            Transform targetEnemy = caster.enemyUnits[0].transform;
-            if (targetEnemy == null)
-            {
-                Debug.LogWarning("Target enemy is null.");
-                return;
-            }
-
+            Transform targetEnemy = caster.enemyUnits[caster.enemyUnits.Count - 1].transform;
             // 开始冲刺协程
             caster.StartCoroutine(RushTowardsTarget(caster, targetEnemy));
         }
@@ -52,15 +46,15 @@ namespace Units.Skills
                 caster.transform.position = newPosition;
 
                 // 检测与敌人的碰撞
-                Collider2D[] hits = Physics2D.OverlapCircleAll(caster.transform.position, 0.5f);
+                Collider2D[] hits = Physics2D.OverlapCircleAll(caster.transform.position, 0.3f);
                 foreach (var hit in hits)
                 {
                     Unit enemyUnit = hit.GetComponent<Unit>();
                     if (enemyUnit != null && enemyUnit.faction != caster.faction && !hitEnemies.Contains(enemyUnit))
                     {
                         Units.Damages.Damage damage = new Units.Damages.Damage(
-                             caster.Attributes.AttackPower.finalValue + rushSpeed * damageMultipierBySpeed,
-                             Name(),
+                            rushSpeed * damageMultipierBySpeed,
+                            Name(),
                             Units.Damages.DamageType.Skill,
                             caster,
                             enemyUnit,
@@ -88,9 +82,9 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"向目标敌人冲锋，持续 {rushDuration} 秒，" +
-                $"冲刺过程中与敌人碰撞会造成基于速度的额外伤害，" +
-                $"伤害为攻击力加上速度的 {damageMultipierBySpeed} 倍。" +
+            return $"向最远的敌人冲锋，持续 {rushDuration} 秒，" +
+                $"冲刺过程中与敌人碰撞会造成基于速度的伤害，" +
+                $"伤害为速度的 {damageMultipierBySpeed} 倍。" +
                 $"技能冷却时间为 {cooldown} 秒。";
         }
 
