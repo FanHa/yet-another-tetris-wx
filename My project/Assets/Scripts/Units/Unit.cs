@@ -48,6 +48,7 @@ namespace Units
         public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
         public GameObject PrecisionArrowPrefab;
         public GameObject chainLightningPrefab;
+        public GameObject BloodBombPrefab;
         public Transform projectileSpawnPoint; // 投射物生成位置
         
         public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
@@ -268,8 +269,7 @@ namespace Units
                 
                 if (projectile != null)
                 {
-                    projectile.target = target.transform;
-                    projectile.damage = damage;
+                    projectile.Init(this, target.transform, 2f, damage);
 
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
                     if (projectileSpriteRenderer != null && Fist1SpriteRenderer != null)

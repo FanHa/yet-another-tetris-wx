@@ -5,7 +5,7 @@ namespace Units.Skills
 {
     public class Bomb : Skill
     {
-        public float damage = 50f; // 炸弹伤害
+        protected float damageValue = 50f; // 炸弹伤害
         public float explosionRadius = 1f; // 爆炸范围
         public override float cooldown => 10f;
         private float speed = 2f;
@@ -24,25 +24,24 @@ namespace Units.Skills
             var bomb = bombInstance.GetComponent<Units.Projectiles.Bomb>();
             if (bomb != null)
             {
-                bomb.faction = caster.faction;
-                bomb.target = new GameObject("BombTarget").transform;
-                bomb.target.position = targetEnemy.position;
-                bomb.damage = new Damages.Damage(
-                    damage, 
+                Damages.Damage damage = new Damages.Damage(
+                    damageValue, 
                     Name(),
                     Damages.DamageType.Skill,
                     caster,
                     null,
                     new List<Buffs.Buff>()
                 );
-                bomb.explosionRadius = explosionRadius;
-                bomb.speed = speed;
+                Transform target = new GameObject("BombTarget").transform;
+                target.position = targetEnemy.position;
+                
+                bomb.Init(caster, target, speed, damage, caster.faction, explosionRadius);
             }
         }
 
         public override string Description()
         {
-            return $"投掷一枚炸弹，对目标区域内的敌人造成 {damage} 点伤害，" +
+            return $"投掷一枚炸弹，对目标区域内的敌人造成 {damageValue} 点伤害，" +
                 $"爆炸范围为 {explosionRadius} 米。" +
                 $"技能冷却时间为 {cooldown} 秒。";
         }

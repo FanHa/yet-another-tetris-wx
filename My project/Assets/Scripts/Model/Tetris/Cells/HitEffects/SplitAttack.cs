@@ -43,7 +43,7 @@ namespace Model.Tetri
             for (int i = 0; i < splitCount; i++)
             {
                 Unit targetEnemy = nearbyEnemies[i];
-                float splitDamage = damage.Value * (splitDamagePercentage / 100f);
+                float splitDamageValue = damage.Value * (splitDamagePercentage / 100f);
 
                 // 创建投射物
                 GameObject projectileObject = UnityEngine.Object.Instantiate(
@@ -55,15 +55,15 @@ namespace Model.Tetri
                 Units.Projectiles.Projectile projectile = projectileObject.GetComponent<Units.Projectiles.Projectile>();
                 if (projectile != null)
                 {
-                    projectile.target = targetEnemy.transform;
-                    projectile.damage = new Damage(
-                        splitDamage,
+                    Damage splitDamage = new Damage(
+                        splitDamageValue,
                         Name(),
                         DamageType.Skill,
                         damage.SourceUnit,
                         targetEnemy,
                         damage.SourceUnit.attackEffects
                     );
+                    projectile.Init(damage.SourceUnit, targetEnemy.transform, 1.5f, splitDamage);
                     // todo 这一段代码与unit中创建projectile的代码有点冗余
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
                     if (projectileSpriteRenderer != null && damage.SourceUnit.Fist1SpriteRenderer != null)

@@ -7,7 +7,7 @@ namespace Units.Skills
     {
         public float attackPowerMultiplier = 4f; // 攻击力倍数
         public override float cooldown => 10f;
-        public float speed = 2f;
+        public float speed = 1.5f;
 
         protected override void ExecuteCore(Unit caster)
         {
@@ -26,15 +26,15 @@ namespace Units.Skills
             Units.Projectiles.Projectile projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
-                projectile.target = targetEnemy.transform;
-                projectile.damage = new Damages.Damage(
+                var damage = new Damages.Damage(
                     caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, 
                     Name(),
                     Damages.DamageType.Hit,
                     caster,
                     targetEnemy,
                     caster.attackEffects);
-                projectile.speed = speed;
+                var target = targetEnemy.transform;
+                projectile.Init(caster, target, speed, damage);
             }
         }
 

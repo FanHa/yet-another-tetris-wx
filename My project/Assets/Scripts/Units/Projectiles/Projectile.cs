@@ -6,12 +6,18 @@ namespace Units.Projectiles
 {
     public class Projectile : MonoBehaviour
     {
-        public Transform target; // 目标物体
-        public float speed; // 移动速度
-        public Units.Damages.Damage damage; // 伤害值
+        protected Units.Unit caster;
+        protected Transform target; // 目标物体, 很多投射物都是投射到目标单位身边的一个虚拟爆炸点,所以target不使用Unit
+        protected float speed; // 移动速度
+        protected Damages.Damage damage;
+        protected bool Initialized = false;
 
         void Update()
         {
+            if (Initialized == false)
+            {
+                return;
+            }
             // 如果目标不存在，销毁自身
             if (target == null)
             {
@@ -19,33 +25,40 @@ namespace Units.Projectiles
                 return;
             }
 
-
             Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
+            transform.position += speed * Time.deltaTime * direction;
 
             // 设置投射物的正前方（transform.up）朝向目标方向
             transform.up = direction;
-
-            // 检测是否触碰到目标
-            if (Vector3.Distance(transform.position, target.position) < 0.2f)
-            {
-                OnHitTarget();
-            }
-            
+    
         }
 
-        protected virtual void OnHitTarget()
+        public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage)
         {
-            // 对目标造成伤害
-            Unit targetUnit = damage.TargetUnit;
-            if (targetUnit != null)
+            
+            this.caster = caster;
+            this.target = target;
+            this.speed = speed;
+            this.damage = damage;
+
+            Initialized = true;
+        }
+        
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.transform == target)
+            {
+                HandleHitTarget();
+            }
+        }
+
+        protected virtual void HandleHitTarget()
+        {
+            if (target.TryGetComponent<Unit>(out var targetUnit))
             {
                 targetUnit.TakeDamage(damage);
-                damage.SourceUnit.TriggerOnAttackHit( damage);
-
-
+                caster.TriggerOnAttackHit( damage);
             }
-            // 销毁投射物
             Destroy(gameObject);
         }
     }

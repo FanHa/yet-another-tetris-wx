@@ -7,16 +7,24 @@ namespace Units.Projectiles
 {
     public class Bomb : Projectile
     {
-        public Units.Unit.Faction faction; // 所属阵营
-        public float explosionRadius = 2f; // 爆炸范围
+        protected Units.Unit.Faction targetFaction; // 所属阵营
+        protected float explosionRadius; // 爆炸范围
 
-        protected override void OnHitTarget()
+        public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius)
+        {
+
+            base.Init(caster, target, speed, damage);
+            this.targetFaction = targetFaction;
+            this.explosionRadius = explosionRadius;
+        }
+
+        protected override void HandleHitTarget()
         {
             StartCoroutine(ExplodeAfterDelay(2f));
 
         }
 
-        private IEnumerator ExplodeAfterDelay(float delay)
+        protected virtual IEnumerator ExplodeAfterDelay(float delay)
         {
             // 停留在目标位置
             yield return new WaitForSeconds(delay);
@@ -25,20 +33,20 @@ namespace Units.Projectiles
             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
             foreach (var collider in hitColliders)
             {
-                var unit = collider.GetComponent<Unit>();
-                if (unit != null && unit.faction != faction)
+                var targetUnit = collider.GetComponent<Unit>();
+                if (targetUnit != null && targetUnit.faction == targetFaction)
                 {
                     var explosionDamage = new Units.Damages.Damage(
                         damage.Value,
                         damage.SourceName,
                         damage.Type,
                         damage.SourceUnit,
-                        unit, // 设置为当前爆炸范围内的敌人
-                        new List<Buffs.Buff>()
+                        targetUnit, // 设置为当前爆炸范围内的敌人
+                        damage.Buffs
                     );
 
                     // 对敌人造成伤害
-                    unit.TakeDamage(explosionDamage);
+                    targetUnit.TakeDamage(explosionDamage);
                 }
             }
 
