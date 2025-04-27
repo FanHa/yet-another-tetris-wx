@@ -121,3 +121,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Skills.WindStrike, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     sprite: {fileID: -1556600189811090418, guid: 64cbbc6fff2a09b4aab63c4a4b698db8, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Skills.ProjectileHail, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    sprite: {fileID: 8796479085401456489, guid: a173a738ddcb5c14da1f02f3bda710c3, type: 3}

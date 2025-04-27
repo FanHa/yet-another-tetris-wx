@@ -37,8 +37,8 @@ MonoBehaviour:
     TetriCells:
     - typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    - typeName: Model.Tetri.Burn, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.ProjectileHail, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   FactionBUnits:
   - CharacterCell:
       typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,

@@ -9,23 +9,10 @@ namespace Model
     [CustomPropertyDrawer(typeof(CellTypeReference))]
     public class TypeReferenceDrawer : PropertyDrawer
     {
-        private static List<Type> cachedCellTypes;
-        private static string[] cachedTypeNames;
+        private  List<Type> cachedCellTypes;
+        private  string[] cachedTypeNames;
 
-        static TypeReferenceDrawer()
-        {
-            CacheCellTypes();
-        }
-
-        void OnEnable()
-        {
-            if (cachedCellTypes == null || cachedTypeNames == null)
-            {
-                CacheCellTypes();
-            }
-        }
-
-        private static void CacheCellTypes()
+        private void CacheCellTypes()
         {
             cachedCellTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
@@ -37,6 +24,10 @@ namespace Model
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            if (cachedCellTypes == null || cachedTypeNames == null || cachedCellTypes.Count == 0)
+            {
+                CacheCellTypes();
+            }
             var typeNameProperty = property.FindPropertyRelative("typeName");
             var currentType = Type.GetType(typeNameProperty.stringValue);
             int currentIndex = cachedCellTypes.IndexOf(currentType);

@@ -50,7 +50,7 @@ namespace Units
         public GameObject chainLightningPrefab;
         public Transform projectileSpawnPoint; // 投射物生成位置
         
-        public List<Unit> enemyUnits = new();
+        public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
         public UnitManager unitManager;
 
@@ -228,9 +228,16 @@ namespace Units
         {
             if (Attributes.IsRanged)
             {
-                
-                // 发射投射物
-                FireProjectile(target, damageValue);
+                damageValue = Attributes.RangeAttackDamagePercentage * damageValue / 100;
+                Damages.Damage damage = new Damages.Damage(
+                    damageValue,
+                    "远程攻击",
+                    Damages.DamageType.Hit,
+                    this,
+                    target,
+                    attackEffects
+                ); 
+                FireProjectile(target, damage);
             }
             else
             {
@@ -252,7 +259,7 @@ namespace Units
             OnAttackHit?.Invoke(damage); // 触发攻击命中事件
         }
 
-        private void FireProjectile(Unit target, float damageValue)
+        public void FireProjectile(Unit target, Damages.Damage damage)
         {
             if (projectilePrefab != null && projectileSpawnPoint != null)
             {
@@ -261,17 +268,9 @@ namespace Units
                 
                 if (projectile != null)
                 {
-                    damageValue = Attributes.RangeAttackDamagePercentage * damageValue / 100;
                     projectile.target = target.transform;
-                    projectile.damage = new Damages.Damage(
-                        damageValue,
-                        "远程攻击",
-                        Damages.DamageType.Hit,
-                        this,
-                        target,
-                        attackEffects); // 设置投射物的伤害
+                    projectile.damage = damage;
 
-                    // 设置投射物的 Sprite 为 Fist1SpriteRenderer 的 Sprite
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
                     if (projectileSpriteRenderer != null && Fist1SpriteRenderer != null)
                     {

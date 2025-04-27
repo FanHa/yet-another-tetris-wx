@@ -51,6 +51,7 @@ namespace Units.Skills
         protected List<Unit> FindEnemiesInRange(Unit caster, float range)
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(caster.transform.position, range);
+            
             return colliders
                 .Select(collider => collider.GetComponent<Unit>())
                 .Where(unit => unit != null && unit.faction != caster.faction)
