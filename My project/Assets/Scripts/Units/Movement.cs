@@ -6,7 +6,7 @@ namespace Units
 {
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float minDistance; // 与敌人保持的最小距离
+        [SerializeField] private float minDistance; // 与其他单位保持的最小距离
         public Transform BattlefieldMinBounds;
         public Transform BattlefieldMaxBounds;
         private Attributes attributes;
@@ -86,9 +86,11 @@ namespace Units
             {
                 if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit otherUnit))
                 {
-                    // 计算避让方向
                     Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
-                    avoidanceVector += toOtherUnit.normalized;
+                    float distance = toOtherUnit.magnitude;
+
+                    // 根据距离的倒数加权，距离越近影响越大
+                    avoidanceVector += toOtherUnit.normalized / Mathf.Max(distance, 0.1f);
                     avoidanceCount++;
                 }
             }
@@ -98,8 +100,11 @@ namespace Units
                 // 平均避让方向
                 avoidanceVector /= avoidanceCount;
 
-                // 调整原始方向
-                return (originalDirection + avoidanceVector).normalized;
+                // 平衡目标方向和避让方向的权重
+                float targetWeight = 0.7f; // 目标方向的权重
+                float avoidanceWeight = 0.3f; // 避让方向的权重
+
+                return (originalDirection * targetWeight + avoidanceVector * avoidanceWeight).normalized;
             }
 
             // 如果没有需要避让的单位，返回原始方向
