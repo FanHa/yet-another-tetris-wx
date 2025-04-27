@@ -22,3 +22,12 @@ MonoBehaviour:
         PublicKeyToken=null
     - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Description: "\u75BE\u5982\u98CE\u4E13\u7CBE"
+    group: 7
+    cellTypes:
+    - typeName: Model.Tetri.Speed, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.WindStrike, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null

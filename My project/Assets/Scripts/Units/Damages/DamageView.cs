@@ -15,7 +15,7 @@ namespace Units.Damages
         {
             damageText = GetComponent<TextMeshProUGUI>();
         }
-        public void Initialize(float damage, Vector3 worldPosition)
+        public void Initialize(float damage, string name, Vector3 worldPosition)
         {
             // 设置随机偏移
             float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f);
@@ -31,7 +31,7 @@ namespace Units.Damages
             if (damageText != null)
             {
                 int roundedDamage = Mathf.RoundToInt(damage); // 将伤害值取整
-                damageText.text = roundedDamage.ToString();
+                damageText.text = name + " " + roundedDamage.ToString();
             }
 
             // 开始渐隐和销毁逻辑

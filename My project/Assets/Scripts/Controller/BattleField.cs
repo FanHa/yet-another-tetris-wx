@@ -157,16 +157,22 @@ namespace Controller {
         private void HandleDamageTaken(Units.Damages.Damage damage)
         {
             battleStatistics.AddRecord(damage);
-            ShowDamageText(damage.TargetUnit.transform.position, damage.Value);
+            ShowDamageText(damage.TargetUnit.transform.position, damage);
         }
 
-        private void ShowDamageText(Vector3 worldPosition, float damage)
+        private void ShowDamageText(Vector3 worldPosition, Units.Damages.Damage damage)
         {
             if (damageTextPrefab != null && damageCanvas != null)
             {
                 GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
                 DamageView damageview = damageTextInstance.GetComponent<DamageView>();
-                damageview.Initialize(damage, worldPosition);
+                string sourceName = "";
+                if (damage.Type != DamageType.Hit)
+                {
+                    sourceName = damage.SourceName;
+                }
+
+                damageview.Initialize(damage.Value, sourceName, worldPosition);
             }
         }
 

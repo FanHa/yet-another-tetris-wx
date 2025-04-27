@@ -479,6 +479,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1132010292}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &175012966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 175012968}
+  - component: {fileID: 175012967}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: UnitManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &175012967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175012966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a974fbcbf51244b815ddfc43bc463e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 0}
+  factionAParent: {fileID: 0}
+  factionBParent: {fileID: 0}
+--- !u!4 &175012968
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175012966}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 943837599}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &262366948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1495,6 +1543,7 @@ Transform:
   - {fileID: 1132010292}
   - {fileID: 1407102699}
   - {fileID: 1349092278}
+  - {fileID: 175012968}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &943837600
@@ -1524,6 +1573,7 @@ MonoBehaviour:
   trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
   unitPrefab: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
   tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  unitManager: {fileID: 175012967}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0
@@ -3630,15 +3680,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1736299767691833620, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000008086012
+      value: 0.00006952371
       objectReference: {fileID: 0}
     - target: {fileID: 1749475623952492478, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000008086012
+      value: 0.00006952371
       objectReference: {fileID: 0}
     - target: {fileID: 1763615482143482981, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000008086012
+      value: 0.00006952371
       objectReference: {fileID: 0}
     - target: {fileID: 2590558395867553244, guid: 5ae9f60d26c8bd34ba10ed2b3e100693, type: 3}
       propertyPath: m_AnchorMax.y
