@@ -56,9 +56,9 @@ namespace Units.Skills
                 );
 
                 // 创建 ChainLightningController 实例并设置起点和终点
-                if (caster.chainLightningPrefab != null)
+                if (caster.ProjectileConfig.ChainLightningPrefab != null)
                 {
-                    var lightningInstance = Object.Instantiate(caster.chainLightningPrefab.gameObject, caster.transform.position, Quaternion.identity);
+                    var lightningInstance = Object.Instantiate(caster.ProjectileConfig.ChainLightningPrefab, caster.transform.position, Quaternion.identity);
                     var controller = lightningInstance.GetComponent<Projectiles.ChainLightning>();
                     if (controller != null)
                     {

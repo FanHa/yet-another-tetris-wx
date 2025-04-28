@@ -19,7 +19,8 @@ namespace Units
         public Units.Skills.Manager SkillManager = new(); // 技能管理器
         private AnimationController animationController;
         public VisualEffectConfig VisualEffectConfig;
-        
+        public Model.ProjectileConfig ProjectileConfig;
+
         public enum Faction
         {
             FactionA,
@@ -44,11 +45,7 @@ namespace Units
         public SpriteRenderer Fist1SpriteRenderer;
         public SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
-        public GameObject projectilePrefab; // 投射物预制体
-        public GameObject bombPrefab; // TODO 暂时所有projectile的prefab都放到这里,以后再改
-        public GameObject PrecisionArrowPrefab;
-        public GameObject chainLightningPrefab;
-        public GameObject BloodBombPrefab;
+
         public Transform projectileSpawnPoint; // 投射物生成位置
         
         public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
@@ -262,9 +259,9 @@ namespace Units
 
         public void FireProjectile(Unit target, Damages.Damage damage)
         {
-            if (projectilePrefab != null && projectileSpawnPoint != null)
+            if (ProjectileConfig.BaseProjectilePrefab != null && projectileSpawnPoint != null)
             {
-                GameObject projectileObject = Instantiate(projectilePrefab, projectileSpawnPoint.position, transform.rotation);
+                GameObject projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
                 
                 if (projectile != null)

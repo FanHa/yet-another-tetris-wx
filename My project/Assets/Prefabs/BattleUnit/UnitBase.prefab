@@ -1174,18 +1174,16 @@ MonoBehaviour:
     RangeAttackDamagePercentage: 0
   BuffManager: {fileID: 0}
   VisualEffectConfig: {fileID: 11400000, guid: bed103acc2cbb594e8d4d2b2d04e3a2c, type: 2}
+  ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0
   BodySpriteRenderer: {fileID: 5410986790312629488}
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
-  projectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
-  bombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
-  PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
-  chainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
   projectileSpawnPoint: {fileID: 1587690522871941135}
-  targetEnemies: []
+  enemyUnits: []
+  unitManager: {fileID: 0}
   moveable: 1
   isFrozen: 0
 --- !u!58 &8368620811269264414
@@ -1273,6 +1271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDistance: 0.3
+  BattlefieldMinBounds: {fileID: 0}
+  BattlefieldMaxBounds: {fileID: 0}
 --- !u!114 &7649338840882115303
 MonoBehaviour:
   m_ObjectHideFlags: 0

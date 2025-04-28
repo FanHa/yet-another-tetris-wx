@@ -6,7 +6,7 @@ namespace Units.Projectiles
 {
     public class BloodBomb : Bomb
     {
-        public float healthReturnPercentage; // 每命中一个敌人返还的血量百分比
+        private float healthReturnPercentage; // 每命中一个敌人返还的血量百分比
 
         public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius, float healthReturnPercentage)
         {

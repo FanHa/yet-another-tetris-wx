@@ -47,7 +47,7 @@ namespace Model.Tetri
 
                 // 创建投射物
                 GameObject projectileObject = UnityEngine.Object.Instantiate(
-                    damage.SourceUnit.projectilePrefab,
+                    damage.SourceUnit.ProjectileConfig.BaseProjectilePrefab,
                     damage.TargetUnit.transform.position,
                     Quaternion.identity
                 );

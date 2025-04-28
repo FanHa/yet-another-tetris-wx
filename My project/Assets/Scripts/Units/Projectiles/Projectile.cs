@@ -11,6 +11,7 @@ namespace Units.Projectiles
         protected float speed; // 移动速度
         protected Damages.Damage damage;
         protected bool Initialized = false;
+        protected bool Moving = true;
 
         void Update()
         {
@@ -24,13 +25,15 @@ namespace Units.Projectiles
                 Destroy(gameObject);
                 return;
             }
+            
+            if (Moving)
+            {
+                Vector3 direction = (target.position - transform.position).normalized;
+                transform.position += speed * Time.deltaTime * direction;
 
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += speed * Time.deltaTime * direction;
-
-            // 设置投射物的正前方（transform.up）朝向目标方向
-            transform.up = direction;
-    
+                // 设置投射物的正前方（transform.up）朝向目标方向
+                transform.up = direction;
+            }
         }
 
         public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage)

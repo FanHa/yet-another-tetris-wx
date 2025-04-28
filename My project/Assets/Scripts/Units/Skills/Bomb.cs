@@ -6,9 +6,9 @@ namespace Units.Skills
     public class Bomb : Skill
     {
         protected float damageValue = 50f; // 炸弹伤害
-        public float explosionRadius = 1f; // 爆炸范围
+        public float explosionRadius = 0.75f; // 爆炸范围
         public override float cooldown => 10f;
-        private float speed = 2f;
+        private float speed = 1.5f;
 
         protected override void ExecuteCore(Unit caster)
         {
@@ -19,8 +19,8 @@ namespace Units.Skills
                 return;
             }
 
-            Transform targetEnemy = enemiesInRange[0].transform;
-            GameObject bombInstance = Object.Instantiate(caster.bombPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
+            Unit targetEnemy = enemiesInRange[0];
+            GameObject bombInstance = Object.Instantiate(caster.ProjectileConfig.BombPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
             var bomb = bombInstance.GetComponent<Units.Projectiles.Bomb>();
             if (bomb != null)
             {
@@ -32,10 +32,11 @@ namespace Units.Skills
                     null,
                     new List<Buffs.Buff>()
                 );
-                Transform target = new GameObject("BombTarget").transform;
-                target.position = targetEnemy.position;
+
+                GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
+                tempTargetInstance.transform.position = targetEnemy.transform.position;
                 
-                bomb.Init(caster, target, speed, damage, caster.faction, explosionRadius);
+                bomb.Init(caster, tempTargetInstance.transform, speed, damage, targetEnemy.faction, explosionRadius);
             }
         }
 

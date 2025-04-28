@@ -20,6 +20,7 @@ namespace Units.Projectiles
 
         protected override void HandleHitTarget()
         {
+            Moving =false;
             StartCoroutine(ExplodeAfterDelay(2f));
 
         }

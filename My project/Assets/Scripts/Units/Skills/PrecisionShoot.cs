@@ -22,7 +22,7 @@ namespace Units.Skills
             }
 
             Unit targetEnemy = enemiesInRange.First();
-            GameObject projectileInstance = Object.Instantiate(caster.PrecisionArrowPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
+            GameObject projectileInstance = Object.Instantiate(caster.ProjectileConfig.PrecisionArrowPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
             Units.Projectiles.Projectile projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
