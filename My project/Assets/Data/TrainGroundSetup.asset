@@ -25,9 +25,9 @@ MonoBehaviour:
         PublicKeyToken=null
     - typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    - typeName: Model.Tetri.Skills.BloodBomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    - typeName: Model.Tetri.Skills.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     - typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null

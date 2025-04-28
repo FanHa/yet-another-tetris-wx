@@ -68,7 +68,7 @@ MonoBehaviour:
   - cellType:
       typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 23071cc0a68e5bc439ab14596531d7a1, type: 3}
+    sprite: {fileID: -1022712919679938794, guid: 5142e583dc8f52e4ca261287ef31c84a, type: 3}
   - cellType:
       typeName: Model.Tetri.Skills.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
@@ -125,3 +125,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Skills.ProjectileHail, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     sprite: {fileID: 8796479085401456489, guid: a173a738ddcb5c14da1f02f3bda710c3, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Skills.BloodBomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 5142575546293964499, guid: b3b57dd9029e27c4698a033a1854cee9, type: 3}
