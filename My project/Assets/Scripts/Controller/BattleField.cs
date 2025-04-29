@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine.UI;
 using Model;
 using Units.Damages;
+using Units.UI;
 
 namespace Controller {
     public class BattleField : MonoBehaviour
@@ -19,6 +20,7 @@ namespace Controller {
 
         [Header("UI Elements")]
         [SerializeField] private GameObject damageTextPrefab;
+        [SerializeField] private GameObject skillNameViewerPrefab;
         [SerializeField] private Canvas damageCanvas;
         [SerializeField] private BattleStatistics battleStatistics;
 
@@ -151,29 +153,31 @@ namespace Controller {
             unit.OnDeath += OnUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;
             unitManager.Register(unit);
+            Units.Skills.Manager skillManager = unit.SkillManager;
+            skillManager.OnSkillCast += HandleSkillCast;
             unit.Initialize();
+        }
+
+        private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
+        {
+            GameObject skillNameInstance = GameObject.Instantiate(skillNameViewerPrefab, damageCanvas.transform);
+            FloatingTextView floatingText = skillNameInstance.GetComponent<FloatingTextView>();
+            floatingText.Initialize(skill.Name(), unit.transform.position);
         }
 
         private void HandleDamageTaken(Units.Damages.Damage damage)
         {
             battleStatistics.AddRecord(damage);
-            ShowDamageText(damage.TargetUnit.transform.position, damage);
-        }
-
-        private void ShowDamageText(Vector3 worldPosition, Units.Damages.Damage damage)
-        {
-            if (damageTextPrefab != null && damageCanvas != null)
+            GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
+            FloatingTextView damageview = damageTextInstance.GetComponent<FloatingTextView>();
+            string sourceName = "";
+            if (damage.Type != DamageType.Hit)
             {
-                GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
-                DamageView damageview = damageTextInstance.GetComponent<DamageView>();
-                string sourceName = "";
-                if (damage.Type != DamageType.Hit)
-                {
-                    sourceName = damage.SourceName;
-                }
-
-                damageview.Initialize(damage.Value, sourceName, worldPosition);
+                sourceName = damage.SourceName;
             }
+            int roundedDamage = Mathf.RoundToInt(damage.Value); // 将伤害值取整
+            string text = sourceName + " " + roundedDamage.ToString();
+            damageview.Initialize(text, damage.TargetUnit.transform.position);
         }
 
         private void OnUnitDeath(Unit deadUnit)

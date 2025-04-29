@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    public class Manager
+    public class Manager : MonoBehaviour
     {
         private List<Skill> skills = new List<Skill>();
         private Unit owner;
@@ -14,9 +15,18 @@ namespace Units.Skills
         public float CooldownRevisePercentage = 100f;
         private Skill readySkill;
 
-        public void Initialize(Unit owner)
+        public event Action<Unit, Skill> OnSkillCast;
+        void Awake()
         {
-            this.owner = owner;
+            owner = GetComponent<Unit>();
+            if (owner == null)
+            {
+                Debug.LogError("Unit component not found on the same GameObject as SkillsManager.");
+            }
+        }
+
+        public void Init()
+        {
             foreach (var skill in skills)
             {
                 skill.Init(CooldownRevisePercentage);
@@ -38,6 +48,7 @@ namespace Units.Skills
         {
             if (readySkill != null)
             {
+                OnSkillCast?.Invoke(owner,readySkill);
                 readySkill.Execute(owner); // 执行保存的技能
                 readySkill = null; // 重置就绪技能
             }

@@ -16,7 +16,7 @@ namespace Units
         public Attributes Attributes;
         public Units.Buffs.Manager BuffManager;// Buff管理器
         private Movement movementController;
-        public Units.Skills.Manager SkillManager = new(); // 技能管理器
+        public Units.Skills.Manager SkillManager;
         private AnimationController animationController;
         public VisualEffectConfig VisualEffectConfig;
         public Model.ProjectileConfig ProjectileConfig;
@@ -66,10 +66,9 @@ namespace Units
 
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
-            Attributes.OnHealthChanged += UpdateHealthBar;
             BuffManager = GetComponent<Units.Buffs.Manager>();
             movementController = GetComponent<Movement>();
-            movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
+            SkillManager = GetComponent<Units.Skills.Manager>();
 
         }
 
@@ -96,14 +95,15 @@ namespace Units
         }
 
         public void Initialize()
-        {
+        {   
+            Attributes.OnHealthChanged += UpdateHealthBar;
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
 
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
-
-            SkillManager.Initialize(this); // 初始化技能管理器
+            movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
+            SkillManager.Init(); // 初始化技能管理器
             InvokeRepeating(nameof(CastSkills) , 0f, 1f); // 每秒调用一次技能
             isActive = true;
         }
@@ -131,7 +131,7 @@ namespace Units
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAction()
         {
-            SkillManager.CastSkill(); // 通过事件回调释放技能
+            SkillManager.CastSkill();
         }
 
         public void StopAction()
