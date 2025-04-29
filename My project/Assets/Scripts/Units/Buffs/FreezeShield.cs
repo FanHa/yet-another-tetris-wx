@@ -18,7 +18,7 @@ namespace Units.Buffs
 
         public override string Description()
         {
-            return $"被攻击时,给攻击者施加冰霜效果";
+            return "被攻击时,给攻击者施加冰霜效果";
         }
 
         public override void Apply(Unit unit)

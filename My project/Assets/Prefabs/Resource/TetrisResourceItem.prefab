@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 101586120604317771}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: Button
+  m_Name: RotateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,6 +354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tetri:
+    Group: 0
     tetriType: 0
     shape:
       rows: 4

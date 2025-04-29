@@ -22,7 +22,7 @@ MonoBehaviour:
         PublicKeyToken=null
     - typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Description: "\u75BE\u5982\u98CE\u4E13\u7CBE"
+  - Description: "\u98CE\u7CFB\u4E13\u7CBE"
     group: 7
     cellTypes:
     - typeName: Model.Tetri.Speed, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -31,3 +31,10 @@ MonoBehaviour:
         PublicKeyToken=null
     - typeName: Model.Tetri.Skills.WindStrike, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Description: "\u751F\u547D\u5F8B\u52A8"
+    group: 4
+    cellTypes:
+    - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    - typeName: Model.Tetri.Skills.BloodBomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
