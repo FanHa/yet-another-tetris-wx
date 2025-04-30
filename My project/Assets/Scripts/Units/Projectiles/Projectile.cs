@@ -12,7 +12,10 @@ namespace Units.Projectiles
         protected Damages.Damage damage;
         protected bool Initialized = false;
         protected bool Moving = true;
-
+        private Vector3 offsetDirection; // 偏移方向
+        private bool isOffsetPhase = true; // 是否处于偏移阶段
+        private float offsetDuration = 0.2f; // 偏移持续时间
+        private float offsetTimer = 0f; // 偏移计时器
         void Update()
         {
             if (Initialized == false)
@@ -28,11 +31,26 @@ namespace Units.Projectiles
             
             if (Moving)
             {
-                Vector3 direction = (target.position - transform.position).normalized;
-                transform.position += speed * Time.deltaTime * direction;
+                if (isOffsetPhase)
+                {
+                    // 偏移阶段
+                    transform.position += 0.3f * speed * Time.deltaTime * offsetDirection;
+                    offsetTimer += Time.deltaTime;
 
-                // 设置投射物的正前方（transform.up）朝向目标方向
-                transform.up = direction;
+                    if (offsetTimer >= offsetDuration)
+                    {
+                        isOffsetPhase = false; // 偏移阶段结束
+                    }
+                }
+                else {
+                    // 朝目标移动
+                    Vector3 direction = (target.position - transform.position).normalized;
+                    transform.position += speed * Time.deltaTime * direction;
+                    // 设置投射物的正前方（transform.up）朝向目标方向
+                    transform.up = direction;
+                }
+                
+                
             }
         }
 
@@ -43,6 +61,10 @@ namespace Units.Projectiles
             this.target = target;
             this.speed = speed;
             this.damage = damage;
+
+            // 计算偏移方向（随机向左或向右）
+            Vector3 toTarget = (target.position - transform.position).normalized;
+            offsetDirection = Quaternion.Euler(0, 0, UnityEngine.Random.value > 0.5f ? 90 : -90) * toTarget;
 
             Initialized = true;
         }
