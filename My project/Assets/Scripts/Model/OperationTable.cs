@@ -13,8 +13,9 @@ namespace Model
         [SerializeField] private Serializable2DArray<Cell> board; // 棋盘
         [SerializeField] private List<CellTypeReference> initialCells;
 
+
+        private List<PlacedTetri> placedTetris = new List<PlacedTetri>();
         private TetriCellFactory _tetriCellFactory = new TetriCellFactory();
-        private Stack<Dictionary<Vector2Int, Cell>> historyStack = new Stack<Dictionary<Vector2Int, Cell>>();
 
         public void Init(int rows, int columns)
         {
@@ -104,7 +105,8 @@ namespace Model
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
                 {
-                    if (tetri.Shape[i, j] is not Empty)
+                    Cell cellToPlace = tetri.Shape[i,j];
+                    if (cellToPlace is not Empty)
                     {
                         int x = position.x + i;
                         int y = position.y + j;
@@ -115,7 +117,7 @@ namespace Model
                             return false;
                         }
 
-                        if (board[x, y] is Character)
+                        if (board[x, y] is not Empty)
                         {
                             Debug.LogWarning("Cannot place Tetri at the specified position: Overlaps with TetriCellCharacter.");
                             return false;
@@ -124,10 +126,6 @@ namespace Model
                 }
             }
 
-            // 记录被覆盖的单元格状态
-            Dictionary<Vector2Int, Cell> overwrittenCells = new Dictionary<Vector2Int, Cell>();
-
-            // 放置Tetri并记录被覆盖的Cell
             for (int i = 0; i < tetri.Shape.GetLength(0); i++)
             {
                 for (int j = 0; j < tetri.Shape.GetLength(1); j++)
@@ -137,49 +135,22 @@ namespace Model
                     {
                         int x = position.x + i;
                         int y = position.y + j;
-
-                        Vector2Int cellPosition = new Vector2Int(x, y);
-
-                        // 记录被覆盖的Cell
-                        if (!overwrittenCells.ContainsKey(cellPosition))
-                        {
-                            overwrittenCells[cellPosition] = board[x, y];
-                        }
-
                         board[x, y] = cell;
                     }
                 }
             }
 
+
             // 将被覆盖的状态存入历史栈
-            historyStack.Push(overwrittenCells);
+            // 保存完整的 Tetri 信息
+            var placedTetri = new PlacedTetri(tetri, position);
+            placedTetris.Add(placedTetri);
 
             OnTableChanged?.Invoke();
             return true;
         }
 
-        public void UndoLastPlacement()
-        {
-            if (historyStack.Count == 0)
-            {
-                Debug.LogWarning("No placement to undo.");
-                return;
-            }
-
-            // 取出最近的历史状态
-            Dictionary<Vector2Int, Cell> lastState = historyStack.Pop();
-
-            // 还原被覆盖的单元格
-            foreach (var kvp in lastState)
-            {
-                Vector2Int position = kvp.Key;
-                Cell cell = kvp.Value;
-
-                board[position.x, position.y] = cell;
-            }
-
-            OnTableChanged?.Invoke();
-        }
+ 
         public List<List<Cell>> GetCharacterCellGroups()
         {
             List<List<Cell>> cellGroups = new List<List<Cell>>();
@@ -226,9 +197,16 @@ namespace Model
             return cellGroups;
         }
 
-        internal void ClearHistory()
+        private class PlacedTetri
         {
-            historyStack.Clear();
+            public Tetri.Tetri Tetri { get; }
+            public Vector2Int Position { get; }
+
+            public PlacedTetri(Tetri.Tetri tetri, Vector2Int position)
+            {
+                Tetri = tetri;
+                Position = position;
+            }
         }
     }
 }

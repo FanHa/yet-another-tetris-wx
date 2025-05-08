@@ -59,7 +59,6 @@ public class TetriController : MonoBehaviour
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
 
         commandManager.ClearHistory();
-        operationTableData.ClearHistory(); // 添加清空 OperationTable 的历史记录
         tetriResource.ClearHistory(); 
 
         tetriResource.PrepareNewRound();

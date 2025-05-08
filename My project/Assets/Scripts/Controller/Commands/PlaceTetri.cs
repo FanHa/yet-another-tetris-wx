@@ -40,7 +40,7 @@ namespace Controller.Commands
             if (isPlaced)
             {
                 // 撤销放置逻辑
-                operationTableData.UndoLastPlacement();
+                // operationTableData.UndoLastPlacement();
 
                 // 恢复资源
                 tetriResource.UndoLastUseTetri();
