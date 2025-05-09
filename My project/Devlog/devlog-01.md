@@ -41,12 +41,16 @@
 - 搞个基本的DevLog流程,便于自己跟踪进度,反思,优化
 
 ## 🔜 下一步计划
-- [ ] 操作台（OperationTable）的逻辑拆分与结构优化
-- [ ] 评估并尝试将 Devlog 内容同步到以下平台之一：
+- 操作台（OperationTable）的逻辑拆分与结构优化
+  - Tetri的放置,旋转,移动,退回Resource库
+  - Resource库对已放置的未放置的Tetri的管理
+  - 操作台点击具体Tetri时的信息展示
+- 评估并尝试将 Devlog 内容同步到以下平台之一：
   - Itch.io Devlog 模块
   - IndieNova（中文独立游戏社区）
   - 知乎/小红书（偏轻松表达）
   - B 站（尝试图文）
+  - Game in Progress
 
 ---
 
