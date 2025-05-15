@@ -20,6 +20,67 @@ namespace UI {
         [SerializeField] private TetriCellTypeResourceMapping spriteMapping; // TetriCellTypeSpriteMapping实例
 
 
+        /// <summary>
+        /// 用于UI刷新，传入所有已放置的Tetri，自动渲染到网格上
+        /// </summary>
+        public void UpdateData(List<Model.PlacedTetri> placedTetris, int rows, int cols)
+        {
+            // 清空现有单元格
+            foreach (Transform child in container.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // 构建一个临时棋盘用于渲染
+            var board = new Model.Tetri.Cell[rows, cols];
+            for (int x = 0; x < rows; x++)
+                for (int y = 0; y < cols; y++)
+                    board[x, y] = new Empty();
+
+            // 将所有PlacedTetri的Cell放到棋盘上
+            foreach (var placed in placedTetris)
+            {
+                var shape = placed.Tetri.Shape;
+                for (int i = 0; i < shape.GetLength(0); i++)
+                {
+                    for (int j = 0; j < shape.GetLength(1); j++)
+                    {
+                        var cell = shape[i, j];
+                        if (cell is not Empty)
+                        {
+                            int x = placed.Position.x + i;
+                            int y = placed.Position.y + j;
+                            if (x >= 0 && x < rows && y >= 0 && y < cols)
+                                board[x, y] = cell;
+                        }
+                    }
+                }
+            }
+
+            // 渲染到UI
+            for (int x = 0; x < rows; x++)
+            {
+                for (int y = 0; y < cols; y++)
+                {
+                    var cellData = board[x, y];
+                    GameObject newCell = Instantiate(CellPrefab, container.transform);
+                    UI.Cell cellComponent = newCell.GetComponent<UI.Cell>();
+                    if (cellData is not Empty)
+                    {
+                        if (cellComponent != null)
+                            cellComponent.SetImage(spriteMapping.GetSprite(cellData));
+                        if (cellData is Model.Tetri.Character)
+                            Instantiate(CharacterHaloPrefab, newCell.transform);
+                    }
+                    else
+                    {
+                        cellComponent.SetTransparent();
+                    }
+                }
+            }
+        }
+
+
         // 更新网格数据
         public void UpdateData(Serializable2DArray<Model.Tetri.Cell> newBoard)
         {
