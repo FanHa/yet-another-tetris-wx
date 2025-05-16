@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1809058401477927045}
   - component: {fileID: 7230082464620331455}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: Icon
   m_TagString: Untagged
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 214274872086768531}
   - component: {fileID: 6038546892718459162}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: Mask
   m_TagString: Untagged
@@ -164,7 +164,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 4617571283070317901, guid: b47ec82c07c691b47baebb52493677ff, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.11372549}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -184,7 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1868297823808705657}
   - component: {fileID: 4395220705919551083}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: RightBorder
   m_TagString: Untagged
@@ -271,7 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8197222342084472851}
   - component: {fileID: 8929488802542926244}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: BottomBorder
   m_TagString: Untagged
@@ -358,7 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7779130309792646050}
   - component: {fileID: 3227920847853292312}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: LeftBorder
   m_TagString: Untagged
@@ -445,7 +445,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5807002002201036979}
   - component: {fileID: 6099157694320574889}
-  m_Layer: 0
+  - component: {fileID: 2851294537409801921}
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: Cell
   m_TagString: Untagged
@@ -492,6 +493,51 @@ MonoBehaviour:
   borderBottom: {fileID: 2830815023309121479}
   borderLeft: {fileID: 4294463648908689000}
   borderRight: {fileID: 706487565432902992}
+--- !u!61 &2851294537409801921
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5481350654030849478}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &6467288721877192097
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,7 +548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1180755036170542773}
   - component: {fileID: 5426431438445071913}
-  m_Layer: 0
+  m_Layer: 8
   m_HasEditorInfo: 1
   m_Name: TopBorder
   m_TagString: Untagged

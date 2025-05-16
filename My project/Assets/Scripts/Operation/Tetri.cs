@@ -1,11 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Operation
 {
-    public class Tetri: MonoBehaviour
+    public class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler,IEndDragHandler
     {
         [SerializeField] private GameObject cellPrefab;
+        private Vector3 offset;
+        private bool isDragging = false;
+        private Camera mainCamera;
+        void Awake()
+        {
+            mainCamera = Camera.main;
+        }
         public void Initialize(Model.Tetri.Tetri modelTetri)
         {
             var shape = modelTetri.Shape;
@@ -36,6 +44,25 @@ namespace Operation
             {
                 sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
             }
+        }
+        
+        
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(eventData.position);
+            offset = transform.position - new Vector3(mouseWorld.x, mouseWorld.y, transform.position.z);
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(eventData.position);
+            transform.position = new Vector3(mouseWorld.x, mouseWorld.y, transform.position.z) + offset;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            // 可在此处理拖拽结束后的逻辑
         }
     }
 }
