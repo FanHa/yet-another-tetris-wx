@@ -1,48 +1,85 @@
-## 近期进展
-- 将原本基于 UI 实现的 Tetri 仓库和操作台转换为世界元素，便于后续扩展更多特性。
-- 实现了方块仓库（TetriInventory）的 MVC 架构。
-- 实现了操作台（OperationTable）的 MVC 架构。
+# Devlog 02 - 用 MVC 架构实现一个可拖拽的俄罗斯方块系统
 
-### 俄罗斯方块（Tetri）从仓库（Inventory）放置到操作台（OperationTable）的代码设计与实现
+> 本文记录我在使用 Unity 开发一个拥有自定义“俄罗斯方块式单位部署系统”的项目中的一些关键进展和技术细节，欢迎关注和讨论。
+
+---
+
+## ✅ 项目近期进展
+
+最近完成了几个比较核心的功能模块，主要包括：
+
+- ✅ 将原本基于 UI 系统实现的方块仓库（Tetri Inventory）和操作台（Operation Table）完全改为 **基于世界空间的元素**，更方便后续实现物理交互、动画、阴影等视觉效果。
+- ✅ 实现了 **TetriInventory（方块仓库）** 的 MVC 架构，支持方块展示、拖拽、数据驱动刷新。
+- ✅ 同样也完成了 **OperationTable（操作台）** 的 MVC 架构，为之后的战斗逻辑奠定基础。
+
+---
+
+## 🎮 从仓库到操作台：俄罗斯方块的拖拽与数据联动设计
+
+在功能实现上，遵循了 **MVC 架构** 和事件驱动的思想：
+
+### 📦 结构概览
+
 - **MainController**
-  - **TetriInventoryController**
-    - 管理 `TetriInventoryView`，通过接口刷新仓库物件的渲染。
-    - 管理 `TetriInventoryModel`，监听数据变动并调用 View 展示。
-    - 负责创建 `Operation.Tetri`（GameObject）。
-  - **OperationTableController**
-    - 管理 `OperationTableView`。
-    - 管理 `OperationTableModel`，监听数据变动并调用 View 展示。
-  - 监听 `TetriInventoryController` 中创建的 `Operation.Tetri`（GameObject）的 `OnBeginDrag`、`OnDrag` 和 `OnEndDrag` 事件：
-    - 创建影子 Tetri 以便拖动。
-    - 判断拖动到 `OperationTable` 上时，调用 `OperationTableController` 接口修改 `OperationTableModel`（通过事件刷新 View）。
-    - 调用 `TetriInventoryController` 接口修改 `TetriInventoryModel`（通过事件刷新 View）。
+  - 包含两个子 Controller：  
+    - **TetriInventoryController**：管理方块仓库
+    - **OperationTableController**：管理操作台
+  - 监听拖动事件，并协调两者之间的数据与视图同步。
+
+### 👇 拖拽操作流程（简化）：
+
+1. 用户从仓库中拖出一个方块时，`TetriInventoryController` 创建一个 `Operation.Tetri` GameObject。
+2. `MainController` 监听拖动事件：
+   - 拖动中生成一个“影子 Tetri”显示预览位置。
+   - 拖拽结束后判断是否放到操作台。
+3. 如果成功放置到操作台：
+   - 更新 `OperationTableModel`，操作台视图随之刷新。
+   - 同时更新 `TetriInventoryModel`，从仓库中移除对应方块。
+
+整个流程依赖模型驱动和事件广播，保持模块解耦。
 
 ---
 
-## 问题记录
-在实现仓库系统（TetriInventory）时，仓库中有若干个俄罗斯方块（Tetri）。目标是：
-- 点击物体时可以拖动物体。
-- 点击仓库背景板时可以滑动整个仓库。
+## 🧩 遇到的 Bug：点击拖拽误触发背景滑动
 
-### 问题描述
-在实际开发中，遇到了点击物体时大部分情况下（这种不确定性让问题排查耗费了大量时间）直接触发了背景板的滑动。
+在实现 TetriInventory 时，我希望实现这样一个效果：
 
-### 排查过程
-排查了以下可能的原因：
-- **Layer** 设置问题。
-- **Mask** 和 **Collider**（包括 CompositeCollider）的配置。
-- **Raycast** 检测。
-- 世界坐标与 UI 坐标的转换。
-- Unity 原生的 `OnDragXXX` 和 `OnPointerXXX` 接口。
+- ✅ 点击方块 → 拖动该方块。
+- ✅ 点击空白区域（背景）→ 拖动整个仓库视图（横向滑动）。
 
-### 问题原因
-最终发现是由于仓库背景和物体的 `position.z` 都为 `0`，导致点击事件的优先级混乱。将仓库背景的 `position.z` 改为 `1` 后，问题得以解决。
+听起来很简单，实际操作时却发现一个**极其诡异的问题**：
+
+> 大多数情况下，**点击方块反而触发了背景滑动操作**，而不是拖拽方块。
+
+### 🔍 排查过程
+
+这个问题调试起来非常耗时，因为并不是 100% 复现，有时候拖得动，有时候又是滑动背景。
+
+尝试排查的方向包括：
+
+- Layer 和 Sorting Order 设置是否正确？
+- 是否是 Mask/Collider（尤其是 CompositeCollider）配置导致的穿透？
+- Pointer/Drag 接口是否没正确拦截？
+- 世界坐标与 UI 坐标之间的冲突？
+- Raycast 配置是否混乱？
+
+### ✅ 最终原因竟然是 Z 值！
+
+最后发现是因为**仓库背景与物体都处在 `z = 0` 层**，导致点击事件优先级随机。  
+将背景板的 Z 值设为 `1`（即稍微远离相机），即可让前景的物体先接收点击事件，问题完美解决。
 
 ---
 
-## 下一步计划
-- 实现操作台上的俄罗斯方块放回仓库的机制。
-- 制作一些基本的角色方块和属性方块，打通从操作台到战场 Unit 的完整流程。
+## 🔄 下一步计划
 
-## 总结
-完成了从仓库拖拽俄罗斯方块到操作台的流程
+- [ ] 支持操作台上的方块“撤回”回到仓库。
+- [ ] 设计一些有战斗属性的特殊方块，如角色方块、技能方块等。
+- [ ] 打通从仓库 → 操作台 → 战场的完整逻辑流程。
+
+---
+
+## 📌 小结
+
+这一阶段主要完成了**从方块仓库拖拽俄罗斯方块放置到操作台**的完整功能流程，并解决了一个棘手的点击事件优先级问题。  
+下一个目标是继续完善这套部署系统，为游戏战斗系统打下基础。
+
