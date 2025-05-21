@@ -1,7 +1,4 @@
-# Devlog 02 - 用 MVC 架构实现一个可拖拽的俄罗斯方块系统
-
-> 本文记录我在使用 Unity 开发一个拥有自定义“俄罗斯方块式单位部署系统”的项目中的一些关键进展和技术细节，欢迎关注和讨论。
-
+# Devlog 02 - 用 MVC 架构实现一个可拖拽的俄罗斯方块操作台
 ---
 
 ## ✅ 项目近期进展
@@ -10,7 +7,7 @@
 
 - ✅ 将原本基于 UI 系统实现的方块仓库（Tetri Inventory）和操作台（Operation Table）完全改为 **基于世界空间的元素**，更方便后续实现物理交互、动画、阴影等视觉效果。
 - ✅ 实现了 **TetriInventory（方块仓库）** 的 MVC 架构，支持方块展示、拖拽、数据驱动刷新。
-- ✅ 同样也完成了 **OperationTable（操作台）** 的 MVC 架构，为之后的战斗逻辑奠定基础。
+- ✅ 同样也完成了 **OperationTable（操作台）** 的 MVC 架构，为之后的战斗单位组装奠定基础。
 
 ---
 
@@ -28,7 +25,7 @@
 
 ### 👇 拖拽操作流程（简化）：
 
-1. 用户从仓库中拖出一个方块时，`TetriInventoryController` 创建一个 `Operation.Tetri` GameObject。
+1. `TetriInventoryController` 创建了若干个 `Operation.Tetri` GameObject, 用户从仓库中拖出一个方块时，通过事件通知`MainController`
 2. `MainController` 监听拖动事件：
    - 拖动中生成一个“影子 Tetri”显示预览位置。
    - 拖拽结束后判断是否放到操作台。
