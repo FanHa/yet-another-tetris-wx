@@ -8,25 +8,31 @@ namespace View
     public class TetriInventoryView : MonoBehaviour
     {
         [SerializeField] private Transform contentRoot;
-        [SerializeField] private GameObject itemPrefab;
 
-        public void ClearView()
+        private void ClearView()
         {
             foreach (Transform child in contentRoot)
             {
                 Destroy(child.gameObject);
             }
         }
+        
 
 
-        public void ShowItems(IReadOnlyList<Tetri> items)
+        public void ShowItems(IReadOnlyList<GameObject> items)
         {
             ClearView();
             for (int i = 0; i < items.Count; i++)
             {
-                GameObject itemObj = Instantiate(itemPrefab, contentRoot);
-                itemObj.GetComponent<Operation.Tetri>().Initialize(items[i]);
-                itemObj.transform.localPosition = CalculateGridPosition(i);
+                var tetriObject = items[i];
+                tetriObject.transform.SetParent(contentRoot, false);
+                tetriObject.transform.localPosition = CalculateGridPosition(i);
+
+                foreach (var sr in tetriObject.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                }
+            
             }
         }
 

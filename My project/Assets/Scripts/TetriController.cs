@@ -7,6 +7,7 @@ using UI.Resource;
 using Model;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
@@ -25,26 +26,87 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Button unitPreviewButton;
     [SerializeField] private Button trainGroundButton;
 
-    
+    [SerializeField] private GameObject tetriPrefab;
+    [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
+    [SerializeField] private Controller.OperationTableController operationTableController;
+    private GameObject currentShadowTetri;
+    private Operation.TetriFactory tetriFactory;
+
     private void Start()
     {
         // 初始化资源面板和操作表
         InitializeResourcesPanel();
         InitializeOperationTable();
-        InitializeBattleField();
+        battleField.OnBattleEnd += HandleBattleEnd;
         levelConfig.Reset();
         // 绑定撤销操作按钮的点击事件
         revokeOperationButton.onClick.AddListener(UndoLastPlacement);
         battleButton.onClick.AddListener(HandleBattleClicked);
         unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
         trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
+
+        tetriInventoryController.OnTetriBeginDrag += HandleTetriBeginDrag;
+        tetriFactory = new Operation.TetriFactory(tetriPrefab);
     }
-    
 
-    private void InitializeBattleField()
+    private void HandleTetriBeginDrag(Operation.Tetri tetri)
     {
-        battleField.OnBattleEnd += HandleBattleEnd;
+        var operationTetri = tetriFactory.CreateTetri(tetri.ModelTetri);
+        currentShadowTetri = operationTetri.gameObject;
+        currentShadowTetri.transform.position = tetri.transform.position;
+        currentShadowTetri.transform.localScale = tetri.transform.localScale;
 
+        foreach (var sr in currentShadowTetri.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            sr.maskInteraction = SpriteMaskInteraction.None;
+        }
+
+        tetri.OnDragEvent += UpdateShadowPosition;
+        tetri.OnEndDragEvent += HandleTetriEndDrag;
+    }
+
+    private void HandleTetriEndDrag()
+    {
+        if (currentShadowTetri != null)
+        {
+
+            // 获取 Tetri 的当前位置
+            Vector3 tetriWorldPosition = currentShadowTetri.transform.position;
+
+            Operation.Tetri operationTetri = currentShadowTetri.GetComponent<Operation.Tetri>();
+            Model.Tetri.Tetri modelTetri = operationTetri.ModelTetri;
+            // 尝试将 Tetri 放置到 OperationTableModel
+            if (operationTableController.TryPlaceTetri(modelTetri, tetriWorldPosition))
+            {
+                tetriInventoryController.MarkTetriAsUsed(modelTetri);
+                Debug.Log("Tetri placed successfully!");
+
+            }
+            // 销毁影子物体
+            Destroy(currentShadowTetri);
+            currentShadowTetri = null;
+        }
+    }
+
+    private void UpdateShadowPosition(Vector3 newPosition)
+    {
+        if (currentShadowTetri != null)
+        {
+            Vector3 tablePosition = operationTableController.transform.position;
+            float cellSize = 1f;   // 每个格子的单位大小为 1
+            Vector3 newVector;
+
+            float snappedX = Mathf.Round((newPosition.x - tablePosition.x) / cellSize) * cellSize + tablePosition.x + cellSize / 2;
+            float snappedY = Mathf.Round((newPosition.y - tablePosition.y) / cellSize) * cellSize + tablePosition.y - cellSize / 2;
+
+            // 返回吸附后的坐标
+            newVector = new Vector3(snappedX, snappedY, newPosition.z);
+
+            newVector.x -= 1 * cellSize;
+            newVector.y += 4 * cellSize;
+            // 更新影子物体的位置
+            currentShadowTetri.transform.position = newVector;
+        }
     }
 
     private void HandleBattleEnd()

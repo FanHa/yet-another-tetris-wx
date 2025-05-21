@@ -99,7 +99,7 @@ namespace Model
         {
             ReplaceCell(tetri);
         }
-        
+
         private void RecalculateCellTypes()
         {
             cellTypes.Clear(); // 清空当前的 cellTypes
@@ -118,6 +118,22 @@ namespace Model
 
             // 触发数据变化事件
             OnDataChanged?.Invoke();
+        }
+        
+        public void MarkTetriAsUsed(Model.Tetri.Tetri tetri)
+        {
+            if (usableTetriList.Contains(tetri))
+            {
+                usableTetriList.Remove(tetri);
+                usedTetriList.Add(tetri);
+
+                // 触发数据变化事件
+                OnDataChanged?.Invoke();
+            }
+            else
+            {
+                Debug.LogWarning("Tetri is not in the usable list and cannot be marked as used.");
+            }
         }
 
 

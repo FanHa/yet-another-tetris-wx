@@ -74,7 +74,7 @@ ScriptedImporter:
     textureFormatSet: 0
     applyGammaDecoding: 0
   previousAsepriteImporterSettings:
-    fileImportMode: 0
+    fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -87,7 +87,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   asepriteImporterSettings:
-    fileImportMode: 0
+    fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -100,7 +100,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638828791976301213
+  platformSettingsDirtyTick: 638830539631798934
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -124,7 +124,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: BaseCell
+  - name: GridCell
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 9
@@ -153,7 +153,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: BaseCell
+    - name: GridCell
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
