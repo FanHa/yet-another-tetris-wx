@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Operation;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +9,7 @@ namespace Controller
 
     public class OperationTableController : MonoBehaviour
     {
-        public event Action<Model.Tetri.Tetri> OnTetriPlaced;
+        public event Action<Operation.Tetri> OnTetriBeginDrag;
         [Header("容器大小")]
         [SerializeField] private int width;
         [SerializeField] private int height;
@@ -21,16 +23,31 @@ namespace Controller
         private void Awake()
         {
             view = GetComponent<View.OperationTableView>();
+            
+        }
+
+        private void Start()
+        {
+            view.Initialize();
+            view.OnItemCreated += HandleTetriCreated;
             model.OnChanged += UpdateView;
             model.Clear();
         }
+
+        private void HandleTetriCreated(Operation.Tetri tetri)
+        {
+            tetri.OnBeginDragEvent += HandleTetriBeginDrag;
+        }
+
+        private void HandleTetriBeginDrag(Operation.Tetri tetri)
+        {
+            OnTetriBeginDrag?.Invoke(tetri);
+        }
+
         private void OnDestroy()
         {
             model.OnChanged -= UpdateView;
-        }
-        private void Start()
-        {
-            view.CreateGridBackground();
+            view.OnItemCreated -= HandleTetriCreated;
         }
 
         private void UpdateView()
@@ -39,31 +56,7 @@ namespace Controller
             view.Refresh(model.PlacedTetris);
         }
 
-        // public void OnDrop(PointerEventData eventData)
-        // {
-        //     var tetriObj = eventData.pointerDrag?.GetComponent<Operation.Tetri>();
-        //     if (tetriObj == null) return;
 
-        //     // 获取 Tetri 的当前位置
-        //     Vector3 tetriWorldPosition = tetriObj.transform.position;
-
-        //     // 将世界坐标转换为网格坐标
-        //     Vector3 tetriLocalPosition = transform.InverseTransformPoint(tetriWorldPosition);
-        //     Vector2Int gridPosition = new Vector2Int(
-        //         Mathf.FloorToInt((tetriLocalPosition.x + width / 2f - 0.5f) / cellSize),
-        //         Mathf.FloorToInt((height / 2f - tetriLocalPosition.y - 0.5f) / cellSize)
-        //     );
-        //     Operation.Tetri operationTetri = tetriObj.GetComponent<Operation.Tetri>();
-        //     Model.Tetri.Tetri modelTetri = operationTetri.ModelTetri;
-        //     // 尝试将 Tetri 放置到 OperationTableModel
-        //     if (model.TryPlaceTetri(modelTetri, gridPosition))
-        //     {
-        //         OnTetriPlaced?.Invoke(modelTetri);
-        //         Debug.Log("Tetri placed successfully!");
-
-        //     }
-
-        // }
 
         public bool TryPlaceTetri(Model.Tetri.Tetri modelTetri, Vector3 worldPosition)
         {
@@ -76,6 +69,18 @@ namespace Controller
 
             // 调用 Model 的 TryPlaceTetri 方法
             return model.TryPlaceTetri(modelTetri, gridPosition);
+        }
+
+        internal void RemoveTetri(Model.Tetri.Tetri modelTetri)
+        {
+            // 从 Model 中移除 Tetri
+            // 这里假设 PlacedTetris 中的 Tetri 是唯一的
+            // 如果有多个相同的 Tetri，可能需要更复杂的逻辑来确定要移除哪个
+           var placedTetri = model.PlacedTetris.FirstOrDefault(pt => pt.tetri == modelTetri);
+            if (placedTetri != null)
+            {
+                model.RemoveTetri(placedTetri);
+            }
         }
     }
 

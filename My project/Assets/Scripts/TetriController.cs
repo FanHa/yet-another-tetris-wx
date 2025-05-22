@@ -8,6 +8,7 @@ using Model;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+
 public class TetriController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
@@ -31,6 +32,7 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Controller.OperationTableController operationTableController;
     private GameObject currentShadowTetri;
     private Operation.TetriFactory tetriFactory;
+    private Operation.Tetri draggingTetriFromOperationTable;
 
     private void Start()
     {
@@ -45,11 +47,63 @@ public class TetriController : MonoBehaviour
         unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
         trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
 
-        tetriInventoryController.OnTetriBeginDrag += HandleTetriBeginDrag;
+        tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
+        operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         tetriFactory = new Operation.TetriFactory(tetriPrefab);
     }
 
-    private void HandleTetriBeginDrag(Operation.Tetri tetri)
+    private void HandleOperationTableTetriBeginDrag(Operation.Tetri tetri)
+    {
+        tetri.transform.SetParent(null); // 将其移到场景根节点或其他适当的父级
+        draggingTetriFromOperationTable = tetri;
+        draggingTetriFromOperationTable.name = "DraggingTetriFromOperationTable";
+        foreach (var renderer in draggingTetriFromOperationTable.GetComponentsInChildren<Renderer>())
+        {
+            renderer.enabled = false;
+        }
+        operationTableController.RemoveTetri(tetri.ModelTetri);
+
+        Operation.Tetri operationTetri = tetriFactory.CreateTetri(tetri.ModelTetri);
+        currentShadowTetri = operationTetri.gameObject;
+        currentShadowTetri.name = "OperationTableDraggingTetriShadow";
+        currentShadowTetri.transform.position = tetri.transform.position;
+        currentShadowTetri.transform.localScale = tetri.transform.localScale;
+
+        // 监听拖动事件
+        tetri.OnDragEvent += UpdateShadowPosition;
+        tetri.OnEndDragEvent += HandleOperationTableTetriDragEndEvent;
+    }
+
+    private void HandleOperationTableTetriDragEndEvent()
+    {
+        if (currentShadowTetri != null)
+        {
+            // 获取影子 Tetri 的当前位置
+            Vector3 tetriWorldPosition = currentShadowTetri.transform.position;
+
+            Operation.Tetri operationTetri = currentShadowTetri.GetComponent<Operation.Tetri>();
+            Model.Tetri.Tetri modelTetri = operationTetri.ModelTetri;
+
+            // 尝试将 Tetri 放置到 OperationTableModel
+            if (operationTableController.TryPlaceTetri(modelTetri, tetriWorldPosition))
+            {
+                Debug.Log("Tetri replaced successfully!");
+            }
+            else
+            {
+                tetriInventoryController.AddTetri(modelTetri);
+                Debug.Log("Failed to place Tetri.");
+            }
+
+            // 销毁影子物体
+            Destroy(currentShadowTetri);
+            currentShadowTetri = null;
+            Destroy(draggingTetriFromOperationTable.gameObject);
+            draggingTetriFromOperationTable = null;
+        }
+    }
+
+    private void HandleInventoryTetriBeginDrag(Operation.Tetri tetri)
     {
         var operationTetri = tetriFactory.CreateTetri(tetri.ModelTetri);
         currentShadowTetri = operationTetri.gameObject;
@@ -62,10 +116,10 @@ public class TetriController : MonoBehaviour
         }
 
         tetri.OnDragEvent += UpdateShadowPosition;
-        tetri.OnEndDragEvent += HandleTetriEndDrag;
+        tetri.OnEndDragEvent += HandleInventoryTetriEndDrag;
     }
 
-    private void HandleTetriEndDrag()
+    private void HandleInventoryTetriEndDrag()
     {
         if (currentShadowTetri != null)
         {

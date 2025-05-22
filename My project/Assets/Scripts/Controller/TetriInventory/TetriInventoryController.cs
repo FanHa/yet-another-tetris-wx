@@ -1,6 +1,7 @@
 // This file is part of the TetriGame project.
 using System;
 using System.Collections.Generic;
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -76,6 +77,7 @@ namespace Controller
                 tetriComponent.OnBeginDragEvent += HandleTetriBeginDrag;
 
                 tetriList.Add(tetriComponent.gameObject);
+
             }
             view.ShowItems(tetriList);
         }
@@ -83,6 +85,11 @@ namespace Controller
         private void HandleTetriBeginDrag(Operation.Tetri tetri)
         {
             OnTetriBeginDrag?.Invoke(tetri);
+        }
+
+        internal void AddTetri(Tetri modelTetri)
+        {
+            model.AddTetri(modelTetri);
         }
     }
 }

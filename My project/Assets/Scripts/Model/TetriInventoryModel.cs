@@ -136,6 +136,27 @@ namespace Model
             }
         }
 
+        public void AddTetri(Tetri.Tetri modelTetri)
+        {
+            if (modelTetri == null)
+            {
+                Debug.LogWarning("Cannot add a null Tetri.");
+                return;
+            }
 
+            // 添加到 usableTetriList
+            usableTetriList.Add(modelTetri);
+
+            // 更新 cellTypes 和 tetriGroups
+            foreach (var position in modelTetri.GetOccupiedPositions())
+            {
+                Cell cell = modelTetri.Shape[position.x, position.y];
+                cellTypes.Add(cell.GetType());
+            }
+            tetriGroups.Add(modelTetri.Group);
+
+            // 触发数据变化事件
+            OnDataChanged?.Invoke();
+        }
     }
 }

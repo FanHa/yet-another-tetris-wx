@@ -527,6 +527,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 943837599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &198430987 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7015219923159112898, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+  m_PrefabInstance: {fileID: 654725609620354711}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62077c1df007534dbf3624224ffbbe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &262366948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1777,7 +1788,7 @@ MonoBehaviour:
   width: 10
   height: 10
   cellSize: 1
-  model: {fileID: 0}
+  model: {fileID: 11400000, guid: 66af11339f20cc64b9049e21aad560ff, type: 2}
 --- !u!61 &1031480437
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1836,8 +1847,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundGridPrefab: {fileID: 4378816075428041609, guid: 0daab5e7e5dbb1547b1ed571accd22ad, type: 3}
+  TetriPrefab: {fileID: 5619751051322031506, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
   backgroundRoot: {fileID: 1916331587}
-  placedTetrisRoot: {fileID: 0}
+  placedTetrisRoot: {fileID: 1634144938}
+  cellSize: 1
+  width: 10
+  height: 10
 --- !u!1 &1122998421
 GameObject:
   m_ObjectHideFlags: 0
@@ -2313,6 +2328,9 @@ MonoBehaviour:
   battleButton: {fileID: 433783001}
   unitPreviewButton: {fileID: 38341087}
   trainGroundButton: {fileID: 1917458619}
+  tetriPrefab: {fileID: 5619751051322031506, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
+  tetriInventoryController: {fileID: 198430987}
+  operationTableController: {fileID: 1031480436}
 --- !u!1 &1407102698
 GameObject:
   m_ObjectHideFlags: 0
@@ -3677,10 +3695,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1152919690617221279, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152919690617221279, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2346342588821836393, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
       propertyPath: m_Name
       value: TetriInventory
       objectReference: {fileID: 0}
+    - target: {fileID: 7015219923159112898, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: tetriPrefab
+      value: 
+      objectReference: {fileID: 5619751051322031506, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
+    - target: {fileID: 7015219923159112898, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: operationTableTransform
+      value: 
+      objectReference: {fileID: 1031480435}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

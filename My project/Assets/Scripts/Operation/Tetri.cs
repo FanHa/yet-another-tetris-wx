@@ -54,8 +54,6 @@ namespace Operation
             
         }
 
-
-
         public void OnBeginDrag(PointerEventData eventData)
         {
             OnBeginDragEvent?.Invoke(this);

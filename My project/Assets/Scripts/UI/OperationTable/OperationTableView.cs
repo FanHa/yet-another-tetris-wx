@@ -7,7 +7,7 @@ namespace View
 {
     public class OperationTableView : MonoBehaviour
     {
-        [Header("背景格子预制件")]
+        public event Action<Operation.Tetri> OnItemCreated;
         [SerializeField] private GameObject backgroundGridPrefab;
         [SerializeField] private GameObject TetriPrefab;
 
@@ -16,7 +16,7 @@ namespace View
         [SerializeField] private float cellSize;
         [SerializeField] private int width;
         [SerializeField] private int height;
-        public void CreateGridBackground()
+        public void Initialize()
         {
             Vector2 origin = new Vector2(-width / 2f + 0.5f, -height / 2f + 0.5f);
 
@@ -45,7 +45,7 @@ namespace View
                 GameObject itemObj = Instantiate(TetriPrefab, placedTetrisRoot);
                 var tetriComponent = itemObj.GetComponent<Operation.Tetri>();
                 tetriComponent.Initialize(placed.tetri);
-                
+
                 // 计算偏移后的位置
                 float offsetX = -5 * cellSize + (cellSize / 2); // 向左偏移 5 个单位
                 float offsetY = 5 * cellSize - (cellSize / 2);  // 向上偏移 5 个单位
@@ -54,6 +54,7 @@ namespace View
                     -placed.position.y * cellSize + offsetY,
                     0
                 );
+                OnItemCreated?.Invoke(tetriComponent);
 
             }
 

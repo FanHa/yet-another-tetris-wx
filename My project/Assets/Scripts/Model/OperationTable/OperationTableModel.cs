@@ -72,5 +72,25 @@ namespace Model
             occupiedCells.Clear();
             OnChanged?.Invoke();
         }
+
+        public void RemoveTetri(PlacedTetri placedTetri)
+        {
+            if (placedTetris.Contains(placedTetri))
+            {
+                // 移除占用的格子
+                List<Vector2Int> tetriOccupiedPositions = placedTetri.tetri.GetOccupiedPositions();
+                foreach (var cell in tetriOccupiedPositions)
+                {
+                    occupiedCells.Remove(placedTetri.position + cell);
+                }
+
+                // 从列表中移除
+                placedTetris.Remove(placedTetri);
+
+                // 触发更新事件
+                OnChanged?.Invoke();
+            }
+        }
+
     }
 }
