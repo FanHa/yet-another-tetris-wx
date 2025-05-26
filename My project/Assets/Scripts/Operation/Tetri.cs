@@ -44,7 +44,7 @@ namespace Operation
 
 
                         // 可选：根据 cell 类型设置外观
-                        // cellObj.GetComponent<CellView>().SetType(cell);
+                        cellObj.GetComponent<Operation.Cell>().Init(cell);
 
                         // 可选：存储 cellObj 引用，便于后续操作
                     }

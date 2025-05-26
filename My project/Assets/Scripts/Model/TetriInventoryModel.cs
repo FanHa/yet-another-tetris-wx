@@ -19,7 +19,7 @@ namespace Model
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
         public IReadOnlyList<Model.Tetri.Tetri> UsedTetriList => usedTetriList;
 
-        private List<Type> attributeTypes; // 用于随机替换单元格的类型
+        private List<Type> attributeTypes= new(); // 用于随机替换单元格的类型
         private Model.Tetri.TetrisFactory tetrisFactory = new Model.Tetri.TetrisFactory();
         private HashSet<CellGroupConfig.Group> tetriGroups = new HashSet<CellGroupConfig.Group>();
         public IReadOnlyCollection<CellGroupConfig.Group> TetriGroups => tetriGroups; // 只读访问
@@ -27,6 +27,7 @@ namespace Model
         public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
         public void Init()
         {
+            attributeTypes.Clear();
             InitializeAttributeTypes();
             // 先清空列表，避免重复
             usableTetriList.Clear();
@@ -37,7 +38,7 @@ namespace Model
         private void InitializeAttributeTypes()
         {
             // 初始化 attributeTypes，仅在为空时加载一次
-            attributeTypes ??= typeof(Model.Tetri.Attribute).Assembly
+            attributeTypes = typeof(Model.Tetri.Attribute).Assembly
                 .GetTypes()
                 .Where(type => typeof(Model.Tetri.Attribute).IsAssignableFrom(type) // 检查是否实现了接口
                                 && !type.IsAbstract // 排除抽象类

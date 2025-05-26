@@ -11,6 +11,17 @@ namespace Operation
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
+        [SerializeField] private Model.Tetri.TetriCellTypeResourceMapping resourceMapping;
+
+        public void Init(Model.Tetri.Cell modelCell)
+        {
+            Sprite sprite = resourceMapping.GetSprite(modelCell);
+            if (sprite != null)
+            {
+                icon.sprite = sprite;
+            }
+
+        }
 
         public void SetMaskColor(Color color)
         {
@@ -21,15 +32,6 @@ namespace Operation
                 {
                     renderer.color = color;
                 }
-            }
-        }
-
-        public void SetIcon(Sprite sprite)
-        {
-            if (icon != null)
-            {
-                icon.sprite = sprite;
-                icon.enabled = (sprite != null);
             }
         }
 
