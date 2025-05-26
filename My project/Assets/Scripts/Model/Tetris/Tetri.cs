@@ -52,6 +52,22 @@ namespace Model.Tetri
             }
         }
 
+        public void ReplaceRandomOccupiedCell(Model.Tetri.Cell cellInstance)
+        {
+            var occupiedPositions = this.GetOccupiedPositions(); 
+
+            if (occupiedPositions.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, occupiedPositions.Count); 
+                var randomCellPosition = occupiedPositions[randomIndex];
+                this.SetCell(randomCellPosition.x, randomCellPosition.y, cellInstance);
+            }
+            else
+            {
+                Debug.LogWarning($"Tetri has no occupied cells to replace.");
+            }
+        }
+
         public List<Vector2Int> GetOccupiedPositions()
         {
             var occupiedPositions = new List<Vector2Int>();

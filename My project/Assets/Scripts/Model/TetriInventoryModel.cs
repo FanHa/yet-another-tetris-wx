@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model.Tetri;
+using Operation;
 using UnityEngine;
 using WeChatWASM;
 
@@ -17,14 +18,20 @@ namespace Model
         [SerializeField] private List<Model.Tetri.Tetri> usedTetriList = new List<Model.Tetri.Tetri>();
 
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
-        public IReadOnlyList<Model.Tetri.Tetri> UsedTetriList => usedTetriList;
 
         private List<Type> attributeTypes= new(); // 用于随机替换单元格的类型
         private Model.Tetri.TetrisFactory tetrisFactory = new Model.Tetri.TetrisFactory();
         private HashSet<CellGroupConfig.Group> tetriGroups = new HashSet<CellGroupConfig.Group>();
         public IReadOnlyCollection<CellGroupConfig.Group> TetriGroups => tetriGroups; // 只读访问
         private HashSet<Type> cellTypes = new HashSet<Type>();
-        public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
+
+        [Header("初始属性Cell列表")] // 修改了 Inspector 标题
+        [SerializeField] private List<CellTypeReference> initialSpecialCellTypes = new List<CellTypeReference>();
+
+        [Header("初始角色Cell列表")] // 新的列表配置
+        [SerializeField]
+        private List<CharacterTypeReference> initialSingleCharacterCells = new List<CharacterTypeReference>(); // 修改为列表
+
         public void Init()
         {
             attributeTypes.Clear();
@@ -48,57 +55,88 @@ namespace Model
 
         private void GenerateInitialTetris()
         {
-            // 假设需要生成固定数量的随机 Tetri
-            int initialTetriCount = 7; // 或者根据需求调整数量
-
-            // 确保每种 attributeType 至少在一个 Tetri 中出现
-            foreach (var attributeType in attributeTypes)
+            // 遍历配置的每个特殊单元格类型
+            foreach (var cellTypeRef in initialSpecialCellTypes)
             {
-                var tetri = tetrisFactory.CreateRandomBaseShape(); // 使用工厂的随机生成方法
-                ReplaceSpecificCell(tetri, attributeType); // 确保包含该 attributeType
+                var tetri = tetrisFactory.CreateRandomBaseShape();
+                if (tetri == null)
+                {
+                    Debug.LogWarning("TetrisFactory 返回了一个空的 Tetri。跳过此项。");
+                    continue;
+                }
+
+                // 如果 CellTypeReference 有效并且其 Type 属性不为 null
+                if (cellTypeRef != null && cellTypeRef.Type != null)
+                {
+                    try
+                    {
+                        // 尝试创建特殊单元格的实例
+                        // 假设 CellTypeReference 有一个 CreateInstance() 方法，或者我们直接用 Type 创建
+                        Model.Tetri.Cell specialCellInstance = null;
+                        if (typeof(Model.Tetri.Cell).IsAssignableFrom(cellTypeRef.Type))
+                        {
+                             specialCellInstance = Activator.CreateInstance(cellTypeRef.Type) as Model.Tetri.Cell;
+                        }
+                        
+                        if (specialCellInstance != null)
+                        {
+                            tetri.ReplaceRandomOccupiedCell(specialCellInstance);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"无法为类型 '{cellTypeRef.typeName}' 创建 Cell 实例，或该类型不是 Cell。Tetri 将不包含此特殊单元格。");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"创建 Cell 实例时出错 (类型: {cellTypeRef.typeName}): {ex.Message}");
+                    }
+                }
+                // 如果 cellTypeRef 为 null 或者其 Type 为 null，
+                // 则表示这个 Tetri 是普通的，不包含通过此配置指定的特殊单元格。
+                
                 usableTetriList.Add(tetri);
             }
 
-            // 生成剩余的随机 Tetri
-            for (int i = attributeTypes.Count; i < initialTetriCount; i++)
+            foreach (var charTypeRef in initialSingleCharacterCells) // 遍历新的列表
             {
-                var tetri = tetrisFactory.CreateRandomBaseShape(); // 使用工厂的随机生成方法
-                ReplaceRandomCell(tetri); // 随机替换单元格
-                usableTetriList.Add(tetri);
+                if (charTypeRef != null && charTypeRef.Type != null)
+                {
+                    var baseTetriForCharacter = tetrisFactory.CreateSinglePaddingCellTetri();
+                    if (baseTetriForCharacter == null)
+                    {
+                         Debug.LogWarning("TetrisFactory.CreateSinglePaddingCellTetri() 返回了一个空的 Tetri。无法创建 Character Tetri。");
+                         continue; // 跳过这个配置项
+                    }
+                    
+                    try
+                    {
+                        // 假设 CharacterTypeReference 有 CreateInstance() 方法
+                        Model.Tetri.Character characterInstance = charTypeRef.CreateInstance(); 
+                        if (characterInstance != null)
+                        {
+                            baseTetriForCharacter.SetCell(1, 1, characterInstance);
+                            usableTetriList.Add(baseTetriForCharacter);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"无法为类型 '{charTypeRef.typeName}' 创建 Character 实例。将不添加此 Character Tetri。");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"创建 Character 实例时出错 (类型: {charTypeRef.typeName}): {ex.Message}");
+                    }
+                }
+                else
+                {
+                    // 如果 charTypeRef 为 null 或其 Type 为 null，可以选择创建一个默认的单格 Tetri (例如只有 Padding)
+                    // 或者直接跳过，不添加任何东西。当前逻辑是跳过。
+                    // Debug.Log("initialSingleCharacterCells 中的一个配置项无效，已跳过。");
+                }
             }
-
-            RecalculateCellTypes();
-        }
-
-        private void ReplaceSpecificCell(Tetri.Tetri tetri, Type attributeType)
-        {
-            ReplaceCell(tetri, attributeType);
-        }
-
-        private void ReplaceCell(Tetri.Tetri tetri, Type specificType = null)
-        {
-            var random = new System.Random();
-            var cells = tetri.GetOccupiedPositions(); // 获取非空单元格的位置
-
-            if (cells.Count > 0)
-            {
-                // 随机选择一个非空单元格的位置
-                var randomCellPosition = cells[random.Next(cells.Count)];
-
-                // 如果指定了特定类型，则使用该类型；否则随机选择一个类型
-                var cellType = specificType ?? attributeTypes[random.Next(attributeTypes.Count)];
-
-                // 创建指定类型的实例
-                var attributeInstance = (Cell)Activator.CreateInstance(cellType);
-
-                // 将实例设置到随机单元格中
-                tetri.SetCell(randomCellPosition.x, randomCellPosition.y, attributeInstance);
-            }
-        }
-
-        private void ReplaceRandomCell(Tetri.Tetri tetri)
-        {
-            ReplaceCell(tetri);
+            
+            RecalculateCellTypes(); // 所有 Tetri 添加完毕后，统一重新计算一次
         }
 
         private void RecalculateCellTypes()
@@ -111,7 +149,7 @@ namespace Model
             {
                 foreach (var position in tetri.GetOccupiedPositions())
                 {
-                    Cell cell = tetri.Shape[position.x, position.y];
+                    Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
                     cellTypes.Add(cell.GetType());
                 }
                 tetriGroups.Add(tetri.Group);
@@ -151,7 +189,7 @@ namespace Model
             // 更新 cellTypes 和 tetriGroups
             foreach (var position in modelTetri.GetOccupiedPositions())
             {
-                Cell cell = modelTetri.Shape[position.x, position.y];
+                Model.Tetri.Cell cell = modelTetri.Shape[position.x, position.y];
                 cellTypes.Add(cell.GetType());
             }
             tetriGroups.Add(modelTetri.Group);

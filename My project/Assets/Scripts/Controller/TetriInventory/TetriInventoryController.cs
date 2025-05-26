@@ -28,6 +28,7 @@ namespace Controller
         }
         void Start()
         {
+            
             model.OnDataChanged += HandleDataChanged;
             model.Init();
         }
