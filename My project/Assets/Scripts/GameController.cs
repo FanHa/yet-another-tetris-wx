@@ -9,7 +9,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-public class TetriController : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     [SerializeField] private UI.OperationTable operationTableUI;
     [SerializeField] private Model.OperationTable operationTableData;
@@ -18,7 +18,7 @@ public class TetriController : MonoBehaviour
     [SerializeField] private Controller.Resource tetriResource;
     [SerializeField] private Controller.Reward reward;
 
-    [SerializeField] private Controller.Inventory inventory;
+    [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     private Controller.Commands.CommandManager commandManager = new(); // 添加命令管理器
 
@@ -44,12 +44,20 @@ public class TetriController : MonoBehaviour
         // 绑定撤销操作按钮的点击事件
         revokeOperationButton.onClick.AddListener(UndoLastPlacement);
         battleButton.onClick.AddListener(HandleBattleClicked);
-        unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
+        // unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
         trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
+        operationTableController.OnCellGroupsUpdated += HandleOperationTableGridCellUpdate;
         tetriFactory = new Operation.TetriFactory(tetriPrefab);
+    }
+
+    private void HandleOperationTableGridCellUpdate(List<List<Model.Tetri.Cell>> cellGroups)
+    {
+        unitInventoryController.ResetInventoryDataFromCellGroups(cellGroups);
+        Debug.Log("OperationTable grid cells updated.");
+        // throw new NotImplementedException();
     }
 
     private void HandleOperationTableTetriBeginDrag(Operation.Tetri tetri)
@@ -178,7 +186,7 @@ public class TetriController : MonoBehaviour
         tetriResource.ClearHistory(); 
 
         tetriResource.PrepareNewRound();
-        inventory.Hide();
+        unitInventoryController.Hide();
         levelConfig.AdvanceToNextLevel(); // 关卡增加
 
     }
@@ -235,7 +243,7 @@ public class TetriController : MonoBehaviour
     private void HandleBattleClicked()
     {
         LoadLevelData();
-        GenerateAndResetInventoryData();
+        // GenerateAndResetInventoryData();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
@@ -254,30 +262,30 @@ public class TetriController : MonoBehaviour
         battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
     }
 
-    private void HandleUnitPreviewClicked()
-    {
-        bool isOpend = inventory.ToggleInventory();
-        if (isOpend)
-        {
-            operationTableUI.gameObject.SetActive(false);
-            GenerateAndResetInventoryData();
-        } else {
-            operationTableUI.gameObject.SetActive(true);
-        }
-    }
+    // private void HandleUnitPreviewClicked()
+    // {
+    //     bool isOpend = unitInventoryController.ToggleInventory();
+    //     if (isOpend)
+    //     {
+    //         operationTableUI.gameObject.SetActive(false);
+    //         GenerateAndResetInventoryData();
+    //     } else {
+    //         operationTableUI.gameObject.SetActive(true);
+    //     }
+    // }
 
     
-    private void GenerateAndResetInventoryData()
-    {
-        List<Model.InventoryItem> items = new List<Model.InventoryItem>();
-        List<List<Model.Tetri.Cell>> fullRows = operationTableData.GetCharacterCellGroups();
-        foreach (var rowCells in fullRows)
-        {
-            Model.InventoryItem item = inventory.GenerateInventoryItemFromTetriCells(rowCells);
-            items.Add(item);
-        }
-        inventory.ResetInventoryData(items);
-    }
+    // private void GenerateAndResetInventoryData()
+    // {
+    //     List<Model.InventoryItem> items = new List<Model.InventoryItem>();
+    //     List<List<Model.Tetri.Cell>> fullRows = operationTableData.GetCharacterCellGroups();
+    //     foreach (var rowCells in fullRows)
+    //     {
+    //         Model.InventoryItem item = unitInventoryController.GenerateInventoryItemFromTetriCells(rowCells);
+    //         items.Add(item);
+    //     }
+    //     unitInventoryController.ResetInventoryData(items);
+    // }
 
     private void UpdateOperationTableUI()
     {

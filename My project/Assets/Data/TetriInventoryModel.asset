@@ -12,5 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d980d3098667dd4caf7e33c0ee346c8, type: 3}
   m_Name: TetriInventoryModel
   m_EditorClassIdentifier: 
-  usableTetriList: []
-  usedTetriList: []
+  usableTetriList:
+  - Group: 0
+    tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    isDisposable: 0
+  usedTetriList:
+  - Group: 0
+    tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    isDisposable: 0
+  - Group: 0
+    tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    isDisposable: 0
+  initialSpecialCellTypes:
+  - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - typeName: Model.Tetri.Attack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  initialSingleCharacterCells:
+  - typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null

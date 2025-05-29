@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cec87af0f40af2428450d8708272cf5, type: 3}
   m_Name: OperationTableModel
   m_EditorClassIdentifier: 
-  placedTetris: []
+  Width: 10
+  Height: 10

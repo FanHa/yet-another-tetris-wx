@@ -7,7 +7,7 @@ namespace Model{
 
     [CreateAssetMenu]
     [Serializable]
-    public class Inventory : ScriptableObject
+    public class UnitInventoryModel : ScriptableObject
     {
         [field: SerializeField] private List<InventoryItem> items = new List<InventoryItem>();
 
@@ -16,12 +16,12 @@ namespace Model{
             get => items;
             set => items = value;
         }
-        public event Action<List<InventoryItem>> OnInventoryChanged;
+        public event Action<List<InventoryItem>> OnDataChanged;
 
         public void AddItems(List<InventoryItem> newItems)
         {
             items.AddRange(newItems);
-            OnInventoryChanged?.Invoke(items);
+            OnDataChanged?.Invoke(items);
         }
 
         public InventoryItem GetItemAt(int itemIndex)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Operation;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Controller
     public class OperationTableController : MonoBehaviour
     {
         public event Action<Operation.Tetri> OnTetriBeginDrag;
+        public event Action<List<List<Model.Tetri.Cell>>> OnCellGroupsUpdated;
+        
         [Header("容器大小")]
         [SerializeField] private int width;
         [SerializeField] private int height;
@@ -30,7 +33,7 @@ namespace Controller
         {
             view.Initialize();
             view.OnItemCreated += HandleTetriCreated;
-            model.OnChanged += UpdateView;
+            model.OnChanged += HandleModelChanged;
             model.Clear();
         }
 
@@ -46,14 +49,16 @@ namespace Controller
 
         private void OnDestroy()
         {
-            model.OnChanged -= UpdateView;
+            model.OnChanged -= HandleModelChanged;
             view.OnItemCreated -= HandleTetriCreated;
         }
 
-        private void UpdateView()
+        private void HandleModelChanged()
         {
             // 让 View 根据 model.PlacedTetris 刷新显示
             view.Refresh(model.PlacedTetris);
+            var groups = model.GetCharacterCellGroups();
+            OnCellGroupsUpdated?.Invoke(groups);
         }
 
 
@@ -76,7 +81,7 @@ namespace Controller
             // 从 Model 中移除 Tetri
             // 这里假设 PlacedTetris 中的 Tetri 是唯一的
             // 如果有多个相同的 Tetri，可能需要更复杂的逻辑来确定要移除哪个
-           var placedTetri = model.PlacedTetris.FirstOrDefault(pt => pt.tetri == modelTetri);
+            var placedTetri = model.PlacedTetris.FirstOrDefault(pt => pt.Tetri == modelTetri);
             if (placedTetri != null)
             {
                 model.RemoveTetri(placedTetri);

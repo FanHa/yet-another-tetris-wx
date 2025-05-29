@@ -32,7 +32,7 @@ namespace View
             }
         }
 
-        public void Refresh(IReadOnlyList<OperationTableModel.PlacedTetri> placedTetris)
+        public void Refresh(IReadOnlyList<Model.PlacedTetri> placedTetris)
         {
             foreach (Transform child in placedTetrisRoot)
             {
@@ -44,14 +44,14 @@ namespace View
 
                 GameObject itemObj = Instantiate(TetriPrefab, placedTetrisRoot);
                 var tetriComponent = itemObj.GetComponent<Operation.Tetri>();
-                tetriComponent.Initialize(placed.tetri);
+                tetriComponent.Initialize(placed.Tetri);
 
                 // 计算偏移后的位置
                 float offsetX = -5 * cellSize + (cellSize / 2); // 向左偏移 5 个单位
                 float offsetY = 5 * cellSize - (cellSize / 2);  // 向上偏移 5 个单位
                 itemObj.transform.localPosition = new Vector3(
-                    placed.position.x * cellSize + offsetX,
-                    -placed.position.y * cellSize + offsetY,
+                    placed.Position.x * cellSize + offsetX,
+                    -placed.Position.y * cellSize + offsetY,
                     0
                 );
                 OnItemCreated?.Invoke(tetriComponent);

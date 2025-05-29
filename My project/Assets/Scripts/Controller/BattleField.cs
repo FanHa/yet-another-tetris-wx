@@ -34,8 +34,8 @@ namespace Controller {
         public Transform factionBParent;
 
         [Header("Data")]
-        [SerializeField] private Model.Inventory inventoryData;
-        [SerializeField] private Model.Inventory enemyData;
+        [SerializeField] private Model.UnitInventoryModel inventoryData;
+        [SerializeField] private Model.UnitInventoryModel enemyData;
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
