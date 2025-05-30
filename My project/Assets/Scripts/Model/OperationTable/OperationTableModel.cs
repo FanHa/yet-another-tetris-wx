@@ -151,24 +151,21 @@ namespace Model
                     if (cell == null) continue;
 
                     // 判断是否为 CharacterCell
-                    if (cell is Model.Tetri.Character)
+                    if (cell is Model.Tetri.Character character)
                     {
                         var group = new List<Cell>();
+                        var offsets = character.GetInfluenceOffsets();
 
-                        // 把自己和周围一圈都加入 group
-                        for (int dx = -1; dx <= 1; dx++)
+                        foreach (var offset in offsets)
                         {
-                            for (int dy = -1; dy <= 1; dy++)
+                            int nx = x + offset.x;
+                            int ny = y + offset.y;
+                            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
                             {
-                                int nx = x + dx;
-                                int ny = y + dy;
-                                if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                                var neighbor = occupiedCellGrid[nx, ny];
+                                if (neighbor != null && !group.Contains(neighbor))
                                 {
-                                    var neighbor = occupiedCellGrid[nx, ny];
-                                    if (neighbor != null)
-                                    {
-                                        group.Add(neighbor);
-                                    }
+                                    group.Add(neighbor);
                                 }
                             }
                         }

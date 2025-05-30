@@ -15,7 +15,6 @@ namespace Controller {
 
         private Units.UnitFactory unitFactory;
 
-        private static bool isInitialized = false;
 
         private void Awake()
         {
@@ -28,12 +27,6 @@ namespace Controller {
         private void Start()
         {
             unitFactory = new Units.UnitFactory(unitPrefab, tetriCellTypeResourceMapping);
-            if (!isInitialized)
-            {
-                PrepareInventoryData();
-                isInitialized = true;
-            }
-
             inventoryData.OnDataChanged += HandleDataChange;
         }
 
@@ -59,12 +52,6 @@ namespace Controller {
         }
 
 
-
-
-        private void PrepareInventoryData()
-        {
-            inventoryData.OnDataChanged += HandleDataChange;
-        }
         private void HandleDataChange(List<Model.InventoryItem> inventoryState)
         {
             var unitList = new List<Units.Unit>();

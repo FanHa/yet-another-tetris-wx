@@ -12,10 +12,8 @@ namespace UI.Inventories
     public class UnitInventoryView : MonoBehaviour
     {
         public event Action<int> OnDescriptionRequested;
-        // [SerializeField] private InventoryItem itemPrefab;
         [SerializeField] private Transform contentPanel;
         [SerializeField] private Description.Description itemDescription;
-        // [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         List<InventoryItem> items = new List<InventoryItem>();
 
 
@@ -24,20 +22,7 @@ namespace UI.Inventories
             // Hide();
         }
 
-        // public void UpdateData(List<Model.InventoryItem> inventoryState)
-        // {
-        //     ResetAllItems();
-
-        //     // Update or create UI elements
-        //     foreach (Model.InventoryItem item in inventoryState)
-        //     {
-        //         UI.Inventories.InventoryItem itemUI = Instantiate(itemPrefab, contentPanel);
-        //         itemUI.SetData(item, tetriCellTypeResourceMapping.GetSprite(item.CharacterCell));
-        //         items.Add(itemUI);
-        //         itemUI.OnItemClicked += HandleItemSelection;
-        //     }
-        // }
-
+ 
         internal void UpdateData(List<Unit> unitList)
         {
             foreach (Transform child in contentPanel)
@@ -55,14 +40,23 @@ namespace UI.Inventories
         private Vector3 CalculateGridPosition(int index)
         {
             int perRow = 3;
-            float size = 5f;
+            int rows = 2;
+            float width = 4.5f;
+            float height = 3.5f;
             float spacing = 0.5f;
-            float cellSize = size + spacing;
+            float cellWidth = width + spacing;
+            float cellHeight = height + spacing;
+
+            float totalWidth = perRow * cellWidth - spacing;
+            float totalHeight = rows * cellHeight - spacing;
+
+            float offsetX = -totalWidth / 2 + cellWidth / 2;
+            float offsetY = totalHeight / 2 - cellHeight / 2;
 
             int row = index / perRow;
             int col = index % perRow;
 
-            return new Vector3(col * cellSize, -row * cellSize, 0);
+            return new Vector3(col * cellWidth, -row * cellHeight, 0) + new Vector3(offsetX, offsetY, 0);
         }
 
         private void HandleItemSelection(InventoryItem item)
