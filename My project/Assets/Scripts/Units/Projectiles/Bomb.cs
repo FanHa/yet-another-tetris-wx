@@ -37,14 +37,11 @@ namespace Units.Projectiles
                 var targetUnit = collider.GetComponent<Unit>();
                 if (targetUnit != null && targetUnit.faction == targetFaction)
                 {
-                    var explosionDamage = new Units.Damages.Damage(
-                        damage.Value,
-                        damage.SourceName,
-                        damage.Type,
-                        damage.SourceUnit,
-                        targetUnit, // 设置为当前爆炸范围内的敌人
-                        damage.Buffs
-                    );
+                    var explosionDamage = new Units.Damages.Damage(damage.Value, damage.Type)
+                        .SetSourceLabel(damage.SourceLabel)
+                        .SetSourceUnit(damage.SourceUnit)
+                        .SetTargetUnit(targetUnit)
+                        .SetBuffs(damage.Buffs);
 
                     // 对敌人造成伤害
                     targetUnit.TakeDamage(explosionDamage);

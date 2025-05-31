@@ -46,15 +46,11 @@ namespace Units.Skills
                 {
                     damageValue *= 1 - damageReductionPercentage / 100f;
                 }
-
-                Damages.Damage damage = new Units.Damages.Damage(
-                    damageValue,
-                    Name(),
-                    Units.Damages.DamageType.Hit,
-                    caster,
-                    targetEnemy,
-                    caster.attackEffects
-                );
+                var damage = new Units.Damages.Damage(damageValue, Units.Damages.DamageType.Hit);
+                damage.SetSourceLabel(Name());
+                damage.SetSourceUnit(caster);
+                damage.SetTargetUnit(targetEnemy);
+                damage.SetBuffs(caster.attackEffects);
                 caster.FireProjectile(targetEnemy, damage);
 
                 // 记录已攻击的敌人

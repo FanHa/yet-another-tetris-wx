@@ -23,7 +23,7 @@ namespace Controller
                     SourceUnit = group.Key,
                     TotalDamage = group.Sum(d => d.Value), // 计算总伤害
                     DamageDetails = group
-                        .GroupBy(d => d.SourceName) // 按伤害来源名称分组
+                        .GroupBy(d => d.SourceLabel) // 按伤害来源名称分组
                         .Select(subGroup => new
                         {
                             DamageSource = subGroup.Key,

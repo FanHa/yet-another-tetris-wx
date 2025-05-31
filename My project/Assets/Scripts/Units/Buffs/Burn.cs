@@ -35,14 +35,12 @@ namespace Units.Buffs
 
         public override void Affect(Unit target)
         {
-            target.TakeDamage(new Damages.Damage(
-                damagePerSecond,
-                Name(),
-                Damages.DamageType.Skill,
-                source,
-                target,
-                new List<Buffs.Buff>())
-            ); // 施加伤害
+            Damages.Damage damage = new Damages.Damage(damagePerSecond, Damages.DamageType.Dot)
+                .SetSourceLabel(Name()) // 设置伤害来源标签
+                .SetSourceUnit(source)  // 设置伤害来源单位
+                .SetTargetUnit(target);
+
+            target.TakeDamage(damage); // 施加伤害
         }
 
         public override Type TetriCellType => typeof(Model.Tetri.Burn); // Return the Type of the corresponding TetriCell

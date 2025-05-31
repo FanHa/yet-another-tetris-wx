@@ -53,14 +53,10 @@ namespace Units.Skills
             var bloodbomb = bombInstance.GetComponent<Units.Projectiles.BloodBomb>();
             if (bloodbomb != null)
             {
-                Damages.Damage damage = new(
-                    healthToConsume,
-                    Name(),
-                    Units.Damages.DamageType.Skill,
-                    caster,
-                    null,
-                    new List<Units.Buffs.Buff>()
-                );
+                var damage = new Units.Damages.Damage(healthToConsume, Units.Damages.DamageType.Skill);
+                damage.SetSourceLabel(Name());
+                damage.SetSourceUnit(caster);
+
                 GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
                 tempTargetInstance.transform.position = targetEnemy.transform.position;
                 

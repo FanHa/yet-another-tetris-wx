@@ -45,15 +45,12 @@ namespace Units.Skills
 
             while (currentTarget != null && bounces < maxBounces)
             {
-                // 对当前目标造成伤害
-                currentTarget.TakeDamage(new Units.Damages.Damage(
-                    currentDamage, 
-                    Name(), 
-                    Damages.DamageType.Skill,
-                    caster,
-                    currentTarget,
-                    new List<Buffs.Buff>())
-                );
+                var damage = new Units.Damages.Damage(currentDamage, Damages.DamageType.Skill);
+                damage.SetSourceLabel(Name());
+                damage.SetSourceUnit(caster);
+                damage.SetTargetUnit(currentTarget);
+                currentTarget.TakeDamage(damage);
+
 
                 // 创建 ChainLightningController 实例并设置起点和终点
                 if (caster.ProjectileConfig.ChainLightningPrefab != null)

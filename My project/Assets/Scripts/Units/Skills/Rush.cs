@@ -52,14 +52,10 @@ namespace Units.Skills
                     Unit enemyUnit = hit.GetComponent<Unit>();
                     if (enemyUnit != null && enemyUnit.faction != caster.faction && !hitEnemies.Contains(enemyUnit))
                     {
-                        Units.Damages.Damage damage = new Units.Damages.Damage(
-                            rushSpeed * damageMultipierBySpeed,
-                            Name(),
-                            Units.Damages.DamageType.Skill,
-                            caster,
-                            enemyUnit,
-                            new List<Units.Buffs.Buff>() // 这里可以添加 Buffs
-                        );
+                        Units.Damages.Damage damage = new Units.Damages.Damage(rushSpeed * damageMultipierBySpeed, Damages.DamageType.Skill);
+                        damage.SetSourceLabel(Name());
+                        damage.SetSourceUnit(caster);
+                        damage.SetTargetUnit(enemyUnit);
 
                         // 对敌人造成伤害
                         enemyUnit.TakeDamage(damage);

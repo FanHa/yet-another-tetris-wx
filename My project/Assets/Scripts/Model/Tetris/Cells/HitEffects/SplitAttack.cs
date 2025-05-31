@@ -55,14 +55,11 @@ namespace Model.Tetri
                 Units.Projectiles.Projectile projectile = projectileObject.GetComponent<Units.Projectiles.Projectile>();
                 if (projectile != null)
                 {
-                    Damage splitDamage = new Damage(
-                        splitDamageValue,
-                        Name(),
-                        DamageType.Skill,
-                        damage.SourceUnit,
-                        targetEnemy,
-                        damage.SourceUnit.attackEffects
-                    );
+                    var splitDamage = new Damage(splitDamageValue, DamageType.Skill);
+                    splitDamage.SetSourceLabel(Name());
+                    splitDamage.SetSourceUnit(damage.SourceUnit);
+                    splitDamage.SetTargetUnit(targetEnemy);
+                    splitDamage.SetBuffs(damage.SourceUnit.attackEffects);
                     projectile.Init(damage.SourceUnit, targetEnemy.transform, 1.5f, splitDamage);
                     // todo 这一段代码与unit中创建projectile的代码有点冗余
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();

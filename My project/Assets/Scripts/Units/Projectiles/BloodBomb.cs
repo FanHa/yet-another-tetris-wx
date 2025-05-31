@@ -26,26 +26,21 @@ namespace Units.Projectiles
                 var unit = collider.GetComponent<Unit>();
                 if (unit != null && unit.faction != caster.faction)
                 {
-                    // 对敌人造成伤害
-                    Damages.Damage explosionDamage = new(
-                        damage.Value,
-                        damage.SourceName,
-                        damage.Type,
-                        damage.SourceUnit,
-                        unit,
-                        damage.Buffs
-                    );
+                    var explosionDamage = new Damages.Damage(damage.Value, Damages.DamageType.Skill)
+                        .SetSourceLabel(damage.SourceLabel)
+                        .SetSourceUnit(damage.SourceUnit)
+                        .SetTargetUnit(unit)
+                        .SetBuffs(damage.Buffs);
+
                     unit.TakeDamage(explosionDamage);
 
-                    Damages.Damage healthToReturn = new(
-                        
-                        -damage.Value * (healthReturnPercentage / 100f),
-                        damage.SourceName + "回复",
-                        Damages.DamageType.Skill,
-                        damage.SourceUnit,
-                        caster,
-                        new List<Buffs.Buff>()
-                    );
+                    var healthToReturn = new Damages.Damage(-damage.Value * (healthReturnPercentage / 100f), Damages.DamageType.Skill)
+                        .SetSourceLabel(damage.SourceLabel + "回复")
+                        .SetSourceUnit(damage.SourceUnit)
+                        .SetTargetUnit(caster)
+                        .SetBuffs(damage.Buffs);
+
+                    caster.TakeDamage(healthToReturn);
                     caster.TakeDamage(healthToReturn);
                 }
             }

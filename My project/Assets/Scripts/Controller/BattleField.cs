@@ -170,13 +170,13 @@ namespace Controller {
             battleStatistics.AddRecord(damage);
             GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
             FloatingTextView damageview = damageTextInstance.GetComponent<FloatingTextView>();
-            string sourceName = "";
+            string sourceLabel = "";
             if (damage.Type != DamageType.Hit)
             {
-                sourceName = damage.SourceName;
+                sourceLabel = damage.SourceLabel;
             }
             int roundedDamage = Mathf.RoundToInt(damage.Value); // 将伤害值取整
-            string text = sourceName + " " + roundedDamage.ToString();
+            string text = sourceLabel + " " + roundedDamage.ToString();
             damageview.Initialize(text, damage.TargetUnit.transform.position);
         }
 

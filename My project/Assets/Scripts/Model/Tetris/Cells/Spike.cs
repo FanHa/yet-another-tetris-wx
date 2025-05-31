@@ -19,13 +19,11 @@ namespace Model.Tetri
         {
             if (damage.Type == DamageType.Hit)
             {
-                var reflectDamage = new Damage(
-                    damage.Value * reflectPercentage / 100, 
-                    Name(), 
-                    DamageType.Skill,
-                    damage.TargetUnit,
-                    damage.SourceUnit,
-                    new List<Units.Buffs.Buff>());
+                Units.Damages.Damage reflectDamage = new Units.Damages.Damage(damage.Value * reflectPercentage / 100, DamageType.Skill)
+                    .SetSourceLabel(Name())
+                    .SetSourceUnit(damage.TargetUnit)
+                    .SetTargetUnit(damage.SourceUnit) // 反弹给攻击者
+                    .SetBuffs(new List<Units.Buffs.Buff>());
                 damage.SourceUnit.TakeDamage(reflectDamage);
             }
         }

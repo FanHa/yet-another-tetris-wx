@@ -78,15 +78,11 @@ namespace Units.VisualEffects
                 Unit enemy = collider.GetComponent<Unit>();
                 if (enemy != null && enemy.faction != caster.faction)
                 {
-                    // 对敌人造成伤害
-                    Units.Damages.Damage damage = new Units.Damages.Damage(
-                        damagePerTick,
-                        "风刃伤害",
-                        Units.Damages.DamageType.Skill,
-                        caster,
-                        enemy,
-                        new List<Units.Buffs.Buff>()
-                    );
+                    Units.Damages.Damage damage = new Units.Damages.Damage(damagePerTick, Damages.DamageType.Skill);
+                    damage.SetSourceLabel("风刃伤害");
+                    damage.SetSourceUnit(caster);
+                    damage.SetTargetUnit(enemy);
+
                     enemy.TakeDamage(damage);
                 }
             }

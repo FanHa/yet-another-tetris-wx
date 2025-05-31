@@ -24,14 +24,9 @@ namespace Units.Skills
             var bomb = bombInstance.GetComponent<Units.Projectiles.Bomb>();
             if (bomb != null)
             {
-                Damages.Damage damage = new Damages.Damage(
-                    damageValue, 
-                    Name(),
-                    Damages.DamageType.Skill,
-                    caster,
-                    null,
-                    new List<Buffs.Buff>()
-                );
+                var damage = new Units.Damages.Damage(damageValue, Units.Damages.DamageType.Skill);
+                damage.SetSourceLabel(Name());
+                damage.SetSourceUnit(caster);
 
                 GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
                 tempTargetInstance.transform.position = targetEnemy.transform.position;

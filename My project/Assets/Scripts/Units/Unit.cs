@@ -227,26 +227,20 @@ namespace Units
             if (Attributes.IsRanged)
             {
                 damageValue = Attributes.RangeAttackDamagePercentage * damageValue / 100;
-                Damages.Damage damage = new Damages.Damage(
-                    damageValue,
-                    "远程攻击",
-                    Damages.DamageType.Hit,
-                    this,
-                    target,
-                    attackEffects
-                ); 
+                Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
+                damage.SetSourceLabel("远程攻击");
+                damage.SetSourceUnit(this);
+                damage.SetTargetUnit(target);
+                damage.SetBuffs(attackEffects);
                 FireProjectile(target, damage);
             }
             else
             {
-                // 近战攻击逻辑
-                Damages.Damage damage = new Damages.Damage(
-                    damageValue, 
-                    "近战攻击",
-                    Damages.DamageType.Hit,
-                    this,
-                    target,
-                    attackEffects);
+                Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
+                damage.SetSourceLabel("近战攻击");
+                damage.SetSourceUnit(this);
+                damage.SetTargetUnit(target);
+                damage.SetBuffs(attackEffects);
                 target.TakeDamage(damage);
                 OnAttackHit?.Invoke(damage);
             }
@@ -282,7 +276,7 @@ namespace Units
 
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
-        {   
+        {
             foreach (Buff buff in damageReceived.Buffs)
             {
                 AddBuff(buff); // 添加Debuff到自己身上

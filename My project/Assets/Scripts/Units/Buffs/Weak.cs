@@ -26,14 +26,12 @@ namespace Units.Buffs
             {
                 // 增加伤害
                 float increasedDamage = damage.Value * (1 + damageIncreasePercentage / 100f);
-                return new Damages.Damage(
-                    increasedDamage,
-                    damage.SourceName, // 继承原始伤害的来源名称
-                    damage.Type,       // 继承原始伤害的类型
-                    damage.SourceUnit, // 继承原始伤害的来源单位
-                    damage.TargetUnit, // 继承原始伤害的目标单位
-                    damage.Buffs       // 继承原始伤害的 Buff 列表
-                );
+                Damages.Damage newDamage = new Damages.Damage(increasedDamage, damage.Type)
+                    .SetSourceLabel(damage.SourceLabel) // 继承原始伤害的来源标签
+                    .SetSourceUnit(damage.SourceUnit)   // 继承原始伤害的来源单位
+                    .SetTargetUnit(damage.TargetUnit)   // 继承原始伤害的目标单位
+                    .SetBuffs(damage.Buffs);             // 继承原始伤害的 Buff 列表
+                return newDamage;
             }
         }
         private DamageIncreaseBehavior damageIncreaseBehavior;

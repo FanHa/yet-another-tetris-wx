@@ -26,13 +26,12 @@ namespace Units.Skills
             Units.Projectiles.Projectile projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
-                var damage = new Damages.Damage(
-                    caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, 
-                    Name(),
-                    Damages.DamageType.Hit,
-                    caster,
-                    targetEnemy,
-                    caster.attackEffects);
+                var damage = new Damages.Damage(caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, Damages.DamageType.Hit);
+                damage.SetSourceLabel(Name());
+                damage.SetSourceUnit(caster);
+                damage.SetTargetUnit(targetEnemy);
+                damage.SetBuffs(caster.attackEffects);
+
                 var target = targetEnemy.transform;
                 projectile.Init(caster, target, speed, damage);
             }
