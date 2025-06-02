@@ -19,6 +19,12 @@ MonoBehaviour:
       rows: 4
       cols: 4
     isDisposable: 0
+  - Group: 0
+    tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    isDisposable: 0
   usedTetriList:
   - Group: 0
     tetriType: 1
@@ -32,11 +38,6 @@ MonoBehaviour:
       rows: 4
       cols: 4
     isDisposable: 0
-  initialSpecialCellTypes:
-  - typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - typeName: Model.Tetri.Attack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  initialSingleCharacterCells:
-  - typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
+  initialConfigs:
+  - {fileID: 11400000, guid: 87108f55f764e41419f6b08faf724f4c, type: 2}
+  avaliableConfigIndex: 0

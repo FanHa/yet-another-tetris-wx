@@ -9,7 +9,6 @@ namespace Units.Skills
         public float healthPercentage = 20f; // 消耗自身血量的百分比
         public float explosionRadius = 0.75f; // 爆炸范围
         public float healthReturnPercentage = 25f; // 每命中一个敌人返还的血量百分比
-        public float speed = 1.5f;
 
         public override string Name()
         {
@@ -60,7 +59,7 @@ namespace Units.Skills
                 GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
                 tempTargetInstance.transform.position = targetEnemy.transform.position;
                 
-                bloodbomb.Init(caster, tempTargetInstance.transform, speed, damage, targetEnemy.faction, explosionRadius, healthReturnPercentage);
+                bloodbomb.Init(caster, tempTargetInstance.transform, damage, targetEnemy.faction, explosionRadius, healthReturnPercentage);
             }
         }
     }

@@ -33,7 +33,7 @@ namespace Units.Skills
                 damage.SetBuffs(caster.attackEffects);
 
                 var target = targetEnemy.transform;
-                projectile.Init(caster, target, speed, damage);
+                projectile.Init(caster, target, damage);
             }
         }
 

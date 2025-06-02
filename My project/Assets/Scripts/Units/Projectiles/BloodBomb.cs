@@ -8,10 +8,10 @@ namespace Units.Projectiles
     {
         private float healthReturnPercentage; // 每命中一个敌人返还的血量百分比
 
-        public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius, float healthReturnPercentage)
+        public void Init(Units.Unit caster, Transform target, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius, float healthReturnPercentage)
         {
             
-            base.Init(caster, target, speed, damage, targetFaction, explosionRadius);
+            base.Init(caster, target, damage, targetFaction, explosionRadius);
             this.healthReturnPercentage = healthReturnPercentage;
         }
 

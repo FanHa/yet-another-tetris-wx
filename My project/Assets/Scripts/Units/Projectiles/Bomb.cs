@@ -10,10 +10,10 @@ namespace Units.Projectiles
         protected Units.Unit.Faction targetFaction; // 所属阵营
         protected float explosionRadius; // 爆炸范围
 
-        public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius)
+        public void Init(Units.Unit caster, Transform target, Damages.Damage damage, Units.Unit.Faction targetFaction, float explosionRadius)
         {
 
-            base.Init(caster, target, speed, damage);
+            base.Init(caster, target, damage);
             this.targetFaction = targetFaction;
             this.explosionRadius = explosionRadius;
         }

@@ -11,6 +11,7 @@ using UnityEngine;
 
 namespace Units
 {
+    [RequireComponent(typeof(DotHandler))]
     public class Unit : MonoBehaviour
     {
         public Attributes Attributes;
@@ -38,7 +39,7 @@ namespace Units
         protected float lastAttackTime = 0;
 
         private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
-        
+
         private HealthBar healthBar;
 
         public SpriteRenderer BodySpriteRenderer;
@@ -46,8 +47,9 @@ namespace Units
         public SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
 
+        private DotHandler dotHandler; // 持续伤害处理器
         public Transform projectileSpawnPoint; // 投射物生成位置
-        
+
         public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
         public UnitManager unitManager;
@@ -69,6 +71,7 @@ namespace Units
             BuffManager = GetComponent<Units.Buffs.Manager>();
             movementController = GetComponent<Movement>();
             SkillManager = GetComponent<Units.Skills.Manager>();
+            dotHandler = GetComponent<DotHandler>();
 
         }
 
@@ -76,7 +79,8 @@ namespace Units
         void Update()
         {
             if (isFrozen) return; // 如果被冻结，直接返回
-            if (isActive) {
+            if (isActive)
+            {
                 AttackEnemies();
             }
         }
@@ -95,7 +99,7 @@ namespace Units
         }
 
         public void Initialize()
-        {   
+        {
             Attributes.OnHealthChanged += UpdateHealthBar;
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
@@ -104,7 +108,7 @@ namespace Units
             InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
             movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
             SkillManager.Init(); // 初始化技能管理器
-            InvokeRepeating(nameof(CastSkills) , 0f, 1f); // 每秒调用一次技能
+            InvokeRepeating(nameof(CastSkills), 0f, 1f); // 每秒调用一次技能
             isActive = true;
         }
         private void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -113,9 +117,9 @@ namespace Units
         }
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
-           movementController.SetBattlefieldBounds(minBounds, maxBounds);
+            movementController.SetBattlefieldBounds(minBounds, maxBounds);
         }
-   
+
         public void AddSkill(Skills.Skill newSkill)
         {
             SkillManager.AddSkill(newSkill); // 添加技能
@@ -132,6 +136,11 @@ namespace Units
         public void HandleSkillCastAction()
         {
             SkillManager.CastSkill();
+        }
+
+        public void ApplyDot(Dot dot)
+        {
+            dotHandler.ApplyDot(dot);
         }
 
         public void StopAction()
@@ -166,7 +175,7 @@ namespace Units
 
         private void UpdateEnemiesDistance()
         {
-            List<Unit> rawEnemyUnits = faction == Faction.FactionA? unitManager.GetFactionBUnits() : unitManager.GetFactionAUnits(); 
+            List<Unit> rawEnemyUnits = faction == Faction.FactionA ? unitManager.GetFactionBUnits() : unitManager.GetFactionAUnits();
 
             // 按距离从小到大排序
             enemyUnits = rawEnemyUnits
@@ -177,7 +186,7 @@ namespace Units
         protected void AttackEnemies()
         {
             float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
-            if (Time.time < lastAttackTime + attackCooldown) 
+            if (Time.time < lastAttackTime + attackCooldown)
                 return; // 检查攻击冷却时间
             if (enemyUnits != null && enemyUnits.Count > 0)
             {
@@ -190,7 +199,7 @@ namespace Units
                         // 调整朝向
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
                         animationController.SetLookDirection(direction);
-                        
+
                         TriggerAttack();
                         lastAttackTime = Time.time; // 更新攻击时间
                     }
@@ -211,7 +220,7 @@ namespace Units
             for (int i = 0; i < attackTargetCount; i++)
             {
                 Unit target = enemyUnits[i];
-                if (target == null) 
+                if (target == null)
                     continue; // todo 这里其实要检查目标是否还活着
                 float distance = Vector2.Distance(transform.position, target.transform.position);
                 if (distance <= Attributes.AttackRange)
@@ -257,10 +266,10 @@ namespace Units
             {
                 GameObject projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
-                
+
                 if (projectile != null)
                 {
-                    projectile.Init(this, target.transform, 2f, damage);
+                    projectile.Init(this, target.transform, damage);
 
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
                     if (projectileSpriteRenderer != null && Fist1SpriteRenderer != null)
@@ -289,7 +298,7 @@ namespace Units
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
             Attributes.CurrentHealth -= finalDamage;
-            
+
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
             CheckHealth();
@@ -326,6 +335,6 @@ namespace Units
             Fist2SpriteRenderer.color = color;
         }
 
-        
+
     }
 }

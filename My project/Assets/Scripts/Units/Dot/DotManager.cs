@@ -22,11 +22,11 @@ namespace Units
         {
             for (int i = dots.Count - 1; i >= 0; i--)
             {
-                var dot = dots[i];
+                Units.Dot dot = dots[i];
                 if (dot.type == DotType.Burn)
                 {
                     Damages.Damage damage = new Damages.Damage(dot.damagePerSecond * interval, Damages.DamageType.Dot);
-                    damage.SetSourceLabel(dot.skill.Name());
+                    damage.SetSourceLabel(dot.skill.Name()+ " - " + dot.label);
                     damage.SetSourceUnit(dot.caster);
                     OnDotDamage?.Invoke(damage);
                 }
@@ -42,17 +42,9 @@ namespace Units
             var existing = dots.Find(d => d.type == dot.type && d.skill == dot.skill && d.caster == dot.caster);
             if (existing != null)
             {
-                if (dot.level > existing.level)
-                {
-                    existing.level = dot.level;
-                    existing.damagePerSecond = dot.damagePerSecond;
-                    existing.duration = dot.duration;
-                    existing.timeLeft = dot.duration;
-                }
-                else if (dot.level == existing.level)
-                {
-                    existing.timeLeft = dot.duration;
-                }
+                existing.damagePerSecond = dot.damagePerSecond;
+                existing.duration = dot.duration;
+                existing.timeLeft = dot.duration;
             }
             else
             {

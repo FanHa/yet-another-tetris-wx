@@ -35,9 +35,9 @@ namespace Units
             }
         }
 
-        public void AddOrRefreshDot(DotType type, Skills.Skill skill, Unit caster, int level, float dps, float duration)
+        public void ApplyDot(Dot dot)
         {
-            dotManager.AddOrRefreshDot(new Dot(type, skill, caster, level, dps, duration));
+            dotManager.AddOrRefreshDot(dot);
         }
     }
 }

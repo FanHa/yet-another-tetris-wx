@@ -25,12 +25,9 @@ namespace Model
         public IReadOnlyCollection<CellGroupConfig.Group> TetriGroups => tetriGroups; // 只读访问
         private HashSet<Type> cellTypes = new HashSet<Type>();
 
-        [Header("初始属性Cell列表")] // 修改了 Inspector 标题
-        [SerializeField] private List<CellTypeReference> initialSpecialCellTypes = new List<CellTypeReference>();
+        [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
+        [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
 
-        [Header("初始角色Cell列表")] // 新的列表配置
-        [SerializeField]
-        private List<CharacterTypeReference> initialSingleCharacterCells = new List<CharacterTypeReference>(); // 修改为列表
 
         public void Init()
         {
@@ -55,6 +52,18 @@ namespace Model
 
         private void GenerateInitialTetris()
         {
+            TetriInventoryInitConfig config = (initialConfigs != null && initialConfigs.Count > avaliableConfigIndex && avaliableConfigIndex >= 0)
+                ? initialConfigs[avaliableConfigIndex]
+                : null;
+            if (config == null)
+            {
+                Debug.LogError("TetriInventoryModel: 初始配置无效，无法生成 Tetri。");
+                return;
+            }
+            List<CellTypeReference> initialSpecialCellTypes = config.initialSpecialCellTypes;
+            List<CharacterTypeReference> initialSingleCharacterCells = config.initialSingleCharacterCells;
+
+
             // 遍历配置的每个特殊单元格类型
             foreach (var cellTypeRef in initialSpecialCellTypes)
             {
@@ -75,9 +84,9 @@ namespace Model
                         Model.Tetri.Cell specialCellInstance = null;
                         if (typeof(Model.Tetri.Cell).IsAssignableFrom(cellTypeRef.Type))
                         {
-                             specialCellInstance = Activator.CreateInstance(cellTypeRef.Type) as Model.Tetri.Cell;
+                            specialCellInstance = Activator.CreateInstance(cellTypeRef.Type) as Model.Tetri.Cell;
                         }
-                        
+
                         if (specialCellInstance != null)
                         {
                             tetri.ReplaceRandomOccupiedCell(specialCellInstance);
@@ -94,7 +103,7 @@ namespace Model
                 }
                 // 如果 cellTypeRef 为 null 或者其 Type 为 null，
                 // 则表示这个 Tetri 是普通的，不包含通过此配置指定的特殊单元格。
-                
+
                 usableTetriList.Add(tetri);
             }
 

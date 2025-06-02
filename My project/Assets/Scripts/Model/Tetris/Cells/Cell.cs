@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,7 +13,10 @@ namespace Model.Tetri
         public abstract string Description();
         public abstract string Name();
 
-        public abstract void Apply(Units.Unit unit); // Apply方法返回一个字符串，表示应用效果的描述
+        public virtual void Apply(Units.Unit unit) { }
+        public virtual void PostApply(Units.Unit unit, IReadOnlyList<Cell> allCells) { }
+
+        public AffinityType Affinity { get; set; } = AffinityType.None;
 
     }
 }

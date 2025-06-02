@@ -29,19 +29,18 @@ namespace Units
 
             item.CharacterCell.Apply(unit);
 
-            Model.Tetri.GarbageReuse garbageReuseCell = null;
             if (item.TetriCells != null)
             {
                 foreach (var cell in item.TetriCells)
                 {
                     cell.Apply(unit);
-                    if (cell is Model.Tetri.GarbageReuse garbageReuse)
-                        garbageReuseCell = garbageReuse;
+                }
+
+                foreach (var cell in item.TetriCells)
+                {
+                    cell.PostApply(unit, item.TetriCells);
                 }
             }
-            garbageReuseCell?.Reuse(item.TetriCells, unit);
-
-            // unit.Initialize();
 
             return unit;
         }

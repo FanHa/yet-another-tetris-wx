@@ -24,6 +24,7 @@ namespace Units.Damages
         {
             Value = value;
             Type = type;
+            Buffs = new List<Buffs.Buff>();
         }
         
 

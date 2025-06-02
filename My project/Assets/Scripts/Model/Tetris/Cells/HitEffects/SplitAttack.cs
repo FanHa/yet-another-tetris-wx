@@ -60,7 +60,7 @@ namespace Model.Tetri
                     splitDamage.SetSourceUnit(damage.SourceUnit);
                     splitDamage.SetTargetUnit(targetEnemy);
                     splitDamage.SetBuffs(damage.SourceUnit.attackEffects);
-                    projectile.Init(damage.SourceUnit, targetEnemy.transform, 1.5f, splitDamage);
+                    projectile.Init(damage.SourceUnit, targetEnemy.transform, splitDamage);
                     // todo 这一段代码与unit中创建projectile的代码有点冗余
                     SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
                     if (projectileSpriteRenderer != null && damage.SourceUnit.Fist1SpriteRenderer != null)

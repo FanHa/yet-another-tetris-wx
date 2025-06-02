@@ -8,7 +8,7 @@ namespace Units.Projectiles
     {
         protected Units.Unit caster;
         protected Transform target; // 目标物体, 很多投射物都是投射到目标单位身边的一个虚拟爆炸点,所以target不使用Unit
-        protected float speed; // 移动速度
+        [SerializeField] protected float speed; // 移动速度
         protected Damages.Damage damage;
         protected bool Initialized = false;
         protected bool Moving = true;
@@ -54,12 +54,10 @@ namespace Units.Projectiles
             }
         }
 
-        public void Init(Units.Unit caster, Transform target, float speed, Damages.Damage damage)
+        public void Init(Units.Unit caster, Transform target, Damages.Damage damage)
         {
-            
             this.caster = caster;
             this.target = target;
-            this.speed = speed;
             this.damage = damage;
 
             // 计算偏移方向（随机向左或向右）

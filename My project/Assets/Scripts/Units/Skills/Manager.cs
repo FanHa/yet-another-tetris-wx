@@ -6,13 +6,14 @@ using UnityEngine;
 
 namespace Units.Skills
 {
+    [AddComponentMenu("Units/Skills/Manager")]
     public class Manager : MonoBehaviour
     {
+        public float CooldownRevisePercentage;
         private List<Skill> skills = new List<Skill>();
         private Unit owner;
         public int SkillsCount => skills.Count;
-        
-        public float CooldownRevisePercentage = 100f;
+
         private Skill readySkill;
 
         public event Action<Unit, Skill> OnSkillCast;
@@ -48,7 +49,7 @@ namespace Units.Skills
         {
             if (readySkill != null)
             {
-                OnSkillCast?.Invoke(owner,readySkill);
+                OnSkillCast?.Invoke(owner, readySkill);
                 readySkill.Execute(owner); // 执行保存的技能
                 readySkill = null; // 重置就绪技能
             }
@@ -60,7 +61,8 @@ namespace Units.Skills
             {
                 return false;
             }
-            if (skills.Count <= 0) {
+            if (skills.Count <= 0)
+            {
                 return false;
             }
             readySkill = skills.FirstOrDefault(skill => skill.IsReady()); // 找到第一个就绪的技能

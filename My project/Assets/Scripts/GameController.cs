@@ -42,9 +42,8 @@ public class GameController : MonoBehaviour
         battleField.OnBattleEnd += HandleBattleEnd;
         levelConfig.Reset();
         // 绑定撤销操作按钮的点击事件
-        revokeOperationButton.onClick.AddListener(UndoLastPlacement);
+        // revokeOperationButton.onClick.AddListener(UndoLastPlacement);
         battleButton.onClick.AddListener(HandleBattleClicked);
-        // unitPreviewButton.onClick.AddListener(HandleUnitPreviewClicked);
         trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;

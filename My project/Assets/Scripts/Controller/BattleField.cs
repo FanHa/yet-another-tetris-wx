@@ -39,7 +39,7 @@ namespace Controller {
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
-
+        private Units.UnitFactory unitFactory;
         [SerializeField] private UnitManager unitManager;
         public event Action OnBattleEnd;
 
@@ -51,6 +51,7 @@ namespace Controller {
 
         void Start()
         {
+            unitFactory = new Units.UnitFactory(unitPrefab, tetriCellTypeResourceMapping);
             battleStatistics.OnEndStatistics += EndStatistics;
         }
 
@@ -94,23 +95,38 @@ namespace Controller {
         {
             foreach (Model.InventoryItem item in items)
             {
-                SpawnUnit(spawnPoint, item.CharacterCell, faction, parent, item.TetriCells);
+                SpawnUnit(spawnPoint, item, faction, parent);
+
+                // SpawnUnit(spawnPoint, item.CharacterCell, faction, parent, item.TetriCells);
             }
         }
 
-        private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
-        {
+        // private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
+        // {
 
-            Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
-            GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
-            Unit unitComponent = newUnit.GetComponent<Unit>();
+        //     Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
+        //     GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
+        //     Unit unitComponent = newUnit.GetComponent<Unit>();
 
-            if (unitComponent != null)
-            {
-                InitializeUnit(unitComponent, faction, characterCell, tetriCells);
+        //     if (unitComponent != null)
+        //     {
+        //         InitializeUnit(unitComponent, faction, characterCell, tetriCells);
                 
-            }
+        //     }
 
+        // }
+
+        private void SpawnUnit(Transform spawnPoint, InventoryItem item, Unit.Faction faction, Transform parent)
+        {
+            Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
+            // 用工厂创建基础Unit
+            Unit unit = unitFactory.CreateUnit(item);
+            if (unit != null)
+            {
+                unit.transform.SetParent(parent, false);
+                unit.transform.position = spawnPosition;
+                InitializeUnitBattle(unit, faction);
+            }
         }
 
         private Vector3 GetRandomSpawnPosition(Vector3 basePosition)
@@ -120,6 +136,22 @@ namespace Controller {
                 UnityEngine.Random.Range(-RandomOffsetRangeY, RandomOffsetRangeY),
                 0f
             );
+        }
+
+        private void InitializeUnitBattle(Unit unit, Unit.Faction faction)
+        {
+            unit.unitManager = unitManager;
+            unit.SetFaction(faction);
+            unit.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
+
+            unit.OnDeath += OnUnitDeath;
+            unit.OnDamageTaken += HandleDamageTaken;
+            unitManager.Register(unit);
+
+            Units.Skills.Manager skillManager = unit.SkillManager;
+            skillManager.OnSkillCast += HandleSkillCast;
+
+            unit.Initialize();
         }
 
         private void InitializeUnit(Unit unit, Unit.Faction faction, Model.Tetri.Character characterCell, List<Model.Tetri.Cell> tetriCells)

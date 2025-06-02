@@ -10,20 +10,20 @@ namespace Units
         public DotType type;
         public Skills.Skill skill;
         public Unit caster;
-        public int level;
         public float damagePerSecond;
         public float duration;
         public float timeLeft;
+        public string label;
 
-        public Dot(DotType type, Skills.Skill skill, Unit caster, int level, float dps, float duration)
+        public Dot(DotType type, Skills.Skill skill, Unit caster, float dps, float duration, string label)
         {
             this.type = type;
             this.skill = skill;
             this.caster = caster;
-            this.level = level;
             this.damagePerSecond = dps;
             this.duration = duration;
             this.timeLeft = duration;
+            this.label = label;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Units.Skills
         protected float damageValue = 50f; // 炸弹伤害
         public float explosionRadius = 0.75f; // 爆炸范围
         public override float cooldown => 10f;
-        private float speed = 1.5f;
 
         protected override void ExecuteCore(Unit caster)
         {
@@ -31,7 +30,7 @@ namespace Units.Skills
                 GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
                 tempTargetInstance.transform.position = targetEnemy.transform.position;
                 
-                bomb.Init(caster, tempTargetInstance.transform, speed, damage, targetEnemy.faction, explosionRadius);
+                bomb.Init(caster, tempTargetInstance.transform, damage, targetEnemy.faction, explosionRadius);
             }
         }
 

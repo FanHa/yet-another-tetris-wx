@@ -129,3 +129,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Skills.BloodBomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: 5142575546293964499, guid: b3b57dd9029e27c4698a033a1854cee9, type: 3}
+  - cellType:
+      typeName: Model.Tetri.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}

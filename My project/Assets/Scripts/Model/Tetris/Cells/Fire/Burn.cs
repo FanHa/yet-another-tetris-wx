@@ -6,8 +6,13 @@ namespace Model.Tetri
     public class Burn : Cell
     {
         public Units.Buffs.Burn burnInstance = new Units.Buffs.Burn(); // 实例化一个Burn对象
+        
+        public Burn()
+        {
+            Affinity = AffinityType.Fire; // 设置Burn的Affinity为Fire
+        }
         public override void Apply(Unit unit)
-        {   
+        {
             burnInstance.source = unit; // 设置Burn对象的source为当前单位
             unit.attackEffects.Add(burnInstance);
         }

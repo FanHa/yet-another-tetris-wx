@@ -45,7 +45,8 @@ namespace Model.Tetri
             var randomKey = shapeKeys[new Random().Next(shapeKeys.Count)];
             return CreateShape(randomKey);
         }
-
+        
+        
         /// <summary>
         /// 创建一个仅在 (1,1) 位置有一个 Padding 类型单元格的 Tetri。
         /// 这个 Tetri 可以稍后被修改以填充特定的单元格类型。
@@ -58,7 +59,7 @@ namespace Model.Tetri
             Tetri tetri = new Tetri(Tetri.TetriType.Normal); // 或者一个更合适的默认类型
 
             // 从 cellFactory 创建一个 Padding 类型的 Cell
-            Cell paddingCell = cellFactory.CreatePadding(); 
+            Cell paddingCell = cellFactory.CreatePadding();
 
             if (paddingCell == null)
             {
