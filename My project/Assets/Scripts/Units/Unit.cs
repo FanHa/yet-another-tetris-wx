@@ -7,17 +7,19 @@ using Model.Tetri;
 using TMPro;
 using UI;
 using Units.Buffs;
+using Units.Skills;
 using UnityEngine;
 
 namespace Units
 {
     [RequireComponent(typeof(DotHandler))]
+    [RequireComponent(typeof(Units.Skills.SkillHandler))]
     public class Unit : MonoBehaviour
     {
         public Attributes Attributes;
         public Units.Buffs.Manager BuffManager;// Buff管理器
         private Movement movementController;
-        public Units.Skills.Manager SkillManager;
+        [SerializeField] private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
         public VisualEffectConfig VisualEffectConfig;
         public Model.ProjectileConfig ProjectileConfig;
@@ -34,6 +36,8 @@ namespace Units
 
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Damages.Damage> OnAttackHit;
+
+        public event Action<Units.Unit, Skill> OnSkillCast;
 
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
@@ -70,9 +74,17 @@ namespace Units
             hitEffect = GetComponent<HitEffect>();
             BuffManager = GetComponent<Units.Buffs.Manager>();
             movementController = GetComponent<Movement>();
-            SkillManager = GetComponent<Units.Skills.Manager>();
+            skillHandler = GetComponent<Units.Skills.SkillHandler>();
             dotHandler = GetComponent<DotHandler>();
 
+        }
+
+        void Start()
+        {
+            if (skillHandler != null)
+            {
+                skillHandler.OnSkillReady += OnSkillReady;
+            }
         }
 
         // Update is called once per frame
@@ -107,8 +119,7 @@ namespace Units
             InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
             movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
-            SkillManager.Init(); // 初始化技能管理器
-            InvokeRepeating(nameof(CastSkills), 0f, 1f); // 每秒调用一次技能
+            skillHandler.Activate(); // 初始化技能管理器
             isActive = true;
         }
         private void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -122,20 +133,20 @@ namespace Units
 
         public void AddSkill(Skills.Skill newSkill)
         {
-            SkillManager.AddSkill(newSkill); // 添加技能
+            skillHandler.AddSkill(newSkill); // 添加技能
         }
-        private void CastSkills()
+        private void OnSkillReady(Skill skill)
         {
-            if (SkillManager.HasSkillToTrigger()) // 检查是否有技能可以释放
-            {
-                animationController.TriggerCastSkill(); // 触发技能释放动画
-            }
+            animationController.TriggerCastSkill();
         }
+
 
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAction()
         {
-            SkillManager.CastSkill();
+            OnSkillCast?.Invoke(this, skillHandler.GetCurrentSkill());
+            skillHandler.ExecutePendingSkill(); // 执行待处理的技能
+            
         }
 
         public void ApplyDot(Dot dot)
@@ -147,7 +158,6 @@ namespace Units
         {
             CancelInvoke(nameof(BuffEffect));
             CancelInvoke(nameof(UpdateEnemiesDistance));
-            CancelInvoke(nameof(CastSkills));
             isActive = false;
         }
 

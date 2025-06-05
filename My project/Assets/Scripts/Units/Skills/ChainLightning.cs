@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class ChainLightning : Skill
     {
-        public override float cooldown => 12f; // 技能冷却时间
         public float baseDamage = 20f; // 初始伤害
         public float damageIncreasePercentage = 20f; // 每次弹射伤害增加百分比
         public int maxBounces = 5; // 最大弹射次数
@@ -15,8 +14,7 @@ namespace Units.Skills
         public override string Description()
         {
             return $"对最近的敌人发射一道闪电，造成 {baseDamage} 点伤害，" +
-                   $"每次弹射伤害增加 {damageIncreasePercentage}%，最多弹射 {maxBounces} 次。" +
-                   $"技能冷却时间为 {cooldown} 秒。";
+                   $"每次弹射伤害增加 {damageIncreasePercentage}%，最多弹射 {maxBounces} 次。";
         }
 
         protected override void ExecuteCore(Unit caster)

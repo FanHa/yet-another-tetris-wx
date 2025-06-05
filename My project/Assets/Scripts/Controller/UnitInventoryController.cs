@@ -10,11 +10,7 @@ namespace Controller {
     {
         private UI.Inventories.UnitInventoryView inventoryView;
         [SerializeField] private Model.UnitInventoryModel inventoryData;
-        [SerializeField] private GameObject unitPrefab;
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
-
-        private Units.UnitFactory unitFactory;
-
+        [SerializeField] private Units.UnitFactory unitFactory;
 
         private void Awake()
         {
@@ -26,7 +22,6 @@ namespace Controller {
         }
         private void Start()
         {
-            unitFactory = new Units.UnitFactory(unitPrefab, tetriCellTypeResourceMapping);
             inventoryData.OnDataChanged += HandleDataChange;
         }
 

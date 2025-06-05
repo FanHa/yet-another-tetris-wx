@@ -1110,8 +1110,8 @@ GameObject:
   - component: {fileID: 769437360241263465}
   - component: {fileID: 2563475565724937826}
   - component: {fileID: 7649338840882115303}
-  - component: {fileID: -8802097609326325647}
   - component: {fileID: 6752341075839971567}
+  - component: {fileID: 4572052767030387485}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: UnitBase
@@ -1191,7 +1191,7 @@ MonoBehaviour:
     IsRanged: 0
     RangeAttackDamagePercentage: 0
   BuffManager: {fileID: 0}
-  SkillManager: {fileID: 0}
+  skillHandler: {fileID: 0}
   VisualEffectConfig: {fileID: 11400000, guid: bed103acc2cbb594e8d4d2b2d04e3a2c, type: 2}
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1304,19 +1304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1546ab120d187534cb81cae6a762a3ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8802097609326325647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8661248642372273568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30b6a4ae8c217754a810c967761b22c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CooldownRevisePercentage: 100
 --- !u!114 &6752341075839971567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,3 +1316,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f067eb7df21eea34b9e3900bf7541a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4572052767030387485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 783bc0fa2cdd70d418896238967065ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyPerTick: 5
+  energyDecayPerSkill: 0.8

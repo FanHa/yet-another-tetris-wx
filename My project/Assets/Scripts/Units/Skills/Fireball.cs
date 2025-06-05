@@ -10,12 +10,14 @@ namespace Units.Skills
         public float DotPerFireCell = 1f;           // 每个火系Cell dot伤害
         public float DotDurationPerFireCell = 1f; // 每个火系Cell增加的dot持续时间
 
-
         public float DotBaseDuration = 3f;              // dot持续时间
 
-        public override float cooldown => 8f;
-
         private int fireCellCount = 0;
+
+        public Fireball()
+        {
+            RequiredEnergy = 100f; // 设置技能所需能量
+        }
 
         public void SetFireCellCount(int fireCellCount)
         {
@@ -60,7 +62,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"向攻击范围内一个敌人发射火球，造成 {BaseDamage} 点火焰伤害。冷却时间为 {cooldown} 秒。";
+            return $"向攻击范围内一个敌人发射火球，造成 {BaseDamage} 点火焰伤害";
         }
 
         public override string Name()

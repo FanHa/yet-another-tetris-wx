@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class AttackFrequency : Skill
     {
-        public override float cooldown => 10f; // 技能冷却时间
         private Units.Buffs.AttackFrequency buffTemplate = new();
 
         public override string Description()
@@ -14,8 +13,7 @@ namespace Units.Skills
 
             // 返回技能描述
             return $"为射程范围内的一个随机友方单位（包括自己）安装攻速模块," +
-                $"{buffTemplate.Description()}" +
-                $"技能冷却时间为 {cooldown} 秒";
+                $"{buffTemplate.Description()}";
         }
 
         protected override void ExecuteCore(Unit caster)

@@ -6,7 +6,6 @@ namespace Units.Skills
     public class PrecisionShoot : Skill
     {
         public float attackPowerMultiplier = 4f; // 攻击力倍数
-        public override float cooldown => 10f;
         public float speed = 1.5f;
 
         protected override void ExecuteCore(Unit caster)
@@ -40,8 +39,7 @@ namespace Units.Skills
         public override string Description()
         {
             return $"对射程范围内生命值最低的敌人发射精准箭矢，" +
-                $"造成攻击力的 {attackPowerMultiplier} 倍伤害。" +
-                $"技能冷却时间为 {cooldown} 秒。";
+                $"造成攻击力的 {attackPowerMultiplier} 倍伤害。";
         }
 
         public override string Name()

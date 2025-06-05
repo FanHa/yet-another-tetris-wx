@@ -5,7 +5,6 @@ namespace Units.Skills
 {
     public class BloodBomb : Skill
     {
-        public override float cooldown => 15f; // 技能冷却时间
         public float healthPercentage = 20f; // 消耗自身血量的百分比
         public float explosionRadius = 0.75f; // 爆炸范围
         public float healthReturnPercentage = 25f; // 每命中一个敌人返还的血量百分比
@@ -19,8 +18,7 @@ namespace Units.Skills
         {
             return $"消耗自身当前血量的 {healthPercentage}% 制作成炸弹，随机投向攻击范围内的一个敌人位置。" +
                    $"对范围 {explosionRadius} 内的敌人造成等同于消耗血量的伤害。" +
-                   $"每命中一个敌人，返还造成伤害的 {healthReturnPercentage}% 的血量。" +
-                   $"技能冷却时间为 {cooldown} 秒。";
+                   $"每命中一个敌人，返还造成伤害的 {healthReturnPercentage}% 的血量。";
         }
 
         protected override void ExecuteCore(Unit caster)

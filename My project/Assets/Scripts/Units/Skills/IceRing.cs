@@ -6,14 +6,12 @@ namespace Units.Skills
 {
     public class IceRing : Skill
     {
-        public override float cooldown => 15f; // 冰环技能冷却时间
         public float freezeDuration = 8f; // 冰冻持续时间
         public float effectRadius = 1f; // 冰环作用范围
 
         public override string Description()
         {
-            return $"释放冰环，对周围 {effectRadius} 米范围内的敌人施加冰冻效果，" +
-                   $"持续 {freezeDuration} 秒，技能冷却时间为 {cooldown} 秒。";
+            return $"释放冰环，对周围 {effectRadius} 米范围内的敌人施加冰冻效果.";
         }
 
         protected override void ExecuteCore(Unit caster)

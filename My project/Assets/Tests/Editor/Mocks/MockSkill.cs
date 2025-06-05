@@ -9,10 +9,10 @@ public class MockSkill : Skill
     public Unit BoundUnit { get; private set; }
 
 
-    public override void Init(float baseCoolDownPercentage)
-    {
-        IsInitialized = true;
-    }
+    // public override void Init(float baseCoolDownPercentage)
+    // {
+    //     IsInitialized = true;
+    // }
 
     public override bool IsReady()
     {
@@ -47,11 +47,11 @@ public class MockSkillWithCooldown : Skill
     public float OriginalCooldown  = 2f; // 原始冷却时间
     private float remainingCooldown = 0f;
 
-    public override void Init(float cooldownRevisePercentage)
-    {
-        OriginalCooldown *= cooldownRevisePercentage / 100f;
-        remainingCooldown = 0f;
-    }
+    // public override void Init(float cooldownRevisePercentage)
+    // {
+    //     OriginalCooldown *= cooldownRevisePercentage / 100f;
+    //     remainingCooldown = 0f;
+    // }
 
     public override bool IsReady()
     {

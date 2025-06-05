@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class Weak : Skill
     {
-        public override float cooldown => 10f; // 技能冷却时间
 
         private Units.Buffs.Weak buffTemplate = new(); // 虚弱Buff模板
 
@@ -20,8 +19,7 @@ namespace Units.Skills
             // 返回技能描述
             return $"随机对射程范围内的一个敌人施加虚弱效果," +
                 $"减少其攻击力 {attackReduction}% 并增加其受到的伤害 {damageIncrease}%," +
-                $"持续 {duration} 秒," +
-                $"技能冷却时间为 {cooldown} 秒,";
+                $"持续 {duration} 秒";
         }
 
         protected override void ExecuteCore(Unit caster)

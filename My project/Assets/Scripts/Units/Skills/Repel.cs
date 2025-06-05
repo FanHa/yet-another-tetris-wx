@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class Repel : Skill
     {
-        public override float cooldown => 10f;
         public float repelDistance = 3f; // 击退距离
         public float repelDuration = 0.5f; // 击退持续时间
 
@@ -62,8 +61,7 @@ namespace Units.Skills
         public override string Description()
         {
             return $"对目标敌人施加击退效果，将其击退 {repelDistance} 米，" +
-                $"击退过程持续 {repelDuration} 秒。" +
-                $"技能冷却时间为 {cooldown} 秒。";
+                $"击退过程持续 {repelDuration} 秒。";
         }
 
         public override string Name()

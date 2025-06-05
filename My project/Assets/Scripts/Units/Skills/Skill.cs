@@ -8,30 +8,37 @@ namespace Units.Skills
     public abstract class Skill
     {
         public abstract string Name();
-        protected float lastUsedTime = 0f;
 
-        public virtual float cooldown { get; protected set; } = 0f;
+        public float RequiredEnergy;
+        public float CurrentEnergy;
         
         public virtual bool IsReady()
         {
-            return Time.time >= lastUsedTime + cooldown;
+            return CurrentEnergy >= RequiredEnergy;
+        }
+
+        public virtual void AddEnergy(float amount)
+        {
+            CurrentEnergy += amount;
+            if (CurrentEnergy > RequiredEnergy)
+            {
+                CurrentEnergy = RequiredEnergy; // 确保不会超过最大能量
+            }
         }
 
         public virtual void Execute(Unit caster)
         {
             ExecuteCore(caster);
-            lastUsedTime = Time.time; // 自动更新上次使用时间
+            CurrentEnergy -= RequiredEnergy; // 执行技能后消耗能量
         }
 
         protected abstract void ExecuteCore(Unit caster);
 
         public abstract string Description();
 
-        public virtual void Init(float baseCoolDownPercentage){
-            // 初始化技能
-            lastUsedTime = Time.time;
-            cooldown = cooldown * baseCoolDownPercentage / 100;
-        }
+
+
+        // todo 这些寻找方法似乎不该归Skill类管
 
         /// <summary>
         /// 寻找范围内的所有友方单位

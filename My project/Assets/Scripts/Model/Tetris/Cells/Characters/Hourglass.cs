@@ -19,7 +19,7 @@ namespace Model.Tetri
         {
             base.Apply(unit);
             // 减少技能冷却时间
-            unit.SkillManager.CooldownRevisePercentage = 100 - CooldownReductionPercentage;
+            // unit.SkillManager.CooldownRevisePercentage = 100 - CooldownReductionPercentage;
             // 增加 Buff 持续时间
             unit.BuffManager.DurationRevisePercentage = 100 + BuffDurationIncreasePercentage;
         }

@@ -1419,8 +1419,7 @@ MonoBehaviour:
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
   trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
-  unitPrefab: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
-  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
   unitManager: {fileID: 175012967}
 --- !u!1 &949375413
 GameObject:
@@ -4524,6 +4523,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitInventory
       objectReference: {fileID: 0}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: unitFactory
+      value: 
+      objectReference: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class WindStrike : Skill
     {
-        public override float cooldown => 15f; // 技能冷却时间
         public float orbitRadius = 1f; // 旋转半径
         public float orbitSpeedMultiplier = 5f; // 旋转速度倍数
         public float effectDuration = 10f; // 区域效果持续时间

@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class ProjectileHail : Skill
     {
-        public override float cooldown => 12f; // 技能冷却时间
         public float damageReductionPercentage = 50f; // 重复攻击时伤害降低百分比
         public float multiplier = 2f; // 攻击频率的倍数
 
@@ -18,8 +17,7 @@ namespace Units.Skills
         public override string Description()
         {
             return $"向攻击范围内的敌人射出攻击频率 * {multiplier} 的投射物。" +
-                   $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。" +
-                   $"技能冷却时间为 {cooldown} 秒。";
+                   $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";
         }
 
         protected override void ExecuteCore(Unit caster)

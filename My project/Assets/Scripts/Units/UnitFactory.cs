@@ -4,15 +4,11 @@ using UnityEngine;
 
 namespace Units
 {
-    public class UnitFactory
+    [CreateAssetMenu(fileName = "UnitFactory", menuName = "Units/UnitFactory")]
+    public class UnitFactory : ScriptableObject
     {
-        private readonly TetriCellTypeResourceMapping resourceMapping;
-        private readonly GameObject unitPrefab;
-        public UnitFactory(GameObject unitPrefab, TetriCellTypeResourceMapping resourceMapping)
-        {
-            this.unitPrefab = unitPrefab;
-            this.resourceMapping = resourceMapping;
-        }
+        [SerializeField] private GameObject unitPrefab;
+        [SerializeField] private TetriCellTypeResourceMapping resourceMapping;
 
         public Units.Unit CreateUnit(InventoryItem item)
         {

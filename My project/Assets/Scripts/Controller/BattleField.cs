@@ -21,7 +21,8 @@ namespace Controller {
         [Header("UI Elements")]
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private GameObject skillNameViewerPrefab;
-        [SerializeField] private Canvas damageCanvas;
+        // [SerializeField] private Canvas damageCanvas;
+        [SerializeField] private GameObject floatingViewManager;
         [SerializeField] private BattleStatistics battleStatistics;
 
         [Header("Controllers")]
@@ -37,9 +38,7 @@ namespace Controller {
         [SerializeField] private Model.UnitInventoryModel inventoryData;
         [SerializeField] private Model.UnitInventoryModel enemyData;
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
-        [SerializeField] private GameObject unitPrefab;
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
-        private Units.UnitFactory unitFactory;
+        [SerializeField] private Units.UnitFactory unitFactory;
         [SerializeField] private UnitManager unitManager;
         public event Action OnBattleEnd;
 
@@ -51,7 +50,6 @@ namespace Controller {
 
         void Start()
         {
-            unitFactory = new Units.UnitFactory(unitPrefab, tetriCellTypeResourceMapping);
             battleStatistics.OnEndStatistics += EndStatistics;
         }
 
@@ -97,24 +95,8 @@ namespace Controller {
             {
                 SpawnUnit(spawnPoint, item, faction, parent);
 
-                // SpawnUnit(spawnPoint, item.CharacterCell, faction, parent, item.TetriCells);
             }
         }
-
-        // private void SpawnUnit(Transform spawnPoint, Character characterCell, Unit.Faction faction, Transform parent, List<Model.Tetri.Cell> tetriCells)
-        // {
-
-        //     Vector3 spawnPosition = GetRandomSpawnPosition(spawnPoint.position);
-        //     GameObject newUnit = Instantiate(unitPrefab, spawnPosition, spawnPoint.rotation, parent);
-        //     Unit unitComponent = newUnit.GetComponent<Unit>();
-
-        //     if (unitComponent != null)
-        //     {
-        //         InitializeUnit(unitComponent, faction, characterCell, tetriCells);
-                
-        //     }
-
-        // }
 
         private void SpawnUnit(Transform spawnPoint, InventoryItem item, Unit.Faction faction, Transform parent)
         {
@@ -148,51 +130,13 @@ namespace Controller {
             unit.OnDamageTaken += HandleDamageTaken;
             unitManager.Register(unit);
 
-            Units.Skills.Manager skillManager = unit.SkillManager;
-            skillManager.OnSkillCast += HandleSkillCast;
-
-            unit.Initialize();
-        }
-
-        private void InitializeUnit(Unit unit, Unit.Faction faction, Model.Tetri.Character characterCell, List<Model.Tetri.Cell> tetriCells)
-        {
-            unit.unitManager = unitManager;
-            unit.SetFaction(faction);
-            unit.SetBattlefieldBounds(battlefieldMinBounds, battlefieldMaxBounds);
-            var characterSprite = tetriCellTypeResourceMapping.GetSprite(characterCell);
-            unit.BodySpriteRenderer.sprite = characterSprite;
-            unit.Fist1SpriteRenderer.sprite = characterSprite;
-            unit.Fist2SpriteRenderer.sprite = characterSprite;
-
-            characterCell.Apply(unit);
-
-            Model.Tetri.GarbageReuse garbageReuseCell = null; // 用于存储 GarbageReuse 类型的 Cell
-
-            if (tetriCells != null)
-            {
-                foreach (Model.Tetri.Cell cell in tetriCells)
-                {
-                    cell.Apply(unit);
-                    if (cell is Model.Tetri.GarbageReuse garbageReuse)
-                    {
-                        garbageReuseCell = garbageReuse; // 暂存 GarbageReuse 类型的 Cell
-                    }
-                }
-            }
-            garbageReuseCell?.Reuse(tetriCells, unit); // 调用 GarbageReuse 的方法，并传入 tetriCells
-
-
-            unit.OnDeath += OnUnitDeath;
-            unit.OnDamageTaken += HandleDamageTaken;
-            unitManager.Register(unit);
-            Units.Skills.Manager skillManager = unit.SkillManager;
-            skillManager.OnSkillCast += HandleSkillCast;
+            unit.OnSkillCast += HandleSkillCast;
             unit.Initialize();
         }
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
         {
-            GameObject skillNameInstance = GameObject.Instantiate(skillNameViewerPrefab, damageCanvas.transform);
+            GameObject skillNameInstance = GameObject.Instantiate(skillNameViewerPrefab, floatingViewManager.transform);
             FloatingTextView floatingText = skillNameInstance.GetComponent<FloatingTextView>();
             floatingText.Initialize(skill.Name(), unit.transform.position);
         }
@@ -200,7 +144,7 @@ namespace Controller {
         private void HandleDamageTaken(Units.Damages.Damage damage)
         {
             battleStatistics.AddRecord(damage);
-            GameObject damageTextInstance = Instantiate(damageTextPrefab, damageCanvas.transform);
+            GameObject damageTextInstance = Instantiate(damageTextPrefab, floatingViewManager.transform);
             FloatingTextView damageview = damageTextInstance.GetComponent<FloatingTextView>();
             string sourceLabel = "";
             if (damage.Type != DamageType.Hit)
