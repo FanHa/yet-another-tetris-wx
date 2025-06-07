@@ -36,6 +36,7 @@ namespace Units
 
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Damages.Damage> OnAttackHit;
+        public event Action<SkillEffectContext> OnSkillEffectTriggered;
 
         public event Action<Units.Unit, Skill> OnSkillCast;
 
@@ -84,8 +85,11 @@ namespace Units
             if (skillHandler != null)
             {
                 skillHandler.OnSkillReady += OnSkillReady;
+                skillHandler.OnSkillEffectTriggered += HandleSkillEffectTriggered;
             }
         }
+
+        
 
         // Update is called once per frame
         void Update()
@@ -129,6 +133,11 @@ namespace Units
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
             movementController.SetBattlefieldBounds(minBounds, maxBounds);
+        }
+        private void HandleSkillEffectTriggered(SkillEffectContext context)
+        {
+            context.Caster = this;
+            OnSkillEffectTriggered?.Invoke(context); 
         }
 
         public void AddSkill(Skills.Skill newSkill)

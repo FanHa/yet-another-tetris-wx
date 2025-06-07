@@ -10,8 +10,11 @@ using UnityEngine.UI;
 using Model;
 using Units.Damages;
 using Units.UI;
+using Units.Skills;
 
 namespace Controller {
+    
+    [RequireComponent(typeof(Units.Skills.SkillEffectHandler))]
     public class BattleField : MonoBehaviour
     {
         [Header("Battlefield Bounds")]
@@ -42,12 +45,22 @@ namespace Controller {
         [SerializeField] private UnitManager unitManager;
         public event Action OnBattleEnd;
 
+        private Units.Skills.SkillEffectHandler skillEffectHandler;
+
         private const float RandomOffsetRangeX = 1f;
         private const float RandomOffsetRangeY = 0.5f;
 
         private List<InventoryItem> factionAConfig;
         private List<InventoryItem> factionBConfig;
 
+        void Awake()
+        {
+            skillEffectHandler = GetComponent<Units.Skills.SkillEffectHandler>();
+            if (skillEffectHandler == null)
+            {
+                Debug.LogError("SkillEffectHandler component is missing on the BattleField.");
+            }
+        }
         void Start()
         {
             battleStatistics.OnEndStatistics += EndStatistics;
@@ -63,7 +76,7 @@ namespace Controller {
         {
             statisticsController.SetLevel(level); // 设置当前关卡
             factionAConfig = inventoryData.Items;
-            
+
             factionBConfig = enemyData.Items;
             SpawnUnits();
         }
@@ -128,10 +141,16 @@ namespace Controller {
 
             unit.OnDeath += OnUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;
-            unitManager.Register(unit);
-
+        
             unit.OnSkillCast += HandleSkillCast;
+            unit.OnSkillEffectTriggered += HandleSkillEffectTriggered;
+            unitManager.Register(unit);
             unit.Initialize();
+        }
+
+        private void HandleSkillEffectTriggered(SkillEffectContext context)
+        {
+            skillEffectHandler.HandleSkillEffect(context);
         }
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
@@ -160,7 +179,7 @@ namespace Controller {
         {
             statisticsController.AddScore(1);// todo 以后根据不同单位设置不同分数
             unitManager.Unregister(deadUnit);
-            List<Unit> survivals = deadUnit.faction == Unit.Faction.FactionA 
+            List<Unit> survivals = deadUnit.faction == Unit.Faction.FactionA
                 ? unitManager.GetFactionAUnits() : unitManager.GetFactionBUnits();
             if (survivals.Count == 0)
             {
@@ -211,6 +230,6 @@ namespace Controller {
             OnBattleEnd?.Invoke();
         }
 
-        
+
     }
 }

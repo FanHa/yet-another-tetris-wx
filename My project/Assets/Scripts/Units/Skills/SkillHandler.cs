@@ -16,6 +16,7 @@ namespace Units.Skills
 
         public event Action<Unit, Skill> OnSkillCast;
         public event Action<Skill> OnSkillReady;
+        public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private Skill pendingSkill;
 
         void Awake()
@@ -24,6 +25,12 @@ namespace Units.Skills
             skillManager.EnergyPerTick = energyPerTick;
             skillManager.EnergyDecayPerSkill = energyDecayPerSkill;
             skillManager.OnSkillReady += HandleSkillReady;
+            skillManager.OnSkillEffectTriggered += HandlerSkillEffectTriggered;
+        }
+
+        private void HandlerSkillEffectTriggered(SkillEffectContext context)
+        {
+            OnSkillEffectTriggered?.Invoke(context);
         }
 
         void Update()

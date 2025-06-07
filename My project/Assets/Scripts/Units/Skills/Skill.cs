@@ -7,6 +7,9 @@ namespace Units.Skills
 {
     public abstract class Skill
     {
+
+        public event Action<SkillEffectContext> OnEffectTriggered;
+
         public abstract string Name();
 
         public float RequiredEnergy;
@@ -32,9 +35,15 @@ namespace Units.Skills
             CurrentEnergy -= RequiredEnergy; // 执行技能后消耗能量
         }
 
+
         protected abstract void ExecuteCore(Unit caster);
 
         public abstract string Description();
+
+        protected void TriggerEffect(SkillEffectContext context)
+        {
+            OnEffectTriggered?.Invoke(context);
+        }
 
 
 
