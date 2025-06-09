@@ -34,9 +34,9 @@ namespace Units.Buffs
 
         public bool IsExpired()
         {
-            return duration > 0f && timeLeft <= 0f;
+            return duration >= 0f && timeLeft <= 0f;
         }
-        public virtual void TickTime(float interval)
+        public virtual void UpdateTime(float interval)
         {
             if (duration > 0)
                 timeLeft -= interval;

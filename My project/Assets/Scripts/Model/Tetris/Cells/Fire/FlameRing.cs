@@ -3,21 +3,21 @@ using Units;
 
 namespace Model.Tetri
 {
-    public class FlameInject : Cell
+    public class FlameRing : Cell
     {
-        public FlameInject()
+        public FlameRing()
         {
             Affinity = AffinityType.Fire;
         }
 
         public override string Description()
         {
-            return "攻击时对目标附加火焰伤害并施加灼烧。";
+            return "每次Tick对周围一圈敌人施加灼烧。";
         }
 
         public override string Name()
         {
-            return "炎附";
+            return "火环";
         }
 
         public override void PostApply(Unit unit, IReadOnlyList<Cell> allCells)
@@ -29,7 +29,7 @@ namespace Model.Tetri
                     fireCellCount++;
             }
 
-            var skillInstance = new Units.Skills.FlameInject();
+            var skillInstance = new Units.Skills.FlameRing();
             skillInstance.SetFireCellCount(fireCellCount);
             unit.AddSkill(skillInstance);
         }

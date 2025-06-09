@@ -7,6 +7,7 @@ namespace Units.Skills
     public class SkillEffectHandler : MonoBehaviour
     {
         [SerializeField] private GameObject blazingFieldPrefab;
+        [SerializeField] private GameObject flamingRingPrefab;
 
 
         internal void HandleSkillEffect(SkillEffectContext context)
@@ -30,6 +31,21 @@ namespace Units.Skills
                 else
                 {
                     Debug.LogWarning("BlazingField component not found on prefab.");
+                }
+            }
+            else if (context.Skill is FlameRing)
+            {
+                prefab = flamingRingPrefab;
+                Vector3 spawnPos = context.Position;
+                GameObject instance = Instantiate(prefab, spawnPos, Quaternion.identity);
+                var flamingRing = instance.GetComponent<Units.VisualEffects.FlamingRing>();
+                if (flamingRing != null)
+                {
+                    flamingRing.Initialize(context.Target.transform, context.Radius);
+                }
+                else
+                {
+                    Debug.LogWarning("FlamingRing component not found on prefab.");
                 }
             }
             else

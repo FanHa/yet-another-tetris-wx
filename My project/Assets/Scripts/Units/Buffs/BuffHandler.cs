@@ -34,7 +34,7 @@ namespace Units.Buffs
             if (buffTickTimer >= BUFF_TICK_INTERVAL)
             {
                 buffTickTimer -= BUFF_TICK_INTERVAL;
-                buffManager.Tick(BUFF_TICK_INTERVAL);
+                buffManager.Tick(owner, BUFF_TICK_INTERVAL);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Units.Buffs
             buffManager.AddOrRefreshBuff(buff);
         }
 
-        internal IEnumerable<object> GetActiveBuffs()
+        internal IEnumerable<Buff> GetActiveBuffs()
         {
             return buffManager.GetAllBuffs();
         }

@@ -5,6 +5,7 @@ namespace Units.Skills
     {
         public Skill Skill;
         public Unit Caster;
+        public Unit Target;
         public Vector3 Position;
         public float Duration;
         public float Radius;

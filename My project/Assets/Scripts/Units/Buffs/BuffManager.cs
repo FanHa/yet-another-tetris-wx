@@ -12,17 +12,20 @@ namespace Units.Buffs
         public event Action<Buff> OnBuffRemoved;
         private readonly List<Buff> buffs = new List<Buff>();
 
-        public void Tick(float interval)
+        public void Tick(Unit unit, float interval)
         {
             for (int i = buffs.Count - 1; i >= 0; i--)
             {
                 Buff buff = buffs[i];
-                buff.TickTime(interval);
+                buff.UpdateTime(interval);
+                if (buff is ITick tickBuff)
+                {
+                    tickBuff.OnTick(unit); // 调用ITick接口的OnTick方法
+                }
                 if (buff.IsExpired())
                 {
                     OnBuffRemoved?.Invoke(buff);
                     buffs.RemoveAt(i);
-                    continue;
                 }
                     
             }

@@ -10,3 +10,20 @@
 - SkillHandler监听技能就绪事件，通知Unit播放施法动画，动画结束后由Unit调用SkillHandler释放技能
 - 技能释放事件（OnSkillCast）通过Unit对外抛出，BattleField等外部系统只需监听Unit的事件即可实现技能表现（如飘字、特效等）
 - 整体结构解耦，便于扩展和维护，支持后续Buff/装备对能量机制的动态调整
+
+## Buff 与 Dot 管理设计
+
+### Buff 管理
+
+- Buff 管理器分为两层：`BuffManager`（纯C#，负责Buff的增删、持续时间、效果叠加等逻辑）和 `BuffHandler`（MonoBehaviour，负责与Unit、表现、事件等交互）。
+- BuffManager 负责所有 Buff 的生命周期管理，包括添加、刷新、移除、过期检测等。
+- BuffHandler 负责监听 BuffManager 的事件，驱动 BuffViewer（表现层）显示、更新和销毁 Buff 图标。
+- 支持 Buff 的唯一性、叠加、刷新等机制，便于扩展多种状态效果。
+<!-- - BuffViewer 作为 MonoBehaviour，负责 Buff 图标的视觉表现和跟随。 -->
+
+### Dot（持续伤害）管理
+
+- Dot 管理同样分为两层：`DotManager`（纯C#，负责所有 Dot 的添加、刷新、堆叠、爆炸等逻辑）和 `DotHandler`（MonoBehaviour，负责与Unit、表现、事件等交互）。
+- DotManager 负责每种 Dot 的独立管理，支持不同技能来源的 Dot 独立存在、同技能来源的 Dot 替换、堆叠与爆炸等机制。
+- DotHandler 负责定时 Tick，驱动 DotManager 结算伤害、触发爆炸等事件，并可用于表现层（如飘字、特效）。
+- Dot 机制与 Buff 机制解耦，便于后续扩展更多持续性效果（如中毒、冰冻等）。
