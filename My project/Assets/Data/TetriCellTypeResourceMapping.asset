@@ -133,3 +133,11 @@ MonoBehaviour:
       typeName: Model.Tetri.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}
+  - cellType:
+      typeName: Model.Tetri.BlazingField, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -7861168299662229937, guid: 581b2c7917ed4fb42870de94637db601, type: 3}
+  - cellType:
+      typeName: Model.Tetri.FlameInject, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}

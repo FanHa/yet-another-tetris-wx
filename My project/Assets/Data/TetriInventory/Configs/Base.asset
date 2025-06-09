@@ -19,6 +19,10 @@ MonoBehaviour:
       PublicKeyToken=null
   - typeName: Model.Tetri.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - typeName: Model.Tetri.BlazingField, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - typeName: Model.Tetri.FlameInject, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   initialSingleCharacterCells:
   - typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null

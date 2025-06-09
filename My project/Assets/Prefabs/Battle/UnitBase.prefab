@@ -1107,11 +1107,11 @@ GameObject:
   - component: {fileID: 3650917277825002224}
   - component: {fileID: 8368620811269264414}
   - component: {fileID: 1902576528534209003}
-  - component: {fileID: 769437360241263465}
   - component: {fileID: 2563475565724937826}
   - component: {fileID: 7649338840882115303}
   - component: {fileID: 6752341075839971567}
   - component: {fileID: 4572052767030387485}
+  - component: {fileID: 5975892864010684759}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: UnitBase
@@ -1190,7 +1190,6 @@ MonoBehaviour:
     AttackRange: 0.5
     IsRanged: 0
     RangeAttackDamagePercentage: 0
-  BuffManager: {fileID: 0}
   skillHandler: {fileID: 0}
   VisualEffectConfig: {fileID: 11400000, guid: bed103acc2cbb594e8d4d2b2d04e3a2c, type: 2}
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
@@ -1261,22 +1260,6 @@ MonoBehaviour:
   ghostPrefab: {fileID: 0}
   hitSound: {fileID: 0}
   audioSource: {fileID: 0}
---- !u!114 &769437360241263465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8661248642372273568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 169ef0e1fc24f064da3dda77bd563ce0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buffViewerParent: {fileID: 7858934183165652001}
-  buffViewerPrefab: {fileID: 8274040249548898299, guid: edd429be709cf0648806abc88f4856bb, type: 3}
-  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
-  DurationRevisePercentage: 100
 --- !u!114 &2563475565724937826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1330,3 +1313,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyPerTick: 5
   energyDecayPerSkill: 0.8
+--- !u!114 &5975892864010684759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8396bdd853a904b9a2110bd752b137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

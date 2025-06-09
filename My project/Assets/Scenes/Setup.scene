@@ -1366,6 +1366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 943837599}
   - component: {fileID: 943837600}
+  - component: {fileID: 943837601}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: BattleField
@@ -1409,7 +1410,7 @@ MonoBehaviour:
   battlefieldMaxBounds: {fileID: 1157705436}
   damageTextPrefab: {fileID: 8658494460595726152, guid: f36c46e0d7615d64e8761c93eb6ff655, type: 3}
   skillNameViewerPrefab: {fileID: 3087921832634182325, guid: cb74d9fbd118a8c4f970f06836f57f44, type: 3}
-  damageCanvas: {fileID: 1176676513}
+  floatingViewManager: {fileID: 1588624655}
   battleStatistics: {fileID: 634437515}
   statisticsController: {fileID: 85712747}
   spawnPointA: {fileID: 656560514}
@@ -1421,6 +1422,19 @@ MonoBehaviour:
   trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
   unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
   unitManager: {fileID: 175012967}
+--- !u!114 &943837601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943837598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec655df22cb14b7469d73c92e473b956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blazingFieldPrefab: {fileID: 2231431966408489219, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0
@@ -2475,6 +2489,38 @@ MonoBehaviour:
   m_EffectColor: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 0.5}
   m_EffectDistance: {x: 30, y: -30}
   m_UseGraphicAlpha: 1
+--- !u!1 &1588624655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1588624656}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: FloatingViewManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1588624656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588624655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 12, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1633481152 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4163043750443375820, guid: b6041911f14cc7d44a0e900cead6443e, type: 3}
@@ -4811,3 +4857,4 @@ SceneRoots:
   - {fileID: 2025217634856458810}
   - {fileID: 654725609620354711}
   - {fileID: 1770591512777316844}
+  - {fileID: 1588624656}

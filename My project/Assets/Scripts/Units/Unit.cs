@@ -14,10 +14,11 @@ namespace Units
 {
     [RequireComponent(typeof(DotHandler))]
     [RequireComponent(typeof(Units.Skills.SkillHandler))]
+    [RequireComponent(typeof(BuffHandler))]
     public class Unit : MonoBehaviour
     {
         public Attributes Attributes;
-        public Units.Buffs.Manager BuffManager;// Buff管理器
+        private Units.Buffs.BuffHandler BuffHandler;// Buff管理器
         private Movement movementController;
         [SerializeField] private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
@@ -73,7 +74,7 @@ namespace Units
 
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
-            BuffManager = GetComponent<Units.Buffs.Manager>();
+            BuffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
             dotHandler = GetComponent<DotHandler>();
@@ -89,7 +90,7 @@ namespace Units
             }
         }
 
-        
+
 
         // Update is called once per frame
         void Update()
@@ -120,7 +121,6 @@ namespace Units
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
 
-            InvokeRepeating(nameof(BuffEffect), 1f, 1f);
             InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
             movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
             skillHandler.Activate(); // 初始化技能管理器
@@ -137,7 +137,7 @@ namespace Units
         private void HandleSkillEffectTriggered(SkillEffectContext context)
         {
             context.Caster = this;
-            OnSkillEffectTriggered?.Invoke(context); 
+            OnSkillEffectTriggered?.Invoke(context);
         }
 
         public void AddSkill(Skills.Skill newSkill)
@@ -155,7 +155,7 @@ namespace Units
         {
             OnSkillCast?.Invoke(this, skillHandler.GetCurrentSkill());
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能
-            
+
         }
 
         public void ApplyDot(Dot dot)
@@ -165,7 +165,6 @@ namespace Units
 
         public void StopAction()
         {
-            CancelInvoke(nameof(BuffEffect));
             CancelInvoke(nameof(UpdateEnemiesDistance));
             isActive = false;
         }
@@ -183,13 +182,7 @@ namespace Units
 
         public void AddBuff(Units.Buffs.Buff buff)
         {
-            BuffManager.AddBuff(buff, this);
-        }
-
-        private void BuffEffect()
-        {
-            BuffManager.UpdateBuffs(this);
-
+            BuffHandler.ApplyBuff(buff);
         }
 
         private void UpdateEnemiesDistance()
@@ -261,6 +254,7 @@ namespace Units
                 damage.SetTargetUnit(target);
                 damage.SetBuffs(attackEffects);
                 FireProjectile(target, damage);
+                // todo 的buff处理
             }
             else
             {
@@ -271,6 +265,14 @@ namespace Units
                 damage.SetBuffs(attackEffects);
                 target.TakeDamage(damage);
                 OnAttackHit?.Invoke(damage);
+
+                foreach (var buff in BuffHandler.GetActiveBuffs())
+                {
+                    if (buff is IAttack attackBuff)
+                    {
+                        attackBuff.OnAttack(this, target, ref damage);
+                    }
+                }
             }
         }
 

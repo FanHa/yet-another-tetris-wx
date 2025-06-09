@@ -13,8 +13,8 @@ namespace Units
         public float damagePerSecond;
         public float duration;
         public float timeLeft;
-        public string label;
 
+        public string label;
         public Dot(DotType type, Skills.Skill skill, Unit caster, float dps, float duration, string label)
         {
             this.type = type;
