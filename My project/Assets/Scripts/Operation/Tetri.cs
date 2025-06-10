@@ -27,6 +27,9 @@ namespace Operation
             int rows = shape.GetLength(0);
             int cols = shape.GetLength(1);
 
+            // 存储所有Cell对象，便于后续设置border
+            var cellObjs = new Operation.Cell[rows, cols];
+
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
@@ -34,20 +37,32 @@ namespace Operation
                     var cell = shape[i, j];
                     if (cell is not Model.Tetri.Empty)
                     {
-                        // 实例化 CellPrefab
                         GameObject cellObj = Instantiate(cellPrefab, this.transform);
-                        // 设置位置（以中心点为基准）
                         float localX = i;
-                        float localY = -j; 
-
+                        float localY = -j;
                         cellObj.transform.localPosition = new Vector3(localX, localY, 0);
 
-
-                        // 可选：根据 cell 类型设置外观
-                        cellObj.GetComponent<Operation.Cell>().Init(cell);
-
-                        // 可选：存储 cellObj 引用，便于后续操作
+                        var cellComp = cellObj.GetComponent<Operation.Cell>();
+                        cellComp.Init(cell);
+                        cellObjs[i, j] = cellComp;
                     }
+                }
+            }
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    var cellComp = cellObjs[i, j];
+                    if (cellComp == null) continue;
+
+                    // 上下左右是否有相邻有效Cell
+                    bool top = (j == 0) || (cellObjs[i, j - 1] == null);
+                    bool bottom = (j == cols - 1) || (cellObjs[i, j + 1] == null);
+                    bool left = (i == 0) || (cellObjs[i - 1, j] == null);
+                    bool right = (i == rows - 1) || (cellObjs[i + 1, j] == null);
+
+                    cellComp.SetBorderVisibility(top, bottom, left, right);
                 }
             }
 

@@ -12,6 +12,7 @@ namespace Operation
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
         [SerializeField] private Model.Tetri.TetriCellTypeResourceMapping resourceMapping;
+        [SerializeField] private Model.Tetri.ColorConfig colorConfig; // 新增：颜色配置
 
         public void Init(Model.Tetri.Cell modelCell)
         {
@@ -21,9 +22,16 @@ namespace Operation
                 icon.sprite = sprite;
             }
 
+            var colorEntry = colorConfig.GetColorEntry(modelCell.Affinity);
+            if (colorEntry != null)
+            {
+                SetMaskColor(colorEntry.maskColor);
+                SetBorderColor(colorEntry.borderColor);
+            }
+
         }
 
-        public void SetMaskColor(Color color)
+        private void SetMaskColor(Color color)
         {
             if (mask != null)
             {
@@ -33,6 +41,14 @@ namespace Operation
                     renderer.color = color;
                 }
             }
+        }
+
+        private void SetBorderColor(Color color)
+        {
+            if (borderTop != null) borderTop.GetComponent<SpriteRenderer>().color = color;
+            if (borderBottom != null) borderBottom.GetComponent<SpriteRenderer>().color = color;
+            if (borderLeft != null) borderLeft.GetComponent<SpriteRenderer>().color = color;
+            if (borderRight != null) borderRight.GetComponent<SpriteRenderer>().color = color;
         }
 
         public void SetBorderVisibility(bool top, bool bottom, bool left, bool right)

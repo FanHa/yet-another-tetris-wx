@@ -1,29 +1,60 @@
+# Devlog 05：技能系统完善
+
 ## 近期完成
-- 战斗单位(Unit)上的dot伤害管理实现(以火系技能为例)
-- 火系技能的设计(dot伤害, 火元素Cell对技能的加成)
-- 投射物(Projectile)的基础逻辑与衍生投射物(火球)的实现
+
+- 实现战斗单位（Unit）上的 DoT 伤害管理（以火系技能为例）  
+- 设计火系技能（包含 DoT 伤害机制、火元素 Cell 对技能的加成）  
+- 构建投射物（Projectile）的基础逻辑并实现衍生投射物“火球”  
+- 新增元素/技能颜色配置机制，支持通过 ScriptableObject 配置不同元素类型的边框色与遮罩色，提升视觉一致性与扩展性  
+
+---
 
 ### Unit 上的技能管理设计
-- 技能管理器设计（从以前的冷却时间改成积蓄能量）
-- 技能管理分为两层：SkillManager（纯C#，负责技能能量、就绪检测等逻辑）和 SkillHandler（MonoBehaviour，负责与Unit、动画、事件等交互）
-- 每个技能有独立的能量需求（RequiredEnergy），每tick由SkillManager分发能量，能量积满后技能进入就绪状态
-- SkillHandler监听技能就绪事件，通知Unit播放施法动画，动画结束后由Unit调用SkillHandler释放技能
-- 技能释放事件（OnSkillCast）通过Unit对外抛出，BattleField等外部系统只需监听Unit的事件即可实现技能表现（如飘字、特效等）
-- 整体结构解耦，便于扩展和维护，支持后续Buff/装备对能量机制的动态调整
 
-## Buff 与 Dot 管理设计
+- 技能系统重构：由原先的冷却时间机制改为能量积蓄机制  
+- 技能管理分为两层：
+  - `SkillManager`（纯 C#，负责技能能量、就绪检测等逻辑）
+  - `SkillHandler`（MonoBehaviour，负责与 Unit、动画、事件等交互）
+- 每个技能设有独立的能量需求（`RequiredEnergy`），由 `SkillManager` 每 tick 分发能量，能量积满后技能进入就绪状态
+- `SkillHandler` 监听技能就绪事件，通知 Unit 播放施法动画，动画结束后由 Unit 驱动技能释放流程
+- 技能释放事件（`OnSkillCast`）由 Unit 向外抛出，`BattleField` 等系统只需监听事件即可完成技能表现（如飘字、特效）
+- 结构清晰解耦，支持后续引入 Buff / 装备对能量系统的调整扩展
+
+---
 
 ### Buff 管理
 
-- Buff 管理器分为两层：`BuffManager`（纯C#，负责Buff的增删、持续时间、效果叠加等逻辑）和 `BuffHandler`（MonoBehaviour，负责与Unit、表现、事件等交互）。
-- BuffManager 负责所有 Buff 的生命周期管理，包括添加、刷新、移除、过期检测等。
-- BuffHandler 负责监听 BuffManager 的事件，驱动 BuffViewer（表现层）显示、更新和销毁 Buff 图标。
-- 支持 Buff 的唯一性、叠加、刷新等机制，便于扩展多种状态效果。
-<!-- - BuffViewer 作为 MonoBehaviour，负责 Buff 图标的视觉表现和跟随。 -->
+- 同样采用双层架构：
+  - `BuffManager`（纯 C#，负责 Buff 的增删、时效与叠加逻辑）
+  - `BuffHandler`（MonoBehaviour，负责表现、图标更新等与 Unit 的交互）
+- 支持 Buff 的唯一性、刷新、叠加机制
+- `BuffManager` 负责完整的生命周期管理，`BuffHandler` 则专注于 UI 与表现层响应
 
-### Dot（持续伤害）管理
+---
 
-- Dot 管理同样分为两层：`DotManager`（纯C#，负责所有 Dot 的添加、刷新、堆叠、爆炸等逻辑）和 `DotHandler`（MonoBehaviour，负责与Unit、表现、事件等交互）。
-- DotManager 负责每种 Dot 的独立管理，支持不同技能来源的 Dot 独立存在、同技能来源的 Dot 替换、堆叠与爆炸等机制。
-- DotHandler 负责定时 Tick，驱动 DotManager 结算伤害、触发爆炸等事件，并可用于表现层（如飘字、特效）。
-- Dot 机制与 Buff 机制解耦，便于后续扩展更多持续性效果（如中毒、冰冻等）。
+### DoT（持续伤害）管理
+
+- 结构与 Buff 管理类似，分为：
+  - `DotManager`（纯 C#，负责 Dot 添加、刷新、堆叠与爆炸等机制）
+  - `DotHandler`（MonoBehaviour，驱动结算、表现更新）
+- 支持不同来源的 Dot 独立存在，同来源 Dot 替换、堆叠与触发爆炸
+- Dot 机制与 Buff 解耦，为后续添加其他持续性效果（如中毒、冰冻）提供良好扩展性
+
+---
+
+## 下一步计划
+
+1. **战斗结束后的奖励选择**
+   - 设计奖励界面与交互流程  
+   - 定义奖励类型（新技能、属性提升、装备等）与数据结构  
+   - 实现与主流程的衔接与存档逻辑  
+
+2. **冰系技能**
+   - 设计冰系技能（如减速、冻结等）  
+   - 实现冰元素 Cell 对技能的加成机制  
+   - 制作冰系技能的表现与特效  
+
+3. **敌人强度随关卡成长的机制**
+   - 设计敌人属性成长曲线（血量、攻击、技能等）  
+   - 配置关卡难度与成长参数  
+   - 实现自动成长逻辑及其与特殊关卡事件的兼容机制  
