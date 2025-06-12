@@ -153,3 +153,7 @@ MonoBehaviour:
       typeName: Model.Tetri.Snowball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
+  - cellType:
+      typeName: Model.Tetri.FrostZone, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}

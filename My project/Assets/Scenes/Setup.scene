@@ -1437,6 +1437,7 @@ MonoBehaviour:
   blazingFieldPrefab: {fileID: 2231431966408489219, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}
   flamingRingPrefab: {fileID: 6059573537789386272, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
   iceShieldPrefab: {fileID: 1995791391659268277, guid: f25552e189446a041af81469fcfa1836, type: 3}
+  frostZonePrefab: {fileID: 2231431966408489219, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0
