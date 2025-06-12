@@ -13,6 +13,7 @@ namespace Model
         public GameObject BloodBombPrefab;
 
         public GameObject FireballPrefab;
+        public GameObject SnowballPrefab;
 
         public GameObject TempTargetPrefab;
     }

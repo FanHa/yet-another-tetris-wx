@@ -18,4 +18,5 @@ MonoBehaviour:
   ChainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
   BloodBombPrefab: {fileID: 83292690119067482, guid: df742fbf7afbe1c46ad4da4bd7f0a951, type: 3}
   FireballPrefab: {fileID: 109674630725193608, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
+  SnowballPrefab: {fileID: 2235469884941056063, guid: 76f0c4ad7b9930f4b9da9cb995db3506, type: 3}
   TempTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
