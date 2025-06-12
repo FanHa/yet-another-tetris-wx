@@ -22,7 +22,12 @@ namespace Units.Buffs
         public abstract string Description();
         public virtual Type BuffType => GetType();
 
-        public virtual void OnApply(Unit unit) { timeLeft = duration; }
+        public virtual void OnApply(Unit unit)
+        {
+            timeLeft = duration;
+            OnApplyExtra(unit); // 调用子类扩展
+        }
+        protected virtual void OnApplyExtra(Unit unit) { }
         public virtual void OnRemove(Unit unit) { }
 
         public string GetKey()
@@ -43,11 +48,11 @@ namespace Units.Buffs
         }
     }
 
-    public interface IAttack {
-        void OnAttack(Unit attacker, Unit target, ref Damages.Damage damage);
+    public interface IAttackHitTrigger {
+        void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage);
     }
-    public interface IHit {
-        void OnHit(Unit self, Unit attacker, ref Damages.Damage damage);
+    public interface ITakeHitTrigger {
+        void OnTakeHit(Unit self, Unit attacker, ref Damages.Damage damage);
     }
     public interface ITick {
         void OnTick(Unit unit);

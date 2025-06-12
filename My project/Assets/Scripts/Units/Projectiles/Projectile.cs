@@ -79,8 +79,10 @@ namespace Units.Projectiles
         {
             if (target.TryGetComponent<Unit>(out var targetUnit))
             {
-                targetUnit.TakeDamage(damage);
-                caster.TriggerOnAttackHit( damage);
+                caster.TriggerAttackHit(targetUnit, damage);
+                targetUnit.TakeHit(caster, ref damage);
+                // targetUnit.TakeDamage(damage);
+                
             }
             Destroy(gameObject);
         }

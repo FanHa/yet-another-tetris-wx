@@ -18,11 +18,16 @@ namespace Units.Skills
         public event Action<Skill> OnSkillReady;
         public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private Skill pendingSkill;
+        private Attributes attributes;
+
+        public void Initialize(Attributes attributes)
+        {
+            this.attributes = attributes;
+        }
 
         void Awake()
         {
             owner = GetComponent<Unit>();
-            skillManager.EnergyPerTick = energyPerTick;
             skillManager.EnergyDecayPerSkill = energyDecayPerSkill;
             skillManager.OnSkillReady += HandleSkillReady;
             skillManager.OnSkillEffectTriggered += HandlerSkillEffectTriggered;
@@ -40,7 +45,9 @@ namespace Units.Skills
             if (tickTimer >= TICK_INTERVAL)
             {
                 tickTimer -= TICK_INTERVAL;
-                skillManager.Tick();
+
+                float energyPerTick = owner.Attributes.EnergyPerTick.finalValue;
+                skillManager.Tick(energyPerTick);
             }
         }
 

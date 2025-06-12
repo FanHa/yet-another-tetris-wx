@@ -20,7 +20,7 @@ namespace Units
         public Attributes Attributes;
         private Units.Buffs.BuffHandler BuffHandler;// Buff管理器
         private Movement movementController;
-        [SerializeField] private Units.Skills.SkillHandler skillHandler; // 技能处理器
+        private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
         public VisualEffectConfig VisualEffectConfig;
         public Model.ProjectileConfig ProjectileConfig;
@@ -123,6 +123,8 @@ namespace Units
 
             InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
             movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
+
+            skillHandler.Initialize(Attributes);
             skillHandler.Activate(); // 初始化技能管理器
             isActive = true;
         }
@@ -254,7 +256,6 @@ namespace Units
                 damage.SetTargetUnit(target);
                 damage.SetBuffs(attackEffects);
                 FireProjectile(target, damage);
-                // todo 的buff处理
             }
             else
             {
@@ -263,22 +264,20 @@ namespace Units
                 damage.SetSourceUnit(this);
                 damage.SetTargetUnit(target);
                 damage.SetBuffs(attackEffects);
-                target.TakeDamage(damage);
-                OnAttackHit?.Invoke(damage);
-
-                foreach (var buff in BuffHandler.GetActiveBuffs())
-                {
-                    if (buff is IAttack attackBuff)
-                    {
-                        attackBuff.OnAttack(this, target, ref damage);
-                    }
-                }
+                target.TakeHit(this, ref damage); // 通知目标单位被攻击
+                TriggerAttackHit(target, damage);
             }
         }
 
-        public void TriggerOnAttackHit(Damages.Damage damage)
+        public void TriggerAttackHit(Unit target, Damages.Damage damage)
         {
-            OnAttackHit?.Invoke(damage); // 触发攻击命中事件
+            foreach (var buff in BuffHandler.GetActiveBuffs())
+            {
+                if (buff is IAttackHitTrigger attackBuff)
+                {
+                    attackBuff.OnAttackHit(this, target, ref damage);
+                }
+            }
         }
 
         public void FireProjectile(Unit target, Damages.Damage damage)
@@ -304,6 +303,18 @@ namespace Units
         }
 
 
+        public void TakeHit(Unit attacker, ref Damages.Damage damage)
+        {
+            foreach (var buff in BuffHandler.GetActiveBuffs())
+            {
+                if (buff is ITakeHitTrigger hitTrigger)
+                {
+                    hitTrigger.OnTakeHit(this, attacker, ref damage);
+                }
+            }
+            // 处理被攻击逻辑
+            TakeDamage(damage);
+        }
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {

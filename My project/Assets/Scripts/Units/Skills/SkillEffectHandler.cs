@@ -8,6 +8,7 @@ namespace Units.Skills
     {
         [SerializeField] private GameObject blazingFieldPrefab;
         [SerializeField] private GameObject flamingRingPrefab;
+        [SerializeField] private GameObject iceShieldPrefab;
 
 
         internal void HandleSkillEffect(SkillEffectContext context)
@@ -46,6 +47,20 @@ namespace Units.Skills
                 else
                 {
                     Debug.LogWarning("FlamingRing component not found on prefab.");
+                }
+            }
+            else if (context.Skill is IceShield)
+            {
+                prefab = iceShieldPrefab;
+                GameObject instance = Instantiate(prefab, context.Caster.transform.position, Quaternion.identity);
+                var iceShield = instance.GetComponent<Units.VisualEffects.IceShield>();
+                if (iceShield != null)
+                {
+                    iceShield.Initialize(context.Caster.transform);
+                }
+                else
+                {
+                    Debug.LogWarning("IceShield component not found on prefab.");
                 }
             }
             else

@@ -141,3 +141,11 @@ MonoBehaviour:
       typeName: Model.Tetri.FlameInject, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
+  - cellType:
+      typeName: Model.Tetri.FlameRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 201670095172932294, guid: 5bf9011d8601ce147a883fb4991c72e1, type: 3}
+  - cellType:
+      typeName: Model.Tetri.IceShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}

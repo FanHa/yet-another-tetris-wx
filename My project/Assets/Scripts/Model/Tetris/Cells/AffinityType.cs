@@ -3,6 +3,7 @@ namespace Model.Tetri
     public enum AffinityType
     {
         None,
-        Fire
+        Fire,
+        Ice
     }
 }

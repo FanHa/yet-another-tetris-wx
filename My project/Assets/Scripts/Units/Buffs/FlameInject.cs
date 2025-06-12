@@ -6,7 +6,7 @@ namespace Units.Buffs
     /// <summary>
     /// FlameInject Buff：攻击时对目标附加火焰伤害并施加灼烧Dot
     /// </summary>
-    public class FlameInject : Buff, IAttack
+    public class FlameInject : Buff, IAttackHitTrigger
     {
         private float extraFireDamage;
         private float dotDps;
@@ -30,7 +30,7 @@ namespace Units.Buffs
         public override string Description() =>
             $"攻击时对目标附加{extraFireDamage}点火焰伤害，并施加{dotDps}/s灼烧({dotDuration}秒)";
 
-        public void OnAttack(Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage)
         {
             // 1. 直接附加火焰伤害
             var fireDamage = new Damages.Damage(extraFireDamage, Damages.DamageType.Fire);

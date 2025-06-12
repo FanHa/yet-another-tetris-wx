@@ -9,7 +9,6 @@ namespace Units.Skills
         public event Action<Skill> OnSkillReady;
         public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private List<Skill> skills = new();
-        public float EnergyPerTick { get; set; } = 10f;
         public float EnergyDecayPerSkill { get; set; } = 0.8f;
 
 
@@ -26,12 +25,12 @@ namespace Units.Skills
             OnSkillEffectTriggered?.Invoke(context);
         }
 
-        public void Tick()
+        public void Tick(float energy)
         {
             int skillCount = skills.Count;
             if (skillCount == 0) return;
             float decay = MathF.Pow(EnergyDecayPerSkill, skillCount - 1);
-            float gain = EnergyPerTick * decay;
+            float gain = energy * decay;
             foreach (var skill in skills)
                 skill.AddEnergy(gain);
             var readySkill = skills.FirstOrDefault(skill => skill.IsReady());
