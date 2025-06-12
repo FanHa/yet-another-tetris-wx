@@ -1,43 +1,38 @@
-// using System;
+using Units.Skills;
 
-// namespace Units.Buffs
-// {
-//     public class Freeze : Buff
-//     {
-//         private float moveSpeedReductionPercentage = 20f;
-//         private float attackSpeedReductionPercentage = 20f;
+namespace Units.Buffs
+{
+    /// <summary>
+    /// Freeze：完全冻结目标，无法移动、攻击、释放技能，能量回复为0
+    /// </summary>
+    public class Freeze : Buff
+    {
+        public Freeze(
+            float duration,
+            Unit sourceUnit,
+            Skill sourceSkill
+        ) : base(duration, sourceUnit, sourceSkill)
+        {
+        }
 
-//         public Freeze()
-//         {
-//             durationSeconds = 8f; // 冻结持续时间
-//         }
+        public override string Name() => "Freeze";
+        public override string Description() => "完全冻结，无法行动，能量回复为0";
 
-//         public override string Name()
-//         {
-//             return "冰霜";
-//         }
+        protected override void OnApplyExtra(Unit unit)
+        {
+            // 攻速、移速、能量回复全部-100%
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -100);
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
+            unit.Attributes.EnergyPerTick.AddPercentageModifier(this, -100);
 
-//         public override string Description()
-//         {
-//             return $"降低目标移动速度{moveSpeedReductionPercentage}%, 降低目标攻击速度{attackSpeedReductionPercentage}%, 持续{durationSeconds}秒";
-//         }
+        }
 
-//         public override void Apply(Unit unit)
-//         {
-//             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -moveSpeedReductionPercentage); // 减少移动速度
-//             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -attackSpeedReductionPercentage);
-//         }
+        public override void OnRemove(Unit unit)
+        {
+            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            unit.Attributes.EnergyPerTick.RemovePercentageModifier(this);
 
-//         public override void Remove(Unit unit)
-//         {
-//             unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-//             unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-//         }
-
-//         public override void Affect(Unit unit)
-//         {
-//         }
-
-//         public override Type TetriCellType => typeof(Model.Tetri.Freeze); // Return the Type of the corresponding TetriCell
-//     }
-// }
+        }
+    }
+}

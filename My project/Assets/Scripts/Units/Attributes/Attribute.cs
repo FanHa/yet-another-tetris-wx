@@ -105,6 +105,10 @@ namespace Units
             }
 
             finalValue = (baseValue + flatSum) * (1 + percentageSum / 100f);
+            if (finalValue < 0)
+            {
+                finalValue = 0; // 确保最终值不为负
+            }
         }
     }
 }
