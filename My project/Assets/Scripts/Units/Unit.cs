@@ -58,7 +58,7 @@ namespace Units
 
         public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
-        public UnitManager unitManager;
+        public UnitManager UnitManager;
 
         public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private bool isActive = false; // 是否处于活动状态
@@ -115,6 +115,7 @@ namespace Units
             }
         }
 
+        // todo 这个方法名要不要改成Activate
         public void Initialize()
         {
             Attributes.OnHealthChanged += UpdateHealthBar;
@@ -189,7 +190,7 @@ namespace Units
 
         private void UpdateEnemiesDistance()
         {
-            List<Unit> rawEnemyUnits = faction == Faction.FactionA ? unitManager.GetFactionBUnits() : unitManager.GetFactionAUnits();
+            List<Unit> rawEnemyUnits = faction == Faction.FactionA ? UnitManager.GetFactionBUnits() : UnitManager.GetFactionAUnits();
 
             // 按距离从小到大排序
             enemyUnits = rawEnemyUnits

@@ -1367,6 +1367,7 @@ GameObject:
   - component: {fileID: 943837599}
   - component: {fileID: 943837600}
   - component: {fileID: 943837601}
+  - component: {fileID: 943837602}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: BattleField
@@ -1415,13 +1416,9 @@ MonoBehaviour:
   statisticsController: {fileID: 85712747}
   spawnPointA: {fileID: 656560514}
   spawnPointB: {fileID: 131970432}
-  factionAParent: {fileID: 28250503}
-  factionBParent: {fileID: 1842027254}
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
   trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
-  unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
-  unitManager: {fileID: 175012967}
 --- !u!114 &943837601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1439,6 +1436,22 @@ MonoBehaviour:
   iceShieldPrefab: {fileID: 1995791391659268277, guid: f25552e189446a041af81469fcfa1836, type: 3}
   frostZonePrefab: {fileID: 2231431966408489219, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
   icyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
+--- !u!114 &943837602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943837598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd7571ac9b3cd8d49a25b34e268f04e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitManager: {fileID: 175012967}
+  unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
+  factionARoot: {fileID: 28250503}
+  factionBRoot: {fileID: 1842027254}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0
