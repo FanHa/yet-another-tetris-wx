@@ -157,3 +157,7 @@ MonoBehaviour:
       typeName: Model.Tetri.FrostZone, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
     sprite: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}
+  - cellType:
+      typeName: Model.Tetri.IcyCage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+    sprite: {fileID: 450698819153296390, guid: 40f2981b399acce4b859f6ecb5ecff66, type: 3}

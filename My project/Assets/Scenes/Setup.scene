@@ -960,7 +960,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.6784314, g: 0.84705883, b: 0.9019608, a: 1}
+  m_BackGroundColor: {r: 0.23829655, g: 0.30761868, b: 0.3301887, a: 0.39215687}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1438,6 +1438,7 @@ MonoBehaviour:
   flamingRingPrefab: {fileID: 6059573537789386272, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
   iceShieldPrefab: {fileID: 1995791391659268277, guid: f25552e189446a041af81469fcfa1836, type: 3}
   frostZonePrefab: {fileID: 2231431966408489219, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
+  icyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
 --- !u!1 &949375413
 GameObject:
   m_ObjectHideFlags: 0

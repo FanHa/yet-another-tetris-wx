@@ -17,5 +17,5 @@ MonoBehaviour:
     borderColor: {r: 1, g: 0.3529412, b: 0, a: 1}
     maskColor: {r: 1, g: 0.3529412, b: 0, a: 0.39215687}
   - affinity: 2
-    borderColor: {r: 0, g: 0.7490196, b: 1, a: 1}
-    maskColor: {r: 0, g: 0.7490196, b: 1, a: 0.39215687}
+    borderColor: {r: 0.68235296, g: 0.9137255, b: 1, a: 1}
+    maskColor: {r: 0.68235296, g: 0.9137255, b: 1, a: 0.39215687}

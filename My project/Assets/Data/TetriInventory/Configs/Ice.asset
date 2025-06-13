@@ -19,6 +19,8 @@ MonoBehaviour:
       PublicKeyToken=null
   - typeName: Model.Tetri.FrostZone, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - typeName: Model.Tetri.IcyCage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   initialSingleCharacterCells:
   - typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
