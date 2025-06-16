@@ -116,19 +116,30 @@ namespace Units
         }
 
         // todo 这个方法名要不要改成Activate
-        public void Initialize()
+
+        public void Setup()
         {
             Attributes.OnHealthChanged += UpdateHealthBar;
             Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
-            lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue); // 初始化冷却时间
-
-            InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
-            movementController.Initialize(Attributes); // 将 Attributes 传递给 Movement
-
+            lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
+            movementController.Initialize(Attributes);
             skillHandler.Initialize(Attributes);
-            skillHandler.Activate(); // 初始化技能管理器
+        }
+
+        public void Activate()
+        {
+            InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
+            skillHandler.Activate();
             isActive = true;
         }
+
+        public void Deactivate()
+        {
+            CancelInvoke(nameof(UpdateEnemiesDistance));
+            skillHandler.Deactivate(); // 如有需要
+            isActive = false;
+        }
+
         private void UpdateHealthBar(float currentHealth, float maxHealth)
         {
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
@@ -166,11 +177,7 @@ namespace Units
             dotHandler.ApplyDot(dot);
         }
 
-        public void StopAction()
-        {
-            CancelInvoke(nameof(UpdateEnemiesDistance));
-            isActive = false;
-        }
+        
 
         public void AddDamageBehavior(ITakeDamageBehavior behavior)
         {
@@ -342,9 +349,8 @@ namespace Units
         {
             if (Attributes.CurrentHealth <= 0)
             {
-                StopAction();
                 OnDeath?.Invoke(this);
-                gameObject.SetActive(false); // 将 GameObject 设置为失活
+                // gameObject.SetActive(false); // 将 GameObject 设置为失活
             }
         }
 

@@ -55,8 +55,6 @@ namespace Controller
                 unit.OnSkillCast += HandleSkillCast;
                 unit.OnSkillEffectTriggered += HandleSkillEffectTriggered;
                 unit.UnitManager = this;
-                unit.Initialize();
-                // unitManager.Register(unit);
                 if (unit.faction == Unit.Faction.FactionA)
                 {
                     factionA.Add(unit);
@@ -65,6 +63,9 @@ namespace Controller
                 {
                     factionB.Add(unit);
                 }
+                unit.Setup();
+                unit.Activate();
+
             }
         }
 
@@ -108,13 +109,14 @@ namespace Controller
         {
             factionA.Remove(deadUnit);
             factionB.Remove(deadUnit);
+            deadUnit.Deactivate();
             OnUnitDeath?.Invoke(deadUnit);
             List<Unit> faction = deadUnit.faction == Unit.Faction.FactionA ? factionA : factionB;
             if (faction.Count == 0)
             {
                 foreach (Unit unit in factionA.Concat(factionB).ToList())
                 {
-                    unit.StopAction();
+                    unit.Deactivate();
                 }
                 OnFactionAllDead?.Invoke(deadUnit.faction);
             }
