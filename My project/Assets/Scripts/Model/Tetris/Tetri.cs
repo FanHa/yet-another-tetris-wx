@@ -13,7 +13,7 @@ namespace Model.Tetri
             Normal     // 普通类型
         }
 
-        public CellGroupConfig.Group Group;
+        // public CellGroupConfig.Group Group;
         [SerializeField] private TetriType tetriType;
         public TetriType Type => tetriType;
         [SerializeField] private Serializable2DArray<Cell> shape;
@@ -22,9 +22,12 @@ namespace Model.Tetri
         [SerializeField] private bool isDisposable;
         public bool IsDisposable => isDisposable;
 
+        // TODO
+        public int UpgradedTimes = 0;
+
         public Tetri(TetriType type, bool isDisposable = false)
         {
-            
+
             this.tetriType = type;
             this.isDisposable = isDisposable;
             InitializeShape(4, 4); // 默认大小为 4x4

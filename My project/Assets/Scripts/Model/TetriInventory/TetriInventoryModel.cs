@@ -19,11 +19,10 @@ namespace Model
 
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
-        private List<Type> attributeTypes= new(); // 用于随机替换单元格的类型
+        private List<Type> attributeTypes = new(); // 用于随机替换单元格的类型
         private Model.Tetri.TetrisFactory tetrisFactory = new Model.Tetri.TetrisFactory();
-        private HashSet<CellGroupConfig.Group> tetriGroups = new HashSet<CellGroupConfig.Group>();
-        public IReadOnlyCollection<CellGroupConfig.Group> TetriGroups => tetriGroups; // 只读访问
         private HashSet<Type> cellTypes = new HashSet<Type>();
+        public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
 
         [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
         [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
@@ -114,14 +113,14 @@ namespace Model
                     var baseTetriForCharacter = tetrisFactory.CreateSinglePaddingCellTetri();
                     if (baseTetriForCharacter == null)
                     {
-                         Debug.LogWarning("TetrisFactory.CreateSinglePaddingCellTetri() 返回了一个空的 Tetri。无法创建 Character Tetri。");
-                         continue; // 跳过这个配置项
+                        Debug.LogWarning("TetrisFactory.CreateSinglePaddingCellTetri() 返回了一个空的 Tetri。无法创建 Character Tetri。");
+                        continue; // 跳过这个配置项
                     }
-                    
+
                     try
                     {
                         // 假设 CharacterTypeReference 有 CreateInstance() 方法
-                        Model.Tetri.Character characterInstance = charTypeRef.CreateInstance(); 
+                        Model.Tetri.Character characterInstance = charTypeRef.CreateInstance();
                         if (characterInstance != null)
                         {
                             baseTetriForCharacter.SetCell(1, 1, characterInstance);
@@ -144,14 +143,13 @@ namespace Model
                     // Debug.Log("initialSingleCharacterCells 中的一个配置项无效，已跳过。");
                 }
             }
-            
+
             RecalculateCellTypes(); // 所有 Tetri 添加完毕后，统一重新计算一次
         }
 
         private void RecalculateCellTypes()
         {
             cellTypes.Clear(); // 清空当前的 cellTypes
-            tetriGroups.Clear();
 
             // 遍历所有 Tetri 列表，重新计算包含的 Cell 类型
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
@@ -161,13 +159,12 @@ namespace Model
                     Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
                     cellTypes.Add(cell.GetType());
                 }
-                tetriGroups.Add(tetri.Group);
             }
 
             // 触发数据变化事件
             OnDataChanged?.Invoke();
         }
-        
+
         public void MarkTetriAsUsed(Model.Tetri.Tetri tetri)
         {
             if (usableTetriList.Contains(tetri))
@@ -201,10 +198,14 @@ namespace Model
                 Model.Tetri.Cell cell = modelTetri.Shape[position.x, position.y];
                 cellTypes.Add(cell.GetType());
             }
-            tetriGroups.Add(modelTetri.Group);
-
             // 触发数据变化事件
             OnDataChanged?.Invoke();
+        }
+        
+        public List<Model.Tetri.Tetri> GetAllTetris()
+        {
+            // 返回所有 Tetri，包括可用和已使用的
+            return usableTetriList.Concat(usedTetriList).ToList();
         }
     }
 }

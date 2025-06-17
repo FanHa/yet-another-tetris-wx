@@ -23,8 +23,6 @@ namespace Model {
         public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
 
          // 用于跟踪当前存在的 Tetri 的 Group
-        private HashSet<CellGroupConfig.Group> tetriGroups = new HashSet<CellGroupConfig.Group>();
-        public IReadOnlyCollection<CellGroupConfig.Group> TetriGroups => tetriGroups; // 只读访问
 
 
         private TetrisFactory tetrisFactory = new TetrisFactory(); // 用于生成随机 Tetri 的工厂
@@ -194,7 +192,6 @@ namespace Model {
         private void RecalculateCellTypes()
         {
             cellTypes.Clear(); // 清空当前的 cellTypes
-            tetriGroups.Clear();
 
             // 遍历所有 Tetri 列表，重新计算包含的 Cell 类型
             foreach (var tetri in tetriList.Concat(unusedTetriList).Concat(usedTetriList))
@@ -204,7 +201,6 @@ namespace Model {
                     Cell cell = tetri.Shape[position.x, position.y];
                     cellTypes.Add(cell.GetType());
                 }
-                tetriGroups.Add(tetri.Group);
             }
 
             // 触发数据变化事件

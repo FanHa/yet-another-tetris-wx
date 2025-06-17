@@ -8,7 +8,7 @@ namespace Model.Tetri
     {
         private readonly Random _random = new Random();
 
-         // 缓存所有 TetriCellCharacter 的子类
+        // 缓存所有 TetriCellCharacter 的子类
         private static readonly List<Type> CachedCharacterTypes;
 
         // 静态构造函数，用于初始化缓存
@@ -35,6 +35,16 @@ namespace Model.Tetri
         public Cell CreatePadding()
         {
             return new Padding();
+        }
+        
+        public Cell CreateCell(Type cellType)
+        {
+            if (cellType == null || !typeof(Cell).IsAssignableFrom(cellType))
+            {
+                throw new ArgumentException("Invalid cell type provided.");
+            }
+
+            return (Cell)Activator.CreateInstance(cellType);
         }
 
     }

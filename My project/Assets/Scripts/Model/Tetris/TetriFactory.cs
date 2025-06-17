@@ -18,7 +18,7 @@ namespace Model.Tetri
             { "Z", new List<(int, int)> { (1, 1), (1, 2), (2, 0), (2, 1) } }
         };
 
-        public Tetri CreateShape(string shapeKey)
+        private Tetri CreateShape(string shapeKey)
         {
             if (!shapeDefinitions.ContainsKey(shapeKey))
                 throw new ArgumentException($"Invalid shape key: {shapeKey}");
@@ -45,8 +45,8 @@ namespace Model.Tetri
             var randomKey = shapeKeys[new Random().Next(shapeKeys.Count)];
             return CreateShape(randomKey);
         }
-        
-        
+
+
         /// <summary>
         /// 创建一个仅在 (1,1) 位置有一个 Padding 类型单元格的 Tetri。
         /// 这个 Tetri 可以稍后被修改以填充特定的单元格类型。
@@ -75,7 +75,52 @@ namespace Model.Tetri
             return tetri;
         }
 
-        
+        /// <summary>
+        /// 创建一个随机形状的 Tetri，并在其中一个随机格子填充指定类型的 Cell，其余为 Padding。
+        /// </summary>
+        /// <param name="cellType">要填充的 Cell 类型</param>
+        /// <returns>新创建的 Tetri 对象</returns>
+        public Tetri CreateRandomShapeWithCell(Type cellType)
+        {
+            // 1. 随机选择一个形状
+            var shapeKeys = new List<string> { "T", "I", "O", "L", "J", "S", "Z" };
+            var random = new Random();
+            var randomKey = shapeKeys[random.Next(shapeKeys.Count)];
+            var positions = shapeDefinitions[randomKey];
+
+            // 2. 创建 Tetri
+            Tetri tetri = new Tetri(Tetri.TetriType.Normal);
+
+            // 3. 随机选择一个格子用于填充目标 Cell
+            int specialIndex = random.Next(positions.Count);
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                var (row, col) = positions[i];
+                if (i == specialIndex)
+                {
+                    // 用指定类型创建 Cell
+                    Cell cell = cellFactory.CreateCell(cellType);
+                    tetri.SetCell(row, col, cell);
+                }
+                else
+                {
+                    // 其余填充 Padding
+                    tetri.SetCell(row, col, cellFactory.CreatePadding());
+                }
+            }
+
+            return tetri;
+        }
+
+        public Tetri CreateSingleCellTetri(Type cellType)
+        {
+            var tetri = new Tetri(Tetri.TetriType.Character);
+            var cell = cellFactory.CreateCell(cellType);
+            // 假设Tetir的Shape是4x4，填充到中心点 (1,1)
+            tetri.SetCell(1, 1, cell);
+            return tetri;
+        }
 
     }
 }

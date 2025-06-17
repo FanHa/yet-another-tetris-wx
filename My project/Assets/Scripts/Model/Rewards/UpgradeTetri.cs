@@ -7,30 +7,36 @@ namespace Model.Rewards
     public class UpgradeTetri : Reward
     {
         private readonly Model.Tetri.Tetri targetTetri; // 目标 Tetri
-        private readonly Vector2Int targetPosition;    // 目标位置
-        private readonly Model.Tetri.Cell newCell; 
+        private readonly string name;
+        private readonly string description;
 
-        public UpgradeTetri(Model.Tetri.Tetri targetTetri, Vector2Int targetPosition, Model.Tetri.Cell newCell)
+        public UpgradeTetri(Model.Tetri.Tetri targetTetri)
         {
             this.targetTetri = targetTetri;
-            this.targetPosition = targetPosition;
-            this.newCell = newCell;
+
+            // 假设升级后 Tetri 里有一个新 Cell（非 Padding/Empty），用它来生成 name/description
+            var upgradedCell = targetTetri.GetOccupiedPositions()
+                .Select(pos => targetTetri.Shape[pos.x, pos.y])
+                .FirstOrDefault(cell => !(cell is Model.Tetri.Padding) && !(cell is Model.Tetri.Empty));
+
+            if (upgradedCell != null)
+            {
+                name = $"升级方块：{upgradedCell.GetType().Name}";
+                description = $"将一个填充物升级为 {upgradedCell.GetType().Name}";
+            }
+            else
+            {
+                name = "升级方块";
+                description = "升级一个填充物";
+            }
         }
 
+        public override string Name() => name;
+        public override string Description() => description;
 
-        public  void Apply()
+        public override string Apply(TetriInventoryModel tetriInventoryData)
         {
-            // 将 PaddingCell 替换为指定类型的 Cell
-            targetTetri.SetCell(targetPosition.x, targetPosition.y, newCell);
+            throw new NotImplementedException();
         }
-
-
-        public override string Name() => $"升级 {newCell.Name()}" + targetTetri.Group;
-        public override string Description() => $"升级一个填充物成为 {newCell.Name()}";
-        public Model.Tetri.Tetri GetTargetTetri() => targetTetri;
-
-        public Vector2Int GetTargetPosition() => targetPosition;
-
-        public Model.Tetri.Cell GetNewCell() => newCell;
     }
 }

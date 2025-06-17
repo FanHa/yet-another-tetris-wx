@@ -7,5 +7,7 @@ namespace Model.Rewards
     {
         public abstract string Name();
         public abstract string Description();
+
+        public abstract string Apply(TetriInventoryModel tetriInventoryData);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Controller;
 using UnityEngine;
 
@@ -7,14 +8,30 @@ namespace Model.Rewards
     public class AddTetri: Reward
     {
         protected Model.Tetri.Tetri tetriInstance;
-        protected Model.Tetri.Cell cellTemplate;
+        private string name;
+        private string description;
 
-        public AddTetri(Model.Tetri.Tetri tetri, Model.Tetri.Cell cell)
+        public AddTetri(Model.Tetri.Tetri tetri)
         {
             tetriInstance = tetri;
-            cellTemplate = cell;
-            SetRandomCell();
+            // 找到 tetriInstance 中非 Padding 的 Cell
+            var cell = tetriInstance.GetOccupiedPositions()
+                .Select(pos => tetriInstance.Shape[pos.x, pos.y])
+                .FirstOrDefault(c => !(c is Model.Tetri.Padding));
+
+            if (cell != null)
+            {
+                name = $"获得新方块：{cell.GetType().Name}";
+                description = $"获得一个包含 {cell.GetType().Name} 的新方块";
+            }
+            else
+            {
+                name = "获得新方块";
+                description = "获得一个新方块";
+            }
         }
+
+
 
         public Model.Tetri.Tetri GetTetri()
         {
@@ -22,18 +39,12 @@ namespace Model.Rewards
         }
 
 
-        public override string Name() => cellTemplate.Name() + tetriInstance.Group;
-        public override string Description() => cellTemplate.Description();
+        public override string Name() => name;
+        public override string Description() => description;
 
-        private void SetRandomCell()
+        public override string Apply(TetriInventoryModel tetriInventoryData)
         {
-            var occupiedPositions = tetriInstance.GetOccupiedPositions();
-            if (occupiedPositions.Count > 0)
-            {
-                var random = new System.Random();
-                var randomPosition = occupiedPositions[random.Next(occupiedPositions.Count)];
-                tetriInstance.SetCell(randomPosition.x, randomPosition.y, cellTemplate);
-            }
+            throw new NotImplementedException();
         }
     }
 }

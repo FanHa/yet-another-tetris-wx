@@ -59,7 +59,7 @@ namespace Controller {
         }
         void Start()
         {
-            battleStatistics.OnEndStatistics += EndStatistics;
+            battleStatistics.OnEndStatistics += HandleEndStatistics;
             unitManager.OnUnitDeath += HandleUnitDeath;
             unitManager.OnFactionAllDead += HandleFactionAllDead;
             unitManager.OnUnitDamageTaken += HandleDamageTaken;
@@ -154,7 +154,7 @@ namespace Controller {
             battleStatistics.ShowChoosenFaction(Units.Unit.Faction.FactionA);
         }
 
-        public void EndStatistics()
+        public void HandleEndStatistics()
         {
             battleStatistics.gameObject.SetActive(false);
             unitManager.Reset();

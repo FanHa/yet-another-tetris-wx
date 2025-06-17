@@ -7,11 +7,18 @@ namespace Model.Rewards
         protected Model.Tetri.Tetri tetriInstance;
         protected Model.Tetri.Character characterCellInstance;
 
-        public NewCharacter(Model.Tetri.Character character)
+        public NewCharacter(Model.Tetri.Tetri characterTetri)
         {
-            characterCellInstance = character;
-            tetriInstance = new Model.Tetri.Tetri(Tetri.Tetri.TetriType.Character, true);
-            tetriInstance.SetCell(1, 1, character); // Place the character at (0, 0)
+            tetriInstance = characterTetri;
+            foreach (var pos in tetriInstance.GetOccupiedPositions())
+            {
+                var cell = tetriInstance.Shape[pos.x, pos.y];
+                if (cell is Model.Tetri.Character character)
+                {
+                    characterCellInstance = character;
+                    break;
+                }
+            }
         }
 
         public Model.Tetri.Tetri GetTetri()
@@ -19,10 +26,10 @@ namespace Model.Rewards
             return tetriInstance;
         }
 
-        public Model.Tetri.Character GetCharacter()
-        {
-            return characterCellInstance;
-        }
+        // public Model.Tetri.Character GetCharacter()
+        // {
+        //     return characterCellInstance;
+        // }
 
         public override string Description()
         {
@@ -32,6 +39,11 @@ namespace Model.Rewards
         public override string Name()
         {
             return characterCellInstance.Name();
+        }
+
+        public override string Apply(TetriInventoryModel tetriInventoryData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

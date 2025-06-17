@@ -16,11 +16,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.Resource tetriResource;
-    [SerializeField] private Controller.Reward reward;
+    [SerializeField] private Controller.RewardController rewardController;
 
     [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
-    private Controller.Commands.CommandManager commandManager = new(); // 添加命令管理器
+    // private Controller.Commands.CommandManager commandManager = new(); // 添加命令管理器
 
     [SerializeField] private Button revokeOperationButton;
     [SerializeField] private Button battleButton;
@@ -172,16 +172,14 @@ public class GameController : MonoBehaviour
 
     private void HandleBattleEnd()
     {
-        reward.EnterRewardSelectionPhase();
-        reward.OnRewardSelected += HandleRewardSelected;
+        rewardController.EnterRewardSelectionPhase();
+        rewardController.OnRewardSelected += HandleRewardSelected;
     }
 
     private void HandleRewardSelected()
     {
-        reward.OnRewardSelected -= HandleRewardSelected;
+        rewardController.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
-
-        commandManager.ClearHistory();
         tetriResource.ClearHistory(); 
 
         tetriResource.PrepareNewRound();
@@ -193,23 +191,10 @@ public class GameController : MonoBehaviour
 
     private void HandleTetriDrop(ItemSlot item, Vector2Int position)
     {
-        var placeCommand = new Controller.Commands.PlaceTetri(operationTableData, item, position, tetriResource);
-
         // 执行放置命令
-        commandManager.ExecuteCommand(placeCommand);
         assemblyMouseFollower.StopFollowing();
     }
 
-    public void UndoLastPlacement()
-    {
-        commandManager.Undo(); // 调用命令管理器的撤销方法
-    }
-
-    private IEnumerator DelayedUseTetri(ItemSlot item)
-    {
-        yield return new WaitForEndOfFrame(); // 等待当前帧结束
-        tetriResource.UseTetri(item);
-    }
 
     private void HandleTetriBeginDrag(ItemSlot item)
     {

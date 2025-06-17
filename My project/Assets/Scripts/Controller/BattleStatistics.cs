@@ -13,7 +13,6 @@ namespace Controller
     {
         
         public event Action OnEndStatistics;
-        // [SerializeField] private GameObject statisticsPanel;
         [SerializeField] private Transform contentParent;
         [SerializeField] private GameObject unitStatisticPrefab;
         [SerializeField] private GameObject damageTypeStatisticPrefab;
