@@ -23,6 +23,8 @@ namespace Model.Rewards
 
         public List<string> allPossibleCellTypeNames;
         public List<string> allPossibleCharacterTypeNames;
+        private List<Type> cachedCellTypes;
+        private List<Type> cachedCharacterTypes;
 
 #if UNITY_EDITOR
         [ContextMenu("自动收集所有Cell类型")]
@@ -56,15 +58,14 @@ namespace Model.Rewards
 #endif
 
 
-        private int rewardCount = 3;
+        [SerializeField] private int rewardCount;
         private TetrisFactory tetrisFactory = new TetrisFactory();
-        private readonly Model.TetriInventoryModel tetriInventoryData;
-        private readonly List<RewardTypeConfig> rewardTypeConfigs;
+        [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
+        private  List<RewardTypeConfig> rewardTypeConfigs;
 
 
-        public RewardFactory(Model.TetriInventoryModel tetriInventoryData)
+        public void OnEnable()
         {
-            this.tetriInventoryData = tetriInventoryData;
             rewardTypeConfigs = new List<RewardTypeConfig>
             {
                 new RewardTypeConfig
@@ -92,21 +93,34 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
+
+            cachedCellTypes = allPossibleCellTypeNames
+                .Select(FindType)
+                .Where(t => t != null)
+                .ToList();
+
+            cachedCharacterTypes = allPossibleCharacterTypeNames
+                .Select(FindType)
+                .Where(t => t != null)
+                .ToList();
+        }
+
+        private Type FindType(string typeName)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var type = assembly.GetType(typeName);
+                if (type != null)
+                    return type;
+            }
+            return null;
         }
 
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
-            var allTypes = allPossibleCellTypeNames
-                .Select(Type.GetType)
-                .Where(t => t != null)
-                .ToList();
-            // todo inventory有一个方法得到CellTypes
-            var ownedTypes = new HashSet<Type>(
-                inventory.GetAllTetris()
-                    .SelectMany(tetri => tetri.GetOccupiedPositions()
-                        .Select(pos => tetri.Shape[pos.x, pos.y].GetType()))
-            );
-            return allTypes.Any(type => !ownedTypes.Contains(type));
+
+            var ownedTypes = inventory.CellTypes;
+            return cachedCellTypes.Any(type => !ownedTypes.Contains(type));
         }
 
         private bool HasEnoughUpgradeableTetri(Model.TetriInventoryModel inventory)
@@ -207,10 +221,7 @@ namespace Model.Rewards
         private Reward CreateNewTetriReward()
         {
             // 1. 获取所有可能的Cell类型
-            var allTypes = allPossibleCellTypeNames
-                .Select(Type.GetType)
-                .Where(t => t != null)
-                .ToList();
+            var allTypes = cachedCellTypes;
 
             // 2. 获取inventory中已有的Cell类型
             var ownedTypes = tetriInventoryData.CellTypes;

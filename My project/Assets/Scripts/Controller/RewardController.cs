@@ -6,35 +6,38 @@ using UI.Reward;
 
 namespace Controller
 {
+    [RequireComponent(typeof(RewardPanelView))]
     public class RewardController : MonoBehaviour
     {
-        [SerializeField] private Panel rewardPanel;
+        private RewardPanelView rewardPanelView;
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
 
-        private RewardFactory rewardFactory;
+        [SerializeField] private RewardFactory rewardFactory;
         public event System.Action OnRewardSelected;
-
-        private void Start()
+        private void Awake()
         {
-            rewardFactory = new RewardFactory(tetriInventoryData);
-        } 
-
-        public void EnterRewardSelectionPhase()
-        {
-            if (rewardPanel != null)
+            rewardPanelView = GetComponent<RewardPanelView>();
+            if (rewardPanelView == null)
             {
-                List<Model.Rewards.Reward> rewards = rewardFactory.GenerateRewards();
-                rewardPanel.SetRewards(rewards);
-                rewardPanel.gameObject.SetActive(true);
-                rewardPanel.OnItemSelected += HandleItemSelectd;
+                Debug.LogError("RewardPanelView component is missing on RewardController.");
             }
         }
 
-        private void HandleItemSelectd(Model.Rewards.Reward reward)
+        public void EnterRewardSelectionPhase()
         {
-            rewardPanel.OnItemSelected -= HandleItemSelectd;
+
+            List<Model.Rewards.Reward> rewards = rewardFactory.GenerateRewards();
+            rewardPanelView.SetRewards(rewards);
+            rewardPanelView.ShowItems();
+            rewardPanelView.OnItemSelected += HandleItemSelected;
+            
+        }
+
+        private void HandleItemSelected(Model.Rewards.Reward reward)
+        {
+            rewardPanelView.OnItemSelected -= HandleItemSelected;
             ApplyReward(reward);
-            rewardPanel.gameObject.SetActive(false);
+            rewardPanelView.gameObject.SetActive(false);
         }
 
         private void ApplyReward(Model.Rewards.Reward reward)

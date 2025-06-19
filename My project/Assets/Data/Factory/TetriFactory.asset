@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252f454c5e479554e90672431cf604f2, type: 3}
-  m_Name: TetrisResources
+  m_Script: {fileID: 11500000, guid: 7947f19d7a9848145aaef9f34e5b508f, type: 3}
+  m_Name: TetriFactory
   m_EditorClassIdentifier: 
-  tetriList: []
-  usedTetriList: []
-  unusedTetriList: []
+  tetriPrefab: {fileID: 6757363006270637913, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}

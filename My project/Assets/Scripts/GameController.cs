@@ -3,7 +3,6 @@ using UnityEngine;
 using UI;
 using Controller;
 using Model.Tetri;
-using UI.Resource;
 using Model;
 using System.Collections;
 using UnityEngine.UI;
@@ -11,34 +10,27 @@ using System;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private UI.OperationTable operationTableUI;
-    [SerializeField] private Model.OperationTable operationTableData;
-    [SerializeField] private AssemblyMouseFollower assemblyMouseFollower;
+
     [SerializeField] private BattleField battleField;
-    [SerializeField] private Controller.Resource tetriResource;
     [SerializeField] private Controller.RewardController rewardController;
 
     [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
-    // private Controller.Commands.CommandManager commandManager = new(); // 添加命令管理器
 
     [SerializeField] private Button revokeOperationButton;
     [SerializeField] private Button battleButton;
     [SerializeField] private Button unitPreviewButton;
     [SerializeField] private Button trainGroundButton;
 
-    [SerializeField] private GameObject tetriPrefab;
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
     private GameObject currentShadowTetri;
-    private Operation.TetriFactory tetriFactory;
+    [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
 
     private void Start()
     {
         // 初始化资源面板和操作表
-        InitializeResourcesPanel();
-        InitializeOperationTable();
         battleField.OnBattleEnd += HandleBattleEnd;
         levelConfig.Reset();
         // 绑定撤销操作按钮的点击事件
@@ -49,14 +41,12 @@ public class GameController : MonoBehaviour
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnCellGroupsUpdated += HandleOperationTableGridCellUpdate;
-        tetriFactory = new Operation.TetriFactory(tetriPrefab);
     }
 
     private void HandleOperationTableGridCellUpdate(List<List<Model.Tetri.Cell>> cellGroups)
     {
         unitInventoryController.ResetInventoryDataFromCellGroups(cellGroups);
         Debug.Log("OperationTable grid cells updated.");
-        // throw new NotImplementedException();
     }
 
     private void HandleOperationTableTetriBeginDrag(Operation.Tetri tetri)
@@ -180,49 +170,12 @@ public class GameController : MonoBehaviour
     {
         rewardController.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
-        tetriResource.ClearHistory(); 
 
-        tetriResource.PrepareNewRound();
         unitInventoryController.Hide();
         levelConfig.AdvanceToNextLevel(); // 关卡增加
 
     }
 
-
-    private void HandleTetriDrop(ItemSlot item, Vector2Int position)
-    {
-        // 执行放置命令
-        assemblyMouseFollower.StopFollowing();
-    }
-
-
-    private void HandleTetriBeginDrag(ItemSlot item)
-    {
-        assemblyMouseFollower.SetFollowItem(item);
-        assemblyMouseFollower.StartFollowing();
-    }
-
-    private void HandleTetriEndDrag(ItemSlot item)
-    {
-        assemblyMouseFollower.StopFollowing();
-    }
-
-    private void InitializeResourcesPanel()
-    {
-        tetriResource.Initialize();
-        tetriResource.OnTetriBegainDrag += HandleTetriBeginDrag;
-        tetriResource.OnTetriEndDrag += HandleTetriEndDrag;
-    }
-
-    private void InitializeOperationTable()
-    {
-        
-        // TODO delete magic number
-        operationTableData.Init(10, 10);
-        operationTableData.OnTableChanged += UpdateOperationTableUI;
-        operationTableUI.OnTetriDrop += HandleTetriDrop;
-        UpdateOperationTableUI();
-    }
 
     private void HandleBattleClicked()
     {
@@ -246,40 +199,10 @@ public class GameController : MonoBehaviour
         battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
     }
 
-    // private void HandleUnitPreviewClicked()
-    // {
-    //     bool isOpend = unitInventoryController.ToggleInventory();
-    //     if (isOpend)
-    //     {
-    //         operationTableUI.gameObject.SetActive(false);
-    //         GenerateAndResetInventoryData();
-    //     } else {
-    //         operationTableUI.gameObject.SetActive(true);
-    //     }
-    // }
 
-    
-    // private void GenerateAndResetInventoryData()
-    // {
-    //     List<Model.InventoryItem> items = new List<Model.InventoryItem>();
-    //     List<List<Model.Tetri.Cell>> fullRows = operationTableData.GetCharacterCellGroups();
-    //     foreach (var rowCells in fullRows)
-    //     {
-    //         Model.InventoryItem item = unitInventoryController.GenerateInventoryItemFromTetriCells(rowCells);
-    //         items.Add(item);
-    //     }
-    //     unitInventoryController.ResetInventoryData(items);
-    // }
-
-    private void UpdateOperationTableUI()
-    {
-        // 更新操作表UI
-        operationTableUI.UpdateData(operationTableData.GetBoardData());
-    }
 
     private void OnDestroy()
     {
         // 取消监听UI的事件
-        operationTableUI.OnTetriDrop -= HandleTetriDrop;
     }
 }

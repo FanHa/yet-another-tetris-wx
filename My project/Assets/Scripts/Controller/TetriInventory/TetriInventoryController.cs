@@ -14,15 +14,13 @@ namespace Controller
         [SerializeField] private Transform operationTableTransform;
         private View.TetriInventoryView view;
         [SerializeField] private Model.TetriInventoryModel model;
-        [SerializeField] private GameObject tetriPrefab;
         public event Action<Operation.Tetri> OnTetriBeginDrag; // 新增事件
-        private Operation.TetriFactory tetriFactory;
+        [SerializeField]private Operation.TetriFactory tetriFactory;
 
         private float minY;
         private float maxY;
         void Awake()
         {
-            tetriFactory = new Operation.TetriFactory(tetriPrefab);
             view = GetComponent<View.TetriInventoryView>();
             
         }
