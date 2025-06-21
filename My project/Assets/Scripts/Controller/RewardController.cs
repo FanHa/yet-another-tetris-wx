@@ -30,7 +30,7 @@ namespace Controller
             rewardPanelView.SetRewards(rewards);
             rewardPanelView.ShowItems();
             rewardPanelView.OnItemSelected += HandleItemSelected;
-            
+
         }
 
         private void HandleItemSelected(Model.Rewards.Reward reward)
@@ -65,5 +65,18 @@ namespace Controller
             // // todo 其他类型的reward和错误处理
             OnRewardSelected?.Invoke();
         }
+
+#if UNITY_EDITOR
+        [ContextMenu("Test Enter Reward Selection Phase")]
+        private void TestEnterRewardSelectionPhase()
+        {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("This method can only be called in Play mode.");
+                return;
+            }
+            EnterRewardSelectionPhase();
+        }
+#endif
     }
 }

@@ -13,6 +13,8 @@ namespace UI.Reward
         [SerializeField] private TextMeshProUGUI detailText;
         [SerializeField] private Transform previewParent; // Parent for the Tetri preview grid
 
+        private Camera previewCamera; // Camera for the Tetri preview
+
         private Model.Rewards.Reward item;        
         public event Action<ItemSlot> OnItemClicked;
 
@@ -25,7 +27,12 @@ namespace UI.Reward
 
         public void SetPreview(GameObject preview)
         {
-            preview.transform.SetParent(previewParent, false);
+            preview.transform.position = previewCamera.transform.position;
+        }
+
+        public void SetPreviewCamera(Camera camera)
+        {
+            previewCamera = camera;
         }
 
         public Model.Rewards.Reward GetReward()

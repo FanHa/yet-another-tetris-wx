@@ -16,6 +16,9 @@ namespace UI.Reward
         public event Action<Model.Rewards.Reward> OnItemSelected;
         [SerializeField] private Controller.Tetris tetris;
         [SerializeField] private TetriFactory tetriFactory;
+
+        [Header("运行时引用")]
+        [SerializeField] private Camera rewardPreviewCamera;
         
         public void SetRewards(List<Model.Rewards.Reward> rewards)
         {
@@ -30,6 +33,7 @@ namespace UI.Reward
                 var preview = GeneratePreview(reward);
                 if (preview != null)
                 {
+                    item.SetPreviewCamera(rewardPreviewCamera);
                     item.SetPreview(preview);
                 }
 
@@ -80,12 +84,22 @@ namespace UI.Reward
             {
                 // 用 tetris.TetriFactory 生成一个 Tetri 物体作为预览
                 var tetriObj = tetriFactory.CreateTetri(addTetriReward.GetTetri()).gameObject;
-                // 可选：设置缩放、位置等以适应UI
+                SetLayerRecursively(tetriObj, LayerMask.NameToLayer("RewardPreview"));
+
                 tetriObj.transform.SetParent(null, false); // 由外部决定父物体
                 return tetriObj;
             }
             // 其他类型暂未实现
             return null;
+        }
+
+        private void SetLayerRecursively(GameObject obj, int layer)
+        {
+            obj.layer = layer;
+            foreach (Transform child in obj.transform)
+            {
+                SetLayerRecursively(child.gameObject, layer);
+            }
         }
 
         public void HandleItemClicked(ItemSlot ItemSlot)
