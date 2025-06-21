@@ -18,7 +18,10 @@ namespace UI.Reward
         [SerializeField] private TetriFactory tetriFactory;
 
         [Header("运行时引用")]
-        [SerializeField] private Camera rewardPreviewCamera;
+        [SerializeField] private Camera[] previewCameras;
+        [SerializeField] private RenderTexture[] previewTextures;
+        [SerializeField] private Transform previewsRoot; // 新增
+
         
         public void SetRewards(List<Model.Rewards.Reward> rewards)
         {
@@ -26,43 +29,31 @@ namespace UI.Reward
             {
                 Destroy(child.gameObject);
             }
-            foreach (Model.Rewards.Reward reward in rewards)
+            if (previewsRoot != null)
             {
+                foreach (Transform child in previewsRoot)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+            for (int i = 0; i < rewards.Count; i++)
+            {
+                var reward = rewards[i];
                 ItemSlot item = Instantiate(itemPrefab, itemParent);
                 item.SetReward(reward);
                 var preview = GeneratePreview(reward);
                 if (preview != null)
                 {
-                    item.SetPreviewCamera(rewardPreviewCamera);
+                    // 分配对应的 Camera 和 RenderTexture
+                    if (i < previewCameras.Length && i < previewTextures.Length)
+                    {
+                        item.SetPreviewCamera(previewCameras[i]);
+                        // 假设 ItemSlot 有 SetPreviewTexture 方法
+                        item.SetPreviewTexture(previewTextures[i]);
+                    }
+                    preview.transform.SetParent(previewsRoot, false);
                     item.SetPreview(preview);
                 }
-
-                // GameObject preview = null;
-                // switch (reward)
-                // {
-                //     case Model.Rewards.AddTetri tetriReward:
-                //         preview = tetris.GenerateTetriPreview(tetriReward.GetTetri());
-                //         break;
-                //     case Model.Rewards.NewCharacter characterReward:
-                //         preview = tetris.GenerateCharacterPreview(characterReward.GetCharacter());
-                //         break;
-                //     case Model.Rewards.UpgradeTetri upgradeTetriReward:
-                //         preview = tetris.GenerateUpgradeTetriPreview(
-                //             upgradeTetriReward.GetTargetTetri(),
-                //             upgradeTetriReward.GetTargetPosition(),
-                //             upgradeTetriReward.GetNewCell());
-                //         break;
-                //     case Model.Rewards.UpgradeCharacter upgradeCharacterReward:
-                //         preview = tetris.GenerateCharacterUpgradePreview(upgradeCharacterReward.GetTargetCharacter());
-                //         break;
-                //     default:
-                //         // 可选：设置一个默认预览
-                //         break;
-                // }
-
-                // if (preview != null)
-                //     item.SetPreview(preview);
-
                 // item.OnItemClicked += HandleItemClicked;
             }
         }

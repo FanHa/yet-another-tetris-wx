@@ -27,12 +27,25 @@ namespace UI.Reward
 
         public void SetPreview(GameObject preview)
         {
-            preview.transform.position = previewCamera.transform.position;
+            Vector3 pos = preview.transform.position;
+            pos.x = previewCamera.transform.position.x;
+            pos.y = previewCamera.transform.position.y;
+            preview.transform.position = pos;
         }
 
         public void SetPreviewCamera(Camera camera)
         {
             previewCamera = camera;
+        }
+
+        public void SetPreviewTexture(RenderTexture texture)
+        {
+            // Assuming the previewParent has a RawImage component to display the texture
+            RawImage rawImage = previewParent.GetComponent<RawImage>();
+            if (rawImage != null)
+            {
+                rawImage.texture = texture;
+            }
         }
 
         public Model.Rewards.Reward GetReward()

@@ -1603,23 +1603,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1224684278}
   - component: {fileID: 1224684277}
-  - component: {fileID: 1224684276}
   m_Layer: 0
   m_HasEditorInfo: 1
-  m_Name: RewardPreviewCamera
+  m_Name: RewardPreviewCamera_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1224684276
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224684275}
-  m_Enabled: 1
 --- !u!20 &1224684277
 Camera:
   m_ObjectHideFlags: 0
@@ -1655,13 +1646,13 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 16384
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 6be4f78486dd9f341a76d8f2ec25ae2a, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: ebec0b1976f32e942af6cd6f2a865414, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1681,12 +1672,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224684275}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 70, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2081044360}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1349092277
 GameObject:
@@ -2141,6 +2132,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750361645}
   m_CullTransparentMesh: 1
+--- !u!1 &1764700190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 1764700191}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: PreviewsRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1764700191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764700190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2081044360}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1776533867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,6 +2765,214 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038811808}
   m_CullTransparentMesh: 1
+--- !u!1 &2081044359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 2081044360}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: RewardPreviewCameraManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2081044360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081044359}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 70, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1224684278}
+  - {fileID: 2125976334}
+  - {fileID: 2138681396}
+  - {fileID: 1764700191}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2125976333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 2125976334}
+  - component: {fileID: 2125976335}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: RewardPreviewCamera_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2125976334
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125976333}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2081044360}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &2125976335
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125976333}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 3
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: ed4d726c6097cf7488e40a1783f38b3d, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_enableGDRP: 1
+  m_backfaceCulling: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!1 &2138681395
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 2138681396}
+  - component: {fileID: 2138681397}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: RewardPreviewCamera_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2138681396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138681395}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 30, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2081044360}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &2138681397
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138681395}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 3
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: 1d3feca167003424f933b6711249a611, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_enableGDRP: 1
+  m_backfaceCulling: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1001 &654725609620354711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2946,9 +3177,45 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 10660679}
     - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewsRoot
+      value: 
+      objectReference: {fileID: 1764700191}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
       propertyPath: rewardPreviewCamera
       value: 
       objectReference: {fileID: 1224684277}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewCameras.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewTextures.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewCameras.Array.data[0]
+      value: 
+      objectReference: {fileID: 1224684277}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewCameras.Array.data[1]
+      value: 
+      objectReference: {fileID: 2125976335}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewCameras.Array.data[2]
+      value: 
+      objectReference: {fileID: 2138681397}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewTextures.Array.data[0]
+      value: 
+      objectReference: {fileID: 8400000, guid: ebec0b1976f32e942af6cd6f2a865414, type: 2}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewTextures.Array.data[1]
+      value: 
+      objectReference: {fileID: 8400000, guid: ed4d726c6097cf7488e40a1783f38b3d, type: 2}
+    - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
+      propertyPath: previewTextures.Array.data[2]
+      value: 
+      objectReference: {fileID: 8400000, guid: 1d3feca167003424f933b6711249a611, type: 2}
     - target: {fileID: 1055258629078185778, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3159,4 +3426,4 @@ SceneRoots:
   - {fileID: 654725609620354711}
   - {fileID: 1770591512777316844}
   - {fileID: 1588624656}
-  - {fileID: 1224684278}
+  - {fileID: 2081044360}
