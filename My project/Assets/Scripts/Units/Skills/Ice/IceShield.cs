@@ -1,25 +1,17 @@
 using UnityEngine;
+using Wangsu.WcsLib.Core;
 
 namespace Units.Skills
 {
     public class IceShield : Skill
     {
         private bool hasTriggered;
-
-        public int BaseMoveSlowPercent = 10;
-        public int MoveSlowPercentPerIceCell = 5;
-        public int BaseAtkSlowPercent = 10;
-        public int AtkSlowPercentPerIceCell = 5;
-        public int BaseEnergySlowPercent = 15; 
-        public int EnergySlowPercentPerIceCell = 5;
-
-        public float BuffDuration = -1f;
-        public float BaseChilledDuration = 5f;
-        public float chilledDurationAdditionPerIceCell = 0.5f;
         private int iceCellCount = 0;
+        public IceShieldConfig Config { get; }
 
-        public IceShield()
+        public IceShield(IceShieldConfig config)
         {
+            Config = config;
             hasTriggered = false;
         }
 
@@ -35,11 +27,11 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            float buffDuration = BuffDuration;
-            float chilledDuration = BaseChilledDuration + iceCellCount * chilledDurationAdditionPerIceCell;
-            int moveSlowPercent = BaseMoveSlowPercent + iceCellCount * MoveSlowPercentPerIceCell;
-            int atkSlowPercent = BaseAtkSlowPercent + iceCellCount * AtkSlowPercentPerIceCell;
-            int energySlowPercent = BaseEnergySlowPercent + iceCellCount * EnergySlowPercentPerIceCell;
+            float buffDuration = Config.BuffDuration;
+            float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationAdditionPerIceCell;
+            int moveSlowPercent = Config.BaseMoveSlowPercent + iceCellCount * Config.MoveSlowPercentPerIceCell;
+            int atkSlowPercent = Config.BaseAtkSlowPercent + iceCellCount * Config.AtkSlowPercentPerIceCell;
+            int energySlowPercent = Config.BaseEnergySlowPercent + iceCellCount * Config.EnergySlowPercentPerIceCell;
 
             var buff = new Buffs.IceShield(
                 buffDuration,

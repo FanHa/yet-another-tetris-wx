@@ -7,21 +7,13 @@ namespace Units.Skills
 {
     public class BlazingField : Skill
     {
-        public float BaseRadius = 1.5f;
-        public float BaseDuration = 5f;
-        public float BaseDotDps = 5f;
-        public float BaseDotDuration = 3f;
-
-        public float RadiusPerFireCell = 0.2f;
-        public float DurationPerFireCell = 1f;
-        public float DotDpsPerFireCell = 2f;
-        public float DotDurationPerFireCell = 0.5f;
-
+        public BlazingFieldConfig Config { get; }
         private int fireCellCount = 0;
 
-        public BlazingField()
+        public BlazingField(BlazingFieldConfig config)
         {
-            RequiredEnergy = 120f; // 设置技能所需能量
+            Config = config;
+            RequiredEnergy = config.RequiredEnergy;
         }
 
         public void SetFireCellCount(int fireCellCount)
@@ -39,10 +31,10 @@ namespace Units.Skills
             Unit targetEnemy = enemiesInRange.First();
             Vector3 center = targetEnemy.transform.position;
 
-            float radius = BaseRadius + fireCellCount * RadiusPerFireCell;
-            float duration = BaseDuration + fireCellCount * DurationPerFireCell;
-            float dotDps = BaseDotDps + fireCellCount * DotDpsPerFireCell;
-            float dotDuration = BaseDotDuration + fireCellCount * DotDurationPerFireCell;
+            float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
+            float duration = Config.BaseDuration + fireCellCount * Config.DurationPerFireCell;
+            float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
+            float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
 
             TriggerEffect(new SkillEffectContext {
                 Skill = this, Position = center, Duration = duration, Radius = radius
@@ -81,6 +73,6 @@ namespace Units.Skills
 
         public override string Name() => "焰域";
         public override string Description() =>
-            $"在目标区域制造一片燃烧地带，{BaseDuration}+{DurationPerFireCell}*火系Cell秒内每秒对范围内敌人施加灼烧，伤害和范围随火系Cell提升。";
+            $"在目标区域制造一片燃烧地带，{Config.BaseDuration}+{Config.DurationPerFireCell}*火系Cell秒内每秒对范围内敌人施加灼烧，伤害和范围随火系Cell提升。";
     }
 }

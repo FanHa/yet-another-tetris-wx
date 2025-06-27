@@ -24,6 +24,8 @@ namespace Model.Tetri
 
         // TODO
         public int UpgradedTimes = 0;
+        public const int MaxUpgradedTimes = 1;
+        public const int MaxCharacterUpgradedTimes = 3;
 
         public Tetri(TetriType type, bool isDisposable = false)
         {
@@ -78,13 +80,46 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    if (!(shape[i, j] is Empty))
+                    if (shape[i, j] is not Empty)
                     {
                         occupiedPositions.Add(new Vector2Int(i, j));
                     }
                 }
             }
             return occupiedPositions;
+        }
+
+        public Cell GetMainCell()
+        {
+            var occupiedPositions = GetOccupiedPositions();
+            foreach (var pos in occupiedPositions)
+            {
+                var cell = shape[pos.x, pos.y];
+                if (cell is not Padding)
+                {
+                    return cell;
+                }
+            }
+            // 没有主Cell，查找已有的Padding
+            foreach (var pos in occupiedPositions)
+            {
+                var cell = shape[pos.x, pos.y];
+                if (cell is Padding)
+                {
+                    return cell;
+                }
+            }
+            // 没有主Cell也没有Padding
+            return null;
+        }
+
+        public bool CanBeUpgraded()
+        {
+            if (tetriType == TetriType.Character && UpgradedTimes >= MaxCharacterUpgradedTimes)
+            {
+                return false;
+            }
+            return UpgradedTimes < MaxUpgradedTimes;
         }
 
         internal void Rotate()
@@ -109,6 +144,28 @@ namespace Model.Tetri
                     shape[j, rows - 1 - i] = tempShape[i, j];
                 }
             }
+        }
+
+        internal Tetri Clone()
+        {
+            var clone = new Tetri(this.tetriType, this.isDisposable)
+            {
+                UpgradedTimes = this.UpgradedTimes
+            };
+
+            // 深拷贝 shape
+            int rows = shape.GetLength(0);
+            int cols = shape.GetLength(1);
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    // 假设 Cell 有 Clone 方法，否则需要你实现
+                    clone.shape[i, j] = shape[i, j]?.Clone() ?? null;
+                }
+            }
+
+            return clone;
         }
     }
 }

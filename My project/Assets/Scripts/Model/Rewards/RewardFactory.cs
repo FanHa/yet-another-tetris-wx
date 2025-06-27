@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using Controller;
 using Model.Tetri;
+using Operation;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,45 +23,10 @@ namespace Model.Rewards
             public Func<TetriInventoryModel, bool> isAvailable;
         }
 
-        public List<string> allPossibleCellTypeNames;
-        public List<string> allPossibleCharacterTypeNames;
-        private List<Type> cachedCellTypes;
-        private List<Type> cachedCharacterTypes;
-
-#if UNITY_EDITOR
-        [ContextMenu("自动收集所有Cell类型")]
-        public void AutoCollectAllCellTypes()
-        {
-            var cellTypes = Assembly.GetAssembly(typeof(Cell))
-                .GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(Cell))
-                            && !type.IsSubclassOf(typeof(Character))
-                            && type != typeof(Empty)
-                            && type != typeof(Padding)
-                            && !type.IsAbstract)
-                .Select(t => t.FullName)
-                .ToList();
-            allPossibleCellTypeNames = cellTypes;
-            EditorUtility.SetDirty(this);
-            Debug.Log("已自动收集所有Cell类型到allPossibleCellTypeNames");
-
-            var characterTypes = Assembly.GetAssembly(typeof(Character))
-                .GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(Character))
-                            && type != typeof(Empty)
-                            && type != typeof(Padding)
-                            && !type.IsAbstract)
-                .Select(t => t.FullName)
-                .ToList();
-            allPossibleCharacterTypeNames = characterTypes;
-            EditorUtility.SetDirty(this);
-            Debug.Log("已自动收集所有Character类型到allPossibleCharacterTypeNames");
-        }
-#endif
-
-
         [SerializeField] private int rewardCount;
-        private TetrisFactory tetrisFactory = new TetrisFactory();
+        [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
+        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
+
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
         private  List<RewardTypeConfig> rewardTypeConfigs;
 
@@ -94,33 +61,12 @@ namespace Model.Rewards
                 },
             };
 
-            cachedCellTypes = allPossibleCellTypeNames
-                .Select(FindType)
-                .Where(t => t != null)
-                .ToList();
-
-            cachedCharacterTypes = allPossibleCharacterTypeNames
-                .Select(FindType)
-                .Where(t => t != null)
-                .ToList();
         }
-
-        private Type FindType(string typeName)
-        {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var type = assembly.GetType(typeName);
-                if (type != null)
-                    return type;
-            }
-            return null;
-        }
-
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
 
             var ownedTypes = inventory.CellTypes;
-            return cachedCellTypes.Any(type => !ownedTypes.Contains(type));
+            return tetriCellFactory.AvailableCellTypes.Any(type => !ownedTypes.Contains(type));
         }
 
         private bool HasEnoughUpgradeableTetri(Model.TetriInventoryModel inventory)
@@ -138,10 +84,6 @@ namespace Model.Rewards
 
         public bool HasUnownedCharacterCell(TetriInventoryModel inventory)
         {
-            var characterTypes = allPossibleCharacterTypeNames
-                .Select(Type.GetType)
-                .Where(t => t != null)
-                .ToList();
             // todo inventory有一个方法得到CellTypes
             var ownedTypes = new HashSet<Type>(
                 inventory.GetAllTetris()
@@ -149,7 +91,7 @@ namespace Model.Rewards
                         .Select(pos => tetri.Shape[pos.x, pos.y].GetType()))
                     .Where(type => typeof(Character).IsAssignableFrom(type))
             );
-            return characterTypes.Any(type => !ownedTypes.Contains(type));
+            return tetriCellFactory.AvailableCharacterTypes.Any(type => !ownedTypes.Contains(type));
         }
 
         private bool HasUpgradeableCharacter(TetriInventoryModel inventory)
@@ -221,7 +163,7 @@ namespace Model.Rewards
         private Reward CreateNewTetriReward()
         {
             // 1. 获取所有可能的Cell类型
-            var allTypes = cachedCellTypes;
+            List<Type> allTypes = tetriCellFactory.AvailableCellTypes;
 
             // 2. 获取inventory中已有的Cell类型
             var ownedTypes = tetriInventoryData.CellTypes;
@@ -239,7 +181,7 @@ namespace Model.Rewards
             // 4. 随机选择一个Cell类型
             var selectedCellType = unownedTypes[UnityEngine.Random.Range(0, unownedTypes.Count)];
 
-            var tetriInstance = tetrisFactory.CreateRandomShapeWithCell(selectedCellType);
+            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedCellType);
 
             // 7. 返回AddTetri奖励
             return new AddTetri(tetriInstance);
@@ -248,10 +190,7 @@ namespace Model.Rewards
         private Reward CreateNewCharacterReward()
         {
             // 1. 获取所有可能的Character类型
-            var allTypes = allPossibleCharacterTypeNames
-                .Select(Type.GetType)
-                .Where(t => t != null)
-                .ToList();
+            List<Type> allTypes = tetriCellFactory.AvailableCharacterTypes;
 
             // 2. 获取inventory中已有的Character类型
             var ownedTypes = tetriInventoryData.CellTypes
@@ -272,7 +211,7 @@ namespace Model.Rewards
             var selectedCharacterType = unownedTypes[UnityEngine.Random.Range(0, unownedTypes.Count)];
 
             // 5. 创建Character实例
-            var tetriInstance = tetrisFactory.CreateSingleCellTetri(selectedCharacterType);
+            var tetriInstance = tetriModelFactory.CreateSingleCellTetri(selectedCharacterType);
 
             // 6. 返回NewCharacter奖励
             return new NewCharacter(tetriInstance);
@@ -281,29 +220,33 @@ namespace Model.Rewards
         private Reward CreateUpgradeTetriReward()
         {
             // 1. 从 inventory 中随机挑选一个可以升级的 Tetri（含有 Padding 且未升级过）
-            var upgradableTetris = tetriInventoryData.GetAllTetris()
-                .Where(tetri => tetri.UpgradedTimes < 1)
+            List<Model.Tetri.Tetri> upgradableTetris = tetriInventoryData.GetAllTetris()
+                .Where(tetri => tetri.Type is Model.Tetri.Tetri.TetriType.Normal && tetri.CanBeUpgraded())
                 .ToList();
-
             if (upgradableTetris.Count == 0)
             {
                 Debug.LogWarning("没有可升级的 Tetri，无法生成 UpgradeTetri 奖励。");
                 return null;
             }
-            var targetTetri = upgradableTetris[UnityEngine.Random.Range(0, upgradableTetris.Count)];
+            Model.Tetri.Tetri targetTetri = upgradableTetris[UnityEngine.Random.Range(0, upgradableTetris.Count)];
 
-            return new UpgradeTetri(targetTetri);
+            Func<Model.Tetri.Tetri, Reward>[] upgradeFactories = new Func<Model.Tetri.Tetri, Reward>[]
+            {
+                tetri => new UpgradeNoneCoreCellsTetri(tetri),
+                tetri => new UpgradeCoreCellTetri(tetri)
+            };
+            // 随机选择一个 UpgradeTetri 的衍生类
+            var selectedFactory = upgradeFactories[UnityEngine.Random.Range(0, upgradeFactories.Length)];
+            return selectedFactory(targetTetri);
 
         }
 
         private Reward CreateUpgradeCharacterReward()
         {
             // 1. 找到所有可升级的 CharacterCell
-            var upgradableCharacters = tetriInventoryData.GetAllTetris()
-                .SelectMany(tetri => tetri.GetOccupiedPositions()
-                    .Select(pos => tetri.Shape[pos.x, pos.y]))
-                .OfType<Character>()
-                .Where(character => character.Level < 3) // todo magic
+            List<Model.Tetri.Tetri> upgradableCharacters = tetriInventoryData.GetAllTetris()
+                .Where(tetri => tetri.Type == Model.Tetri.Tetri.TetriType.Character)
+                .Where(tetri => tetri.CanBeUpgraded())
                 .ToList();
 
             if (upgradableCharacters.Count == 0)

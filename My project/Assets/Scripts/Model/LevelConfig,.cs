@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Model.Rewards;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Model 
@@ -19,6 +20,7 @@ namespace Model
         [SerializeField] private int maxEnemyCount = 10; // 最大敌人数量
         [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
         [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
+        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory; // TetriCell 工厂
 
         
         private void OnEnable()
@@ -124,12 +126,13 @@ namespace Model
             List<InventoryItem> inventoryItems = new List<InventoryItem>();
             foreach (var enemy in enemyDatas)
             {
-                var characterInstance = (Tetri.Character)Activator.CreateInstance(enemy.character.Type);
+
+                var characterInstance = (Tetri.Character)tetriCellModelFactory.CreateCell(enemy.character.Type);
 
                 var tetriCells = new List<Tetri.Cell>();
                 foreach (var cell in enemy.tetriCells)
                 {
-                    tetriCells.Add((Tetri.Cell)Activator.CreateInstance(cell.Type));
+                    tetriCells.Add(tetriCellModelFactory.CreateCell(cell.Type));
                 }
 
                 InventoryItem inventoryItem = new InventoryItem(characterInstance, tetriCells);

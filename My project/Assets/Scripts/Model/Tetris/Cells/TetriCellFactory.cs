@@ -1,52 +1,107 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Units.Skills;
+using Units.VisualEffects;
+using UnityEditor;
+using UnityEngine;
 
 namespace Model.Tetri
 {
-    public class TetriCellFactory
+    [CreateAssetMenu(menuName = "Factory/TetriCellModelFactory")]
+    public class TetriCellFactory : ScriptableObject
     {
-        private readonly Random _random = new Random();
 
-        // 缓存所有 TetriCellCharacter 的子类
-        private static readonly List<Type> CachedCharacterTypes;
-
-        // 静态构造函数，用于初始化缓存
-        static TetriCellFactory()
+        public List<Type> AvailableCellTypes = new()
         {
-            CachedCharacterTypes = typeof(Character).Assembly
-                .GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(Character)) && !type.IsAbstract)
-                .ToList();
+            typeof(FrostZone),
+            typeof(IceShield),
+            typeof(IcyCage),
+            typeof(Snowball),
+            typeof(Fireball),
+            typeof(FlameInject),
+            typeof(BlazingField),
+            typeof(FlamingRing)
+        };
 
-            if (CachedCharacterTypes.Count == 0)
-            {
-                throw new InvalidOperationException("No subclasses of TetriCellCharacter found.");
-            }
+        public List<Type> AvailableCharacterTypes = new()
+        {
+            typeof(Square),
+            typeof(Triangle),
+            typeof(Circle),
+            typeof(Aim)
+        };
+
+        [SerializeField] private CellLevelConfigManager cellLevelConfigManager;
+        private readonly Dictionary<Type, SkillConfigGroup> cellConfigMap = new();
+
+        public void OnEnable()
+        {
+            RegisterAll();
         }
 
-        public Cell CreateRandomCharacter()
+        public void Register<TCell>(SkillConfigGroup configGroup)
+            where TCell : Cell, new()
         {
-            // 随机选择一个子类并创建实例
-            var selectedType = CachedCharacterTypes[_random.Next(CachedCharacterTypes.Count)];
-            return (Cell)Activator.CreateInstance(selectedType);
+            cellConfigMap[typeof(TCell)] = configGroup;
+        }
+
+        public void RegisterAll()
+        {
+            Register<FrostZone>(cellLevelConfigManager.FrostZoneConfigGroup);
+            Register<IceShield>(cellLevelConfigManager.IceShieldConfigGroup);
+            Register<IcyCage>(cellLevelConfigManager.IcyCageConfigGroup);
+            Register<Snowball>(cellLevelConfigManager.SnowballConfigGroup);
+            Register<Fireball>(cellLevelConfigManager.FireballConfigGroup);
+            Register<FlameInject>(cellLevelConfigManager.FlameInjectConfigGroup);
+            Register<BlazingField>(cellLevelConfigManager.BlazingFieldConfigGroup);
+            Register<Model.Tetri.FlameRing>(cellLevelConfigManager.FlameRingConfigGroup);
         }
 
         public Cell CreatePadding()
         {
             return new Padding();
         }
-        
-        public Cell CreateCell(Type cellType)
+
+
+
+        // public Cell CreateCell(Type type)
+        // {
+        //     if (type == null || !typeof(Cell).IsAssignableFrom(type))
+        //         throw new ArgumentException("Invalid cell type provided.");
+
+        //     // 1. 创建Cell实例（无参构造）
+        //     var cell = (Cell)Activator.CreateInstance(type);
+
+        //     // 2. 查找并注入配置
+        //     if (cellLevelConfigMap != null && cellLevelConfigMap.TryGetValue(type, out var config) && config != null)
+        //     {
+        //         cell.SetLevelConfig(config);
+        //     }
+
+        //     return cell;
+        // }
+
+        public Cell CreateCell(Type type) 
         {
-            if (cellType == null || !typeof(Cell).IsAssignableFrom(cellType))
-            {
+            if (type == null || !typeof(Cell).IsAssignableFrom(type))
                 throw new ArgumentException("Invalid cell type provided.");
+
+            // 1. 创建Cell实例（无参构造）
+            var cell = (Cell)Activator.CreateInstance(type);
+
+            // 2. 查找并注入配置
+            if (cellConfigMap != null && cellConfigMap.TryGetValue(type, out var config) && config != null)
+            {
+                cell.SetLevelConfig(config);
             }
-
-            return (Cell)Activator.CreateInstance(cellType);
+            else
+            {
+                Debug.LogWarning($"No config registered for cell type: {type.Name}");
+            }
+            return cell;
         }
-
     }
 
 }

@@ -8,22 +8,13 @@ namespace Units.Skills
     /// </summary>
     public class Snowball : Skill
     {
-        public float BaseDamage = 10f;
-        public float IceCellDamageBonus = 4f;
-        public float BaseChilledDuration = 3f;
-        public float ChilledDurationPerIceCell = 0.5f;
-        public int BaseChilledMoveSlowPercent = 10;
-        public int ChilledMoveSlowPercentPerIceCell = 3;
-        public int BaseChilledAtkSlowPercent = 10;
-        public int ChilledAtkSlowPercentPerIceCell = 3;
-        public int BaseChilledEnergySlowPercent = 15;
-        public int ChilledEnergySlowPercentPerIceCell = 4;
-
+        public SnowballConfig Config { get; }
         private int iceCellCount = 0;
 
-        public Snowball()
+        public Snowball(SnowballConfig config)
         {
-            RequiredEnergy = 40f;
+            Config = config;
+            RequiredEnergy = config.RequiredEnergy;
         }
 
         public void SetIceCellCount(int iceCellCount)
@@ -51,17 +42,17 @@ namespace Units.Skills
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
             if (snowBall != null)
             {
-                float totalDamage = BaseDamage + iceCellCount * IceCellDamageBonus;
+                float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
                 var damage = new Damages.Damage(totalDamage, Damages.DamageType.Ice);
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(caster);
                 damage.SetTargetUnit(targetEnemy);
 
                 // 计算Chilled参数
-                float chilledDuration = BaseChilledDuration + iceCellCount * ChilledDurationPerIceCell;
-                int moveSlowPercent = BaseChilledMoveSlowPercent + iceCellCount * ChilledMoveSlowPercentPerIceCell;
-                int atkSlowPercent = BaseChilledAtkSlowPercent + iceCellCount * ChilledAtkSlowPercentPerIceCell;
-                int energySlowPercent = BaseChilledEnergySlowPercent + iceCellCount * ChilledEnergySlowPercentPerIceCell;
+                float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
+                int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
+                int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
+                int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
 
                 var chilled = new Units.Buffs.Chilled(
                     chilledDuration,

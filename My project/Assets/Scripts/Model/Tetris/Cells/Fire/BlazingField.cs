@@ -23,13 +23,15 @@ namespace Model.Tetri
         public override void PostApply(Unit unit, IReadOnlyList<Cell> allCells)
         {
             int fireCount = 0;
-            foreach (Model.Tetri.Cell cell in allCells)
+            foreach (var cell in allCells)
             {
                 if (cell.Affinity == AffinityType.Fire)
                     fireCount++;
             }
 
-            var skillInstance = new Units.Skills.BlazingField();
+            var configGroup = skillConfigGroup as Units.Skills.BlazingFieldConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.BlazingField(config);
             skillInstance.SetFireCellCount(fireCount);
             unit.AddSkill(skillInstance);
         }

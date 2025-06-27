@@ -8,14 +8,13 @@ namespace Units.Skills
     /// </summary>
     public class IcyCage : Skill
     {
-        public float BaseFreezeDuration = 2f;
-        public float FreezeDurationPerIceCell = 0.5f;
-
+        public IcyCageConfig Config { get; }
         private int iceCellCount = 0;
 
-        public IcyCage()
+        public IcyCage(IcyCageConfig config)
         {
-            RequiredEnergy = 65f;
+            Config = config;
+            RequiredEnergy = config.RequiredEnergy;
         }
 
         public void SetIceCellCount(int iceCellCount)
@@ -25,7 +24,7 @@ namespace Units.Skills
 
         public float GetDuration()
         {
-            return BaseFreezeDuration + iceCellCount * FreezeDurationPerIceCell;
+            return Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
         }
 
         protected override void ExecuteCore(Unit caster)
@@ -39,7 +38,7 @@ namespace Units.Skills
 
             Unit targetEnemy = enemiesInRange.First();
 
-            float freezeDuration = BaseFreezeDuration + iceCellCount * FreezeDurationPerIceCell;
+            float freezeDuration = Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
 
             var freezeBuff = new Buffs.Freeze(
                 freezeDuration,

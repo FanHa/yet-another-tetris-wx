@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Units;
+using UnityEngine;
 
 namespace Model.Tetri
 {
@@ -28,8 +29,9 @@ namespace Model.Tetri
                 if (cell.Affinity == AffinityType.Ice)
                     iceCount++;
             }
-
-            var skillInstance = new Units.Skills.IcyCage();
+            var configGroup = skillConfigGroup as Units.Skills.IcyCageConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.IcyCage(config);
             skillInstance.SetIceCellCount(iceCount);
             unit.AddSkill(skillInstance);
         }

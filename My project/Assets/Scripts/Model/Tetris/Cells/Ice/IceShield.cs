@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Units;
+using UnityEngine;
 
 namespace Model.Tetri
 {
     public class IceShield : Cell
     {
+        public Units.Skills.IceShieldConfigGroup LevelConfig;
         public IceShield()
         {
             Affinity = AffinityType.Ice;
@@ -22,9 +24,12 @@ namespace Model.Tetri
                     iceCellCount++;
             }
 
-            var skillInstance = new Units.Skills.IceShield();
+            var configGroup = skillConfigGroup as Units.Skills.IceShieldConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.IceShield(config);
             skillInstance.SetIceCellCount(iceCellCount);
             unit.AddSkill(skillInstance);
         }
+        
     }
 }

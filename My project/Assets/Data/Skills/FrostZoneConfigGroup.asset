@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 123505b1a0cba7b4a94e659d89e340de, type: 3}
+  m_Name: FrostZoneConfigGroup
+  m_EditorClassIdentifier: 
+  LevelConfigs:
+  - BaseRadius: 1.5
+    BaseDuration: 5
+    BaseDamage: 8
+    BaseChilledDuration: 2
+    BaseChilledMoveSlowPercent: 10
+    RadiusPerIceCell: 0.2
+    DurationPerIceCell: 1
+    DamagePerIceCell: 3
+    ChilledDurationPerIceCell: 0.5
+    ChilledMoveSlowPercentPerIceCell: 3
+    BaseChilledAtkSlowPercent: 10
+    ChilledAtkSlowPercentPerIceCell: 3
+    BaseChilledEnergySlowPercent: 15
+    ChilledEnergySlowPercentPerIceCell: 4
+    RequiredEnergy: 120
+  - BaseRadius: 1.5
+    BaseDuration: 5
+    BaseDamage: 16
+    BaseChilledDuration: 2
+    BaseChilledMoveSlowPercent: 15
+    RadiusPerIceCell: 0.2
+    DurationPerIceCell: 1
+    DamagePerIceCell: 6
+    ChilledDurationPerIceCell: 0.5
+    ChilledMoveSlowPercentPerIceCell: 6
+    BaseChilledAtkSlowPercent: 15
+    ChilledAtkSlowPercentPerIceCell: 6
+    BaseChilledEnergySlowPercent: 25
+    ChilledEnergySlowPercentPerIceCell: 6
+    RequiredEnergy: 120

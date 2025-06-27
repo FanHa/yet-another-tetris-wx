@@ -6,19 +6,12 @@ namespace Units.Skills
     public class FlameRing : Skill
     {
         private bool hasTriggered;
-
-        public float BaseDotDps = 2f;
-        public float DotDpsPerFireCell = 1f;
-        public float BaseDotDuration = 2f;
-        public float DotDurationPerFireCell = 1f;
-        public float BuffDuration = -1f;
-        public float BaseRadius = 1f;
-        public float RadiusPerFireCell = 0.2f;
-
         private int fireCellCount = 0;
+        public FlameRingConfig Config { get; }
 
-        public FlameRing()
+        public FlameRing(FlameRingConfig config)
         {
+            Config = config;
             hasTriggered = false;
         }
 
@@ -34,14 +27,14 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            float dotDps = BaseDotDps + fireCellCount * DotDpsPerFireCell;
-            float dotDuration = BaseDotDuration + fireCellCount * DotDurationPerFireCell;
-            float radius = BaseRadius + fireCellCount * RadiusPerFireCell;
+            float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
+            float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
+            float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
 
             var buff = new Buffs.FlameRing(
                 dotDps,
                 dotDuration,
-                BuffDuration,
+                Config.BuffDuration,
                 radius,
                 caster,
                 this

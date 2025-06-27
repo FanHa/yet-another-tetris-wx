@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Units;
+using UnityEngine;
 
 namespace Model.Tetri
 {
@@ -29,7 +30,9 @@ namespace Model.Tetri
                     iceCount++;
             }
 
-            var skillInstance = new Units.Skills.Snowball();
+            var configGroup = skillConfigGroup as Units.Skills.SnowballConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.Snowball(config);
             skillInstance.SetIceCellCount(iceCount);
             unit.AddSkill(skillInstance);
         }

@@ -15,7 +15,7 @@ namespace UI.Reward
         public Transform itemParent;
         public event Action<Model.Rewards.Reward> OnItemSelected;
         [SerializeField] private Controller.Tetris tetris;
-        [SerializeField] private TetriFactory tetriFactory;
+        [SerializeField] private Operation.TetriFactory tetriFactory;
 
         [Header("运行时引用")]
         [SerializeField] private Camera[] previewCameras;
@@ -80,7 +80,56 @@ namespace UI.Reward
                 tetriObj.transform.SetParent(null, false); // 由外部决定父物体
                 return tetriObj;
             }
-            // 其他类型暂未实现
+            if (reward is Model.Rewards.NewCharacter newCharacterReward)
+            {
+                // 用 tetris.TetriFactory 生成一个 Tetri 物体作为预览
+                var tetriObj = tetriFactory.CreateTetri(newCharacterReward.GetTetri()).gameObject;
+                SetLayerRecursively(tetriObj, LayerMask.NameToLayer("RewardPreview"));
+
+                tetriObj.transform.SetParent(null, false); // 由外部决定父物体
+                return tetriObj;
+            }
+            if (reward is Model.Rewards.UpgradeTetri upgradeTetriReward)
+            {
+                // 创建父容器
+                var container = new GameObject("UpgradeTetriPreview");
+
+                // 旧的 Tetri
+                var oldTetriObj = tetriFactory.CreateTetri(upgradeTetriReward.TargetTetri).gameObject;
+                SetLayerRecursively(oldTetriObj, LayerMask.NameToLayer("RewardPreview"));
+                oldTetriObj.transform.SetParent(container.transform, false);
+                oldTetriObj.transform.localPosition = new Vector3(-0.8f, 0.8f, 0); // 左上
+
+                // 新的 Tetri（升级后）
+                var newTetriObj = tetriFactory.CreateTetri(upgradeTetriReward.UpgradedTetri).gameObject;
+                SetLayerRecursively(newTetriObj, LayerMask.NameToLayer("RewardPreview"));
+                newTetriObj.transform.SetParent(container.transform, false);
+                newTetriObj.transform.localPosition = new Vector3(0.8f, -0.8f, 0); // 右下
+
+                container.transform.SetParent(null, false); // 由外部决定父物体
+                return container;
+            }
+            if (reward is Model.Rewards.UpgradeCharacter upgradeCharacterReward)
+            {
+                // 创建父容器
+                var container = new GameObject("UpgradeCharacterPreview");
+
+                // 旧的 Tetri
+                var oldTetriObj = tetriFactory.CreateTetri(upgradeCharacterReward.TargetTetri).gameObject;
+                SetLayerRecursively(oldTetriObj, LayerMask.NameToLayer("RewardPreview"));
+                oldTetriObj.transform.SetParent(container.transform, false);
+                oldTetriObj.transform.localPosition = new Vector3(-0.8f, 0.8f, 0); // 左上
+
+                // 新的 Tetri（升级后）
+                var newTetriObj = tetriFactory.CreateTetri(upgradeCharacterReward.UpgradedTetri).gameObject;
+                SetLayerRecursively(newTetriObj, LayerMask.NameToLayer("RewardPreview"));
+                newTetriObj.transform.SetParent(container.transform, false);
+                newTetriObj.transform.localPosition = new Vector3(0.8f, -0.8f, 0); // 右下
+
+                container.transform.SetParent(null, false); // 由外部决定父物体
+                return container;
+            }
+            // todo 实现其他类型
             return null;
         }
 

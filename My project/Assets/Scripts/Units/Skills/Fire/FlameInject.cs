@@ -6,19 +6,12 @@ namespace Units.Skills
     public class FlameInject : Skill
     {
         private bool hasTriggered;
-
-        public float BaseFireDamage = 1f;
-        public float FireCellDamageBonus = 1f;
-        public float BaseDotDps = 1f;
-        public float DotDpsPerFireCell = 1f;
-        public float BaseDotDuration = 2f;
-        public float DotDurationPerFireCell = 1f;
-        public float BuffDuration = -1f;
-
         private int fireCellCount = 0;
+        public FlameInjectConfig Config { get; }
 
-        public FlameInject()
+        public FlameInject(FlameInjectConfig config)
         {
+            Config = config;
             hasTriggered = false;
         }
 
@@ -35,15 +28,15 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            float extraFireDamage = BaseFireDamage + fireCellCount * FireCellDamageBonus;
-            float dotDps = BaseDotDps + fireCellCount * DotDpsPerFireCell;
-            float dotDuration = BaseDotDuration + fireCellCount * DotDurationPerFireCell;
+            float extraFireDamage = Config.BaseFireDamage + fireCellCount * Config.FireCellDamageBonus;
+            float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
+            float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
 
             var buff = new Buffs.FlameInject(
                 extraFireDamage,
                 dotDps,
                 dotDuration,
-                BuffDuration,
+                Config.BuffDuration,
                 caster,
                 this
             );

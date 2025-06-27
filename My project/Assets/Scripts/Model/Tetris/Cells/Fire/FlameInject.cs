@@ -29,7 +29,9 @@ namespace Model.Tetri
                     fireCellCount++;
             }
 
-            var skillInstance = new Units.Skills.FlameInject();
+            var configGroup = skillConfigGroup as Units.Skills.FlameInjectConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.FlameInject(config);
             skillInstance.SetFireCellCount(fireCellCount);
             unit.AddSkill(skillInstance);
         }

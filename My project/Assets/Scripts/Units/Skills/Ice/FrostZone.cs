@@ -7,28 +7,14 @@ namespace Units.Skills
 {
     public class FrostZone : Skill
     {
-        public float BaseRadius = 1.5f;
-        public float BaseDuration = 5f;
-        public float BaseDamage = 8f;
-        public float BaseChilledDuration = 2f;
-
-        public float RadiusPerIceCell = 0.2f;
-        public float DurationPerIceCell = 1f;
-        public float DamagePerIceCell = 3f;
-        public float ChilledDurationPerIceCell = 0.5f;
-
-        public int BaseChilledMoveSlowPercent = 10;
-        public int ChilledMoveSlowPercentPerIceCell = 3;
-        public int BaseChilledAtkSlowPercent = 10;
-        public int ChilledAtkSlowPercentPerIceCell = 3;
-        public int BaseChilledEnergySlowPercent = 15;
-        public int ChilledEnergySlowPercentPerIceCell = 4;
+        public FrostZoneConfig Config { get; }
 
         private int iceCellCount = 0;
 
-        public FrostZone()
+        public FrostZone(FrostZoneConfig config)
         {
-            RequiredEnergy = 120f;
+            RequiredEnergy = config.RequiredEnergy;
+            this.Config = config;
         }
 
         public void SetIceCellCount(int iceCellCount)
@@ -38,12 +24,12 @@ namespace Units.Skills
 
         public float GetRadius()
         {
-            return BaseRadius + iceCellCount * RadiusPerIceCell;
+            return Config.BaseRadius + iceCellCount * Config.RadiusPerIceCell;
         }
 
         public float GetDuration()
         {
-            return BaseDuration + iceCellCount * DurationPerIceCell;
+            return Config.BaseDuration + iceCellCount * Config.DurationPerIceCell;
         }
 
         protected override void ExecuteCore(Unit caster)
@@ -58,11 +44,11 @@ namespace Units.Skills
 
             float radius = GetRadius();
             float duration = GetDuration();
-            float damage = BaseDamage + iceCellCount * DamagePerIceCell;
-            float chilledDuration = BaseChilledDuration + iceCellCount * ChilledDurationPerIceCell;
-            int moveSlowPercent = BaseChilledMoveSlowPercent + iceCellCount * ChilledMoveSlowPercentPerIceCell;
-            int atkSlowPercent = BaseChilledAtkSlowPercent + iceCellCount * ChilledAtkSlowPercentPerIceCell;
-            int energySlowPercent = BaseChilledEnergySlowPercent + iceCellCount * ChilledEnergySlowPercentPerIceCell;
+            float damage = Config.BaseDamage + iceCellCount * Config.DamagePerIceCell;
+            float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
+            int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
+            int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
+            int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
 
             TriggerEffect(new SkillEffectContext
             {
@@ -113,6 +99,6 @@ namespace Units.Skills
 
         public override string Name() => "霜域";
         public override string Description() =>
-            $"在目标区域制造一片极寒地带，{BaseDuration}+{DurationPerIceCell}*冰系Cell秒内每秒对范围内敌人造成冰属性伤害并施加Chilled，所有效果随冰系Cell提升。";
+            $"在目标区域制造一片极寒地带，{Config.BaseDuration}+{Config.DurationPerIceCell}*冰系Cell秒内每秒对范围内敌人造成冰属性伤害并施加Chilled，所有效果随冰系Cell提升。";
     }
 }

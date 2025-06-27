@@ -16,11 +16,11 @@ namespace Model
 
         [SerializeField] private List<Model.Tetri.Tetri> usableTetriList = new List<Model.Tetri.Tetri>();
         [SerializeField] private List<Model.Tetri.Tetri> usedTetriList = new List<Model.Tetri.Tetri>();
-
+        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory;
+        [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
         private List<Type> attributeTypes = new(); // 用于随机替换单元格的类型
-        private Model.Tetri.TetrisFactory tetrisFactory = new Model.Tetri.TetrisFactory();
         private HashSet<Type> cellTypes = new HashSet<Type>();
         public IReadOnlyCollection<Type> CellTypes => cellTypes; // 只读访问
 
@@ -66,10 +66,10 @@ namespace Model
             // 遍历配置的每个特殊单元格类型
             foreach (var cellTypeRef in initialSpecialCellTypes)
             {
-                var tetri = tetrisFactory.CreateRandomBaseShape();
+                var tetri = tetriModelFactory.CreateRandomBaseShape();
                 if (tetri == null)
                 {
-                    Debug.LogWarning("TetrisFactory 返回了一个空的 Tetri。跳过此项。");
+                    Debug.LogWarning("TetriModelFactory 返回了一个空的 Tetri。跳过此项。");
                     continue;
                 }
 
@@ -83,7 +83,7 @@ namespace Model
                         Model.Tetri.Cell specialCellInstance = null;
                         if (typeof(Model.Tetri.Cell).IsAssignableFrom(cellTypeRef.Type))
                         {
-                            specialCellInstance = Activator.CreateInstance(cellTypeRef.Type) as Model.Tetri.Cell;
+                            specialCellInstance = tetriCellModelFactory.CreateCell(cellTypeRef.Type);
                         }
 
                         if (specialCellInstance != null)
@@ -110,10 +110,10 @@ namespace Model
             {
                 if (charTypeRef != null && charTypeRef.Type != null)
                 {
-                    var baseTetriForCharacter = tetrisFactory.CreateSinglePaddingCellTetri();
+                    var baseTetriForCharacter = tetriModelFactory.CreateSinglePaddingCellTetri();
                     if (baseTetriForCharacter == null)
                     {
-                        Debug.LogWarning("TetrisFactory.CreateSinglePaddingCellTetri() 返回了一个空的 Tetri。无法创建 Character Tetri。");
+                        Debug.LogWarning("TetriModelFactory.CreateSinglePaddingCellTetri() 返回了一个空的 Tetri。无法创建 Character Tetri。");
                         continue; // 跳过这个配置项
                     }
 

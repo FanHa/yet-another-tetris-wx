@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Units;
+using UnityEngine;
 
 namespace Model.Tetri
 {
@@ -29,7 +30,9 @@ namespace Model.Tetri
                     iceCount++;
             }
 
-            var skillInstance = new Units.Skills.FrostZone();
+            var configGroup = skillConfigGroup as Units.Skills.FrostZoneConfigGroup;
+            var config = configGroup?.LevelConfigs[Level - 1];
+            var skillInstance = new Units.Skills.FrostZone(config);
             skillInstance.SetIceCellCount(iceCount);
             unit.AddSkill(skillInstance);
         }

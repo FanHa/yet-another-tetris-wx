@@ -5,18 +5,13 @@ namespace Units.Skills
 {
     public class Fireball : Skill
     {
-        public float BaseDamage = 20f;
-        public float FireCellDamageBonus = 5f;
-        public float DotPerFireCell = 1f;           // 每个火系Cell dot伤害
-        public float DotDurationPerFireCell = 1f; // 每个火系Cell增加的dot持续时间
-
-        public float DotBaseDuration = 3f;              // dot持续时间
-
+        public FireballConfig Config { get; }
         private int fireCellCount = 0;
 
-        public Fireball()
+        public Fireball(FireballConfig config)
         {
-            RequiredEnergy = 100f; // 设置技能所需能量
+            Config = config;
+            RequiredEnergy = config.RequiredEnergy;
         }
 
         public void SetFireCellCount(int fireCellCount)
@@ -40,7 +35,7 @@ namespace Units.Skills
             Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
             if (fireball != null)
             {
-                float totalDamage = BaseDamage + fireCellCount * FireCellDamageBonus;
+                float totalDamage = Config.BaseDamage + fireCellCount * Config.FireCellDamageBonus;
                 var damage = new Damages.Damage(totalDamage, Damages.DamageType.Skill);
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(caster);
@@ -51,8 +46,8 @@ namespace Units.Skills
                     Units.DotType.Burn,
                     this,
                     caster,
-                    fireCellCount * DotPerFireCell,    // 伤害值为 fireCellCount
-                    DotBaseDuration + fireCellCount * DotDurationPerFireCell,
+                    fireCellCount * Config.DotPerFireCell,
+                    Config.DotBaseDuration + fireCellCount * Config.DotDurationPerFireCell,
                     "灼烧"
                 );
                 fireball.SetDot(dot);
@@ -62,7 +57,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"向攻击范围内一个敌人发射火球，造成 {BaseDamage} 点火焰伤害";
+            return $"向攻击范围内一个敌人发射火球，造成 {Config.BaseDamage} 点火焰伤害";
         }
 
         public override string Name()

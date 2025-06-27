@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Model.Tetri
 {
-    public class TetrisFactory
+
+    [CreateAssetMenu(menuName = "Factory/TetriModelFactory")]
+    public class TetriFactory : ScriptableObject
     {
-        private TetriCellFactory cellFactory = new TetriCellFactory();
+        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory;
 
         private readonly Dictionary<string, List<(int, int)>> shapeDefinitions = new()
         {
@@ -26,7 +29,7 @@ namespace Model.Tetri
             Tetri tetri = new Tetri(Tetri.TetriType.Normal);
             foreach (var (row, col) in shapeDefinitions[shapeKey])
             {
-                tetri.SetCell(row, col, cellFactory.CreatePadding());
+                tetri.SetCell(row, col, tetriCellModelFactory.CreatePadding());
             }
             return tetri;
         }
@@ -42,7 +45,7 @@ namespace Model.Tetri
         public Tetri CreateRandomBaseShape()
         {
             var shapeKeys = new List<string> { "T", "I", "O", "L", "J", "S", "Z" };
-            var randomKey = shapeKeys[new Random().Next(shapeKeys.Count)];
+            var randomKey = shapeKeys[UnityEngine.Random.Range(0, shapeKeys.Count)];
             return CreateShape(randomKey);
         }
 
@@ -59,7 +62,7 @@ namespace Model.Tetri
             Tetri tetri = new Tetri(Tetri.TetriType.Normal); // 或者一个更合适的默认类型
 
             // 从 cellFactory 创建一个 Padding 类型的 Cell
-            Cell paddingCell = cellFactory.CreatePadding();
+            Cell paddingCell = tetriCellModelFactory.CreatePadding();
 
             if (paddingCell == null)
             {
@@ -84,15 +87,14 @@ namespace Model.Tetri
         {
             // 1. 随机选择一个形状
             var shapeKeys = new List<string> { "T", "I", "O", "L", "J", "S", "Z" };
-            var random = new Random();
-            var randomKey = shapeKeys[random.Next(shapeKeys.Count)];
+            var randomKey = shapeKeys[UnityEngine.Random.Range(0, shapeKeys.Count)];
             var positions = shapeDefinitions[randomKey];
 
             // 2. 创建 Tetri
             Tetri tetri = new Tetri(Tetri.TetriType.Normal);
 
             // 3. 随机选择一个格子用于填充目标 Cell
-            int specialIndex = random.Next(positions.Count);
+            int specialIndex = UnityEngine.Random.Range(0, positions.Count);
 
             for (int i = 0; i < positions.Count; i++)
             {
@@ -100,13 +102,13 @@ namespace Model.Tetri
                 if (i == specialIndex)
                 {
                     // 用指定类型创建 Cell
-                    Cell cell = cellFactory.CreateCell(cellType);
+                    Cell cell = tetriCellModelFactory.CreateCell(cellType);
                     tetri.SetCell(row, col, cell);
                 }
                 else
                 {
                     // 其余填充 Padding
-                    tetri.SetCell(row, col, cellFactory.CreatePadding());
+                    tetri.SetCell(row, col, tetriCellModelFactory.CreatePadding());
                 }
             }
 
@@ -116,7 +118,7 @@ namespace Model.Tetri
         public Tetri CreateSingleCellTetri(Type cellType)
         {
             var tetri = new Tetri(Tetri.TetriType.Character);
-            var cell = cellFactory.CreateCell(cellType);
+            var cell = tetriCellModelFactory.CreateCell(cellType);
             // 假设Tetir的Shape是4x4，填充到中心点 (1,1)
             tetri.SetCell(1, 1, cell);
             return tetri;

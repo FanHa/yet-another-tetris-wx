@@ -12,37 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82bafd87eb4a98c45b52a6975f38a9a4, type: 3}
   m_Name: RewardFactory
   m_EditorClassIdentifier: 
-  allPossibleCellTypeNames:
-  - Model.Tetri.Attack
-  - Model.Tetri.AttackFrequency
-  - Model.Tetri.Health
-  - Model.Tetri.RangeAttack
-  - Model.Tetri.Speed
-  - Model.Tetri.BlazingField
-  - Model.Tetri.Fireball
-  - Model.Tetri.FirePadding
-  - Model.Tetri.FlameInject
-  - Model.Tetri.FlameRing
-  - Model.Tetri.GarbageReuse
-  - Model.Tetri.MultiAttack
-  - Model.Tetri.SplitAttack
-  - Model.Tetri.FrostZone
-  - Model.Tetri.IceShield
-  - Model.Tetri.IcyCage
-  - Model.Tetri.Snowball
-  - Model.Tetri.Spike
-  - Model.Tetri.Skills.BloodBomb
-  - Model.Tetri.Skills.Bomb
-  - Model.Tetri.Skills.ChainLightning
-  - Model.Tetri.Skills.PrecisionShoot
-  - Model.Tetri.Skills.ProjectileHail
-  - Model.Tetri.Skills.Repel
-  - Model.Tetri.Skills.Rush
-  - Model.Tetri.Skills.WindStrike
-  allPossibleCharacterTypeNames:
-  - Model.Tetri.Aim
-  - Model.Tetri.Circle
-  - Model.Tetri.Square
-  - Model.Tetri.Triangle
   rewardCount: 3
+  tetriModelFactory: {fileID: 11400000, guid: bbc0821158c9cd04da22c630746033be, type: 2}
+  tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
   tetriInventoryData: {fileID: 11400000, guid: 0ec7254a647b3ed4f974283cbd9bc1fb, type: 2}
