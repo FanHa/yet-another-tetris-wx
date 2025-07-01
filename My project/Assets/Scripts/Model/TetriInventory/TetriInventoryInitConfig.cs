@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Model
@@ -6,7 +7,8 @@ namespace Model
     [CreateAssetMenu(fileName = "TetriInventoryInitConfig", menuName = "Tetris/TetriInventoryInitConfig")]
     public class TetriInventoryInitConfig : ScriptableObject
     {
-        public List<CellTypeReference> initialSpecialCellTypes;
-        public List<CharacterTypeReference> initialSingleCharacterCells;
+        public List<CellTypeId> CellTypeIds;
+        public List<CharacterTypeId> CharacterTypeIds;
+
     }
 }

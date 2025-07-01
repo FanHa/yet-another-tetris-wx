@@ -13,47 +13,20 @@ namespace Model
     {
         public int currentLevel = 0;
         public List<EnemyData> enemyDatas; // 敌人数据列表
-        [SerializeField] private List<CharacterTypeReference> availableCharacters; // 可用的角色类型
-        [SerializeField] private List<CellTypeReference> availableTetriCells; // 可用的 TetriCell 类型
-        
+
         [SerializeField] private int levelsPerEnemyIncrease = 3; // 每增加一个敌人的关卡数
         [SerializeField] private int maxEnemyCount = 10; // 最大敌人数量
         [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
         [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory; // TetriCell 工厂
 
+        private List<CellTypeId> availableCellTypeIds;
+        private List<CharacterTypeId> availableCharacterTypeIds;
         
         private void OnEnable()
         {
-            // 初始化 availableCharacters
-            if (availableCharacters == null || availableCharacters.Count == 0)
-            {
-                availableCharacters = new List<CharacterTypeReference>();
-                var characterTypes = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(assembly => assembly.GetTypes())
-                    .Where(type => type.IsSubclassOf(typeof(Tetri.Character)) && !type.IsAbstract)
-                    .ToList();
-
-                foreach (var characterType in characterTypes)
-                {
-                    availableCharacters.Add(new CharacterTypeReference { typeName = characterType.AssemblyQualifiedName });
-                }
-            }
-
-            // 初始化 availableTetriCells
-            if (availableTetriCells == null || availableTetriCells.Count == 0)
-            {
-                availableTetriCells = new List<CellTypeReference>();
-                var cellTypes = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(assembly => assembly.GetTypes())
-                    .Where(type => type.IsSubclassOf(typeof(Tetri.Cell)) && !type.IsAbstract)
-                    .ToList();
-
-                foreach (var cellType in cellTypes)
-                {
-                    availableTetriCells.Add(new CellTypeReference { typeName = cellType.AssemblyQualifiedName });
-                }
-            }
+            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId)).Cast<CellTypeId>().ToList();
+            availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
 
         /// <summary>
@@ -80,20 +53,11 @@ namespace Model
             while (enemyDatas.Count < enemyCount)
             {
                 // 添加一个随机敌人
-                var randomCharacter = availableCharacters[UnityEngine.Random.Range(0, availableCharacters.Count)];
-                var tetriCells = new List<CellTypeReference>();
-                // tetriCells.Add(randomCharacter);
-                // EnemyData enemyData = new EnemyData
-                // {
-                //     character = randomCharacter,
-                //     tetriCells = new List<CellTypeReference>()
-                // };
-
+                var randomCharacterId = availableCharacterTypeIds[UnityEngine.Random.Range(0, availableCharacterTypeIds.Count)];
                 enemyDatas.Add(new EnemyData
                 {
-                    character = randomCharacter,
-                    tetriCells = new List<CellTypeReference>()
-                    
+                    characterId = randomCharacterId,
+                    tetriCellIds = new List<CellTypeId>()
                 });
             }
 
@@ -112,8 +76,8 @@ namespace Model
                 var randomEnemy = enemyDatas[randomEnemyIndex];
 
                 // 随机添加一个 TetriCell
-                var randomCell = availableTetriCells[UnityEngine.Random.Range(0, availableTetriCells.Count)];
-                randomEnemy.tetriCells.Add(randomCell);
+                var randomCellId = availableCellTypeIds[UnityEngine.Random.Range(0, availableCellTypeIds.Count)];
+                randomEnemy.tetriCellIds.Add(randomCellId);
             }
         }
 
@@ -127,12 +91,12 @@ namespace Model
             foreach (var enemy in enemyDatas)
             {
 
-                var characterInstance = (Tetri.Character)tetriCellModelFactory.CreateCell(enemy.character.Type);
+                var characterInstance = (Tetri.Character)tetriCellModelFactory.CreateCharacterCell(enemy.characterId);
 
                 var tetriCells = new List<Tetri.Cell>();
-                foreach (var cell in enemy.tetriCells)
+                foreach (var cellId in enemy.tetriCellIds)
                 {
-                    tetriCells.Add(tetriCellModelFactory.CreateCell(cell.Type));
+                    tetriCells.Add(tetriCellModelFactory.CreateCell(cellId));
                 }
 
                 InventoryItem inventoryItem = new InventoryItem(characterInstance, tetriCells);
@@ -159,8 +123,8 @@ namespace Model
 
         [Serializable]
         public struct EnemyData {
-            public CharacterTypeReference character; // 敌人名称
-            public List<CellTypeReference> tetriCells; // TetriCell 列表
+            public CharacterTypeId characterId; // 敌人名称
+            public List<CellTypeId> tetriCellIds; // TetriCell 列表
         }
     }
 }

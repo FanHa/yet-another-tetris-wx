@@ -12,17 +12,27 @@ namespace Model.Tetri
         [Serializable]
         public struct CellTypeResourcePair
         {
-            public Model.CellTypeReference cellType; // Class type reference
-            public Sprite sprite; // Sprite associated with the cell type
-            // Future extensibility: Add other fields here if needed
+            public CellTypeId cellTypeId; // 直接用枚举
+            public Sprite sprite;
         }
 
+        [Serializable]
+        public struct CharacterTypeResourcePair
+        {
+            public CharacterTypeId characterTypeId;
+            public Sprite sprite;
+        }
+
+
         [SerializeField]
-        private List<CellTypeResourcePair> mappings;
+        private List<CellTypeResourcePair> cellMappings;
+        [SerializeField]
+        private List<CharacterTypeResourcePair> characterMappings;
 
-        public List<CellTypeResourcePair> Mappings => mappings;
+        private Dictionary<CellTypeId, Sprite> cellResourceDictionary;
+        private Dictionary<CharacterTypeId, Sprite> characterResourceDictionary;
 
-        private Dictionary<Type, CellTypeResourcePair> resourceDictionary;
+        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
 
         private void OnEnable()
         {
@@ -31,33 +41,54 @@ namespace Model.Tetri
 
         private void InitializeDictionary()
         {
-            resourceDictionary = new Dictionary<Type, CellTypeResourcePair>();
-            foreach (var pair in mappings)
+            cellResourceDictionary = new Dictionary<CellTypeId, Sprite>();
+            foreach (var pair in cellMappings)
             {
-                if (pair.cellType.Type != null)
-                {
-                    resourceDictionary[pair.cellType.Type] = pair;
-                }
-                else
-                {
-                    Debug.LogWarning("Invalid type in CellTypeResourcePair.");
-                }
+                cellResourceDictionary[pair.cellTypeId] = pair.sprite;
+            }
+
+            characterResourceDictionary = new Dictionary<CharacterTypeId, Sprite>();
+            foreach (var pair in characterMappings)
+            {
+                characterResourceDictionary[pair.characterTypeId] = pair.sprite;
             }
         }
 
-        public Sprite GetSprite(Cell cell)
+        public Sprite GetSprite(CellTypeId cellTypeId)
         {
-            if (cell == null) return null;
-            return GetSprite(cell.GetType());
+            if (cellResourceDictionary.TryGetValue(cellTypeId, out var sprite))
+            {
+                return sprite;
+            }
+            return null;
+        }
+
+        public Sprite GetSprite(CharacterTypeId characterTypeId)
+        {
+            if (characterResourceDictionary.TryGetValue(characterTypeId, out var sprite))
+            {
+                return sprite;
+            }
+            return null;
         }
 
         public Sprite GetSprite(Type type)
         {
-            if (resourceDictionary.TryGetValue(type, out var pair))
+            if (tetriCellFactory.TypeToCellTypeId.TryGetValue(type, out var cellTypeId))
             {
-                return pair.sprite;
+                return GetSprite(cellTypeId);
+            }
+            if (tetriCellFactory.TypeToCharacterTypeId != null &&
+                tetriCellFactory.TypeToCharacterTypeId.TryGetValue(type, out var characterTypeId))
+            {
+                return GetSprite(characterTypeId);
             }
             return null;
+        }
+
+        public Sprite GetSprite(Model.Tetri.Cell cell)
+        {
+            return GetSprite(cell.GetType());
         }
     }
 }

@@ -24,11 +24,12 @@ namespace Model.Rewards
         {
             Tetri.Tetri clone = TargetTetri.Clone();
             Tetri.Cell mainCell = clone.GetMainCell();
+            mainCell.SetLevel(mainCell.Level + 1);
             // 这里应返回一个升级了核心方块的 Tetri 实例
             // var clone = TargetTetri.Clone();
             // clone.UpgradeCoreCell();
             // return clone;
-            return TargetTetri; // TODO: 替换为实际升级后的 Tetri
+            return clone; // TODO: 替换为实际升级后的 Tetri
         }
     }
 }

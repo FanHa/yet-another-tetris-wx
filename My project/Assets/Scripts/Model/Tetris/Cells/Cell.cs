@@ -37,16 +37,5 @@ namespace Model.Tetri
         }
         public AffinityType Affinity { get; set; } = AffinityType.None;
 
-        // 通用的配置获取方法
-        // protected TConfig GetConfigByLevel<TGroup, TConfig>(int level)
-        //     where TGroup : SkillConfigGroup
-        //     where TConfig : SkillConfig
-        // {
-        //     var levelConfigs = skillConfig.LevelConfigs.Cast<TConfig>().ToList();
-        //     int idx = Mathf.Clamp(level - 1, 0, levelConfigs.Count - 1);
-        //     return levelConfigs[idx];
-        // }
-
-
     }
 }

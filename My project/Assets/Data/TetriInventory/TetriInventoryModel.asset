@@ -25,7 +25,6 @@ MonoBehaviour:
       cols: 4
     isDisposable: 0
     UpgradedTimes: 0
-  usedTetriList:
   - tetriType: 1
     shape:
       rows: 4
@@ -38,16 +37,11 @@ MonoBehaviour:
       cols: 4
     isDisposable: 0
     UpgradedTimes: 0
-  - tetriType: 1
-    shape:
-      rows: 4
-      cols: 4
-    isDisposable: 0
-    UpgradedTimes: 0
-  tetriCellModelFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
+  usedTetriList: []
   tetriModelFactory: {fileID: 11400000, guid: bbc0821158c9cd04da22c630746033be, type: 2}
+  tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
   initialConfigs:
   - {fileID: 11400000, guid: 87108f55f764e41419f6b08faf724f4c, type: 2}
   - {fileID: 11400000, guid: d1095e2d45c10f24080cd3f95f43171f, type: 2}
   - {fileID: 11400000, guid: 99a257b52b2d40d40a8c4ddcd111c527, type: 2}
-  avaliableConfigIndex: 2
+  avaliableConfigIndex: 0

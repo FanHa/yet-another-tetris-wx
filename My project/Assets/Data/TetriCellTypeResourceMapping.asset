@@ -12,152 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78de513d432610343b673f92ab999487, type: 3}
   m_Name: TetriCellTypeResourceMapping
   m_EditorClassIdentifier: 
-  mappings:
-  - cellType:
-      typeName: Model.Tetri.Square, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 295863414502548795, guid: b3b684dd650e01c449f6ba4045ed1aad, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Circle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 4a699ed6cc5fffa4db585b5f8fed9a46, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Triangle, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 78d7a8165cc484b40954add426688caa, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Health, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 8021e9c9c16ecff4bb1591ff5e4796f0, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Attack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 89fbe6ed46777a545bb8de430f35ec6b, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Speed, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 5567fe1ca425c054aacb8b3f3d6caaab, type: 3}
-  - cellType:
-      typeName: Model.Tetri.RangeAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: ba135f836894d1a4da27bb84e3c5f57d, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Padding, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 1f154552f0361304197c9882be8470cd, type: 3}
-  - cellType:
-      typeName: Model.Tetri.AttackFrequency, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: b6d4ba64283d6eb4182fb242ad32cdb3, type: 3}
-  - cellType:
-      typeName: Model.Tetri.MultiAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 73c1d9932ecd9374182327367c2fbc4b, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Burn, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 2849fc3197c70814898f84dc29043472, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Freeze, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 2602fcc039d611748a555bc56750f508, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.Bomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: 3f4fe7b756ccfc14caa0f79acfcf00bb, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.Rush, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -1022712919679938794, guid: 5142e583dc8f52e4ca261287ef31c84a, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.PrecisionShoot, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: fc237a7ebf2a9f64da1be74cc80b0528, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Spike, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 2761841243735719389, guid: b6b8a35868512504b9779d073e1ff71f, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.Repel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -1599670373071065104, guid: 5c866afa287a5ab48ae272ad5eaf82b1, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.Weak, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: a3c8de2a746fdd14697b6a5f8a5016d3, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.FreezeShield, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: 3487433227025612565, guid: 29ef00118e2b1034fa8dbc2602a19185, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.AttackFrequency, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: -7564692533757840442, guid: 410f599027107704994ced6a997f58cb, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.IceRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -2757998378745276550, guid: 3e3707d1c23064a42ab96568ce3e0727, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.ChainLightning, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: 21300000, guid: b13f12d7859bcc74e916e790b066b1d6, type: 3}
-  - cellType:
-      typeName: Model.Tetri.SplitAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -7827631244116426395, guid: 3271294aa4f615740840c8006e5d234e, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Hourglass, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -7003098779552009737, guid: aba5b67bd2734a74e9e996abc4f05043, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Aim, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 3544725380317974027, guid: 8e674b28de170b24e832629515f396de, type: 3}
-  - cellType:
-      typeName: Model.Tetri.GarbageReuse, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 3200374790000820769, guid: 59a56695ee879d84391ed56bcefaf593, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.WindStrike, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: -1556600189811090418, guid: 64cbbc6fff2a09b4aab63c4a4b698db8, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.ProjectileHail, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    sprite: {fileID: 8796479085401456489, guid: a173a738ddcb5c14da1f02f3bda710c3, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Skills.BloodBomb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 5142575546293964499, guid: b3b57dd9029e27c4698a033a1854cee9, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}
-  - cellType:
-      typeName: Model.Tetri.BlazingField, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -7861168299662229937, guid: 581b2c7917ed4fb42870de94637db601, type: 3}
-  - cellType:
-      typeName: Model.Tetri.FlameInject, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
-  - cellType:
-      typeName: Model.Tetri.FlameRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 201670095172932294, guid: 5bf9011d8601ce147a883fb4991c72e1, type: 3}
-  - cellType:
-      typeName: Model.Tetri.IceShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}
-  - cellType:
-      typeName: Model.Tetri.Snowball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-    sprite: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
-  - cellType:
-      typeName: Model.Tetri.FrostZone, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
+  cellMappings:
+  - cellTypeId: 0
     sprite: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}
-  - cellType:
-      typeName: Model.Tetri.IcyCage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
+  - cellTypeId: 1
+    sprite: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}
+  - cellTypeId: 2
     sprite: {fileID: 450698819153296390, guid: 40f2981b399acce4b859f6ecb5ecff66, type: 3}
+  - cellTypeId: 3
+    sprite: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
+  - cellTypeId: 4
+    sprite: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}
+  - cellTypeId: 5
+    sprite: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
+  - cellTypeId: 6
+    sprite: {fileID: -7861168299662229937, guid: 581b2c7917ed4fb42870de94637db601, type: 3}
+  - cellTypeId: 7
+    sprite: {fileID: 201670095172932294, guid: 5bf9011d8601ce147a883fb4991c72e1, type: 3}
+  characterMappings:
+  - characterTypeId: 0
+    sprite: {fileID: 295863414502548795, guid: b3b684dd650e01c449f6ba4045ed1aad, type: 3}
+  tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
