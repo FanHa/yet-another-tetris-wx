@@ -40,6 +40,7 @@ namespace Controller {
         [SerializeField] private Model.UnitInventoryModel inventoryData;
         [SerializeField] private Model.UnitInventoryModel enemyData;
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
+        [SerializeField] private TetriCellFactory tetriCellFactory;
         private UnitManager unitManager;
         public event Action OnBattleEnd;
 
@@ -47,6 +48,7 @@ namespace Controller {
 
         private List<InventoryItem> factionAConfig;
         private List<InventoryItem> factionBConfig;
+
 
         void Awake()
         {
@@ -86,12 +88,12 @@ namespace Controller {
         {
             // 将 FactionAUnits 转换为 InventoryItem 列表
             factionAConfig = trainGroundSetup.FactionAUnits
-                .Select(unitConfig => unitConfig.ToInventoryItem())
+                .Select(unitConfig => unitConfig.ToInventoryItem(tetriCellFactory))
                 .ToList();
 
             // 将 FactionBUnits 转换为 InventoryItem 列表
             factionBConfig = trainGroundSetup.FactionBUnits
-                .Select(unitConfig => unitConfig.ToInventoryItem())
+                .Select(unitConfig => unitConfig.ToInventoryItem(tetriCellFactory))
                 .ToList();
             SpawnUnits();
         }

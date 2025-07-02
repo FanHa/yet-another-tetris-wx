@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model.Tetri;
 using UnityEngine;
 
 
@@ -7,21 +8,21 @@ namespace Model.TrainGround
     [System.Serializable]
     public class UnitConfig
     {
-        public CharacterTypeReference CharacterCell; // 单位的 CharacterCell
-        public List<CellTypeReference> TetriCells;   // 单位的 TetriCells 列表
+        public CharacterTypeId characterId; // 单位的 CharacterCell
+        public List<CellTypeId> tetriCellIds;   // 单位的 TetriCells 列表
 
-        public InventoryItem ToInventoryItem()
+        public InventoryItem ToInventoryItem(TetriCellFactory factory)
         {
             // 实例化 CharacterCell
-            var characterCell = CharacterCell?.CreateInstance();
+            var characterCell = factory.CreateCharacterCell(characterId);
 
             // 实例化 TetriCells
             var tetriCells = new List<Model.Tetri.Cell>();
-            if (TetriCells != null)
+            if (tetriCellIds != null)
             {
-                foreach (var cellType in TetriCells)
+                foreach (var cellId in tetriCellIds)
                 {
-                    var cellInstance = cellType?.CreateInstance();
+                    var cellInstance = factory.CreateCell(cellId);
                     if (cellInstance != null)
                     {
                         tetriCells.Add(cellInstance);

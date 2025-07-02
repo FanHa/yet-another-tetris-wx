@@ -47,7 +47,8 @@ namespace Model.Tetri
                 new(CellTypeId.Fireball, typeof(Fireball), cellLevelConfigManager.FireballConfigGroup),
                 new(CellTypeId.FlameInject, typeof(FlameInject), cellLevelConfigManager.FlameInjectConfigGroup),
                 new(CellTypeId.BlazingField, typeof(BlazingField), cellLevelConfigManager.BlazingFieldConfigGroup),
-                new(CellTypeId.FlameRing, typeof(FlameRing), cellLevelConfigManager.FlameRingConfigGroup)
+                new(CellTypeId.FlameRing, typeof(FlameRing), cellLevelConfigManager.FlameRingConfigGroup),
+                new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };
 
             // 自动生成映射表
@@ -100,25 +101,21 @@ namespace Model.Tetri
         }
         
         
-        public Cell CreateCharacterCell(CharacterTypeId characterTypeId)
+        public Character CreateCharacterCell(CharacterTypeId characterTypeId)
         {
             if (!CharacterTypeIdToType.TryGetValue(characterTypeId, out var type))
                 throw new ArgumentException($"Unknown CharacterTypeId: {characterTypeId}");
 
-            if (type == null || !typeof(Cell).IsAssignableFrom(type))
+            if (type == null || !typeof(Character).IsAssignableFrom(type))
                 throw new ArgumentException("Invalid character type provided.");
 
             // 1. 创建Cell实例（无参构造）
-            var cell = (Cell)Activator.CreateInstance(type);
+            var cell = (Character)Activator.CreateInstance(type);
 
             // todo character 似乎没有Config
             if (CellTypeToConfig != null && CellTypeToConfig.TryGetValue(type, out var config) && config != null)
             {
                 cell.SetLevelConfig(config);
-            }
-            else
-            {
-                Debug.LogWarning($"No config registered for character type: {type.Name}");
             }
             return cell;
         }

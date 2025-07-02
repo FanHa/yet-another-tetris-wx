@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Base
   m_EditorClassIdentifier: 
   CellTypeIds: 00000000010000000200000003000000
-  CharacterTypeIds: 
+  CharacterTypeIds: 00000000

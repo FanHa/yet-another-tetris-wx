@@ -13,7 +13,6 @@ namespace Model.Tetri
             Normal     // 普通类型
         }
 
-        // public CellGroupConfig.Group Group;
         [SerializeField] private TetriType tetriType;
         public TetriType Type => tetriType;
         [SerializeField] private Serializable2DArray<Cell> shape;

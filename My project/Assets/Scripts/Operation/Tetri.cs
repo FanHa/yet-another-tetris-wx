@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,6 +15,9 @@ namespace Operation
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
         [SerializeField] private GameObject cellPrefab;
+        [SerializeField] private SpriteRenderer characterSpriteRenderer;
+        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
+        [SerializeField] private Transform cellsRoot;
         private Camera mainCamera;
 
         void Awake()
@@ -27,6 +31,7 @@ namespace Operation
             int rows = shape.GetLength(0);
             int cols = shape.GetLength(1);
 
+            Model.Tetri.Character mainCell = null;
             // 存储所有Cell对象，便于后续设置border
             var cellObjs = new Operation.Cell[rows, cols];
 
@@ -37,7 +42,7 @@ namespace Operation
                     var cell = shape[i, j];
                     if (cell is not Model.Tetri.Empty)
                     {
-                        GameObject cellObj = Instantiate(cellPrefab, this.transform);
+                        GameObject cellObj = Instantiate(cellPrefab, this.cellsRoot);
                         float localX = i;
                         float localY = -j;
                         cellObj.transform.localPosition = new Vector3(localX, localY, 0);
@@ -45,6 +50,11 @@ namespace Operation
                         var cellComp = cellObj.GetComponent<Operation.Cell>();
                         cellComp.Init(cell);
                         cellObjs[i, j] = cellComp;
+
+                        if (mainCell == null && cell is Model.Tetri.Character characterCell)
+                        {
+                            mainCell = characterCell;
+                        }
                     }
                 }
             }
@@ -64,6 +74,20 @@ namespace Operation
 
                     cellComp.SetBorderVisibility(top, bottom, left, right);
                 }
+            }
+
+            if (modelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
+            {
+                if (mainCell != null)
+                {
+                    characterSpriteRenderer.sprite = tetriCellTypeResourceMapping.GetSprite(mainCell);
+                    characterSpriteRenderer.gameObject.SetActive(true);
+                    cellsRoot.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                characterSpriteRenderer.gameObject.SetActive(false);
             }
 
             
