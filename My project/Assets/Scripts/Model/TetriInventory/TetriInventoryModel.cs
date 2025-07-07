@@ -26,15 +26,14 @@ namespace Model
         private readonly HashSet<CharacterTypeId> existCharacterTypeIds = new();
         public IReadOnlyCollection<CharacterTypeId> ExistCharacterTypeIds => existCharacterTypeIds;
 
-
-        [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
         [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
         [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
 
 
         public void Init()
         {
-            // 先清空列表，避免重复
+            foreach (var tetri in usableTetriList.Concat(usedTetriList))
+                tetri.OnDataChanged -= HandleTetriChanged;
             usableTetriList.Clear();
             usedTetriList.Clear();
             GenerateInitialTetris();
@@ -48,89 +47,100 @@ namespace Model
             List<CellTypeId> initialCellIds = config.CellTypeIds;
             List<CharacterTypeId> initialCharacterIds = config.CharacterTypeIds;
 
-            // 遍历配置的每个特殊单元格类型
             foreach (var cellTypeId in initialCellIds)
             {
                 Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellTypeId);
-                usableTetriList.Add(tetri);
+                AddTetri(tetri, silent: true); 
             }
 
-            foreach (var characterTypeId in initialCharacterIds) // 遍历新的列表
+            foreach (var characterTypeId in initialCharacterIds)
             {
                 Tetri.Tetri characterTetri = tetriModelFactory.CreateCharacterTetri(characterTypeId);
-                usableTetriList.Add(characterTetri);
+                AddTetri(characterTetri, silent: true);
             }
 
-            RecalculateCellTypes(); // 所有 Tetri 添加完毕后，统一重新计算一次
+            RecalculateCellTypes(); 
+            OnDataChanged?.Invoke(); 
         }
 
         private void RecalculateCellTypes()
         {
-            existCellTypeIds.Clear(); 
+            existCellTypeIds.Clear();
             existCharacterTypeIds.Clear();
-
-            // 遍历所有 Tetri 列表，重新计算包含的 CellTypeId
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
-            {
-                foreach (var position in tetri.GetOccupiedPositions())
-                {
-                    Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
-                    // 通过工厂的 Type->CellTypeId 映射获取 CellTypeId
-                    if (tetriCellFactory.TypeToCellTypeId.TryGetValue(cell.GetType(), out var cellTypeId))
-                    {
-                        existCellTypeIds.Add(cellTypeId);
-                    }
-                }
-            }
-
-            // 触发数据变化事件
-            OnDataChanged?.Invoke();
+                UpdateCellTypesForTetri(tetri);
         }
 
         public void MarkTetriAsUsed(Model.Tetri.Tetri tetri)
         {
-            if (usableTetriList.Contains(tetri))
-            {
-                usableTetriList.Remove(tetri);
-                usedTetriList.Add(tetri);
-
-                // 触发数据变化事件
-                OnDataChanged?.Invoke();
-            }
-            else
-            {
-                Debug.LogWarning("Tetri is not in the usable list and cannot be marked as used.");
-            }
-        }
-
-        public void AddTetri(Tetri.Tetri modelTetri)
-        {
-            if (modelTetri == null)
-            {
-                Debug.LogWarning("Cannot add a null Tetri.");
-                return;
-            }
-
-            // 添加到 usableTetriList
-            usableTetriList.Add(modelTetri);
-
-            // 更新 cellTypes 和 tetriGroups
-            foreach (var position in modelTetri.GetOccupiedPositions())
-            {
-                Model.Tetri.Cell cell = modelTetri.Shape[position.x, position.y];
-                if (tetriCellFactory.TypeToCellTypeId.TryGetValue(cell.GetType(), out var cellTypeId))
-                {
-                    existCellTypeIds.Add(cellTypeId);
-                }
-            }
+            usableTetriList.Remove(tetri);
+            usedTetriList.Add(tetri);
             // 触发数据变化事件
             OnDataChanged?.Invoke();
         }
-        
+
+        public void AddTetriRange(IEnumerable<Model.Tetri.Tetri> tetris)
+        {
+            foreach (var tetri in tetris)
+            {
+                AddTetri(tetri, silent: true);
+            }
+
+            // 触发数据变化事件
+            OnDataChanged?.Invoke();
+        }
+
+        public void AddTetri(Tetri.Tetri modelTetri, bool silent = false)
+        {
+            // 添加到 usableTetriList
+            usableTetriList.Add(modelTetri);
+            modelTetri.OnDataChanged += HandleTetriChanged;
+            UpdateCellTypesForTetri(modelTetri);
+            // 触发数据变化事件
+            if (!silent)
+                OnDataChanged?.Invoke();
+        }
+
+        private void UpdateCellTypesForTetri(Tetri.Tetri tetri)
+        {
+            foreach (var position in tetri.GetOccupiedPositions())
+            {
+                Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
+                if (cell is Character character)
+                {
+                    // 如果是角色类型，添加角色类型 ID
+                    existCharacterTypeIds.Add(character.CharacterTypeId);
+                }
+                else
+                {
+                    // 如果是普通方块类型，添加方块类型 ID
+                    existCellTypeIds.Add(cell.CellTypeId);
+                }
+            }
+        }
+
+        public void RemoveTetri(Tetri.Tetri tetri)
+        {
+            if (usableTetriList.Remove(tetri) || usedTetriList.Remove(tetri))
+            {
+                // 解绑事件
+                tetri.OnDataChanged -= HandleTetriChanged;
+                RecalculateCellTypes(); // 重新计算 CellTypeIds
+                OnDataChanged?.Invoke();
+            }
+        }
+
+        private void HandleTetriChanged()
+        {
+            RecalculateCellTypes(); // 重新计算 CellTypeIds
+            // 处理 Tetri 数据变化
+            OnDataChanged?.Invoke();
+        }
+
         public List<Model.Tetri.Tetri> GetAllTetris()
         {
             // 返回所有 Tetri，包括可用和已使用的
             return usableTetriList.Concat(usedTetriList).ToList();
-        }
+        }        
     }
 }

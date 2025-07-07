@@ -6,7 +6,7 @@ namespace Model.Tetri
 {
     public class IceShield : Cell
     {
-        public Units.Skills.IceShieldConfigGroup LevelConfig;
+        public override CellTypeId CellTypeId => CellTypeId.IceShield;
         public IceShield()
         {
             Affinity = AffinityType.Ice;
@@ -24,7 +24,7 @@ namespace Model.Tetri
                     iceCellCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.IceShieldConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.IceShieldConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.IceShield(config);
             skillInstance.SetIceCellCount(iceCellCount);

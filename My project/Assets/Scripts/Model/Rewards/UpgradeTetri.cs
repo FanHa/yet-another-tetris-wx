@@ -35,9 +35,9 @@ namespace Model.Rewards
         public override string Name() => name;
         public override string Description() => description;
 
-        public override string Apply(TetriInventoryModel tetriInventoryData)
+        public override void Apply(TetriInventoryModel tetriInventoryData)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

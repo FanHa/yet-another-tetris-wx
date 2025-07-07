@@ -5,6 +5,8 @@ namespace Model.Tetri
 {
     public class FlameRing : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.FlameRing;
+
         public FlameRing()
         {
             Affinity = AffinityType.Fire;
@@ -29,7 +31,7 @@ namespace Model.Tetri
                     fireCellCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.FlameRingConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.FlameRingConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.FlameRing(config);
             skillInstance.SetFireCellCount(fireCellCount);

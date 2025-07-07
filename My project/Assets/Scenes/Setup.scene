@@ -124,56 +124,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &10660677
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 10660678}
-  - component: {fileID: 10660679}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: Tetris
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &10660678
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10660677}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 707241304}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &10660679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10660677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 147e5d98609f100408033b9b72518f09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  previewPrefab: {fileID: 7578777165251633043, guid: 7738e5ee486b77242b9ba0d2d6a3ab5e, type: 3}
-  tetriCellPrefab: {fileID: 1323579768250752484, guid: 2360e06a2313172449c7f2d929ce14f3, type: 3}
-  spriteMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
-  colorNew: {r: 0.21960784, g: 0.8509804, b: 0.6627451, a: 1}
-  colorUpgrade: {r: 0.9607843, g: 0.7607843, b: 0.25882354, a: 1}
 --- !u!1 &28250502
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,39 +930,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1132010292}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &707241303
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 7
-  m_Component:
-  - component: {fileID: 707241304}
-  m_Layer: 0
-  m_HasEditorInfo: 1
-  m_Name: Service
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &707241304
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 707241303}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.3033175, y: 2.1327014, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 10660678}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &892864796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,6 +1024,7 @@ MonoBehaviour:
   inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
   trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
+  tetriCellFactory: {fileID: 0}
 --- !u!114 &943837601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3175,7 +3093,7 @@ PrefabInstance:
     - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
       propertyPath: tetris
       value: 
-      objectReference: {fileID: 10660679}
+      objectReference: {fileID: 0}
     - target: {fileID: 474241545982737102, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
       propertyPath: previewsRoot
       value: 
@@ -3419,7 +3337,6 @@ SceneRoots:
   - {fileID: 1391442593}
   - {fileID: 2021754828}
   - {fileID: 943837599}
-  - {fileID: 707241304}
   - {fileID: 1176676516}
   - {fileID: 85712746}
   - {fileID: 2025217634856458810}

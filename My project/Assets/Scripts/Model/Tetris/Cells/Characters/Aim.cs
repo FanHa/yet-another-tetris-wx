@@ -7,6 +7,7 @@ namespace Model.Tetri
     [Serializable]
     public class Aim : Character
     {
+        public override CharacterTypeId CharacterTypeId => CharacterTypeId.Aim;
         public float AttackRange = 2f;
         public Aim()
         {

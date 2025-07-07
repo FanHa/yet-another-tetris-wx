@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -69,6 +70,24 @@ namespace Model.Tetri
                     tetri.SetCell(row, col, tetriCellModelFactory.CreatePadding());
             }
             return tetri;
+        }
+
+        public Tetri Clone(Tetri original)
+        {
+            Tetri clone = new Tetri(original.Type);
+            var shape = original.Shape;
+            int rows = shape.GetLength(0);
+            int cols = shape.GetLength(1);
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    clone.SetCell(i, j, tetriCellModelFactory.Clone(shape[i, j]));
+                }
+            }
+            clone.UpgradedTimes = original.UpgradedTimes;
+            return clone;
         }
 
     }

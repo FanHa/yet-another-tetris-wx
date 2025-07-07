@@ -14,7 +14,6 @@ namespace UI.Reward
         public ItemSlot itemPrefab;
         public Transform itemParent;
         public event Action<Model.Rewards.Reward> OnItemSelected;
-        [SerializeField] private Controller.Tetris tetris;
         [SerializeField] private Operation.TetriFactory tetriFactory;
 
         [Header("运行时引用")]
@@ -27,15 +26,17 @@ namespace UI.Reward
         {
             foreach (Transform child in itemParent)
             {
+                var itemSlot = child.GetComponent<ItemSlot>();
+                if (itemSlot != null)
+                    itemSlot.OnItemClicked -= HandleItemClicked;
                 Destroy(child.gameObject);
             }
-            if (previewsRoot != null)
+
+            foreach (Transform child in previewsRoot)
             {
-                foreach (Transform child in previewsRoot)
-                {
-                    Destroy(child.gameObject);
-                }
+                Destroy(child.gameObject);
             }
+
             for (int i = 0; i < rewards.Count; i++)
             {
                 var reward = rewards[i];
@@ -54,7 +55,7 @@ namespace UI.Reward
                     preview.transform.SetParent(previewsRoot, false);
                     item.SetPreview(preview);
                 }
-                // item.OnItemClicked += HandleItemClicked;
+                item.OnItemClicked += HandleItemClicked;
             }
         }
 
@@ -73,59 +74,64 @@ namespace UI.Reward
         {
             if (reward is Model.Rewards.AddTetri addTetriReward)
             {
+                var container = new GameObject("NewTetriPreview");
                 // 用 tetris.TetriFactory 生成一个 Tetri 物体作为预览
                 var tetriObj = tetriFactory.CreateTetri(addTetriReward.GetTetri()).gameObject;
                 SetLayerRecursively(tetriObj, LayerMask.NameToLayer("RewardPreview"));
 
-                tetriObj.transform.SetParent(null, false); // 由外部决定父物体
-                return tetriObj;
+                tetriObj.transform.SetParent(container.transform, false);
+                tetriObj.transform.localPosition = new Vector3(-1.5f, 1.5f, 0);
+                container.transform.SetParent(null, false); // 由外部决定父物体
+                return container;
             }
             if (reward is Model.Rewards.NewCharacter newCharacterReward)
             {
+                var container = new GameObject("NewCharacterPreview");
                 // 用 tetris.TetriFactory 生成一个 Tetri 物体作为预览
                 var tetriObj = tetriFactory.CreateTetri(newCharacterReward.GetTetri()).gameObject;
                 SetLayerRecursively(tetriObj, LayerMask.NameToLayer("RewardPreview"));
 
-                tetriObj.transform.SetParent(null, false); // 由外部决定父物体
-                return tetriObj;
+                tetriObj.transform.SetParent(container.transform, false);
+                tetriObj.transform.localPosition = new Vector3(-1.5f, 1.5f, 0);
+                container.transform.SetParent(null, false); // 由外部决定父物体
+                return container;
             }
-            if (reward is Model.Rewards.UpgradeTetri upgradeTetriReward)
+            if (reward is Model.Rewards.UpgradeCoreCell upgradeCoreCellReward)
+            {
+                var container = new GameObject("UpgradeCoreCellPreview");
+                // 用 tetris.TetriFactory 生成一个 Tetri 物体作为预览
+                var tetriObj = tetriFactory.CreateTetri(upgradeCoreCellReward.TargetTetri).gameObject;
+                SetLayerRecursively(tetriObj, LayerMask.NameToLayer("RewardPreview"));
+
+                tetriObj.transform.SetParent(container.transform, false);
+                tetriObj.transform.localPosition = new Vector3(-1.5f, 1.5f, 0);
+                container.transform.SetParent(null, false); // 由外部决定父物体
+                return container;
+            }
+            if (reward is Model.Rewards.UpgradeNoneCoreCells upgradeTetriReward)
             {
                 // 创建父容器
                 var container = new GameObject("UpgradeTetriPreview");
-
                 // 旧的 Tetri
                 var oldTetriObj = tetriFactory.CreateTetri(upgradeTetriReward.TargetTetri).gameObject;
                 SetLayerRecursively(oldTetriObj, LayerMask.NameToLayer("RewardPreview"));
                 oldTetriObj.transform.SetParent(container.transform, false);
-                oldTetriObj.transform.localPosition = new Vector3(-0.8f, 0.8f, 0); // 左上
-
+                oldTetriObj.transform.localPosition = new Vector3(-2.5f, 2.5f, 0); // 左上
                 // 新的 Tetri（升级后）
                 var newTetriObj = tetriFactory.CreateTetri(upgradeTetriReward.UpgradedTetri).gameObject;
                 SetLayerRecursively(newTetriObj, LayerMask.NameToLayer("RewardPreview"));
                 newTetriObj.transform.SetParent(container.transform, false);
-                newTetriObj.transform.localPosition = new Vector3(0.8f, -0.8f, 0); // 右下
-
+                newTetriObj.transform.localPosition = new Vector3(0.5f, -0.5f, 0); // 右下
                 container.transform.SetParent(null, false); // 由外部决定父物体
                 return container;
             }
             if (reward is Model.Rewards.UpgradeCharacter upgradeCharacterReward)
             {
-                // 创建父容器
                 var container = new GameObject("UpgradeCharacterPreview");
-
-                // 旧的 Tetri
                 var oldTetriObj = tetriFactory.CreateTetri(upgradeCharacterReward.TargetTetri).gameObject;
                 SetLayerRecursively(oldTetriObj, LayerMask.NameToLayer("RewardPreview"));
                 oldTetriObj.transform.SetParent(container.transform, false);
-                oldTetriObj.transform.localPosition = new Vector3(-0.8f, 0.8f, 0); // 左上
-
-                // 新的 Tetri（升级后）
-                var newTetriObj = tetriFactory.CreateTetri(upgradeCharacterReward.UpgradedTetri).gameObject;
-                SetLayerRecursively(newTetriObj, LayerMask.NameToLayer("RewardPreview"));
-                newTetriObj.transform.SetParent(container.transform, false);
-                newTetriObj.transform.localPosition = new Vector3(0.8f, -0.8f, 0); // 右下
-
+                oldTetriObj.transform.localPosition = new Vector3(-1.5f, 1.5f, 0);
                 container.transform.SetParent(null, false); // 由外部决定父物体
                 return container;
             }

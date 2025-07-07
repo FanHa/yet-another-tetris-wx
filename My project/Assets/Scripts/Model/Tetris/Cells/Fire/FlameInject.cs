@@ -5,6 +5,7 @@ namespace Model.Tetri
 {
     public class FlameInject : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.FlameInject;
         public FlameInject()
         {
             Affinity = AffinityType.Fire;
@@ -29,7 +30,7 @@ namespace Model.Tetri
                     fireCellCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.FlameInjectConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.FlameInjectConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.FlameInject(config);
             skillInstance.SetFireCellCount(fireCellCount);

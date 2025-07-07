@@ -5,6 +5,8 @@ namespace Model.Tetri
 {
     public class Fireball : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.Fireball;
+
         public Fireball()
         {
             Affinity = AffinityType.Fire;
@@ -29,7 +31,7 @@ namespace Model.Tetri
                     fireCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.FireballConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.FireballConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.Fireball(config);
             skillInstance.SetFireCellCount(fireCount);

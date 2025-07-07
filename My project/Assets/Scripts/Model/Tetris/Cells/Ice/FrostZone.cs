@@ -6,6 +6,8 @@ namespace Model.Tetri
 {
     public class FrostZone : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.FrostZone;
+
         public FrostZone()
         {
             Affinity = AffinityType.Ice;
@@ -30,7 +32,7 @@ namespace Model.Tetri
                     iceCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.FrostZoneConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.FrostZoneConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.FrostZone(config);
             skillInstance.SetIceCellCount(iceCount);

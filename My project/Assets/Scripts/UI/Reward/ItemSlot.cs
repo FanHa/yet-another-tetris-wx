@@ -55,11 +55,10 @@ namespace UI.Reward
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.pointerEnter == gameObject)
-            {
-                Debug.Log("Item clicked: " + item.Name());
-                OnItemClicked?.Invoke(this);
-            }
+
+            Debug.Log("Item clicked: " + item.Name());
+            OnItemClicked?.Invoke(this);
+
         }
 
 

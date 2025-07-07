@@ -91,7 +91,7 @@ namespace Model.Tetri
             // 2. 查找并注入配置
             if (CellTypeToConfig != null && CellTypeToConfig.TryGetValue(type, out var config) && config != null)
             {
-                cell.SetLevelConfig(config);
+                cell.SkillConfigGroup = config;
             }
             else
             {
@@ -115,9 +115,18 @@ namespace Model.Tetri
             // todo character 似乎没有Config
             if (CellTypeToConfig != null && CellTypeToConfig.TryGetValue(type, out var config) && config != null)
             {
-                cell.SetLevelConfig(config);
+                cell.SkillConfigGroup = config;
             }
             return cell;
+        }
+
+        public Cell Clone(Cell cell)
+        {
+
+            var clone = (Cell)Activator.CreateInstance(cell.GetType());
+            clone.SkillConfigGroup = cell.SkillConfigGroup; // 复制技能配置组
+            clone.Level = cell.Level;
+            return clone;
         }
     }
 

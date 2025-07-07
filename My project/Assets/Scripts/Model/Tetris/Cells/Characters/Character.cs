@@ -8,6 +8,8 @@ namespace Model.Tetri
     [Serializable]
     public abstract class Character : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.Padding;
+        public abstract CharacterTypeId CharacterTypeId { get; }
         [SerializeField] private string characterName; // 永久角色名
         public string CharacterName => characterName; // 只读属性，获取角色名
 
@@ -18,10 +20,6 @@ namespace Model.Tetri
         public float AttacksPerTenSeconds = 3f;
         public float RangeAttackDamagePercentage = 70f;
         public bool IsRanged = false;
-
-        // todo 提供修改level 的方法
-        public int Level = 1;
-
 
         public Character()
         {
@@ -51,36 +49,47 @@ namespace Model.Tetri
 
         public List<Vector2Int> GetInfluenceOffsets()
         {
-            List<Vector2Int> offsets = new List<Vector2Int>{Vector2Int.zero};
-            if (Level == 1)
+            // 本体
+            var selfOffsets = new HashSet<Vector2Int>
             {
-                offsets.AddRange(new[] {
-                    new Vector2Int(0, 1),
-                    new Vector2Int(0, -1),
-                    new Vector2Int(1, 0),
-                    new Vector2Int(-1, 0)
-                });
-            }
-            else if (Level == 2)
+                new Vector2Int(0, 0),
+                new Vector2Int(0, 1),
+                new Vector2Int(1, 0),
+                new Vector2Int(1, 1)
+            };
+
+            var offsets = new List<Vector2Int>(selfOffsets);
+
+            if (Level >= 1)
             {
-                for (int dx = -1; dx <= 1; dx++)
-                    for (int dy = -1; dy <= 1; dy++)
-                        if (!offsets.Contains(new Vector2Int(dx, dy)))
-                            offsets.Add(new Vector2Int(dx, dy));
+                // Level1: 4x4外围一圈
+                for (int dx = -1; dx <= 2; dx++)
+                {
+                    for (int dy = -1; dy <= 2; dy++)
+                    {
+                        var pos = new Vector2Int(dx, dy);
+                        // 跳过本体
+                        if (selfOffsets.Contains(pos)) continue;
+                        // 只加外围
+                        if (dx == -1 || dx == 2 || dy == -1 || dy == 2)
+                            offsets.Add(pos);
+                    }
+                }
             }
-            else if (Level >= 3)
+
+            if (Level >= 2)
             {
-                for (int dx = -1; dx <= 1; dx++)
-                    for (int dy = -1; dy <= 1; dy++)
-                        if (!offsets.Contains(new Vector2Int(dx, dy)))
-                            offsets.Add(new Vector2Int(dx, dy));
-                offsets.AddRange(new[] {
-                    new Vector2Int(0, 2),
-                    new Vector2Int(0, -2),
-                    new Vector2Int(2, 0),
-                    new Vector2Int(-2, 0)
-                });
+                // Level2: 上下左右各延申2格
+                offsets.Add(new Vector2Int(-2, 0));
+                offsets.Add(new Vector2Int(-2, 1));
+                offsets.Add(new Vector2Int(2, 0));
+                offsets.Add(new Vector2Int(2, 1));
+                offsets.Add(new Vector2Int(0, -2));
+                offsets.Add(new Vector2Int(1, -2));
+                offsets.Add(new Vector2Int(0, 2));
+                offsets.Add(new Vector2Int(1, 2));
             }
+
             return offsets;
         }
 

@@ -26,10 +26,6 @@ namespace Model.Rewards
             return tetriInstance;
         }
 
-        // public Model.Tetri.Character GetCharacter()
-        // {
-        //     return characterCellInstance;
-        // }
 
         public override string Description()
         {
@@ -41,9 +37,9 @@ namespace Model.Rewards
             return characterCellInstance.Name();
         }
 
-        public override string Apply(TetriInventoryModel tetriInventoryData)
+        public override void Apply(TetriInventoryModel tetriInventoryData)
         {
-            throw new System.NotImplementedException();
+            tetriInventoryData.AddTetri(tetriInstance);
         }
     }
 }

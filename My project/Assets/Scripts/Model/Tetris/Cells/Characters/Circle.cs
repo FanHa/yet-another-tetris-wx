@@ -7,6 +7,8 @@ namespace Model.Tetri
     [Serializable]
     public class Circle : Character
     {
+        public override CharacterTypeId CharacterTypeId => CharacterTypeId.Circle;
+
         public Circle()
         {
             // 设置基类的字段

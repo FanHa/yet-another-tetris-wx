@@ -5,6 +5,7 @@ namespace Model.Tetri
 {
     public class BlazingField : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public BlazingField()
         {
             Affinity = AffinityType.Fire;
@@ -29,7 +30,7 @@ namespace Model.Tetri
                     fireCount++;
             }
 
-            var configGroup = skillConfigGroup as Units.Skills.BlazingFieldConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.BlazingFieldConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.BlazingField(config);
             skillInstance.SetFireCellCount(fireCount);

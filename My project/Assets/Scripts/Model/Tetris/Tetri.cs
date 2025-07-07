@@ -7,6 +7,7 @@ namespace Model.Tetri
     [Serializable]
     public class Tetri
     {
+        public event Action OnDataChanged;
         public enum TetriType
         {
             Character, // 角色类型
@@ -18,19 +19,16 @@ namespace Model.Tetri
         [SerializeField] private Serializable2DArray<Cell> shape;
 
         public Serializable2DArray<Cell> Shape => shape;
-        [SerializeField] private bool isDisposable;
-        public bool IsDisposable => isDisposable;
 
         // TODO
         public int UpgradedTimes = 0;
         public const int MaxUpgradedTimes = 1;
         public const int MaxCharacterUpgradedTimes = 3;
 
-        public Tetri(TetriType type, bool isDisposable = false)
+        public Tetri(TetriType type)
         {
 
             this.tetriType = type;
-            this.isDisposable = isDisposable;
             InitializeShape(4, 4); // 默认大小为 4x4
         }
         private void InitializeShape(int rows, int cols)
@@ -56,21 +54,6 @@ namespace Model.Tetri
             }
         }
 
-        public void ReplaceRandomOccupiedCell(Model.Tetri.Cell cellInstance)
-        {
-            var occupiedPositions = this.GetOccupiedPositions(); 
-
-            if (occupiedPositions.Count > 0)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, occupiedPositions.Count); 
-                var randomCellPosition = occupiedPositions[randomIndex];
-                this.SetCell(randomCellPosition.x, randomCellPosition.y, cellInstance);
-            }
-            else
-            {
-                Debug.LogWarning($"Tetri has no occupied cells to replace.");
-            }
-        }
 
         public List<Vector2Int> GetOccupiedPositions()
         {
@@ -121,50 +104,63 @@ namespace Model.Tetri
             return UpgradedTimes < MaxUpgradedTimes;
         }
 
-        internal void Rotate()
+        // internal void Rotate()
+        // {
+        //     int rows = shape.GetLength(0);
+        //     int cols = shape.GetLength(1);
+
+        //     var tempShape = new Serializable2DArray<Cell>(rows, cols);
+        //     for (int i = 0; i < rows; i++)
+        //     {
+        //         for (int j = 0; j < cols; j++)
+        //         {
+        //             tempShape[i, j] = shape[i, j];
+        //         }
+        //     }
+
+        //     // 就地旋转
+        //     for (int i = 0; i < rows; i++)
+        //     {
+        //         for (int j = 0; j < cols; j++)
+        //         {
+        //             shape[j, rows - 1 - i] = tempShape[i, j];
+        //         }
+        //     }
+        // }
+
+        public void UpgradeCoreCell()
         {
-            int rows = shape.GetLength(0);
-            int cols = shape.GetLength(1);
-
-            var tempShape = new Serializable2DArray<Cell>(rows, cols);
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    tempShape[i, j] = shape[i, j];
-                }
-            }
-
-            // 就地旋转
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    shape[j, rows - 1 - i] = tempShape[i, j];
-                }
-            }
+            // todo 判断tetri是不是在自己维护的列表中
+            var mainCell = GetMainCell();
+            mainCell.Level += 1;
+            UpgradedTimes += 1;
+            OnDataChanged?.Invoke();
         }
 
-        internal Tetri Clone()
+        public void UpgradeNoneCoreCells()
         {
-            var clone = new Tetri(this.tetriType, this.isDisposable)
-            {
-                UpgradedTimes = this.UpgradedTimes
-            };
+            if (!CanBeUpgraded()) return;
 
-            // 深拷贝 shape
-            int rows = shape.GetLength(0);
-            int cols = shape.GetLength(1);
-            for (int i = 0; i < rows; i++)
+            var mainCell = GetMainCell();
+            if (mainCell == null) return;
+
+            var mainAffinity = mainCell.Affinity;
+
+            for (int x = 0; x < Shape.GetLength(0); x++)
             {
-                for (int j = 0; j < cols; j++)
+                for (int y = 0; y < Shape.GetLength(1); y++)
                 {
-                    // 假设 Cell 有 Clone 方法，否则需要你实现
-                    clone.shape[i, j] = shape[i, j]?.Clone() ?? null;
+                    var cell = Shape[x, y];
+                    if (cell is Model.Tetri.Padding paddingCell)
+                    {
+                        paddingCell.Affinity = mainAffinity;
+                    }
                 }
             }
-
-            return clone;
+            UpgradedTimes += 1;
+            OnDataChanged?.Invoke();
         }
+
+
     }
 }

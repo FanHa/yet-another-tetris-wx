@@ -7,6 +7,7 @@ namespace Model.Tetri
     [Serializable]
     public class Triangle : Character
     {
+        public override CharacterTypeId CharacterTypeId => CharacterTypeId.Triangle;
         public Triangle()
         {
             AttackPowerValue = 15f;

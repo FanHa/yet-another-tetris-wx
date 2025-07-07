@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Model.Rewards
@@ -7,7 +8,6 @@ namespace Model.Rewards
     public class UpgradeCharacter : Reward
     {
         public Model.Tetri.Tetri TargetTetri { get; protected set; }
-        public Model.Tetri.Tetri UpgradedTetri { get; protected set; }
         private readonly Model.Tetri.Character targetCharacter;
         private readonly string name;
         private readonly string description;
@@ -15,30 +15,6 @@ namespace Model.Rewards
         public UpgradeCharacter(Model.Tetri.Tetri characterTetri)
         {
             TargetTetri = characterTetri;
-            targetCharacter = TargetTetri.GetOccupiedPositions()
-                .Select(pos => TargetTetri.Shape[pos.x, pos.y])
-                .OfType<Model.Tetri.Character>()
-                .FirstOrDefault();
-
-            Model.Tetri.Tetri clone = TargetTetri.Clone();
-            if (targetCharacter != null)
-            {
-                // 在克隆体中找到对应的 Character，并升级
-                var clonedCharacter = clone.GetOccupiedPositions()
-                    .Select(pos => clone.Shape[pos.x, pos.y])
-                    .OfType<Model.Tetri.Character>()
-                    .FirstOrDefault();
-
-                if (clonedCharacter != null)
-                {
-                    clonedCharacter.Level += 1;
-                }
-                UpgradedTetri = clone;
-            }
-            else
-            {
-                UpgradedTetri = TargetTetri; // 如果没有角色，直接使用原 Tetri
-            }
 
             if (targetCharacter != null)
             {
@@ -55,9 +31,9 @@ namespace Model.Rewards
         public override string Name() => name;
         public override string Description() => description;
 
-        public override string Apply(Model.TetriInventoryModel tetriInventoryData)
+        public override void Apply(Model.TetriInventoryModel tetriInventoryData)
         {
-            throw new NotImplementedException();
+            TargetTetri.UpgradeCoreCell(); // 升级核心方块
         }
     }
 }

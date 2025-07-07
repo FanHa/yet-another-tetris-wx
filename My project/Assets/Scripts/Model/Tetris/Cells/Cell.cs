@@ -11,18 +11,14 @@ namespace Model.Tetri
     [Serializable]
     public abstract class Cell
     {
-        public int Level { get; private set; } = 1;
-        protected SkillConfigGroup skillConfigGroup;
-
-        public void SetLevel(int level)
+        private int level = 1;
+        public int Level
         {
-            Level = Mathf.Max(1, level);
+            get => level;
+            set => level = Mathf.Max(1, value);
         }
-        public virtual void SetLevelConfig(SkillConfigGroup skillConfigGroup)
-        {
-            this.skillConfigGroup = skillConfigGroup;
-        }   
-
+        public virtual CellTypeId CellTypeId { get; }
+        public SkillConfigGroup SkillConfigGroup;
 
         public abstract string Description();
         public abstract string Name();
@@ -30,11 +26,6 @@ namespace Model.Tetri
         public virtual void Apply(Units.Unit unit) { }
         public virtual void PostApply(Units.Unit unit, IReadOnlyList<Cell> allCells) { }
 
-        public virtual Cell Clone()
-        {
-            // 如有特殊字段，子类重写 Clone()
-            return (Cell)this.MemberwiseClone();
-        }
         public AffinityType Affinity { get; set; } = AffinityType.None;
 
     }

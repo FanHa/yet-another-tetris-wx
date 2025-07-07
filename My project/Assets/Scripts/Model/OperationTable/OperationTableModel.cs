@@ -14,7 +14,6 @@ namespace Model
 
         [SerializeField]
         private List<PlacedTetri> placedTetris = new List<PlacedTetri>();
-
         public IReadOnlyList<PlacedTetri> PlacedTetris => placedTetris;
 
         private Model.Tetri.Cell[,] occupiedCellGrid;
@@ -29,17 +28,6 @@ namespace Model
         /// <returns>是否放置成功</returns>
         public bool TryPlaceTetri(Model.Tetri.Tetri tetri, Vector2Int position)
         {
-            if (tetri == null)
-            {
-                Debug.LogError("尝试放置一个空的 Tetri。");
-                return false;
-            }
-            if (occupiedCellGrid == null)
-            {
-                Debug.LogError("CellGrid 未初始化。请检查 OperationTableModel 的 Width/Height 设置。");
-                return false;
-            }
-
             var cellsToOccupyGlobal = new List<Vector2Int>();
             List<Vector2Int> tetriRelativeOccupiedPositions = tetri.GetOccupiedPositions();
             foreach (var relativePos in tetriRelativeOccupiedPositions)
@@ -64,13 +52,12 @@ namespace Model
             }
 
             var placedTetri = new Model.PlacedTetri(tetri, position);
-
             placedTetris.Add(placedTetri);
+
+            tetri.OnDataChanged += HandleTetriChanged;
             foreach (var relativePos in tetriRelativeOccupiedPositions)
             {
                 Vector2Int globalPos = position + relativePos;
-                // 不再需要添加到 occupiedCoordinates
-
                 Model.Tetri.Cell cellObject = tetri.Shape[relativePos.x, relativePos.y];
                 if (cellObject != null)
                 {
@@ -88,54 +75,43 @@ namespace Model
 
         public void Clear()
         {
+            foreach (var placed in placedTetris)
+            {
+                placed.Tetri.OnDataChanged -= HandleTetriChanged;
+            }
             placedTetris.Clear();
-
-            if (Width > 0 && Height > 0)
-            {
-                occupiedCellGrid = new Model.Tetri.Cell[Width, Height]; // 重新创建空的 grid
-            }
-            else
-            {
-                Debug.LogError("OperationTableModel Width or Height is not set correctly for Clear. Defaulting to 10x10 for grid re-initialization.");
-                occupiedCellGrid = new Model.Tetri.Cell[10, 10];
-            }
-
+            occupiedCellGrid = new Model.Tetri.Cell[Width, Height]; // 重新创建空的 grid
             OnChanged?.Invoke();
         }
 
         public void RemoveTetri(Model.PlacedTetri placedTetriToRemove)
         {
-            if (placedTetriToRemove != null && placedTetris.Contains(placedTetriToRemove))
+            placedTetriToRemove.Tetri.OnDataChanged -= HandleTetriChanged;
+            List<Vector2Int> tetriRelativeOccupiedPositions = placedTetriToRemove.Tetri.GetOccupiedPositions();
+            foreach (var relativePos in tetriRelativeOccupiedPositions)
             {
-                if (occupiedCellGrid == null)
+                Vector2Int globalPos = placedTetriToRemove.Position + relativePos;
+                // 不再需要从 occupiedCoordinates 移除
+                if (globalPos.x >= 0 && globalPos.x < occupiedCellGrid.GetLength(0) &&
+                    globalPos.y >= 0 && globalPos.y < occupiedCellGrid.GetLength(1))
                 {
-                    Debug.LogError("CellGrid is null during RemoveTetri. This should not happen.");
-                    return;
+                    occupiedCellGrid[globalPos.x, globalPos.y] = null; // 从 grid 中清除
                 }
-
-                List<Vector2Int> tetriRelativeOccupiedPositions = placedTetriToRemove.Tetri.GetOccupiedPositions();
-                foreach (var relativePos in tetriRelativeOccupiedPositions)
-                {
-                    Vector2Int globalPos = placedTetriToRemove.Position + relativePos;
-                    // 不再需要从 occupiedCoordinates 移除
-
-                    if (globalPos.x >= 0 && globalPos.x < occupiedCellGrid.GetLength(0) &&
-                        globalPos.y >= 0 && globalPos.y < occupiedCellGrid.GetLength(1))
-                    {
-                        occupiedCellGrid[globalPos.x, globalPos.y] = null; // 从 grid 中清除
-                    }
-                }
-
-                placedTetris.Remove(placedTetriToRemove);
-                OnChanged?.Invoke();
             }
-            else
-            {
-                Debug.LogWarning("尝试移除一个不存在的 Tetri 或者传入的 PlacedTetri 为 null。");
-            }
+            placedTetris.Remove(placedTetriToRemove);
+            OnChanged?.Invoke();
+   
         }
 
-        internal List<List<Cell>> GetCharacterCellGroups()
+        private void HandleTetriChanged()
+        {
+            // Tetri 变动时，通知外部刷新
+            OnChanged?.Invoke();
+        }
+
+
+
+        public List<List<Cell>> GetCharacterCellGroups()
         {
             var result = new List<List<Cell>>();
             if (occupiedCellGrid == null) return result;

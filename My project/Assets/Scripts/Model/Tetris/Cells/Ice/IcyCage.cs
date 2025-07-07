@@ -6,6 +6,7 @@ namespace Model.Tetri
 {
     public class IcyCage : Cell
     {
+        public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCage()
         {
             Affinity = AffinityType.Ice;
@@ -29,7 +30,7 @@ namespace Model.Tetri
                 if (cell.Affinity == AffinityType.Ice)
                     iceCount++;
             }
-            var configGroup = skillConfigGroup as Units.Skills.IcyCageConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.IcyCageConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.IcyCage(config);
             skillInstance.SetIceCellCount(iceCount);

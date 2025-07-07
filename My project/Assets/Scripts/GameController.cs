@@ -170,8 +170,6 @@ public class GameController : MonoBehaviour
     {
         rewardController.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
-
-        unitInventoryController.Hide();
         levelConfig.AdvanceToNextLevel(); // 关卡增加
 
     }

@@ -223,8 +223,8 @@ namespace Model.Rewards
 
             Func<Model.Tetri.Tetri, Reward>[] upgradeFactories = new Func<Model.Tetri.Tetri, Reward>[]
             {
-                tetri => new UpgradeNoneCoreCellsTetri(tetri),
-                tetri => new UpgradeCoreCellTetri(tetri)
+                tetri => new UpgradeNoneCoreCells(tetri, tetriModelFactory),
+                tetri => new UpgradeCoreCell(tetri)
             };
             // 随机选择一个 UpgradeTetri 的衍生类
             var selectedFactory = upgradeFactories[UnityEngine.Random.Range(0, upgradeFactories.Length)];
