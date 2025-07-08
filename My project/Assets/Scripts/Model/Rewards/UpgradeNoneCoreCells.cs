@@ -15,8 +15,8 @@ namespace Model.Rewards
 
         }
 
-        public override string Name() => "升级非核心方块";
-        public override string Description() => "将一个非核心方块升级为更高级的方块";
+        public override string Name() => "升级填充方块";
+        public override string Description() => "赋予填充方块属性,对核心方块提供加成";
 
         public override void Apply(TetriInventoryModel tetriInventoryData)
         {

@@ -34,7 +34,7 @@ namespace Model.Rewards
 
         public override string Name()
         {
-            return characterCellInstance.Name();
+            return "新角色：" + characterCellInstance.Name();
         }
 
         public override void Apply(TetriInventoryModel tetriInventoryData)

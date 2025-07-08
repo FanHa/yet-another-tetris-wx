@@ -8,24 +8,16 @@ namespace Model.Rewards
     public class UpgradeCharacter : Reward
     {
         public Model.Tetri.Tetri TargetTetri { get; protected set; }
-        private readonly Model.Tetri.Character targetCharacter;
         private readonly string name;
         private readonly string description;
 
         public UpgradeCharacter(Model.Tetri.Tetri characterTetri)
         {
             TargetTetri = characterTetri;
+            var characterCell = TargetTetri.GetMainCell() as Model.Tetri.Character;
+            name = $"升级角色：{characterCell.Name()}";
+            description = $"提升角色等级";
 
-            if (targetCharacter != null)
-            {
-                name = $"升级角色：{targetCharacter.GetType().Name}";
-                description = $"将 {targetCharacter.GetType().Name} 的等级提升至 {targetCharacter.Level + 1}";
-            }
-            else
-            {
-                name = "升级角色";
-                description = "提升角色等级";
-            }
         }
 
         public override string Name() => name;

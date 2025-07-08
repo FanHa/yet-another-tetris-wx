@@ -15,20 +15,10 @@ namespace Model.Rewards
         {
             tetriInstance = tetri;
             // 找到 tetriInstance 中非 Padding 的 Cell
-            var cell = tetriInstance.GetOccupiedPositions()
-                .Select(pos => tetriInstance.Shape[pos.x, pos.y])
-                .FirstOrDefault(c => !(c is Model.Tetri.Padding));
+            Model.Tetri.Cell cell = tetriInstance.GetMainCell();
+            name = $"获得新能力：{cell.Name()}";
+            description = $"{cell.Description()}";
 
-            if (cell != null)
-            {
-                name = $"获得新方块：{cell.GetType().Name}";
-                description = $"获得一个包含 {cell.GetType().Name} 的新方块";
-            }
-            else
-            {
-                name = "获得新方块";
-                description = "获得一个新方块";
-            }
         }
 
 

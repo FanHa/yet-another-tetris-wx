@@ -34,4 +34,10 @@ MonoBehaviour:
   characterMappings:
   - characterTypeId: 0
     sprite: {fileID: 295863414502548795, guid: b3b684dd650e01c449f6ba4045ed1aad, type: 3}
+  - characterTypeId: 1
+    sprite: {fileID: -908458399817262326, guid: f16c9e5016fe2b24cb6c77b96bcec625, type: 3}
+  - characterTypeId: 2
+    sprite: {fileID: -6044770247596281384, guid: fd1ba31e8f072114e9f4fd90ec001415, type: 3}
+  - characterTypeId: 3
+    sprite: {fileID: 3544725380317974027, guid: 8e674b28de170b24e832629515f396de, type: 3}
   tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}

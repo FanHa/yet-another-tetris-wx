@@ -63,7 +63,10 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
-            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId)).Cast<CellTypeId>().ToList();
+            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId))
+                .Cast<CellTypeId>()
+                .Where(typeId => typeId != CellTypeId.Padding)
+                .ToList();
             availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
@@ -151,23 +154,54 @@ namespace Model.Rewards
 
         public List<Reward> GenerateRewards()
         {
-            List<Reward> rewards = new List<Reward>();
-            for (int i = 0; i < rewardCount; i++)
+            var rewards = new List<Reward>();
+            var usedKeys = new HashSet<string>();
+            int maxTries = rewardCount * 5; // 防止死循环
+            int tries = 0;
+            while (rewards.Count < rewardCount && tries < maxTries)
             {
                 var reward = GenerateReward();
-                if (reward != null)
+                if (reward == null)
+                {
+                    tries++;
+                    continue;
+                }
+
+                // 生成唯一性key
+                string key = GetRewardKey(reward);
+                if (!usedKeys.Contains(key))
+                {
                     rewards.Add(reward);
+                    usedKeys.Add(key);
+                }
+                tries++;
             }
             return rewards;
         }
 
+        private string GetRewardKey(Reward reward)
+        {
+            switch (reward)
+            {
+                case AddTetri addTetri:
+                    return "AddTetri_" + addTetri.GetTetri().GetMainCell().CellTypeId;
+                case NewCharacter newChar:
+                    var characterCell = newChar.GetTetri().GetMainCell() as Character;
+                    return "NewCharacter_" + characterCell.CharacterTypeId;
+                case UpgradeCoreCell upgradeCore:
+                    return "UpgradeCoreCell_" + upgradeCore.TargetTetri.GetHashCode();
+                case UpgradeNoneCoreCells upgradeNoneCore:
+                    return "UpgradeNoneCore_" + upgradeNoneCore.TargetTetri.GetHashCode();
+                case UpgradeCharacter upgradeChar:
+                    return "UpgradeCharacter_" + upgradeChar.TargetTetri.GetHashCode();
+                default:
+                    return reward.GetType().Name;
+            }
+        }
+
         private Reward CreateNewTetriReward()
         {
-
-            // 2. 获取inventory中已有的Cell类型
             var ownedTypeIds = tetriInventoryData.ExistCellTypeIds;
-
-            // 3. 找出未拥有的Cell类型
             var unownedTypeIds = availableCellTypeIds.Where(type => !ownedTypeIds.Contains(type)).ToList();
 
             if (unownedTypeIds.Count == 0)
