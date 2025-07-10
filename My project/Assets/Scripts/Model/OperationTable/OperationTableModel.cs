@@ -100,7 +100,7 @@ namespace Model
             }
             placedTetris.Remove(placedTetriToRemove);
             OnChanged?.Invoke();
-   
+
         }
 
         private void HandleTetriChanged()
@@ -111,11 +111,9 @@ namespace Model
 
 
 
-        public List<List<Cell>> GetCharacterCellGroups()
+        public List<CharacterInfluenceGroup> GetCharacterInfluenceGroups()
         {
-            var result = new List<List<Cell>>();
-            if (occupiedCellGrid == null) return result;
-
+            var result = new List<CharacterInfluenceGroup>();
             int width = occupiedCellGrid.GetLength(0);
             int height = occupiedCellGrid.GetLength(1);
 
@@ -124,9 +122,6 @@ namespace Model
                 for (int y = 0; y < height; y++)
                 {
                     var cell = occupiedCellGrid[x, y];
-                    if (cell == null) continue;
-
-                    // 判断是否为 CharacterCell
                     if (cell is Model.Tetri.Character character)
                     {
                         var group = new List<Cell>();
@@ -145,8 +140,8 @@ namespace Model
                                 }
                             }
                         }
-
-                        result.Add(group);
+                        var characterGroup = new CharacterInfluenceGroup(character, group);
+                        result.Add(characterGroup);
                     }
                 }
             }
@@ -154,4 +149,17 @@ namespace Model
             return result;
         }
     }
+
+    public class CharacterInfluenceGroup
+    {
+        public Character Character { get; }
+        public List<Cell> InfluencedCells { get; }
+
+        public CharacterInfluenceGroup(Character character, List<Cell> influencedCells)
+        {
+            Character = character;
+            InfluencedCells = influencedCells;
+        }
+    }
+    
 }

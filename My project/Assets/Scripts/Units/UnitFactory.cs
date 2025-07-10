@@ -10,7 +10,7 @@ namespace Units
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping resourceMapping;
 
-        public Units.Unit CreateUnit(InventoryItem item)
+        public Units.Unit CreateUnit(UnitInventoryItem item)
         {
             var go = Object.Instantiate(unitPrefab);
             var unit = go.GetComponent<Units.Unit>();

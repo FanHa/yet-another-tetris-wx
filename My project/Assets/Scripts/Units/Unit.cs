@@ -9,13 +9,14 @@ using UI;
 using Units.Buffs;
 using Units.Skills;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Units
 {
     [RequireComponent(typeof(DotHandler))]
     [RequireComponent(typeof(Units.Skills.SkillHandler))]
     [RequireComponent(typeof(BuffHandler))]
-    public class Unit : MonoBehaviour
+    public class Unit : MonoBehaviour, IPointerClickHandler
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler BuffHandler;// Buff管理器
@@ -38,7 +39,7 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Damages.Damage> OnAttackHit;
         public event Action<SkillEffectContext> OnSkillEffectTriggered;
-
+        public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
 
         public Faction faction; // 单位的阵营
@@ -374,6 +375,9 @@ namespace Units
             Fist2SpriteRenderer.color = color;
         }
 
-
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            OnClicked?.Invoke(this);
+        }
     }
 }

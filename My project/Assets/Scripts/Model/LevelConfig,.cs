@@ -12,8 +12,7 @@ namespace Model
     public class LevelConfig : ScriptableObject
     {
         public int currentLevel = 0;
-        public List<EnemyData> enemyDatas; // 敌人数据列表
-
+        public List<EnemyData> enemyDatas = new();
         [SerializeField] private int levelsPerEnemyIncrease = 3; // 每增加一个敌人的关卡数
         [SerializeField] private int maxEnemyCount = 10; // 最大敌人数量
         [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
@@ -25,7 +24,10 @@ namespace Model
         
         private void OnEnable()
         {
-            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId)).Cast<CellTypeId>().ToList();
+            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId))
+                .Cast<CellTypeId>()
+                .Where(typeId => typeId != CellTypeId.Padding)
+                .ToList();
             availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
 
@@ -40,20 +42,19 @@ namespace Model
 
         private void GenerateEnemyData()
         {
-            // 确保敌人数据列表不为空
-            if (enemyDatas == null)
-            {
-                enemyDatas = new List<EnemyData>();
-            }
-
             // 计算当前关卡的敌人数量
             int enemyCount = Mathf.Min(1 + (currentLevel - 1) / levelsPerEnemyIncrease, maxEnemyCount);
 
             // 确保敌人数量足够
             while (enemyDatas.Count < enemyCount)
             {
-                // 添加一个随机敌人
-                var randomCharacterId = availableCharacterTypeIds[UnityEngine.Random.Range(0, availableCharacterTypeIds.Count)];
+                // 随机一个未被选中的敌人类型
+                var availableIds = availableCharacterTypeIds
+                    .Where(id => !enemyDatas.Any(e => e.characterId == id))
+                    .ToList();
+                if (availableIds.Count == 0) break; // 没有可用的敌人类型了
+
+                var randomCharacterId = availableIds[UnityEngine.Random.Range(0, availableIds.Count)];
                 enemyDatas.Add(new EnemyData
                 {
                     characterId = randomCharacterId,
@@ -84,22 +85,31 @@ namespace Model
         /// <summary>
         /// 获取当前关卡的敌人数据
         /// </summary>
-        public List<InventoryItem> GetEnemyData()
+        public List<UnitInventoryItem> GetEnemyData()
         {
             // 转换为 InventoryItem 列表
-            List<InventoryItem> inventoryItems = new List<InventoryItem>();
+            List<UnitInventoryItem> inventoryItems = new List<UnitInventoryItem>();
             foreach (var enemy in enemyDatas)
             {
 
                 var characterInstance = (Tetri.Character)tetriCellModelFactory.CreateCharacterCell(enemy.characterId);
-
-                var tetriCells = new List<Tetri.Cell>();
+                var cellCountDict = new Dictionary<CellTypeId, int>();
                 foreach (var cellId in enemy.tetriCellIds)
                 {
-                    tetriCells.Add(tetriCellModelFactory.CreateCell(cellId));
+                    if (!cellCountDict.ContainsKey(cellId))
+                        cellCountDict[cellId] = 1;
+                    else
+                        cellCountDict[cellId]++;
+                }
+                var tetriCells = new List<Tetri.Cell>();
+                foreach (var kv in cellCountDict)
+                {
+                    var cell = tetriCellModelFactory.CreateCell(kv.Key);
+                    cell.Level = kv.Value; // 重复次数即为等级
+                    tetriCells.Add(cell);
                 }
 
-                InventoryItem inventoryItem = new InventoryItem(characterInstance, tetriCells);
+                UnitInventoryItem inventoryItem = new(characterInstance, tetriCells);
                 inventoryItems.Add(inventoryItem);
             }
 

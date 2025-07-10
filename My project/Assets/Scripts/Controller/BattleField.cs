@@ -46,8 +46,8 @@ namespace Controller {
 
         private Units.Skills.SkillEffectHandler skillEffectHandler;
 
-        private List<InventoryItem> factionAConfig;
-        private List<InventoryItem> factionBConfig;
+        private List<UnitInventoryItem> factionAConfig;
+        private List<UnitInventoryItem> factionBConfig;
 
 
         void Awake()
@@ -69,7 +69,7 @@ namespace Controller {
             unitManager.OnSkillEffectTriggered += HandleSkillEffectTriggered;
         }
 
-        public void SetEnemyData(List<Model.InventoryItem> enemyData)
+        public void SetEnemyData(List<Model.UnitInventoryItem> enemyData)
         {
             this.enemyData.Items = enemyData; // 替换敌人数据
         }

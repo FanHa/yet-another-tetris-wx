@@ -9,27 +9,27 @@ namespace Model{
     [Serializable]
     public class UnitInventoryModel : ScriptableObject
     {
-        [field: SerializeField] private List<InventoryItem> items = new List<InventoryItem>();
+        [field: SerializeField] private List<UnitInventoryItem> items = new List<UnitInventoryItem>();
 
-        public List<InventoryItem> Items
+        public List<UnitInventoryItem> Items
         {
             get => items;
             set => items = value;
         }
-        public event Action<List<InventoryItem>> OnDataChanged;
+        public event Action<List<UnitInventoryItem>> OnDataChanged;
 
-        public void AddItems(List<InventoryItem> newItems)
+        public void AddItems(List<UnitInventoryItem> newItems)
         {
             items.AddRange(newItems);
             OnDataChanged?.Invoke(items);
         }
 
-        public InventoryItem GetItemAt(int itemIndex)
+        public UnitInventoryItem GetItemAt(int itemIndex)
         {
             return items[itemIndex];
         }
 
-        public void ResetInventoryData(List<InventoryItem> newItems)
+        public void ResetInventoryData(List<UnitInventoryItem> newItems)
         {
             items.Clear();
             AddItems(newItems);

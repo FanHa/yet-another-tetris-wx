@@ -26,7 +26,7 @@ namespace UI.Inventories.Description
             }
         }
 
-        public void SetDescription(Model.InventoryItem item)
+        public void SetDescription(Model.UnitInventoryItem item)
         {
             // 清空现有的DescriptionItem
             foreach (Transform child in descriptionItemParent)

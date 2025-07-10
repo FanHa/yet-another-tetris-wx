@@ -11,19 +11,12 @@ namespace UI.Inventories
 
     public class UnitInventoryView : MonoBehaviour
     {
-        public event Action<int> OnDescriptionRequested;
+        public event Action<Unit> OnUnitClicked;
         [SerializeField] private Transform contentPanel;
         [SerializeField] private Description.Description itemDescription;
         List<InventoryItem> items = new List<InventoryItem>();
 
-
-        private void Awake()
-        {
-            // Hide();
-        }
-
- 
-        internal void UpdateData(List<Unit> unitList)
+        public void UpdateData(List<Unit> unitList)
         {
             foreach (Transform child in contentPanel)
             {
@@ -34,7 +27,13 @@ namespace UI.Inventories
                 var unit = unitList[i];
                 unit.transform.SetParent(contentPanel, false);
                 unit.transform.localPosition = CalculateGridPosition(i);
+                unit.OnClicked += HandleUnitClicked;
             }
+        }
+
+        private void HandleUnitClicked(Unit unit)
+        {
+            OnUnitClicked?.Invoke(unit);
         }
 
         private Vector3 CalculateGridPosition(int index)
@@ -59,35 +58,21 @@ namespace UI.Inventories
             return new Vector3(col * cellWidth, -row * cellHeight, 0) + new Vector3(offsetX, offsetY, 0);
         }
 
-        private void HandleItemSelection(InventoryItem item)
-        {
-            int index = items.IndexOf(item);
-            if (index == -1)
-            {
-                Debug.LogError("Item not found");
-                return;
-            }
-            Model.InventoryItem selectedItem = items[index].Data;
-            itemDescription.SetDescription(selectedItem); // Directly set the description
-            DeselectAllItems();
-            items[index].Select();
-            OnDescriptionRequested?.Invoke(index);
+        // private void HandleItemSelection(InventoryItem item)
+        // {
+        //     int index = items.IndexOf(item);
+        //     if (index == -1)
+        //     {
+        //         Debug.LogError("Item not found");
+        //         return;
+        //     }
+        //     Model.UnitInventoryItem selectedItem = items[index].Data;
+        //     itemDescription.SetDescription(selectedItem); // Directly set the description
+        //     DeselectAllItems();
+        //     items[index].Select();
+        //     OnDescriptionRequested?.Invoke(index);
 
-        }
-
-        public void Show()
-        {
-            // todo 很奇怪的问题，这里必须调用两次在能在第一次show时显示出来，不然就不行
-            gameObject.SetActive(true);
-            gameObject.SetActive(true);
-            ResetSelection();
-        }
-
-        public void ResetSelection()
-        {
-            itemDescription.ResetDescription();
-            DeselectAllItems();
-        }
+        // }
 
         private void DeselectAllItems()
         {
@@ -95,20 +80,6 @@ namespace UI.Inventories
             {
                 item.Deselect();
             }
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
-        }
-
-        private void ResetAllItems()
-        {
-            foreach (var item in items)
-            {
-                Destroy(item.gameObject);
-            }
-            items.Clear();
         }
 
         

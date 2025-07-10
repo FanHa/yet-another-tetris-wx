@@ -11,7 +11,7 @@ namespace Model.TrainGround
         public CharacterTypeId characterId; // 单位的 CharacterCell
         public List<CellTypeId> tetriCellIds;   // 单位的 TetriCells 列表
 
-        public InventoryItem ToInventoryItem(TetriCellFactory factory)
+        public UnitInventoryItem ToInventoryItem(TetriCellFactory factory)
         {
             // 实例化 CharacterCell
             var characterCell = factory.CreateCharacterCell(characterId);
@@ -31,7 +31,7 @@ namespace Model.TrainGround
             }
 
             // 创建并返回 InventoryItem
-            return new InventoryItem(characterCell, tetriCells);
+            return new UnitInventoryItem(characterCell, tetriCells);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model;
 using Operation;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,8 +12,8 @@ namespace Controller
     public class OperationTableController : MonoBehaviour
     {
         public event Action<Operation.Tetri> OnTetriBeginDrag;
-        public event Action<List<List<Model.Tetri.Cell>>> OnCellGroupsUpdated;
-        
+        public event Action<List<CharacterInfluenceGroup>> OnCharacterInfluenceGroupsChanged;
+
         [Header("容器大小")]
         [SerializeField] private int width;
         [SerializeField] private int height;
@@ -57,8 +58,8 @@ namespace Controller
         {
             // 让 View 根据 model.PlacedTetris 刷新显示
             view.Refresh(model.PlacedTetris);
-            var groups = model.GetCharacterCellGroups();
-            OnCellGroupsUpdated?.Invoke(groups);
+            List<CharacterInfluenceGroup> groups = model.GetCharacterInfluenceGroups();
+            OnCharacterInfluenceGroupsChanged?.Invoke(groups);
         }
 
 

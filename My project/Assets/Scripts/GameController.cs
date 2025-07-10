@@ -7,6 +7,8 @@ using Model;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using Units;
+using UI.UnitInfo;
 
 public class GameController : MonoBehaviour
 {
@@ -16,14 +18,12 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
-
-    [SerializeField] private Button revokeOperationButton;
     [SerializeField] private Button battleButton;
-    [SerializeField] private Button unitPreviewButton;
     [SerializeField] private Button trainGroundButton;
 
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
+    [SerializeField] private UnitInfo unitInfo;
     private GameObject currentShadowTetri;
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
@@ -40,12 +40,18 @@ public class GameController : MonoBehaviour
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
-        operationTableController.OnCellGroupsUpdated += HandleOperationTableGridCellUpdate;
+        operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
+        unitInventoryController.OnUnitClicked += HandleUnitClicked;
     }
 
-    private void HandleOperationTableGridCellUpdate(List<List<Model.Tetri.Cell>> cellGroups)
+    private void HandleUnitClicked(Unit unit)
     {
-        unitInventoryController.ResetInventoryDataFromCellGroups(cellGroups);
+        unitInfo.ShowUnitInfo(unit);
+    }
+
+    private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)
+    {
+        unitInventoryController.RefreshInventoryFromInfluenceGroups(characterGroups);
         Debug.Log("OperationTable grid cells updated.");
     }
 
@@ -193,7 +199,7 @@ public class GameController : MonoBehaviour
 
     private void LoadLevelData()
     {
-        List<InventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        List<UnitInventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
         battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
     }
 

@@ -4,42 +4,42 @@ using UnityEngine;
 using Model;
 using Model.Tetri;
 using System.Linq;
+using Units;
 
 namespace Controller {
+    [RequireComponent(typeof(UI.Inventories.UnitInventoryView))]
     public class UnitInventoryController : MonoBehaviour
     {
-        private UI.Inventories.UnitInventoryView inventoryView;
+        private UI.Inventories.UnitInventoryView unitInventoryView;
         [SerializeField] private Model.UnitInventoryModel inventoryData;
         [SerializeField] private Units.UnitFactory unitFactory;
 
+        public event Action<Unit> OnUnitClicked;
+
         private void Awake()
         {
-            inventoryView = GetComponent<UI.Inventories.UnitInventoryView>();
-            if (inventoryView == null)
-            {
-                Debug.LogError("UnitInventoryController requires a UnitInventoryView component.");
-            }
+            unitInventoryView = GetComponent<UI.Inventories.UnitInventoryView>();
         }
         private void Start()
         {
             inventoryData.OnDataChanged += HandleDataChange;
+            unitInventoryView.OnUnitClicked += HandleUnitClicked;
         }
 
-
-        private Model.InventoryItem GenerateInventoryItemFromTetriCells(List<Cell> tetriCells)
+        private void HandleUnitClicked(Unit unit)
         {
-            Character characterCell = tetriCells.OfType<Character>().FirstOrDefault();
-            List<Cell> remainingCells = tetriCells.Where(cell => cell != characterCell).ToList();
-
-            return new Model.InventoryItem(characterCell, remainingCells);
+            OnUnitClicked?.Invoke(unit);
         }
 
-        public void ResetInventoryDataFromCellGroups(List<List<Cell>> cellGroups)
+        public void RefreshInventoryFromInfluenceGroups(List<CharacterInfluenceGroup> characterGroups)
         {
-            var items = new List<InventoryItem>();
-            foreach (var group in cellGroups)
+            var items = new List<UnitInventoryItem>();
+            foreach (var group in characterGroups)
             {
-                var item = GenerateInventoryItemFromTetriCells(group);
+                var item = new UnitInventoryItem(
+                    group.Character,
+                    group.InfluencedCells
+                );
                 items.Add(item);
             }
             inventoryData.ResetInventoryData(items);
@@ -47,11 +47,11 @@ namespace Controller {
         }
 
 
-        private void HandleDataChange(List<Model.InventoryItem> inventoryState)
+        private void HandleDataChange(List<Model.UnitInventoryItem> inventoryState)
         {
             var unitList = new List<Units.Unit>();
 
-            foreach (Model.InventoryItem item in inventoryState)
+            foreach (Model.UnitInventoryItem item in inventoryState)
             {
                 Units.Unit unit = unitFactory.CreateUnit(item);
                 if (unit != null)
@@ -59,32 +59,7 @@ namespace Controller {
                     unitList.Add(unit);
                 }
             }
-            inventoryView.UpdateData(unitList);
+            unitInventoryView.UpdateData(unitList);
         }
-
-        // public bool ToggleInventory()
-        // {
-        //     if (inventoryView.gameObject.activeSelf)
-        //     {
-        //         inventoryView.Hide();
-        //         return false;
-        //     }
-        //     else
-        //     {
-        //         inventoryView.Show();
-        //         inventoryView.UpdateData(inventoryData.Items);
-        //         return true;
-        //     }
-        // }
-
-        public void Hide()
-        {
-            inventoryView.Hide();
-        }
-
-        //  void ResetInventoryData(List<InventoryItem> newItems)
-        // {
-        //     inventoryData.ResetInventoryData(newItems);
-        // }
     }
 }

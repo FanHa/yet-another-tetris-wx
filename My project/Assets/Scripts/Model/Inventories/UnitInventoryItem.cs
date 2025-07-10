@@ -7,7 +7,7 @@ using Model.Rewards;
 namespace Model
 {
     [Serializable]
-    public class InventoryItem
+    public class UnitInventoryItem
     {
         [SerializeField] public Model.Tetri.Character CharacterCell { get; set; }
         [SerializeField] private List<Tetri.Cell> tetriCells = new List<Tetri.Cell>();
@@ -29,13 +29,13 @@ namespace Model
         }
 
         // 构造函数
-        public InventoryItem(
-            Model.Tetri.Character characterCell = null,
-            List<Tetri.Cell> tetriCells = null)
+        public UnitInventoryItem(
+            Model.Tetri.Character characterCell,
+            List<Tetri.Cell> tetriCells)
         {
             
             this.CharacterCell = characterCell;
-            this.tetriCells = tetriCells ?? new List<Tetri.Cell>(); // 确保 tetriCells 不为 null
+            this.tetriCells = tetriCells;
         }
     }
     

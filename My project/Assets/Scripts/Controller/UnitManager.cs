@@ -34,7 +34,7 @@ namespace Controller
         /// <param name="faction">阵营</param>
         /// <param name="parent">父物体</param>
         public void SpawnUnits(
-            List<InventoryItem> items,
+            List<UnitInventoryItem> items,
             Transform spawnPoint,
             Unit.Faction faction,
             Transform minBounds,
