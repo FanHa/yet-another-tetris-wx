@@ -36,7 +36,28 @@ namespace UI.UnitInfo
                 Destroy(child.gameObject);
             foreach (Transform child in skillRoot)
                 Destroy(child.gameObject);
-                
+            
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
+            bool isUpperHalf = screenPos.y > (Screen.height / 2f);
+            RectTransform panelRect = panel.GetComponent<RectTransform>();
+            if (panelRect != null)
+            {
+                // 这里假设锚点在中间
+                Vector2 anchoredPos = panelRect.anchoredPosition;
+                if (isUpperHalf)
+                {
+                    // 显示在下半区
+                    anchoredPos.y = -Screen.height * 0.25f; // 你可以根据UI布局微调
+                }
+                else
+                {
+                    // 显示在上半区
+                    anchoredPos.y = Screen.height * 0.25f;
+                }
+                panelRect.anchoredPosition = anchoredPos;
+            }
+
+
             unitInfoCamera.SetTarget(unit.transform);
             panel.SetActive(true);
             Units.Attributes attributes = unit.Attributes;
