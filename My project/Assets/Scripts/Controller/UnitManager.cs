@@ -11,6 +11,7 @@ namespace Controller
 {
     public class UnitManager : MonoBehaviour
     {
+        public event Action<Unit> OnUnitClicked;
         public event Action<Unit> OnUnitDeath;
         public event Action<Unit.Faction> OnFactionAllDead;
         public event Action<Units.Damages.Damage> OnUnitDamageTaken;
@@ -54,6 +55,7 @@ namespace Controller
 
                 unit.OnSkillCast += HandleSkillCast;
                 unit.OnSkillEffectTriggered += HandleSkillEffectTriggered;
+                unit.OnClicked += HandleUnitClicked;
                 unit.UnitManager = this;
                 if (unit.faction == Unit.Faction.FactionA)
                 {
@@ -67,6 +69,11 @@ namespace Controller
                 unit.Activate();
 
             }
+        }
+
+        private void HandleUnitClicked(Unit unit)
+        {
+            OnUnitClicked?.Invoke(unit);
         }
 
         public void Reset()

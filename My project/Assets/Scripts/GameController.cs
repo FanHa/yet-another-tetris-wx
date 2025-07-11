@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
     {
         // 初始化资源面板和操作表
         battleField.OnBattleEnd += HandleBattleEnd;
+        battleField.OnUnitClicked += HandleUnitClicked;
         levelConfig.Reset();
         // 绑定撤销操作按钮的点击事件
         // revokeOperationButton.onClick.AddListener(UndoLastPlacement);

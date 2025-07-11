@@ -43,6 +43,7 @@ namespace Controller {
         [SerializeField] private TetriCellFactory tetriCellFactory;
         private UnitManager unitManager;
         public event Action OnBattleEnd;
+        public event Action<Unit> OnUnitClicked;
 
         private Units.Skills.SkillEffectHandler skillEffectHandler;
 
@@ -67,6 +68,12 @@ namespace Controller {
             unitManager.OnUnitDamageTaken += HandleDamageTaken;
             unitManager.OnSkillCast += HandleSkillCast;
             unitManager.OnSkillEffectTriggered += HandleSkillEffectTriggered;
+            unitManager.OnUnitClicked += HandleUnitClicked;
+        }
+
+        private void HandleUnitClicked(Unit unit)
+        {
+            OnUnitClicked?.Invoke(unit);
         }
 
         public void SetEnemyData(List<Model.UnitInventoryItem> enemyData)
