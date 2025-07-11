@@ -1175,22 +1175,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Attributes:
     moveSpeed:
+      Name: "\u79FB\u901F"
       baseValue: 2
       finalValue: 3
     attackPower:
+      Name: "\u653B\u51FB\u529B"
       baseValue: 10
       finalValue: 10
     maxHealth:
+      Name: "\u6700\u5927\u751F\u547D"
       baseValue: 100
       finalValue: 100
     attacksPerTenSeconds:
+      Name: "\u653B\u51FB\u901F\u5EA6"
       baseValue: 3
       finalValue: 3
+    energyPerTick:
+      Name: "\u80FD\u91CF\u56DE\u590D\u901F\u5EA6"
+      baseValue: 5
+      finalValue: 5
     AttackTargetNumber: 1
     AttackRange: 0.5
     IsRanged: 0
     RangeAttackDamagePercentage: 0
-  skillHandler: {fileID: 0}
   VisualEffectConfig: {fileID: 11400000, guid: bed103acc2cbb594e8d4d2b2d04e3a2c, type: 2}
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1201,7 +1208,7 @@ MonoBehaviour:
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
   projectileSpawnPoint: {fileID: 1587690522871941135}
   enemyUnits: []
-  unitManager: {fileID: 0}
+  UnitManager: {fileID: 0}
   moveable: 1
   isFrozen: 0
 --- !u!58 &8368620811269264414
@@ -1238,7 +1245,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.5
 --- !u!114 &1902576528534209003
 MonoBehaviour:
   m_ObjectHideFlags: 0

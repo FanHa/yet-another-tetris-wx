@@ -1,4 +1,5 @@
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
@@ -8,6 +9,7 @@ namespace Units.Skills
     /// </summary>
     public class IcyCage : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCageConfig Config { get; }
         private int iceCellCount = 0;
 

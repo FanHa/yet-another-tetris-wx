@@ -116,8 +116,6 @@ namespace Units
             }
         }
 
-        // todo 这个方法名要不要改成Activate
-
         public void Setup()
         {
             Attributes.OnHealthChanged += UpdateHealthBar;
@@ -162,6 +160,10 @@ namespace Units
         private void OnSkillReady(Skill skill)
         {
             animationController.TriggerCastSkill();
+        }
+        public IReadOnlyList<Skill> GetSkills()
+        {
+            return skillHandler.GetSkills();
         }
 
 

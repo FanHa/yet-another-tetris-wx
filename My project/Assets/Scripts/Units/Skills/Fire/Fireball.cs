@@ -1,10 +1,12 @@
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class Fireball : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.Fireball;
         public FireballConfig Config { get; }
         private int fireCellCount = 0;
 

@@ -9,6 +9,8 @@ namespace Units.Skills
         public event Action<Skill> OnSkillReady;
         public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private List<Skill> skills = new();
+        public IReadOnlyList<Skill> Skills => skills;
+        
         public float EnergyDecayPerSkill { get; set; } = 0.8f;
 
 

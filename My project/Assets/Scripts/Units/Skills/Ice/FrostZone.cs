@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class FrostZone : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public FrostZoneConfig Config { get; }
 
         private int iceCellCount = 0;

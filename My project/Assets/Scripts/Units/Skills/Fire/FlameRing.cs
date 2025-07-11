@@ -1,10 +1,13 @@
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class FlameRing : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.FlameRing;
+
         private bool hasTriggered;
         private int fireCellCount = 0;
         public FlameRingConfig Config { get; }

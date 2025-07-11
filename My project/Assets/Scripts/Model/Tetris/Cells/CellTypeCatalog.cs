@@ -18,6 +18,7 @@ namespace Model.Tetri
         BlazingField,
         FlameRing,
         Padding,
+        None
     }
 
     public enum CharacterTypeId

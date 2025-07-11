@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class BlazingField : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public BlazingFieldConfig Config { get; }
         private int fireCellCount = 0;
 

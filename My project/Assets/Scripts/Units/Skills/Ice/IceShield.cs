@@ -1,3 +1,4 @@
+using Model.Tetri;
 using UnityEngine;
 using Wangsu.WcsLib.Core;
 
@@ -5,6 +6,8 @@ namespace Units.Skills
 {
     public class IceShield : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.IceShield;
+
         private bool hasTriggered;
         private int iceCellCount = 0;
         public IceShieldConfig Config { get; }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
@@ -9,6 +10,7 @@ namespace Units.Skills
     {
 
         public event Action<SkillEffectContext> OnEffectTriggered;
+        public virtual CellTypeId CellTypeId => CellTypeId.None; // 默认值，子类可以覆盖
 
         public abstract string Name();
 

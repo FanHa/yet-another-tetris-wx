@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
@@ -63,6 +64,11 @@ namespace Units.Skills
         }
 
         public void AddSkill(Skill newSkill) => skillManager.AddSkill(newSkill);
+
+        public IReadOnlyList<Skill> GetSkills()
+        {
+            return skillManager.Skills;
+        }
 
         private void HandleSkillReady(Skill skill)
         {

@@ -1,10 +1,12 @@
 using System.Linq;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class FlameInject : Skill
     {
+        public override CellTypeId CellTypeId => CellTypeId.FlameInject;
         private bool hasTriggered;
         private int fireCellCount = 0;
         public FlameInjectConfig Config { get; }
