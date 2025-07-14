@@ -7,11 +7,7 @@ namespace Model.Tetri
     public class IceShield : Cell
     {
         public override CellTypeId CellTypeId => CellTypeId.IceShield;
-        public IceShield()
-        {
-            Affinity = AffinityType.Ice;
-        }
-
+        public override AffinityType Affinity => AffinityType.Ice;
         public override string Description() => "获得一次性冰霜护盾技能，被攻击时反制攻击者。";
         public override string Name() => "冰霜护盾";
 

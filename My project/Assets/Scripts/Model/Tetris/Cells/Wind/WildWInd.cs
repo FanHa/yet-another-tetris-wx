@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    public class WindShift : Cell
+    public class WildWind : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.WindShift;
+        public override CellTypeId CellTypeId => CellTypeId.WildWind;
         public override AffinityType Affinity => AffinityType.Wind;
 
         public override string Description()
@@ -21,9 +21,9 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfigGroup as Units.Skills.WindShiftConfigGroup;
+            var configGroup = SkillConfigGroup as Units.Skills.WildWindConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
-            var skillInstance = new Units.Skills.WindShift(config);
+            var skillInstance = new Units.Skills.WildWind(config);
             unit.AddSkill(skillInstance);
         }
     }

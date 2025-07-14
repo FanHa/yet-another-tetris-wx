@@ -29,16 +29,14 @@ namespace Units.Projectiles
                     var explosionDamage = new Damages.Damage(damage.Value, Damages.DamageType.Skill)
                         .SetSourceLabel(damage.SourceLabel)
                         .SetSourceUnit(damage.SourceUnit)
-                        .SetTargetUnit(unit)
-                        .SetBuffs(damage.Buffs);
+                        .SetTargetUnit(unit);
 
                     unit.TakeDamage(explosionDamage);
 
                     var healthToReturn = new Damages.Damage(-damage.Value * (healthReturnPercentage / 100f), Damages.DamageType.Skill)
                         .SetSourceLabel(damage.SourceLabel + "回复")
                         .SetSourceUnit(damage.SourceUnit)
-                        .SetTargetUnit(caster)
-                        .SetBuffs(damage.Buffs);
+                        .SetTargetUnit(caster);
 
                     caster.TakeDamage(healthToReturn);
                     caster.TakeDamage(healthToReturn);

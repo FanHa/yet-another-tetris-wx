@@ -6,11 +6,7 @@ namespace Model.Tetri
     public class Fireball : Cell
     {
         public override CellTypeId CellTypeId => CellTypeId.Fireball;
-
-        public Fireball()
-        {
-            Affinity = AffinityType.Fire;
-        }
+        public override AffinityType Affinity => AffinityType.Fire;
 
         public override string Description()
         {

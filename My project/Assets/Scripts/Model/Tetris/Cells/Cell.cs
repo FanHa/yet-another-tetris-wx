@@ -24,7 +24,11 @@ namespace Model.Tetri
         public abstract string Name();
 
         public virtual void Apply(Units.Unit unit) { }
-        public AffinityType Affinity { get; set; } = AffinityType.None;
+        public virtual AffinityType Affinity
+        {
+            get => AffinityType.None;
+            set { }
+        }
 
     }
 }

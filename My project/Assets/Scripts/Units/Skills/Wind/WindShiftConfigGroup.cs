@@ -13,11 +13,11 @@ namespace Units.Skills
     public class WindShiftConfig : SkillConfig
     {
         [Header("风形态属性加成")]
-        public float AttackRangeBonus = 2f;
-        public float DamageMultiplier = 0.7f;
-        public float TakeDamageMultiplier = 1.3f;
+        public float AttackRangeBonus;
+        [Tooltip("造成伤害降低百分比（如30表示降低30%）")]
+        public float DamageReducePercent;
+        [Tooltip("受到伤害提升百分比（如30表示提升30%）")]
+        public float TakeDamageIncreasePercent;
 
-        [Header("消耗")]
-        public float RequiredEnergy = 40f;
     }
 }

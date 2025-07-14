@@ -33,7 +33,10 @@ namespace Units.Skills
             caster.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
                 sourceUnit: caster,
-                sourceSkill: this
+                sourceSkill: this,
+                attackRangeBonus: Config.AttackRangeBonus,
+                damageReducePercent: Config.DamageReducePercent,
+                takeDamageIncreasePercent: Config.TakeDamageIncreasePercent
             ));
         }
     }

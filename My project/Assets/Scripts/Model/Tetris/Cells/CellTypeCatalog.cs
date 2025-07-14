@@ -20,6 +20,7 @@ namespace Model.Tetri
         Padding,
         None,
         WindShift,
+        WildWind,
     }
 
     public enum CharacterTypeId

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19ab00b0ad559a541ac8590861d9f547, type: 3}
+  m_Name: WildWindConfigGroup
+  m_EditorClassIdentifier: 
+  LevelConfigs:
+  - RequiredEnergy: 100
+    Damage: 15
+    DebuffDuration: 3
+    MoveSlowPercent: 50
+    AtkReducePercent: 50
+    Radius: 1.5
+    Duration: 2
+    DamageAdditionPerWindCell: 3
+  - RequiredEnergy: 100
+    Damage: 30
+    DebuffDuration: 3
+    MoveSlowPercent: 75
+    AtkReducePercent: 75
+    Radius: 1.5
+    Duration: 2
+    DamageAdditionPerWindCell: 5

@@ -20,3 +20,5 @@ MonoBehaviour:
   IcyCageConfigGroup: {fileID: 11400000, guid: 2e084169d1806404ebc15a3a8bed4951, type: 2}
   IceShieldConfigGroup: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
   FrostZoneConfigGroup: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}
+  WindShiftConfigGroup: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}
+  WildWindConfigGroup: {fileID: 11400000, guid: 2efad6ffda58cc449a2fde652c25fab0, type: 2}

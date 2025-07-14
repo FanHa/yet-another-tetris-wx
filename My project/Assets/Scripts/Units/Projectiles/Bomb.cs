@@ -40,8 +40,7 @@ namespace Units.Projectiles
                     var explosionDamage = new Units.Damages.Damage(damage.Value, damage.Type)
                         .SetSourceLabel(damage.SourceLabel)
                         .SetSourceUnit(damage.SourceUnit)
-                        .SetTargetUnit(targetUnit)
-                        .SetBuffs(damage.Buffs);
+                        .SetTargetUnit(targetUnit);
 
                     // 对敌人造成伤害
                     targetUnit.TakeDamage(explosionDamage);

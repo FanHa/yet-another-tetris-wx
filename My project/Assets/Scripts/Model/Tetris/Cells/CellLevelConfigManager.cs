@@ -18,5 +18,9 @@ namespace Model.Tetri
         public IcyCageConfigGroup IcyCageConfigGroup;
         public IceShieldConfigGroup IceShieldConfigGroup;
         public FrostZoneConfigGroup FrostZoneConfigGroup;
+
+        [Header("风系技能")]
+        public WindShiftConfigGroup WindShiftConfigGroup;
+        public WildWindConfigGroup WildWindConfigGroup;
     }
 }

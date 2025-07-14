@@ -25,5 +25,7 @@ namespace Model
 
         public GameObject IceShieldPrefab;
         public GameObject IcyCagePrefab;
+
+        public GameObject WildWindPrefab;
     }
 }

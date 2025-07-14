@@ -294,10 +294,6 @@ namespace Units
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
-            foreach (Buff buff in damageReceived.Buffs)
-            {
-                AddBuff(buff); // 添加Debuff到自己身上
-            }
             foreach (var behavior in damageBehaviors)
             {
                 damageReceived = behavior.ModifyDamage(damageReceived);

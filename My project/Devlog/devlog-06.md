@@ -1,2 +1,3 @@
 - 统一近战攻击与远程攻击的逻辑
 - 将Cell的Affinity加成统一集成放到Unit上(以前是每个技能都要自己统计一遍)
+- 将技能的视觉效果与技能本身整合到一个Monobehavior的Gameobject上

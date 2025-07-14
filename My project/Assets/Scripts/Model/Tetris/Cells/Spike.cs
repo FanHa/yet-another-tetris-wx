@@ -22,8 +22,7 @@ namespace Model.Tetri
                 Units.Damages.Damage reflectDamage = new Units.Damages.Damage(damage.Value * reflectPercentage / 100, DamageType.Skill)
                     .SetSourceLabel(Name())
                     .SetSourceUnit(damage.TargetUnit)
-                    .SetTargetUnit(damage.SourceUnit) // 反弹给攻击者
-                    .SetBuffs(new List<Units.Buffs.Buff>());
+                    .SetTargetUnit(damage.SourceUnit);
                 damage.SourceUnit.TakeDamage(reflectDamage);
             }
         }

@@ -6,11 +6,7 @@ namespace Model.Tetri
     public class FlameRing : Cell
     {
         public override CellTypeId CellTypeId => CellTypeId.FlameRing;
-
-        public FlameRing()
-        {
-            Affinity = AffinityType.Fire;
-        }
+        public override AffinityType Affinity => AffinityType.Fire;
 
         public override string Description()
         {

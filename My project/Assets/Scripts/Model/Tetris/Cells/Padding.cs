@@ -5,9 +5,15 @@ namespace Model.Tetri
     [System.Serializable]
     public class Padding : Cell
     {
+        private AffinityType affinity = AffinityType.None;
+        public override AffinityType Affinity
+        {
+            get => affinity;
+            set => affinity = value;
+        }
         public override void Apply(Unit unit)
         {
-            
+
         }
 
         public override string Description()

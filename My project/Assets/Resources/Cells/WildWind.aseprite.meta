@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: XitKti+lUntZaQbTfDE1slwhJ6ZDs/wr15aWhYrXkuK6/Zy6AJrbN2c=
+guid: CnMc5nv4U3zjtcInkxCLgKyXY71TIWPKer1+KFSMS0L2lvzgK9ClOe8=
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -100,7 +100,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638881418288647386
+  platformSettingsDirtyTick: 638881545127485630
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -124,18 +124,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: WindShift
+  - name: WildWind
     originalName: 
-    pivot: {x: 0.5090909, y: 0.48333335}
+    pivot: {x: 0.50793654, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 55
-      height: 60
-    spriteID: 2b1a2b189117e524584e3af6f066d801
+      width: 63
+      height: 64
+    spriteID: e4d75c6bc01ee044ca01524e848d8452
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -195082512
-    name: WindShift
+    guid: 236336640
+    name: WildWind
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: WindShift
+    - name: WildWind
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 4
-        y: 3
-        width: 55
-        height: 60
-      spriteId: 2b1a2b189117e524584e3af6f066d801
+        x: 0
+        y: 0
+        width: 63
+        height: 64
+      spriteId: e4d75c6bc01ee044ca01524e848d8452
     linkedCells: []
     parentIndex: -1
   platformSettings:

@@ -9,7 +9,8 @@ namespace Units.Damages
         Fire,
         Ice,
         Skill,
-        Dot
+        Dot,
+        Wind
     }
 
     public class Damage
@@ -19,14 +20,11 @@ namespace Units.Damages
         public DamageType Type { get; private set; }
         public Unit SourceUnit { get; private set; }
         public Unit TargetUnit { get; private set; }
-        public List<Buffs.Buff> Buffs { get; private set; }
-
 
         public Damage(float value, DamageType type)
         {
             Value = value;
             Type = type;
-            Buffs = new List<Buffs.Buff>();
         }
         
 
@@ -45,12 +43,6 @@ namespace Units.Damages
         public Damage SetTargetUnit(Unit unit)
         {
             TargetUnit = unit;
-            return this;
-        }
-
-        public Damage SetBuffs(List<Buffs.Buff> buffs)
-        {
-            Buffs = buffs;
             return this;
         }
 
