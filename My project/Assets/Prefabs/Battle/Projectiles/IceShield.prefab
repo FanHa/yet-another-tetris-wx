@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2944100352677386664}
   - component: {fileID: 1191075648234408424}
-  - component: {fileID: 2725591038117207760}
+  - component: {fileID: 8363342164250943101}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: IceShield
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2725591038117207760
+--- !u!114 &8363342164250943101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,8 +97,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1995791391659268277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35bf11f427c3deb42aca2938284d71a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 6eb8c9b9132e79341bdcee349703408a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 360
-  radius: 0.75
+  rotateSpeed: 90
+  radius: 1

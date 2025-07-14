@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 7
   m_Component:
   - component: {fileID: 6323954090028209230}
-  - component: {fileID: 7256169759917712801}
+  - component: {fileID: 4527722017122255586}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: BlazingField
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2568379587855392787}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7256169759917712801
+--- !u!114 &4527722017122255586
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2231431966408489219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ce036448a3f93445910cde3e2473742, type: 3}
+  m_Script: {fileID: 11500000, guid: 65ee84276b021c842a00893f0ec5823f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fireParticle: {fileID: 2568379587855392784}

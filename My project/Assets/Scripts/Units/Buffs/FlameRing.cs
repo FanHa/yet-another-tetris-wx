@@ -7,7 +7,7 @@ namespace Units.Buffs
     /// <summary>
     /// FlameRing Buff：每次Tick对周围一圈敌人施加Dot伤害
     /// </summary>
-    public class FlameRing : Buff, ITick
+    public class FlameRing : Buff
     {
         private float dotDps;
         private float dotDuration;
@@ -31,25 +31,20 @@ namespace Units.Buffs
         public override string Description() =>
             $"每{duration}s对半径{radius}内所有敌人施加{dotDps}/s灼烧({dotDuration}秒)";
 
-        public void OnTick(Unit self)
-        {
-            // 查找周围一圈敌人
-            var enemies = self.enemyUnits
-                .Where(u => u != null && Vector2.Distance(self.transform.position, u.transform.position) <= radius)
-                .ToList();
 
-            foreach (var enemy in enemies)
-            {
-                var dot = new Dot(
-                    DotType.Burn,
-                    skill: sourceSkill,
-                    caster: self,
-                    dps: dotDps,
-                    duration: dotDuration,
-                    label: "灼烧"
-                );
-                enemy.ApplyDot(dot);
-            }
+        protected override void OnApplyExtra(Unit self)
+        {
+            var prefab = self.ProjectileConfig.FlameRingPrefab; // 你需要在配置里加上这个Prefab
+            var effectObj = Object.Instantiate(prefab, self.transform.position, Quaternion.identity, self.transform);
+            var flameRingEntity = effectObj.GetComponent<Units.Projectiles.FlameRing>();
+            flameRingEntity.Initialize(
+                owner: self,
+                radius: radius,
+                sourceSkill: sourceSkill,
+                dotDps: dotDps,
+                dotDuration: dotDuration
+            );
+            flameRingEntity.Activate();
         }
     }
 }

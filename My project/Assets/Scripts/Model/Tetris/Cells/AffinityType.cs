@@ -4,6 +4,7 @@ namespace Model.Tetri
     {
         None,
         Fire,
-        Ice
+        Ice,
+        Wind
     }
 }

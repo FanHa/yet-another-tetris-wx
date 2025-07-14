@@ -9,7 +9,6 @@ namespace Units.Skills
     public abstract class Skill
     {
 
-        public event Action<SkillEffectContext> OnEffectTriggered;
         public virtual CellTypeId CellTypeId => CellTypeId.None; // 默认值，子类可以覆盖
 
         public abstract string Name();
@@ -42,10 +41,10 @@ namespace Units.Skills
 
         public abstract string Description();
 
-        protected void TriggerEffect(SkillEffectContext context)
-        {
-            OnEffectTriggered?.Invoke(context);
-        }
+        // protected void TriggerEffect(SkillEffectContext context)
+        // {
+        //     OnEffectTriggered?.Invoke(context);
+        // }
 
 
 

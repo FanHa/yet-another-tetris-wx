@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Model;
 using Model.Tetri;
 using UnityEngine;
@@ -23,19 +24,19 @@ namespace Units
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;
 
-            item.CharacterCell.Apply(unit);
-
-            if (item.TetriCells != null)
+            var cellCounts = new Dictionary<AffinityType, int>();
+            foreach (var cell in item.TetriCells)
             {
-                foreach (var cell in item.TetriCells)
-                {
-                    cell.Apply(unit);
-                }
+                if (!cellCounts.ContainsKey(cell.Affinity))
+                    cellCounts[cell.Affinity] = 0;
+                cellCounts[cell.Affinity]++;
+            }
+            unit.CellCounts = cellCounts;
 
-                foreach (var cell in item.TetriCells)
-                {
-                    cell.PostApply(unit, item.TetriCells);
-                }
+            item.CharacterCell.Apply(unit);
+            foreach (var cell in item.TetriCells)
+            {
+                cell.Apply(unit);
             }
 
             return unit;

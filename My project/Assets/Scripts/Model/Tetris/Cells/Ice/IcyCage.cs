@@ -22,18 +22,11 @@ namespace Model.Tetri
             return "冰牢";
         }
 
-        public override void PostApply(Unit unit, IReadOnlyList<Cell> allCells)
+        public override void Apply(Unit unit)
         {
-            int iceCount = 0;
-            foreach (var cell in allCells)
-            {
-                if (cell.Affinity == AffinityType.Ice)
-                    iceCount++;
-            }
             var configGroup = SkillConfigGroup as Units.Skills.IcyCageConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.IcyCage(config);
-            skillInstance.SetIceCellCount(iceCount);
             unit.AddSkill(skillInstance);
         }
     }

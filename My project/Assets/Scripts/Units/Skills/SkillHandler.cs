@@ -17,7 +17,6 @@ namespace Units.Skills
 
         public event Action<Unit, Skill> OnSkillCast;
         public event Action<Skill> OnSkillReady;
-        public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private Skill pendingSkill;
         private Attributes attributes;
 
@@ -31,13 +30,8 @@ namespace Units.Skills
             owner = GetComponent<Unit>();
             skillManager.EnergyDecayPerSkill = energyDecayPerSkill;
             skillManager.OnSkillReady += HandleSkillReady;
-            skillManager.OnSkillEffectTriggered += HandlerSkillEffectTriggered;
         }
 
-        private void HandlerSkillEffectTriggered(SkillEffectContext context)
-        {
-            OnSkillEffectTriggered?.Invoke(context);
-        }
 
         void Update()
         {

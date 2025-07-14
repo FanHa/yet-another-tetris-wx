@@ -11,7 +11,6 @@ namespace Units.Skills
         public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public FrostZoneConfig Config { get; }
 
-        private int iceCellCount = 0;
 
         public FrostZone(FrostZoneConfig config)
         {
@@ -19,17 +18,13 @@ namespace Units.Skills
             this.Config = config;
         }
 
-        public void SetIceCellCount(int iceCellCount)
-        {
-            this.iceCellCount = iceCellCount;
-        }
 
-        public float GetRadius()
+        public float GetRadius(int iceCellCount)
         {
             return Config.BaseRadius + iceCellCount * Config.RadiusPerIceCell;
         }
 
-        public float GetDuration()
+        public float GetDuration(int iceCellCount)
         {
             return Config.BaseDuration + iceCellCount * Config.DurationPerIceCell;
         }
@@ -43,61 +38,31 @@ namespace Units.Skills
             // 以第一个敌人为中心
             Unit targetEnemy = enemiesInRange.First();
             Vector3 center = targetEnemy.transform.position;
-
-            float radius = GetRadius();
-            float duration = GetDuration();
+            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            float radius = GetRadius(iceCellCount);
+            float duration = GetDuration(iceCellCount);
             float damage = Config.BaseDamage + iceCellCount * Config.DamagePerIceCell;
             float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
             int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
             int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
             int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
 
-            TriggerEffect(new SkillEffectContext
-            {
-                Skill = this,
-                Position = center,
-                // Duration = duration,
-                // Radius = radius
-            });
-            caster.StartCoroutine(FrostZoneRoutine(caster, center, radius, duration, damage, chilledDuration, moveSlowPercent, atkSlowPercent, energySlowPercent));
+            var prefab = caster.ProjectileConfig.FrostZonePrefab;
+            var frostZoneObj = Object.Instantiate(prefab, center, Quaternion.identity);
+            var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
+            frostZone.Initialize(
+                caster: caster,
+                radius: radius,
+                duration: duration,
+                damage: damage,
+                chilledDuration: chilledDuration,
+                moveSlowPercent: moveSlowPercent,
+                atkSlowPercent: atkSlowPercent,
+                energySlowPercent: energySlowPercent
+            );
+            frostZone.Activate();
         }
 
-        private IEnumerator FrostZoneRoutine(Unit caster, Vector3 center, float radius, float duration, float damage, float chilledDuration, int moveSlowPercent, int atkSlowPercent, int energySlowPercent)
-        {
-            float elapsed = 0f;
-            float tickInterval = 1f;
-
-            while (elapsed < duration)
-            {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(center, radius);
-                foreach (var collider in colliders)
-                {
-                    Unit enemy = collider.GetComponent<Unit>();
-                    if (enemy != null && enemy.faction != caster.faction)
-                    {
-                        // 造成冰属性伤害
-                        var iceDamage = new Damages.Damage(damage, Damages.DamageType.Ice);
-                        iceDamage.SetSourceUnit(caster);
-                        iceDamage.SetSourceLabel("霜域");
-                        iceDamage.SetTargetUnit(enemy);
-                        enemy.TakeDamage(iceDamage);
-
-                        // 施加Chilled Buff
-                        var chilled = new Units.Buffs.Chilled(
-                            chilledDuration,
-                            moveSlowPercent,
-                            atkSlowPercent,
-                            energySlowPercent,
-                            caster,
-                            this
-                        );
-                        enemy.AddBuff(chilled);
-                    }
-                }
-                yield return new WaitForSeconds(tickInterval);
-                elapsed += tickInterval;
-            }
-        }
 
         public override string Name() => "霜域";
         public override string Description() =>

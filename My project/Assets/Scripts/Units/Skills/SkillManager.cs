@@ -7,7 +7,6 @@ namespace Units.Skills
     public class SkillManager
     {
         public event Action<Skill> OnSkillReady;
-        public event Action<SkillEffectContext> OnSkillEffectTriggered;
         private List<Skill> skills = new();
         public IReadOnlyList<Skill> Skills => skills;
         
@@ -18,13 +17,7 @@ namespace Units.Skills
         {
             if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
                 return;
-            newSkill.OnEffectTriggered += HandlerSkillEffectTriggered;
             skills.Add(newSkill);
-        }
-
-        private void HandlerSkillEffectTriggered(SkillEffectContext context)
-        {
-            OnSkillEffectTriggered?.Invoke(context);
         }
 
         public void Tick(float energy)

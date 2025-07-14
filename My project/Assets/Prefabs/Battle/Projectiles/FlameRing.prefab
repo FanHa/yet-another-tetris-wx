@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 7
   m_Component:
   - component: {fileID: 7835655410001079919}
-  - component: {fileID: 4156074962090009521}
+  - component: {fileID: 6674140992886737915}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: FlameRing
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 3708358361083454727}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4156074962090009521
+--- !u!114 &6674140992886737915
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6059573537789386272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 148d329deb8427d40b199ff204dee1b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 42117ea2d09841e438e9d17d438e05ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ringParticle: {fileID: 3708358361083454724}

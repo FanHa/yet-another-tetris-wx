@@ -9,18 +9,12 @@ namespace Units.Skills
         public override CellTypeId CellTypeId => CellTypeId.FlameRing;
 
         private bool hasTriggered;
-        private int fireCellCount = 0;
         public FlameRingConfig Config { get; }
 
         public FlameRing(FlameRingConfig config)
         {
             Config = config;
             hasTriggered = false;
-        }
-
-        public void SetFireCellCount(int fireCellCount)
-        {
-            this.fireCellCount = fireCellCount;
         }
 
         public override bool IsReady()
@@ -30,6 +24,7 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
+            int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
             float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
             float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
@@ -43,9 +38,9 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
-            TriggerEffect(new SkillEffectContext {
-                Skill = this,  Radius = radius ,Target = caster
-            });
+            // TriggerEffect(new SkillEffectContext {
+            //     Skill = this,  Radius = radius ,Target = caster
+            // });
             hasTriggered = true;
         }
 

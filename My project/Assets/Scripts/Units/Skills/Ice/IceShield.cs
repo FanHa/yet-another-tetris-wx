@@ -9,18 +9,12 @@ namespace Units.Skills
         public override CellTypeId CellTypeId => CellTypeId.IceShield;
 
         private bool hasTriggered;
-        private int iceCellCount = 0;
         public IceShieldConfig Config { get; }
 
         public IceShield(IceShieldConfig config)
         {
             Config = config;
             hasTriggered = false;
-        }
-
-        public void SetIceCellCount(int iceCellCount)
-        {
-            this.iceCellCount = iceCellCount;
         }
 
         public override bool IsReady()
@@ -30,6 +24,8 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
+            hasTriggered = true;
+            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float buffDuration = Config.BuffDuration;
             float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationAdditionPerIceCell;
             int moveSlowPercent = Config.BaseMoveSlowPercent + iceCellCount * Config.MoveSlowPercentPerIceCell;
@@ -46,12 +42,6 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
-            TriggerEffect(new SkillEffectContext
-            {
-                Skill = this,
-                Target = caster
-            });
-            hasTriggered = true;
         }
 
         public override string Description()

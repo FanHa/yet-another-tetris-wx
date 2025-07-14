@@ -23,19 +23,11 @@ namespace Model.Tetri
             return "霜域";
         }
 
-        public override void PostApply(Unit unit, IReadOnlyList<Cell> allCells)
+        public override void Apply(Unit unit)
         {
-            int iceCount = 0;
-            foreach (Model.Tetri.Cell cell in allCells)
-            {
-                if (cell.Affinity == AffinityType.Ice)
-                    iceCount++;
-            }
-
             var configGroup = SkillConfigGroup as Units.Skills.FrostZoneConfigGroup;
             var config = configGroup?.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.FrostZone(config);
-            skillInstance.SetIceCellCount(iceCount);
             unit.AddSkill(skillInstance);
         }
     }

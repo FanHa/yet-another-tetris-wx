@@ -11,17 +11,11 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.Snowball;
         public SnowballConfig Config { get; }
-        private int iceCellCount = 0;
 
         public Snowball(SnowballConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
-        }
-
-        public void SetIceCellCount(int iceCellCount)
-        {
-            this.iceCellCount = iceCellCount;
         }
 
         protected override void ExecuteCore(Unit caster)
@@ -42,31 +36,29 @@ namespace Units.Skills
                 Quaternion.identity
             );
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
-            if (snowBall != null)
-            {
-                float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
-                var damage = new Damages.Damage(totalDamage, Damages.DamageType.Ice);
-                damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(caster);
-                damage.SetTargetUnit(targetEnemy);
-
-                // 计算Chilled参数
-                float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
-                int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
-                int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
-                int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
-
-                var chilled = new Units.Buffs.Chilled(
-                    chilledDuration,
-                    moveSlowPercent,
-                    atkSlowPercent,
-                    energySlowPercent,
-                    caster,
-                    this
-                );
-                snowBall.SetChilled(chilled);
-                snowBall.Init(caster, targetEnemy.transform, damage);
-            }
+            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
+            var damage = new Damages.Damage(totalDamage, Damages.DamageType.Ice);
+            damage.SetSourceLabel(Name());
+            damage.SetSourceUnit(caster);
+            damage.SetTargetUnit(targetEnemy);
+            // 计算Chilled参数
+            float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
+            int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
+            int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
+            int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
+            var chilled = new Units.Buffs.Chilled(
+                chilledDuration,
+                moveSlowPercent,
+                atkSlowPercent,
+                energySlowPercent,
+                caster,
+                this
+            );
+            snowBall.SetChilled(chilled);
+            snowBall.Init(caster, targetEnemy.transform, damage);
+            snowBall.Activate();
+            
         }
 
         public override string Description()

@@ -24,8 +24,6 @@ namespace Model.Tetri
         public abstract string Name();
 
         public virtual void Apply(Units.Unit unit) { }
-        public virtual void PostApply(Units.Unit unit, IReadOnlyList<Cell> allCells) { }
-
         public AffinityType Affinity { get; set; } = AffinityType.None;
 
     }

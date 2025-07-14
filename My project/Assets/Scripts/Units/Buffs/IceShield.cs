@@ -12,6 +12,7 @@ namespace Units.Buffs
         private int chilledMoveSlowPercent;  // Chilled 移动速度减缓百分比
         private int chilledAttackSlowPercent;// Chilled 攻击速度减缓百分比
         private int chilledEnergyRegenSlowPercent; // Chilled 能量回复减缓百分比
+        private GameObject vfxInstance;
 
         public IceShield(
             float buffDuration,
@@ -46,6 +47,25 @@ namespace Units.Buffs
                 sourceSkill
             );
             attacker.AddBuff(chilled);
+        }
+
+        protected override void OnApplyExtra(Unit unit)
+        {
+            var vfxPrefab = unit.ProjectileConfig.IceShieldPrefab;
+            vfxInstance = Object.Instantiate(vfxPrefab, unit.transform.position, Quaternion.identity);
+            var iceShieldComp = vfxInstance.GetComponent<Units.Projectiles.IceShield>();
+            iceShieldComp.Initialize(unit);
+            iceShieldComp.Activate();
+        }
+
+        public override void OnRemove(Unit unit)
+        {
+            if (vfxInstance != null)
+            {
+                Object.Destroy(vfxInstance);
+                vfxInstance = null;
+            }
+            base.OnRemove(unit);
         }
     }
 }

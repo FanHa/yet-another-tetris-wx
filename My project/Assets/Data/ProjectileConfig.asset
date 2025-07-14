@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd26482ab6a565418861616fc7c9d70, type: 3}
   m_Name: ProjectileConfig
   m_EditorClassIdentifier: 
-  BaseProjectilePrefab: {fileID: 6524986292476145452, guid: 96371a052d742a441b0873e49df158b3, type: 3}
+  BaseProjectilePrefab: {fileID: 9187572345046287161, guid: c0e4b6d77ae220a41ac8156d43707b50, type: 3}
+  MeleeProjectilePrefab: {fileID: 6126591707298796667, guid: d3e017b197a10c94a8b90001f8a157f3, type: 3}
   BombPrefab: {fileID: 2509275562231442316, guid: 339502166c7444a4f89dc9175e4bb1a9, type: 3}
   PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
   ChainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
@@ -20,3 +21,8 @@ MonoBehaviour:
   FireballPrefab: {fileID: 109674630725193608, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
   SnowballPrefab: {fileID: 2235469884941056063, guid: 76f0c4ad7b9930f4b9da9cb995db3506, type: 3}
   TempTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
+  BlazingFieldPrefab: {fileID: 2231431966408489219, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}
+  FlameRingPrefab: {fileID: 6059573537789386272, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
+  FrostZonePrefab: {fileID: 2231431966408489219, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
+  IceShieldPrefab: {fileID: 1995791391659268277, guid: f25552e189446a041af81469fcfa1836, type: 3}
+  IcyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}

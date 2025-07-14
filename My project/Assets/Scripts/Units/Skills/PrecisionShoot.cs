@@ -29,10 +29,10 @@ namespace Units.Skills
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(caster);
                 damage.SetTargetUnit(targetEnemy);
-                damage.SetBuffs(caster.attackEffects);
 
                 var target = targetEnemy.transform;
                 projectile.Init(caster, target, damage);
+                projectile.Activate();
             }
         }
 

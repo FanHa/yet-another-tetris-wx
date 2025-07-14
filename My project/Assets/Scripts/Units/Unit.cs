@@ -25,6 +25,7 @@ namespace Units
         private AnimationController animationController;
         public VisualEffectConfig VisualEffectConfig;
         public Model.ProjectileConfig ProjectileConfig;
+        public Dictionary<AffinityType, int> CellCounts = new();
 
         public enum Faction
         {
@@ -38,7 +39,6 @@ namespace Units
 
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Damages.Damage> OnAttackHit;
-        public event Action<SkillEffectContext> OnSkillEffectTriggered;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
 
@@ -61,7 +61,7 @@ namespace Units
 
         public UnitManager UnitManager;
 
-        public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
+        // public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         public bool isFrozen = false;
@@ -87,7 +87,6 @@ namespace Units
             if (skillHandler != null)
             {
                 skillHandler.OnSkillReady += OnSkillReady;
-                skillHandler.OnSkillEffectTriggered += HandleSkillEffectTriggered;
             }
         }
 
@@ -146,11 +145,6 @@ namespace Units
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
             movementController.SetBattlefieldBounds(minBounds, maxBounds);
-        }
-        private void HandleSkillEffectTriggered(SkillEffectContext context)
-        {
-            context.Caster = this;
-            OnSkillEffectTriggered?.Invoke(context);
         }
 
         public void AddSkill(Skills.Skill newSkill)
@@ -225,16 +219,11 @@ namespace Units
                         Vector2 direction = (closestEnemy.position - transform.position).normalized;
                         animationController.SetLookDirection(direction);
 
-                        TriggerAttack();
+                        animationController.TriggerAttack();
                         lastAttackTime = Time.time; // 更新攻击时间
                     }
                 }
             }
-        }
-
-        private void TriggerAttack()
-        {
-            animationController.TriggerAttack();
         }
 
         // 这个方法会被animator的event触发
@@ -258,26 +247,25 @@ namespace Units
 
         private void Attack(Unit target, float damageValue)
         {
+            GameObject projectileObject;
             if (Attributes.IsRanged)
             {
-                damageValue = Attributes.RangeAttackDamagePercentage * damageValue / 100;
-                Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
-                damage.SetSourceLabel("远程攻击");
-                damage.SetSourceUnit(this);
-                damage.SetTargetUnit(target);
-                damage.SetBuffs(attackEffects);
-                FireProjectile(target, damage);
+                projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
             }
             else
             {
-                Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
-                damage.SetSourceLabel("近战攻击");
-                damage.SetSourceUnit(this);
-                damage.SetTargetUnit(target);
-                damage.SetBuffs(attackEffects);
-                target.TakeHit(this, ref damage); // 通知目标单位被攻击
-                TriggerAttackHit(target, damage);
+                projectileObject = Instantiate(ProjectileConfig.MeleeProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
             }
+            Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
+            damage.SetSourceLabel("普通攻击");
+            damage.SetSourceUnit(this);
+            damage.SetTargetUnit(target);
+            Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
+            projectile.SetSprite(Fist1SpriteRenderer.sprite);
+            projectile.Init(this, target.transform, damage);
+            projectileObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+            projectile.Activate();
+
         }
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)
@@ -290,29 +278,6 @@ namespace Units
                 }
             }
         }
-
-        public void FireProjectile(Unit target, Damages.Damage damage)
-        {
-            if (ProjectileConfig.BaseProjectilePrefab != null && projectileSpawnPoint != null)
-            {
-                GameObject projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
-                Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
-
-                if (projectile != null)
-                {
-                    projectile.Init(this, target.transform, damage);
-
-                    SpriteRenderer projectileSpriteRenderer = projectileObject.GetComponent<SpriteRenderer>();
-                    if (projectileSpriteRenderer != null && Fist1SpriteRenderer != null)
-                    {
-                        projectileSpriteRenderer.sprite = Fist1SpriteRenderer.sprite;
-                    }
-                    projectileObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-
-                }
-            }
-        }
-
 
         public void TakeHit(Unit attacker, ref Damages.Damage damage)
         {

@@ -13,8 +13,6 @@ using Units.UI;
 using Units.Skills;
 
 namespace Controller {
-
-    [RequireComponent(typeof(Units.Skills.SkillEffectHandler))]
     [RequireComponent(typeof(UnitManager))]
     public class BattleField : MonoBehaviour
     {
@@ -45,19 +43,12 @@ namespace Controller {
         public event Action OnBattleEnd;
         public event Action<Unit> OnUnitClicked;
 
-        private Units.Skills.SkillEffectHandler skillEffectHandler;
-
         private List<UnitInventoryItem> factionAConfig;
         private List<UnitInventoryItem> factionBConfig;
 
 
         void Awake()
         {
-            skillEffectHandler = GetComponent<Units.Skills.SkillEffectHandler>();
-            if (skillEffectHandler == null)
-            {
-                Debug.LogError("SkillEffectHandler component is missing on the BattleField.");
-            }
             unitManager = GetComponent<UnitManager>();
         }
         void Start()
@@ -67,7 +58,6 @@ namespace Controller {
             unitManager.OnFactionAllDead += HandleFactionAllDead;
             unitManager.OnUnitDamageTaken += HandleDamageTaken;
             unitManager.OnSkillCast += HandleSkillCast;
-            unitManager.OnSkillEffectTriggered += HandleSkillEffectTriggered;
             unitManager.OnUnitClicked += HandleUnitClicked;
         }
 
@@ -112,10 +102,6 @@ namespace Controller {
             unitManager.SpawnUnits(factionBConfig, spawnPointB, Unit.Faction.FactionB, battlefieldMinBounds, battlefieldMaxBounds);
         }
 
-        private void HandleSkillEffectTriggered(SkillEffectContext context)
-        {
-            skillEffectHandler.HandleSkillEffect(context);
-        }
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
         {

@@ -16,7 +16,6 @@ namespace Controller
         public event Action<Unit.Faction> OnFactionAllDead;
         public event Action<Units.Damages.Damage> OnUnitDamageTaken;
         public event Action<Units.Unit, Units.Skills.Skill> OnSkillCast;
-        public event Action<SkillEffectContext> OnSkillEffectTriggered;
 
         [SerializeField] private UnitFactory unitFactory;
         [SerializeField] private Transform factionARoot;
@@ -54,7 +53,6 @@ namespace Controller
                 unit.OnDamageTaken += HandleDamageTaken;
 
                 unit.OnSkillCast += HandleSkillCast;
-                unit.OnSkillEffectTriggered += HandleSkillEffectTriggered;
                 unit.OnClicked += HandleUnitClicked;
                 unit.UnitManager = this;
                 if (unit.faction == Unit.Faction.FactionA)
@@ -140,10 +138,6 @@ namespace Controller
             OnSkillCast?.Invoke(unit, skill);
         }
         
-        private void HandleSkillEffectTriggered(SkillEffectContext context)
-        {
-            OnSkillEffectTriggered?.Invoke(context);
-        }
 
         internal List<Unit> GetFactionBUnits()
         {

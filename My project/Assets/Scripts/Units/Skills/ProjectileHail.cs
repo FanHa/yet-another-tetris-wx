@@ -48,8 +48,7 @@ namespace Units.Skills
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(caster);
                 damage.SetTargetUnit(targetEnemy);
-                damage.SetBuffs(caster.attackEffects);
-                caster.FireProjectile(targetEnemy, damage);
+                // caster.Attack(targetEnemy, damage);
 
                 // 记录已攻击的敌人
                 attackedEnemies.Add(targetEnemy);

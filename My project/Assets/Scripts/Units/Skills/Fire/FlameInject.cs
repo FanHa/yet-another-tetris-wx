@@ -8,18 +8,12 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.FlameInject;
         private bool hasTriggered;
-        private int fireCellCount = 0;
         public FlameInjectConfig Config { get; }
 
         public FlameInject(FlameInjectConfig config)
         {
             Config = config;
             hasTriggered = false;
-        }
-
-        public void SetFireCellCount(int fireCellCount)
-        {
-            this.fireCellCount = fireCellCount;
         }
 
         public override bool IsReady()
@@ -30,6 +24,7 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
+            int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float extraFireDamage = Config.BaseFireDamage + fireCellCount * Config.FireCellDamageBonus;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
             float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;

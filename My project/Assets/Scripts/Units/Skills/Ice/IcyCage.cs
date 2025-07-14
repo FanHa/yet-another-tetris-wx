@@ -11,7 +11,6 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCageConfig Config { get; }
-        private int iceCellCount = 0;
 
         public IcyCage(IcyCageConfig config)
         {
@@ -19,12 +18,7 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        public void SetIceCellCount(int iceCellCount)
-        {
-            this.iceCellCount = iceCellCount;
-        }
-
-        public float GetDuration()
+        public float GetDuration(int iceCellCount)
         {
             return Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
         }
@@ -39,7 +33,7 @@ namespace Units.Skills
                 return;
 
             Unit targetEnemy = enemiesInRange.First();
-
+            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float freezeDuration = Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
 
             var freezeBuff = new Buffs.Freeze(
@@ -48,12 +42,6 @@ namespace Units.Skills
                 this
             );
             targetEnemy.AddBuff(freezeBuff);
-
-            TriggerEffect(new SkillEffectContext
-            {
-                Skill = this,
-                Target = targetEnemy,
-            });
         }
 
         public override string Description()

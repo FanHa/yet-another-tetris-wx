@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2944100352677386664}
   - component: {fileID: 1191075648234408424}
-  - component: {fileID: 3034142121366498615}
+  - component: {fileID: 8931962592207463393}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: IcyCage
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3034142121366498615
+--- !u!114 &8931962592207463393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,6 +97,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1995791391659268277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb70d4e51d185f4dad4f9d9716d63da, type: 3}
+  m_Script: {fileID: 11500000, guid: c4e6160558b65044aa1ddc21512c61f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -13,7 +13,6 @@ namespace UI.Inventories
     {
         public event Action<Unit> OnUnitClicked;
         [SerializeField] private Transform contentPanel;
-        [SerializeField] private Description.Description itemDescription;
         List<InventoryItem> items = new List<InventoryItem>();
 
         public void UpdateData(List<Unit> unitList)
