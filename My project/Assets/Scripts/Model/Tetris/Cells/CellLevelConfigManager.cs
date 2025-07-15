@@ -22,5 +22,6 @@ namespace Model.Tetri
         [Header("风系技能")]
         public WindShiftConfigGroup WindShiftConfigGroup;
         public WildWindConfigGroup WildWindConfigGroup;
+        public AttackBoostConfigGroup AttackBoostConfigGroup;
     }
 }

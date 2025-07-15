@@ -50,6 +50,7 @@ namespace Model.Tetri
                 new(CellTypeId.FlameRing, typeof(FlameRing), cellLevelConfigManager.FlameRingConfigGroup),
                 new(CellTypeId.WindShift, typeof(WindShift), cellLevelConfigManager.WindShiftConfigGroup),
                 new(CellTypeId.WildWind, typeof(WildWind), cellLevelConfigManager.WildWindConfigGroup),
+                new(CellTypeId.AttackBoost, typeof(AttackBoost), cellLevelConfigManager.AttackBoostConfigGroup),
 
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };

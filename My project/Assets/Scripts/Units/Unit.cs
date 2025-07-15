@@ -23,7 +23,6 @@ namespace Units
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
-        public VisualEffectConfig VisualEffectConfig;
         public Model.ProjectileConfig ProjectileConfig;
         public Dictionary<AffinityType, int> CellCounts = new();
 
@@ -45,8 +44,6 @@ namespace Units
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
 
-        private List<ITakeDamageBehavior> damageBehaviors = new List<ITakeDamageBehavior>(); // 伤害行为链
-
         private HealthBar healthBar;
 
         public SpriteRenderer BodySpriteRenderer;
@@ -61,7 +58,6 @@ namespace Units
 
         public UnitManager UnitManager;
 
-        // public List<Buffs.Buff> attackEffects = new List<Buffs.Buff>(); // 攻击效果列表
         private bool isActive = false; // 是否处于活动状态
         public bool moveable = true;
         public bool isFrozen = false;
@@ -174,18 +170,6 @@ namespace Units
             dotHandler.ApplyDot(dot);
         }
 
-        
-
-        public void AddDamageBehavior(ITakeDamageBehavior behavior)
-        {
-            damageBehaviors.Add(behavior);
-        }
-
-        public void RemoveDamageBehavior(ITakeDamageBehavior behavior)
-        {
-            damageBehaviors.Remove(behavior);
-        }
-
 
         public void AddBuff(Units.Buffs.Buff buff)
         {
@@ -294,11 +278,6 @@ namespace Units
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
-            foreach (var behavior in damageBehaviors)
-            {
-                damageReceived = behavior.ModifyDamage(damageReceived);
-            }
-
             float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
 
             Attributes.CurrentHealth -= finalDamage;
