@@ -1,48 +1,39 @@
-// using System;
-// using System.Collections.Generic;
+using Units.Skills;
 
-// namespace Units.Buffs
-// {
-//     public class Burn : Buff
-//     {
-//         public Units.Unit source; // 施加灼烧效果的单位
-//         private int damagePerSecond = 2; // 每秒伤害
+namespace Units.Buffs
+{
+    /// <summary>
+    /// Burn：灼烧持续伤害Buff（Dot）
+    /// </summary>
+    public class Burn : Buff, ITick
+    {
+        private readonly float dps;
+        private const string label = "灼烧";
 
-//         public Burn()
-//         {
-//             durationSeconds = 5f; // 持续时间
-//         }
+        public Burn(
+            float dps,
+            float duration,
+            Unit sourceUnit,
+            Skill sourceSkill
+        ) : base(duration, sourceUnit, sourceSkill)
+        {
+            this.dps = dps;
+        }
 
-//         public override void Apply(Unit target)
-//         {
+        public override string Name() => label;
+        public override string GetKey()
+        {
+            return base.GetKey() + sourceSkill + sourceUnit;
+        }
+        public override string Description() => $"每秒造成{dps}点火焰伤害";
 
-//         }
-        
-//         public override string Name()
-//         {
-//             return "灼烧";
-//         }
-
-//         public override string Description()
-//         {
-//             return $"{damagePerSecond} 伤害每秒, 持续{durationSeconds}秒";
-//         }
-
-//         public override void Remove(Unit unit)
-//         {
-            
-//         }
-
-//         public override void Affect(Unit target)
-//         {
-//             Damages.Damage damage = new Damages.Damage(damagePerSecond, Damages.DamageType.Dot)
-//                 .SetSourceLabel(Name()) // 设置伤害来源标签
-//                 .SetSourceUnit(source)  // 设置伤害来源单位
-//                 .SetTargetUnit(target);
-
-//             target.TakeDamage(damage); // 施加伤害
-//         }
-
-//         public override Type TetriCellType => typeof(Model.Tetri.Burn); // Return the Type of the corresponding TetriCell
-//     }
-// }
+        public void OnTick(Unit unit)
+        {
+            var damage = new Damages.Damage(dps, Damages.DamageType.Fire);
+            damage.SetSourceUnit(sourceUnit);
+            damage.SetSourceLabel(sourceSkill.Name() + "-" +label);
+            damage.SetTargetUnit(unit);
+            unit.TakeDamage(damage);
+        }
+    }
+}

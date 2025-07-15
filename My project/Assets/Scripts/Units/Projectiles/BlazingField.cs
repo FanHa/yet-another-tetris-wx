@@ -15,6 +15,7 @@ namespace Units.Projectiles
         private float timer = 0f;
         private float tickTimer = 0f;
         private bool initialized = false;
+        private Skills.Skill sourceSkill;
 
         [SerializeField] private ParticleSystem fireParticle;
         void Update()
@@ -34,15 +35,13 @@ namespace Units.Projectiles
                     Unit enemy = collider.GetComponent<Unit>();
                     if (enemy != null && enemy.faction != caster.faction)
                     {
-                        var dot = new Units.Dot(
-                            Units.DotType.Burn,
-                            null, // 可以传递技能引用
-                            caster,
+                        var burn = new Units.Buffs.Burn(
                             dotDps,
                             dotDuration,
-                            "焰域灼烧"
+                            caster,
+                            null // 可根据需要传递技能引用
                         );
-                        enemy.ApplyDot(dot);
+                        enemy.AddBuff(burn);
                     }
                 }
             }
@@ -53,7 +52,7 @@ namespace Units.Projectiles
             }
         }
 
-        public void Init(Unit caster, float radius, float duration, float dotDps, float dotDuration)
+        public void Init(Unit caster, float radius, float duration, float dotDps, float dotDuration, Skills.Skill sourceSkill)
         {
             this.caster = caster;
             this.radius = radius;
@@ -63,6 +62,7 @@ namespace Units.Projectiles
             var main = fireParticle.main;
             main.startLifetime = radius;
             this.duration = duration;
+            this.sourceSkill = sourceSkill;
             timer = 0f;
         }
 

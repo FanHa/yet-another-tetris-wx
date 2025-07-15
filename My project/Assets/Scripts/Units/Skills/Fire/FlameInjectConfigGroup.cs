@@ -12,17 +12,15 @@ namespace Units.Skills
     [System.Serializable]
     public class FlameInjectConfig : SkillConfig
     {
-        [Header("火焰伤害")]
-        public float BaseFireDamage = 1f;
-        public float FireCellDamageBonus = 1f;
+        [Header("通用")]
+        public float BuffDuration;
 
-        [Header("灼烧效果")]
-        public float BaseDotDps = 1f;
-        public float DotDpsPerFireCell = 1f;
-        public float BaseDotDuration = 2f;
-        public float DotDurationPerFireCell = 1f;
+        [Header("属性")]
+        public float BaseDotDps;
+        public float DotDuration;
 
-        [Header("Buff")]
-        public float BuffDuration = -1f;
+        [Header("加成")]
+        public float DotDpsPerFireCell;
+
     }
 }

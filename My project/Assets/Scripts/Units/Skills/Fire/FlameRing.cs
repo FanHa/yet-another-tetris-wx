@@ -38,9 +38,6 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
-            // TriggerEffect(new SkillEffectContext {
-            //     Skill = this,  Radius = radius ,Target = caster
-            // });
             hasTriggered = true;
         }
 

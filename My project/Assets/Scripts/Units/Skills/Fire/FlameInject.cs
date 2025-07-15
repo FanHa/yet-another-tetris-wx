@@ -25,12 +25,10 @@ namespace Units.Skills
         protected override void ExecuteCore(Unit caster)
         {
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
-            float extraFireDamage = Config.BaseFireDamage + fireCellCount * Config.FireCellDamageBonus;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
-            float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
+            float dotDuration = Config.DotDuration;
 
             var buff = new Buffs.FlameInject(
-                extraFireDamage,
                 dotDps,
                 dotDuration,
                 Config.BuffDuration,

@@ -2,10 +2,17 @@ namespace Units.Projectiles
 {
     public class Fireball : Projectile
     {
-        private Dot dot; // 火焰持续伤害
-        public void SetDot(Dot dot)
+        private float burnDps;
+        private float burnDuration;
+        private Skills.Skill sourceSkill;
+
+        public void Init(Unit caster, Unit target, float burnDps, float burnDuration, Skills.Skill sourceSkill)
         {
-            this.dot = dot;
+            this.caster = caster;
+            this.target = target.transform;
+            this.burnDps = burnDps;
+            this.burnDuration = burnDuration;
+            this.sourceSkill = sourceSkill;
         }
 
         protected override void HandleHitTarget()
@@ -23,12 +30,15 @@ namespace Units.Projectiles
                 return;
             }
 
-            unit.TakeDamage(damage); // 对目标单位造成伤害
-            // 处理火焰持续伤害
-            if (dot != null)
-            {
-                unit.ApplyDot(dot);
-            }
+            // 命中后直接添加Burn Buff
+            var burn = new Units.Buffs.Burn(
+                dps: burnDps,
+                duration: burnDuration,
+                sourceUnit: caster,
+                sourceSkill: sourceSkill
+            );
+            unit.AddBuff(burn);
+
             Destroy(gameObject); // 销毁投射物
         }
     }

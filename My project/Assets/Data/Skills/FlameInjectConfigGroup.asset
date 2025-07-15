@@ -13,17 +13,11 @@ MonoBehaviour:
   m_Name: FlameInjectConfigGroup
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - BaseFireDamage: 1
-    FireCellDamageBonus: 1
-    BaseDotDps: 1
+  - BuffDuration: -1
+    BaseDotDps: 3
+    DotDuration: 3
     DotDpsPerFireCell: 1
-    BaseDotDuration: 2
-    DotDurationPerFireCell: 1
-    BuffDuration: -1
-  - BaseFireDamage: 2
-    FireCellDamageBonus: 2
-    BaseDotDps: 2
+  - BuffDuration: -1
+    BaseDotDps: 6
+    DotDuration: 3
     DotDpsPerFireCell: 2
-    BaseDotDuration: 2
-    DotDurationPerFireCell: 1
-    BuffDuration: -1

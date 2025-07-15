@@ -12,16 +12,14 @@ namespace Units.Skills
     [System.Serializable]
     public class FireballConfig : SkillConfig
     {
-        [Header("伤害")]
-        public float BaseDamage = 20f;
-        public float FireCellDamageBonus = 5f;
+        [Header("通用")]
+        public float RequiredEnergy;
 
-        [Header("灼烧效果")]
-        public float DotPerFireCell = 1f;
-        public float DotDurationPerFireCell = 1f;
-        public float DotBaseDuration = 3f;
+        [Header("属性")]
+        public float DotBaseDamage;
+        public float DotDuration;
 
-        [Header("消耗")]
-        public float RequiredEnergy = 100f;
+        [Header("加成")]
+        public float DotAddtionPerFireCell; // 每个火系方块增加的伤害
     }
 }

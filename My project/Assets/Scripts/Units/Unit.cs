@@ -13,7 +13,6 @@ using UnityEngine.EventSystems;
 
 namespace Units
 {
-    [RequireComponent(typeof(DotHandler))]
     [RequireComponent(typeof(Units.Skills.SkillHandler))]
     [RequireComponent(typeof(BuffHandler))]
     public class Unit : MonoBehaviour, IPointerClickHandler
@@ -51,7 +50,6 @@ namespace Units
         public SpriteRenderer Fist2SpriteRenderer;
         private HitEffect hitEffect;
 
-        private DotHandler dotHandler; // 持续伤害处理器
         public Transform projectileSpawnPoint; // 投射物生成位置
 
         public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
@@ -74,8 +72,6 @@ namespace Units
             BuffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
-            dotHandler = GetComponent<DotHandler>();
-
         }
 
         void Start()
@@ -164,12 +160,6 @@ namespace Units
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能
 
         }
-
-        public void ApplyDot(Dot dot)
-        {
-            dotHandler.ApplyDot(dot);
-        }
-
 
         public void AddBuff(Units.Buffs.Buff buff)
         {

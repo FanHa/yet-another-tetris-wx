@@ -28,16 +28,6 @@ MonoBehaviour:
       rows: 4
       cols: 4
     UpgradedTimes: 0
-  - tetriType: 1
-    shape:
-      rows: 4
-      cols: 4
-    UpgradedTimes: 0
-  - tetriType: 1
-    shape:
-      rows: 4
-      cols: 4
-    UpgradedTimes: 0
   - tetriType: 0
     shape:
       rows: 4
@@ -50,4 +40,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d1095e2d45c10f24080cd3f95f43171f, type: 2}
   - {fileID: 11400000, guid: 99a257b52b2d40d40a8c4ddcd111c527, type: 2}
   - {fileID: 11400000, guid: bb81ad1e0fefc4e4f97d31c1b0df71bd, type: 2}
-  avaliableConfigIndex: 3
+  avaliableConfigIndex: 1

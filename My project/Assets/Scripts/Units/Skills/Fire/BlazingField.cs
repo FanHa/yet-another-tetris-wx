@@ -34,7 +34,14 @@ namespace Units.Skills
             var prefab = caster.ProjectileConfig.BlazingFieldPrefab; // 你需要在配置里加上这个Prefab
             var blazingFieldObj = Object.Instantiate(prefab, center, Quaternion.identity);
             var effect = blazingFieldObj.GetComponent<Units.Projectiles.BlazingField>();
-            effect.Init(caster, radius, duration, dotDps, dotDuration);
+            effect.Init(
+                caster: caster,
+                radius: radius,
+                duration: duration,
+                dotDps: dotDps,
+                dotDuration: dotDuration,
+                sourceSkill: this
+            );
             effect.Activate();
         }
 

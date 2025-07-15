@@ -30,7 +30,7 @@ namespace Units.Buffs
         protected virtual void OnApplyExtra(Unit unit) { }
         public virtual void OnRemove(Unit unit) { }
 
-        public string GetKey()
+        public virtual string GetKey()
         {
             // 使用Buff的类型和名称作为唯一标识
             return $"{BuffType.FullName}:{Name()}";

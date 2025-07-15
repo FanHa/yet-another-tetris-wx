@@ -61,15 +61,13 @@ namespace Units.Projectiles
 
                 foreach (var enemy in enemies)
                 {
-                    var dot = new Dot(
-                        DotType.Burn,
-                        skill: sourceSkill,
-                        caster: owner,
+                    var burn = new Units.Buffs.Burn(
                         dps: dotDps,
                         duration: dotDuration,
-                        label: "灼烧"
+                        sourceUnit: owner,
+                        sourceSkill: sourceSkill
                     );
-                    enemy.ApplyDot(dot);
+                    enemy.AddBuff(burn);
                 }
             }
         }

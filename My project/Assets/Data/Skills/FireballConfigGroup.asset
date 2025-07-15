@@ -13,15 +13,11 @@ MonoBehaviour:
   m_Name: FireballConfigGroup
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - BaseDamage: 20
-    FireCellDamageBonus: 5
-    DotPerFireCell: 1
-    DotDurationPerFireCell: 1
-    DotBaseDuration: 3
-    RequiredEnergy: 100
-  - BaseDamage: 50
-    FireCellDamageBonus: 10
-    DotPerFireCell: 1
-    DotDurationPerFireCell: 1
-    DotBaseDuration: 3
-    RequiredEnergy: 100
+  - RequiredEnergy: 100
+    DotBaseDamage: 5
+    DotDuration: 5
+    DotAddtionPerFireCell: 1
+  - RequiredEnergy: 100
+    DotBaseDamage: 10
+    DotDuration: 5
+    DotAddtionPerFireCell: 2
