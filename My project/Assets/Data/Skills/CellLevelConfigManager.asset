@@ -23,3 +23,4 @@ MonoBehaviour:
   WindShiftConfigGroup: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}
   WildWindConfigGroup: {fileID: 11400000, guid: 2efad6ffda58cc449a2fde652c25fab0, type: 2}
   AttackBoostConfigGroup: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
+  HitAndRunConfigGroup: {fileID: 11400000, guid: ec3b9aafabe20ca4aa32529ade44e2c8, type: 2}

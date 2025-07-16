@@ -23,5 +23,6 @@ namespace Model.Tetri
         public WindShiftConfigGroup WindShiftConfigGroup;
         public WildWindConfigGroup WildWindConfigGroup;
         public AttackBoostConfigGroup AttackBoostConfigGroup;
+        public HitAndRunConfigGroup HitAndRunConfigGroup; // HitAndRun 没有配置
     }
 }

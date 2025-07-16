@@ -102,7 +102,7 @@ namespace Units
                 if (enemyUnits != null && enemyUnits.Count > 0)
                 {
                     Transform closestEnemy = enemyUnits[0].transform;
-                    movementController.MoveTowardsEnemy(closestEnemy);
+                    movementController.ExecuteMove(closestEnemy);
                 }
             }
         }
@@ -128,6 +128,10 @@ namespace Units
             CancelInvoke(nameof(UpdateEnemiesDistance));
             skillHandler.Deactivate(); // 如有需要
             isActive = false;
+        }
+        public void SetHitAndRun(bool enable)
+        {
+            movementController.IsHitAndRun = enable;
         }
 
         private void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -215,8 +219,8 @@ namespace Units
                 {
                     Attack(target, Attributes.AttackPower.finalValue / attackTargetCount); // 执行攻击逻辑
                 }
-
             }
+
         }
 
         private void Attack(Unit target, float damageValue)

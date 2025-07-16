@@ -22,6 +22,7 @@ namespace Model.Tetri
         WindShift,
         WildWind,
         AttackBoost,
+        HitAndRun
     }
 
     public enum CharacterTypeId

@@ -51,6 +51,7 @@ namespace Model.Tetri
                 new(CellTypeId.WindShift, typeof(WindShift), cellLevelConfigManager.WindShiftConfigGroup),
                 new(CellTypeId.WildWind, typeof(WildWind), cellLevelConfigManager.WildWindConfigGroup),
                 new(CellTypeId.AttackBoost, typeof(AttackBoost), cellLevelConfigManager.AttackBoostConfigGroup),
+                new(CellTypeId.HitAndRun, typeof(HitAndRun), cellLevelConfigManager.HitAndRunConfigGroup), // HitAndRun 没有配置
 
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };

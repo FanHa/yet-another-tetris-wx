@@ -10,6 +10,7 @@ namespace Units
         public Transform BattlefieldMinBounds;
         public Transform BattlefieldMaxBounds;
         private Attributes attributes;
+        public bool IsHitAndRun = false;
 
         public void Initialize(Attributes attributes)
         {
@@ -36,28 +37,52 @@ namespace Units
             return (minBounds, maxBounds);
         }
 
-        public void MoveTowardsEnemy(Transform closestEnemy)
+        public void ExecuteMove(Transform closestEnemy)
         {
             if (closestEnemy == null) return;
 
             float distance = Vector2.Distance(transform.position, closestEnemy.position);
-            if (distance <= attributes.AttackRange)
+
+            Vector2 direction;
+            if (IsHitAndRun)
             {
-                return;
+                // HitAndRun逻辑：在攻击距离附近徘徊
+                float desiredDistance = attributes.AttackRange * 0.9f; // 可微调徘徊距离
+                if (distance < desiredDistance)
+                {
+                    // 太近了，远离敌人
+                    direction = (transform.position - closestEnemy.position).normalized;
+                }
+                else if (distance > attributes.AttackRange)
+                {
+                    // 太远了，靠近敌人
+                    direction = (closestEnemy.position - transform.position).normalized;
+                }
+                else
+                {
+                    // 距离合适，随机微调方向或原地徘徊
+                    direction = Vector2.zero;
+                }
             }
-            // 计算移动方向
-            Vector2 direction = (closestEnemy.position - transform.position).normalized;
+            else
+            {
+                // 原计划：靠近敌人
+                if (distance <= attributes.AttackRange)
+                {
+                    return;
+                }
+                direction = (closestEnemy.position - transform.position).normalized;
+            }
 
-            // 调整方向以避免扎堆
-            Vector2 adjustedDirection = AdjustDirectionToAvoidUnits(direction);
+            if (direction != Vector2.zero)
+            {
+                Vector2 adjustedDirection = AdjustDirectionToAvoidUnits(direction);
+                Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, attributes.MoveSpeed.finalValue * Time.deltaTime);
+                transform.position = newPosition;
 
-            // 移动单位
-            Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, attributes.MoveSpeed.finalValue * Time.deltaTime);
-            transform.position = newPosition;
-
-            // 调整朝向
-            AdjustLookDirection(adjustedDirection);
-            ClampPositionToBattlefield();
+                AdjustLookDirection(adjustedDirection);
+                ClampPositionToBattlefield();
+            }
         }
 
         private void ClampPositionToBattlefield()

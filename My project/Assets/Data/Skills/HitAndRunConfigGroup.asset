@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec24568920b65f4c95fb31ff46be2c0, type: 3}
-  m_Name: Wind
+  m_Script: {fileID: 11500000, guid: c9359cbc86b3ab24c894f886d7477b25, type: 3}
+  m_Name: HitAndRunConfigGroup
   m_EditorClassIdentifier: 
-  CellTypeIds: 0b0000000a0000000c0000000d000000
-  CharacterTypeIds: 00000000
+  LevelConfigs: []
