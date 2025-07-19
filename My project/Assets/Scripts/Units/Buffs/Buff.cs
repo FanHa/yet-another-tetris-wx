@@ -10,6 +10,7 @@ namespace Units.Buffs
         protected float timeLeft;
         protected Unit sourceUnit { get; set; }
         protected Units.Skills.Skill sourceSkill { get; set; } // 施加此Buff的技能
+        public Units.Skills.Skill SourceSkill => sourceSkill;
 
         public Buff(float duration, Unit sourceUnit, Units.Skills.Skill sourceSkill)
         {

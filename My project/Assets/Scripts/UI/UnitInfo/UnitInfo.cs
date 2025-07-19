@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Model.Tetri;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,13 @@ namespace UI.UnitInfo
         [SerializeField] private Transform attributeRoot;
         [SerializeField] private UI.UnitInfo.Attribute unitAttributePrefab;
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
+
         [SerializeField] private Transform skillRoot;
+
+        [SerializeField] private UI.UnitInfo.Buff buffInfoPrefab;
+        [SerializeField] private Transform buffRoot;
+
+        [SerializeField] private TMP_Text buffDescriptionText;
 
         [Header("运行时设置")]
         [SerializeField] private Utils.CameraFollower unitInfoCamera;
@@ -25,7 +32,12 @@ namespace UI.UnitInfo
             closeButton.onClick.AddListener(HideUnitInfo);
         }
 
-        private void HideUnitInfo()
+        public void Start()
+        {
+            panel.SetActive(false);
+        }
+
+        public void HideUnitInfo()
         {
             panel.SetActive(false);
         }
@@ -36,7 +48,9 @@ namespace UI.UnitInfo
                 Destroy(child.gameObject);
             foreach (Transform child in skillRoot)
                 Destroy(child.gameObject);
-            
+            foreach (Transform child in buffRoot)
+                Destroy(child.gameObject);
+
             Vector3 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
             bool isUpperHalf = screenPos.y > (Screen.height / 2f);
             RectTransform panelRect = panel.GetComponent<RectTransform>();
@@ -83,6 +97,22 @@ namespace UI.UnitInfo
                 UI.UnitInfo.Skill instantiatedSkill = Instantiate(unitSkillPrefab, skillRoot);
                 instantiatedSkill.SetSkill(skill.Name(), skill.Description(), cellTypeResourceMapping.GetSprite(skill.CellTypeId));
             }
+
+            List<Units.Buffs.Buff> buffs = unit.GetActiveBuffs();
+            if (buffs.Count > 0)
+            {
+                foreach (Units.Buffs.Buff buff in buffs)
+                {
+                    UI.UnitInfo.Buff buffInfo = Instantiate(buffInfoPrefab, buffRoot);
+                    buffInfo.SetBuff(buff);
+                    buffInfo.OnBuffClicked += ShowBuffDescription;
+                }
+            }
+        }
+        
+        public void ShowBuffDescription(Units.Buffs.Buff buff)
+        {
+            buffDescriptionText.text = buff.Name() + ": " + buff.Description();
         }
     }
 }

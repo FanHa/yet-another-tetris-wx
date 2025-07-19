@@ -15,8 +15,6 @@ namespace Units
         {
             var go = Object.Instantiate(unitPrefab);
             var unit = go.GetComponent<Units.Unit>();
-            if (unit == null)
-                return null;
 
             // 基础外观和数据初始化
             var characterSprite = resourceMapping.GetSprite(item.CharacterCell);

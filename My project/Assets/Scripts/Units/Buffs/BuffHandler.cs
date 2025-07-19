@@ -43,7 +43,7 @@ namespace Units.Buffs
             buffManager.AddOrRefreshBuff(buff);
         }
 
-        internal IEnumerable<Buff> GetActiveBuffs()
+        public IEnumerable<Buff> GetActiveBuffs()
         {
             return buffManager.GetAllBuffs();
         }

@@ -22,7 +22,7 @@ namespace Model.Tetri
         public override void Apply(Unit unit)
         {
             var configGroup = SkillConfigGroup as Units.Skills.HitAndRunConfigGroup;
-            var config = configGroup?.LevelConfigs[Level - 1];
+            var config = configGroup.LevelConfigs[Level - 1];
             var skillInstance = new Units.Skills.HitAndRun(config);
             unit.AddSkill(skillInstance);
         }

@@ -315,5 +315,10 @@ namespace Units
         {
             OnClicked?.Invoke(this);
         }
+
+        public List<Units.Buffs.Buff> GetActiveBuffs()
+        {
+            return BuffHandler.GetActiveBuffs().ToList();
+        }
     }
 }
