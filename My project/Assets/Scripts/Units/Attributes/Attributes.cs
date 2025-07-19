@@ -34,15 +34,16 @@ namespace Units
             }
         }
         public event Action<float, float> OnHealthChanged;
+        public event Action OnStateChanged;
 
 
         public Attributes()
         {
             moveSpeed = new Attribute("移速", 2);
             attackPower = new Attribute("攻击力", 10);
-            maxHealth = new Attribute("最大生命", 100);
-            attacksPerTenSeconds = new Attribute("攻击速度", 2.5f);
-            energyPerTick = new Attribute("能量回复速度", 5);
+            maxHealth = new Attribute("生命", 100);
+            attacksPerTenSeconds = new Attribute("攻速", 2.5f);
+            energyPerTick = new Attribute("能量回复", 5);
             CurrentHealth = MaxHealth.finalValue;
         }
     }

@@ -5,6 +5,7 @@ namespace Model.Tetri
         None,
         Fire,
         Ice,
-        Wind
+        Wind,
+        Blood,
     }
 }

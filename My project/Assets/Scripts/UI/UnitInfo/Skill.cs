@@ -1,3 +1,5 @@
+using System;
+using Model.Tetri;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,13 +7,25 @@ namespace UI.UnitInfo
 {
     public class Skill : MonoBehaviour
     {
-        [SerializeField] private Image skillIcon;
-        [SerializeField] private TMPro.TextMeshProUGUI descriptionText;
+        private Image skillIcon;
+        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
+        private Units.Skills.Skill skill;
+        public event Action<Units.Skills.Skill> OnClicked;
 
-        public void SetSkill(string name, string description, Sprite icon)
+        private void Awake()
         {
-            descriptionText.text = "<b>" + name + "</b>: " + description;
-            skillIcon.sprite = icon;
+            skillIcon = GetComponent<Image>();
+            Button button = GetComponent<Button>();
+            button.onClick.AddListener(HandleClick);
+        }
+        public void SetSkill(Units.Skills.Skill skill)
+        {
+            this.skill = skill;
+            skillIcon.sprite = cellTypeResourceMapping.GetSprite(skill.CellTypeId);
+        }
+        private void HandleClick()
+        {
+            OnClicked?.Invoke(this.skill);
         }
     }
 }

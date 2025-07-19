@@ -12,8 +12,12 @@ namespace Units
         [SerializeField] private float baseValue; // 基础值
         [SerializeField] private Dictionary<object, float> flatModifiers; // 绝对值修改来源
         [SerializeField] private Dictionary<object, float> percentageModifiers; // 百分比修改来源
+        public float BaseValue => baseValue;
+        public IEnumerable<float> FlatModifiers => flatModifiers.Values;
+        public IEnumerable<float> PercentageModifiers => percentageModifiers.Values;
 
         public float finalValue;
+        
 
         public Attribute(string name, float baseValue)
         {
