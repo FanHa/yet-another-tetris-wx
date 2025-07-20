@@ -20,10 +20,11 @@ MonoBehaviour:
   BloodBombPrefab: {fileID: 83292690119067482, guid: df742fbf7afbe1c46ad4da4bd7f0a951, type: 3}
   FireballPrefab: {fileID: 109674630725193608, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
   SnowballPrefab: {fileID: 2235469884941056063, guid: 76f0c4ad7b9930f4b9da9cb995db3506, type: 3}
-  TempTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
+  TemporaryTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
   BlazingFieldPrefab: {fileID: 2231431966408489219, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}
   FlameRingPrefab: {fileID: 6059573537789386272, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
   FrostZonePrefab: {fileID: 2231431966408489219, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
   IceShieldPrefab: {fileID: 1995791391659268277, guid: f25552e189446a041af81469fcfa1836, type: 3}
   IcyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
   WildWindPrefab: {fileID: 1995791391659268277, guid: 0a417b4fc79a18846800e1363a2a09f5, type: 3}
+  LifeBombPrefab: {fileID: 1995791391659268277, guid: 06ddad6e653bae5448a9643c0be053c8, type: 3}

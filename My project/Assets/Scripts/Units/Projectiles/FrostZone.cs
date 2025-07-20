@@ -77,7 +77,7 @@ namespace Units.Projectiles
                     if (enemy != null && enemy.faction != caster.faction)
                     {
                         // 造成冰属性伤害
-                        var iceDamage = new Damages.Damage(damage, Damages.DamageType.Ice);
+                        var iceDamage = new Damages.Damage(damage, Damages.DamageType.Skill);
                         iceDamage.SetSourceUnit(caster);
                         iceDamage.SetSourceLabel("霜域");
                         iceDamage.SetTargetUnit(enemy);

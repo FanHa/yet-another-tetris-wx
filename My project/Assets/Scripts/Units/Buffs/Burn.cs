@@ -29,7 +29,7 @@ namespace Units.Buffs
 
         public void OnTick(Unit unit)
         {
-            var damage = new Damages.Damage(dps, Damages.DamageType.Fire);
+            var damage = new Damages.Damage(dps, Damages.DamageType.Skill);
             damage.SetSourceUnit(sourceUnit);
             damage.SetSourceLabel(sourceSkill.Name() + "-" +label);
             damage.SetTargetUnit(unit);

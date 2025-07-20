@@ -46,7 +46,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度，所有效果随冰系Cell数量提升。";
+            return "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度.";
         }
 
         public override string Name()

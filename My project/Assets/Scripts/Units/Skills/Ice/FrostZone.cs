@@ -66,6 +66,6 @@ namespace Units.Skills
 
         public override string Name() => "霜域";
         public override string Description() =>
-            $"在目标区域制造一片极寒地带，{Config.BaseDuration}+{Config.DurationPerIceCell}*冰系Cell秒内每秒对范围内敌人造成冰属性伤害并施加Chilled，所有效果随冰系Cell提升。";
+            "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
     }
 }

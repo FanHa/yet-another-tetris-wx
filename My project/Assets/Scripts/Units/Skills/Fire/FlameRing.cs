@@ -43,7 +43,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"每次Tick对周围一圈敌人施加灼烧，所有效果随火系Cell数量提升。";
+            return "每次Tick对周围一圈敌人施加灼烧, 所有效果随火系Cell数量提升.";
         }
 
         public override string Name()

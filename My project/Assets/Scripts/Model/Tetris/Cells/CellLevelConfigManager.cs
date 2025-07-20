@@ -24,5 +24,8 @@ namespace Model.Tetri
         public WildWindConfigGroup WildWindConfigGroup;
         public AttackBoostConfigGroup AttackBoostConfigGroup;
         public HitAndRunConfigGroup HitAndRunConfigGroup; // HitAndRun 没有配置
+
+        [Header("生命")]
+        public LifeBombConfigGroup LifeBombConfigGroup;
     }
 }

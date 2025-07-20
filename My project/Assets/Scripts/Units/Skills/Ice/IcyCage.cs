@@ -46,7 +46,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"对攻击范围内一个敌人施加冻结（Freeze）效果，持续时间随冰系Cell数量提升。";
+            return "对攻击范围内一个敌人施加冻结(Freeze)效果";
         }
 
         public override string Name()

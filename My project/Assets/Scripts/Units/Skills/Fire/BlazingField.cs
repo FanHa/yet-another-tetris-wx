@@ -48,6 +48,6 @@ namespace Units.Skills
 
         public override string Name() => "焰域";
         public override string Description() =>
-            $"在目标区域制造一片燃烧地带，{Config.BaseDuration}+{Config.DurationPerFireCell}*火系Cell秒内每秒对范围内敌人施加灼烧，伤害和范围随火系Cell提升。";
+            "在目标区域制造一片燃烧区域,对敌人造成伤害";
     }
 }

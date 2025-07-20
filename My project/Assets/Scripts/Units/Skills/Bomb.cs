@@ -26,7 +26,7 @@ namespace Units.Skills
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(caster);
 
-                GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TempTargetPrefab);
+                GameObject tempTargetInstance = Object.Instantiate(caster.ProjectileConfig.TemporaryTargetPrefab);
                 tempTargetInstance.transform.position = targetEnemy.transform.position;
                 
                 bomb.Init(caster, tempTargetInstance.transform, damage, targetEnemy.faction, explosionRadius);

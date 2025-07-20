@@ -38,7 +38,7 @@ namespace Units.Skills
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
-            var damage = new Damages.Damage(totalDamage, Damages.DamageType.Ice);
+            var damage = new Damages.Damage(totalDamage, Damages.DamageType.Skill);
             damage.SetSourceLabel(Name());
             damage.SetSourceUnit(caster);
             damage.SetTargetUnit(targetEnemy);
@@ -63,7 +63,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"向攻击范围内一个敌人发射雪球，造成冰属性伤害并施加Chilled（冰霜Debuff，可叠加或刷新），所有效果随冰系Cell数量提升。";
+            return "向攻击范围内一个敌人发射雪球,造成伤害并施加减速Debuff.";
         }
 
         public override string Name()

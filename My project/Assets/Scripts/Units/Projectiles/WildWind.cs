@@ -82,7 +82,7 @@ namespace Units.Projectiles
 
                     if (!damagedUnits.Contains(unit))
                     {
-                        var dmg = new Damages.Damage(damage, Damages.DamageType.Wind);
+                        var dmg = new Damages.Damage(damage, Damages.DamageType.Skill);
                         dmg.SetSourceUnit(caster);
                         dmg.SetSourceLabel("狂风");
                         dmg.SetTargetUnit(unit);

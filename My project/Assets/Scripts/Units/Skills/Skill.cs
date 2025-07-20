@@ -12,6 +12,7 @@ namespace Units.Skills
         public virtual CellTypeId CellTypeId => CellTypeId.None; // 默认值，子类可以覆盖
 
         public abstract string Name();
+        public abstract string Description();
 
         public float RequiredEnergy;
         public float CurrentEnergy;
@@ -39,14 +40,7 @@ namespace Units.Skills
 
         protected abstract void ExecuteCore(Unit caster);
 
-        public abstract string Description();
-
-        // protected void TriggerEffect(SkillEffectContext context)
-        // {
-        //     OnEffectTriggered?.Invoke(context);
-        // }
-
-
+        
 
         // todo 这些寻找方法似乎不该归Skill类管
 

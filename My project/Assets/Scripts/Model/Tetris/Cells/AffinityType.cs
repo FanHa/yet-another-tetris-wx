@@ -6,6 +6,6 @@ namespace Model.Tetri
         Fire,
         Ice,
         Wind,
-        Blood,
+        Life,
     }
 }

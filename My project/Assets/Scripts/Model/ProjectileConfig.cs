@@ -16,7 +16,7 @@ namespace Model
         public GameObject FireballPrefab;
         public GameObject SnowballPrefab;
 
-        public GameObject TempTargetPrefab;
+        public GameObject TemporaryTargetPrefab;
 
         public GameObject BlazingFieldPrefab;
         public GameObject FlameRingPrefab;
@@ -27,5 +27,6 @@ namespace Model
         public GameObject IcyCagePrefab;
 
         public GameObject WildWindPrefab;
+        public GameObject LifeBombPrefab;
     }
 }

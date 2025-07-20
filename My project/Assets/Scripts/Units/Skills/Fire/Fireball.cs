@@ -47,7 +47,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return $"向攻击范围内一个敌人发射火球，造成灼烧";
+            return "向攻击范围内一个敌人发射火球，造成灼烧";
         }
 
         public override string Name()
