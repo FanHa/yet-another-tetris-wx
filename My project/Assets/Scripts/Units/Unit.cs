@@ -61,10 +61,6 @@ namespace Units
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
-            if (animationController == null)
-            {
-                Debug.LogWarning("AnimationController component not found on the same GameObject.");
-            }
 
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
@@ -77,7 +73,7 @@ namespace Units
         {
             if (skillHandler != null)
             {
-                skillHandler.OnSkillReady += OnSkillReady;
+                skillHandler.OnSkillReady += HandleSkillReady;
             }
         }
 
@@ -145,19 +141,22 @@ namespace Units
         {
             skillHandler.AddSkill(newSkill); // 添加技能
         }
-        private void OnSkillReady(Skill skill)
-        {
-            animationController.TriggerCastSkill();
-        }
+        
         public IReadOnlyList<Skill> GetSkills()
         {
             return skillHandler.GetSkills();
         }
 
+        private void HandleSkillReady(Skill skill)
+        {
+            canMove = false; // 技能动画开始，禁止移动
+            animationController.TriggerCastSkill();
+        }
 
         // 这个方法会被 Animator 的事件触发
-        public void HandleSkillCastAction()
+        public void HandleSkillCastAnimationEnd()
         {
+            canMove = true; // 技能动画结束，恢复移动
             OnSkillCast?.Invoke(this, skillHandler.GetCurrentSkill());
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能
 
