@@ -19,7 +19,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     [SerializeField] private Button battleButton;
-    [SerializeField] private Button trainGroundButton;
 
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
@@ -37,7 +36,6 @@ public class GameController : MonoBehaviour
         // 绑定撤销操作按钮的点击事件
         // revokeOperationButton.onClick.AddListener(UndoLastPlacement);
         battleButton.onClick.AddListener(HandleBattleClicked);
-        trainGroundButton.onClick.AddListener(HandleTrainGroundClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
@@ -189,12 +187,6 @@ public class GameController : MonoBehaviour
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
-    }
-
-    private void HandleTrainGroundClicked()
-    {
-        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
-        battleField.StartTrainGroundBattle();
     }
 
 

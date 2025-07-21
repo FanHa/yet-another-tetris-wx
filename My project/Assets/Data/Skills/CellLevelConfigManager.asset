@@ -25,3 +25,4 @@ MonoBehaviour:
   AttackBoostConfigGroup: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
   HitAndRunConfigGroup: {fileID: 11400000, guid: ec3b9aafabe20ca4aa32529ade44e2c8, type: 2}
   LifeBombConfigGroup: {fileID: 11400000, guid: 208605d500f1c43499f0044326cdc70d, type: 2}
+  LifeShieldConfigGroup: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}

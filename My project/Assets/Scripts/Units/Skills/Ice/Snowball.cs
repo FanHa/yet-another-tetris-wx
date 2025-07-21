@@ -20,7 +20,7 @@ namespace Units.Skills
 
         protected override void ExecuteCore(Unit caster)
         {
-            var enemiesInRange = FindEnemiesInRange(caster, caster.Attributes.AttackRange)
+            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
                 .ToList();
 

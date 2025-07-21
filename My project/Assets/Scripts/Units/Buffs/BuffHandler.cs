@@ -43,6 +43,11 @@ namespace Units.Buffs
             buffManager.AddOrRefreshBuff(buff);
         }
 
+        public void RemoveBuff(Buff buff)
+        {
+            buffManager.RemoveBuff(buff);
+        }
+
         public IEnumerable<Buff> GetActiveBuffs()
         {
             return buffManager.GetAllBuffs();

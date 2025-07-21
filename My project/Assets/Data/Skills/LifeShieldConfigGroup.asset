@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8453a70eaaacd914186b6bedca73c897, type: 3}
+  m_Name: LifeShieldConfigGroup
+  m_EditorClassIdentifier: 
+  LevelConfigs:
+  - RequiredEnergy: 100
+    LifeCostPercent: 10
+    AbsorbPercent: 50
+    BuffDuration: 15
+  - RequiredEnergy: 100
+    LifeCostPercent: 10
+    AbsorbPercent: 75
+    BuffDuration: 15

@@ -27,5 +27,6 @@ namespace Model.Tetri
 
         [Header("生命")]
         public LifeBombConfigGroup LifeBombConfigGroup;
+        public LifeShieldConfigGroup LifeShieldConfigGroup;
     }
 }

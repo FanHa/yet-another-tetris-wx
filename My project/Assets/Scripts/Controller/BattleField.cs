@@ -81,8 +81,15 @@ namespace Controller {
             SpawnUnits();
         }
 
-        public void StartTrainGroundBattle()
+#if UNITY_EDITOR
+        [ContextMenu("Test Enter Train Ground")]
+        private void TestEnterTrainGround()
         {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("This method can only be called in Play mode.");
+                return;
+            }
             // 将 FactionAUnits 转换为 InventoryItem 列表
             factionAConfig = trainGroundSetup.FactionAUnits
                 .Select(unitConfig => unitConfig.ToInventoryItem(tetriCellFactory))
@@ -94,6 +101,7 @@ namespace Controller {
                 .ToList();
             SpawnUnits();
         }
+#endif
 
 
         private void SpawnUnits()

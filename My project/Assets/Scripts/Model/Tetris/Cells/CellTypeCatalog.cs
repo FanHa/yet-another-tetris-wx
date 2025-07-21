@@ -23,7 +23,8 @@ namespace Model.Tetri
         WildWind,
         AttackBoost,
         HitAndRun,
-        LifeBomb
+        LifeBomb,
+        LifeShield,
     }
 
     public enum CharacterTypeId

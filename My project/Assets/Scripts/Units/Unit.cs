@@ -170,6 +170,11 @@ namespace Units
             BuffHandler.ApplyBuff(buff);
         }
 
+        public void RemoveBuff(Units.Buffs.Buff buff)
+        {
+            BuffHandler.RemoveBuff(buff);
+        }
+
         private void UpdateEnemiesDistance()
         {
             List<Unit> rawEnemyUnits = faction == Faction.FactionA ? UnitManager.GetFactionBUnits() : UnitManager.GetFactionAUnits();
@@ -261,9 +266,9 @@ namespace Units
         {
             foreach (var buff in BuffHandler.GetActiveBuffs())
             {
-                if (buff is ITakeHitTrigger hitTrigger)
+                if (buff is ITakeHitTrigger takeHitTrigger)
                 {
-                    hitTrigger.OnTakeHit(this, attacker, ref damage);
+                    takeHitTrigger.OnTakeHit(this, attacker, ref damage);
                 }
             }
             // 处理被攻击逻辑
@@ -320,5 +325,55 @@ namespace Units
         {
             return BuffHandler.GetActiveBuffs().ToList();
         }
+
+        public List<Unit> FindAlliesInRange(float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction == faction)
+                .ToList();
+        }
+
+        /// <summary>
+        /// 寻找范围内的所有敌方单位
+        /// </summary>
+        public List<Unit> FindEnemiesInRange(float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
+
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction != faction)
+                .ToList();
+        }
+
+        /// <summary>
+        /// 寻找范围内最近的敌方单位
+        /// </summary>
+        public Unit FindClosestEnemy(float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction != faction)
+                .OrderBy(unit => Vector2.Distance(transform.position, unit.transform.position))
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 寻找范围内的随机友方单位
+        /// </summary>
+        public Unit FindRandomAlly(float range)
+        {
+            var allies = FindAlliesInRange(range);
+            if (allies.Count > 0)
+            {
+                return allies[UnityEngine.Random.Range(0, allies.Count)];
+            }
+            return null;
+        }
+
+        
     }
 }

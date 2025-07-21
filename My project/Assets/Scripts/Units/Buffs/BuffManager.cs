@@ -45,6 +45,14 @@ namespace Units.Buffs
             }
         }
 
+        public void RemoveBuff(Buff buff)
+        {
+            if (buffs.Remove(buff))
+            {
+                OnBuffRemoved?.Invoke(buff);
+            }
+        }
+
         /// <summary>
         /// 获取所有Buff
         /// </summary>

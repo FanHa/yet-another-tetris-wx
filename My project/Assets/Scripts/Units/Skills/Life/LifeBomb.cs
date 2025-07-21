@@ -18,7 +18,7 @@ namespace Units.Skills
         protected override void ExecuteCore(Unit caster)
         {
             // todo 需要判断自身血量,如果不够就不能施放技能
-            var enemiesInRange = FindEnemiesInRange(caster, caster.Attributes.AttackRange)
+            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
                 .ToList();
 
