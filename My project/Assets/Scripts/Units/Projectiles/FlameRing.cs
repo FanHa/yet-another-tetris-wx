@@ -9,7 +9,6 @@ namespace Units.Projectiles
         [SerializeField] private ParticleSystem ringParticle;
         private bool initialized = false;
         private Unit owner;
-        private float timer = 0f;
         private const float tickInterval = 1f;
         private float tickTimer = 0f;
         private float radius;
@@ -33,7 +32,6 @@ namespace Units.Projectiles
 
             var shape = ringParticle.shape;
             shape.radius = radius;
-            timer = 0f;
             tickTimer = 0f;
         }
 
@@ -50,7 +48,6 @@ namespace Units.Projectiles
 
             // 跟随目标
             transform.position = owner.transform.position;
-            timer += Time.deltaTime;
             tickTimer += Time.deltaTime;
             if (tickTimer >= tickInterval)
             {

@@ -29,12 +29,12 @@ MonoBehaviour:
       cols: 4
     UpgradedTimes: 0
   usedTetriList:
-  - tetriType: 0
+  - tetriType: 1
     shape:
       rows: 4
       cols: 4
     UpgradedTimes: 0
-  - tetriType: 1
+  - tetriType: 0
     shape:
       rows: 4
       cols: 4
@@ -46,4 +46,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99a257b52b2d40d40a8c4ddcd111c527, type: 2}
   - {fileID: 11400000, guid: bb81ad1e0fefc4e4f97d31c1b0df71bd, type: 2}
   - {fileID: 11400000, guid: 59843abf4f193bc4fb5bcca322154607, type: 2}
-  avaliableConfigIndex: 3
+  avaliableConfigIndex: 1

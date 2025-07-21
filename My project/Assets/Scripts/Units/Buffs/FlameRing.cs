@@ -29,12 +29,12 @@ namespace Units.Buffs
 
         public override string Name() => "火环";
         public override string Description() =>
-            $"每{duration}s对半径{radius}内所有敌人施加{dotDps}/s灼烧({dotDuration}秒)";
+            "对周围敌人施加灼烧DeBuff";
 
 
         protected override void OnApplyExtra(Unit self)
         {
-            var prefab = self.ProjectileConfig.FlameRingPrefab; // 你需要在配置里加上这个Prefab
+            var prefab = self.ProjectileConfig.FlameRingPrefab; 
             var effectObj = Object.Instantiate(prefab, self.transform.position, Quaternion.identity, self.transform);
             var flameRingEntity = effectObj.GetComponent<Units.Projectiles.FlameRing>();
             flameRingEntity.Initialize(

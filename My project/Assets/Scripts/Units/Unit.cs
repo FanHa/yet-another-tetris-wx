@@ -36,7 +36,6 @@ namespace Units
         public event Action<Unit> OnDeath;
 
         public event Action<Damages.Damage> OnDamageTaken;
-        public event Action<Damages.Damage> OnAttackHit;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
 

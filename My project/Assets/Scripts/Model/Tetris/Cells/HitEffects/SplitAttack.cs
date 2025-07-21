@@ -16,7 +16,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.OnAttackHit += HandleSplitAttack;
+            // unit.OnAttackHit += HandleSplitAttack;
         }
 
         private void HandleSplitAttack(Damage damage)

@@ -34,7 +34,6 @@ namespace Units
             }
         }
         public event Action<float, float> OnHealthChanged;
-        public event Action OnStateChanged;
 
 
         public Attributes()

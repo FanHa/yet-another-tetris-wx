@@ -23,7 +23,7 @@ namespace Model.Tetri
         };
 
 
-        public Tetri CreateRandomShapeWithCell(CellTypeId cellType)
+        public Tetri CreateRandomShapeWithCell(CellTypeId cellTypeId)
         {
             // 1. 随机选择一个形状
             var shapeKeys = new List<string> { "T", "I", "L", "J", "S", "Z" };
@@ -35,20 +35,21 @@ namespace Model.Tetri
 
             // 3. 随机选择一个格子用于填充目标 Cell
             int specialIndex = UnityEngine.Random.Range(0, positions.Count);
+            Cell specialCell = tetriCellModelFactory.CreateCell(cellTypeId);
+            AffinityType targetAffinity = specialCell.Affinity;
 
             for (int i = 0; i < positions.Count; i++)
             {
                 var (row, col) = positions[i];
                 if (i == specialIndex)
                 {
-                    // 用指定类型创建 Cell
-                    Cell cell = tetriCellModelFactory.CreateCell(cellType);
-                    tetri.SetCell(row, col, cell);
+                    tetri.SetCell(row, col, specialCell);
                 }
                 else
                 {
-                    // 其余填充 Padding
-                    tetri.SetCell(row, col, tetriCellModelFactory.CreatePadding());
+                    Padding padding = tetriCellModelFactory.CreatePadding();
+                    padding.Affinity = targetAffinity; // 设置为目标 Cell 的 Affinity
+                    tetri.SetCell(row, col, padding);
                 }
             }
 

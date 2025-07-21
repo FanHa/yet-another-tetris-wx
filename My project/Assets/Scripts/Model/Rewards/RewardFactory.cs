@@ -65,7 +65,7 @@ namespace Model.Rewards
             };
             availableCellTypeIds = Enum.GetValues(typeof(CellTypeId))
                 .Cast<CellTypeId>()
-                .Where(typeId => typeId != CellTypeId.Padding)
+                .Where(typeId => typeId != CellTypeId.Padding && typeId != CellTypeId.None)
                 .ToList();
             availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
@@ -257,7 +257,8 @@ namespace Model.Rewards
 
             Func<Model.Tetri.Tetri, Reward>[] upgradeFactories = new Func<Model.Tetri.Tetri, Reward>[]
             {
-                tetri => new UpgradeNoneCoreCells(tetri, tetriModelFactory),
+                // todo 暂时没想好升级非CoreCell的奖励
+                // tetri => new UpgradeNoneCoreCells(tetri, tetriModelFactory),
                 tetri => new UpgradeCoreCell(tetri)
             };
             // 随机选择一个 UpgradeTetri 的衍生类

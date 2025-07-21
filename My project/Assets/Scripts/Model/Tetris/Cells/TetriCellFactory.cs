@@ -78,7 +78,7 @@ namespace Model.Tetri
 
 
 
-        public Cell CreatePadding()
+        public Padding CreatePadding()
         {
             return new Padding();
         }
