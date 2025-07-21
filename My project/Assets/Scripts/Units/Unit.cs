@@ -57,8 +57,7 @@ namespace Units
         public UnitManager UnitManager;
 
         private bool isActive = false; // 是否处于活动状态
-        public bool moveable = true;
-        public bool isFrozen = false;
+        private bool canMove = true;
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
@@ -87,16 +86,15 @@ namespace Units
         // Update is called once per frame
         void Update()
         {
-            if (isFrozen) return; // 如果被冻结，直接返回
-            if (isActive)
-            {
-                AttackEnemies();
-            }
+            if (!isActive)
+                return;
+            ProcessAttack();
+            
         }
 
         void FixedUpdate()
         {
-            if (isActive)
+            if (isActive && canMove)
             {
                 // 如果有目标敌人，移动到最近的敌人
                 if (enemyUnits != null && enemyUnits.Count > 0)
@@ -185,7 +183,7 @@ namespace Units
                 .ToList();
         }
 
-        protected void AttackEnemies()
+        protected void ProcessAttack()
         {
             float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
             if (Time.time < lastAttackTime + attackCooldown)
@@ -193,37 +191,35 @@ namespace Units
             if (enemyUnits != null && enemyUnits.Count > 0)
             {
                 Transform closestEnemy = enemyUnits[0].transform; // 获取最近的敌人
-                if (closestEnemy != null)
+                
+                float distance = Vector2.Distance(transform.position, closestEnemy.position);
+                if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
                 {
-                    float distance = Vector2.Distance(transform.position, closestEnemy.position);
-                    if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
-                    {
-                        // 调整朝向
-                        Vector2 direction = (closestEnemy.position - transform.position).normalized;
-                        animationController.SetLookDirection(direction);
-
-                        animationController.TriggerAttack();
-                        lastAttackTime = Time.time; // 更新攻击时间
-                    }
+                    canMove = false; // 攻击动画开始，禁止移动
+                    // 调整朝向
+                    Vector2 direction = (closestEnemy.position - transform.position).normalized;
+                    animationController.SetLookDirection(direction);
+                    animationController.TriggerAttack();
+                    lastAttackTime = Time.time; // 更新攻击时间
                 }
+                
             }
         }
 
         // 这个方法会被animator的event触发
-        public void HandleAttackActionHit()
+        public void HandleAttackAnimationEnd()
         {
-            int attackTargetCount = Mathf.Min(enemyUnits.Count, (int)Attributes.AttackTargetNumber);
+            canMove = true;
+            if (enemyUnits.Count == 0)
+                return;
 
-            for (int i = 0; i < attackTargetCount; i++)
+            Unit target = enemyUnits[0];
+            if (target == null)
+                return; // 检查目标是否有效
+            float distance = Vector2.Distance(transform.position, target.transform.position);
+            if (distance <= Attributes.AttackRange)
             {
-                Unit target = enemyUnits[i];
-                if (target == null)
-                    continue; // todo 这里其实要检查目标是否还活着
-                float distance = Vector2.Distance(transform.position, target.transform.position);
-                if (distance <= Attributes.AttackRange)
-                {
-                    Attack(target, Attributes.AttackPower.finalValue / attackTargetCount); // 执行攻击逻辑
-                }
+                Attack(target, Attributes.AttackPower.finalValue);
             }
 
         }

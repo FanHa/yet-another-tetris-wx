@@ -34,7 +34,7 @@ namespace Units.Skills
             float elapsedTime = 0f; // 已经过的时间
             float rushSpeed = caster.Attributes.MoveSpeed.finalValue * speedMultiplier; // 冲刺速度基于自身移动速度
             Vector2 direction = (targetPosition - startPosition).normalized; // 冲刺方向在循环外计算
-            caster.moveable = false; // 暂时禁用其他行为
+            // caster.moveable = false; // 暂时禁用其他行为
 
             while (elapsedTime < rushDuration)
             {
@@ -71,7 +71,7 @@ namespace Units.Skills
             }
 
             // 冲刺结束，恢复单位行为
-            caster.moveable = true;
+            // caster.moveable = true;
             hitEnemies.Clear(); // 清空已碰撞的敌人记录
         }
 

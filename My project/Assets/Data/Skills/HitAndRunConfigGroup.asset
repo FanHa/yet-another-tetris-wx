@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9359cbc86b3ab24c894f886d7477b25, type: 3}
   m_Name: HitAndRunConfigGroup
   m_EditorClassIdentifier: 
-  LevelConfigs: []
+  LevelConfigs:
+  - BuffDuration: -1
+  - BuffDuration: -1

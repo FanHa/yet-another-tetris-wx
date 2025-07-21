@@ -11,6 +11,6 @@ namespace Units.Skills
     [System.Serializable]
     public class HitAndRunConfig : SkillConfig
     {
-        
+        public float BuffDuration;
     }
 }
