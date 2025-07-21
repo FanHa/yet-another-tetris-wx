@@ -331,7 +331,7 @@ namespace Units
             Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
             return colliders
                 .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.faction == faction)
+                .Where(unit => unit != null && unit.faction == faction && unit != this)
                 .ToList();
         }
 
