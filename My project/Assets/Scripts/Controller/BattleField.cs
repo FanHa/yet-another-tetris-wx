@@ -35,10 +35,10 @@ namespace Controller {
         public Transform spawnPointB;
 
         [Header("Data")]
-        [SerializeField] private Model.UnitInventoryModel inventoryData;
-        [SerializeField] private Model.UnitInventoryModel enemyData;
-        [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
-        [SerializeField] private TetriCellFactory tetriCellFactory;
+        [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
+        [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
+        [SerializeField] private Model.UnitInventoryModel trainGroundDataFactionA;
+        [SerializeField] private Model.UnitInventoryModel trainGroundDataFactionB;
         private UnitManager unitManager;
         public event Action OnBattleEnd;
         public event Action<Unit> OnUnitClicked;
@@ -66,42 +66,21 @@ namespace Controller {
             OnUnitClicked?.Invoke(unit);
         }
 
-        public void SetEnemyData(List<Model.UnitInventoryItem> enemyData)
-        {
-            this.enemyData.Items = enemyData; // 替换敌人数据
-        }
-
-
         public void StartNewLevelBattle(int level)
         {
             statisticsController.SetLevel(level); // 设置当前关卡
-            factionAConfig = inventoryData.Items;
+            factionAConfig = playerUnitInventoryData.Items;
 
-            factionBConfig = enemyData.Items;
+            factionBConfig = enemyUnitInventoryData.Items;
             SpawnUnits();
         }
 
-#if UNITY_EDITOR
-        [ContextMenu("Test Enter Train Ground")]
-        private void TestEnterTrainGround()
+        public void StartTrainGround()
         {
-            if (!Application.isPlaying)
-            {
-                Debug.LogWarning("This method can only be called in Play mode.");
-                return;
-            }
-            // 将 FactionAUnits 转换为 InventoryItem 列表
-            factionAConfig = trainGroundSetup.FactionAUnits
-                .Select(unitConfig => unitConfig.ToInventoryItem(tetriCellFactory))
-                .ToList();
-
-            // 将 FactionBUnits 转换为 InventoryItem 列表
-            factionBConfig = trainGroundSetup.FactionBUnits
-                .Select(unitConfig => unitConfig.ToInventoryItem(tetriCellFactory))
-                .ToList();
+            factionAConfig = trainGroundDataFactionA.Items;
+            factionBConfig = trainGroundDataFactionB.Items;
             SpawnUnits();
         }
-#endif
 
 
         private void SpawnUnits()

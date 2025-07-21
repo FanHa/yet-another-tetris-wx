@@ -792,10 +792,10 @@ MonoBehaviour:
   statisticsController: {fileID: 85712747}
   spawnPointA: {fileID: 656560514}
   spawnPointB: {fileID: 131970432}
-  inventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
-  enemyData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
-  trainGroundSetup: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
-  tetriCellFactory: {fileID: 0}
+  playerUnitInventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
+  enemyUnitInventoryData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
+  trainGroundDataFactionA: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
+  trainGroundDataFactionB: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
 --- !u!114 &943837602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2337,6 +2337,30 @@ PrefabInstance:
       propertyPath: unitFactory
       value: 
       objectReference: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: tetriCellFactory
+      value: 
+      objectReference: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: trainGroundSetup
+      value: 
+      objectReference: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: enemyUnitInventoryData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: playerUnitInventoryData
+      value: 
+      objectReference: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: trainGroundUnitInventoryDataA
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
+    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
+      propertyPath: trainGroundUnitInventoryDataB
+      value: 
+      objectReference: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

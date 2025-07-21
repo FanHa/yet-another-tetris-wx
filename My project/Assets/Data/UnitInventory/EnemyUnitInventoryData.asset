@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9828c61bd8484d346addb7cf5d99078a, type: 3}
-  m_Name: Current
+  m_Name: EnemyUnitInventoryData
   m_EditorClassIdentifier: 
   items:
   - spawnInterval: 0

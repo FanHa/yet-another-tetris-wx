@@ -11,8 +11,13 @@ namespace Controller {
     public class UnitInventoryController : MonoBehaviour
     {
         private UI.Inventories.UnitInventoryView unitInventoryView;
-        [SerializeField] private Model.UnitInventoryModel inventoryData;
+        [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
+        [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
+        [SerializeField] private Model.UnitInventoryModel trainGroundUnitInventoryDataA;
+        [SerializeField] private Model.UnitInventoryModel trainGroundUnitInventoryDataB;
+        [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
         [SerializeField] private Units.UnitFactory unitFactory;
+        [SerializeField] private TetriCellFactory tetriCellFactory;
 
         public event Action<Unit> OnUnitClicked;
 
@@ -22,7 +27,7 @@ namespace Controller {
         }
         private void Start()
         {
-            inventoryData.OnDataChanged += HandleDataChange;
+            playerUnitInventoryData.OnDataChanged += HandleDataChange;
             unitInventoryView.OnUnitClicked += HandleUnitClicked;
         }
 
@@ -42,8 +47,54 @@ namespace Controller {
                 );
                 items.Add(item);
             }
-            inventoryData.ResetInventoryData(items);
+            playerUnitInventoryData.ResetInventoryData(items);
 
+        }
+
+        public void SetEnemyInventoryData(List<UnitInventoryItem> enemyData)
+        {
+            enemyUnitInventoryData.ResetInventoryData(enemyData);
+        }
+
+        public void PrepareTrainGroundUnitInventory()
+        {
+            var itemsA = new List<UnitInventoryItem>();
+            foreach (var unitConfig in trainGroundSetup.FactionAUnits)
+            {
+                var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
+                var tetriCells = new List<Model.Tetri.Cell>();
+                if (unitConfig.tetriCellIds != null)
+                {
+                    foreach (var cellId in unitConfig.tetriCellIds)
+                    {
+                        var cell = tetriCellFactory.CreateCell(cellId);
+                        if (cell != null)
+                            tetriCells.Add(cell);
+                    }
+                }
+                var item = new UnitInventoryItem(characterCell, tetriCells);
+                itemsA.Add(item);
+            }
+            trainGroundUnitInventoryDataA.ResetInventoryData(itemsA);
+
+            var itemsB = new List<UnitInventoryItem>();
+            foreach (var unitConfig in trainGroundSetup.FactionBUnits)
+            {
+                var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
+                var tetriCells = new List<Model.Tetri.Cell>();
+                if (unitConfig.tetriCellIds != null)
+                {
+                    foreach (var cellId in unitConfig.tetriCellIds)
+                    {
+                        var cell = tetriCellFactory.CreateCell(cellId);
+                        if (cell != null)
+                            tetriCells.Add(cell);
+                    }
+                }
+                var item = new UnitInventoryItem(characterCell, tetriCells);
+                itemsB.Add(item);
+            }
+            trainGroundUnitInventoryDataB.ResetInventoryData(itemsB);
         }
 
 

@@ -182,24 +182,30 @@ public class GameController : MonoBehaviour
 
     private void HandleBattleClicked()
     {
-        LoadLevelData();
-        // GenerateAndResetInventoryData();
-        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);                
+        List<UnitInventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        unitInventoryController.SetEnemyInventoryData(levelData);
+        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
     }
-
-
-    private void LoadLevelData()
-    {
-        List<UnitInventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
-        battleField.SetEnemyData(levelData); // Pass enemy data to BattleField
-    }
-
-
 
     private void OnDestroy()
     {
         // 取消监听UI的事件
     }
+    
+#if UNITY_EDITOR
+    [ContextMenu("Test Enter Train Ground")]
+    private void TestEnterTrainGround()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("This method can only be called in Play mode.");
+            return;
+        }
+        unitInventoryController.PrepareTrainGroundUnitInventory();
+        Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
+        battleField.StartTrainGround();
+    }
+#endif
 }
