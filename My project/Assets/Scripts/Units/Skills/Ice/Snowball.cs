@@ -18,14 +18,14 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
                 .ToList();
 
             if (enemiesInRange.Count == 0)
-                return;
+                return false;
 
             Unit targetEnemy = enemiesInRange.First();
 
@@ -58,6 +58,7 @@ namespace Units.Skills
             snowBall.SetChilled(chilled);
             snowBall.Init(caster, targetEnemy.transform, damage);
             snowBall.Activate();
+            return true;
             
         }
 

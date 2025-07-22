@@ -20,7 +20,7 @@ namespace Units.Skills
                    $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             float attackRange = caster.Attributes.AttackRange;
             float attackFrequency = caster.Attributes.AttacksPerTenSeconds.finalValue;
@@ -30,7 +30,7 @@ namespace Units.Skills
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for ProjectileHail.");
-                return;
+                return false;
             }
 
             HashSet<Unit> attackedEnemies = new HashSet<Unit>();
@@ -53,6 +53,7 @@ namespace Units.Skills
                 // 记录已攻击的敌人
                 attackedEnemies.Add(targetEnemy);
             }
+            return true;
         }
 
     }

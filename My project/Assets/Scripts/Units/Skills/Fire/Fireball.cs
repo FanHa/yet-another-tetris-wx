@@ -15,7 +15,7 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
@@ -23,7 +23,7 @@ namespace Units.Skills
 
             if (enemiesInRange.Count == 0)
             {
-                return;
+                return false;
             }
 
             Unit targetEnemy = enemiesInRange.First();
@@ -42,7 +42,8 @@ namespace Units.Skills
                 sourceSkill: this
             );
             fireball.Activate();
-            
+
+            return true;
         }
 
         public override string Description()

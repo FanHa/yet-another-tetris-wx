@@ -8,7 +8,7 @@ namespace Units.Skills
         public float attackPowerMultiplier = 4f; // 攻击力倍数
         public float speed = 1.5f;
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
@@ -17,7 +17,7 @@ namespace Units.Skills
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for PrecisionShoot.");
-                return;
+                return false;
             }
 
             Unit targetEnemy = enemiesInRange.First();
@@ -34,6 +34,7 @@ namespace Units.Skills
                 projectile.Init(caster, target, damage);
                 projectile.Activate();
             }
+            return true;
         }
 
         public override string Description()

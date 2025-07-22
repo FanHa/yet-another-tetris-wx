@@ -17,18 +17,19 @@ namespace Units.Skills
                    $"每次弹射伤害增加 {damageIncreasePercentage}%，最多弹射 {maxBounces} 次。";
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             // 找到范围内最近的敌人
             Unit initialTarget = caster.FindClosestEnemy(range);
             if (initialTarget == null)
             {
                 Debug.LogWarning("No valid targets found within range for ChainLightning.");
-                return;
+                return false;
             }
 
             // 开始闪电弹射逻辑
             caster.StartCoroutine(ChainLightningRoutine(caster, initialTarget));
+            return true;
         }
 
         private System.Collections.IEnumerator ChainLightningRoutine(Unit caster, Unit initialTarget)

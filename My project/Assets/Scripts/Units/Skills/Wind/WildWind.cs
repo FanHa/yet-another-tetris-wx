@@ -18,7 +18,7 @@ namespace Units.Skills
         public override string Name() => "狂风";
         public override string Description() => "在自身位置制造一阵狂风，击退敌人并造成伤害";
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             int windCellCount = caster.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
             float finalDamage = Config.Damage + windCellCount * Config.DamageAdditionPerWindCell;
@@ -36,6 +36,7 @@ namespace Units.Skills
                 atkReducePercent: Config.AtkReducePercent
             );
             wildWind.Activate();
+            return true;
         }
     }
 }

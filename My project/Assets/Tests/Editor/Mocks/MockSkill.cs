@@ -30,7 +30,7 @@ public class MockSkill : Skill
         throw new System.NotImplementedException();
     }
 
-    protected override void ExecuteCore(Unit caster)
+    protected override bool ExecuteCore(Unit caster)
     {
         throw new System.NotImplementedException();
     }
@@ -74,7 +74,7 @@ public class MockSkillWithCooldown : Skill
         throw new System.NotImplementedException();
     }
 
-    protected override void ExecuteCore(Unit caster)
+    protected override bool ExecuteCore(Unit caster)
     {
         throw new System.NotImplementedException();
     }

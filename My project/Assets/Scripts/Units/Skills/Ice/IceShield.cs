@@ -22,9 +22,8 @@ namespace Units.Skills
             return !hasTriggered;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
-            hasTriggered = true;
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float buffDuration = Config.BuffDuration;
             float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationAdditionPerIceCell;
@@ -42,6 +41,9 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
+            hasTriggered = true;
+
+            return true;
         }
 
         public override string Description()

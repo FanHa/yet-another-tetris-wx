@@ -23,14 +23,16 @@ namespace Units.Skills
         }
 
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
-            hasTriggered = true;
+
             caster.AddBuff(new Buffs.HitAndRunBuff(
                 duration: -1f,
                 sourceUnit: caster,
                 sourceSkill: this
             ));
+            hasTriggered = true;
+            return true;
         }
     }
 }

@@ -27,9 +27,9 @@ namespace Units.Skills
             return !hasTriggered;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
-            hasTriggered = true;
+
             caster.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
                 sourceUnit: caster,
@@ -38,6 +38,8 @@ namespace Units.Skills
                 damageReducePercent: Config.DamageReducePercent,
                 takeDamageIncreasePercent: Config.TakeDamageIncreasePercent
             ));
+            hasTriggered = true;
+            return true;
         }
     }
 }

@@ -23,14 +23,14 @@ namespace Units.Skills
             return Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
                 .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
                 .ToList();
 
             if (enemiesInRange.Count == 0)
-                return;
+                return false;
 
             Unit targetEnemy = enemiesInRange.First();
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
@@ -42,6 +42,7 @@ namespace Units.Skills
                 this
             );
             targetEnemy.AddBuff(freezeBuff);
+            return true;
         }
 
         public override string Description()

@@ -15,15 +15,14 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             // 找到所有友方单位（不包括自己）
             var target = caster.FindRandomAlly(float.MaxValue);
 
-            // todo 没有目标单位情况处理
             // todo 尽量不要重复
             if (target == null)
-                return;
+                return false;
 
             float shieldAmount = caster.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
 
@@ -34,6 +33,7 @@ namespace Units.Skills
                 caster,                     // 来源单位
                 this                        // 来源技能
             ));
+            return true;
 
         }
 

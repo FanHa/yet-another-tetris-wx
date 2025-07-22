@@ -6,6 +6,8 @@ namespace Units.Projectiles
 {
     public class BlazingField : MonoBehaviour
     {
+        [SerializeField] private ParticleSystem edgeParticle;
+        [SerializeField] private ParticleSystem centerParticle;
         private Unit caster;
         private float radius;
         private float duration;
@@ -17,7 +19,7 @@ namespace Units.Projectiles
         private bool initialized = false;
         private Skills.Skill sourceSkill;
 
-        [SerializeField] private ParticleSystem fireParticle;
+        // [SerializeField] private ParticleSystem fireParticle;
         void Update()
         {
             if (!initialized)
@@ -39,7 +41,7 @@ namespace Units.Projectiles
                             dotDps,
                             dotDuration,
                             caster,
-                            null // 可根据需要传递技能引用
+                            sourceSkill
                         );
                         enemy.AddBuff(burn);
                     }
@@ -59,11 +61,15 @@ namespace Units.Projectiles
             this.duration = duration;
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
-            var main = fireParticle.main;
-            main.startLifetime = radius;
-            this.duration = duration;
             this.sourceSkill = sourceSkill;
+
+            var edgeShape = edgeParticle.shape;
+            edgeShape.radius = radius;
+
+            var centerShape = centerParticle.shape;
+            centerShape.radius = radius;
             timer = 0f;
+            tickTimer = 0f;
         }
 
         public void Activate()

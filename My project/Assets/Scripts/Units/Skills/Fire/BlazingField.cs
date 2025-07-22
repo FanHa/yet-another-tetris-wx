@@ -16,11 +16,11 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange);
             if (enemiesInRange.Count == 0)
-                return;
+                return false;
 
             // 以第一个敌人为中心
             Unit targetEnemy = enemiesInRange.First();
@@ -43,6 +43,7 @@ namespace Units.Skills
                 sourceSkill: this
             );
             effect.Activate();
+            return true;
         }
 
 

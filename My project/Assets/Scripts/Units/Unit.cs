@@ -56,7 +56,7 @@ namespace Units
         public UnitManager UnitManager;
 
         private bool isActive = false; // 是否处于活动状态
-        private bool canMove = true;
+        private bool isInAction = false;
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
@@ -89,7 +89,7 @@ namespace Units
 
         void FixedUpdate()
         {
-            if (isActive && canMove)
+            if (isActive &&  isInAction == false)
             {
                 // 如果有目标敌人，移动到最近的敌人
                 if (enemyUnits != null && enemyUnits.Count > 0)
@@ -148,16 +148,18 @@ namespace Units
 
         private void HandleSkillReady(Skill skill)
         {
-            canMove = false; // 技能动画开始，禁止移动
+            if (isInAction)
+                return; // 技能动作期间不响应新的技能
+            isInAction = true; // 技能动画开始，禁止移动
             animationController.TriggerCastSkill();
         }
 
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            canMove = true; // 技能动画结束，恢复移动
             OnSkillCast?.Invoke(this, skillHandler.GetCurrentSkill());
-            skillHandler.ExecutePendingSkill(); // 执行待处理的技能
+            skillHandler.ExecutePendingSkill(); // 执行待处理的技能\
+            isInAction = false;
 
         }
 
@@ -183,6 +185,8 @@ namespace Units
 
         protected void ProcessAttack()
         {
+            if (isInAction)
+                return;
             float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
             if (Time.time < lastAttackTime + attackCooldown)
                 return; // 检查攻击冷却时间
@@ -193,12 +197,12 @@ namespace Units
                 float distance = Vector2.Distance(transform.position, closestEnemy.position);
                 if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
                 {
-                    canMove = false; // 攻击动画开始，禁止移动
+                    isInAction = true; // 攻击动画开始，禁止移动
                     // 调整朝向
                     Vector2 direction = (closestEnemy.position - transform.position).normalized;
                     animationController.SetLookDirection(direction);
                     animationController.TriggerAttack();
-                    lastAttackTime = Time.time; // 更新攻击时间
+                    
                 }
                 
             }
@@ -207,7 +211,6 @@ namespace Units
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()
         {
-            canMove = true;
             if (enemyUnits.Count == 0)
                 return;
 
@@ -219,7 +222,8 @@ namespace Units
             {
                 Attack(target, Attributes.AttackPower.finalValue);
             }
-
+            isInAction = false;
+            lastAttackTime = Time.time; // 更新攻击时间
         }
 
         private void Attack(Unit target, float damageValue)

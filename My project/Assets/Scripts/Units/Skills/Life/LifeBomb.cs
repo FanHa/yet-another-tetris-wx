@@ -15,7 +15,7 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             // todo 需要判断自身血量,如果不够就不能施放技能
             var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
@@ -24,7 +24,7 @@ namespace Units.Skills
 
             if (enemiesInRange.Count == 0)
             {
-                return;
+                return false;
             }
 
             Unit targetEnemy = enemiesInRange.First();
@@ -56,6 +56,7 @@ namespace Units.Skills
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this
             );
+            return true;
         }
 
         public override string Description()

@@ -17,7 +17,7 @@ namespace Units.Skills
         public override string Name() => "攻击加速";
         public override string Description() => $"短时间内攻击速度提升{Config.AtkSpeedPercent}%";
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             int windCellCount = caster.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
             float atkSpeedPercent = Config.AtkSpeedPercent + windCellCount * Config.AtkSpeedAdditionPercentPerWindCell;
@@ -27,6 +27,7 @@ namespace Units.Skills
                 sourceUnit: caster,
                 sourceSkill: this
             ));
+            return true;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Units.Skills
             return !hasTriggered;
         }
 
-        protected override void ExecuteCore(Unit caster)
+        protected override bool ExecuteCore(Unit caster)
         {
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
@@ -37,7 +37,7 @@ namespace Units.Skills
             );
             caster.AddBuff(buff);
             hasTriggered = true; // 标记技能已触发
-
+            return true;
         }
 
         public override string Description()
