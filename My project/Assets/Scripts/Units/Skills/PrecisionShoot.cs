@@ -10,7 +10,7 @@ namespace Units.Skills
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
+            var enemiesInRange = caster.UnitManager.FindEnemiesInRange(caster, caster.Attributes.AttackRange)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .ToList();
 

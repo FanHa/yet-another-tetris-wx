@@ -17,16 +17,13 @@ namespace Units.Skills
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
-                .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
-                .ToList();
+            var targetEnemy = caster.UnitManager.FindClosestEnemyInRange(caster, caster.Attributes.AttackRange);
 
-            if (enemiesInRange.Count == 0)
+            if (targetEnemy == null)
             {
                 return false;
             }
 
-            Unit targetEnemy = enemiesInRange.First();
             GameObject projectileInstance = Object.Instantiate(caster.ProjectileConfig.FireballPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
             Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;

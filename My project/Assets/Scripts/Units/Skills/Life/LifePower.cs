@@ -16,7 +16,11 @@ namespace Units.Skills
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var target = caster.FindRandomAllyIncludingSelf(float.MaxValue);
+            var target = caster.UnitManager.FindRandomAlly(
+                self: caster,
+                range: float.MaxValue,
+                includeSelf: true // 包括自己
+            );
             if (target == null)
                 return false;
 

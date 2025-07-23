@@ -137,7 +137,7 @@ namespace Controller
         {
             OnSkillCast?.Invoke(unit, skill);
         }
-        
+
 
         internal List<Unit> GetFactionBUnits()
         {
@@ -147,6 +147,53 @@ namespace Controller
         internal List<Unit> GetFactionAUnits()
         {
             return factionA;
+        }
+        
+        public List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf = false)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction == self.faction && (includeSelf || unit != self))
+                .ToList();
+        }
+
+        public List<Unit> FindEnemiesInRange(Unit self, float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction != self.faction)
+                .ToList();
+        }
+
+        public Unit FindRandomEnemyInRange(Unit self, float range)
+        {
+            var enemies = FindEnemiesInRange(self, range);
+            if (enemies.Count > 0)
+                return enemies[UnityEngine.Random.Range(0, enemies.Count)];
+            return null;
+        }
+
+        public Unit FindClosestEnemyInRange(Unit self, float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
+            return colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction != self.faction)
+                .OrderBy(unit => Vector2.Distance(self.transform.position, unit.transform.position))
+                .FirstOrDefault();
+        }
+        
+
+        public Unit FindRandomAlly(Unit self, float range, bool includeSelf = false)
+        {
+            var allies = FindAlliesInRange(self, range, includeSelf);
+            if (allies.Count > 0)
+            {
+                return allies[UnityEngine.Random.Range(0, allies.Count)];
+            }
+            return null;
         }
     }
 }

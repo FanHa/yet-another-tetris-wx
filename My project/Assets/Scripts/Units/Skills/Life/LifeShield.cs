@@ -24,7 +24,11 @@ namespace Units.Skills
         protected override bool ExecuteCore(Unit caster)
         {
             // 找到所有友方单位（不包括自己）
-            var target = caster.FindRandomAlly(float.MaxValue);
+            var target = caster.UnitManager.FindRandomAlly(
+                self: caster,
+                range: float.MaxValue,
+                includeSelf: false
+            );
 
             // todo 尽量不要重复
             if (target == null)

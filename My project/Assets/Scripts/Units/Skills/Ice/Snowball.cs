@@ -20,14 +20,9 @@ namespace Units.Skills
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
-                .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
-                .ToList();
-
-            if (enemiesInRange.Count == 0)
+            var targetEnemy = caster.UnitManager.FindRandomEnemyInRange(caster, caster.Attributes.AttackRange);
+            if (targetEnemy == null)
                 return false;
-
-            Unit targetEnemy = enemiesInRange.First();
 
             // 实例化雪球投射物
             GameObject projectileInstance = Object.Instantiate(

@@ -26,7 +26,7 @@ namespace Units.Skills
             float attackFrequency = caster.Attributes.AttacksPerTenSeconds.finalValue;
             int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
 
-            List<Unit> enemiesInRange = caster.FindEnemiesInRange(attackRange);
+            List<Unit> enemiesInRange = caster.UnitManager.FindEnemiesInRange(caster,attackRange);
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for ProjectileHail.");

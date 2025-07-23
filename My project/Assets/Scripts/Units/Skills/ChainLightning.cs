@@ -20,7 +20,7 @@ namespace Units.Skills
         protected override bool ExecuteCore(Unit caster)
         {
             // 找到范围内最近的敌人
-            Unit initialTarget = caster.FindClosestEnemy(range);
+            Unit initialTarget = caster.UnitManager.FindClosestEnemyInRange(caster, range);
             if (initialTarget == null)
             {
                 Debug.LogWarning("No valid targets found within range for ChainLightning.");
@@ -67,7 +67,7 @@ namespace Units.Skills
                 hitTargets.Add(currentTarget);
 
                 // 查找下一个最近的敌人
-                Unit nextTarget = caster.FindEnemiesInRange(range)
+                Unit nextTarget = caster.UnitManager.FindEnemiesInRange(caster, range)
                     .Where(enemy => !hitTargets.Contains(enemy)) // 排除已命中的敌人
                     .OrderBy(enemy => (currentTarget.transform.position - enemy.transform.position).sqrMagnitude)
                     .FirstOrDefault();

@@ -18,18 +18,11 @@ namespace Units.Skills
         protected override bool ExecuteCore(Unit caster)
         {
             // todo 需要判断自身血量,如果不够就不能施放技能
-            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange)
-                .OrderBy(enemy => Vector3.Distance(caster.transform.position, enemy.transform.position))
-                .ToList();
-
-            if (enemiesInRange.Count == 0)
+            var targetEnemy = caster.UnitManager.FindRandomEnemyInRange(caster, caster.Attributes.AttackRange);
+            if (targetEnemy == null)
             {
                 return false;
             }
-
-            Unit targetEnemy = enemiesInRange.First();
-
-
 
             float percent = Config.HealthCostPercent / 100f;
             float healthCost = caster.Attributes.CurrentHealth * percent;

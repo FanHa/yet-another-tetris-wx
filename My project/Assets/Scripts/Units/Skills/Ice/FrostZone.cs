@@ -31,12 +31,11 @@ namespace Units.Skills
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var enemiesInRange = caster.FindEnemiesInRange(caster.Attributes.AttackRange);
-            if (enemiesInRange.Count == 0)
+            var targetEnemy = caster.UnitManager.FindClosestEnemyInRange(caster, caster.Attributes.AttackRange);
+            if (targetEnemy == null)
                 return false;
 
             // 以第一个敌人为中心
-            Unit targetEnemy = enemiesInRange.First();
             Vector3 center = targetEnemy.transform.position;
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float radius = GetRadius(iceCellCount);
