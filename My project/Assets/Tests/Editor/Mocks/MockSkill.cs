@@ -2,7 +2,7 @@ using Units;
 using Units.Skills;
 using UnityEngine;
 
-public class MockSkill : Skill
+public class MockSkill : ActiveSkill
 {
     public bool IsInitialized { get; private set; }
     public bool IsExecuted { get; private set; }
@@ -41,7 +41,7 @@ public class MockSkill : Skill
     }
 }
 
-public class MockSkillWithCooldown : Skill
+public class MockSkillWithCooldown : ActiveSkill
 {
     public int ExecutionCount { get; private set; } = 0;
     public float OriginalCooldown  = 2f; // 原始冷却时间

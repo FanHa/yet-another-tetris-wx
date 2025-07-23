@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class BlazingField : Skill
+    public class BlazingField : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public BlazingFieldConfig Config { get; }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class ChainLightning : Skill
+    public class ChainLightning : ActiveSkill
     {
         public float baseDamage = 20f; // 初始伤害
         public float damageIncreasePercentage = 20f; // 每次弹射伤害增加百分比

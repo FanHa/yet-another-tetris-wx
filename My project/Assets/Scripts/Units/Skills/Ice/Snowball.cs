@@ -7,7 +7,7 @@ namespace Units.Skills
     /// <summary>
     /// SnowBall：对攻击范围内一个敌人发射雪球，造成冰属性伤害并施加Chilled（冰霜Debuff，可叠加或刷新）
     /// </summary>
-    public class Snowball : Skill
+    public class Snowball : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.Snowball;
         public SnowballConfig Config { get; }

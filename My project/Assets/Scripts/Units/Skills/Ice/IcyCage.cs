@@ -7,7 +7,7 @@ namespace Units.Skills
     /// <summary>
     /// IcyCage：对攻击范围内一个敌人施加Freeze（冻结）Buff，持续时间随冰系Cell数量提升
     /// </summary>
-    public class IcyCage : Skill
+    public class IcyCage : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCageConfig Config { get; }

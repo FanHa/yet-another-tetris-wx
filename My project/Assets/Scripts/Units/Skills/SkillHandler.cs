@@ -17,7 +17,7 @@ namespace Units.Skills
 
         public event Action<Unit, Skill> OnSkillCast;
         public event Action<Skill> OnSkillReady;
-        private Skill pendingSkill;
+        private ActiveSkill pendingSkill;
         private Attributes attributes;
 
         public void Initialize(Attributes attributes)
@@ -64,7 +64,7 @@ namespace Units.Skills
             return skillManager.Skills;
         }
 
-        private void HandleSkillReady(Skill skill)
+        private void HandleSkillReady(ActiveSkill skill)
         {
             if (pendingSkill != null)
             {

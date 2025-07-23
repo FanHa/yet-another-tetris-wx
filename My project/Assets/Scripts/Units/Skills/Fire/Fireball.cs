@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class Fireball : Skill
+    public class Fireball : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.Fireball;
         public FireballConfig Config { get; }

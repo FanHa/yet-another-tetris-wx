@@ -4,25 +4,30 @@ using Wangsu.WcsLib.Core;
 
 namespace Units.Skills
 {
-    public class IceShield : Skill
+    public class IceShield : Skill, IPassiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.IceShield;
 
-        private bool hasTriggered;
         public IceShieldConfig Config { get; }
 
         public IceShield(IceShieldConfig config)
         {
             Config = config;
-            hasTriggered = false;
         }
 
-        public override bool IsReady()
+        public override string Description()
         {
-            return !hasTriggered;
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度.";
 
-        protected override bool ExecuteCore(Unit caster)
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "冰霜护盾";
+
+        public void ApplyPassive(Unit caster)
         {
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float buffDuration = Config.BuffDuration;
@@ -41,21 +46,6 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
-            hasTriggered = true;
-
-            return true;
         }
-
-        public override string Description()
-        {
-            return DescriptionStatic();
-        }
-        public static string DescriptionStatic() => "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度.";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "冰霜护盾";
     }
 }

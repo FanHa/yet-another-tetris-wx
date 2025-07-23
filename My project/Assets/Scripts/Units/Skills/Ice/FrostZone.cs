@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class FrostZone : Skill
+    public class FrostZone : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public FrostZoneConfig Config { get; }

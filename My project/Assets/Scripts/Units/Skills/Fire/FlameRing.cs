@@ -4,25 +4,30 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class FlameRing : Skill
+    public class FlameRing : Skill, IPassiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.FlameRing;
 
-        private bool hasTriggered;
         public FlameRingConfig Config { get; }
 
         public FlameRing(FlameRingConfig config)
         {
             Config = config;
-            hasTriggered = false;
         }
 
-        public override bool IsReady()
+        public override string Description()
         {
-            return !hasTriggered;
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "对周围一圈敌人持续造成火焰伤害";
 
-        protected override bool ExecuteCore(Unit caster)
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "火环";
+
+        public void ApplyPassive(Unit caster)
         {
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
@@ -38,20 +43,6 @@ namespace Units.Skills
                 this
             );
             caster.AddBuff(buff);
-            hasTriggered = true;
-            return true;
         }
-
-        public override string Description()
-        {
-            return DescriptionStatic();
-        }
-        public static string DescriptionStatic() => "对周围一圈敌人持续造成火焰伤害";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "火环";
     }
 }

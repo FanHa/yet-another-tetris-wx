@@ -2,15 +2,13 @@ using Model.Tetri;
 
 namespace Units.Skills
 {
-    public class WindShift : Skill
+    public class WindShift : Skill, IPassiveSkill
     {
         public WindShiftConfig Config { get; }
-        private bool hasTriggered;
         public override CellTypeId CellTypeId => CellTypeId.WindShift;
 
         public WindShift(WindShiftConfig config)
         {
-            hasTriggered = false;
             Config = config;
         }
         public override string Description()
@@ -24,24 +22,18 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "风形态";
-        public override bool IsReady()
-        {
-            return !hasTriggered;
-        }
 
-        protected override bool ExecuteCore(Unit caster)
+        public void ApplyPassive(Unit unit)
         {
-
-            caster.AddBuff(new Buffs.WindShiftBuff(
+            unit.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
-                sourceUnit: caster,
+                sourceUnit: unit,
                 sourceSkill: this,
                 attackRangeBonus: Config.AttackRangeBonus,
                 damageReducePercent: Config.DamageReducePercent,
                 takeDamageIncreasePercent: Config.TakeDamageIncreasePercent
             ));
-            hasTriggered = true;
-            return true;
         }
+        
     }
 }

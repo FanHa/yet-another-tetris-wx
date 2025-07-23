@@ -2,7 +2,7 @@ using Model.Tetri;
 
 namespace Units.Skills
 {
-    public class AttackBoost : Skill
+    public class AttackBoost : ActiveSkill
     {
         public AttackBoostConfig Config { get; }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class PrecisionShoot : Skill
+    public class PrecisionShoot : ActiveSkill
     {
         public float attackPowerMultiplier = 4f; // 攻击力倍数
         public float speed = 1.5f;

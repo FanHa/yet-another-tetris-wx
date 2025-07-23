@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class LifeBomb : Skill
+    public class LifeBomb : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.LifeBomb;
         public LifeBombConfig Config { get; }

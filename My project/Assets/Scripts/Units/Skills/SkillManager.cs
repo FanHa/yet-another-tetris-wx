@@ -6,7 +6,7 @@ namespace Units.Skills
 {
     public class SkillManager
     {
-        public event Action<Skill> OnSkillReady;
+        public event Action<ActiveSkill> OnSkillReady;
         private List<Skill> skills = new();
         public IReadOnlyList<Skill> Skills => skills;
         
@@ -22,13 +22,17 @@ namespace Units.Skills
 
         public void Tick(float energy)
         {
-            int skillCount = skills.Count;
-            if (skillCount == 0) return;
-            float decay = MathF.Pow(EnergyDecayPerSkill, skillCount - 1);
+            var activeSkills = skills.OfType<ActiveSkill>().ToList();
+            int activeSkillCount = activeSkills.Count;
+            if (activeSkillCount == 0) return;
+            float decay = MathF.Pow(EnergyDecayPerSkill, activeSkillCount - 1);
             float gain = energy * decay;
-            foreach (var skill in skills)
+            foreach (ActiveSkill skill in activeSkills)
+            {
                 skill.AddEnergy(gain);
-            var readySkill = skills.FirstOrDefault(skill => skill.IsReady());
+            }
+            var readySkill = activeSkills.FirstOrDefault(skill => skill.IsReady());
+
             if (readySkill != null)
             {
                 OnSkillReady?.Invoke(readySkill);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class ProjectileHail : Skill
+    public class ProjectileHail : ActiveSkill
     {
         public float damageReductionPercentage = 50f; // 重复攻击时伤害降低百分比
         public float multiplier = 2f; // 攻击频率的倍数

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class WildWind : Skill
+    public class WildWind : ActiveSkill
     {
         public WildWindConfig Config { get; }
 

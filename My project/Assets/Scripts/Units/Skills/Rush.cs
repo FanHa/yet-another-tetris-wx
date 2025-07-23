@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class Rush : Skill
+    public class Rush : ActiveSkill
     {
         public float rushDuration = 1f;
         public float speedMultiplier = 2f; // 冲刺速度倍数

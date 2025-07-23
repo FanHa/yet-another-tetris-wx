@@ -2,15 +2,13 @@ using Model.Tetri;
 
 namespace Units.Skills
 {
-    public class HitAndRun : Skill
+    public class HitAndRun : Skill, IPassiveSkill
     {
         public HitAndRunConfig Config { get; }
-        private bool hasTriggered;
 
         public HitAndRun(HitAndRunConfig config)
         {
             Config = config;
-            hasTriggered = false;
         }
 
         public override CellTypeId CellTypeId => CellTypeId.HitAndRun;
@@ -26,22 +24,15 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "走A";
-        public override bool IsReady()
+
+
+        public void ApplyPassive(Unit caster)
         {
-            return !hasTriggered;
-        }
-
-
-        protected override bool ExecuteCore(Unit caster)
-        {
-
             caster.AddBuff(new Buffs.HitAndRunBuff(
                 duration: -1f,
                 sourceUnit: caster,
                 sourceSkill: this
             ));
-            hasTriggered = true;
-            return true;
         }
     }
 }

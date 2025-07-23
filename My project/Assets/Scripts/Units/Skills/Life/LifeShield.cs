@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class LifeShield : Skill
+    public class LifeShield : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.LifeShield;
         public LifeShieldConfig Config { get; }
@@ -13,6 +13,12 @@ namespace Units.Skills
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
+        }
+
+        public override bool IsReady()
+        {
+            // todo 重写,这里需要判定自身血量条件
+            return base.IsReady();
         }
 
         protected override bool ExecuteCore(Unit caster)
