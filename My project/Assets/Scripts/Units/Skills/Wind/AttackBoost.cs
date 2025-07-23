@@ -1,4 +1,5 @@
 using Model.Tetri;
+using UnityEngine;
 
 namespace Units.Skills
 {
@@ -30,12 +31,18 @@ namespace Units.Skills
         {
             int windCellCount = caster.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
             float atkSpeedPercent = Config.AtkSpeedPercent + windCellCount * Config.AtkSpeedAdditionPercentPerWindCell;
-            caster.AddBuff(new Buffs.AttackBoostBuff(
+            var buff = new Buffs.AttackBoostBuff(
                 duration: Config.Duration,
                 atkSpeedPercent: atkSpeedPercent,
                 sourceUnit: caster,
                 sourceSkill: this
-            ));
+            );
+
+            var prefab = caster.ProjectileConfig.BuffProjectilePrefab;
+            var projectileObj = Object.Instantiate(prefab, caster.transform.position, Quaternion.identity);
+            var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
+            projectile.Init(caster, caster, buff); // 目标为自己
+            projectile.Activate();
             return true;
         }
     }

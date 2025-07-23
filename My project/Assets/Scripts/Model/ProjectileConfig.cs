@@ -6,17 +6,18 @@ namespace Model
     [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "Configs/ProjectileConfig")]
     public class ProjectileConfig : ScriptableObject
     {
+        [Header("通用")]
+        public GameObject BuffProjectilePrefab; // Buff投射物预制体
         public GameObject BaseProjectilePrefab; // 投射物预制体
         public GameObject MeleeProjectilePrefab;
-        public GameObject BombPrefab;
+        public GameObject TemporaryTargetPrefab;
+
+        [Header("技能投射物")]
         public GameObject PrecisionArrowPrefab;
         public GameObject ChainLightningPrefab;
-        public GameObject BloodBombPrefab;
 
         public GameObject FireballPrefab;
         public GameObject SnowballPrefab;
-
-        public GameObject TemporaryTargetPrefab;
 
         public GameObject BlazingFieldPrefab;
         public GameObject FlameRingPrefab;

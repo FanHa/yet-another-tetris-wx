@@ -252,7 +252,8 @@ namespace Units
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)
         {
-            foreach (var buff in BuffHandler.GetActiveBuffs())
+            List<Buff> buffs = BuffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
+            foreach (Buff buff in buffs)
             {
                 if (buff is IAttackHitTrigger attackBuff)
                 {
@@ -263,7 +264,8 @@ namespace Units
 
         public void TakeHit(Unit attacker, ref Damages.Damage damage)
         {
-            foreach (var buff in BuffHandler.GetActiveBuffs())
+            List<Buff> buffs = BuffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
+            foreach (Buff buff in buffs)
             {
                 if (buff is ITakeHitTrigger takeHitTrigger)
                 {

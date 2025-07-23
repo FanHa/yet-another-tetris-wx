@@ -36,15 +36,19 @@ namespace Units.Skills
 
             float shieldAmount = caster.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
 
-            target.AddBuff(new Units.Buffs.LifeShieldBuff(
+            var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
-                Config.AbsorbPercent,       // 吸收百分比
-                Config.BuffDuration,       // 持续时间
-                caster,                     // 来源单位
-                this                        // 来源技能
-            ));
+                Config.AbsorbPercent, // 吸收百分比
+                Config.BuffDuration,  // 持续时间
+                caster,               // 来源单位
+                this                  // 来源技能
+            );
+            var prefab = caster.ProjectileConfig.BuffProjectilePrefab;
+            var projectileObj = Object.Instantiate(prefab, caster.transform.position, Quaternion.identity);
+            var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
+            projectile.Init(caster, target, buff);
+            projectile.Activate();
             return true;
-
         }
 
         public override string Description()
