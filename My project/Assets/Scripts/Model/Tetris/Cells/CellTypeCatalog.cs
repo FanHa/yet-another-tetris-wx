@@ -25,6 +25,7 @@ namespace Model.Tetri
         HitAndRun,
         LifeBomb,
         LifeShield,
+        LifePower,
     }
 
     public enum CharacterTypeId

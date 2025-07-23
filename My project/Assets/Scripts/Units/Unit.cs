@@ -371,7 +371,20 @@ namespace Units
             }
             return null;
         }
+        public Unit FindRandomAllyIncludingSelf(float range)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
+            var allies = colliders
+                .Select(collider => collider.GetComponent<Unit>())
+                .Where(unit => unit != null && unit.faction == faction)
+                .ToList(); // 不排除自己
 
+            if (allies.Count > 0)
+            {
+                return allies[UnityEngine.Random.Range(0, allies.Count)];
+            }
+            return null;
+        }
         
     }
 }

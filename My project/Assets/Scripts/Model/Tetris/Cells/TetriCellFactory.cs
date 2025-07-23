@@ -54,6 +54,7 @@ namespace Model.Tetri
                 new(CellTypeId.HitAndRun, typeof(HitAndRun), cellLevelConfigManager.HitAndRunConfigGroup), // HitAndRun 没有配置
                 new(CellTypeId.LifeBomb, typeof(LifeBomb), cellLevelConfigManager.LifeBombConfigGroup),
                 new(CellTypeId.LifeShield, typeof(LifeShield), cellLevelConfigManager.LifeShieldConfigGroup),
+                new(CellTypeId.LifePower, typeof(LifePower), cellLevelConfigManager.LifePowerConfigGroup),
 
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };
