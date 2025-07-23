@@ -15,8 +15,17 @@ namespace Units.Skills
 
         public override CellTypeId CellTypeId => CellTypeId.WildWind;
 
-        public override string Name() => "狂风";
-        public override string Description() => "在自身位置制造一阵狂风，击退敌人并造成伤害";
+        public override string Description()
+        {
+            return DescriptionStatic();
+        }
+        public static string DescriptionStatic() => "在自身周围制造一阵狂风, 击退敌人并造成伤害.";
+
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "狂风";
 
         protected override bool ExecuteCore(Unit caster)
         {

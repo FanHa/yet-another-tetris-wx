@@ -47,12 +47,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return "对攻击范围内一个敌人施加冻结(Freeze)效果";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "对攻击范围内一个敌人施加冻结效果";
 
         public override string Name()
         {
-            return "冰牢";
+            return NameStatic();
         }
+        public static string NameStatic() => "冰牢";
     }
 }

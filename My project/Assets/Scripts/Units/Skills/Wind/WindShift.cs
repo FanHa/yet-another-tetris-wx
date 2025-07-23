@@ -15,13 +15,15 @@ namespace Units.Skills
         }
         public override string Description()
         {
-            return "将单位的形态切换为风形态，提升攻击距离, 降低伤害, 提升自身受到伤害";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离，降低伤害，提升自身受到伤害。";
 
         public override string Name()
         {
-            return "风形态";
+            return NameStatic();
         }
+        public static string NameStatic() => "风形态";
         public override bool IsReady()
         {
             return !hasTriggered;

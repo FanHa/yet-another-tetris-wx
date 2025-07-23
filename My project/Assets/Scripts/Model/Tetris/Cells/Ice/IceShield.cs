@@ -8,8 +8,8 @@ namespace Model.Tetri
     {
         public override CellTypeId CellTypeId => CellTypeId.IceShield;
         public override AffinityType Affinity => AffinityType.Ice;
-        public override string Description() => "获得一次性冰霜护盾技能，被攻击时反制攻击者。";
-        public override string Name() => "冰霜护盾";
+        public override string Description() => Units.Skills.IceShield.DescriptionStatic();
+        public override string Name() => Units.Skills.IceShield.NameStatic();
 
         public override void Apply(Unit unit)
         {

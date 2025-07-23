@@ -44,12 +44,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return "每次Tick对周围一圈敌人施加灼烧, 所有效果随火系Cell数量提升.";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "对周围一圈敌人持续造成火焰伤害";
 
         public override string Name()
         {
-            return "火环";
+            return NameStatic();
         }
+        public static string NameStatic() => "火环";
     }
 }

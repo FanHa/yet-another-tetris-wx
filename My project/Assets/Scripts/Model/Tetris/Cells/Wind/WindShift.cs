@@ -11,12 +11,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "切换为风形态，提升攻击距离，降低伤害，提升自身受到伤害。";
+            return Units.Skills.WindShift.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "风形态";
+            return Units.Skills.WindShift.NameStatic();
         }
 
         public override void Apply(Unit unit)

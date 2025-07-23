@@ -11,12 +11,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "短时间内提升攻击速度。每个风系方块增加额外的攻击速度。";
+            return Units.Skills.AttackBoost.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "攻击加速";
+            return Units.Skills.AttackBoost.NameStatic();
         }
 
         public override void Apply(Unit unit)

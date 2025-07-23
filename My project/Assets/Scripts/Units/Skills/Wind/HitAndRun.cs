@@ -15,8 +15,17 @@ namespace Units.Skills
 
         public override CellTypeId CellTypeId => CellTypeId.HitAndRun;
 
-        public override string Name() => "走A";
-        public override string Description() => "和敌人保持攻击距离";
+        public override string Description()
+        {
+            return DescriptionStatic();
+        }
+        public static string DescriptionStatic() => "和敌人保持攻击距离,自动走A.";
+
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "走A";
         public override bool IsReady()
         {
             return !hasTriggered;

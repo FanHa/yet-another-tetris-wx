@@ -65,8 +65,16 @@ namespace Units.Skills
         }
 
 
-        public override string Name() => "霜域";
-        public override string Description() =>
-            "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
+        public override string Description()
+        {
+            return DescriptionStatic();
+        }
+        public static string DescriptionStatic() => "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
+
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "霜域";
     }
 }

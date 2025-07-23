@@ -48,12 +48,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度.";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和能量获取速度.";
 
         public override string Name()
         {
-            return "冰霜护盾";
+            return NameStatic();
         }
+        public static string NameStatic() => "冰霜护盾";
     }
 }

@@ -11,12 +11,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "对一个敌人施加冰牢（冻结/极强减速），持续时间随冰系Cell数量提升。";
+            return Units.Skills.IcyCage.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "冰牢";
+            return Units.Skills.IcyCage.NameStatic();
         }
 
         public override void Apply(Unit unit)

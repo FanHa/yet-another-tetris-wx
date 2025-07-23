@@ -42,12 +42,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return "攻击时附加火焰伤害并施加灼烧, 所有效果随火系Cell数量提升。";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "攻击时附加火焰伤害";
 
         public override string Name()
         {
-            return "炎附";
+            return NameStatic();
         }
+        public static string NameStatic() => "炎附";
     }
 }

@@ -10,12 +10,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "每次Tick对周围一圈敌人施加灼烧。";
+            return Units.Skills.FlameRing.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "火环";
+            return Units.Skills.FlameRing.NameStatic();
         }
 
         public override void Apply(Unit unit)

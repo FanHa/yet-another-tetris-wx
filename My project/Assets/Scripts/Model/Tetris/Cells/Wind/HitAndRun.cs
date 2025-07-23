@@ -11,12 +11,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "与敌人保持攻击距离";
+            return Units.Skills.HitAndRun.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "走A";
+            return Units.Skills.HitAndRun.NameStatic();
         }
 
         public override void Apply(Unit unit)

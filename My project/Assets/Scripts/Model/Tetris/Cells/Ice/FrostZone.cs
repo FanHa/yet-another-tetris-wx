@@ -11,12 +11,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "在目标区域生成霜域，对范围内敌人造成冰属性伤害并施加冰霜减速。";
+            return Units.Skills.FrostZone.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "霜域";
+            return Units.Skills.FrostZone.NameStatic();
         }
 
         public override void Apply(Unit unit)

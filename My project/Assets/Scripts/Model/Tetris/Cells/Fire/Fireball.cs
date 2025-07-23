@@ -10,12 +10,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "发射一个火球，造成火焰伤害。";
+            return Units.Skills.Fireball.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "火球";
+            return Units.Skills.Fireball.NameStatic();
         }
 
         public override void Apply(Unit unit)

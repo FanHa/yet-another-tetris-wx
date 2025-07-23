@@ -10,12 +10,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "在目标区域生成焰域，对范围内敌人造成持续火焰伤害。";
+            return Units.Skills.BlazingField.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "焰域";
+            return Units.Skills.BlazingField.NameStatic();
         }
 
         public override void Apply(Unit unit)

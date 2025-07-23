@@ -10,12 +10,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "攻击时对目标附加火焰伤害并施加灼烧。";
+            return Units.Skills.FlameInject.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "炎附";
+            return Units.Skills.FlameInject.NameStatic();
         }
 
         public override void Apply(Unit unit)

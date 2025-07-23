@@ -45,15 +45,16 @@ namespace Units.Skills
 
             return true;
         }
-
         public override string Description()
         {
-            return "向攻击范围内一个敌人发射火球，造成灼烧";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "向攻击范围内一个敌人发射火球，造成灼烧。";
 
         public override string Name()
         {
-            return "火球";
+            return NameStatic();
         }
+        public static string NameStatic() => "火球";
     }
 }

@@ -14,8 +14,17 @@ namespace Units.Skills
 
         public override CellTypeId CellTypeId => CellTypeId.AttackBoost;
 
-        public override string Name() => "攻击加速";
-        public override string Description() => $"短时间内攻击速度提升{Config.AtkSpeedPercent}%";
+        public override string Description()
+        {
+            return DescriptionStatic();
+        }
+        public static string DescriptionStatic() => "短时间内攻击速度提升";
+
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "攻击加速";
 
         protected override bool ExecuteCore(Unit caster)
         {

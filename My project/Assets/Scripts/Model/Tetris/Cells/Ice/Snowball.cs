@@ -9,14 +9,15 @@ namespace Model.Tetri
         public override CellTypeId CellTypeId => CellTypeId.Snowball;
         public override AffinityType Affinity => AffinityType.Ice;
 
+
         public override string Description()
         {
-            return "发射一个雪球，造成冰属性伤害并施加Chilled（冰霜减速Debuff）。";
+            return Units.Skills.Snowball.DescriptionStatic();
         }
 
         public override string Name()
         {
-            return "雪球";
+            return Units.Skills.Snowball.NameStatic();
         }
 
         public override void Apply(Unit unit)

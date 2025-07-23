@@ -47,8 +47,16 @@ namespace Units.Skills
         }
 
 
-        public override string Name() => "焰域";
-        public override string Description() =>
-            "在目标区域制造一片燃烧区域,对敌人造成伤害";
+        public override string Description()
+        {
+            return DescriptionStatic();
+        }
+        public static string DescriptionStatic() => "在目标区域制造一片燃烧区域, 对敌人造成灼烧.";
+
+        public override string Name()
+        {
+            return NameStatic();
+        }
+        public static string NameStatic() => "焰域";
     }
 }

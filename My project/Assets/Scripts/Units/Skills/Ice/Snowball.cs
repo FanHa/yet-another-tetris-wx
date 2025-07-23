@@ -64,12 +64,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return "向攻击范围内一个敌人发射雪球,造成伤害并施加减速Debuff.";
+            return DescriptionStatic();
         }
+        public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,造成伤害并施加减速Debuff.";
 
         public override string Name()
         {
-            return "雪球";
+            return NameStatic();
         }
+        public static string NameStatic() => "雪球";
     }
 }

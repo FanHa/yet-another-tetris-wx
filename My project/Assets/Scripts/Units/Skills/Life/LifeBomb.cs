@@ -63,7 +63,7 @@ namespace Units.Skills
         {
             return DescriptionStatic();
         }
-         public static string DescriptionStatic() => "消耗自身生命值制作炸弹，对目标区域的敌人造成范围伤害。";
+        public static string DescriptionStatic() => "消耗自身生命值制作炸弹，对目标区域的敌人造成范围伤害。";
 
 
         public override string Name()
