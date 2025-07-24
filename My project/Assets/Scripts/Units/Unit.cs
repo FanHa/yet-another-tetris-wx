@@ -58,6 +58,8 @@ namespace Units
 
         private bool isActive = false; // 是否处于活动状态
         private bool isInAction = false;
+        private Unit pendingAttackTarget;
+
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
@@ -189,14 +191,15 @@ namespace Units
                 return; // 检查攻击冷却时间
             if (enemyUnits != null && enemyUnits.Count > 0)
             {
-                Transform closestEnemy = enemyUnits[0].transform; // 获取最近的敌人
-                
-                float distance = Vector2.Distance(transform.position, closestEnemy.position);
+                Unit target = enemyUnits[0];
+
+                float distance = Vector2.Distance(transform.position, target.transform.position);
                 if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
                 {
+                    pendingAttackTarget = target;
                     isInAction = true; // 攻击动画开始，禁止移动
                     // 调整朝向
-                    Vector2 direction = (closestEnemy.position - transform.position).normalized;
+                    Vector2 direction = (target.transform.position - transform.position).normalized;
                     animationController.SetLookDirection(direction);
                     animationController.TriggerAttack();
                     
@@ -208,17 +211,19 @@ namespace Units
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()
         {
-            if (enemyUnits.Count == 0)
+            if (pendingAttackTarget == null)
                 return;
 
-            Unit target = enemyUnits[0];
-            if (target == null)
-                return; // 检查目标是否有效
-            float distance = Vector2.Distance(transform.position, target.transform.position);
+            float distance = Vector2.Distance(transform.position, pendingAttackTarget.transform.position);
             if (distance <= Attributes.AttackRange)
             {
-                Attack(target, Attributes.AttackPower.finalValue);
+                Attack(pendingAttackTarget, Attributes.AttackPower.finalValue);
             }
+            else
+            {
+                // todo miss 处理
+            }
+            pendingAttackTarget = null;
             isInAction = false;
             lastAttackTime = Time.time; // 更新攻击时间
         }
