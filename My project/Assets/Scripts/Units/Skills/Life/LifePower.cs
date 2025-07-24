@@ -7,6 +7,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.LifePower; // 如果有专属ID请替换
         public LifePowerConfig Config { get; }
+        private Unit cachedTarget;
 
         public LifePower(LifePowerConfig config)
         {
@@ -14,25 +15,36 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        public override bool IsReady()
         {
-            var target = caster.UnitManager.FindRandomAlly(
-                self: caster,
+            if (!base.IsReady())
+                return false;
+            cachedTarget = Owner.UnitManager.FindRandomAlly(
+                self: Owner,
                 range: float.MaxValue,
-                includeSelf: true // 包括自己
+                includeSelf: true
             );
-            if (target == null)
+            if (cachedTarget == null)
                 return false;
 
+            return true;
+        }
+
+
+        protected override bool ExecuteCore(Unit caster)
+        {
+            if (cachedTarget == null)
+                return false;
             // 攻击力加成与施法者当前血量相关
             float atkBoost = caster.Attributes.MaxHealth.finalValue * (Config.HealthToAtkPercent / 100f);
 
-            target.AddBuff(new Units.Buffs.LifePowerBuff(
+            cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 atkBoost,                // 攻击力加成
                 Config.BuffDuration,     // 持续时间
                 caster,                  // 来源单位
                 this                     // 来源技能
             ));
+            cachedTarget = null; // 用完清空
             return true;
         }
 

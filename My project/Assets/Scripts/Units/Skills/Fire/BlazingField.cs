@@ -10,19 +10,27 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public BlazingFieldConfig Config { get; }
+        private Vector3 targetPosition;
         public BlazingField(BlazingFieldConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
         }
+        public override bool IsReady()
+        {
+            if (!base.IsReady())
+                return false;
+            var targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            if (targetEnemy == null)
+                return false;
+            targetPosition = targetEnemy.transform.position;
+            return true;
+
+        }
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var targetEnemy = caster.UnitManager.FindRandomEnemyInRange(caster, caster.Attributes.AttackRange);
-            if (targetEnemy == null)
-                return false;
-
-            Vector3 center = targetEnemy.transform.position;
+            Vector3 center = targetPosition;
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
             float duration = Config.BaseDuration + fireCellCount * Config.DurationPerFireCell;

@@ -57,7 +57,11 @@ namespace Units.Skills
             isActive = false;
         }
 
-        public void AddSkill(Skill newSkill) => skillManager.AddSkill(newSkill);
+        public void AddSkill(Skill newSkill)
+        {
+            newSkill.Owner = owner; // 设置技能的拥有者
+            skillManager.AddSkill(newSkill);
+        }
 
         public IReadOnlyList<Skill> GetSkills()
         {

@@ -10,6 +10,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public FrostZoneConfig Config { get; }
+        private Vector3 targetPosition;
 
 
         public FrostZone(FrostZoneConfig config)
@@ -19,24 +20,29 @@ namespace Units.Skills
         }
 
 
-        public float GetRadius(int iceCellCount)
+        private float GetRadius(int iceCellCount)
         {
             return Config.BaseRadius + iceCellCount * Config.RadiusPerIceCell;
         }
 
-        public float GetDuration(int iceCellCount)
+        private float GetDuration(int iceCellCount)
         {
             return Config.BaseDuration + iceCellCount * Config.DurationPerIceCell;
         }
-
-        protected override bool ExecuteCore(Unit caster)
+        public override bool IsReady()
         {
-            var targetEnemy = caster.UnitManager.FindClosestEnemyInRange(caster, caster.Attributes.AttackRange);
-            if (targetEnemy == null)
+            if (!base.IsReady())
                 return false;
 
-            // 以第一个敌人为中心
-            Vector3 center = targetEnemy.transform.position;
+            // 找到攻击范围内的敌人
+            var targetEnemy = Owner.UnitManager.FindClosestEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            if (targetEnemy == null)
+                return false;
+            targetPosition = targetEnemy.transform.position;
+            return true;
+        }
+        protected override bool ExecuteCore(Unit caster)
+        {
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float radius = GetRadius(iceCellCount);
             float duration = GetDuration(iceCellCount);
@@ -47,7 +53,7 @@ namespace Units.Skills
             int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
 
             var prefab = caster.ProjectileConfig.FrostZonePrefab;
-            var frostZoneObj = Object.Instantiate(prefab, center, Quaternion.identity);
+            var frostZoneObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
             frostZone.Initialize(
                 caster: caster,

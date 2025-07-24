@@ -8,6 +8,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.LifeBomb;
         public LifeBombConfig Config { get; }
+        private GameObject cachedTempTarget;
 
         public LifeBomb(LifeBombConfig config)
         {
@@ -15,25 +16,27 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
+        public override bool IsReady()
+        {
+            if (!base.IsReady())
+                return false;
+            var targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            if (targetEnemy == null)
+                return false;
+            cachedTempTarget = Object.Instantiate(
+                Owner.ProjectileConfig.TemporaryTargetPrefab,
+                targetEnemy.transform.position,
+                Quaternion.identity
+            );
+            return true;
+        }
+
         protected override bool ExecuteCore(Unit caster)
         {
-            // todo 需要判断自身血量,如果不够就不能施放技能
-            var targetEnemy = caster.UnitManager.FindRandomEnemyInRange(caster, caster.Attributes.AttackRange);
-            if (targetEnemy == null)
-            {
-                return false;
-            }
-
             float percent = Config.HealthCostPercent / 100f;
             float healthCost = caster.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, caster.Attributes.CurrentHealth); // 至少消耗1点
 
-            // 创建临时目标点
-            GameObject tempTarget = Object.Instantiate(
-                caster.ProjectileConfig.TemporaryTargetPrefab,
-                targetEnemy.transform.position,
-                Quaternion.identity
-            );
 
             // 投射炸弹
             GameObject projectileInstance = Object.Instantiate(
@@ -45,10 +48,11 @@ namespace Units.Skills
 
             lifeBomb.Init(
                 caster: caster,
-                temporaryTarget: tempTarget,
+                temporaryTarget: cachedTempTarget,
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this
             );
+            cachedTempTarget = null; // 用完清空
             return true;
         }
 

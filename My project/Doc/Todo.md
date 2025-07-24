@@ -38,6 +38,9 @@
 
 ### 其他
 - 🧠 匹配系统,记录胜场,存入服务器,匹配相同胜场的对手(不需要对手上线)
+- 做大关卡时可以保留几个技能到角色上开启新征程
+- 更加只能的AI的可行性
+- UnitInventoryModel 从ScriptableObject 换成 MonoBehavior
 
 
 

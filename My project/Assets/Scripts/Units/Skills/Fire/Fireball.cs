@@ -8,26 +8,33 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.Fireball;
         public FireballConfig Config { get; }
+        private Unit targetEnemy;
 
         public Fireball(FireballConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
         }
+        
+        public override bool IsReady()
+        {
+            if (!base.IsReady())
+                return false;
+
+            // 找到攻击范围内的敌人
+            targetEnemy = Owner.UnitManager.FindClosestEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            if (targetEnemy == null)
+                return false;
+
+            return true;
+        }
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var targetEnemy = caster.UnitManager.FindClosestEnemyInRange(caster, caster.Attributes.AttackRange);
-
-            if (targetEnemy == null)
-            {
-                return false;
-            }
-
             GameObject projectileInstance = Object.Instantiate(caster.ProjectileConfig.FireballPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
             Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
             int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
-            
+
             float burnDps = Config.DotBaseDamage + fireCellCount * Config.DotAddtionPerFireCell;
             float burnDuration = Config.DotDuration;
 
@@ -39,7 +46,7 @@ namespace Units.Skills
                 sourceSkill: this
             );
             fireball.Activate();
-
+            targetEnemy = null; // 用完清空
             return true;
         }
         public override string Description()

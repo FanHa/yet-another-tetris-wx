@@ -14,6 +14,9 @@ namespace Units.Skills
         public abstract string Name();
         public abstract string Description();
 
+        public Unit Owner { get; set; } // 技能的拥有者
+        
+
     }
 
     public interface IPassiveSkill

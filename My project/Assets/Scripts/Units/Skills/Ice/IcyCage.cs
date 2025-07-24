@@ -11,6 +11,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCageConfig Config { get; }
+        private Unit targetEnemy;
 
         public IcyCage(IcyCageConfig config)
         {
@@ -18,17 +19,21 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        public float GetDuration(int iceCellCount)
+        public override bool IsReady()
         {
-            return Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
+            if (!base.IsReady())
+                return false;
+
+            // 找到攻击范围内的敌人
+            targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            if (targetEnemy == null)
+                return false;
+
+            return true;
         }
 
         protected override bool ExecuteCore(Unit caster)
         {
-            var targetEnemy = caster.UnitManager.FindRandomEnemyInRange(caster, caster.Attributes.AttackRange);
-            if (targetEnemy == null)
-                return false;
-
             int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float freezeDuration = Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
 
@@ -38,6 +43,7 @@ namespace Units.Skills
                 this
             );
             targetEnemy.AddBuff(freezeBuff);
+            targetEnemy = null;
             return true;
         }
 

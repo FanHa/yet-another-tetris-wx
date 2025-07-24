@@ -8,6 +8,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.LifeShield;
         public LifeShieldConfig Config { get; }
+        private Unit cachedTarget;
 
         public LifeShield(LifeShieldConfig config)
         {
@@ -17,25 +18,28 @@ namespace Units.Skills
 
         public override bool IsReady()
         {
-            // todo 重写,这里需要判定自身血量条件
-            return base.IsReady();
-        }
+            if (!base.IsReady())
+                return false;
 
-        protected override bool ExecuteCore(Unit caster)
-        {
-            // 找到所有友方单位（不包括自己）
-            var target = caster.UnitManager.FindRandomAlly(
-                self: caster,
+            // 找到友方目标（不包括自己）
+            cachedTarget = Owner.UnitManager.FindRandomAlly(
+                self: Owner,
                 range: float.MaxValue,
                 includeSelf: false
             );
+            if (cachedTarget == null)
+                return false;
 
-            // todo 尽量不要重复
-            if (target == null)
+            return true;
+        }
+
+
+        protected override bool ExecuteCore(Unit caster)
+        {
+            if (cachedTarget == null)
                 return false;
 
             float shieldAmount = caster.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
-            // todo 扣除自己血量
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
@@ -46,8 +50,16 @@ namespace Units.Skills
             var prefab = caster.ProjectileConfig.BuffProjectilePrefab;
             var projectileObj = Object.Instantiate(prefab, caster.transform.position, Quaternion.identity);
             var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
-            projectile.Init(caster, target, buff);
+            projectile.Init(caster, cachedTarget, buff);
             projectile.Activate();
+
+            var damage = new Damages.Damage(shieldAmount, Damages.DamageType.Skill);
+            damage.SetSourceUnit(caster);
+            damage.SetTargetUnit(caster);
+            damage.SetSourceLabel(Name());
+            caster.TakeDamage(damage);
+
+            cachedTarget = null;
             return true;
         }
 
