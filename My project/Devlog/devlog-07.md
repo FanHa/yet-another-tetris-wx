@@ -6,3 +6,4 @@
 - 优化Tetri的创建,创建Tetri时会创建一个MainCell并把其他Cell的属性设置成mainCell的属性,比如风技能Cell会把该Tetri的其他Cell的属性都设置成"风"
 - 优化技能施放,解决技能释放过程中因为条件不满足而中断的问题
 - 主动技能与被动技能逻辑优化
+- 主动技能施放Buff时通过BuffProjectile增加一个统一的简单的视觉效果

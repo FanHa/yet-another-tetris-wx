@@ -1207,8 +1207,6 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 1587690522871941135}
   enemyUnits: []
   UnitManager: {fileID: 0}
-  moveable: 1
-  isFrozen: 0
 --- !u!58 &8368620811269264414
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1280,6 +1278,7 @@ MonoBehaviour:
   minDistance: 0.3
   BattlefieldMinBounds: {fileID: 0}
   BattlefieldMaxBounds: {fileID: 0}
+  IsHitAndRun: 0
 --- !u!114 &7649338840882115303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,8 +1303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 783bc0fa2cdd70d418896238967065ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyPerTick: 5
-  energyDecayPerSkill: 0.8
+  energyPerTick: 10
+  energyDecayPerSkill: 0.9
 --- !u!114 &5975892864010684759
 MonoBehaviour:
   m_ObjectHideFlags: 0

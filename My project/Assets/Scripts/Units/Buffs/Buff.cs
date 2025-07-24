@@ -9,6 +9,7 @@ namespace Units.Buffs
         protected float duration; // -1为永久
         protected float timeLeft;
         protected Unit sourceUnit { get; set; }
+        protected Unit owner;
         protected Units.Skills.Skill sourceSkill { get; set; } // 施加此Buff的技能
         public Units.Skills.Skill SourceSkill => sourceSkill;
 
@@ -26,9 +27,8 @@ namespace Units.Buffs
         public virtual void OnApply(Unit unit)
         {
             timeLeft = duration;
-            OnApplyExtra(unit); // 调用子类扩展
+            owner = unit;
         }
-        protected virtual void OnApplyExtra(Unit unit) { }
         public virtual void OnRemove(Unit unit) { }
 
         public virtual string GetKey()
@@ -49,13 +49,36 @@ namespace Units.Buffs
         }
     }
 
-    public interface IAttackHitTrigger {
+    public interface IAttackHitTrigger
+    {
         void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage);
     }
-    public interface ITakeHitTrigger {
+    public interface ITakeHitTrigger
+    {
         void OnTakeHit(Unit self, Unit attacker, ref Damages.Damage damage);
     }
-    public interface ITick {
+    public interface ITick
+    {
         void OnTick(Unit unit);
+    }
+    
+    public interface ITakeDamagePercentAdd
+    {
+        float GetPercentAdd();
+    }
+
+    public interface ITakeDamagePercentReduce
+    {
+        float GetPercentReduce();
+    }
+
+    public interface ITakeDamageFlatAdd
+    {
+        float GetFlatAdd();
+    }
+
+    public interface ITakeDamageFlatReduce
+    {
+        float GetFlatReduce();
     }
 }

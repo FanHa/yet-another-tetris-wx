@@ -20,8 +20,9 @@ namespace Units.Buffs
         public override string Name() => "Freeze";
         public override string Description() => "完全冻结，无法行动，能量回复为0";
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             // 攻速、移速、能量回复全部-100%
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -100);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -100);

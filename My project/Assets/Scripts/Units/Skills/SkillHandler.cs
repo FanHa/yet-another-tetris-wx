@@ -6,8 +6,8 @@ namespace Units.Skills
 {
     public class SkillHandler : MonoBehaviour
     {
-        public float energyPerTick = 5f;
-        public float energyDecayPerSkill = 0.8f;
+        public float energyPerTick;
+        public float energyDecayPerSkill;
         private float tickTimer = 0f;
         private const float TICK_INTERVAL = 0.5f;
         private bool isActive = false;

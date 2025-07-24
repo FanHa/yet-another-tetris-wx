@@ -30,8 +30,9 @@ namespace Units.Buffs
             $"移速-{MoveSlowPercent}%，攻速-{AttackSlowPercent}%，能量回复-{EnergyRegenSlowPercent}%";
 
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -AttackSlowPercent);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
             unit.Attributes.EnergyPerTick.AddPercentageModifier(this, -EnergyRegenSlowPercent);

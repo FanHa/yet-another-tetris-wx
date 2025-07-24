@@ -2,7 +2,7 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
-    public class WindShiftBuff : Buff, IAttackHitTrigger, ITakeHitTrigger
+    public class WindShiftBuff : Buff, IAttackHitTrigger, ITakeDamagePercentAdd
     {
         private readonly float attackRangeBonus;      // 攻击距离提升
         private readonly float damageReducePercent;   // 造成伤害降低百分比（如30表示降低30%）
@@ -28,8 +28,9 @@ namespace Units.Buffs
         public override string Description() =>
             $"风形态：攻击距离+{attackRangeBonus}，造成伤害-{damageReducePercent}% ，受到伤害+{takeDamageIncreasePercent}%";
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             unit.Attributes.AttackRange += attackRangeBonus;
             unit.Attributes.IsRanged = true;
         }
@@ -47,12 +48,10 @@ namespace Units.Buffs
             damage.SetValue(damage.Value * multiplier);
         }
 
-
-        // 受到伤害时提升所受伤害
-        public void OnTakeHit(Unit self, Unit attacker, ref Damages.Damage damage)
+        public float GetPercentAdd()
         {
-            float multiplier = 1f + takeDamageIncreasePercent / 100f;
-            damage.SetValue(damage.Value * multiplier);
+            return takeDamageIncreasePercent;
         }
+
     }
 }

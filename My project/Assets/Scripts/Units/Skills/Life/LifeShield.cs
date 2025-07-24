@@ -35,10 +35,10 @@ namespace Units.Skills
                 return false;
 
             float shieldAmount = caster.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
+            // todo 扣除自己血量
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
-                Config.AbsorbPercent, // 吸收百分比
                 Config.BuffDuration,  // 持续时间
                 caster,               // 来源单位
                 this                  // 来源技能

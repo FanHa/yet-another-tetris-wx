@@ -71,10 +71,7 @@ namespace Units
 
         void Start()
         {
-            if (skillHandler != null)
-            {
-                skillHandler.OnSkillReady += HandleSkillReady;
-            }
+            skillHandler.OnSkillReady += HandleSkillReady;
         }
 
 
@@ -104,7 +101,6 @@ namespace Units
         public void Setup()
         {
             Attributes.OnHealthChanged += UpdateHealthBar;
-            Attributes.CurrentHealth = Attributes.MaxHealth.finalValue;
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
             movementController.Initialize(Attributes);
             skillHandler.Initialize(Attributes);
@@ -278,10 +274,33 @@ namespace Units
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
-            float finalDamage = Mathf.Max(1, Mathf.Round(damageReceived.Value));
+            var buffs = BuffHandler.GetActiveBuffs().ToList();
 
-            Attributes.CurrentHealth -= finalDamage;
+            float percentAdd = 0f;
+            float percentReduce = 0f;
+            float flatAdd = 0f;
+            float flatReduce = 0f;
 
+            foreach (var buff in buffs)
+            {
+                if (buff is ITakeDamagePercentAdd add)
+                    percentAdd += add.GetPercentAdd();
+                if (buff is ITakeDamagePercentReduce reduce)
+                    percentReduce += reduce.GetPercentReduce();
+                if (buff is ITakeDamageFlatAdd flatA)
+                    flatAdd += flatA.GetFlatAdd();
+                if (buff is ITakeDamageFlatReduce flatR)
+                    flatReduce += flatR.GetFlatReduce();
+            }
+
+            var addMulti = 1f + (percentAdd / 100f);
+            var reduceMulti = 1f - (percentReduce / 100f);
+
+            float baseValue = damageReceived.Value;
+            float finalDamage = baseValue * addMulti * reduceMulti + flatAdd + flatReduce;
+            finalDamage = Mathf.Max(1, Mathf.Round(finalDamage));
+            damageReceived.SetValue(finalDamage);
+            Attributes.TakeDamage(damageReceived.Value);
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
             CheckHealth();

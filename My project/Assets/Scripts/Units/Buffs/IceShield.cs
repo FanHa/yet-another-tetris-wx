@@ -49,8 +49,9 @@ namespace Units.Buffs
             attacker.AddBuff(chilled);
         }
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             var vfxPrefab = unit.ProjectileConfig.IceShieldPrefab;
             vfxInstance = Object.Instantiate(vfxPrefab, unit.transform.position, Quaternion.identity);
             var iceShieldComp = vfxInstance.GetComponent<Units.Projectiles.IceShield>();

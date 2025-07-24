@@ -26,8 +26,9 @@ namespace Units.Buffs
         public override string Description() =>
             $"移速-{MoveSlowPercent}%，攻击力-{AtkReducePercent}%";
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
             unit.Attributes.AttackPower.AddPercentageModifier(this, -AtkReducePercent);
         }

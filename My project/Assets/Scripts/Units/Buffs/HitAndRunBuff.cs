@@ -7,8 +7,9 @@ namespace Units.Buffs
         public HitAndRunBuff(float duration, Unit sourceUnit, Skill sourceSkill)
             : base(duration, sourceUnit, sourceSkill) { }
 
-        protected override void OnApplyExtra(Unit unit)
+        public override void OnApply(Unit unit)
         {
+            base.OnApply(unit);
             unit.SetHitAndRun(true);
         }
 
