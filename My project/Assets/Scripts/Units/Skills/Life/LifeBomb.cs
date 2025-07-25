@@ -31,23 +31,23 @@ namespace Units.Skills
             return true;
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             float percent = Config.HealthCostPercent / 100f;
-            float healthCost = caster.Attributes.CurrentHealth * percent;
-            healthCost = Mathf.Clamp(healthCost, 1f, caster.Attributes.CurrentHealth); // 至少消耗1点
+            float healthCost = Owner.Attributes.CurrentHealth * percent;
+            healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
 
 
             // 投射炸弹
             GameObject projectileInstance = Object.Instantiate(
-                caster.ProjectileConfig.LifeBombPrefab,
-                caster.projectileSpawnPoint.position,
+                Owner.ProjectileConfig.LifeBombPrefab,
+                Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
             Units.Projectiles.LifeBomb lifeBomb = projectileInstance.GetComponent<Units.Projectiles.LifeBomb>();
 
             lifeBomb.Init(
-                caster: caster,
+                caster: Owner,
                 temporaryTarget: cachedTempTarget,
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this

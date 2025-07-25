@@ -20,13 +20,13 @@ namespace Units.Skills
                    $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            float attackRange = caster.Attributes.AttackRange;
-            float attackFrequency = caster.Attributes.AttacksPerTenSeconds.finalValue;
+            float attackRange = Owner.Attributes.AttackRange;
+            float attackFrequency = Owner.Attributes.AttacksPerTenSeconds.finalValue;
             int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
 
-            List<Unit> enemiesInRange = caster.UnitManager.FindEnemiesInRange(caster,attackRange);
+            List<Unit> enemiesInRange = Owner.UnitManager.FindEnemiesInRange(Owner, attackRange);
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for ProjectileHail.");
@@ -39,14 +39,14 @@ namespace Units.Skills
                 Unit targetEnemy = enemiesInRange
                     .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? enemiesInRange[Random.Range(0, enemiesInRange.Count)];
 
-                float damageValue = caster.Attributes.AttackPower.finalValue;
+                float damageValue = Owner.Attributes.AttackPower.finalValue;
                 if (attackedEnemies.Contains(targetEnemy))
                 {
                     damageValue *= 1 - damageReductionPercentage / 100f;
                 }
                 var damage = new Units.Damages.Damage(damageValue, Units.Damages.DamageType.Hit);
                 damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(caster);
+                damage.SetSourceUnit(Owner);
                 damage.SetTargetUnit(targetEnemy);
                 // caster.Attack(targetEnemy, damage);
 

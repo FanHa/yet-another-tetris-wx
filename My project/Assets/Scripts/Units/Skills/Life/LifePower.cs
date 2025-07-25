@@ -31,17 +31,17 @@ namespace Units.Skills
         }
 
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             if (cachedTarget == null)
                 return false;
             // 攻击力加成与施法者当前血量相关
-            float atkBoost = caster.Attributes.MaxHealth.finalValue * (Config.HealthToAtkPercent / 100f);
+            float atkBoost = Owner.Attributes.MaxHealth.finalValue * (Config.HealthToAtkPercent / 100f);
 
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 atkBoost,                // 攻击力加成
                 Config.BuffDuration,     // 持续时间
-                caster,                  // 来源单位
+                Owner,                   // 来源单位
                 this                     // 来源技能
             ));
             cachedTarget = null; // 用完清空

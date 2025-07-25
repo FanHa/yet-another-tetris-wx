@@ -34,30 +34,30 @@ namespace Units.Skills
         }
 
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             if (cachedTarget == null)
                 return false;
 
-            float shieldAmount = caster.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
+            float shieldAmount = Owner.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
                 Config.BuffDuration,  // 持续时间
-                caster,               // 来源单位
+                Owner,               // 来源单位
                 this                  // 来源技能
             );
-            var prefab = caster.ProjectileConfig.BuffProjectilePrefab;
-            var projectileObj = Object.Instantiate(prefab, caster.transform.position, Quaternion.identity);
+            var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
+            var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
-            projectile.Init(caster, cachedTarget, buff);
+            projectile.Init(Owner, cachedTarget, buff);
             projectile.Activate();
 
             var damage = new Damages.Damage(shieldAmount, Damages.DamageType.Skill);
-            damage.SetSourceUnit(caster);
-            damage.SetTargetUnit(caster);
+            damage.SetSourceUnit(Owner);
+            damage.SetTargetUnit(Owner);
             damage.SetSourceLabel(Name());
-            caster.TakeDamage(damage);
+            Owner.TakeDamage(damage);
 
             cachedTarget = null;
             return true;

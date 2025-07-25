@@ -33,20 +33,20 @@ namespace Units.Skills
             return true;
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             // 实例化雪球投射物
             GameObject projectileInstance = Object.Instantiate(
-                caster.ProjectileConfig.SnowballPrefab,
-                caster.projectileSpawnPoint.position,
+                Owner.ProjectileConfig.SnowballPrefab,
+                Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
-            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
             var damage = new Damages.Damage(totalDamage, Damages.DamageType.Skill);
             damage.SetSourceLabel(Name());
-            damage.SetSourceUnit(caster);
+            damage.SetSourceUnit(Owner);
             damage.SetTargetUnit(cachedTarget);
             // 计算Chilled参数
             float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
@@ -58,11 +58,11 @@ namespace Units.Skills
                 moveSlowPercent,
                 atkSlowPercent,
                 energySlowPercent,
-                caster,
+                Owner,
                 this
             );
             snowBall.SetChilled(chilled);
-            snowBall.Init(caster, cachedTarget.transform, damage);
+            snowBall.Init(Owner, cachedTarget.transform, damage);
             snowBall.Activate();
             // 清空目标
             cachedTarget = null;

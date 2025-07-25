@@ -27,9 +27,9 @@ namespace Units.Skills
         }
         public static string NameStatic() => "火环";
 
-        public void ApplyPassive(Unit caster)
+        public void ApplyPassive()
         {
-            int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int fireCellCount = Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
             float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
             float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
@@ -39,10 +39,10 @@ namespace Units.Skills
                 dotDuration,
                 Config.BuffDuration,
                 radius,
-                caster,
+                Owner,
                 this
             );
-            caster.AddBuff(buff);
+            Owner.AddBuff(buff);
         }
     }
 }

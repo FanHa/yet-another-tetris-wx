@@ -21,12 +21,12 @@ namespace Units.Skills
 
     public interface IPassiveSkill
     {
-        void ApplyPassive(Unit unit);
+        void ApplyPassive();
     }
     public interface IActiveSkill
     {
         void AddEnergy(float amount);
         bool IsReady();
-        void Execute(Unit caster);
+        void Execute();
     }
 }

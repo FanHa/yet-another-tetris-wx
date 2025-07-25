@@ -27,9 +27,9 @@ namespace Units.Skills
         }
         public static string NameStatic() => "冰霜护盾";
 
-        public void ApplyPassive(Unit caster)
+        public void ApplyPassive()
         {
-            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float buffDuration = Config.BuffDuration;
             float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationAdditionPerIceCell;
             int moveSlowPercent = Config.BaseMoveSlowPercent + iceCellCount * Config.MoveSlowPercentPerIceCell;
@@ -42,11 +42,11 @@ namespace Units.Skills
                 moveSlowPercent,
                 atkSlowPercent,
                 energySlowPercent,
-                caster,
+                Owner,
                 this
             );
-            
-            caster.AddBuff(buff);
+
+            Owner.AddBuff(buff);
         }
     }
 }

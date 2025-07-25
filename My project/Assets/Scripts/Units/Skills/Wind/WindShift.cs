@@ -22,12 +22,12 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "风形态";
-
-        public void ApplyPassive(Unit unit)
+    
+        public void ApplyPassive()
         {
-            unit.AddBuff(new Buffs.WindShiftBuff(
+            Owner.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
-                sourceUnit: unit,
+                sourceUnit: Owner,
                 sourceSkill: this,
                 attackRangeBonus: Config.AttackRangeBonus,
                 damageReducePercent: Config.DamageReducePercent,

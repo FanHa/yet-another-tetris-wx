@@ -27,21 +27,21 @@ namespace Units.Skills
         }
         public static string NameStatic() => "攻击加速";
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            int windCellCount = caster.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            int windCellCount = Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
             float atkSpeedPercent = Config.AtkSpeedPercent + windCellCount * Config.AtkSpeedAdditionPercentPerWindCell;
             var buff = new Buffs.AttackBoostBuff(
                 duration: Config.Duration,
                 atkSpeedPercent: atkSpeedPercent,
-                sourceUnit: caster,
+                sourceUnit: Owner,
                 sourceSkill: this
             );
 
-            var prefab = caster.ProjectileConfig.BuffProjectilePrefab;
-            var projectileObj = Object.Instantiate(prefab, caster.transform.position, Quaternion.identity);
+            var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
+            var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
-            projectile.Init(caster, caster, buff); // 目标为自己
+            projectile.Init(Owner, Owner, buff); // 目标为自己
             projectile.Activate();
             return true;
         }

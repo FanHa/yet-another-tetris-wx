@@ -28,20 +28,20 @@ namespace Units.Skills
 
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             Vector3 center = targetPosition;
-            int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int fireCellCount = Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
             float duration = Config.BaseDuration + fireCellCount * Config.DurationPerFireCell;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
             float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
 
-            var prefab = caster.ProjectileConfig.BlazingFieldPrefab; // 你需要在配置里加上这个Prefab
+            var prefab = Owner.ProjectileConfig.BlazingFieldPrefab; // 你需要在配置里加上这个Prefab
             var blazingFieldObj = Object.Instantiate(prefab, center, Quaternion.identity);
             var effect = blazingFieldObj.GetComponent<Units.Projectiles.BlazingField>();
             effect.Init(
-                caster: caster,
+                caster: Owner,
                 radius: radius,
                 duration: duration,
                 dotDps: dotDps,

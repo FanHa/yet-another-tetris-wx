@@ -29,17 +29,17 @@ namespace Units.Skills
             return true;
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            GameObject projectileInstance = Object.Instantiate(caster.ProjectileConfig.FireballPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
+            GameObject projectileInstance = Object.Instantiate(Owner.ProjectileConfig.FireballPrefab, Owner.projectileSpawnPoint.position, Quaternion.identity);
             Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
-            int fireCellCount = caster.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int fireCellCount = Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
 
             float burnDps = Config.DotBaseDamage + fireCellCount * Config.DotAddtionPerFireCell;
             float burnDuration = Config.DotDuration;
 
             fireball.Init(
-                caster: caster,
+                caster: Owner,
                 target: targetEnemy,
                 burnDps: burnDps,
                 burnDuration: burnDuration,

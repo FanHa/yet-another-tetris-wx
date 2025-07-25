@@ -13,17 +13,17 @@ namespace Units.Skills
         private HashSet<Unit> hitEnemies = new HashSet<Unit>(); // 记录已碰撞的敌人
 
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            if (caster.enemyUnits == null || caster.enemyUnits.Count == 0)
+            if (Owner.enemyUnits == null || Owner.enemyUnits.Count == 0)
             {
                 Debug.LogWarning("No target enemies to rush towards.");
                 return false;
             }
 
-            Transform targetEnemy = caster.enemyUnits[caster.enemyUnits.Count - 1].transform;
+            Transform targetEnemy = Owner.enemyUnits[Owner.enemyUnits.Count - 1].transform;
             // 开始冲刺协程
-            caster.StartCoroutine(RushTowardsTarget(caster, targetEnemy));
+            Owner.StartCoroutine(RushTowardsTarget(Owner, targetEnemy));
             return true;
         }
 

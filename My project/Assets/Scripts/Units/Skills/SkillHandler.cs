@@ -82,7 +82,7 @@ namespace Units.Skills
         {
             if (pendingSkill != null && pendingSkill.IsReady())
             {
-                pendingSkill.Execute(owner);
+                pendingSkill.Execute();
                 OnSkillCast?.Invoke(owner, pendingSkill);
                 pendingSkill = null; // 清除已执行的技能
             }

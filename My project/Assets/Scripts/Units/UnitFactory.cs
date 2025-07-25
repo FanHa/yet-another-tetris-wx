@@ -41,7 +41,7 @@ namespace Units
             {
                 if (skill is Units.Skills.IPassiveSkill passive)
                 {
-                    passive.ApplyPassive(unit);
+                    passive.ApplyPassive();
                 }
             }
 

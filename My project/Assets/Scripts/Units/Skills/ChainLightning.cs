@@ -17,10 +17,10 @@ namespace Units.Skills
                    $"每次弹射伤害增加 {damageIncreasePercentage}%，最多弹射 {maxBounces} 次。";
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
             // 找到范围内最近的敌人
-            Unit initialTarget = caster.UnitManager.FindClosestEnemyInRange(caster, range);
+            Unit initialTarget = Owner.UnitManager.FindClosestEnemyInRange(Owner, range);
             if (initialTarget == null)
             {
                 Debug.LogWarning("No valid targets found within range for ChainLightning.");
@@ -28,7 +28,7 @@ namespace Units.Skills
             }
 
             // 开始闪电弹射逻辑
-            caster.StartCoroutine(ChainLightningRoutine(caster, initialTarget));
+            Owner.StartCoroutine(ChainLightningRoutine(Owner, initialTarget));
             return true;
         }
 

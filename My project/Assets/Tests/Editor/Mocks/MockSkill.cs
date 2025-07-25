@@ -19,10 +19,10 @@ public class MockSkill : ActiveSkill
         return true; // Always ready for testing
     }
 
-    public override void Execute(Unit unit)
+    public override void Execute()
     {
         IsExecuted = true;
-        BoundUnit = unit; // 记录绑定的 Unit
+        BoundUnit = Owner; // 记录绑定的 Unit
     }
 
     public override string Name()
@@ -30,7 +30,7 @@ public class MockSkill : ActiveSkill
         throw new System.NotImplementedException();
     }
 
-    protected override bool ExecuteCore(Unit caster)
+    protected override bool ExecuteCore()
     {
         throw new System.NotImplementedException();
     }
@@ -58,7 +58,7 @@ public class MockSkillWithCooldown : ActiveSkill
         return remainingCooldown <= 0f;
     }
 
-    public override void Execute(Unit owner)
+    public override void Execute()
     {
         ExecutionCount++;
         remainingCooldown = OriginalCooldown;
@@ -74,7 +74,7 @@ public class MockSkillWithCooldown : ActiveSkill
         throw new System.NotImplementedException();
     }
 
-    protected override bool ExecuteCore(Unit caster)
+    protected override bool ExecuteCore()
     {
         throw new System.NotImplementedException();
     }

@@ -41,9 +41,9 @@ namespace Units.Skills
             targetPosition = targetEnemy.transform.position;
             return true;
         }
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float radius = GetRadius(iceCellCount);
             float duration = GetDuration(iceCellCount);
             float damage = Config.BaseDamage + iceCellCount * Config.DamagePerIceCell;
@@ -52,11 +52,11 @@ namespace Units.Skills
             int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
             int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
 
-            var prefab = caster.ProjectileConfig.FrostZonePrefab;
+            var prefab = Owner.ProjectileConfig.FrostZonePrefab;
             var frostZoneObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
             frostZone.Initialize(
-                caster: caster,
+                caster: Owner,
                 radius: radius,
                 duration: duration,
                 damage: damage,

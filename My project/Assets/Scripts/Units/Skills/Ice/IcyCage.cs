@@ -32,14 +32,14 @@ namespace Units.Skills
             return true;
         }
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            int iceCellCount = caster.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             float freezeDuration = Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
 
             var freezeBuff = new Buffs.Freeze(
                 freezeDuration,
-                caster,
+                Owner,
                 this
             );
             targetEnemy.AddBuff(freezeBuff);

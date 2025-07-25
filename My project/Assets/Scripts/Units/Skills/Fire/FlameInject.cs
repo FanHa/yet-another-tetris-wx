@@ -27,9 +27,9 @@ namespace Units.Skills
         }
         public static string NameStatic() => "炎附";
 
-        public void ApplyPassive(Unit unit)
+        public void ApplyPassive()
         {
-            int fireCellCount = unit.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int fireCellCount = Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
             float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
             float dotDuration = Config.DotDuration;
 
@@ -37,10 +37,10 @@ namespace Units.Skills
                 dotDps,
                 dotDuration,
                 Config.BuffDuration,
-                unit,
+                Owner,
                 this
             );
-            unit.AddBuff(buff);
+            Owner.AddBuff(buff);
         }
 
     }

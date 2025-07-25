@@ -8,9 +8,9 @@ namespace Units.Skills
         public float attackPowerMultiplier = 4f; // 攻击力倍数
         public float speed = 1.5f;
 
-        protected override bool ExecuteCore(Unit caster)
+        protected override bool ExecuteCore()
         {
-            var enemiesInRange = caster.UnitManager.FindEnemiesInRange(caster, caster.Attributes.AttackRange)
+            var enemiesInRange = Owner.UnitManager.FindEnemiesInRange(Owner, Owner.Attributes.AttackRange)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .ToList();
 
@@ -21,17 +21,17 @@ namespace Units.Skills
             }
 
             Unit targetEnemy = enemiesInRange.First();
-            GameObject projectileInstance = Object.Instantiate(caster.ProjectileConfig.PrecisionArrowPrefab, caster.projectileSpawnPoint.position, Quaternion.identity);
+            GameObject projectileInstance = Object.Instantiate(Owner.ProjectileConfig.PrecisionArrowPrefab, Owner.projectileSpawnPoint.position, Quaternion.identity);
             Units.Projectiles.Projectile projectile = projectileInstance.GetComponent<Units.Projectiles.Projectile>();
             if (projectile != null)
             {
-                var damage = new Damages.Damage(caster.Attributes.AttackPower.finalValue * attackPowerMultiplier, Damages.DamageType.Hit);
+                var damage = new Damages.Damage(Owner.Attributes.AttackPower.finalValue * attackPowerMultiplier, Damages.DamageType.Hit);
                 damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(caster);
+                damage.SetSourceUnit(Owner);
                 damage.SetTargetUnit(targetEnemy);
 
                 var target = targetEnemy.transform;
-                projectile.Init(caster, target, damage);
+                projectile.Init(Owner, target, damage);
                 projectile.Activate();
             }
             return true;

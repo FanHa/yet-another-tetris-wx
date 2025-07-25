@@ -26,11 +26,11 @@ namespace Units.Skills
         public static string NameStatic() => "走A";
 
 
-        public void ApplyPassive(Unit caster)
+        public void ApplyPassive()
         {
-            caster.AddBuff(new Buffs.HitAndRunBuff(
+            Owner.AddBuff(new Buffs.HitAndRunBuff(
                 duration: -1f,
-                sourceUnit: caster,
+                sourceUnit: Owner,
                 sourceSkill: this
             ));
         }
