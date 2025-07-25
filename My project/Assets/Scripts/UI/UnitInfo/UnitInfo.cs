@@ -116,7 +116,7 @@ namespace UI.UnitInfo
                     attributes.MoveSpeed,
                     attributes.AttackPower,
                     attributes.AttacksPerTenSeconds,
-                    attributes.EnergyPerTick
+                    attributes.EnergyPerSecond
                 }
             );
             foreach (Units.Attribute attribute in AttributeToShow)

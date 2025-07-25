@@ -12,13 +12,13 @@ namespace Units
         [SerializeField] private Attribute attackPower;
         [SerializeField] private Attribute maxHealth;
         [SerializeField] private Attribute attacksPerTenSeconds;
-        [SerializeField] private Attribute energyPerTick;
+        [SerializeField] private Attribute energyPerSecond;
 
         public Attribute MoveSpeed => moveSpeed;
         public Attribute AttackPower => attackPower;
         public Attribute MaxHealth => maxHealth;
         public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
-        public Attribute EnergyPerTick => energyPerTick;
+        public Attribute EnergyPerSecond => energyPerSecond;
 
         public float AttackTargetNumber; // 攻击目标数量
         public float AttackRange; // 攻击范围
@@ -48,7 +48,7 @@ namespace Units
             attackPower = new Attribute("攻击力", 10);
             maxHealth = new Attribute("生命", 100);
             attacksPerTenSeconds = new Attribute("攻速", 2.5f);
-            energyPerTick = new Attribute("能量回复", 5);
+            energyPerSecond = new Attribute("能量回复", 5);
             CurrentHealth = MaxHealth.finalValue;
             shields = new List<Shield>();
         }

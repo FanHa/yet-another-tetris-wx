@@ -9,7 +9,7 @@ namespace Units.Skills
         public float energyPerTick;
         public float energyDecayPerSkill;
         private float tickTimer = 0f;
-        private const float TICK_INTERVAL = 0.5f;
+        private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
         private SkillManager skillManager = new();
@@ -41,7 +41,7 @@ namespace Units.Skills
             {
                 tickTimer -= TICK_INTERVAL;
 
-                float energyPerTick = owner.Attributes.EnergyPerTick.finalValue;
+                float energyPerTick = owner.Attributes.EnergyPerSecond.finalValue * TICK_INTERVAL;
                 skillManager.Tick(energyPerTick);
             }
         }

@@ -26,7 +26,7 @@ namespace Units.Buffs
             // 攻速、移速、能量回复全部-100%
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -100);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
-            unit.Attributes.EnergyPerTick.AddPercentageModifier(this, -100);
+            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -100);
             var vfxPrefab = unit.ProjectileConfig.IcyCagePrefab;
             vfxInstance = Object.Instantiate(vfxPrefab, unit.transform.position, Quaternion.identity);
             var icyCageComp = vfxInstance.GetComponent<Units.Projectiles.IcyCage>();
@@ -39,7 +39,7 @@ namespace Units.Buffs
         {
             unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
             unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            unit.Attributes.EnergyPerTick.RemovePercentageModifier(this);
+            unit.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
             if (vfxInstance != null)
             {
                 Object.Destroy(vfxInstance);

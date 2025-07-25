@@ -57,6 +57,7 @@ namespace Units
         public UnitManager UnitManager;
 
         private bool isActive = false; // 是否处于活动状态
+        public bool IsActive => isActive;
         private bool isInAction = false;
         private Unit pendingAttackTarget;
 
@@ -119,6 +120,7 @@ namespace Units
         {
             CancelInvoke(nameof(UpdateEnemiesDistance));
             skillHandler.Deactivate(); // 如有需要
+            BuffHandler.GetActiveBuffs().ToList().ForEach(buff => BuffHandler.RemoveBuff(buff)); // 清理所有Buff
             isActive = false;
         }
         public void SetHitAndRun(bool enable)
@@ -308,18 +310,15 @@ namespace Units
             Attributes.TakeDamage(damageReceived.Value);
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
-            CheckHealth();
-        }
 
-
-        private void CheckHealth()
-        {
             if (Attributes.CurrentHealth <= 0)
             {
+                Deactivate();
                 OnDeath?.Invoke(this);
-                // gameObject.SetActive(false); // 将 GameObject 设置为失活
             }
         }
+
+
 
         void OnDrawGizmosSelected()
         {
@@ -349,69 +348,6 @@ namespace Units
         public List<Units.Buffs.Buff> GetActiveBuffs()
         {
             return BuffHandler.GetActiveBuffs().ToList();
-        }
-
-        // public List<Unit> FindAlliesInRange(float range)
-        // {
-        //     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
-        //     return colliders
-        //         .Select(collider => collider.GetComponent<Unit>())
-        //         .Where(unit => unit != null && unit.faction == faction && unit != this)
-        //         .ToList();
-        // }
-
-        // /// <summary>
-        // /// 寻找范围内的所有敌方单位
-        // /// </summary>
-        // public List<Unit> FindEnemiesInRange(float range)
-        // {
-        //     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
-
-        //     return colliders
-        //         .Select(collider => collider.GetComponent<Unit>())
-        //         .Where(unit => unit != null && unit.faction != faction)
-        //         .ToList();
-        // }
-
-        // /// <summary>
-        // /// 寻找范围内最近的敌方单位
-        // /// </summary>
-        // public Unit FindClosestEnemy(float range)
-        // {
-        //     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
-        //     return colliders
-        //         .Select(collider => collider.GetComponent<Unit>())
-        //         .Where(unit => unit != null && unit.faction != faction)
-        //         .OrderBy(unit => Vector2.Distance(transform.position, unit.transform.position))
-        //         .FirstOrDefault();
-        // }
-
-        // /// <summary>
-        // /// 寻找范围内的随机友方单位
-        // /// </summary>
-        // public Unit FindRandomAlly(float range)
-        // {
-        //     var allies = FindAlliesInRange(range);
-        //     if (allies.Count > 0)
-        //     {
-        //         return allies[UnityEngine.Random.Range(0, allies.Count)];
-        //     }
-        //     return null;
-        // }
-        // public Unit FindRandomAllyIncludingSelf(float range)
-        // {
-        //     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range);
-        //     var allies = colliders
-        //         .Select(collider => collider.GetComponent<Unit>())
-        //         .Where(unit => unit != null && unit.faction == faction)
-        //         .ToList(); // 不排除自己
-
-        //     if (allies.Count > 0)
-        //     {
-        //         return allies[UnityEngine.Random.Range(0, allies.Count)];
-        //     }
-        //     return null;
-        // }
-        
+        }        
     }
 }

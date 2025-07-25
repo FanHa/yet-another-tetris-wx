@@ -35,13 +35,13 @@ namespace Units.Buffs
             base.OnApply(unit);
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -AttackSlowPercent);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
-            unit.Attributes.EnergyPerTick.AddPercentageModifier(this, -EnergyRegenSlowPercent);
+            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -EnergyRegenSlowPercent);
         }
         public override void OnRemove(Unit unit)
         {
             unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
             unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            unit.Attributes.EnergyPerTick.RemovePercentageModifier(this);
+            unit.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
         }
     }
 }

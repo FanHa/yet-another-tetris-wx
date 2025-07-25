@@ -57,7 +57,7 @@ namespace Units.Skills
         {
             return DescriptionStatic();
         }
-        public static string DescriptionStatic() => "在目标区域制造一片燃烧区域, 对敌人造成灼烧.";
+        public static string DescriptionStatic() => "制造一片燃烧区域, 对敌人造成伤害.";
 
         public override string Name()
         {

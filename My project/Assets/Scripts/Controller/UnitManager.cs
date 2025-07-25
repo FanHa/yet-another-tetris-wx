@@ -114,7 +114,6 @@ namespace Controller
         {
             factionA.Remove(deadUnit);
             factionB.Remove(deadUnit);
-            deadUnit.Deactivate();
             OnUnitDeath?.Invoke(deadUnit);
             List<Unit> faction = deadUnit.faction == Unit.Faction.FactionA ? factionA : factionB;
             if (faction.Count == 0)
@@ -154,7 +153,7 @@ namespace Controller
             Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
             return colliders
                 .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.faction == self.faction && (includeSelf || unit != self))
+                .Where(unit => unit != null && unit.IsActive && unit.faction == self.faction && (includeSelf || unit != self))
                 .ToList();
         }
 
@@ -163,7 +162,7 @@ namespace Controller
             Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
             return colliders
                 .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.faction != self.faction)
+                .Where(unit => unit != null && unit.IsActive&& unit.faction != self.faction)
                 .ToList();
         }
 
@@ -180,7 +179,7 @@ namespace Controller
             Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
             return colliders
                 .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.faction != self.faction)
+                .Where(unit => unit != null && unit.IsActive && unit.faction != self.faction)
                 .OrderBy(unit => Vector2.Distance(self.transform.position, unit.transform.position))
                 .FirstOrDefault();
         }
