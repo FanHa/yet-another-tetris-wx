@@ -18,7 +18,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => "Freeze";
-        public override string Description() => "完全冻结，无法行动，能量回复为0";
+        public override string Description() => "完全冻结,无法行动,能量回复为0";
 
         public override void OnApply(Unit unit)
         {

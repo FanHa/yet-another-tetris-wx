@@ -19,7 +19,7 @@ namespace Units.Buffs
 
         public override string Name() => "风形态";
         public override string Description() =>
-            $"风形态：攻击距离+{attackRangeBonus}";
+            $"攻击距离+{attackRangeBonus}";
 
         public override void OnApply(Unit unit)
         {

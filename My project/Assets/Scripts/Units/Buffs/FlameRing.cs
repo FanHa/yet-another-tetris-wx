@@ -29,7 +29,7 @@ namespace Units.Buffs
 
         public override string Name() => "火环";
         public override string Description() =>
-            "对周围敌人施加灼烧DeBuff";
+            $"对周围敌人施加灼烧DeBuff,每秒造成{dotDps}点伤害";
 
 
         public override void OnApply(Unit unit)

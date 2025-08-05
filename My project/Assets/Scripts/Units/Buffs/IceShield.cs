@@ -32,7 +32,7 @@ namespace Units.Buffs
 
         public override string Name() => "冰霜护盾";
         public override string Description() =>
-            $"被攻击时使攻击者获得Chilled：移速-{chilledMoveSlowPercent}%，攻速-{chilledAttackSlowPercent}%，能量回复-{chilledEnergyRegenSlowPercent}%，持续{chilledDuration}秒";
+            $"被攻击时使攻击者获得Chilled:移速-{chilledMoveSlowPercent}%，攻速-{chilledAttackSlowPercent}%，能量回复-{chilledEnergyRegenSlowPercent}%，持续{chilledDuration}秒";
 
         public void OnTakeHit(Unit self, Unit attacker, ref Damages.Damage damage)
         {
