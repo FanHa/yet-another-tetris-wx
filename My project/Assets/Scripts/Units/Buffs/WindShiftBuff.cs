@@ -2,31 +2,24 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
-    public class WindShiftBuff : Buff, IAttackHitTrigger, ITakeDamagePercentAdd
+    public class WindShiftBuff : Buff
     {
-        private readonly float attackRangeBonus;      // 攻击距离提升
-        private readonly float damageReducePercent;   // 造成伤害降低百分比（如30表示降低30%）
-        private readonly float takeDamageIncreasePercent; // 受到伤害提升百分比（如30表示提升30%）
-
+        private readonly float attackRangeBonus;      // 攻击距离提升）
 
         public WindShiftBuff(
             float duration,
             Unit sourceUnit,
             Skill sourceSkill,
-            float attackRangeBonus,
-            float damageReducePercent,
-            float takeDamageIncreasePercent
+            float attackRangeBonus
         )
             : base(duration, sourceUnit, sourceSkill)
         {
             this.attackRangeBonus = attackRangeBonus;
-            this.damageReducePercent = damageReducePercent;
-            this.takeDamageIncreasePercent = takeDamageIncreasePercent;
         }
 
         public override string Name() => "风形态";
         public override string Description() =>
-            $"风形态：攻击距离+{attackRangeBonus}，造成伤害-{damageReducePercent}% ，受到伤害+{takeDamageIncreasePercent}%";
+            $"风形态：攻击距离+{attackRangeBonus}";
 
         public override void OnApply(Unit unit)
         {
@@ -40,18 +33,5 @@ namespace Units.Buffs
         {
             unit.Attributes.AttackRange -= attackRangeBonus;
         }
-
-        // 造成伤害时降低输出
-        public void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage)
-        {
-            float multiplier = 1f - damageReducePercent / 100f;
-            damage.SetValue(damage.Value * multiplier);
-        }
-
-        public float GetPercentAdd()
-        {
-            return takeDamageIncreasePercent;
-        }
-
     }
 }

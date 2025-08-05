@@ -34,14 +34,13 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
-            float freezeDuration = Config.BaseFreezeDuration + iceCellCount * Config.FreezeDurationPerIceCell;
-
+            var stats = CalcStats();
             var freezeBuff = new Buffs.Freeze(
-                freezeDuration,
+                stats.FreezeDuration.Final,
                 Owner,
                 this
             );
+            // todo 判断TargetEnemy 是否还活跃
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
             return true;
@@ -49,8 +48,10 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return $"对攻击范围内一个敌人施加冻结效果：\n{stats.FreezeDuration}";
         }
+
         public static string DescriptionStatic() => "对攻击范围内一个敌人施加冻结效果";
 
         public override string Name()
@@ -58,5 +59,19 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "冰牢";
+        private struct IcyCageStats
+        {
+            public StatValue FreezeDuration;
+        }
+
+        private IcyCageStats CalcStats()
+        {
+            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            return new IcyCageStats
+            {
+                FreezeDuration = new StatValue("冻结持续时间", Config.BaseFreezeDuration, iceCellCount * Config.FreezeDurationPerIceCell)
+            };
+        }
+
     }
 }

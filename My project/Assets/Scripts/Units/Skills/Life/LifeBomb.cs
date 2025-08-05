@@ -16,6 +16,19 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
+        private struct LifeBombStats
+        {
+            public StatValue HealthCostPercent;
+        }
+
+        private LifeBombStats CalcStats()
+        {
+            return new LifeBombStats
+            {
+                HealthCostPercent = new StatValue("消耗生命值百分比", Config.HealthCostPercent)
+            };
+        }
+
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -33,10 +46,10 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
+            var stats = CalcStats();
             float percent = Config.HealthCostPercent / 100f;
             float healthCost = Owner.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
-
 
             // 投射炸弹
             GameObject projectileInstance = Object.Instantiate(
@@ -58,9 +71,13 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + "\n" +
+                $"{stats.HealthCostPercent}";
         }
-        public static string DescriptionStatic() => "消耗自身生命值制作炸弹，对目标区域的敌人造成范围伤害。";
+
+        public static string DescriptionStatic() => "消耗自身生命值制作炸弹，对目标区域的敌人造成伤害。";
 
 
         public override string Name()

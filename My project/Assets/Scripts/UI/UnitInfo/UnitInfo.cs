@@ -168,7 +168,19 @@ namespace UI.UnitInfo
         }
         public void ShowSkillDescription(Units.Skills.Skill skill)
         {
-            skillDescriptionText.text = "<b>" + skill.Name() + "</b>: " + skill.Description();
+            string desc = skill.Description();
+
+            // 替换自定义标签为富文本颜色
+            desc = desc.Replace("<base>", "<color=#FFFFFF>")
+                    .Replace("</base>", "</color>")
+                    .Replace("<bonus>", "<color=#00FF66>")
+                    .Replace("</bonus>", "</color>")
+                    .Replace("<debuff>", "<color=#FF5555>")
+                    .Replace("</debuff>", "</color>")
+                    .Replace("<final>", "<color=#FFD700>")
+                    .Replace("</final>", "</color>");
+
+            skillDescriptionText.text = "<b>" + skill.Name() + "</b>: " + desc;
         }
     }
 }

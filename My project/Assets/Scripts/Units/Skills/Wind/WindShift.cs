@@ -11,11 +11,33 @@ namespace Units.Skills
         {
             Config = config;
         }
+
+        private struct WindShiftStats
+        {
+            public StatValue AttackRangeBonus;
+        }
+
+        private WindShiftStats CalcStats()
+        {
+            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            return new WindShiftStats
+            {
+                AttackRangeBonus = new StatValue(
+                    "攻击距离提升",
+                    Config.AttackRangeBonus,
+                    windCellCount * Config.AttackRangePerWindCell
+                )
+            };
+        }
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + ":\n" +
+                $"{stats.AttackRangeBonus}";
         }
-        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离，降低伤害，提升自身受到伤害。";
+ 
+        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离";
 
         public override string Name()
         {
@@ -25,13 +47,12 @@ namespace Units.Skills
     
         public void ApplyPassive()
         {
+            var stats = CalcStats();
             Owner.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
                 sourceUnit: Owner,
                 sourceSkill: this,
-                attackRangeBonus: Config.AttackRangeBonus,
-                damageReducePercent: Config.DamageReducePercent,
-                takeDamageIncreasePercent: Config.TakeDamageIncreasePercent
+                attackRangeBonus: stats.AttackRangeBonus.Final
             ));
         }
         

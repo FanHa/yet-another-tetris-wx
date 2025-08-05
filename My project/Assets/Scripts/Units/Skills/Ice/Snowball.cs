@@ -18,7 +18,7 @@ namespace Units.Skills
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
         }
-        
+
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -35,6 +35,9 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
+            var stats = CalcStats();
+            // Todo 判断cachedTarget是否依然活跃
+
             // 实例化雪球投射物
             GameObject projectileInstance = Object.Instantiate(
                 Owner.ProjectileConfig.SnowballPrefab,
@@ -42,22 +45,17 @@ namespace Units.Skills
                 Quaternion.identity
             );
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
-            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
-            float totalDamage = Config.BaseDamage + iceCellCount * Config.IceCellDamageBonus;
-            var damage = new Damages.Damage(totalDamage, Damages.DamageType.Skill);
+
+            var damage = new Damages.Damage(stats.Damage.Final, Damages.DamageType.Skill);
             damage.SetSourceLabel(Name());
             damage.SetSourceUnit(Owner);
             damage.SetTargetUnit(cachedTarget);
-            // 计算Chilled参数
-            float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
-            int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
-            int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
-            int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
+
             var chilled = new Units.Buffs.Chilled(
-                chilledDuration,
-                moveSlowPercent,
-                atkSlowPercent,
-                energySlowPercent,
+                stats.ChilledDuration.Final,
+                (int)stats.MoveSlowPercent.Final,
+                (int)stats.AtkSlowPercent.Final,
+                (int)stats.EnergySlowPercent.Final,
                 Owner,
                 this
             );
@@ -67,13 +65,19 @@ namespace Units.Skills
             // 清空目标
             cachedTarget = null;
             return true;
-
         }
 
         public override string Description()
-        {
-            return DescriptionStatic();
-        }
+    {
+        var stats = CalcStats();
+        return
+            DescriptionStatic() + "\n" +
+            $"{stats.Damage}\n" +
+            $"{stats.ChilledDuration}\n" +
+            $"{stats.MoveSlowPercent}\n" +
+            $"{stats.AtkSlowPercent}\n" +
+            $"{stats.EnergySlowPercent}";
+    }
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,造成伤害并施加减速Debuff.";
 
         public override string Name()
@@ -81,5 +85,27 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "雪球";
+        
+        private struct SnowballStats
+        {
+            public StatValue Damage;
+            public StatValue ChilledDuration;
+            public StatValue MoveSlowPercent;
+            public StatValue AtkSlowPercent;
+            public StatValue EnergySlowPercent;
+        }
+
+        private SnowballStats CalcStats()
+        {
+            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            return new SnowballStats
+            {
+                Damage = new StatValue("冰属性伤害", Config.BaseDamage, iceCellCount * Config.IceCellDamageBonus),
+                ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationPerIceCell),
+                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, iceCellCount * Config.ChilledMoveSlowPercentPerIceCell),
+                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, iceCellCount * Config.ChilledAtkSlowPercentPerIceCell),
+                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, iceCellCount * Config.ChilledEnergySlowPercentPerIceCell)
+            };
+        }
     }
 }

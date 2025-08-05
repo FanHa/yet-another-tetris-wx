@@ -19,16 +19,6 @@ namespace Units.Skills
             this.Config = config;
         }
 
-
-        private float GetRadius(int iceCellCount)
-        {
-            return Config.BaseRadius + iceCellCount * Config.RadiusPerIceCell;
-        }
-
-        private float GetDuration(int iceCellCount)
-        {
-            return Config.BaseDuration + iceCellCount * Config.DurationPerIceCell;
-        }
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -43,27 +33,20 @@ namespace Units.Skills
         }
         protected override bool ExecuteCore()
         {
-            int iceCellCount = Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
-            float radius = GetRadius(iceCellCount);
-            float duration = GetDuration(iceCellCount);
-            float damage = Config.BaseDamage + iceCellCount * Config.DamagePerIceCell;
-            float chilledDuration = Config.BaseChilledDuration + iceCellCount * Config.ChilledDurationPerIceCell;
-            int moveSlowPercent = Config.BaseChilledMoveSlowPercent + iceCellCount * Config.ChilledMoveSlowPercentPerIceCell;
-            int atkSlowPercent = Config.BaseChilledAtkSlowPercent + iceCellCount * Config.ChilledAtkSlowPercentPerIceCell;
-            int energySlowPercent = Config.BaseChilledEnergySlowPercent + iceCellCount * Config.ChilledEnergySlowPercentPerIceCell;
+            var stats = CalcStats();
 
             var prefab = Owner.ProjectileConfig.FrostZonePrefab;
             var frostZoneObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
             frostZone.Initialize(
                 caster: Owner,
-                radius: radius,
-                duration: duration,
-                damage: damage,
-                chilledDuration: chilledDuration,
-                moveSlowPercent: moveSlowPercent,
-                atkSlowPercent: atkSlowPercent,
-                energySlowPercent: energySlowPercent
+                radius: stats.Radius.Final,
+                duration: stats.Duration.Final,
+                damage: stats.Damage.Final,
+                chilledDuration: stats.ChilledDuration.Final,
+                moveSlowPercent: Mathf.RoundToInt(stats.MoveSlowPercent.Final),
+                atkSlowPercent: Mathf.RoundToInt(stats.AtkSlowPercent.Final),
+                energySlowPercent: Mathf.RoundToInt(stats.EnergySlowPercent.Final)
             );
             frostZone.Activate();
             return true;
@@ -72,8 +55,18 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + ":\n" +
+                $"{stats.Duration}\n" +
+                $"{stats.Radius}\n" +
+                $"{stats.Damage}\n" +
+                $"{stats.MoveSlowPercent}\n" +
+                $"{stats.AtkSlowPercent}\n" +
+                $"{stats.EnergySlowPercent}\n" +
+                $"{stats.ChilledDuration}";
         }
+
         public static string DescriptionStatic() => "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
 
         public override string Name()
@@ -81,5 +74,31 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "霜域";
+
+        private struct FrostZoneStats
+        {
+            public StatValue Radius;
+            public StatValue Duration;
+            public StatValue Damage;
+            public StatValue ChilledDuration;
+            public StatValue MoveSlowPercent;
+            public StatValue AtkSlowPercent;
+            public StatValue EnergySlowPercent;
+        }
+
+        private FrostZoneStats CalcStats()
+        {
+            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            return new FrostZoneStats
+            {
+                Radius = new StatValue("范围半径", Config.BaseRadius, iceCellCount * Config.RadiusPerIceCell),
+                Duration = new StatValue("持续时间", Config.BaseDuration, iceCellCount * Config.DurationPerIceCell),
+                Damage = new StatValue("冰属性伤害", Config.BaseDamage, iceCellCount * Config.DamagePerIceCell),
+                ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationPerIceCell),
+                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, iceCellCount * Config.ChilledMoveSlowPercentPerIceCell),
+                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, iceCellCount * Config.ChilledAtkSlowPercentPerIceCell),
+                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, iceCellCount * Config.ChilledEnergySlowPercentPerIceCell)
+            };
+        }
     }
 }

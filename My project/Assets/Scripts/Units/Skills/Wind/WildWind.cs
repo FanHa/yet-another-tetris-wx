@@ -15,16 +15,44 @@ namespace Units.Skills
 
         public override CellTypeId CellTypeId => CellTypeId.WildWind;
 
+        private struct WildWindStats
+        {
+            public StatValue Damage;
+            public StatValue Radius;
+            public StatValue Duration;
+            public StatValue DebuffDuration;
+            public StatValue MoveSlowPercent;
+            public StatValue AtkReducePercent;
+        }
+
+        private WildWindStats CalcStats()
+        {
+            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            return new WildWindStats
+            {
+                Damage = new StatValue("伤害", Config.Damage, windCellCount * Config.DamageAdditionPerWindCell),
+                Radius = new StatValue("作用半径", Config.Radius),
+                Duration = new StatValue("风场持续时间", Config.Duration),
+                DebuffDuration = new StatValue("DeBuff持续时间", Config.DebuffDuration),
+                MoveSlowPercent = new StatValue("DeBuff移动速度降低(%)", Config.MoveSlowPercent),
+                AtkReducePercent = new StatValue("DeBuff攻击力降低(%)", Config.AtkReducePercent)
+            };
+        }
+
         public override string Description()
         {
+            var stats = CalcStats();
             return
-                $"在自身周围制造一阵狂风，" +
-                $"对范围内敌人造成伤害：a[b + c]，" +
-                $"其中 a=风元素数，b={Config.Damage}[基础]，c={Config.DamageAdditionPerWindCell}[每个风元素加成]；" +
-                $"击退敌人，并使其移动速度降低{Config.MoveSlowPercent}%、攻击力降低{Config.AtkReducePercent}%，" +
-                $"持续{Config.DebuffDuration}秒。";
+                DescriptionStatic() + $"\n" +
+                $"{stats.Damage}\n" +
+                $"{stats.Radius}\n" +
+                $"{stats.Duration}\n" +
+                $"{stats.DebuffDuration}\n" +
+                $"{stats.MoveSlowPercent}\n" +
+                $"{stats.AtkReducePercent}";
         }
-        public static string DescriptionStatic() => "在自身周围制造一阵狂风, 击退敌人并造成伤害.";
+
+        public static string DescriptionStatic() => "在自身周围制造一阵狂风, 击退敌人并造成伤害和减速Debuff.";
 
         public override string Name()
         {
@@ -34,23 +62,24 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            int windCellCount = Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
-            float finalDamage = Config.Damage + windCellCount * Config.DamageAdditionPerWindCell;
+            var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.WildWindPrefab; // 需要在配置中添加WildWindPrefab
+            var prefab = Owner.ProjectileConfig.WildWindPrefab;
             var wildWindObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var wildWind = wildWindObj.GetComponent<Units.Projectiles.WildWind>();
             wildWind.Initialize(
                 caster: Owner,
-                radius: Config.Radius,
-                duration: Config.Duration,
-                damage: finalDamage,
-                debuffDuration: Config.DebuffDuration,
-                moveSlowPercent: Config.MoveSlowPercent,
-                atkReducePercent: Config.AtkReducePercent
+                radius: stats.Radius.Final,
+                duration: stats.Duration.Final,
+                damage: stats.Damage.Final,
+                debuffDuration: stats.DebuffDuration.Final,
+                moveSlowPercent: (int)stats.MoveSlowPercent.Final,
+                atkReducePercent: (int)stats.AtkReducePercent.Final
             );
             wildWind.Activate();
             return true;
         }
+
+        
     }
 }

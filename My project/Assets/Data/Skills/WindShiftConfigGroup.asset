@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: WindShiftConfigGroup
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - AttackRangeBonus: 5
-    DamageReducePercent: 50
-    TakeDamageIncreasePercent: 100
-  - AttackRangeBonus: 7.5
-    DamageReducePercent: 35
-    TakeDamageIncreasePercent: 75
+  - AttackRangeBonus: 1.5
+    AttackRangePerWindCell: 0.5
+  - AttackRangeBonus: 3
+    AttackRangePerWindCell: 0.7

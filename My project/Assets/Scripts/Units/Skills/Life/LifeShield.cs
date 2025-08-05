@@ -16,6 +16,21 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
+        private struct LifeShieldStats
+        {
+            public StatValue LifeCostPercent;
+            public StatValue BuffDuration;
+        }
+
+        private LifeShieldStats CalcStats()
+        {
+            return new LifeShieldStats
+            {
+                LifeCostPercent = new StatValue("生命值消耗比例(%)", Config.LifeCostPercent),
+                BuffDuration = new StatValue("持续时间", Config.BuffDuration)
+            };
+        }
+
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -39,11 +54,12 @@ namespace Units.Skills
             if (cachedTarget == null)
                 return false;
 
-            float shieldAmount = Owner.Attributes.CurrentHealth * (Config.LifeCostPercent / 100f);
+            var stats = CalcStats();
+            float shieldAmount = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
-                Config.BuffDuration,  // 持续时间
+                stats.BuffDuration.Final,  // 持续时间
                 Owner,               // 来源单位
                 this                  // 来源技能
             );
@@ -65,9 +81,14 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + "\n" +
+                $"{stats.LifeCostPercent}\n" +
+                $"{stats.BuffDuration}\n";
         }
-        public static string DescriptionStatic() => "随机为一个友方单位添加生命护盾，抵挡伤害。";
+
+        public static string DescriptionStatic() => "消耗自身血量,为一个友方单位添加生命护盾，抵挡伤害。";
 
         public override string Name()
         {

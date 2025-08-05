@@ -16,6 +16,27 @@ namespace Units.Skills
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
         }
+
+        private struct BlazingFieldStats
+        {
+            public StatValue Radius;
+            public StatValue Duration;
+            public StatValue DotDps;
+            public StatValue DotDuration;
+        }
+
+        private BlazingFieldStats CalcStats()
+        {
+            int fireCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            return new BlazingFieldStats
+            {
+                Radius = new StatValue("范围半径", Config.BaseRadius, fireCellCount * Config.RadiusPerFireCell),
+                Duration = new StatValue("持续时间", Config.BaseDuration, fireCellCount * Config.DurationPerFireCell),
+                DotDps = new StatValue("每秒伤害", Config.BaseDotDps, fireCellCount * Config.DotDpsPerFireCell),
+                DotDuration = new StatValue("灼烧持续时间", Config.BaseDotDuration, fireCellCount * Config.DotDurationPerFireCell)
+            };
+        }
+
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -30,22 +51,17 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            Vector3 center = targetPosition;
-            int fireCellCount = Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
-            float radius = Config.BaseRadius + fireCellCount * Config.RadiusPerFireCell;
-            float duration = Config.BaseDuration + fireCellCount * Config.DurationPerFireCell;
-            float dotDps = Config.BaseDotDps + fireCellCount * Config.DotDpsPerFireCell;
-            float dotDuration = Config.BaseDotDuration + fireCellCount * Config.DotDurationPerFireCell;
+            var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.BlazingFieldPrefab; // 你需要在配置里加上这个Prefab
-            var blazingFieldObj = Object.Instantiate(prefab, center, Quaternion.identity);
+            var prefab = Owner.ProjectileConfig.BlazingFieldPrefab;
+            var blazingFieldObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var effect = blazingFieldObj.GetComponent<Units.Projectiles.BlazingField>();
             effect.Init(
                 caster: Owner,
-                radius: radius,
-                duration: duration,
-                dotDps: dotDps,
-                dotDuration: dotDuration,
+                radius: stats.Radius.Final,
+                duration: stats.Duration.Final,
+                dotDps: stats.DotDps.Final,
+                dotDuration: stats.DotDuration.Final,
                 sourceSkill: this
             );
             effect.Activate();
@@ -55,8 +71,15 @@ namespace Units.Skills
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + ":\n" +
+                $"{stats.Radius}\n" +
+                $"{stats.Duration}\n" +
+                $"{stats.DotDps}\n" +
+                $"{stats.DotDuration}";
         }
+
         public static string DescriptionStatic() => "制造一片燃烧区域, 对敌人造成伤害.";
 
         public override string Name()

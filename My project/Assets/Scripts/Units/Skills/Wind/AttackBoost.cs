@@ -15,11 +15,32 @@ namespace Units.Skills
 
         public override CellTypeId CellTypeId => CellTypeId.AttackBoost;
 
+        private struct AttackBoostStats
+        {
+            public StatValue AtkSpeedPercent;
+            public StatValue Duration;
+        }
+
+        private AttackBoostStats CalcStats()
+        {
+            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            return new AttackBoostStats
+            {
+                AtkSpeedPercent = new StatValue("攻击速度提升(%)", Config.AtkSpeedPercent, windCellCount * Config.AtkSpeedAdditionPercentPerWindCell),
+                Duration = new StatValue("持续时间", Config.Duration)
+            };
+        }
+
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + ":\n" +
+                $"{stats.Duration}\n" +
+                $"{stats.AtkSpeedPercent}";
         }
-        public static string DescriptionStatic() => "短时间内攻击速度提升";
+
+        public static string DescriptionStatic() => "提升攻击速度";
 
         public override string Name()
         {
@@ -29,11 +50,10 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            int windCellCount = Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
-            float atkSpeedPercent = Config.AtkSpeedPercent + windCellCount * Config.AtkSpeedAdditionPercentPerWindCell;
+            var stats = CalcStats();
             var buff = new Buffs.AttackBoostBuff(
-                duration: Config.Duration,
-                atkSpeedPercent: atkSpeedPercent,
+                duration: stats.Duration.Final,
+                atkSpeedPercent: stats.AtkSpeedPercent.Final,
                 sourceUnit: Owner,
                 sourceSkill: this
             );

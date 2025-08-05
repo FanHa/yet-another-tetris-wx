@@ -15,6 +15,22 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
+        private struct LifePowerStats
+        {
+            public StatValue HealthToAtkPercent;
+            public StatValue BuffDuration;
+        }
+
+        private LifePowerStats CalcStats()
+        {
+            return new LifePowerStats
+            {
+                HealthToAtkPercent = new StatValue("生命转换率(%)", Config.HealthToAtkPercent),
+                BuffDuration = new StatValue("Buff时间", Config.BuffDuration)
+            };
+        }
+
+
         public override bool IsReady()
         {
             if (!base.IsReady())
@@ -35,24 +51,31 @@ namespace Units.Skills
         {
             if (cachedTarget == null)
                 return false;
-            // 攻击力加成与施法者当前血量相关
-            float atkBoost = Owner.Attributes.MaxHealth.finalValue * (Config.HealthToAtkPercent / 100f);
+
+            var stats = CalcStats();
+            // 攻击力加成与施法者最大生命值相关
+            float atkBoost = Owner.Attributes.MaxHealth.finalValue * (stats.HealthToAtkPercent.Final / 100f);
 
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
-                atkBoost,                // 攻击力加成
-                Config.BuffDuration,     // 持续时间
-                Owner,                   // 来源单位
-                this                     // 来源技能
+                atkBoost,
+                stats.BuffDuration.Final,
+                Owner,
+                this
             ));
-            cachedTarget = null; // 用完清空
+            cachedTarget = null;
             return true;
         }
 
         public override string Description()
         {
-            return DescriptionStatic();
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + "\n" +
+                $"{stats.HealthToAtkPercent}" +
+                $"{stats.BuffDuration}";
         }
-        public static string DescriptionStatic() => "随机为一个友方单位添加攻击力加成, 数值与施法者当前生命值相关.";
+
+        public static string DescriptionStatic() => "转换自身生命值为一个友方单位添加攻击力Buff";
 
         public override string Name()
         {
