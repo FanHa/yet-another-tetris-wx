@@ -33,10 +33,11 @@ namespace Units.Buffs
             unit.Attributes.AttackPower.AddPercentageModifier(this, -AtkReducePercent);
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            unit.Attributes.AttackPower.RemovePercentageModifier(this);
+            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            owner.Attributes.AttackPower.RemovePercentageModifier(this);
+            base.OnRemove();
         }
     }
 }

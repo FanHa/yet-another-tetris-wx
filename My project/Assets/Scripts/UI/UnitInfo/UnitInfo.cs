@@ -9,7 +9,6 @@ namespace UI.UnitInfo
 {
     public class UnitInfo : MonoBehaviour
     {
-        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button closeButton;
 
@@ -31,8 +30,6 @@ namespace UI.UnitInfo
         [SerializeField] private Utils.CameraFollower unitInfoCamera;
 
         private Units.Unit currentUnit;
-        private const float refreshInterval = 0.2f;
-        private float refreshTimer = 0f;
 
         public void Awake()
         {
@@ -44,18 +41,6 @@ namespace UI.UnitInfo
             panel.SetActive(false);
         }
 
-        void Update()
-        {
-            if (panel.activeSelf && currentUnit != null)
-            {
-                refreshTimer += Time.deltaTime;
-                if (refreshTimer >= refreshInterval)
-                {
-                    RefreshInfo(currentUnit);
-                    refreshTimer = 0f;
-                }
-            }
-        }
 
         public void HideUnitInfo()
         {
@@ -68,8 +53,33 @@ namespace UI.UnitInfo
             currentUnit = unit;
             panel.SetActive(true);
             RefreshInfo(unit);
-            refreshTimer = 0f;
+            unit.BuffAdded += HandleUnitBuffChanged;
+            unit.BuffRemoved += HandleUnitBuffChanged;
             
+        }
+        
+        private void HandleUnitBuffChanged(Units.Buffs.Buff buff)
+        {
+            RefreshBuffInfo();
+        }
+
+        private void RefreshBuffInfo()
+        {
+            if (currentUnit == null) return;
+
+            foreach (Transform child in buffRoot)
+                Destroy(child.gameObject);
+
+            List<Units.Buffs.Buff> buffs = currentUnit.GetActiveBuffs();
+            if (buffs.Count > 0)
+            {
+                foreach (Units.Buffs.Buff buff in buffs)
+                {
+                    UI.UnitInfo.Buff buffInfo = Instantiate(buffInfoPrefab, buffRoot);
+                    buffInfo.SetBuff(buff);
+                    buffInfo.OnBuffClicked += ShowBuffDescription;
+                }
+            }
         }
 
         public void RefreshInfo(Units.Unit unit)
@@ -78,13 +88,12 @@ namespace UI.UnitInfo
                 Destroy(child.gameObject);
             foreach (Transform child in skillRoot)
                 Destroy(child.gameObject);
-            foreach (Transform child in buffRoot)
-                Destroy(child.gameObject);
+
 
             unitInfoCamera.SetTarget(unit.transform);
-            
+
             Units.Attributes attributes = unit.Attributes;
-             // 1. 先显示 MaxHealth（CurrentHealth / MaxHealth）
+            // 1. 先显示 MaxHealth（CurrentHealth / MaxHealth）
             var maxHealthAttr = attributes.MaxHealth;
             var instantiatedMaxHealth = Instantiate(unitAttributePrefab, attributeRoot);
 
@@ -96,9 +105,9 @@ namespace UI.UnitInfo
             foreach (var v in maxHealthAttr.PercentageModifiers)
                 healthPercentSum += v;
 
-            string finalColor   = "#FFD700"; // 金色
-            string baseColor    = "#FFFFFF"; // 白色
-            string flatColor    = "#00FF00"; // 绿色
+            string finalColor = "#FFD700"; // 金色
+            string baseColor = "#FFFFFF"; // 白色
+            string flatColor = "#00FF00"; // 绿色
             string percentColor = "#FFA500"; // 橙色
 
             string healthValueText = $"<color={finalColor}>{unit.Attributes.CurrentHealth:F0}</color>/<color={finalColor}>{maxHealthAttr.finalValue:F0}</color> [<color={baseColor}>{healthBaseValue:F0}</color>";
@@ -150,16 +159,7 @@ namespace UI.UnitInfo
                 skillInfo.OnClicked += ShowSkillDescription;
             }
 
-            List<Units.Buffs.Buff> buffs = unit.GetActiveBuffs();
-            if (buffs.Count > 0)
-            {
-                foreach (Units.Buffs.Buff buff in buffs)
-                {
-                    UI.UnitInfo.Buff buffInfo = Instantiate(buffInfoPrefab, buffRoot);
-                    buffInfo.SetBuff(buff);
-                    buffInfo.OnBuffClicked += ShowBuffDescription;
-                }
-            }
+            RefreshBuffInfo();
         }
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)

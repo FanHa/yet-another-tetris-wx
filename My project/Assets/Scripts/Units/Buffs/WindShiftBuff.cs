@@ -29,9 +29,10 @@ namespace Units.Buffs
         }
 
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.Attributes.AttackRange -= attackRangeBonus;
+            owner.Attributes.AttackRange -= attackRangeBonus;
+            base.OnRemove();
         }
     }
 }

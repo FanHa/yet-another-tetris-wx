@@ -37,11 +37,12 @@ namespace Units.Buffs
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
             unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -EnergyRegenSlowPercent);
         }
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-            unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            unit.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
+            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            owner.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
+            base.OnRemove();
         }
     }
 }

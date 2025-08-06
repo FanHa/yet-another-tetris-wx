@@ -74,7 +74,8 @@ namespace Units.Skills
                 damage: stats.Damage.Final,
                 debuffDuration: stats.DebuffDuration.Final,
                 moveSlowPercent: (int)stats.MoveSlowPercent.Final,
-                atkReducePercent: (int)stats.AtkReducePercent.Final
+                atkReducePercent: (int)stats.AtkReducePercent.Final,
+                sourceSkill: this // 传递技能引用
             );
             wildWind.Activate();
             return true;

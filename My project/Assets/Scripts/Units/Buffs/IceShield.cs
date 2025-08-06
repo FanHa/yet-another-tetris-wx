@@ -59,14 +59,14 @@ namespace Units.Buffs
             iceShieldComp.Activate();
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
             if (vfxInstance != null)
             {
                 Object.Destroy(vfxInstance);
                 vfxInstance = null;
             }
-            base.OnRemove(unit);
+            base.OnRemove();
         }
     }
 }

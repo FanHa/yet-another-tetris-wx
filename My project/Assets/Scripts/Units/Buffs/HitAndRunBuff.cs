@@ -13,9 +13,10 @@ namespace Units.Buffs
             unit.SetHitAndRun(true);
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.SetHitAndRun(false);
+            owner.SetHitAndRun(false);
+            base.OnRemove();
         }
 
         public override string Name() => "走A";

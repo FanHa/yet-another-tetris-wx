@@ -28,9 +28,10 @@ namespace Units.Buffs
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, AtkSpeedPercent);
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            base.OnRemove();
         }
     }
 }

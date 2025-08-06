@@ -35,16 +35,17 @@ namespace Units.Buffs
 
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
-            unit.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-            unit.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            unit.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
+            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            owner.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
             if (vfxInstance != null)
             {
                 Object.Destroy(vfxInstance);
                 vfxInstance = null;
             }
+            base.OnRemove();
 
         }
     }

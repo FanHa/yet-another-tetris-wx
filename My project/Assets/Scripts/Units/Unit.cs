@@ -38,6 +38,8 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
+        public event Action<Buff> BuffAdded;
+        public event Action<Buff> BuffRemoved;
 
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
@@ -167,11 +169,13 @@ namespace Units
         public void AddBuff(Units.Buffs.Buff buff)
         {
             BuffHandler.ApplyBuff(buff);
+            BuffAdded?.Invoke(buff); // 触发Buff添加事件
         }
 
         public void RemoveBuff(Units.Buffs.Buff buff)
         {
             BuffHandler.RemoveBuff(buff);
+            BuffRemoved?.Invoke(buff); // 触发Buff移除事件
         }
 
         private void UpdateEnemiesDistance()

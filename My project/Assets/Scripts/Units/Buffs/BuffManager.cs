@@ -8,9 +8,13 @@ namespace Units.Buffs
 {
     public class BuffManager
     {
-        public event Action<Buff> OnBuffApplied;
-        public event Action<Buff> OnBuffRemoved;
         private readonly List<Buff> buffs = new List<Buff>();
+        private Unit owner;
+
+        public BuffManager(Unit owner)
+        {
+            this.owner = owner;
+        }
 
         public void Tick(Unit unit, float interval)
         {
@@ -24,10 +28,10 @@ namespace Units.Buffs
                 }
                 if (buff.IsExpired())
                 {
-                    OnBuffRemoved?.Invoke(buff);
+                    buff.OnRemove();
                     buffs.RemoveAt(i);
                 }
-                    
+
             }
         }
 
@@ -40,17 +44,14 @@ namespace Units.Buffs
             }
             else
             {
+                buff.OnApply(owner);
                 buffs.Add(buff);
-                OnBuffApplied?.Invoke(buff);
             }
         }
 
         public void RemoveBuff(Buff buff)
         {
-            if (buffs.Remove(buff))
-            {
-                OnBuffRemoved?.Invoke(buff);
-            }
+            buffs.Remove(buff);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model.Tetri.Skills;
 using UnityEngine;
 
 namespace Units.Projectiles
@@ -14,6 +15,7 @@ namespace Units.Projectiles
         private int atkReducePercent;
         private float timer = 0f;
         private bool initialized = false;
+        private Units.Skills.Skill sourceSkill;
 
         private const float rotateSpeed = 60f; // 每秒旋转60度
         private const float pushSpeed = 2.5f;  // 每秒远离速度
@@ -27,7 +29,8 @@ namespace Units.Projectiles
             float damage,
             float debuffDuration,
             int moveSlowPercent,
-            int atkReducePercent
+            int atkReducePercent,
+            Units.Skills.Skill sourceSkill
         )
         {
             this.caster = caster;
@@ -37,6 +40,7 @@ namespace Units.Projectiles
             this.debuffDuration = debuffDuration;
             this.moveSlowPercent = moveSlowPercent;
             this.atkReducePercent = atkReducePercent;
+            this.sourceSkill = sourceSkill;
 
             timer = 0f;
         }
@@ -76,7 +80,7 @@ namespace Units.Projectiles
                         moveSlowPercent: moveSlowPercent,
                         atkReducePercent: atkReducePercent,
                         sourceUnit: caster,
-                        sourceSkill: null // 可根据需要传递技能引用
+                        sourceSkill: sourceSkill
                     );
                     unit.AddBuff(buff);
 

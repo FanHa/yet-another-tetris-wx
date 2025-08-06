@@ -15,15 +15,7 @@ namespace Units.Buffs
         private void Awake()
         {
             owner = GetComponent<Unit>();
-            buffManager = new BuffManager();
-            buffManager.OnBuffApplied += (buff) =>
-            {
-                buff.OnApply(owner); // 应用Buff效果
-            };
-            buffManager.OnBuffRemoved += (buff) =>
-            {
-                buff.OnRemove(owner); // 移除Buff效果
-            };
+            buffManager = new BuffManager(owner);
         }
 
         private void Update()

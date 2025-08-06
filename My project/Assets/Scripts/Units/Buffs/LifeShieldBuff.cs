@@ -24,10 +24,11 @@ namespace Units.Buffs
             unit.Attributes.AddShield(shield);
         }
 
-        public override void OnRemove(Unit unit)
+        public override void OnRemove()
         {
             shield.OnBroken -= OnShieldBroken;
-            unit.Attributes.RemoveShield(shield);
+            owner.Attributes.RemoveShield(shield);
+            base.OnRemove();
         }
 
         private void OnShieldBroken(Shield shield)
