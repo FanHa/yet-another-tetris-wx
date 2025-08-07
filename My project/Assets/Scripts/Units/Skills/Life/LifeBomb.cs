@@ -47,7 +47,7 @@ namespace Units.Skills
         protected override bool ExecuteCore()
         {
             var stats = CalcStats();
-            float percent = Config.HealthCostPercent / 100f;
+            float percent = stats.HealthCostPercent.Final / 100f;
             float healthCost = Owner.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
 

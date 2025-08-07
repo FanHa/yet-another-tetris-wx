@@ -15,6 +15,7 @@ namespace UI.UnitInfo
         [Header("属性")]
         [SerializeField] private Transform attributeRoot;
         [SerializeField] private UI.UnitInfo.Attribute unitAttributePrefab;
+        [SerializeField] private UI.UnitInfo.Health healthPrefab;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
@@ -52,7 +53,7 @@ namespace UI.UnitInfo
         {
             currentUnit = unit;
             panel.SetActive(true);
-            RefreshInfo(unit);
+            RefreshInfo();
             unit.BuffAdded += HandleUnitBuffChanged;
             unit.BuffRemoved += HandleUnitBuffChanged;
             
@@ -82,42 +83,32 @@ namespace UI.UnitInfo
             }
         }
 
-        public void RefreshInfo(Units.Unit unit)
+        private void RefreshSkillInfo()
+        {
+            foreach (Transform child in skillRoot)
+                Destroy(child.gameObject);
+            IReadOnlyList<Units.Skills.Skill> skills = currentUnit.GetSkills();
+            foreach (Units.Skills.Skill skill in skills)
+            {
+                UI.UnitInfo.Skill skillInfo = Instantiate(unitSkillPrefab, skillRoot);
+                skillInfo.SetSkill(skill);
+                skillInfo.OnClicked += ShowSkillDescription;
+            }
+        }
+
+        private void RefreshInfo()
         {
             foreach (Transform child in attributeRoot)
                 Destroy(child.gameObject);
-            foreach (Transform child in skillRoot)
-                Destroy(child.gameObject);
+            
 
 
-            unitInfoCamera.SetTarget(unit.transform);
+            unitInfoCamera.SetTarget(currentUnit.transform);
 
-            Units.Attributes attributes = unit.Attributes;
-            // 1. 先显示 MaxHealth（CurrentHealth / MaxHealth）
-            var maxHealthAttr = attributes.MaxHealth;
-            var instantiatedMaxHealth = Instantiate(unitAttributePrefab, attributeRoot);
-
-            float healthBaseValue = maxHealthAttr.BaseValue;
-            float healthFlatSum = 0f;
-            foreach (var v in maxHealthAttr.FlatModifiers)
-                healthFlatSum += v;
-            float healthPercentSum = 0f;
-            foreach (var v in maxHealthAttr.PercentageModifiers)
-                healthPercentSum += v;
-
-            string finalColor = "#FFD700"; // 金色
-            string baseColor = "#FFFFFF"; // 白色
-            string flatColor = "#00FF00"; // 绿色
-            string percentColor = "#FFA500"; // 橙色
-
-            string healthValueText = $"<color={finalColor}>{unit.Attributes.CurrentHealth:F0}</color>/<color={finalColor}>{maxHealthAttr.finalValue:F0}</color> [<color={baseColor}>{healthBaseValue:F0}</color>";
-            if (healthFlatSum != 0f)
-                healthValueText += $" +<color={flatColor}>{healthFlatSum:F0}</color>";
-            if (healthPercentSum != 0f)
-                healthValueText += $" +<color={percentColor}>{healthPercentSum:F0}%</color>";
-            healthValueText += "]";
-
-            instantiatedMaxHealth.SetAttribute("生命值", healthValueText);
+            Units.Attributes attributes = currentUnit.Attributes;
+            
+            var instantiatedHealth = Instantiate(healthPrefab, attributeRoot);
+            instantiatedHealth.BindAttributes(currentUnit.Attributes);
 
             var AttributeToShow = new List<Units.Attribute>(
                 new[]
@@ -131,35 +122,14 @@ namespace UI.UnitInfo
             foreach (Units.Attribute attribute in AttributeToShow)
             {
                 var instantiatedAttribute = Instantiate(unitAttributePrefab, attributeRoot);
-                float baseValue = attribute.BaseValue; // 你需要加这个getter
-                float flatSum = 0f;
-                foreach (var v in attribute.FlatModifiers)
-                    flatSum += v;
-                float percentSum = 0f;
-                foreach (var v in attribute.PercentageModifiers)
-                    percentSum += v;
-
-                string valueText = $"<color={finalColor}>{attribute.finalValue:F0}</color> [<color={baseColor}>{baseValue:F0}</color>";
-                if (flatSum != 0f)
-                    valueText += $" +<color={flatColor}>{flatSum:F0}</color>";
-                if (percentSum != 0f)
-                    valueText += $" +<color={percentColor}>{percentSum:F0}%</color>";
-                valueText += "]";
-
-                instantiatedAttribute.SetAttribute(attribute.Name, valueText);
-
+                instantiatedAttribute.SetAttribute(attribute);
 
             }
 
-            IReadOnlyList<Units.Skills.Skill> skills = unit.GetSkills();
-            foreach (Units.Skills.Skill skill in skills)
-            {
-                UI.UnitInfo.Skill skillInfo = Instantiate(unitSkillPrefab, skillRoot);
-                skillInfo.SetSkill(skill);
-                skillInfo.OnClicked += ShowSkillDescription;
-            }
+            
 
             RefreshBuffInfo();
+            RefreshSkillInfo();
         }
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)

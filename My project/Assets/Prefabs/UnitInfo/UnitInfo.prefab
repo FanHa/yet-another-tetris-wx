@@ -1277,11 +1277,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30275034a9b872e48826ad0d9ed18ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
   panel: {fileID: 3017757061570332156}
   closeButton: {fileID: 4787872848867899563}
   attributeRoot: {fileID: 6648737684756618166}
   unitAttributePrefab: {fileID: 944034364794604165, guid: 33808a366921f374385e63226ae195e1, type: 3}
+  healthPrefab: {fileID: 8770121835179115003, guid: 2829b6ecb99c15f42a4bff57207512cc, type: 3}
   unitSkillPrefab: {fileID: 385390242833999299, guid: c1efffced46363b4cac9b9aa6da119be, type: 3}
   skillRoot: {fileID: 8460114661841911077}
   skillDescriptionText: {fileID: 7490695567076034888}
