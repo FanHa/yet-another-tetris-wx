@@ -287,31 +287,15 @@ namespace Units
         {
             var buffs = BuffHandler.GetActiveBuffs().ToList();
 
-            float percentAdd = 0f;
-            float percentReduce = 0f;
-            float flatAdd = 0f;
-            float flatReduce = 0f;
-
+            Attributes.TakeDamage(damageReceived.Value);
             foreach (var buff in buffs)
             {
-                if (buff is ITakeDamagePercentAdd add)
-                    percentAdd += add.GetPercentAdd();
-                if (buff is ITakeDamagePercentReduce reduce)
-                    percentReduce += reduce.GetPercentReduce();
-                if (buff is ITakeDamageFlatAdd flatA)
-                    flatAdd += flatA.GetFlatAdd();
-                if (buff is ITakeDamageFlatReduce flatR)
-                    flatReduce += flatR.GetFlatReduce();
+                if (buff is IAfterTakeDamageTrigger trigger)
+                {
+                    trigger.OnAfterTakeDamage(ref damageReceived);
+                }
             }
 
-            var addMulti = 1f + (percentAdd / 100f);
-            var reduceMulti = 1f - (percentReduce / 100f);
-
-            float baseValue = damageReceived.Value;
-            float finalDamage = baseValue * addMulti * reduceMulti + flatAdd + flatReduce;
-            finalDamage = Mathf.Max(1, Mathf.Round(finalDamage));
-            damageReceived.SetValue(finalDamage);
-            Attributes.TakeDamage(damageReceived.Value);
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
 

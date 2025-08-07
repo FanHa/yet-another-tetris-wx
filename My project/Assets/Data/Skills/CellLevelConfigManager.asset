@@ -27,3 +27,4 @@ MonoBehaviour:
   LifeBombConfigGroup: {fileID: 11400000, guid: 208605d500f1c43499f0044326cdc70d, type: 2}
   LifeShieldConfigGroup: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}
   LifePowerConfigGroup: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
+  LifeEchoConfigGroup: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}

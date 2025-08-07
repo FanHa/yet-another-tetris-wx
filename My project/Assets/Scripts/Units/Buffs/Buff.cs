@@ -65,24 +65,10 @@ namespace Units.Buffs
     {
         void OnTick(Unit unit);
     }
+
+    public interface IAfterTakeDamageTrigger
+    {
+        void OnAfterTakeDamage(ref Damages.Damage damage);
+    }
     
-    public interface ITakeDamagePercentAdd
-    {
-        float GetPercentAdd();
-    }
-
-    public interface ITakeDamagePercentReduce
-    {
-        float GetPercentReduce();
-    }
-
-    public interface ITakeDamageFlatAdd
-    {
-        float GetFlatAdd();
-    }
-
-    public interface ITakeDamageFlatReduce
-    {
-        float GetFlatReduce();
-    }
 }

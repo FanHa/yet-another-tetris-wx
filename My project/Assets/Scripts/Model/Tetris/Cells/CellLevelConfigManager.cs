@@ -29,5 +29,6 @@ namespace Model.Tetri
         public LifeBombConfigGroup LifeBombConfigGroup;
         public LifeShieldConfigGroup LifeShieldConfigGroup;
         public LifePowerConfigGroup LifePowerConfigGroup;
+        public LifeEchoConfigGroup LifeEchoConfigGroup;
     }
 }

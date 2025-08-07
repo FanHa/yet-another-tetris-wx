@@ -6,11 +6,8 @@ namespace Units.Damages
     public enum DamageType
     {
         Hit,   // 普通攻击（无论是近战还是远程
-        Fire,
-        Ice,
         Skill,
-        Dot,
-        Wind
+        Reflect
     }
 
     public class Damage

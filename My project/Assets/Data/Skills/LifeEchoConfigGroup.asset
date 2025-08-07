@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec24568920b65f4c95fb31ff46be2c0, type: 3}
-  m_Name: Life
+  m_Script: {fileID: 11500000, guid: 00707ee8f2fcd7048887373ac92e35ce, type: 3}
+  m_Name: LifeEchoConfigGroup
   m_EditorClassIdentifier: 
-  CellTypeIds: 0e0000000f0000001000000011000000
-  CharacterTypeIds: 00000000
+  LevelConfigs:
+  - DamagePercentToReflect: 15
+  - DamagePercentToReflect: 30
