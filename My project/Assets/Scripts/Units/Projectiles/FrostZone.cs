@@ -15,6 +15,7 @@ namespace Units.Projectiles
         private int moveSlowPercent;
         private int atkSlowPercent;
         private int energySlowPercent;
+        private Units.Skills.Skill sourceSkill;
 
         private float timer = 0f;
         private float tickTimer = 0f;
@@ -28,7 +29,8 @@ namespace Units.Projectiles
             float chilledDuration,
             int moveSlowPercent,
             int atkSlowPercent,
-            int energySlowPercent
+            int energySlowPercent,
+            Units.Skills.Skill sourceSkill
         )
         {
             this.caster = caster;
@@ -39,15 +41,14 @@ namespace Units.Projectiles
             this.moveSlowPercent = moveSlowPercent;
             this.atkSlowPercent = atkSlowPercent;
             this.energySlowPercent = energySlowPercent;
+            this.sourceSkill = sourceSkill;
 
             // 设置粒子特效半径
             var edgeShape = edgeParticle.shape;
             edgeShape.radius = radius;
-            // edgeParticle.Play();
         
             var centerShape = centerParticle.shape;
             centerShape.radius = radius;
-            // centerParticle.Play();
             
             timer = 0f;
             tickTimer = 0f;
@@ -69,12 +70,13 @@ namespace Units.Projectiles
             if (tickTimer >= tickInterval)
             {
                 tickTimer -= tickInterval;
-                // DOT判定
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
-                foreach (var collider in colliders)
+                var enemies = caster.UnitManager != null
+                    ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius)
+                    : null;
+
+                if (enemies != null)
                 {
-                    Unit enemy = collider.GetComponent<Unit>();
-                    if (enemy != null && enemy.faction != caster.faction)
+                    foreach (var enemy in enemies)
                     {
                         // 造成冰属性伤害
                         var iceDamage = new Damages.Damage(damage, Damages.DamageType.Skill);
@@ -83,14 +85,14 @@ namespace Units.Projectiles
                         iceDamage.SetTargetUnit(enemy);
                         enemy.TakeDamage(iceDamage);
 
-                        // 施加Chilled Buff
+                        // 施加 Chilled Buff
                         var chilled = new Units.Buffs.Chilled(
                             chilledDuration,
                             moveSlowPercent,
                             atkSlowPercent,
                             energySlowPercent,
                             caster,
-                            null // 可传递技能引用
+                            sourceSkill // 可传递技能引用
                         );
                         enemy.AddBuff(chilled);
                     }

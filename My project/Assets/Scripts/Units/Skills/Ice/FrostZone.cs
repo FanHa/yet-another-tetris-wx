@@ -46,7 +46,8 @@ namespace Units.Skills
                 chilledDuration: stats.ChilledDuration.Final,
                 moveSlowPercent: Mathf.RoundToInt(stats.MoveSlowPercent.Final),
                 atkSlowPercent: Mathf.RoundToInt(stats.AtkSlowPercent.Final),
-                energySlowPercent: Mathf.RoundToInt(stats.EnergySlowPercent.Final)
+                energySlowPercent: Mathf.RoundToInt(stats.EnergySlowPercent.Final),
+                sourceSkill: this
             );
             frostZone.Activate();
             return true;

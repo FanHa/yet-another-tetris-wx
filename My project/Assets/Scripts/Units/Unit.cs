@@ -107,7 +107,7 @@ namespace Units
         {
             Attributes.OnHealthChanged += UpdateHealthBar;
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
-            movementController.Initialize(Attributes);
+            movementController.Initialize(Attributes, UnitManager, this);
             skillHandler.Initialize(Attributes);
         }
 

@@ -62,18 +62,17 @@ namespace Units.Projectiles
 
         private void HandleExplosion()
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-            foreach (var hit in hits)
+            var enemies = caster.UnitManager != null
+                ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, explosionRadius)
+                : null;
+
+            if (enemies != null)
             {
-                if (hit.TryGetComponent<Unit>(out var unit))
+                foreach (var unit in enemies)
                 {
-                    if (unit.faction == caster.faction)
-                    {
-                        continue;
-                    }
                     var damage = new Damages.Damage(healthAmount, Damages.DamageType.Skill);
                     damage.SetSourceUnit(caster);
-                    damage.SetSourceLabel(sourceSkill.Name());
+                    damage.SetSourceLabel(sourceSkill != null ? sourceSkill.Name() : "生命炸弹");
                     damage.SetTargetUnit(unit);
                     unit.TakeDamage(damage);
                 }

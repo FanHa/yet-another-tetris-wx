@@ -28,8 +28,7 @@ namespace Units.Buffs
                 }
                 if (buff.IsExpired())
                 {
-                    buff.OnRemove();
-                    buffs.RemoveAt(i);
+                    buffs.Remove(buff);
                 }
 
             }

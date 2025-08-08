@@ -147,52 +147,67 @@ namespace Controller
         {
             return factionA;
         }
-        
+
         public List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf = false)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
-            return colliders
-                .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.IsActive && unit.faction == self.faction && (includeSelf || unit != self))
+            var list = self.faction == Unit.Faction.FactionA ? factionA : factionB;
+            float r2 = range * range;
+            Vector2 selfPos = self.transform.position;
+
+            return list
+                .Where(u => u != null && u.IsActive && (includeSelf || u != self))
+                .Where(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude <= r2)
                 .ToList();
         }
 
         public List<Unit> FindEnemiesInRange(Unit self, float range)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
-            return colliders
-                .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.IsActive&& unit.faction != self.faction)
+            var list = self.faction == Unit.Faction.FactionA ? factionB : factionA;
+            float r2 = range * range;
+            Vector2 selfPos = self.transform.position;
+
+            return list
+                .Where(u => u != null && u.IsActive)
+                .Where(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude <= r2)
                 .ToList();
         }
 
         public Unit FindRandomEnemyInRange(Unit self, float range)
         {
             var enemies = FindEnemiesInRange(self, range);
-            if (enemies.Count > 0)
-                return enemies[UnityEngine.Random.Range(0, enemies.Count)];
-            return null;
+            if (enemies.Count == 0) return null;
+            return enemies[UnityEngine.Random.Range(0, enemies.Count)];
         }
 
         public Unit FindClosestEnemyInRange(Unit self, float range)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(self.transform.position, range);
-            return colliders
-                .Select(collider => collider.GetComponent<Unit>())
-                .Where(unit => unit != null && unit.IsActive && unit.faction != self.faction)
-                .OrderBy(unit => Vector2.Distance(self.transform.position, unit.transform.position))
+            var list = self.faction == Unit.Faction.FactionA ? factionB : factionA;
+            float r2 = range * range;
+            Vector2 selfPos = self.transform.position;
+
+            return list
+                .Where(u => u != null && u.IsActive)
+                .Where(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude <= r2)
+                .OrderBy(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude)
                 .FirstOrDefault();
         }
-        
+
 
         public Unit FindRandomAlly(Unit self, float range, bool includeSelf = false)
         {
             var allies = FindAlliesInRange(self, range, includeSelf);
-            if (allies.Count > 0)
-            {
-                return allies[UnityEngine.Random.Range(0, allies.Count)];
-            }
-            return null;
+            if (allies.Count == 0) return null;
+            return allies[UnityEngine.Random.Range(0, allies.Count)];
+        }
+        
+        public List<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
+        {
+            var list = selfFaction == Unit.Faction.FactionA ? factionB : factionA;
+            float r2 = range * range;
+            return list
+                .Where(u => u != null && u.IsActive)
+                .Where(u => ((Vector2)u.transform.position - center).sqrMagnitude <= r2)
+                .ToList();
         }
     }
 }

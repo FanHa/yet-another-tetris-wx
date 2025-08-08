@@ -30,12 +30,14 @@ namespace Units.Projectiles
             if (tickTimer >= tickInterval)
             {
                 tickTimer -= tickInterval;
-                // DOT判定
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
-                foreach (var collider in colliders)
+
+                var enemies = caster.UnitManager != null
+                    ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius)
+                    : null;
+
+                if (enemies != null)
                 {
-                    Unit enemy = collider.GetComponent<Unit>();
-                    if (enemy != null && enemy.faction != caster.faction)
+                    foreach (var enemy in enemies)
                     {
                         var burn = new Units.Buffs.Burn(
                             dotDps,

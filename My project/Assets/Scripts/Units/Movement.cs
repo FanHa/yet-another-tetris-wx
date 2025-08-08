@@ -10,11 +10,15 @@ namespace Units
         public Transform BattlefieldMinBounds;
         public Transform BattlefieldMaxBounds;
         private Attributes attributes;
+        private Controller.UnitManager unitManager; // 新增：由外部注入
+        private Unit owner; 
         public bool IsHitAndRun = false;
 
-        public void Initialize(Attributes attributes)
+        public void Initialize(Attributes attributes, Controller.UnitManager unitManager, Unit owner)
         {
             this.attributes = attributes;
+            this.unitManager = unitManager;
+            this.owner = owner;
         }
 
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
@@ -101,25 +105,36 @@ namespace Units
 
         private Vector2 AdjustDirectionToAvoidUnits(Vector2 originalDirection)
         {
-            // 获取附近的单位
-            Collider2D[] nearbyUnits = Physics2D.OverlapCircleAll(transform.position, minDistance);
+            
 
             Vector2 avoidanceVector = Vector2.zero;
             int avoidanceCount = 0;
 
-            foreach (var collider in nearbyUnits)
-            {
-                if (collider.gameObject != gameObject && collider.TryGetComponent<Unit>(out Unit otherUnit))
+            var allies = unitManager.FindAlliesInRange(owner, minDistance, includeSelf: false);
+                var enemies = unitManager.FindEnemiesInRange(owner, minDistance);
+
+                if (allies != null)
                 {
-                    Vector2 toOtherUnit = (Vector2)(transform.position - otherUnit.transform.position);
-                    float distance = toOtherUnit.magnitude;
-
-                    // 根据距离的倒数加权，距离越近影响越大
-                    avoidanceVector += toOtherUnit.normalized / Mathf.Max(distance, 0.1f);
-                    avoidanceCount++;
+                    foreach (var other in allies)
+                    {
+                        if (other == null || !other.IsActive) continue;
+                        Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
+                        float dist = Mathf.Max(toOther.magnitude, 0.1f);
+                        avoidanceVector += toOther.normalized / dist;
+                        avoidanceCount++;
+                    }
                 }
-            }
-
+                if (enemies != null)
+                {
+                    foreach (var other in enemies)
+                    {
+                        if (other == null || !other.IsActive) continue;
+                        Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
+                        float dist = Mathf.Max(toOther.magnitude, 0.1f);
+                        avoidanceVector += toOther.normalized / dist;
+                        avoidanceCount++;
+                    }
+                }
             if (avoidanceCount > 0)
             {
                 // 平均避让方向
