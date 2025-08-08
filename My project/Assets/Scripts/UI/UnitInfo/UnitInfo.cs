@@ -17,6 +17,10 @@ namespace UI.UnitInfo
         [SerializeField] private UI.UnitInfo.Attribute unitAttributePrefab;
         [SerializeField] private UI.UnitInfo.Health healthPrefab;
 
+        [Header("Affinity")]
+        [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
+        [SerializeField] private Transform affinityRoot;
+
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
         [SerializeField] private Transform skillRoot;
@@ -96,17 +100,15 @@ namespace UI.UnitInfo
             }
         }
 
-        private void RefreshInfo()
+        private void RefreshAttributes()
         {
+            if (currentUnit == null) return;
+
             foreach (Transform child in attributeRoot)
                 Destroy(child.gameObject);
-            
-
-
-            unitInfoCamera.SetTarget(currentUnit.transform);
 
             Units.Attributes attributes = currentUnit.Attributes;
-            
+
             var instantiatedHealth = Instantiate(healthPrefab, attributeRoot);
             instantiatedHealth.BindAttributes(currentUnit.Attributes);
 
@@ -123,13 +125,33 @@ namespace UI.UnitInfo
             {
                 var instantiatedAttribute = Instantiate(unitAttributePrefab, attributeRoot);
                 instantiatedAttribute.SetAttribute(attribute);
-
             }
+        }
+        private void RefreshAffinity()
+        {
+            if (currentUnit == null) return;
 
-            
+            foreach (Transform child in affinityRoot)
+                Destroy(child.gameObject);
 
+            Dictionary<Model.Tetri.AffinityType, int> affinities = currentUnit.CellCounts;
+            foreach (var affinity in affinities)
+            {
+                if (affinity.Key == Model.Tetri.AffinityType.None)
+                    continue;
+                UI.UnitInfo.Affinity affinityInfo = Instantiate(affinityInfoPrefab, affinityRoot);
+                affinityInfo.SetAffinity(affinity.Key, affinity.Value);
+            }
+        }
+
+        private void RefreshInfo()
+        {
+            unitInfoCamera.SetTarget(currentUnit.transform);
+
+            RefreshAttributes();
             RefreshBuffInfo();
             RefreshSkillInfo();
+            RefreshAffinity();
         }
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)
