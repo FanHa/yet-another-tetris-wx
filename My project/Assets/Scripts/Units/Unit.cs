@@ -105,7 +105,7 @@ namespace Units
 
         public void Setup()
         {
-            Attributes.OnHealthChanged += UpdateHealthBar;
+            healthBar.SetAttributes(Attributes);
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
             movementController.Initialize(Attributes, UnitManager, this);
             skillHandler.Initialize(Attributes);
@@ -130,10 +130,7 @@ namespace Units
             movementController.IsHitAndRun = enable;
         }
 
-        private void UpdateHealthBar(float currentHealth, float maxHealth)
-        {
-            healthBar.UpdateHealthBar(currentHealth, maxHealth);
-        }
+
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
             movementController.SetBattlefieldBounds(minBounds, maxBounds);
