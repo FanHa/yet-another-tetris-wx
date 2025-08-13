@@ -15,15 +15,15 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            if (Owner.enemyUnits == null || Owner.enemyUnits.Count == 0)
-            {
-                Debug.LogWarning("No target enemies to rush towards.");
-                return false;
-            }
+            // if (Owner.enemyUnits == null || Owner.enemyUnits.Count == 0)
+            // {
+            //     Debug.LogWarning("No target enemies to rush towards.");
+            //     return false;
+            // }
 
-            Transform targetEnemy = Owner.enemyUnits[Owner.enemyUnits.Count - 1].transform;
-            // 开始冲刺协程
-            Owner.StartCoroutine(RushTowardsTarget(Owner, targetEnemy));
+            // Transform targetEnemy = Owner.enemyUnits[Owner.enemyUnits.Count - 1].transform;
+            // // 开始冲刺协程
+            // Owner.StartCoroutine(RushTowardsTarget(Owner, targetEnemy));
             return true;
         }
 

@@ -53,7 +53,7 @@ namespace Units
 
         public Transform projectileSpawnPoint; // 投射物生成位置
 
-        public List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
+        private List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
         [Header("运行时注入")]
         public UnitManager UnitManager;
@@ -86,6 +86,7 @@ namespace Units
         {
             if (!isActive)
                 return;
+            UpdateEnemiesDistance();
             ProcessAttack();
             
         }
@@ -113,14 +114,12 @@ namespace Units
 
         public void Activate()
         {
-            InvokeRepeating(nameof(UpdateEnemiesDistance), 0f, 0.5f);
             skillHandler.Activate();
             isActive = true;
         }
 
         public void Deactivate()
         {
-            CancelInvoke(nameof(UpdateEnemiesDistance));
             skillHandler.Deactivate(); // 如有需要
             BuffHandler.GetActiveBuffs().ToList().ForEach(buff => BuffHandler.RemoveBuff(buff)); // 清理所有Buff
             isActive = false;
@@ -190,12 +189,32 @@ namespace Units
 
         private void UpdateEnemiesDistance()
         {
-            List<Unit> rawEnemyUnits = faction == Faction.FactionA ? UnitManager.GetFactionBUnits() : UnitManager.GetFactionAUnits();
+            if (UnitManager == null) return;
 
-            // 按距离从小到大排序
-            enemyUnits = rawEnemyUnits
-                .OrderBy(unit => Vector2.SqrMagnitude(unit.transform.position - transform.position)) // 按平方距离排序
-                .ToList();
+            var list = faction == Faction.FactionA
+                ? UnitManager.GetFactionBUnits()
+                : UnitManager.GetFactionAUnits();
+
+            Unit closest = null;
+            float bestSqr = float.MaxValue;
+            Vector2 selfPos = transform.position;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var u = list[i];
+                if (u == null || !u.IsActive) continue;
+
+                float d2 = ((Vector2)u.transform.position - selfPos).sqrMagnitude;
+                if (d2 < bestSqr)
+                {
+                    bestSqr = d2;
+                    closest = u;
+                }
+            }
+
+            // 只用到最近一个时，避免维护整张有序表
+            enemyUnits.Clear();
+            if (closest != null) enemyUnits.Add(closest);
         }
 
         protected void ProcessAttack()

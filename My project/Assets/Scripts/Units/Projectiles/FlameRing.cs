@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
@@ -52,9 +53,11 @@ namespace Units.Projectiles
             if (tickTimer >= tickInterval)
             {
                 tickTimer -= tickInterval;
-                var enemies = owner.enemyUnits
-                    .Where(u => u != null && Vector2.Distance(owner.transform.position, u.transform.position) <= radius)
-                    .ToList();
+
+                Controller.UnitManager unitManager = owner.UnitManager;
+                if (unitManager == null)
+                    return;
+                List<Units.Unit> enemies =  unitManager.FindEnemiesInRangeAtPosition(owner.faction, transform.position, radius);
 
                 foreach (var enemy in enemies)
                 {
