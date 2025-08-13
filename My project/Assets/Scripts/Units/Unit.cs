@@ -130,6 +130,19 @@ namespace Units
             movementController.IsHitAndRun = enable;
         }
 
+        public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)
+        {
+            this.CellCounts = CellCounts;
+
+            this.CellCounts.TryGetValue(AffinityType.Life, out int lifeCount);
+            float hpBonus = 20f * lifeCount;
+            Attributes.MaxHealth.AddFlatModifier(this, hpBonus);
+
+            this.CellCounts.TryGetValue(AffinityType.Wind, out int windCount);
+            float rangeBonus = 0.25f * windCount;
+            Attributes.AttackRange += rangeBonus;
+        }
+
 
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
