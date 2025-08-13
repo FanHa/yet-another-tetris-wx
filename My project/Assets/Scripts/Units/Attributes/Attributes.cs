@@ -19,11 +19,9 @@ namespace Units
         public Attribute MaxHealth => maxHealth;
         public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
         public Attribute EnergyPerSecond => energyPerSecond;
-
-        public float AttackTargetNumber; // 攻击目标数量
         public float AttackRange; // 攻击范围
-        public bool IsRanged; // 是否为远程单位
-        public float RangeAttackDamagePercentage;
+        [SerializeField] private float RangedThreshold;
+        public bool IsRanged => AttackRange >= RangedThreshold;
 
         private float currentHealth;
         public float CurrentHealth

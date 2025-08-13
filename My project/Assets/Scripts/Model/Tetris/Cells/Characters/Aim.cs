@@ -13,8 +13,6 @@ namespace Model.Tetri
         {
             AttackPowerValue = 9f;
             MaxCoreValue = 90f;
-            RangeAttackDamagePercentage = 100f;
-            IsRanged = true;
         }
         public override void Apply(Unit unit)
         {

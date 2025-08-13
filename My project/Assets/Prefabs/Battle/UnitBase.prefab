@@ -1492,10 +1492,8 @@ MonoBehaviour:
       Name: "\u80FD\u91CF\u56DE\u590D"
       baseValue: 5
       finalValue: 5
-    AttackTargetNumber: 1
     AttackRange: 0.5
-    IsRanged: 0
-    RangeAttackDamagePercentage: 0
+    RangedThreshold: 2
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

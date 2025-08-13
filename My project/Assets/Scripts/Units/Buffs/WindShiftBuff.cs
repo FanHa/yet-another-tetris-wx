@@ -25,7 +25,6 @@ namespace Units.Buffs
         {
             base.OnApply(unit);
             unit.Attributes.AttackRange += attackRangeBonus;
-            unit.Attributes.IsRanged = true;
         }
 
 
