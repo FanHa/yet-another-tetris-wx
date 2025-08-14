@@ -74,13 +74,6 @@ namespace Units
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
         }
 
-        void Start()
-        {
-            skillHandler.OnSkillReady += HandleSkillReady;
-        }
-
-
-
         // Update is called once per frame
         void Update()
         {
@@ -88,6 +81,7 @@ namespace Units
                 return;
             UpdateEnemiesDistance();
             ProcessAttack();
+            ProcessSkill();
             
         }
 
@@ -152,24 +146,27 @@ namespace Units
         {
             skillHandler.AddSkill(newSkill); // 添加技能
         }
-        
+
         public IReadOnlyList<Skill> GetSkills()
         {
             return skillHandler.GetSkills();
+        
         }
 
-        private void HandleSkillReady(Skill skill)
+        private void ProcessSkill()
         {
-            if (isInAction)
-                return; // 技能动作期间不响应新的技能
-            isInAction = true; // 技能动画开始，禁止移动
-            animationController.TriggerCastSkill();
+            if (isInAction) return;
+            if (skillHandler.HasReadySkill)
+            {
+                isInAction = true;                  // 锁动作
+                animationController.TriggerCastSkill(); // 播放施法动画
+            }
         }
 
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            OnSkillCast?.Invoke(this, skillHandler.GetCurrentSkill());
+            OnSkillCast?.Invoke(this, skillHandler.PeekReadySkill());
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能\
             isInAction = false;
 
@@ -242,6 +239,8 @@ namespace Units
                 
             }
         }
+
+        
 
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()

@@ -39,16 +39,25 @@ namespace Units
         private List<Shield> shields;
         public event Action<float> OnShieldChanged;
 
-
-        public Attributes()
+        public Attributes(
+            float moveSpeedBase,
+            float attackPowerBase,
+            float maxHealthBase,
+            float attacksPerTenSecondsBase,
+            float energyPerSecondBase,
+            float attackRange
+        )
         {
-            moveSpeed = new Attribute("移速", 2);
-            attackPower = new Attribute("攻击力", 10);
-            maxHealth = new Attribute("生命", 100);
-            attacksPerTenSeconds = new Attribute("攻速", 2.5f);
-            energyPerSecond = new Attribute("能量回复", 5);
-            CurrentHealth = MaxHealth.finalValue;
+            moveSpeed = new Attribute("移速", moveSpeedBase);
+            attackPower = new Attribute("攻击力", attackPowerBase);
+            maxHealth = new Attribute("生命", maxHealthBase);
+            attacksPerTenSeconds = new Attribute("攻速", attacksPerTenSecondsBase);
+            energyPerSecond = new Attribute("能量回复", energyPerSecondBase);
+
+            AttackRange = attackRange;
+
             shields = new List<Shield>();
+            CurrentHealth = MaxHealth.finalValue;
         }
 
         public void AddShield(Shield shield)
@@ -63,7 +72,7 @@ namespace Units
                 OnShieldChanged?.Invoke(ShieldValue);
         }
 
-        
+
         public void TakeDamage(float damage)
         {
             for (int i = 0; i < shields.Count && damage > 0;)
@@ -84,6 +93,11 @@ namespace Units
             if (damage > 0)
                 CurrentHealth -= damage;
             OnShieldChanged?.Invoke(ShieldValue);
+        }
+        
+        public void RefillHealthToMax()
+        {
+            CurrentHealth = MaxHealth.finalValue;
         }
     }
 }

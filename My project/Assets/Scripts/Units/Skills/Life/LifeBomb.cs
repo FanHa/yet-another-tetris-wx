@@ -8,7 +8,7 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.LifeBomb;
         public LifeBombConfig Config { get; }
-        private GameObject cachedTempTarget;
+        private Vector3 cachedTargetPos; 
 
         public LifeBomb(LifeBombConfig config)
         {
@@ -36,11 +36,8 @@ namespace Units.Skills
             var targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
             if (targetEnemy == null)
                 return false;
-            cachedTempTarget = Object.Instantiate(
-                Owner.ProjectileConfig.TemporaryTargetPrefab,
-                targetEnemy.transform.position,
-                Quaternion.identity
-            );
+
+            cachedTargetPos = targetEnemy.transform.position;
             return true;
         }
 
@@ -50,6 +47,12 @@ namespace Units.Skills
             float percent = stats.HealthCostPercent.Final / 100f;
             float healthCost = Owner.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
+            var tempTarget = Object.Instantiate(
+                Owner.ProjectileConfig.TemporaryTargetPrefab,
+                cachedTargetPos,
+                Quaternion.identity
+            );
+            tempTarget.name = "临时目标 By " + Owner.name + " " + Name();
 
             // 投射炸弹
             GameObject projectileInstance = Object.Instantiate(
@@ -61,11 +64,11 @@ namespace Units.Skills
 
             lifeBomb.Init(
                 caster: Owner,
-                temporaryTarget: cachedTempTarget,
+                temporaryTarget: tempTarget,
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this
             );
-            cachedTempTarget = null; // 用完清空
+            
             return true;
         }
 

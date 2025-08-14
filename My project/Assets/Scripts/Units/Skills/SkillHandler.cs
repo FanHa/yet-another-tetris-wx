@@ -17,7 +17,10 @@ namespace Units.Skills
 
         public event Action<Unit, Skill> OnSkillCast;
         public event Action<Skill> OnSkillReady;
-        private ActiveSkill pendingSkill;
+
+        private readonly Queue<ActiveSkill> readyQueue = new Queue<ActiveSkill>();
+        private readonly HashSet<ActiveSkill> queuedSet = new HashSet<ActiveSkill>();
+
         private Attributes attributes;
 
         public void Initialize(Attributes attributes)
@@ -55,6 +58,8 @@ namespace Units.Skills
         public void Deactivate()
         {
             isActive = false;
+            readyQueue.Clear();          // 清空就绪队列，避免残留
+            queuedSet.Clear();
         }
 
         public void AddSkill(Skill newSkill)
@@ -70,27 +75,32 @@ namespace Units.Skills
 
         private void HandleSkillReady(ActiveSkill skill)
         {
-            if (pendingSkill != null)
-            {
+            if (!queuedSet.Add(skill))
                 return;
-            }
-            pendingSkill = skill;
-            OnSkillReady?.Invoke(skill); // 让Unit监听这个事件
+
+            readyQueue.Enqueue(skill);
+            OnSkillReady?.Invoke(skill); // 用于 UI 高亮等
         }
 
         public void ExecutePendingSkill()
         {
-            if (pendingSkill != null && pendingSkill.IsReady())
-            {
-                pendingSkill.Execute();
-                OnSkillCast?.Invoke(owner, pendingSkill);
-                pendingSkill = null; // 清除已执行的技能
-            }
+            if (readyQueue.Count == 0) return;
+
+            var skill = readyQueue.Peek();
+
+            skill.Execute();
+            OnSkillCast?.Invoke(owner, skill);
+
+
+            // 无论是否执行成功，都出队一次，允许后续重新判定再入队
+            readyQueue.Dequeue();
+            queuedSet.Remove(skill);
         }
 
-        internal Skill GetCurrentSkill()
+        public bool HasReadySkill => readyQueue.Count > 0;
+        public ActiveSkill PeekReadySkill()
         {
-            return pendingSkill;
+            return readyQueue.Count > 0 ? readyQueue.Peek() : null;
         }
     }
 }

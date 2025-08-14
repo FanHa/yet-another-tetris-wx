@@ -16,6 +16,15 @@ namespace Units
             GameObject go = Object.Instantiate(unitPrefab);
             Units.Unit unit = go.GetComponent<Units.Unit>();
 
+            unit.Attributes = new Units.Attributes(
+                moveSpeedBase: 2f,
+                attackPowerBase: 10f,
+                maxHealthBase: 100f,
+                attacksPerTenSecondsBase: 2.5f,
+                energyPerSecondBase: 5f,
+                attackRange: 1f
+            );
+
             // 基础外观和数据初始化
             Sprite characterSprite = resourceMapping.GetSprite(item.CharacterCell);
             unit.BodySpriteRenderer.sprite = characterSprite;
@@ -44,6 +53,8 @@ namespace Units
                     passive.ApplyPassive();
                 }
             }
+
+            unit.Attributes.RefillHealthToMax();
 
             return unit;
         }
