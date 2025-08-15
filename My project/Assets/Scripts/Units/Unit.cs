@@ -82,20 +82,12 @@ namespace Units
             UpdateEnemiesDistance();
             ProcessAttack();
             ProcessSkill();
-            
-        }
-
-        void FixedUpdate()
-        {
-            if (isActive &&  isInAction == false)
+            if (!isInAction && enemyUnits != null && enemyUnits.Count > 0)
             {
-                // 如果有目标敌人，移动到最近的敌人
-                if (enemyUnits != null && enemyUnits.Count > 0)
-                {
-                    Transform closestEnemy = enemyUnits[0].transform;
-                    movementController.ExecuteMove(closestEnemy);
-                }
+                Transform closestEnemy = enemyUnits[0].transform;
+                movementController.ExecuteMove(closestEnemy);
             }
+            
         }
 
         public void Setup()

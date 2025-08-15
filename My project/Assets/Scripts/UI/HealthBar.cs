@@ -5,8 +5,8 @@ namespace UI
 {
     public class HealthBar : MonoBehaviour
     {
-        [SerializeField] private Slider Life;
-        [SerializeField] private Slider Shield;
+        [SerializeField] private Slider lifeSlider;
+        [SerializeField] private Slider shieldSlider;
         private Camera healthCamera;
         [SerializeField] private Transform target;
         [SerializeField] private Vector3 offset;
@@ -24,40 +24,40 @@ namespace UI
         public void SetAttributes(Units.Attributes attributes)
         {
             this.attributes = attributes;
-            UpdateImmediate();
+            RefreshValues();
 
         }
 
         private void Update()
         {
-            
+
             transform.rotation = healthCamera.transform.rotation;
             transform.position = target.position + offset;
-            
+
             if (attributes == null) return;
 
-            // 读取属性实时刷新
-            float maxHealth = Mathf.Max(attributes.MaxHealth.finalValue, 1f);
-            float currentHealth = Mathf.Clamp(attributes.CurrentHealth, 0f, maxHealth);
-            float shieldValue = Mathf.Max(attributes.ShieldValue, 0f);
+            RefreshValues();
 
-            Life.value = currentHealth / maxHealth;
-
-            float shieldNormalized = Mathf.Clamp01(shieldValue / maxHealth);
-            Shield.value = shieldNormalized;
-            
         }
-        private void UpdateImmediate()
+        
+        private void RefreshValues()
         {
+            if (attributes == null) return;
+
             float maxHealth = Mathf.Max(attributes.MaxHealth.finalValue, 1f);
             float currentHealth = Mathf.Clamp(attributes.CurrentHealth, 0f, maxHealth);
             float shieldValue = Mathf.Max(attributes.ShieldValue, 0f);
+            float shieldNormalized = Mathf.Clamp01(shieldValue / maxHealth);
 
-            if (Life != null)
-                Life.value = currentHealth / maxHealth;
+            lifeSlider.value = currentHealth / maxHealth;
 
-            if (Shield != null)
-                Shield.value = Mathf.Clamp01(shieldValue / maxHealth);
+
+            bool showShield = shieldNormalized > 0f;
+            if (shieldSlider.gameObject.activeSelf != showShield)
+                shieldSlider.gameObject.SetActive(showShield);
+            if (showShield)
+                shieldSlider.value = shieldNormalized;
+
         }
     }
 }

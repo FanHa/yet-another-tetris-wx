@@ -540,8 +540,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec894fb68a01f5429391c2239f7a763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: {fileID: 4442008565583706885}
-  Shield: {fileID: 347640396795588166}
+  lifeSlider: {fileID: 0}
+  shieldSlider: {fileID: 0}
   target: {fileID: 4503421608668510641}
   offset: {x: 0, y: 0.2, z: 0}
 --- !u!1 &2768629011979689127
@@ -939,8 +939,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec894fb68a01f5429391c2239f7a763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: {fileID: 0}
-  Shield: {fileID: 0}
+  lifeSlider: {fileID: 0}
+  shieldSlider: {fileID: 0}
   target: {fileID: 4503421608668510641}
   offset: {x: 0, y: 0.2, z: 0}
 --- !u!1 &7474106867498017513
@@ -1276,8 +1276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec894fb68a01f5429391c2239f7a763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Life: {fileID: 4442008565583706885}
-  Shield: {fileID: 347640396795588166}
+  lifeSlider: {fileID: 4442008565583706885}
+  shieldSlider: {fileID: 347640396795588166}
   target: {fileID: 4503421608668510641}
   offset: {x: 0, y: 0.6, z: 0}
 --- !u!1 &7825242004104575439
@@ -1502,7 +1502,6 @@ MonoBehaviour:
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
   projectileSpawnPoint: {fileID: 1587690522871941135}
-  enemyUnits: []
   UnitManager: {fileID: 0}
 --- !u!58 &8368620811269264414
 CircleCollider2D:
