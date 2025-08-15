@@ -199,7 +199,7 @@ namespace Controller
             if (allies.Count == 0) return null;
             return allies[UnityEngine.Random.Range(0, allies.Count)];
         }
-        
+
         public List<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
         {
             var list = selfFaction == Unit.Faction.FactionA ? factionB : factionA;
@@ -208,6 +208,16 @@ namespace Controller
                 .Where(u => u != null && u.IsActive)
                 .Where(u => ((Vector2)u.transform.position - center).sqrMagnitude <= r2)
                 .ToList();
+        }
+        
+        public Unit FindWeakestEnemy(Unit self)
+        {
+            var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
+
+            return enemyList
+                .Where(u => u != null && u.IsActive)
+                .OrderBy(u => u.Attributes.MaxHealth.finalValue)
+                .FirstOrDefault();
         }
     }
 }

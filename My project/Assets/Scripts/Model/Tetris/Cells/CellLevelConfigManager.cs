@@ -30,5 +30,8 @@ namespace Model.Tetri
         public LifeShieldConfigGroup LifeShieldConfigGroup;
         public LifePowerConfigGroup LifePowerConfigGroup;
         public LifeEchoConfigGroup LifeEchoConfigGroup;
+
+        [Header("暗影")]
+        public ShadowAttackConfigGroup ShadowAttackConfigGroup;
     }
 }
