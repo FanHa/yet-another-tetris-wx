@@ -19,18 +19,19 @@ namespace Units.Buffs
 
         public void OnAfterTakeDamage(ref Damages.Damage damage)
         {
-            if (damage.Type == Damages.DamageType.Reflect)
-                return; // 避免反弹再次反弹
-            // 反弹伤害给来源Unit
-            var attacker = damage.SourceUnit;
-            if (attacker != null && attacker != owner)
+            if (damage.Type == Damages.DamageType.Hit || damage.Type == Damages.DamageType.Skill)
             {
-                float reflectValue = damage.Value * (reflectPercent / 100f);
-                var reflectDamage = new Damages.Damage(reflectValue, Damages.DamageType.Reflect)
-                    .SetSourceUnit(owner)
-                    .SetTargetUnit(attacker)
-                    .SetSourceLabel("生命回响·反弹");
-                attacker.TakeDamage(reflectDamage);
+                // 反弹伤害给来源Unit
+                var attacker = damage.SourceUnit;
+                if (attacker != null && attacker != owner)
+                {
+                    float reflectValue = damage.Value * (reflectPercent / 100f);
+                    var reflectDamage = new Damages.Damage(reflectValue, Damages.DamageType.Reflect)
+                        .SetSourceUnit(owner)
+                        .SetTargetUnit(attacker)
+                        .SetSourceLabel("生命回响·反弹");
+                    attacker.TakeDamage(reflectDamage);
+                }
             }
         }
     }

@@ -57,7 +57,8 @@ namespace Model.Tetri
                 new(CellTypeId.LifePower, typeof(LifePower), cellLevelConfigManager.LifePowerConfigGroup),
                 new(CellTypeId.LifeEcho, typeof(LifeEcho), cellLevelConfigManager.LifeEchoConfigGroup),
                 new(CellTypeId.ShadowAttack, typeof(ShadowAttack), cellLevelConfigManager.ShadowAttackConfigGroup),
-                
+                new(CellTypeId.ShadowStep, typeof(ShadowStep), cellLevelConfigManager.shadowStepConfigGroup),
+
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };
 

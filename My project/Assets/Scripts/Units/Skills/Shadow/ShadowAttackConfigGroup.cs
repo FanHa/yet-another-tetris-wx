@@ -12,12 +12,10 @@ namespace Units.Skills
     [System.Serializable]
     public class ShadowAttackConfig : SkillConfig
     {
+        public float VulnerabilityPercent;
 
-        [Header("消耗")]
-        public float RequiredEnergy;
-        public float InitEnergy;
+        public float VulnerabilityPercentPerShadowCell;
 
-        public int WeakLevel;
-        public float Damage;
+        public float DotDuration;
     }
 }

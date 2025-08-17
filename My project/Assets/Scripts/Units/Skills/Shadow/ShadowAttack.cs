@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class ShadowAttack : ActiveSkill
+    public class ShadowAttack : Skill, IPassiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.ShadowAttack;
         public ShadowAttackConfig Config { get; }
@@ -11,46 +11,47 @@ namespace Units.Skills
         public ShadowAttack(ShadowAttackConfig config)
         {
             Config = config;
-            RequiredEnergy = config.RequiredEnergy;
         }
 
-
-        protected override bool ExecuteCore()
+        private struct ShadowAttackStats
         {
+            public StatValue VulnerabilityPercent;
+            public StatValue DotDuration;
+        }
 
-            Unit targetEnemy = Owner.UnitManager.FindWeakestEnemy(Owner);
-            if (targetEnemy == null)
-                return false;
-
-            Vector3 dir = (targetEnemy.transform.position - Owner.transform.position).normalized;
-            Vector3 targetPos = targetEnemy.transform.position + dir * 1.2f; // 1.2f为身后距离，可调整
-
-            Owner.transform.position = targetPos;
-
-            // todo 施放易伤buff
-            // 造成伤害
-            var damage = new Damages.Damage(Config.Damage, Damages.DamageType.Hit);
-            damage.SetSourceUnit(Owner);
-            damage.SetTargetUnit(targetEnemy);
-            damage.SetSourceLabel("影袭");
-            targetEnemy.TakeDamage(damage);
-            // todo 动画
-
-            return true;
+        private ShadowAttackStats CalcStats()
+        {
+            int shadowCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Shadow, out var count) ? count : 0;
+            return new ShadowAttackStats
+            {
+                VulnerabilityPercent = new StatValue("易伤百分比", Config.VulnerabilityPercent, shadowCellCount * Config.VulnerabilityPercentPerShadowCell),
+                DotDuration = new StatValue("易伤持续时间", Config.DotDuration)
+            };
         }
 
         public override string Description()
         {
-            var weakLevel = new StatValue("易伤层数", Config.WeakLevel);
-
+            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{weakLevel}\n";
+                $"{stats.VulnerabilityPercent}\n" +
+                $"{stats.DotDuration}\n";
         }
-
-        public static string DescriptionStatic() => "闪现到最脆弱敌人身后,施加易伤并造成伤害";
+        public static string DescriptionStatic() => "攻击时附加易伤";
 
         public override string Name() => NameStatic();
         public static string NameStatic() => "影袭";
+
+        public void ApplyPassive()
+        {
+            var stats = CalcStats();
+            var buff = new Buffs.ShadowAttackBuff(
+                stats.VulnerabilityPercent.Final,
+                stats.DotDuration.Final,
+                Owner,
+                this
+            );
+            Owner.AddBuff(buff);
+        }
     }
 }

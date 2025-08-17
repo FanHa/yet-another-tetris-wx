@@ -9,15 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79af95f4f40ab9c46b2207d65df28079, type: 3}
+  m_Script: {fileID: 11500000, guid: 83e47096223972e44b76a6f80a13dd0e, type: 3}
   m_Name: ShadowAttackConfigGroup
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - RequiredEnergy: 50
-    InitEnergy: 0
-    WeakLevel: 10
-    Damage: 20
-  - RequiredEnergy: 50
-    InitEnergy: 0
-    WeakLevel: 20
-    Damage: 40
+  - VulnerabilityPercent: 5
+    VulnerabilityPercentPerShadowCell: 1
+    DotDuration: 10
+  - VulnerabilityPercent: 10
+    VulnerabilityPercentPerShadowCell: 2
+    DotDuration: 10

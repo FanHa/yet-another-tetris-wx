@@ -28,6 +28,8 @@ namespace Model.Tetri
         LifePower,
         LifeEcho,
         ShadowAttack,
+        ShadowStep,
+        
     }
 
     public enum CharacterTypeId
