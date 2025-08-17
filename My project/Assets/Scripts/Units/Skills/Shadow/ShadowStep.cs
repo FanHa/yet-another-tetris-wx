@@ -12,6 +12,7 @@ namespace Units.Skills
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
+            CurrentEnergy = config.InitEnergy;
         }
 
         private struct ShadowStepStats

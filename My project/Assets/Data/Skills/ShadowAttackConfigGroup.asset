@@ -15,7 +15,7 @@ MonoBehaviour:
   LevelConfigs:
   - VulnerabilityPercent: 5
     VulnerabilityPercentPerShadowCell: 1
-    DotDuration: 10
+    DotDuration: 25
   - VulnerabilityPercent: 10
     VulnerabilityPercentPerShadowCell: 2
-    DotDuration: 10
+    DotDuration: 25
