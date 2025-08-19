@@ -29,6 +29,7 @@ namespace Model.Tetri
         LifeEcho,
         ShadowAttack,
         ShadowStep,
+        ShadowArrow,
         
     }
 

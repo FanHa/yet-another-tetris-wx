@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d980d3098667dd4caf7e33c0ee346c8, type: 3}
   m_Name: TetriInventoryModel
   m_EditorClassIdentifier: 
-  usableTetriList: []
+  usableTetriList:
+  - tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    UpgradedTimes: 0
+  - tetriType: 1
+    shape:
+      rows: 4
+      cols: 4
+    UpgradedTimes: 0
   usedTetriList:
   - tetriType: 0
     shape:
@@ -32,4 +42,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bb81ad1e0fefc4e4f97d31c1b0df71bd, type: 2}
   - {fileID: 11400000, guid: 59843abf4f193bc4fb5bcca322154607, type: 2}
   - {fileID: 11400000, guid: ff3ff84843b6737478e673dd07efa67b, type: 2}
-  avaliableConfigIndex: 5
+  avaliableConfigIndex: 0

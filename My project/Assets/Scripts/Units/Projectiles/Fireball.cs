@@ -1,15 +1,20 @@
 namespace Units.Projectiles
 {
-    public class Fireball : Projectile
+    public class Fireball : ProjectileToUnit
     {
         private float burnDps;
         private float burnDuration;
         private Skills.Skill sourceSkill;
 
-        public void Init(Unit caster, Unit target, float burnDps, float burnDuration, Skills.Skill sourceSkill)
+        public void Init(
+            Units.Unit caster,
+            Units.Unit target,
+            float burnDps,
+            float burnDuration,
+            Units.Skills.Skill sourceSkill
+        )
         {
-            this.caster = caster;
-            this.target = target.transform;
+            base.Init(caster, target);
             this.burnDps = burnDps;
             this.burnDuration = burnDuration;
             this.sourceSkill = sourceSkill;
@@ -17,19 +22,6 @@ namespace Units.Projectiles
 
         protected override void HandleHitTarget()
         {
-            if (target == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Unit unit = target.GetComponent<Units.Unit>();
-            if (unit == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             // 命中后直接添加Burn Buff
             var burn = new Units.Buffs.Burn(
                 dps: burnDps,
@@ -37,7 +29,7 @@ namespace Units.Projectiles
                 sourceUnit: caster,
                 sourceSkill: sourceSkill
             );
-            unit.AddBuff(burn);
+            target.AddBuff(burn);
 
             Destroy(gameObject); // 销毁投射物
         }

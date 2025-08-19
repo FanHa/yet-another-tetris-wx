@@ -260,21 +260,17 @@ namespace Units
             if (Attributes.IsRanged)
             {
                 projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
+                var projectile = projectileObject.GetComponent<Projectiles.RangeAttack>();
+                projectile.Init(this, target);
+                projectile.Activate();
             }
             else
             {
                 projectileObject = Instantiate(ProjectileConfig.MeleeProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
+                var projectile = projectileObject.GetComponent<Projectiles.MeleeAttack>();
+                projectile.Init(this, target);
+                projectile.Activate();
             }
-            Damages.Damage damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
-            damage.SetSourceLabel("普通攻击");
-            damage.SetSourceUnit(this);
-            damage.SetTargetUnit(target);
-            Projectiles.Projectile projectile = projectileObject.GetComponent<Projectiles.Projectile>();
-            projectile.SetSprite(Fist1SpriteRenderer.sprite);
-            projectile.Init(this, target.transform, damage);
-            projectileObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            projectile.Activate();
-
         }
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)

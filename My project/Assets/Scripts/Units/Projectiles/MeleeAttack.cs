@@ -2,33 +2,51 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class MeleeAttack : Projectile
+    public class MeleeAttack : MonoBehaviour
     {
-        protected override void Update()
-        {
-            if (!Initialized)
-                return;
+        private Units.Unit caster;
+        private Units.Unit target;
+        private bool isActive = false;
 
-            // 近战攻击：直接瞬移到目标位置并触发命中
-            if (target == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            // 直接设置位置到目标（可选：或做极快移动）
-            transform.position = target.position;
-
-            // 触发命中并销毁
-            HandleHitTarget();
-        }
-
-        // 近战攻击不需要偏移和移动表现，重写 Init 以跳过偏移逻辑
-        public override void Init(Units.Unit caster, Transform target, Damages.Damage damage)
+        /// <summary>
+        /// 初始化近战攻击
+        /// </summary>
+        public void Init(Units.Unit caster, Units.Unit target)
         {
             this.caster = caster;
             this.target = target;
-            this.damage = damage;
+        }
+
+        public void Activate()
+        {
+            isActive = true;
+        }
+
+        private void Update()
+        {
+            if (!isActive)
+                return;
+
+            HandleHitTarget();
+        }
+
+        private void HandleHitTarget()
+        {
+            float damageValue = caster.Attributes.AttackPower.finalValue;
+            var damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
+            damage.SetSourceUnit(caster);
+            damage.SetTargetUnit(target);
+            damage.SetSourceLabel(Name());
+
+            caster.TriggerAttackHit(target, damage);
+            target.TakeHit(caster, ref damage);
+
+            Destroy(gameObject);
+        }
+        
+        private string Name()
+        {
+            return "近战攻击";
         }
     }
 }

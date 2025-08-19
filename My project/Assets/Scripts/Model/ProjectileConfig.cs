@@ -13,7 +13,7 @@ namespace Model
         public GameObject TemporaryTargetPrefab;
 
         [Header("技能投射物")]
-        public GameObject PrecisionArrowPrefab;
+        public GameObject ShadowArrowPrefab;
         public GameObject ChainLightningPrefab;
 
         public GameObject FireballPrefab;

@@ -33,6 +33,7 @@ namespace Model.Tetri
 
         [Header("暗影")]
         public ShadowAttackConfigGroup ShadowAttackConfigGroup;
-        public ShadowStepConfigGroup shadowStepConfigGroup;
+        public ShadowStepConfigGroup ShadowStepConfigGroup;
+        public ShadowArrowConfigGroup ShadowArrowConfigGroup;
     }
 }

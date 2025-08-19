@@ -29,4 +29,5 @@ MonoBehaviour:
   LifePowerConfigGroup: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
   LifeEchoConfigGroup: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
   ShadowAttackConfigGroup: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
-  shadowStepConfigGroup: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
+  ShadowStepConfigGroup: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
+  ShadowArrowConfigGroup: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}

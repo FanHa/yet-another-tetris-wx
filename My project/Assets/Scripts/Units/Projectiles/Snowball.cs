@@ -2,39 +2,46 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class Snowball : Projectile
+    public class Snowball : ProjectileToUnit
     {
-        private Units.Buffs.Chilled chilledBuff;
+        private float chilledDuration;
+        private int moveSlowPercent;
+        private int atkSlowPercent;
+        private int energySlowPercent;
+        private Units.Skills.Skill sourceSkill;
 
-        public void SetChilled(Units.Buffs.Chilled chilled)
+        public void Init(
+            Units.Unit caster,
+            Units.Unit target,
+            float chilledDuration,
+            int moveSlowPercent,
+            int atkSlowPercent,
+            int energySlowPercent,
+            Units.Skills.Skill sourceSkill
+        )
         {
-            this.chilledBuff = chilled;
+            base.Init(caster, target);
+            this.chilledDuration = chilledDuration;
+            this.moveSlowPercent = moveSlowPercent;
+            this.atkSlowPercent = atkSlowPercent;
+            this.energySlowPercent = energySlowPercent;
+            this.sourceSkill = sourceSkill;
         }
 
         protected override void HandleHitTarget()
         {
-            if (target == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Unit unit = target.GetComponent<Units.Unit>();
-            if (unit == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            unit.TakeDamage(damage); // 对目标单位造成冰属性伤害
-
             // 施加冰霜减速Buff
-            if (chilledBuff != null)
-            {
-                unit.AddBuff(chilledBuff);
-            }
+            var chilledBuff = new Units.Buffs.Chilled(
+                chilledDuration,
+                moveSlowPercent,
+                atkSlowPercent,
+                energySlowPercent,
+                caster,
+                sourceSkill
+            );
+            target.AddBuff(chilledBuff);
 
-            Destroy(gameObject); // 销毁投射物
+            Destroy(gameObject);
         }
     }
 }

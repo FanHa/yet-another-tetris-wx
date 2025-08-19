@@ -45,22 +45,15 @@ namespace Units.Skills
                 Quaternion.identity
             );
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
-
-            var damage = new Damages.Damage(stats.Damage.Final, Damages.DamageType.Skill);
-            damage.SetSourceLabel(Name());
-            damage.SetSourceUnit(Owner);
-            damage.SetTargetUnit(cachedTarget);
-
-            var chilled = new Units.Buffs.Chilled(
+            snowBall.Init(
+                Owner,
+                cachedTarget,
                 stats.ChilledDuration.Final,
                 (int)stats.MoveSlowPercent.Final,
                 (int)stats.AtkSlowPercent.Final,
                 (int)stats.EnergySlowPercent.Final,
-                Owner,
                 this
             );
-            snowBall.SetChilled(chilled);
-            snowBall.Init(Owner, cachedTarget.transform, damage);
             snowBall.Activate();
             // 清空目标
             cachedTarget = null;
@@ -68,17 +61,16 @@ namespace Units.Skills
         }
 
         public override string Description()
-    {
-        var stats = CalcStats();
-        return
-            DescriptionStatic() + "\n" +
-            $"{stats.Damage}\n" +
-            $"{stats.ChilledDuration}\n" +
-            $"{stats.MoveSlowPercent}\n" +
-            $"{stats.AtkSlowPercent}\n" +
-            $"{stats.EnergySlowPercent}";
-    }
-        public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,造成伤害并施加减速Debuff.";
+        {
+            var stats = CalcStats();
+            return
+                DescriptionStatic() + "\n" +
+                $"{stats.ChilledDuration}\n" +
+                $"{stats.MoveSlowPercent}\n" +
+                $"{stats.AtkSlowPercent}\n" +
+                $"{stats.EnergySlowPercent}";
+        }
+        public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,施加减速Debuff.";
 
         public override string Name()
         {
@@ -88,7 +80,6 @@ namespace Units.Skills
         
         private struct SnowballStats
         {
-            public StatValue Damage;
             public StatValue ChilledDuration;
             public StatValue MoveSlowPercent;
             public StatValue AtkSlowPercent;
@@ -100,7 +91,6 @@ namespace Units.Skills
             int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
             return new SnowballStats
             {
-                Damage = new StatValue("冰属性伤害", Config.BaseDamage, iceCellCount * Config.IceCellDamageBonus),
                 ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationPerIceCell),
                 MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, iceCellCount * Config.ChilledMoveSlowPercentPerIceCell),
                 AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, iceCellCount * Config.ChilledAtkSlowPercentPerIceCell),
