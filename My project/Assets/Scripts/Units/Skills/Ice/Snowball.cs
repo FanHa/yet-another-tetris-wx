@@ -25,7 +25,7 @@ namespace Units.Skills
                 return false;
 
             // 找到攻击范围内的敌人
-            cachedTarget = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            cachedTarget = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange.finalValue);
             if (cachedTarget == null)
                 return false;
 

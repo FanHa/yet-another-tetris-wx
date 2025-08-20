@@ -9,16 +9,26 @@ namespace Model.Tetri
     {
         public override CharacterTypeId CharacterTypeId => CharacterTypeId.Circle;
 
-        public Circle()
+        public float HealthBonusPercent = 80f;
+        public float AttackRangeBonusPercent = -40f;
+        public float AttackPowerBonusPercent = -20f; // -20%攻击力
+        public float MoveSpeedBonusPercent = -20f;   // -20%速度
+        public override void Apply(Unit unit)
         {
-            // 设置基类的字段
-            AttackPowerValue = 7f;  // 设置攻击力
-            MaxCoreValue = 150f;   // 设置最大生命值
+            base.Apply(unit);
+            unit.Attributes.MaxHealth.AddPercentageModifier(this, HealthBonusPercent);
+            unit.Attributes.AttackRange.AddPercentageModifier(this, AttackRangeBonusPercent);
+            unit.Attributes.AttackPower.AddPercentageModifier(this, AttackPowerBonusPercent);
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, MoveSpeedBonusPercent);
         }
-
         public override string Name()
         {
             return "小圆";
+        }
+
+        public override string Description()
+        {
+            return "血量极高，射程、攻击力和速度均较低。";
         }
 
 

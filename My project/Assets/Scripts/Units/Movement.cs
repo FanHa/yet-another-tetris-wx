@@ -51,13 +51,13 @@ namespace Units
             if (IsHitAndRun)
             {
                 // HitAndRun逻辑：在攻击距离附近徘徊
-                float desiredDistance = attributes.AttackRange * 0.9f; // 可微调徘徊距离
+                float desiredDistance = attributes.AttackRange.finalValue * 0.9f; // 可微调徘徊距离
                 if (distance < desiredDistance)
                 {
                     // 太近了，远离敌人
                     direction = (transform.position - closestEnemy.position).normalized;
                 }
-                else if (distance > attributes.AttackRange)
+                else if (distance > attributes.AttackRange.finalValue)
                 {
                     // 太远了，靠近敌人
                     direction = (closestEnemy.position - transform.position).normalized;
@@ -71,7 +71,7 @@ namespace Units
             else
             {
                 // 原计划：靠近敌人
-                if (distance <= attributes.AttackRange)
+                if (distance <= attributes.AttackRange.finalValue)
                 {
                     return;
                 }

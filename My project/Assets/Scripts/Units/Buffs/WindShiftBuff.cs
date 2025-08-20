@@ -24,13 +24,13 @@ namespace Units.Buffs
         public override void OnApply(Unit unit)
         {
             base.OnApply(unit);
-            unit.Attributes.AttackRange += attackRangeBonus;
+            unit.Attributes.AttackRange.AddFlatModifier(this, attackRangeBonus);
         }
 
 
         public override void OnRemove()
         {
-            owner.Attributes.AttackRange -= attackRangeBonus;
+            owner.Attributes.AttackRange.RemoveFlatModifier(this);
             base.OnRemove();
         }
     }

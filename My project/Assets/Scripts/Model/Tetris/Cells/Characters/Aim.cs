@@ -9,15 +9,14 @@ namespace Model.Tetri
     {
         public override CharacterTypeId CharacterTypeId => CharacterTypeId.Aim;
         public float AttackRange = 2f;
-        public Aim()
-        {
-            AttackPowerValue = 9f;
-            MaxCoreValue = 90f;
-        }
+
         public override void Apply(Unit unit)
         {
             base.Apply(unit);
-            unit.Attributes.AttackRange = AttackRange;
+            unit.Attributes.AttackRange.SetBaseValue(AttackRange);
+            unit.Attributes.AttackRange.AddPercentageModifier(this, 20); // 20%攻击范围加成
+
+            unit.Attributes.MaxHealth.AddPercentageModifier(this, -50); // -50%生命上限
         }
 
         public override string Name()
@@ -27,7 +26,7 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return "天生远程单位,且没有远程攻击伤害衰减" + base.Description();
+            return "天生远程单位,更多的攻击距离加成,更少的生命";
         }
     }
 }

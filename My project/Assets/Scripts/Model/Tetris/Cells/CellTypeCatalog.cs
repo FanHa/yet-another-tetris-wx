@@ -38,7 +38,8 @@ namespace Model.Tetri
         Square,
         Triangle,
         Circle,
-        Aim
+        Aim,
+        Hourglass
     }
 }
 

@@ -13,15 +13,16 @@ namespace Units
         [SerializeField] private Attribute maxHealth;
         [SerializeField] private Attribute attacksPerTenSeconds;
         [SerializeField] private Attribute energyPerSecond;
+        [SerializeField] private Attribute attackRange;
 
         public Attribute MoveSpeed => moveSpeed;
         public Attribute AttackPower => attackPower;
         public Attribute MaxHealth => maxHealth;
         public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
         public Attribute EnergyPerSecond => energyPerSecond;
-        public float AttackRange; // 攻击范围
+        public Attribute AttackRange => attackRange;
         [SerializeField] private float RangedThreshold;
-        public bool IsRanged => AttackRange >= RangedThreshold;
+        public bool IsRanged => AttackRange.finalValue >= RangedThreshold;
 
         private float currentHealth;
         public float CurrentHealth
@@ -53,8 +54,7 @@ namespace Units
             maxHealth = new Attribute("生命", maxHealthBase);
             attacksPerTenSeconds = new Attribute("攻速", attacksPerTenSecondsBase);
             energyPerSecond = new Attribute("能量回复", energyPerSecondBase);
-
-            AttackRange = attackRange;
+            this.attackRange = new Attribute("攻击范围", attackRange);
 
             shields = new List<Shield>();
             CurrentHealth = MaxHealth.finalValue;

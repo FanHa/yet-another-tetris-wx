@@ -31,10 +31,14 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            unit.Attributes.AttackPower.SetBaseValue(AttackPowerValue);
-            unit.Attributes.MaxHealth.SetBaseValue(MaxCoreValue);
-            unit.Attributes.AttacksPerTenSeconds.SetBaseValue(AttacksPerTenSeconds);
-            unit.Attributes.MoveSpeed.SetBaseValue(MoveSpeedValue);
+            unit.Attributes = new Units.Attributes(
+                moveSpeedBase: 2f,
+                attackPowerBase: 10f,
+                maxHealthBase: 100f,
+                attacksPerTenSecondsBase: 2.5f,
+                energyPerSecondBase: 5f,
+                attackRange: 1f
+            );
             unit.name = characterName;
         }
 

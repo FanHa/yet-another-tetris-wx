@@ -72,6 +72,7 @@ namespace Units
             BuffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
+            
         }
 
         // Update is called once per frame
@@ -125,7 +126,7 @@ namespace Units
 
             this.CellCounts.TryGetValue(AffinityType.Wind, out int windCount);
             float rangeBonus = 0.25f * windCount;
-            Attributes.AttackRange += rangeBonus;
+            Attributes.AttackRange.AddFlatModifier(this, rangeBonus);
         }
 
 
@@ -218,7 +219,7 @@ namespace Units
                 Unit target = enemyUnits[0];
 
                 float distance = Vector2.Distance(transform.position, target.transform.position);
-                if (distance <= Attributes.AttackRange) // 检查最近的敌人是否在攻击范围内
+                if (distance <= Attributes.AttackRange.finalValue) // 检查最近的敌人是否在攻击范围内
                 {
                     pendingAttackTarget = target;
                     isInAction = true; // 攻击动画开始，禁止移动
@@ -241,7 +242,7 @@ namespace Units
                 return;
 
             float distance = Vector2.Distance(transform.position, pendingAttackTarget.transform.position);
-            if (distance <= Attributes.AttackRange)
+            if (distance <= Attributes.AttackRange.finalValue)
             {
                 Attack(pendingAttackTarget, Attributes.AttackPower.finalValue);
             }
@@ -329,7 +330,7 @@ namespace Units
 
             // 绘制攻击范围的Gizmos
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, Attributes.AttackRange);
+            Gizmos.DrawWireSphere(transform.position, Attributes.AttackRange.finalValue);
         }
 
         /// <summary>

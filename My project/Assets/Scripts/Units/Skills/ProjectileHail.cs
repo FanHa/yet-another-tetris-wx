@@ -22,7 +22,7 @@ namespace Units.Skills
 
         protected override bool ExecuteCore()
         {
-            float attackRange = Owner.Attributes.AttackRange;
+            float attackRange = Owner.Attributes.AttackRange.finalValue;
             float attackFrequency = Owner.Attributes.AttacksPerTenSeconds.finalValue;
             int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
 

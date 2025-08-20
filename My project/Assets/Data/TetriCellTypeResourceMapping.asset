@@ -62,4 +62,6 @@ MonoBehaviour:
     sprite: {fileID: -6044770247596281384, guid: fd1ba31e8f072114e9f4fd90ec001415, type: 3}
   - characterTypeId: 3
     sprite: {fileID: 3544725380317974027, guid: 8e674b28de170b24e832629515f396de, type: 3}
+  - characterTypeId: 4
+    sprite: {fileID: -7003098779552009737, guid: aba5b67bd2734a74e9e996abc4f05043, type: 3}
   tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}

@@ -33,7 +33,7 @@ namespace Units.Skills
         {
             if (!base.IsReady())
                 return false;
-            var targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange);
+            var targetEnemy = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange.finalValue);
             if (targetEnemy == null)
                 return false;
 

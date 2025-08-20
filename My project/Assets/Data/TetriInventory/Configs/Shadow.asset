@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec24568920b65f4c95fb31ff46be2c0, type: 3}
   m_Name: Shadow
   m_EditorClassIdentifier: 
-  CellTypeIds: 1200000013000000
-  CharacterTypeIds: 00000000
+  CellTypeIds: 120000001300000014000000
+  CharacterTypeIds: 04000000

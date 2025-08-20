@@ -73,7 +73,8 @@ namespace Model.Tetri
                 (CharacterTypeId.Square, typeof(Square)),
                 (CharacterTypeId.Triangle, typeof(Triangle)),
                 (CharacterTypeId.Circle, typeof(Circle)),
-                (CharacterTypeId.Aim, typeof(Aim))
+                (CharacterTypeId.Aim, typeof(Aim)),
+                (CharacterTypeId.Hourglass, typeof(Hourglass))
             };
             CharacterTypeIdToType = characterTypeMetas.ToDictionary(m => m.id, m => m.type);
             TypeToCharacterTypeId = characterTypeMetas.ToDictionary(m => m.type, m => m.id);

@@ -16,7 +16,7 @@ MonoBehaviour:
   BaseProjectilePrefab: {fileID: 9187572345046287161, guid: c0e4b6d77ae220a41ac8156d43707b50, type: 3}
   MeleeProjectilePrefab: {fileID: 6126591707298796667, guid: d3e017b197a10c94a8b90001f8a157f3, type: 3}
   TemporaryTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
-  PrecisionArrowPrefab: {fileID: 5370478100421002413, guid: e6f7318ca1ca6c443805c5caa7ea9ff0, type: 3}
+  ShadowArrowPrefab: {fileID: 2235469884941056063, guid: 928e49a1b111acf4d883165a6e13ffc7, type: 3}
   ChainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
   FireballPrefab: {fileID: 109674630725193608, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
   SnowballPrefab: {fileID: 2235469884941056063, guid: 76f0c4ad7b9930f4b9da9cb995db3506, type: 3}
