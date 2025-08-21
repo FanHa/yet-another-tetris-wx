@@ -37,7 +37,7 @@ namespace Units.Skills
                 $"{stats.AttackRangeBonus}";
         }
  
-        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离";
+        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离,获得攻击距离伤害加成";
 
         public override string Name()
         {

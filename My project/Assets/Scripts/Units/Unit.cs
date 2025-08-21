@@ -260,14 +260,14 @@ namespace Units
             GameObject projectileObject;
             if (Attributes.IsRanged)
             {
-                projectileObject = Instantiate(ProjectileConfig.BaseProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
+                projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 var projectile = projectileObject.GetComponent<Projectiles.RangeAttack>();
                 projectile.Init(this, target);
                 projectile.Activate();
             }
             else
             {
-                projectileObject = Instantiate(ProjectileConfig.MeleeProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
+                projectileObject = Instantiate(ProjectileConfig.MeleeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
                 var projectile = projectileObject.GetComponent<Projectiles.MeleeAttack>();
                 projectile.Init(this, target);
                 projectile.Activate();

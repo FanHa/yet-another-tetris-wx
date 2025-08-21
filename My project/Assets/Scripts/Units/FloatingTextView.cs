@@ -18,8 +18,8 @@ namespace Units.UI
         public void Initialize(string text, Vector3 worldPosition)
         {
             // 设置随机偏移
-            float randomOffsetX = UnityEngine.Random.Range(-0.2f, 0.2f);
-            float randomOffsetY = UnityEngine.Random.Range(-0.1f, 0.1f);
+            float randomOffsetX = UnityEngine.Random.Range(-1f, 1f);
+            float randomOffsetY = UnityEngine.Random.Range(-0.5f, 0.5f);
             Vector3 randomOffset = new(randomOffsetX, randomOffsetY, 0f);
 
             // 设置位置

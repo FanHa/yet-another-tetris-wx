@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ProjectileConfig
   m_EditorClassIdentifier: 
   BuffProjectilePrefab: {fileID: 1995791391659268277, guid: 86abf7817d99cc843872c0662a2c8a3c, type: 3}
-  BaseProjectilePrefab: {fileID: 9187572345046287161, guid: c0e4b6d77ae220a41ac8156d43707b50, type: 3}
-  MeleeProjectilePrefab: {fileID: 6126591707298796667, guid: d3e017b197a10c94a8b90001f8a157f3, type: 3}
+  RangeAttackProjectilePrefab: {fileID: 9187572345046287161, guid: c0e4b6d77ae220a41ac8156d43707b50, type: 3}
+  MeleeAttackProjectilePrefab: {fileID: 6126591707298796667, guid: d3e017b197a10c94a8b90001f8a157f3, type: 3}
   TemporaryTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}
   ShadowArrowPrefab: {fileID: 2235469884941056063, guid: 928e49a1b111acf4d883165a6e13ffc7, type: 3}
   ChainLightningPrefab: {fileID: 4768406924635470117, guid: e7745176670ab7c43ae33b91db614d30, type: 3}
@@ -27,3 +27,4 @@ MonoBehaviour:
   IcyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
   WildWindPrefab: {fileID: 1995791391659268277, guid: 0a417b4fc79a18846800e1363a2a09f5, type: 3}
   LifeBombPrefab: {fileID: 1995791391659268277, guid: 06ddad6e653bae5448a9643c0be053c8, type: 3}
+  ChargePrefab: {fileID: 0}

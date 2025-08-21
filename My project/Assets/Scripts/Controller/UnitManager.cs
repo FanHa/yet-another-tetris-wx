@@ -209,7 +209,7 @@ namespace Controller
                 .Where(u => ((Vector2)u.transform.position - center).sqrMagnitude <= r2)
                 .ToList();
         }
-        
+
         public Unit FindWeakestEnemy(Unit self)
         {
             var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
@@ -217,6 +217,17 @@ namespace Controller
             return enemyList
                 .Where(u => u != null && u.IsActive)
                 .OrderBy(u => u.Attributes.MaxHealth.finalValue)
+                .FirstOrDefault();
+        }
+        
+        public Unit FindFurthestEnemy(Unit self)
+        {
+            var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
+            Vector2 selfPos = self.transform.position;
+
+            return enemyList
+                .Where(u => u != null && u.IsActive)
+                .OrderByDescending(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude)
                 .FirstOrDefault();
         }
     }

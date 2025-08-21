@@ -30,6 +30,7 @@ namespace Model.Tetri
         ShadowAttack,
         ShadowStep,
         ShadowArrow,
+        Charge
         
     }
 

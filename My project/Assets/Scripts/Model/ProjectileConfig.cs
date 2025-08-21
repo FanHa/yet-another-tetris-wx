@@ -8,8 +8,8 @@ namespace Model
     {
         [Header("通用")]
         public GameObject BuffProjectilePrefab; // Buff投射物预制体
-        public GameObject BaseProjectilePrefab; // 投射物预制体
-        public GameObject MeleeProjectilePrefab;
+        public GameObject RangeAttackProjectilePrefab; // 投射物预制体
+        public GameObject MeleeAttackProjectilePrefab;
         public GameObject TemporaryTargetPrefab;
 
         [Header("技能投射物")]
@@ -29,5 +29,7 @@ namespace Model
 
         public GameObject WildWindPrefab;
         public GameObject LifeBombPrefab;
+
+        public GameObject ChargePrefab;
     }
 }
