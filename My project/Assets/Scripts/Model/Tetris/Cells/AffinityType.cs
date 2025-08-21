@@ -7,6 +7,7 @@ namespace Model.Tetri
         Ice,
         Wind,
         Life,
-        Shadow
+        Shadow,
+        Swift
     }
 }

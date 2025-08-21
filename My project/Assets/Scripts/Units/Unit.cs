@@ -127,6 +127,10 @@ namespace Units
             this.CellCounts.TryGetValue(AffinityType.Wind, out int windCount);
             float rangeBonus = 0.25f * windCount;
             Attributes.AttackRange.AddFlatModifier(this, rangeBonus);
+
+            this.CellCounts.TryGetValue(AffinityType.Swift, out int swiftCount);
+            float swiftBonus = 0.35f * swiftCount;
+            Attributes.MoveSpeed.AddFlatModifier(this, swiftBonus);
         }
 
 

@@ -31,3 +31,4 @@ MonoBehaviour:
   ShadowAttackConfigGroup: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
   ShadowStepConfigGroup: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
   ShadowArrowConfigGroup: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}
+  ChargeConfigGroup: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
