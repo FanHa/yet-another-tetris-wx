@@ -27,4 +27,4 @@ MonoBehaviour:
   IcyCagePrefab: {fileID: 1995791391659268277, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
   WildWindPrefab: {fileID: 1995791391659268277, guid: 0a417b4fc79a18846800e1363a2a09f5, type: 3}
   LifeBombPrefab: {fileID: 1995791391659268277, guid: 06ddad6e653bae5448a9643c0be053c8, type: 3}
-  ChargePrefab: {fileID: 0}
+  ChargePrefab: {fileID: 1995791391659268277, guid: cf629d04663a76b43b6cbe7574d44ff5, type: 3}

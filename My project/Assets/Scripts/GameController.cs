@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System;
 using Units;
 using UI.UnitInfo;
+using UI.TetriInfo;
 
 public class GameController : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
     [SerializeField] private UnitInfo unitInfo;
+    [SerializeField] private TetriInfo tetriInfo;
     private GameObject currentShadowTetri;
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
@@ -38,6 +40,7 @@ public class GameController : MonoBehaviour
         battleButton.onClick.AddListener(HandleBattleClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
+        tetriInventoryController.OnTetriClick += HandleTetriClick;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
         unitInventoryController.OnUnitClicked += HandleUnitClicked;
@@ -46,6 +49,11 @@ public class GameController : MonoBehaviour
     private void HandleUnitClicked(Unit unit)
     {
         unitInfo.ShowUnitInfo(unit);
+    }
+
+    private void HandleTetriClick(Operation.Tetri tetri)
+    {
+        tetriInfo.ShowTetriInfo(tetri.ModelTetri);
     }
 
     private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)

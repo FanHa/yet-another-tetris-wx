@@ -15,18 +15,19 @@ namespace Controller
         private View.TetriInventoryView view;
         [SerializeField] private Model.TetriInventoryModel model;
         public event Action<Operation.Tetri> OnTetriBeginDrag; // 新增事件
-        [SerializeField]private Operation.TetriFactory tetriFactory;
+        public event Action<Operation.Tetri> OnTetriClick; // 新增事件
+        [SerializeField] private Operation.TetriFactory tetriFactory;
 
         private float minY;
         private float maxY;
         void Awake()
         {
             view = GetComponent<View.TetriInventoryView>();
-            
+
         }
         void Start()
         {
-            
+
             model.OnDataChanged += HandleDataChanged;
             model.Init();
         }
@@ -74,6 +75,7 @@ namespace Controller
                 // 创建 Tetri 实例
                 var tetriComponent = tetriFactory.CreateTetri(tetriModel);
                 tetriComponent.OnBeginDragEvent += HandleTetriBeginDrag;
+                tetriComponent.OnClickEvent += HandleTetriClick;
 
                 tetriList.Add(tetriComponent.gameObject);
 
@@ -89,6 +91,11 @@ namespace Controller
         internal void AddTetri(Tetri modelTetri)
         {
             model.AddTetri(modelTetri);
+        }
+        
+        private void HandleTetriClick(Operation.Tetri tetri)
+        {
+            OnTetriClick?.Invoke(tetri);
         }
     }
 }

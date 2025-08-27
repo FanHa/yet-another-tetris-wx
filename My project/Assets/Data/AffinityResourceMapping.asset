@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242c3fd6ddf56b340b615b182ff4b42f, type: 3}
+  m_Name: AffinityResourceMapping
+  m_EditorClassIdentifier: 
+  affinityResources:
+  - affinityType: 1
+    name: "\u706B"
+    description: "\u5F3A\u5316\u706B\u7CFB\u6280\u80FD\u548C\u71C3\u70E7Buff,"
+    icon: {fileID: 0}
+  - affinityType: 2
+    name: "\u51B0"
+    description: "\u5F3A\u5316\u51B0\u7CFB\u6280\u80FD\u548C\u51B0\u51BBbuff"
+    icon: {fileID: 0}
+  - affinityType: 3
+    name: "\u98CE"
+    description: "\u5F3A\u5316\u98CE\u7CFB\u6280\u80FD, \u63D0\u5347\u653B\u51FB\u8DDD\u79BB"
+    icon: {fileID: 0}
+  - affinityType: 4
+    name: "\u751F\u547D"
+    description: "\u5F3A\u5316\u751F\u547D\u7CFB\u6280\u80FD,\u63D0\u5347\u751F\u547D\u503C"
+    icon: {fileID: 0}
+  - affinityType: 5
+    name: "\u5F71"
+    description: "\u5F3A\u5316\u5F71\u7CFB\u6280\u80FD,\u653B\u51FB\u9644\u5E26\u6613\u4F24"
+    icon: {fileID: 0}
+  - affinityType: 6
+    name: "\u8FC5"
+    description: "\u5F3A\u5316\u8FC5\u7CFB\u6280\u80FD,\u63D0\u5347\u79FB\u52A8\u901F\u5EA6"
+    icon: {fileID: 0}

@@ -6,12 +6,13 @@ using UnityEngine.EventSystems;
 
 namespace Operation
 {
-    public class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler,IEndDragHandler
+    public class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
 
         public event Action<Operation.Tetri> OnBeginDragEvent;
         public event Action<Vector3> OnDragEvent;
         public event Action OnEndDragEvent;
+        public event Action<Operation.Tetri> OnClickEvent;
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
         [SerializeField] private GameObject cellPrefab;
@@ -90,7 +91,7 @@ namespace Operation
                 characterSpriteRenderer.gameObject.SetActive(false);
             }
 
-            
+
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -109,6 +110,11 @@ namespace Operation
         public void OnEndDrag(PointerEventData eventData)
         {
             OnEndDragEvent?.Invoke();
+        }
+        
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            OnClickEvent?.Invoke(this);
         }
 
 

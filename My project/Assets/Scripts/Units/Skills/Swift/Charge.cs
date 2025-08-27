@@ -45,7 +45,7 @@ namespace Units.Skills
             chargeProjectile.Init(
                 owner: Owner,
                 target: targetEnemy,
-                speed: Owner.Attributes.MoveSpeed.finalValue,
+                speed: 2f * Owner.Attributes.MoveSpeed.finalValue,
                 chargeDamage: stats.ChargeDamage.Final,
                 sourceSkill: this
             );

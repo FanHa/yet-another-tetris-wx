@@ -104,6 +104,38 @@ namespace Model.Tetri
             return UpgradedTimes < MaxUpgradedTimes;
         }
 
+        public List<Cell> GetAllCells()
+        {
+            var cells = new List<Cell>();
+            for (int i = 0; i < shape.GetLength(0); i++)
+            {
+                for (int j = 0; j < shape.GetLength(1); j++)
+                {
+                    var cell = shape[i, j];
+                    if (cell is not Empty)
+                    {
+                        cells.Add(cell);
+                    }
+                }
+            }
+            return cells;
+        }
+
+        public Dictionary<AffinityType, int> GetAffinityCounts()
+        {
+            var result = new Dictionary<AffinityType, int>();
+            foreach (var cell in GetAllCells())
+            {
+                var affinity = cell.Affinity;
+                if (affinity == AffinityType.None)
+                    continue;
+                if (!result.ContainsKey(affinity))
+                    result[affinity] = 0;
+                result[affinity]++;
+            }
+            return result;
+        }
+
         // internal void Rotate()
         // {
         //     int rows = shape.GetLength(0);

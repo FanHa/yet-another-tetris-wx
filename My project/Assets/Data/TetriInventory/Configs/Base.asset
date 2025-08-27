@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec24568920b65f4c95fb31ff46be2c0, type: 3}
   m_Name: Base
   m_EditorClassIdentifier: 
-  CellTypeIds: 04000000030000000a000000
+  CellTypeIds: 04000000030000000a00000015000000
   CharacterTypeIds: 00000000
