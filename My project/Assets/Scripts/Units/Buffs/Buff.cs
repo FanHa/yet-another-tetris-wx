@@ -9,6 +9,7 @@ namespace Units.Buffs
         protected float duration; // -1为永久
         public float TimeLeft;
         protected Unit sourceUnit { get; set; }
+        public Unit SourceUnit => sourceUnit;
         protected Unit owner;
         protected Units.Skills.Skill sourceSkill { get; set; } // 施加此Buff的技能
         public Units.Skills.Skill SourceSkill => sourceSkill;

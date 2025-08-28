@@ -31,8 +31,9 @@ namespace UI.UnitInfo
         [SerializeField] private Transform buffRoot;
         [SerializeField] private TMPro.TextMeshProUGUI buffDescriptionText;
 
-        [Header("运行时设置")]
-        [SerializeField] private Utils.CameraFollower unitInfoCamera;
+        [Header("实例设置")]
+        [SerializeField] private Utils.CameraFollower buffSourceUnitCamera;
+        [SerializeField] private Utils.CameraFollower currentUnitCamera;
 
         private Units.Unit currentUnit;
 
@@ -146,7 +147,7 @@ namespace UI.UnitInfo
 
         private void RefreshInfo()
         {
-            unitInfoCamera.SetTarget(currentUnit.transform);
+            currentUnitCamera.SetTarget(currentUnit.transform);
 
             RefreshAttributes();
             RefreshBuffInfo();
@@ -157,6 +158,8 @@ namespace UI.UnitInfo
         public void ShowBuffDescription(Units.Buffs.Buff buff)
         {
             buffDescriptionText.text = "<b>" + buff.Name() + "</b>: " + buff.Description();
+            buffSourceUnitCamera.SetTarget(buff.SourceUnit.transform);
+            
         }
         public void ShowSkillDescription(Units.Skills.Skill skill)
         {
