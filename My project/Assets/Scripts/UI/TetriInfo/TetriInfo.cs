@@ -13,6 +13,7 @@ namespace UI.TetriInfo
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         [SerializeField] private AffinityResourceMapping affinityResourceMapping;
         [SerializeField] private ColorConfig affinityColorConfig;
+        [SerializeField] private GameObject affinityObject; 
 
         [Header("Skill")]
         [SerializeField] private Image skillIcon;
@@ -58,20 +59,30 @@ namespace UI.TetriInfo
             skillNameText.text = mainCell.Name();
             skillDescriptionText.text = mainCell.Description();
 
-            Dictionary<AffinityType, int> affinityCounts = tetri.GetAffinityCounts();
-            string affinityDesc = "";
-            foreach (var kvp in affinityCounts)
+            if (tetri.Type == Model.Tetri.Tetri.TetriType.Character)
             {
-                var res = affinityResourceMapping.GetResource(kvp.Key);
-                var colorEntry = affinityColorConfig.GetColorEntry(kvp.Key);
-                affinityIcon.color = colorEntry.maskColor;
-                var outline = affinityIcon.GetComponent<UnityEngine.UI.Outline>();
-                outline.effectColor = colorEntry.borderColor;
-
-                affinityDesc += $"{res.name}: {res.description} ( X {kvp.Value} )\n";
-                break;
+                affinityObject.SetActive(false);
             }
-            affinityDescriptionText.text = affinityDesc.TrimEnd('\n');
+            else
+            {
+                affinityObject.SetActive(true);
+                Dictionary<AffinityType, int> affinityCounts = tetri.GetAffinityCounts();
+                string affinityDesc = "";
+                foreach (var kvp in affinityCounts)
+                {
+                    var res = affinityResourceMapping.GetResource(kvp.Key);
+                    var colorEntry = affinityColorConfig.GetColorEntry(kvp.Key);
+                    affinityIcon.color = colorEntry.maskColor;
+                    var outline = affinityIcon.GetComponent<UnityEngine.UI.Outline>();
+                    outline.effectColor = colorEntry.borderColor;
+
+                    affinityDesc += $"{res.name}: {res.description} ( X {kvp.Value} )\n";
+                    break;
+                }
+                affinityDescriptionText.text = affinityDesc.TrimEnd('\n');
+            }
+
+            
         }
 
         public void HideTetriInfo()
