@@ -8,10 +8,12 @@ namespace UI.UnitInfo
         [SerializeField] protected TMPro.TextMeshProUGUI attributeValueText;
 
         protected Units.Attribute attribute;
-        protected string finalColor = "#FFD700"; // 金色
-        protected string baseColor = "#FFFFFF";  // 白色
-        protected string flatColor = "#00FF00";  // 绿色
-        protected string percentColor = "#FFA500"; // 橙色
+
+        [Header("颜色配置")]
+        [SerializeField] private Color baseColor;
+        [SerializeField] private Color positiveColor; // 用于正加成
+        [SerializeField] private Color negativeColor; // 用于负加成
+
 
         void Update()
         {
@@ -35,12 +37,29 @@ namespace UI.UnitInfo
             float percentSum = 0f;
             foreach (var v in attribute.PercentageModifiers)
                 percentSum += v;
+            
+            float percentValue = (baseValue + flatSum) * (percentSum / 100f);
 
-            string valueText = $"<color={finalColor}>{attribute.finalValue:F0}</color> [<color={baseColor}>{baseValue:F0}</color>";
+            Color finalColor;
+            if (attribute.finalValue > baseValue)
+                finalColor = positiveColor;
+            else if (attribute.finalValue < baseValue)
+                finalColor = negativeColor;
+            else
+                finalColor = baseColor;
+
+            string valueText = $"<color=#{ColorUtility.ToHtmlStringRGB(finalColor)}>{attribute.finalValue:F0}</color> [<color=#{ColorUtility.ToHtmlStringRGB(baseColor)}>{baseValue:F0}</color>";
+
             if (flatSum != 0f)
-                valueText += $" +<color={flatColor}>{flatSum:F0}</color>";
-            if (percentSum != 0f)
-                valueText += $" +<color={percentColor}>{percentSum:F0}%</color>";
+            {
+                var color = flatSum > 0 ? positiveColor : negativeColor;
+                valueText += $" <color=#{ColorUtility.ToHtmlStringRGB(color)}>{(flatSum > 0 ? "+" : "")}{flatSum:F0}</color>";
+            }
+            if (percentValue != 0f)
+            {
+                var color = percentValue > 0 ? positiveColor : negativeColor;
+                valueText += $" <color=#{ColorUtility.ToHtmlStringRGB(color)}>{(percentValue > 0 ? "+" : "")}{percentValue:F0}({percentSum:F0}%)</color>";
+            }
             valueText += "]";
 
             attributeValueText.text = valueText;
