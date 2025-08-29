@@ -71,25 +71,26 @@ namespace UI.UnitInfo
 
         private void RefreshBuffInfo()
         {
+            buffDescriptionText.text = ""; // 清空原有内容
             if (currentUnit == null) return;
 
             foreach (Transform child in buffRoot)
                 Destroy(child.gameObject);
 
             List<Units.Buffs.Buff> buffs = currentUnit.GetActiveBuffs();
-            if (buffs.Count > 0)
+
+            foreach (Units.Buffs.Buff buff in buffs)
             {
-                foreach (Units.Buffs.Buff buff in buffs)
-                {
-                    UI.UnitInfo.Buff buffInfo = Instantiate(buffInfoPrefab, buffRoot);
-                    buffInfo.SetBuff(buff);
-                    buffInfo.OnBuffClicked += ShowBuffDescription;
-                }
+                UI.UnitInfo.Buff buffInfo = Instantiate(buffInfoPrefab, buffRoot);
+                buffInfo.SetBuff(buff);
+                buffInfo.OnBuffClicked += ShowBuffDescription;
             }
+            
         }
 
         private void RefreshSkillInfo()
         {
+            skillDescriptionText.text = ""; // 清空原有内容
             foreach (Transform child in skillRoot)
                 Destroy(child.gameObject);
             IReadOnlyList<Units.Skills.Skill> skills = currentUnit.GetSkills();
