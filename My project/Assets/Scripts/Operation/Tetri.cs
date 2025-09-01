@@ -16,9 +16,11 @@ namespace Operation
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
         [SerializeField] private GameObject cellPrefab;
-        [SerializeField] private SpriteRenderer characterSpriteRenderer;
+        // [SerializeField] private SpriteRenderer characterSpriteRenderer;
+        [SerializeField] private Transform characterRoot; 
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         [SerializeField] private Transform cellsRoot;
+        [SerializeField] private Units.UnitFactory unitFactory;
         private Camera mainCamera;
 
         void Awake()
@@ -82,16 +84,15 @@ namespace Operation
 
             if (modelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
             {
-                if (mainCell != null)
-                {
-                    characterSpriteRenderer.sprite = tetriCellTypeResourceMapping.GetSprite(mainCell);
-                    characterSpriteRenderer.gameObject.SetActive(true);
-                    cellsRoot.gameObject.SetActive(false);
-                }
+                var unit = unitFactory.CreateUnit(mainCell);
+                characterRoot.gameObject.SetActive(true);
+                unit.transform.SetParent(characterRoot, false);
+                cellsRoot.gameObject.SetActive(false);
+
             }
             else
             {
-                characterSpriteRenderer.gameObject.SetActive(false);
+                characterRoot.gameObject.SetActive(false);
             }
 
 

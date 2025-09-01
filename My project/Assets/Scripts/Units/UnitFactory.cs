@@ -36,7 +36,7 @@ namespace Units
                 cellCounts[cell.Affinity]++;
             }
             unit.SetCellAffinity(cellCounts);
-            
+
             foreach (Units.Skills.Skill skill in unit.GetSkills())
             {
                 if (skill is Units.Skills.IPassiveSkill passive)
@@ -48,6 +48,12 @@ namespace Units
             unit.Attributes.RefillHealthToMax();
 
             return unit;
+        }
+        
+        public Units.Unit CreateUnit(Model.Tetri.Character characterCell)
+        {
+            var item = new Model.UnitInventoryItem(characterCell, new List<Model.Tetri.Cell>());
+            return CreateUnit(item);
         }
     }
 }
