@@ -41,12 +41,12 @@ namespace View
             int perRow = 3;
             float size = 5f;
             float spacing = 0.5f;
-            float cellSize = size + spacing;
+            float elementSize = size + spacing;
 
             int row = index / perRow;
             int col = index % perRow;
 
-            return new Vector3(col * cellSize, -row * cellSize, 0);
+            return new Vector3(col * elementSize, -row * elementSize, 0);
         }
     }
 }

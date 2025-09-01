@@ -66,12 +66,24 @@ namespace Controller
 
         public bool TryPlaceTetri(Model.Tetri.Tetri modelTetri, Vector3 worldPosition)
         {
-            // 将世界坐标转换为网格坐标
+            // 先将世界坐标转换为操作表的本地坐标
             Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
-            Vector2Int gridPosition = new Vector2Int(
-                Mathf.FloorToInt((localPosition.x + width / 2f - 0.5f) / cellSize),
-                Mathf.FloorToInt((height / 2f - localPosition.y - 0.5f) / cellSize)
-            );
+            localPosition.x -= 1.5f * cellSize;
+            localPosition.y += 1.5f * cellSize;
+
+            // 计算网格左上角 (0,0) 在本地坐标中的位置
+            Vector3 gridOriginLocal = new Vector3(-width / 2f + 0.5f, height / 2f - 0.5f, 0);
+
+            // 以左上角为基准，计算 localPosition 到 gridOriginLocal 的偏移
+            Vector3 offset = localPosition - gridOriginLocal;
+
+
+
+            // 转换为网格坐标
+            int gridX = Mathf.FloorToInt(offset.x / cellSize);
+            int gridY = Mathf.FloorToInt(-offset.y / cellSize); // Y轴向下为正
+
+            Vector2Int gridPosition = new Vector2Int(gridX, gridY);
 
             // 调用 Model 的 TryPlaceTetri 方法
             return model.TryPlaceTetri(modelTetri, gridPosition);

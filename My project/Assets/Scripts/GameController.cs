@@ -160,14 +160,12 @@ public class GameController : MonoBehaviour
             float cellSize = 1f;   // 每个格子的单位大小为 1
             Vector3 newVector;
 
-            float snappedX = Mathf.Round((newPosition.x - tablePosition.x) / cellSize) * cellSize + tablePosition.x + cellSize / 2;
-            float snappedY = Mathf.Round((newPosition.y - tablePosition.y) / cellSize) * cellSize + tablePosition.y - cellSize / 2;
+            float snappedX = Mathf.Round((newPosition.x - tablePosition.x) / cellSize) * cellSize + tablePosition.x ;
+            float snappedY = Mathf.Round((newPosition.y - tablePosition.y) / cellSize) * cellSize + tablePosition.y ;
 
             // 返回吸附后的坐标
             newVector = new Vector3(snappedX, snappedY, newPosition.z);
-
-            newVector.x -= 1 * cellSize;
-            newVector.y += 4 * cellSize;
+            newVector.y += 2 * cellSize;
             // 更新影子物体的位置
             currentShadowTetri.transform.position = newVector;
         }

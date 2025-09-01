@@ -73,7 +73,7 @@ namespace Controller
             foreach (var tetriModel in model.UsableTetriList)
             {
                 // 创建 Tetri 实例
-                var tetriComponent = tetriFactory.CreateTetri(tetriModel);
+                Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetriModel);
                 tetriComponent.OnBeginDragEvent += HandleTetriBeginDrag;
                 tetriComponent.OnClickEvent += HandleTetriClick;
 

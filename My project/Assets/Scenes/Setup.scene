@@ -2504,6 +2504,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1152919690617221279, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152919690617221279, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2346342588821836393, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
       propertyPath: m_Name
       value: TetriInventory

@@ -39,6 +39,8 @@ namespace View
                 Destroy(child.gameObject);
             }
 
+            Vector2 leftTopLocal = new Vector2(-width / 2f + 0.5f, height / 2f - 0.5f);
+
             foreach (var placed in placedTetris)
             {
 
@@ -46,14 +48,9 @@ namespace View
                 var tetriComponent = itemObj.GetComponent<Operation.Tetri>();
                 tetriComponent.Initialize(placed.Tetri);
 
-                // 计算偏移后的位置
-                float offsetX = -5 * cellSize + (cellSize / 2); // 向左偏移 5 个单位
-                float offsetY = 5 * cellSize - (cellSize / 2);  // 向上偏移 5 个单位
-                itemObj.transform.localPosition = new Vector3(
-                    placed.Position.x * cellSize + offsetX,
-                    -placed.Position.y * cellSize + offsetY,
-                    0
-                );
+                float x = leftTopLocal.x + (placed.Position.x + 1.5f) * cellSize;
+                float y = leftTopLocal.y - (placed.Position.y + 1.5f) * cellSize;
+                itemObj.transform.localPosition = new Vector3(x, y, 0);
                 OnItemCreated?.Invoke(tetriComponent);
 
             }

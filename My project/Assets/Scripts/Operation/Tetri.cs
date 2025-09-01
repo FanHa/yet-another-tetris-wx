@@ -36,6 +36,9 @@ namespace Operation
             // 存储所有Cell对象，便于后续设置border
             var cellObjs = new Operation.Cell[rows, cols];
 
+            float offsetX = (rows - 1) / 2f; // 对于4x4就是1.5
+            float offsetY = (cols - 1) / 2f; // 对于4x4就是1.5
+
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
@@ -44,8 +47,8 @@ namespace Operation
                     if (cell is not Model.Tetri.Empty)
                     {
                         GameObject cellObj = Instantiate(cellPrefab, this.cellsRoot);
-                        float localX = i;
-                        float localY = -j;
+                        float localX = i - offsetX;
+                        float localY = -j + offsetY;
                         cellObj.transform.localPosition = new Vector3(localX, localY, 0);
 
                         var cellComp = cellObj.GetComponent<Operation.Cell>();
