@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Model.Tetri;
 using UnityEngine;
@@ -7,13 +8,15 @@ namespace UI.TetriInfo
 {
     public class TetriInfo : MonoBehaviour
     {
+        public event Action<Operation.Tetri> OnRotateTetriClicked;
         [SerializeField] private Operation.TetriFactory tetriFactory;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button closeButton;
+        [SerializeField] private Button rotateButton;
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         [SerializeField] private AffinityResourceMapping affinityResourceMapping;
         [SerializeField] private ColorConfig affinityColorConfig;
-        [SerializeField] private GameObject affinityObject; 
+        [SerializeField] private GameObject affinityObject;
 
         [Header("Skill")]
         [SerializeField] private Image skillIcon;
@@ -27,11 +30,12 @@ namespace UI.TetriInfo
         [Header("实例中引用")]
         [SerializeField] private Camera tetriCamera;
 
-        private GameObject currentTetriObj;
+        private Operation.Tetri currentTetri;
 
         private void Awake()
         {
             closeButton.onClick.AddListener(HideTetriInfo);
+            rotateButton.onClick.AddListener(HandleRotateButtonClicked);
         }
 
         private void Start()
@@ -44,13 +48,13 @@ namespace UI.TetriInfo
         {
             panel.SetActive(true);
 
-            if (currentTetriObj != null)
+            if (currentTetri != null)
             {
-                Destroy(currentTetriObj);
-                currentTetriObj = null;
+                Destroy(currentTetri.gameObject);
+                currentTetri = null;
             }
-            currentTetriObj = tetriFactory.CreateTetri(tetri).gameObject;
-            currentTetriObj.transform.SetPositionAndRotation(tetriCamera.transform.position + tetriCamera.transform.forward * 5f, Quaternion.identity);
+            currentTetri = tetriFactory.CreateTetri(tetri);
+            currentTetri.transform.SetPositionAndRotation(tetriCamera.transform.position + tetriCamera.transform.forward * 5f, Quaternion.identity);
 
             Model.Tetri.Cell mainCell = tetri.GetMainCell();
             Sprite sprite = tetriCellTypeResourceMapping.GetSprite(mainCell);
@@ -82,18 +86,23 @@ namespace UI.TetriInfo
                 affinityDescriptionText.text = affinityDesc.TrimEnd('\n');
             }
 
-            
+
         }
 
         public void HideTetriInfo()
         {
 
-            if (currentTetriObj != null)
+            if (currentTetri != null)
             {
-                Destroy(currentTetriObj);
-                currentTetriObj = null;
+                Destroy(currentTetri.gameObject);
+                currentTetri = null;
             }
             panel.SetActive(false);
+        }
+
+        private void HandleRotateButtonClicked()
+        {
+            OnRotateTetriClicked?.Invoke(currentTetri);
         }
     }
 }

@@ -160,6 +160,32 @@ namespace Model.Tetri
         //     }
         // }
 
+        public void Rotate()
+        {
+            int rows = shape.GetLength(0);
+            int cols = shape.GetLength(1);
+
+            var tempShape = new Serializable2DArray<Cell>(rows, cols);
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    tempShape[i, j] = shape[i, j];
+                }
+            }
+
+            // 顺时针旋转90度
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    shape[j, rows - 1 - i] = tempShape[i, j];
+                }
+            }
+
+            OnDataChanged?.Invoke();
+        }
+
         public void UpgradeCoreCell()
         {
             // todo 判断tetri是不是在自己维护的列表中

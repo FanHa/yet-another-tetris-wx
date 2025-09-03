@@ -15,6 +15,7 @@
 - 与一个敌人交换某个属性(一次性)
 - Cell类型考虑做成ScrptableObject
 - 优化TrainGround 设置Model.Cell 并创建的流程
+- 一个Cell可以拥有多个Affinity
 
 ### 📊 UX / UI
 

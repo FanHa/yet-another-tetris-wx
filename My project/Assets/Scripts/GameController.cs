@@ -44,11 +44,19 @@ public class GameController : MonoBehaviour
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
         unitInventoryController.OnUnitClicked += HandleUnitClicked;
+
+        tetriInfo.OnRotateTetriClicked += HandleRotateTetri;
     }
 
     private void HandleUnitClicked(Unit unit)
     {
         unitInfo.ShowUnitInfo(unit);
+    }
+
+    private void HandleRotateTetri(Operation.Tetri tetri)
+    {
+        tetri.ModelTetri.Rotate();
+        tetriInfo.ShowTetriInfo(tetri.ModelTetri);
     }
 
     private void HandleTetriClick(Operation.Tetri tetri)
