@@ -11,7 +11,7 @@ namespace Units
         public Transform BattlefieldMaxBounds;
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
-        private Unit owner; 
+        private Unit owner;
         public bool IsHitAndRun = false;
 
         public void Initialize(Attributes attributes, Controller.UnitManager unitManager, Unit owner)
@@ -41,11 +41,15 @@ namespace Units
             return (minBounds, maxBounds);
         }
 
-        public void ExecuteMove(Transform closestEnemy)
+        public void ExecuteMove(Transform targetEnemy)
         {
-            if (closestEnemy == null) return;
+            if (targetEnemy == null)
+            {
+                ResolveCurrentOverlap();
+                return;
+            }
 
-            float distance = Vector2.Distance(transform.position, closestEnemy.position);
+            float distance = Vector2.Distance(transform.position, targetEnemy.position);
 
             Vector2 direction;
             if (IsHitAndRun)
@@ -55,12 +59,12 @@ namespace Units
                 if (distance < desiredDistance)
                 {
                     // 太近了，远离敌人
-                    direction = (transform.position - closestEnemy.position).normalized;
+                    direction = (transform.position - targetEnemy.position).normalized;
                 }
                 else if (distance > attributes.AttackRange.finalValue)
                 {
                     // 太远了，靠近敌人
-                    direction = (closestEnemy.position - transform.position).normalized;
+                    direction = (targetEnemy.position - transform.position).normalized;
                 }
                 else
                 {
@@ -73,9 +77,10 @@ namespace Units
                 // 原计划：靠近敌人
                 if (distance <= attributes.AttackRange.finalValue)
                 {
+                    ResolveCurrentOverlap();
                     return;
                 }
-                direction = (closestEnemy.position - transform.position).normalized;
+                direction = (targetEnemy.position - transform.position).normalized;
             }
 
             if (direction != Vector2.zero)
@@ -86,6 +91,11 @@ namespace Units
 
                 AdjustLookDirection(adjustedDirection);
                 ClampPositionToBattlefield();
+            }
+            else
+            {
+                // 静止时也要检测并推开重叠
+                ResolveCurrentOverlap();
             }
         }
 
@@ -105,36 +115,36 @@ namespace Units
 
         private Vector2 AdjustDirectionToAvoidUnits(Vector2 originalDirection)
         {
-            
+
 
             Vector2 avoidanceVector = Vector2.zero;
             int avoidanceCount = 0;
 
             var allies = unitManager.FindAlliesInRange(owner, minDistance, includeSelf: false);
-                var enemies = unitManager.FindEnemiesInRange(owner, minDistance);
+            var enemies = unitManager.FindEnemiesInRange(owner, minDistance);
 
-                if (allies != null)
+            if (allies != null)
+            {
+                foreach (var other in allies)
                 {
-                    foreach (var other in allies)
-                    {
-                        if (other == null || !other.IsActive) continue;
-                        Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
-                        float dist = Mathf.Max(toOther.magnitude, 0.1f);
-                        avoidanceVector += toOther.normalized / dist;
-                        avoidanceCount++;
-                    }
+                    if (other == null || !other.IsActive) continue;
+                    Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
+                    float dist = Mathf.Max(toOther.magnitude, 0.1f);
+                    avoidanceVector += toOther.normalized / dist;
+                    avoidanceCount++;
                 }
-                if (enemies != null)
+            }
+            if (enemies != null)
+            {
+                foreach (var other in enemies)
                 {
-                    foreach (var other in enemies)
-                    {
-                        if (other == null || !other.IsActive) continue;
-                        Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
-                        float dist = Mathf.Max(toOther.magnitude, 0.1f);
-                        avoidanceVector += toOther.normalized / dist;
-                        avoidanceCount++;
-                    }
+                    if (other == null || !other.IsActive) continue;
+                    Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
+                    float dist = Mathf.Max(toOther.magnitude, 0.1f);
+                    avoidanceVector += toOther.normalized / dist;
+                    avoidanceCount++;
                 }
+            }
             if (avoidanceCount > 0)
             {
                 // 平均避让方向
@@ -155,6 +165,23 @@ namespace Units
         {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 计算角度
             transform.rotation = Quaternion.Euler(0, 0, angle - 90f); // 设置自身旋转
+        }
+        
+        private void ResolveCurrentOverlap()
+        {
+            var allUnits = unitManager.GetAllUnits();
+            foreach (var other in allUnits)
+            {
+                if (other == owner || !other.IsActive) continue;
+                float actualDist = Vector2.Distance(transform.position, other.transform.position);
+                if (actualDist < minDistance && actualDist > 0.01f)
+                {
+                    Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
+                    float pushDist = minDistance - actualDist;
+                    transform.position += (Vector3)(dir * pushDist * 0.5f);
+                    other.transform.position -= (Vector3)(dir * pushDist * 0.5f);
+                }
+            }
         }
     }
 }

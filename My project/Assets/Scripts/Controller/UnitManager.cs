@@ -230,5 +230,13 @@ namespace Controller
                 .OrderByDescending(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude)
                 .FirstOrDefault();
         }
+
+        public List<Unit> GetAllUnits()
+        {
+            // 返回所有阵营的活动单位
+            return factionA.Concat(factionB)
+                .Where(u => u != null && u.IsActive)
+                .ToList();
+        }
     }
 }
