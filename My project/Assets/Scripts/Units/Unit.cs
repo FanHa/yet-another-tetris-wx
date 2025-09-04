@@ -18,7 +18,7 @@ namespace Units
     public class Unit : MonoBehaviour, IPointerClickHandler
     {
         public Attributes Attributes;
-        private Units.Buffs.BuffHandler BuffHandler;// Buff管理器
+        private Units.Buffs.BuffHandler buffHandler;// Buff管理器
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
@@ -69,10 +69,15 @@ namespace Units
 
             healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
-            BuffHandler = GetComponent<Units.Buffs.BuffHandler>();
+            buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
             
+        }
+
+        private void Start()
+        {
+            buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
         }
 
         // Update is called once per frame
@@ -108,7 +113,7 @@ namespace Units
         public void Deactivate()
         {
             skillHandler.Deactivate(); // 如有需要
-            BuffHandler.GetActiveBuffs().ToList().ForEach(buff => BuffHandler.RemoveBuff(buff)); // 清理所有Buff
+            buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
             isActive = false;
         }
         public void SetHitAndRun(bool enable)
@@ -171,13 +176,13 @@ namespace Units
 
         public void AddBuff(Units.Buffs.Buff buff)
         {
-            BuffHandler.ApplyBuff(buff);
+            buffHandler.ApplyBuff(buff);
             BuffAdded?.Invoke(buff); // 触发Buff添加事件
         }
 
         public void RemoveBuff(Units.Buffs.Buff buff)
         {
-            BuffHandler.RemoveBuff(buff);
+            buffHandler.RemoveBuff(buff);
             BuffRemoved?.Invoke(buff); // 触发Buff移除事件
         }
 
@@ -280,7 +285,7 @@ namespace Units
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)
         {
-            List<Buff> buffs = BuffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
+            List<Buff> buffs = buffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
             foreach (Buff buff in buffs)
             {
                 if (buff is IAttackHitTrigger attackBuff)
@@ -292,7 +297,7 @@ namespace Units
 
         public void TakeHit(Unit attacker, ref Damages.Damage damage)
         {
-            List<Buff> buffs = BuffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
+            List<Buff> buffs = buffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
             foreach (Buff buff in buffs)
             {
                 if (buff is ITakeHitTrigger takeHitTrigger)
@@ -306,7 +311,7 @@ namespace Units
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
-            var buffs = BuffHandler.GetActiveBuffs().ToList();
+            var buffs = buffHandler.GetActiveBuffs().ToList();
 
             Attributes.TakeDamage(damageReceived.Value);
             foreach (var buff in buffs)
@@ -356,7 +361,7 @@ namespace Units
 
         public List<Units.Buffs.Buff> GetActiveBuffs()
         {
-            return BuffHandler.GetActiveBuffs().ToList();
+            return buffHandler.GetActiveBuffs().ToList();
         }        
     }
 }
