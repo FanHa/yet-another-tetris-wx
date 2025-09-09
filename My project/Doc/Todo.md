@@ -33,6 +33,7 @@
 - Unit战斗时的能量获取优化
 - 是否需要伤害随着攻击距离而衰减
 - 是否需要场地地形
+- Attribute种的百分比加成可以分类化,最终值 = (base + flat) *percentClass1* percentClass2 * ....
 
 ### 操作台
 
