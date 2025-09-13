@@ -17,6 +17,7 @@ namespace UI.TetriInfo
         [SerializeField] private AffinityResourceMapping affinityResourceMapping;
         [SerializeField] private ColorConfig affinityColorConfig;
         [SerializeField] private GameObject affinityObject;
+        [SerializeField] private GameObject blocker;
 
         [Header("Skill")]
         [SerializeField] private Image skillIcon;
@@ -41,12 +42,14 @@ namespace UI.TetriInfo
         private void Start()
         {
             panel.SetActive(false);
+            blocker.SetActive(false);
         }
 
 
         public void ShowTetriInfo(Model.Tetri.Tetri tetri)
         {
             panel.SetActive(true);
+            blocker.SetActive(true);
 
             if (currentTetri != null)
             {
@@ -98,6 +101,7 @@ namespace UI.TetriInfo
                 currentTetri = null;
             }
             panel.SetActive(false);
+            blocker.SetActive(false);
         }
 
         private void HandleRotateButtonClicked()
