@@ -16,12 +16,12 @@ namespace Operation
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
         [SerializeField] private GameObject cellPrefab;
-        // [SerializeField] private SpriteRenderer characterSpriteRenderer;
         [SerializeField] private Transform characterRoot; 
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         [SerializeField] private Transform cellsRoot;
         [SerializeField] private Units.UnitFactory unitFactory;
         private Camera mainCamera;
+        private Units.Unit previewUnit;
 
         void Awake()
         {
@@ -84,18 +84,39 @@ namespace Operation
 
             if (modelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
             {
-                var unit = unitFactory.CreateUnit(mainCell);
+                if (previewUnit != null)
+                {
+                    previewUnit.OnClicked -= HandlePreviewUnitClicked;
+                    Destroy(previewUnit.gameObject);
+                    previewUnit = null;
+                }
+
+                previewUnit = unitFactory.CreateUnit(mainCell);
+                previewUnit.OnClicked += HandlePreviewUnitClicked;
+
                 characterRoot.gameObject.SetActive(true);
-                unit.transform.SetParent(characterRoot, false);
+                previewUnit.transform.SetParent(characterRoot, false);
                 cellsRoot.gameObject.SetActive(false);
 
             }
             else
             {
                 characterRoot.gameObject.SetActive(false);
+                cellsRoot.gameObject.SetActive(true);
+
+                // 非角色类型确保没有悬挂订阅
+                if (previewUnit != null)
+                {
+                    previewUnit.OnClicked -= HandlePreviewUnitClicked;
+                    Destroy(previewUnit.gameObject);
+                    previewUnit = null;
+                }
             }
+        }
 
-
+        private void HandlePreviewUnitClicked(Units.Unit _)
+        {
+            TriggerClick(); // 走统一点击流程
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -117,6 +138,11 @@ namespace Operation
         }
         
         public void OnPointerClick(PointerEventData eventData)
+        {
+            TriggerClick();
+        }
+
+        private void TriggerClick()
         {
             OnClickEvent?.Invoke(this);
         }
