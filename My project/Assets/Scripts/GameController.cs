@@ -55,13 +55,14 @@ public class GameController : MonoBehaviour
 
     private void HandleRotateTetri(Operation.Tetri tetri)
     {
+        // TODO 这里调用Rotate后, view的可能试图会重建,此时Operation.Tetri可能已经为null了
         tetri.ModelTetri.Rotate();
-        tetriInfo.ShowTetriInfo(tetri.ModelTetri);
+        tetriInfo.ShowTetriInfo(tetri);
     }
 
     private void HandleTetriClick(Operation.Tetri tetri)
     {
-        tetriInfo.ShowTetriInfo(tetri.ModelTetri);
+        tetriInfo.ShowTetriInfo(tetri);
     }
 
     private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)

@@ -30,7 +30,31 @@ namespace Operation
         public void Initialize(Model.Tetri.Tetri modelTetri)
         {
             ModelTetri = modelTetri;
-            var shape = modelTetri.Shape;
+            ModelTetri.OnRotated += OnModelRotated;
+            RebuildFromModel();
+        }
+
+        private void OnDestroy()
+        {
+            if (ModelTetri != null)
+                ModelTetri.OnRotated -= OnModelRotated;
+
+            if (previewUnit != null)
+            {
+                previewUnit.OnClicked -= HandlePreviewUnitClicked;
+            }
+        }
+
+        private void OnModelRotated()
+        {
+            // 仅根据当前模型重建显示
+            RebuildFromModel();
+        }
+
+        private void RebuildFromModel()
+        {
+            ClearCells();
+            var shape = ModelTetri.Shape;
             int rows = shape.GetLength(0);
             int cols = shape.GetLength(1);
 
@@ -82,7 +106,7 @@ namespace Operation
                 }
             }
 
-            if (modelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
+            if (ModelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
             {
                 if (previewUnit != null)
                 {
@@ -113,6 +137,16 @@ namespace Operation
                 }
             }
         }
+
+        private void ClearCells()
+        {
+            if (cellsRoot == null) return;
+            for (int i = cellsRoot.childCount - 1; i >= 0; i--)
+            {
+                Destroy(cellsRoot.GetChild(i).gameObject);
+            }
+        }
+
 
         private void HandlePreviewUnitClicked(Units.Unit _)
         {

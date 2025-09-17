@@ -76,7 +76,6 @@ namespace Controller
                 Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetriModel);
                 tetriComponent.OnBeginDragEvent += HandleTetriBeginDrag;
                 tetriComponent.OnClickEvent += HandleTetriClick;
-
                 tetriList.Add(tetriComponent.gameObject);
 
             }

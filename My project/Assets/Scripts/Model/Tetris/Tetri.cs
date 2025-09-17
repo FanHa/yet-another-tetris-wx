@@ -8,6 +8,7 @@ namespace Model.Tetri
     public class Tetri
     {
         public event Action OnDataChanged;
+        public event Action OnRotated;
         public enum TetriType
         {
             Character, // 角色类型
@@ -136,29 +137,6 @@ namespace Model.Tetri
             return result;
         }
 
-        // internal void Rotate()
-        // {
-        //     int rows = shape.GetLength(0);
-        //     int cols = shape.GetLength(1);
-
-        //     var tempShape = new Serializable2DArray<Cell>(rows, cols);
-        //     for (int i = 0; i < rows; i++)
-        //     {
-        //         for (int j = 0; j < cols; j++)
-        //         {
-        //             tempShape[i, j] = shape[i, j];
-        //         }
-        //     }
-
-        //     // 就地旋转
-        //     for (int i = 0; i < rows; i++)
-        //     {
-        //         for (int j = 0; j < cols; j++)
-        //         {
-        //             shape[j, rows - 1 - i] = tempShape[i, j];
-        //         }
-        //     }
-        // }
 
         public void Rotate()
         {
@@ -183,7 +161,7 @@ namespace Model.Tetri
                 }
             }
 
-            OnDataChanged?.Invoke();
+            OnRotated?.Invoke();
         }
 
         public void UpgradeCoreCell()

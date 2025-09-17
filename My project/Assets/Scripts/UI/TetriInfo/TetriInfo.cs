@@ -30,7 +30,7 @@ namespace UI.TetriInfo
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
 
         [Header("实例中引用")]
-        [SerializeField] private Camera tetriCamera;
+        [SerializeField] private Camera tetriInfoCamera;
 
         private Operation.Tetri currentTetri;
 
@@ -49,38 +49,34 @@ namespace UI.TetriInfo
         }
 
 
-        public void ShowTetriInfo(Model.Tetri.Tetri tetri)
+        public void ShowTetriInfo(Operation.Tetri tetriComponent)
         {
+            currentTetri = tetriComponent;
             blocker.SetActive(true);
             closeButton.gameObject.SetActive(true);
-            if (currentTetri != null)
-            {
-                Destroy(currentTetri.gameObject);
-                currentTetri = null;
-            }
-            bool isCharacter = tetri.Type == Model.Tetri.Tetri.TetriType.Character;
+
+            bool isCharacter = tetriComponent.ModelTetri.Type == Model.Tetri.Tetri.TetriType.Character;
             normalTetriPanel.SetActive(!isCharacter);
             characterTetriPanel.SetActive(isCharacter);
-
+            Vector3 offset = new Vector3(0f, 0f, -10f);
+            tetriInfoCamera.transform.position = tetriComponent.transform.position + offset;
             if (isCharacter)
-                ShowCharacterTetri(tetri);
+                ShowCharacterTetri(tetriComponent);
             else
-                ShowNormalTetri(tetri);
+                ShowNormalTetri(tetriComponent);
         }
 
-        private void ShowCharacterTetri(Model.Tetri.Tetri tetri)
+        private void ShowCharacterTetri(Operation.Tetri tetriComponent)
         {
             // 角色面板占位，后续扩展
             // affinityObject.SetActive(false);
         }
 
-        private void ShowNormalTetri(Model.Tetri.Tetri tetri)
+        private void ShowNormalTetri(Operation.Tetri tetriComponent)
         {
             // 原 normal 面板逻辑
             affinityObject.SetActive(true);
-
-            currentTetri = tetriFactory.CreateTetri(tetri);
-            currentTetri.transform.SetPositionAndRotation(tetriCamera.transform.position + tetriCamera.transform.forward * 5f, Quaternion.identity);
+            var tetri = tetriComponent.ModelTetri;
 
             Model.Tetri.Cell mainCell = tetri.GetMainCell();
             Sprite sprite = tetriCellTypeResourceMapping.GetSprite(mainCell);
@@ -110,12 +106,6 @@ namespace UI.TetriInfo
 
         public void HideTetriInfo()
         {
-
-            if (currentTetri != null)
-            {
-                Destroy(currentTetri.gameObject);
-                currentTetri = null;
-            }
             normalTetriPanel.SetActive(false);
             characterTetriPanel.SetActive(false);
             blocker.SetActive(false);
