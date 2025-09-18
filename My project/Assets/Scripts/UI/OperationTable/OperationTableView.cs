@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Model;
+using Model.Tetri;
 using UnityEngine;
 
 namespace View
@@ -16,6 +17,7 @@ namespace View
         [SerializeField] private float cellSize;
         [SerializeField] private int width;
         [SerializeField] private int height;
+        [SerializeField] private Operation.TetriFactory tetriFactory;
         public void Initialize()
         {
             Vector2 origin = new Vector2(-width / 2f + 0.5f, -height / 2f + 0.5f);
@@ -43,14 +45,14 @@ namespace View
 
             foreach (var placed in placedTetris)
             {
-
-                GameObject itemObj = Instantiate(TetriPrefab, placedTetrisRoot);
-                var tetriComponent = itemObj.GetComponent<Operation.Tetri>();
+                // todo 这里调用工厂的方法来创建
+                var tetriComponent = tetriFactory.CreateTetri(placed.Tetri);
+                tetriComponent.transform.SetParent(placedTetrisRoot, false);
                 tetriComponent.Initialize(placed.Tetri);
 
                 float x = leftTopLocal.x + (placed.Position.x + 1.5f) * cellSize;
                 float y = leftTopLocal.y - (placed.Position.y + 1.5f) * cellSize;
-                itemObj.transform.localPosition = new Vector3(x, y, 0);
+                tetriComponent.transform.localPosition = new Vector3(x, y, 0);
                 OnItemCreated?.Invoke(tetriComponent);
 
             }

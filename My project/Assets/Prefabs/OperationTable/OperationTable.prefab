@@ -72,6 +72,7 @@ MonoBehaviour:
   cellSize: 1
   width: 10
   height: 10
+  tetriFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
 --- !u!1 &3259663312759383123
 GameObject:
   m_ObjectHideFlags: 0
