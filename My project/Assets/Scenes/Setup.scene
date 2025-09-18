@@ -3145,6 +3145,10 @@ PrefabInstance:
       propertyPath: tetriCamera
       value: 
       objectReference: {fileID: 1987537968}
+    - target: {fileID: 7522610900756573693, guid: aec3d0796cf7ae44c86529bf4db73db6, type: 3}
+      propertyPath: tetriInfoCamera
+      value: 
+      objectReference: {fileID: 1987537968}
     - target: {fileID: 8171075095809114202, guid: aec3d0796cf7ae44c86529bf4db73db6, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

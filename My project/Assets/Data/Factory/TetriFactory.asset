@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7947f19d7a9848145aaef9f34e5b508f, type: 3}
   m_Name: TetriFactory
   m_EditorClassIdentifier: 
-  tetriPrefab: {fileID: 6757363006270637913, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
+  tetriPiecePrefab: {fileID: 8523240208316506237, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
+  tetriCharacterPrefab: {fileID: 5572945275850634869, guid: 7d475bfcf328858458c02a53ba89970b, type: 3}

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Operation
 {
-    public class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public abstract class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
 
         public event Action<Operation.Tetri> OnBeginDragEvent;
@@ -15,13 +15,13 @@ namespace Operation
         public event Action<Operation.Tetri> OnClickEvent;
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
-        [SerializeField] private GameObject cellPrefab;
-        [SerializeField] private Transform characterRoot; 
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
-        [SerializeField] private Transform cellsRoot;
-        [SerializeField] private Units.UnitFactory unitFactory;
+        // [SerializeField] private GameObject cellPrefab;
+        // [SerializeField] private Transform characterRoot; 
+        // [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
+        // [SerializeField] private Transform cellsRoot;
+        // [SerializeField] private Units.UnitFactory unitFactory;
         private Camera mainCamera;
-        private Units.Unit previewUnit;
+        // private Units.Unit previewUnit;
 
         void Awake()
         {
@@ -39,10 +39,10 @@ namespace Operation
             if (ModelTetri != null)
                 ModelTetri.OnRotated -= OnModelRotated;
 
-            if (previewUnit != null)
-            {
-                previewUnit.OnClicked -= HandlePreviewUnitClicked;
-            }
+            // if (previewUnit != null)
+            // {
+            //     previewUnit.OnClicked -= HandlePreviewUnitClicked;
+            // }
         }
 
         private void OnModelRotated()
@@ -51,101 +51,103 @@ namespace Operation
             RebuildFromModel();
         }
 
-        private void RebuildFromModel()
-        {
-            ClearCells();
-            var shape = ModelTetri.Shape;
-            int rows = shape.GetLength(0);
-            int cols = shape.GetLength(1);
+        protected abstract void RebuildFromModel();
 
-            Model.Tetri.Character mainCell = null;
-            // 存储所有Cell对象，便于后续设置border
-            var cellObjs = new Operation.Cell[rows, cols];
+        // private void RebuildFromModel()
+        // {
+        //     ClearCells();
+        //     var shape = ModelTetri.Shape;
+        //     int rows = shape.GetLength(0);
+        //     int cols = shape.GetLength(1);
 
-            float offsetX = (rows - 1) / 2f; // 对于4x4就是1.5
-            float offsetY = (cols - 1) / 2f; // 对于4x4就是1.5
+        //     Model.Tetri.Character mainCell = null;
+        //     // 存储所有Cell对象，便于后续设置border
+        //     var cellObjs = new Operation.Cell[rows, cols];
 
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    var cell = shape[i, j];
-                    if (cell is not Model.Tetri.Empty)
-                    {
-                        GameObject cellObj = Instantiate(cellPrefab, this.cellsRoot);
-                        float localX = i - offsetX;
-                        float localY = -j + offsetY;
-                        cellObj.transform.localPosition = new Vector3(localX, localY, 0);
+        //     float offsetX = (rows - 1) / 2f; // 对于4x4就是1.5
+        //     float offsetY = (cols - 1) / 2f; // 对于4x4就是1.5
 
-                        var cellComp = cellObj.GetComponent<Operation.Cell>();
-                        cellComp.Init(cell);
-                        cellObjs[i, j] = cellComp;
+        //     for (int i = 0; i < rows; i++)
+        //     {
+        //         for (int j = 0; j < cols; j++)
+        //         {
+        //             var cell = shape[i, j];
+        //             if (cell is not Model.Tetri.Empty)
+        //             {
+        //                 GameObject cellObj = Instantiate(cellPrefab, this.cellsRoot);
+        //                 float localX = i - offsetX;
+        //                 float localY = -j + offsetY;
+        //                 cellObj.transform.localPosition = new Vector3(localX, localY, 0);
 
-                        if (mainCell == null && cell is Model.Tetri.Character characterCell)
-                        {
-                            mainCell = characterCell;
-                        }
-                    }
-                }
-            }
+        //                 var cellComp = cellObj.GetComponent<Operation.Cell>();
+        //                 cellComp.Init(cell);
+        //                 cellObjs[i, j] = cellComp;
 
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    var cellComp = cellObjs[i, j];
-                    if (cellComp == null) continue;
+        //                 if (mainCell == null && cell is Model.Tetri.Character characterCell)
+        //                 {
+        //                     mainCell = characterCell;
+        //                 }
+        //             }
+        //         }
+        //     }
 
-                    // 上下左右是否有相邻有效Cell
-                    bool top = (j == 0) || (cellObjs[i, j - 1] == null);
-                    bool bottom = (j == cols - 1) || (cellObjs[i, j + 1] == null);
-                    bool left = (i == 0) || (cellObjs[i - 1, j] == null);
-                    bool right = (i == rows - 1) || (cellObjs[i + 1, j] == null);
+        //     for (int i = 0; i < rows; i++)
+        //     {
+        //         for (int j = 0; j < cols; j++)
+        //         {
+        //             var cellComp = cellObjs[i, j];
+        //             if (cellComp == null) continue;
 
-                    cellComp.SetBorderVisibility(top, bottom, left, right);
-                }
-            }
+        //             // 上下左右是否有相邻有效Cell
+        //             bool top = (j == 0) || (cellObjs[i, j - 1] == null);
+        //             bool bottom = (j == cols - 1) || (cellObjs[i, j + 1] == null);
+        //             bool left = (i == 0) || (cellObjs[i - 1, j] == null);
+        //             bool right = (i == rows - 1) || (cellObjs[i + 1, j] == null);
 
-            if (ModelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
-            {
-                if (previewUnit != null)
-                {
-                    previewUnit.OnClicked -= HandlePreviewUnitClicked;
-                    Destroy(previewUnit.gameObject);
-                    previewUnit = null;
-                }
+        //             cellComp.SetBorderVisibility(top, bottom, left, right);
+        //         }
+        //     }
 
-                previewUnit = unitFactory.CreateUnit(mainCell);
-                previewUnit.OnClicked += HandlePreviewUnitClicked;
+        //     if (ModelTetri.Type == Model.Tetri.Tetri.TetriType.Character)
+        //     {
+        //         if (previewUnit != null)
+        //         {
+        //             previewUnit.OnClicked -= HandlePreviewUnitClicked;
+        //             Destroy(previewUnit.gameObject);
+        //             previewUnit = null;
+        //         }
 
-                characterRoot.gameObject.SetActive(true);
-                previewUnit.transform.SetParent(characterRoot, false);
-                cellsRoot.gameObject.SetActive(false);
+        //         previewUnit = unitFactory.CreateUnit(mainCell);
+        //         previewUnit.OnClicked += HandlePreviewUnitClicked;
 
-            }
-            else
-            {
-                characterRoot.gameObject.SetActive(false);
-                cellsRoot.gameObject.SetActive(true);
+        //         characterRoot.gameObject.SetActive(true);
+        //         previewUnit.transform.SetParent(characterRoot, false);
+        //         cellsRoot.gameObject.SetActive(false);
 
-                // 非角色类型确保没有悬挂订阅
-                if (previewUnit != null)
-                {
-                    previewUnit.OnClicked -= HandlePreviewUnitClicked;
-                    Destroy(previewUnit.gameObject);
-                    previewUnit = null;
-                }
-            }
-        }
+        //     }
+        //     else
+        //     {
+        //         characterRoot.gameObject.SetActive(false);
+        //         cellsRoot.gameObject.SetActive(true);
 
-        private void ClearCells()
-        {
-            if (cellsRoot == null) return;
-            for (int i = cellsRoot.childCount - 1; i >= 0; i--)
-            {
-                Destroy(cellsRoot.GetChild(i).gameObject);
-            }
-        }
+        //         // 非角色类型确保没有悬挂订阅
+        //         if (previewUnit != null)
+        //         {
+        //             previewUnit.OnClicked -= HandlePreviewUnitClicked;
+        //             Destroy(previewUnit.gameObject);
+        //             previewUnit = null;
+        //         }
+        //     }
+        // }
+
+        // private void ClearCells()
+        // {
+        //     if (cellsRoot == null) return;
+        //     for (int i = cellsRoot.childCount - 1; i >= 0; i--)
+        //     {
+        //         Destroy(cellsRoot.GetChild(i).gameObject);
+        //     }
+        // }
 
 
         private void HandlePreviewUnitClicked(Units.Unit _)
@@ -176,7 +178,7 @@ namespace Operation
             TriggerClick();
         }
 
-        private void TriggerClick()
+        protected void TriggerClick()
         {
             OnClickEvent?.Invoke(this);
         }
