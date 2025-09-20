@@ -9,7 +9,6 @@ namespace Model
         [Header("通用")]
         public GameObject BuffProjectilePrefab; // Buff投射物预制体
         public GameObject RangeAttackProjectilePrefab; // 投射物预制体
-        public GameObject MeleeAttackProjectilePrefab;
         public GameObject TemporaryTargetPrefab;
 
         [Header("技能投射物")]

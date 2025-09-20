@@ -69,7 +69,7 @@ namespace Units.Projectiles
 
         private string Name()
         {
-            return "远程攻击";
+            return "普通攻击";
         }
     }
 }

@@ -267,20 +267,12 @@ namespace Units
         private void Attack(Unit target, float damageValue)
         {
             GameObject projectileObject;
-            if (Attributes.IsRanged)
-            {
-                projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
-                var projectile = projectileObject.GetComponent<Projectiles.RangeAttack>();
-                projectile.Init(this, target);
-                projectile.Activate();
-            }
-            else
-            {
-                projectileObject = Instantiate(ProjectileConfig.MeleeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
-                var projectile = projectileObject.GetComponent<Projectiles.MeleeAttack>();
-                projectile.Init(this, target);
-                projectile.Activate();
-            }
+            projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
+            var projectile = projectileObject.GetComponent<Projectiles.RangeAttack>();
+            projectile.Init(this, target);
+            projectile.Activate();
+            
+
         }
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)

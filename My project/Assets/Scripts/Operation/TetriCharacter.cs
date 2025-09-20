@@ -7,18 +7,19 @@ namespace Operation
         [SerializeField] private Transform characterRoot;
         [SerializeField] private Units.UnitFactory unitFactory;
 
-        private Units.Unit previewUnit;
+        public Units.Unit PreviewUnit { get; private set; } // 公共只读
+
 
         protected override void RebuildFromModel()
         {
             if (ModelTetri == null) return;
 
             // 清理旧
-            if (previewUnit != null)
+            if (PreviewUnit != null)
             {
-                previewUnit.OnClicked -= HandlePreviewUnitClicked;
-                Destroy(previewUnit.gameObject);
-                previewUnit = null;
+                PreviewUnit.OnClicked -= HandlePreviewUnitClicked;
+                Destroy(PreviewUnit.gameObject);
+                PreviewUnit = null;
             }
 
             // 找到主 Character cell
@@ -26,9 +27,9 @@ namespace Operation
 
             if (mainCell != null)
             {
-                previewUnit = unitFactory.CreateUnit(mainCell);
-                previewUnit.transform.SetParent(characterRoot, false);
-                previewUnit.OnClicked += HandlePreviewUnitClicked; // 订阅
+                PreviewUnit = unitFactory.CreateUnit(mainCell);
+                PreviewUnit.transform.SetParent(characterRoot, false);
+                PreviewUnit.OnClicked += HandlePreviewUnitClicked; // 订阅
 
             }
         }
@@ -41,10 +42,10 @@ namespace Operation
 
         protected void OnDestroy()
         {
-            if (previewUnit != null)
+            if (PreviewUnit != null)
             {
-                previewUnit.OnClicked -= HandlePreviewUnitClicked;
-                previewUnit = null;
+                PreviewUnit.OnClicked -= HandlePreviewUnitClicked;
+                PreviewUnit = null;
             }
         }
 

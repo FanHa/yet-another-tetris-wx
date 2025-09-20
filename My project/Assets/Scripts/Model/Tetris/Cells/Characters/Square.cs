@@ -12,5 +12,10 @@ namespace Model.Tetri
         {
             return "小方";
         }
+
+        public override string Description()
+        {
+            return "平平无奇";
+        }
     }
 }

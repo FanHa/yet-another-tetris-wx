@@ -21,8 +21,6 @@ namespace Units
         public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
         public Attribute EnergyPerSecond => energyPerSecond;
         public Attribute AttackRange => attackRange;
-        [SerializeField] private float RangedThreshold;
-        public bool IsRanged => AttackRange.finalValue >= RangedThreshold;
 
         private float currentHealth;
         public float CurrentHealth
