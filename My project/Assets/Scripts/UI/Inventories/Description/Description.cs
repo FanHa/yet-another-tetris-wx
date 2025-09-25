@@ -26,20 +26,20 @@ namespace UI.Inventories.Description
             }
         }
 
-        public void SetDescription(Model.UnitInventoryItem item)
+        public void SetDescription(Model.CharacterInfluenceGroup item)
         {
             // 清空现有的DescriptionItem
             foreach (Transform child in descriptionItemParent)
             {
                 Destroy(child.gameObject);
             }
-            itemImage.sprite = cellTypeResourceMapping.GetSprite(item.CharacterCell);
+            itemImage.sprite = cellTypeResourceMapping.GetSprite(item.Character);
             itemImage.gameObject.SetActive(true);
-            descriptionText.text = item.CharacterCell.Description();
+            descriptionText.text = item.Character.Description();
 
              // 对 TetriCells 进行分组，按类型合并并记录数量
             Dictionary<Type, int> groupedCells = new Dictionary<System.Type, int>();
-            foreach (Model.Tetri.Cell cell in item.TetriCells)
+            foreach (Model.Tetri.Cell cell in item.InfluencedCells)
             {
                 var cellType = cell.GetType(); // 获取 Cell 的类型
                 if (groupedCells.ContainsKey(cellType))
@@ -62,7 +62,7 @@ namespace UI.Inventories.Description
                 Item newItem = Instantiate(descriptionItemPrefab, descriptionItemParent);
 
                 // 获取类型对应的一个实例（可以从 TetriCells 中找到第一个匹配的实例）
-                Model.Tetri.Cell exampleCell = item.TetriCells.Find(c => c.GetType() == cellType);
+                Model.Tetri.Cell exampleCell = item.InfluencedCells.Find(c => c.GetType() == cellType);
 
                 // 设置 DescriptionItem 的属性，包括图片、描述和数量
                 newItem.SetDescription(cellTypeResourceMapping.GetSprite(exampleCell), count, exampleCell.Description());

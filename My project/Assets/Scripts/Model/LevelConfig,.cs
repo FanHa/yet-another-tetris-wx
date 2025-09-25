@@ -85,10 +85,10 @@ namespace Model
         /// <summary>
         /// 获取当前关卡的敌人数据
         /// </summary>
-        public List<UnitInventoryItem> GetEnemyData()
+        public List<CharacterInfluenceGroup> GetEnemyData()
         {
             // 转换为 InventoryItem 列表
-            List<UnitInventoryItem> inventoryItems = new List<UnitInventoryItem>();
+            List<CharacterInfluenceGroup> inventoryItems = new List<CharacterInfluenceGroup>();
             foreach (var enemy in enemyDatas)
             {
 
@@ -109,7 +109,7 @@ namespace Model
                     tetriCells.Add(cell);
                 }
 
-                UnitInventoryItem inventoryItem = new(characterInstance, tetriCells);
+                CharacterInfluenceGroup inventoryItem = new(characterInstance, tetriCells);
                 inventoryItems.Add(inventoryItem);
             }
 

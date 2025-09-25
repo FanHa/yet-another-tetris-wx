@@ -9,6 +9,7 @@ namespace UI.UnitInfo
 {
     public class UnitInfo : MonoBehaviour
     {
+        public Action OnClosed;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button closeButton;
 
@@ -52,6 +53,7 @@ namespace UI.UnitInfo
         {
             currentUnit = null;
             panel.SetActive(false);
+            OnClosed?.Invoke();
         }
 
         public void ShowUnitInfo(Units.Unit unit)

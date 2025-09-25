@@ -34,7 +34,7 @@ namespace View
             }
         }
 
-        public void Refresh(IReadOnlyList<Model.PlacedTetri> placedTetris)
+        public void Refresh(IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> placedTetris)
         {
             foreach (Transform child in placedTetrisRoot)
             {
@@ -46,12 +46,14 @@ namespace View
             foreach (var placed in placedTetris)
             {
                 // todo 这里调用工厂的方法来创建
-                var tetriComponent = tetriFactory.CreateTetri(placed.Tetri);
+                Tetri tetri = placed.Key;
+                Vector2Int position = placed.Value;
+                Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetri);
                 tetriComponent.transform.SetParent(placedTetrisRoot, false);
-                tetriComponent.Initialize(placed.Tetri);
+                tetriComponent.Initialize(tetri);
 
-                float x = leftTopLocal.x + (placed.Position.x + 1.5f) * cellSize;
-                float y = leftTopLocal.y - (placed.Position.y + 1.5f) * cellSize;
+                float x = leftTopLocal.x + (position.x + 1.5f) * cellSize;
+                float y = leftTopLocal.y - (position.y + 1.5f) * cellSize;
                 tetriComponent.transform.localPosition = new Vector3(x, y, 0);
                 OnItemCreated?.Invoke(tetriComponent);
 

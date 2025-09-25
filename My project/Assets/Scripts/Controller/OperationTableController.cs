@@ -13,6 +13,7 @@ namespace Controller
     {
         public event Action<Operation.Tetri> OnTetriBeginDrag;
         public event Action<List<CharacterInfluenceGroup>> OnCharacterInfluenceGroupsChanged;
+        public event Action<Operation.Tetri> OnTetriClick;
 
         [Header("容器大小")]
         [SerializeField] private int width;
@@ -41,11 +42,17 @@ namespace Controller
         private void HandleTetriCreated(Operation.Tetri tetri)
         {
             tetri.OnBeginDragEvent += HandleTetriBeginDrag;
+            tetri.OnClickEvent += HandleTetriClick;
         }
 
         private void HandleTetriBeginDrag(Operation.Tetri tetri)
         {
             OnTetriBeginDrag?.Invoke(tetri);
+        }
+
+        private void HandleTetriClick(Operation.Tetri tetri)
+        {
+            OnTetriClick?.Invoke(tetri);
         }
 
         private void OnDestroy()
@@ -57,9 +64,14 @@ namespace Controller
         private void HandleModelChanged()
         {
             // 让 View 根据 model.PlacedTetris 刷新显示
-            view.Refresh(model.PlacedTetris);
+            view.Refresh(model.PlacedMap);
             List<CharacterInfluenceGroup> groups = model.GetCharacterInfluenceGroups();
             OnCharacterInfluenceGroupsChanged?.Invoke(groups);
+        }
+
+        public CharacterInfluenceGroup GetCharacterInfluenceGroupByTetri(Model.Tetri.Tetri tetri)
+        {
+            return model.GetCharacterInfluenceGroupOf(tetri);
         }
 
 
@@ -91,14 +103,7 @@ namespace Controller
 
         internal void RemoveTetri(Model.Tetri.Tetri modelTetri)
         {
-            // 从 Model 中移除 Tetri
-            // 这里假设 PlacedTetris 中的 Tetri 是唯一的
-            // 如果有多个相同的 Tetri，可能需要更复杂的逻辑来确定要移除哪个
-            var placedTetri = model.PlacedTetris.FirstOrDefault(pt => pt.Tetri == modelTetri);
-            if (placedTetri != null)
-            {
-                model.RemoveTetri(placedTetri);
-            }
+            model.RemoveTetri(modelTetri);
         }
     }
 

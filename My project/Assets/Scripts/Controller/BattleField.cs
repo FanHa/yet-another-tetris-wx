@@ -43,8 +43,8 @@ namespace Controller {
         public event Action OnBattleEnd;
         public event Action<Unit> OnUnitClicked;
 
-        private List<UnitInventoryItem> factionAConfig;
-        private List<UnitInventoryItem> factionBConfig;
+        private List<CharacterInfluenceGroup> factionAConfig;
+        private List<CharacterInfluenceGroup> factionBConfig;
 
 
         void Awake()

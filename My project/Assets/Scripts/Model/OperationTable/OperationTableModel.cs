@@ -13,12 +13,13 @@ namespace Model
         public event Action OnChanged;
 
         [SerializeField]
-        private List<PlacedTetri> placedTetris = new List<PlacedTetri>();
-        public IReadOnlyList<PlacedTetri> PlacedTetris => placedTetris;
+        // private List<PlacedTetri> placedTetris = new List<PlacedTetri>();
+        // public IReadOnlyList<PlacedTetri> PlacedTetris => placedTetris;
+
+        private Dictionary<Model.Tetri.Tetri, Vector2Int> placedMap = new();
+        public IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> PlacedMap => placedMap;
 
         private Model.Tetri.Cell[,] occupiedCellGrid;
-        public Model.Tetri.Cell[,] OccupiedCellGrid => occupiedCellGrid; // Public getter for the grid
-
 
         /// <summary>
         /// 尝试放置一个 Tetri 到指定位置
@@ -51,9 +52,6 @@ namespace Model
                 }
             }
 
-            var placedTetri = new Model.PlacedTetri(tetri, position);
-            placedTetris.Add(placedTetri);
-
             tetri.OnDataChanged += HandleTetriChanged;
             foreach (var relativePos in tetriRelativeOccupiedPositions)
             {
@@ -68,6 +66,7 @@ namespace Model
                     }
                 }
             }
+            placedMap[tetri] = position;
 
             OnChanged?.Invoke();
             return true;
@@ -75,22 +74,24 @@ namespace Model
 
         public void Clear()
         {
-            foreach (var placed in placedTetris)
+            foreach (var kv in placedMap)
             {
-                placed.Tetri.OnDataChanged -= HandleTetriChanged;
+                kv.Key.OnDataChanged -= HandleTetriChanged;
             }
-            placedTetris.Clear();
+            placedMap.Clear();
+
             occupiedCellGrid = new Model.Tetri.Cell[Width, Height]; // 重新创建空的 grid
             OnChanged?.Invoke();
         }
 
-        public void RemoveTetri(Model.PlacedTetri placedTetriToRemove)
+        public void RemoveTetri(Model.Tetri.Tetri placedTetriToRemove)
         {
-            placedTetriToRemove.Tetri.OnDataChanged -= HandleTetriChanged;
-            List<Vector2Int> tetriRelativeOccupiedPositions = placedTetriToRemove.Tetri.GetOccupiedPositions();
+            placedMap.TryGetValue(placedTetriToRemove, out var position);
+            placedTetriToRemove.OnDataChanged -= HandleTetriChanged;
+            List<Vector2Int> tetriRelativeOccupiedPositions = placedTetriToRemove.GetOccupiedPositions();
             foreach (var relativePos in tetriRelativeOccupiedPositions)
             {
-                Vector2Int globalPos = placedTetriToRemove.Position + relativePos;
+                Vector2Int globalPos = position + relativePos;
                 // 不再需要从 occupiedCoordinates 移除
                 if (globalPos.x >= 0 && globalPos.x < occupiedCellGrid.GetLength(0) &&
                     globalPos.y >= 0 && globalPos.y < occupiedCellGrid.GetLength(1))
@@ -98,7 +99,7 @@ namespace Model
                     occupiedCellGrid[globalPos.x, globalPos.y] = null; // 从 grid 中清除
                 }
             }
-            placedTetris.Remove(placedTetriToRemove);
+            placedMap.Remove(placedTetriToRemove);
             OnChanged?.Invoke();
 
         }
@@ -108,8 +109,6 @@ namespace Model
             // Tetri 变动时，通知外部刷新
             OnChanged?.Invoke();
         }
-
-
 
         public List<CharacterInfluenceGroup> GetCharacterInfluenceGroups()
         {
@@ -148,6 +147,32 @@ namespace Model
 
             return result;
         }
+
+        public CharacterInfluenceGroup GetCharacterInfluenceGroupOf(Model.Tetri.Tetri tetri)
+        {
+            placedMap.TryGetValue(tetri, out var position);
+            var basePosition = position + Vector2Int.one; // 主格子在 tetri 内的位置
+            int width = occupiedCellGrid.GetLength(0);
+            int height = occupiedCellGrid.GetLength(1);
+            var group = new List<Cell>();
+            var character = tetri.GetMainCell() as Model.Tetri.Character;
+            var offsets = character.GetInfluenceOffsets();
+            foreach (var offset in offsets)
+            {
+                int nx = basePosition.x + offset.x;
+                int ny = basePosition.y + offset.y;
+                if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                {
+                    var neighbor = occupiedCellGrid[nx, ny];
+                    if (neighbor != null && !group.Contains(neighbor))
+                    {
+                        group.Add(neighbor);
+                    }
+                }
+            }
+            return new CharacterInfluenceGroup(character, group);
+        }
+
     }
 
     public class CharacterInfluenceGroup

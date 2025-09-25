@@ -10,7 +10,7 @@ namespace UI.Inventories
     public class InventoryItem : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image itemImage;
-        public Model.UnitInventoryItem Data;
+        public Model.CharacterInfluenceGroup Data;
 
         private Outline outline;
 
@@ -33,7 +33,7 @@ namespace UI.Inventories
             // todo
         }
 
-        public void SetData(Model.UnitInventoryItem item , Sprite sprite)
+        public void SetData(Model.CharacterInfluenceGroup item , Sprite sprite)
         {
             Data = item;
             itemImage.sprite = sprite;

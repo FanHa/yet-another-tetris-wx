@@ -38,10 +38,10 @@ namespace Controller {
 
         public void RefreshInventoryFromInfluenceGroups(List<CharacterInfluenceGroup> characterGroups)
         {
-            var items = new List<UnitInventoryItem>();
+            var items = new List<CharacterInfluenceGroup>();
             foreach (var group in characterGroups)
             {
-                var item = new UnitInventoryItem(
+                var item = new CharacterInfluenceGroup(
                     group.Character,
                     group.InfluencedCells
                 );
@@ -51,14 +51,14 @@ namespace Controller {
 
         }
 
-        public void SetEnemyInventoryData(List<UnitInventoryItem> enemyData)
+        public void SetEnemyInventoryData(List<CharacterInfluenceGroup> enemyData)
         {
             enemyUnitInventoryData.ResetInventoryData(enemyData);
         }
 
         public void PrepareTrainGroundUnitInventory()
         {
-            var itemsA = new List<UnitInventoryItem>();
+            var itemsA = new List<CharacterInfluenceGroup>();
             foreach (var unitConfig in trainGroundSetup.FactionAUnits)
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
@@ -72,12 +72,12 @@ namespace Controller {
                             tetriCells.Add(cell);
                     }
                 }
-                var item = new UnitInventoryItem(characterCell, tetriCells);
+                var item = new CharacterInfluenceGroup(characterCell, tetriCells);
                 itemsA.Add(item);
             }
             trainGroundUnitInventoryDataA.ResetInventoryData(itemsA);
 
-            var itemsB = new List<UnitInventoryItem>();
+            var itemsB = new List<CharacterInfluenceGroup>();
             foreach (var unitConfig in trainGroundSetup.FactionBUnits)
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
@@ -91,18 +91,18 @@ namespace Controller {
                             tetriCells.Add(cell);
                     }
                 }
-                var item = new UnitInventoryItem(characterCell, tetriCells);
+                var item = new CharacterInfluenceGroup(characterCell, tetriCells);
                 itemsB.Add(item);
             }
             trainGroundUnitInventoryDataB.ResetInventoryData(itemsB);
         }
 
 
-        private void HandleDataChange(List<Model.UnitInventoryItem> inventoryState)
+        private void HandleDataChange(List<Model.CharacterInfluenceGroup> inventoryState)
         {
             var unitList = new List<Units.Unit>();
 
-            foreach (Model.UnitInventoryItem item in inventoryState)
+            foreach (Model.CharacterInfluenceGroup item in inventoryState)
             {
                 Units.Unit unit = unitFactory.CreateUnit(item);
                 if (unit != null)

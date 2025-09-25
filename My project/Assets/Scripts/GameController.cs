@@ -25,9 +25,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private Controller.OperationTableController operationTableController;
     [SerializeField] private UnitInfo unitInfo;
     [SerializeField] private TetriInfo tetriInfo;
+    [SerializeField] private Units.UnitFactory unitFactory;
     private GameObject currentShadowTetri;
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
+    private Units.Unit tempUnit;
 
     private void Start()
     {
@@ -40,8 +42,9 @@ public class GameController : MonoBehaviour
         battleButton.onClick.AddListener(HandleBattleClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
-        tetriInventoryController.OnTetriClick += HandleTetriClick;
+        tetriInventoryController.OnTetriClick += HandleTetriInventoryTetriClick;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
+        operationTableController.OnTetriClick += HandleOperationTableTetriClick; // 新增：监听操作台点击
         operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
         unitInventoryController.OnUnitClicked += HandleUnitClicked;
 
@@ -60,9 +63,31 @@ public class GameController : MonoBehaviour
         tetriInfo.ShowTetriInfo(tetri);
     }
 
-    private void HandleTetriClick(Operation.Tetri tetri)
+    private void HandleTetriInventoryTetriClick(Operation.Tetri tetri)
     {
         tetriInfo.ShowTetriInfo(tetri);
+    }
+
+    private void HandleOperationTableTetriClick(Operation.Tetri tetri)
+    {
+        var type = tetri.ModelTetri.Type;
+        if (type == Model.Tetri.Tetri.TetriType.Character)
+        {
+            CharacterInfluenceGroup characterInfluenceGroup = operationTableController.GetCharacterInfluenceGroupByTetri(tetri.ModelTetri);
+            Units.Unit unit = unitFactory.CreateUnit(characterInfluenceGroup);
+            unit.transform.position = tetri.transform.position;
+            unitInfo.ShowUnitInfo(unit);
+            tempUnit = unit;
+            unitInfo.OnClosed += () =>
+            {
+                Destroy(tempUnit.gameObject);
+            };
+        }
+        else
+        {
+            // todo
+        }
+        // tetriInfo.ShowTetriInfo(tetri);
     }
 
     private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)
@@ -197,7 +222,7 @@ public class GameController : MonoBehaviour
 
     private void HandleBattleClicked()
     {
-        List<UnitInventoryItem> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        List<CharacterInfluenceGroup> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
         unitInventoryController.SetEnemyInventoryData(levelData);
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
