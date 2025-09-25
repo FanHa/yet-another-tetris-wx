@@ -74,6 +74,11 @@ namespace Controller
             return model.GetCharacterInfluenceGroupOf(tetri);
         }
 
+        public List<CharacterInfluenceGroup> GetCharacterInfluenceGroups()
+        {
+            return model.GetCharacterInfluenceGroups();
+        }
+
 
 
         public bool TryPlaceTetri(Model.Tetri.Tetri modelTetri, Vector3 worldPosition)

@@ -37,18 +37,25 @@ public class GameController : MonoBehaviour
         battleField.OnBattleEnd += HandleBattleEnd;
         battleField.OnUnitClicked += HandleUnitClicked;
         levelConfig.Reset();
-        // 绑定撤销操作按钮的点击事件
-        // revokeOperationButton.onClick.AddListener(UndoLastPlacement);
+
         battleButton.onClick.AddListener(HandleBattleClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         tetriInventoryController.OnTetriClick += HandleTetriInventoryTetriClick;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnTetriClick += HandleOperationTableTetriClick; // 新增：监听操作台点击
-        operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
+        // operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
         unitInventoryController.OnUnitClicked += HandleUnitClicked;
 
         tetriInfo.OnRotateTetriClicked += HandleRotateTetri;
+        unitInfo.OnClosed += () =>
+        {
+            if (tempUnit != null)
+            {
+                Destroy(tempUnit.gameObject);
+                tempUnit = null;
+            }
+        };
     }
 
     private void HandleUnitClicked(Unit unit)
@@ -78,23 +85,19 @@ public class GameController : MonoBehaviour
             unit.transform.position = tetri.transform.position;
             unitInfo.ShowUnitInfo(unit);
             tempUnit = unit;
-            unitInfo.OnClosed += () =>
-            {
-                Destroy(tempUnit.gameObject);
-            };
+            
         }
         else
         {
-            // todo
+            tetriInfo.ShowTetriInfo(tetri);
         }
-        // tetriInfo.ShowTetriInfo(tetri);
     }
 
-    private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)
-    {
-        unitInventoryController.RefreshInventoryFromInfluenceGroups(characterGroups);
-        Debug.Log("OperationTable grid cells updated.");
-    }
+    // private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)
+    // {
+    //     unitInventoryController.RefreshInventoryFromInfluenceGroups(characterGroups);
+    //     Debug.Log("OperationTable grid cells updated.");
+    // }
 
     private void HandleOperationTableTetriBeginDrag(Operation.Tetri tetri)
     {
@@ -224,6 +227,7 @@ public class GameController : MonoBehaviour
     {
         List<CharacterInfluenceGroup> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
         unitInventoryController.SetEnemyInventoryData(levelData);
+        unitInventoryController.SetPlayerInventoryData(operationTableController.GetCharacterInfluenceGroups());
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 

@@ -23,37 +23,42 @@ namespace Controller {
 
         private void Awake()
         {
-            unitInventoryView = GetComponent<UI.Inventories.UnitInventoryView>();
+            // unitInventoryView = GetComponent<UI.Inventories.UnitInventoryView>();
         }
         private void Start()
         {
-            playerUnitInventoryData.OnDataChanged += HandleDataChange;
-            unitInventoryView.OnUnitClicked += HandleUnitClicked;
+            // playerUnitInventoryData.OnDataChanged += HandleDataChange;
+            // unitInventoryView.OnUnitClicked += HandleUnitClicked;
         }
 
-        private void HandleUnitClicked(Unit unit)
-        {
-            OnUnitClicked?.Invoke(unit);
-        }
+        // private void HandleUnitClicked(Unit unit)
+        // {
+        //     OnUnitClicked?.Invoke(unit);
+        // }
 
-        public void RefreshInventoryFromInfluenceGroups(List<CharacterInfluenceGroup> characterGroups)
-        {
-            var items = new List<CharacterInfluenceGroup>();
-            foreach (var group in characterGroups)
-            {
-                var item = new CharacterInfluenceGroup(
-                    group.Character,
-                    group.InfluencedCells
-                );
-                items.Add(item);
-            }
-            playerUnitInventoryData.ResetInventoryData(items);
+        // public void RefreshInventoryFromInfluenceGroups(List<CharacterInfluenceGroup> characterGroups)
+        // {
+        //     var items = new List<CharacterInfluenceGroup>();
+        //     foreach (var group in characterGroups)
+        //     {
+        //         var item = new CharacterInfluenceGroup(
+        //             group.Character,
+        //             group.InfluencedCells
+        //         );
+        //         items.Add(item);
+        //     }
+        //     playerUnitInventoryData.ResetInventoryData(items);
 
-        }
+        // }
 
         public void SetEnemyInventoryData(List<CharacterInfluenceGroup> enemyData)
         {
             enemyUnitInventoryData.ResetInventoryData(enemyData);
+        }
+
+        public void SetPlayerInventoryData(List<CharacterInfluenceGroup> playerData)
+        {
+            playerUnitInventoryData.ResetInventoryData(playerData);
         }
 
         public void PrepareTrainGroundUnitInventory()
