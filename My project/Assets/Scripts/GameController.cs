@@ -44,8 +44,6 @@ public class GameController : MonoBehaviour
         tetriInventoryController.OnTetriClick += HandleTetriInventoryTetriClick;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnTetriClick += HandleOperationTableTetriClick; // 新增：监听操作台点击
-        // operationTableController.OnCharacterInfluenceGroupsChanged += HandleOperationTableGridCellUpdate;
-        unitInventoryController.OnUnitClicked += HandleUnitClicked;
 
         tetriInfo.OnRotateTetriClicked += HandleRotateTetri;
         unitInfo.OnClosed += () =>
@@ -65,14 +63,13 @@ public class GameController : MonoBehaviour
 
     private void HandleRotateTetri(Operation.Tetri tetri)
     {
-        // TODO 这里调用Rotate后, view的可能试图会重建,此时Operation.Tetri可能已经为null了
         tetri.ModelTetri.Rotate();
-        tetriInfo.ShowTetriInfo(tetri);
+        tetriInfo.ShowTetriInfo(tetri, true);
     }
 
     private void HandleTetriInventoryTetriClick(Operation.Tetri tetri)
     {
-        tetriInfo.ShowTetriInfo(tetri);
+        tetriInfo.ShowTetriInfo(tetri, true);
     }
 
     private void HandleOperationTableTetriClick(Operation.Tetri tetri)
@@ -89,7 +86,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            tetriInfo.ShowTetriInfo(tetri);
+            tetriInfo.ShowTetriInfo(tetri, false);
         }
     }
 

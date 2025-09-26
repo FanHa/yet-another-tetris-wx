@@ -55,15 +55,21 @@ namespace UI.TetriInfo
         }
 
 
-        public void ShowTetriInfo(Operation.Tetri tetriComponent)
+        public void ShowTetriInfo(Operation.Tetri tetriComponent, bool showRotateButton)
         {
             currentTetri = tetriComponent;
             blocker.SetActive(true);
             closeButton.gameObject.SetActive(true);
 
+
             bool isCharacter = tetriComponent.ModelTetri.Type == Model.Tetri.Tetri.TetriType.Character;
             normalTetriPanel.SetActive(!isCharacter);
             characterTetriPanel.SetActive(isCharacter);
+            if (showRotateButton)
+                rotateButton.gameObject.SetActive(true);
+            else
+                rotateButton.gameObject.SetActive(false);
+                
             Vector3 offset = new Vector3(0f, 0f, -10f);
             tetriInfoCamera.transform.position = tetriComponent.transform.position + offset;
             if (isCharacter)

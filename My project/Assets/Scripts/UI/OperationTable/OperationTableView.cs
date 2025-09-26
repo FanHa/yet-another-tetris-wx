@@ -45,7 +45,6 @@ namespace View
 
             foreach (var placed in placedTetris)
             {
-                // todo 这里调用工厂的方法来创建
                 Tetri tetri = placed.Key;
                 Vector2Int position = placed.Value;
                 Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetri);
