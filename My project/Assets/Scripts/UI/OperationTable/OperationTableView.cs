@@ -14,12 +14,16 @@ namespace View
 
         [SerializeField] private Transform backgroundRoot;
         [SerializeField] private Transform placedTetrisRoot;
-        [SerializeField] private float cellSize;
-        [SerializeField] private int width;
-        [SerializeField] private int height;
+        private float cellSize;
+        private int width;
+        private int height;
         [SerializeField] private Operation.TetriFactory tetriFactory;
-        public void Initialize()
+        public void Initialize(int width, int height, float cellSize)
         {
+            this.width = width;
+            this.height = height;
+            this.cellSize = cellSize;
+
             Vector2 origin = new Vector2(-width / 2f + 0.5f, -height / 2f + 0.5f);
 
             for (int y = 0; y < height; y++)

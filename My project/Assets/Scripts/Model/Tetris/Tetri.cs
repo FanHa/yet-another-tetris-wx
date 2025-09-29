@@ -152,12 +152,11 @@ namespace Model.Tetri
                 }
             }
 
-            // 顺时针旋转90度
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    shape[j, rows - 1 - i] = tempShape[i, j];
+                    shape[rows - 1 - j, i] = tempShape[i, j];
                 }
             }
 

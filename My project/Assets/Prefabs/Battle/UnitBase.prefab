@@ -71,7 +71,7 @@ RectTransform:
   m_Father: {fileID: 8339528377276250400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1179,7 +1179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5606919347248128722
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1314,7 +1314,7 @@ RectTransform:
   m_Father: {fileID: 1080213347996614027}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1492,12 +1492,15 @@ MonoBehaviour:
       Name: "\u80FD\u91CF\u56DE\u590D"
       baseValue: 5
       finalValue: 5
-    AttackRange: 0.5
-    RangedThreshold: 2
+    attackRange:
+      Name: 
+      baseValue: 0
+      finalValue: 0
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   faction: 0
+  healthBar: {fileID: 2119846270201577330}
   BodySpriteRenderer: {fileID: 5410986790312629488}
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}

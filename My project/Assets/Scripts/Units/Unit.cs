@@ -44,7 +44,7 @@ namespace Units
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
 
-        private HealthBar healthBar;
+        [SerializeField] private HealthBar healthBar;
 
         public SpriteRenderer BodySpriteRenderer;
         public SpriteRenderer Fist1SpriteRenderer;
@@ -67,7 +67,6 @@ namespace Units
         {
             animationController = GetComponent<AnimationController>();
 
-            healthBar = GetComponentInChildren<HealthBar>();
             hitEffect = GetComponent<HitEffect>();
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
@@ -108,10 +107,12 @@ namespace Units
         {
             skillHandler.Activate();
             isActive = true;
+            healthBar.gameObject.SetActive(true);
         }
 
         public void Deactivate()
         {
+            healthBar.gameObject.SetActive(false);
             skillHandler.Deactivate(); // 如有需要
             buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
             isActive = false;

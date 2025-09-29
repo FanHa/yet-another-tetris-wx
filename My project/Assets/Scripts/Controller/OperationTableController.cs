@@ -15,10 +15,6 @@ namespace Controller
         public event Action<List<CharacterInfluenceGroup>> OnCharacterInfluenceGroupsChanged;
         public event Action<Operation.Tetri> OnTetriClick;
 
-        [Header("容器大小")]
-        [SerializeField] private int width;
-        [SerializeField] private int height;
-
         [Header("每个格子的间距")]
         [SerializeField] private float cellSize;
 
@@ -33,7 +29,7 @@ namespace Controller
 
         private void Start()
         {
-            view.Initialize();
+            view.Initialize(model.Width, model.Height, cellSize);
             view.OnItemCreated += HandleTetriCreated;
             model.OnChanged += HandleModelChanged;
             model.Clear();
@@ -89,7 +85,7 @@ namespace Controller
             localPosition.y += 1.5f * cellSize;
 
             // 计算网格左上角 (0,0) 在本地坐标中的位置
-            Vector3 gridOriginLocal = new Vector3(-width / 2f + 0.5f, height / 2f - 0.5f, 0);
+            Vector3 gridOriginLocal = new Vector3(-model.Width / 2f + 0.5f, model.Height / 2f - 0.5f, 0);
 
             // 以左上角为基准，计算 localPosition 到 gridOriginLocal 的偏移
             Vector3 offset = localPosition - gridOriginLocal;

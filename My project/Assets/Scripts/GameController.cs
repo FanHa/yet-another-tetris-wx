@@ -20,7 +20,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private Controller.UnitInventoryController unitInventoryController;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     [SerializeField] private Button battleButton;
-
+    [SerializeField] private Button pauseButton;
+    private bool isPaused = false;
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
     [SerializeField] private UnitInfo unitInfo;
@@ -39,6 +40,7 @@ public class GameController : MonoBehaviour
         levelConfig.Reset();
 
         battleButton.onClick.AddListener(HandleBattleClicked);
+        pauseButton.onClick.AddListener(HandlePauseClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         tetriInventoryController.OnTetriClick += HandleTetriInventoryTetriClick;
@@ -89,12 +91,6 @@ public class GameController : MonoBehaviour
             tetriInfo.ShowTetriInfo(tetri, false);
         }
     }
-
-    // private void HandleOperationTableGridCellUpdate(List<CharacterInfluenceGroup> characterGroups)
-    // {
-    //     unitInventoryController.RefreshInventoryFromInfluenceGroups(characterGroups);
-    //     Debug.Log("OperationTable grid cells updated.");
-    // }
 
     private void HandleOperationTableTetriBeginDrag(Operation.Tetri tetri)
     {
@@ -228,6 +224,22 @@ public class GameController : MonoBehaviour
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
+    }
+
+    private void HandlePauseClicked()
+    {
+        if (isPaused)
+        {
+            Time.timeScale = 1;
+            pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "暂停";
+            isPaused = false;
+        }
+        else
+        {
+            Time.timeScale = 0;
+            pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "恢复";
+            isPaused = true;
+        }
     }
 
     private void OnDestroy()
