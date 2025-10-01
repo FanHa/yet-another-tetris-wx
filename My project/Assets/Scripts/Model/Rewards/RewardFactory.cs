@@ -190,8 +190,6 @@ namespace Model.Rewards
                     return "NewCharacter_" + characterCell.CharacterTypeId;
                 case UpgradeCoreCell upgradeCore:
                     return "UpgradeCoreCell_" + upgradeCore.TargetTetri.GetHashCode();
-                case UpgradeNoneCoreCells upgradeNoneCore:
-                    return "UpgradeNoneCore_" + upgradeNoneCore.TargetTetri.GetHashCode();
                 case UpgradeCharacter upgradeChar:
                     return "UpgradeCharacter_" + upgradeChar.TargetTetri.GetHashCode();
                 default:
