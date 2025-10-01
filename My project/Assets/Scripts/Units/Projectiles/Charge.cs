@@ -14,6 +14,8 @@ namespace Units.Projectiles
         private Skill sourceSkill;
         private HashSet<Unit> damagedUnits = new HashSet<Unit>();
         private bool isActive = false;
+        [SerializeField] private float overshootDistance = 1f;
+
 
         public void Init(Unit owner, Unit target, float speed, float chargeDamage, Skill sourceSkill)
         {
@@ -22,7 +24,11 @@ namespace Units.Projectiles
             this.speed = speed;
             this.chargeDamage = chargeDamage;
             this.sourceSkill = sourceSkill;
-            this.targetPosition = target.transform.position;
+            Vector3 dir = target.transform.position - owner.transform.position;
+            if (dir.sqrMagnitude < 0.0001f)
+                dir = target.transform.forward; // 同一点时用目标正向
+            dir.Normalize();
+            this.targetPosition = target.transform.position + dir * this.overshootDistance;
         }       
 
         public void Activate()
