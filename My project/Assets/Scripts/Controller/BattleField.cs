@@ -31,7 +31,7 @@ namespace Controller {
         [SerializeField] private Controller.Statistics statisticsController;
 
         [Header("Spawn Points")]
-        public Transform spawnPointA;
+        // public Transform spawnPointA;
         public Transform spawnPointB;
 
         [Header("Data")]
@@ -43,8 +43,8 @@ namespace Controller {
         public event Action OnBattleEnd;
         public event Action<Unit> OnUnitClicked;
 
-        private List<CharacterInfluenceGroup> factionAConfig;
-        private List<CharacterInfluenceGroup> factionBConfig;
+        private List<CharacterPlacement> factionAConfig;
+        private List<CharacterPlacement> factionBConfig;
 
 
         void Awake()
@@ -85,7 +85,7 @@ namespace Controller {
 
         private void SpawnUnits()
         {
-            unitManager.SpawnUnits(factionAConfig, spawnPointA, Unit.Faction.FactionA, battlefieldMinBounds, battlefieldMaxBounds);
+            unitManager.SpawnUnits(factionAConfig, transform, Unit.Faction.FactionA, battlefieldMinBounds, battlefieldMaxBounds);
             unitManager.SpawnUnits(factionBConfig, spawnPointB, Unit.Faction.FactionB, battlefieldMinBounds, battlefieldMaxBounds);
         }
 

@@ -34,18 +34,20 @@ namespace Controller
         /// <param name="faction">阵营</param>
         /// <param name="parent">父物体</param>
         public void SpawnUnits(
-            List<CharacterInfluenceGroup> items,
+            List<CharacterPlacement> items,
             Transform spawnPoint,
             Unit.Faction faction,
             Transform minBounds,
             Transform maxBounds
         )
         {
-            foreach (var item in items)
+            foreach (Model.CharacterPlacement item in items)
             {
-                Unit unit = unitFactory.CreateUnit(item);
+                Unit unit = unitFactory.CreateUnit(item.CharacterInfluence);
                 unit.transform.SetParent(GetRootByFaction(faction), false);
-                Vector3 spawnPos = GetRandomOffsetedSpawnPosition(spawnPoint.position);
+
+                Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
+
                 unit.transform.position = spawnPos;
                 unit.SetFaction(faction);
                 unit.SetBattlefieldBounds(minBounds, maxBounds);
@@ -95,18 +97,6 @@ namespace Controller
         private Transform GetRootByFaction(Unit.Faction faction)
         {
             return faction == Unit.Faction.FactionA ? factionARoot : factionBRoot;
-        }
-
-        /// <summary>
-        /// 随机微调出生点
-        /// </summary>
-        private Vector3 GetRandomOffsetedSpawnPosition(Vector3 basePosition)
-        {
-            return basePosition + new Vector3(
-                UnityEngine.Random.Range(-RandomOffsetRangeX, RandomOffsetRangeX),
-                UnityEngine.Random.Range(-RandomOffsetRangeY, RandomOffsetRangeY),
-                0f
-            );
         }
 
 

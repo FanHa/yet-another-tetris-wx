@@ -18,6 +18,10 @@ namespace View
         private int width;
         private int height;
         [SerializeField] private Operation.TetriFactory tetriFactory;
+        [SerializeField] private Transform ScreenCenterPosition;
+
+        private readonly Dictionary<Model.Tetri.Tetri, Operation.Tetri> tetriObjectMap = new();
+
         public void Initialize(int width, int height, float cellSize)
         {
             this.width = width;
@@ -40,6 +44,7 @@ namespace View
 
         public void Refresh(IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> placedTetris)
         {
+            tetriObjectMap.Clear();
             foreach (Transform child in placedTetrisRoot)
             {
                 Destroy(child.gameObject);
@@ -58,10 +63,23 @@ namespace View
                 float x = leftTopLocal.x + (position.x + 1.5f) * cellSize;
                 float y = leftTopLocal.y - (position.y + 1.5f) * cellSize;
                 tetriComponent.transform.localPosition = new Vector3(x, y, 0);
+
+                tetriObjectMap[tetri] = tetriComponent;
                 OnItemCreated?.Invoke(tetriComponent);
 
             }
 
         }
+
+        public Vector3 GetRelativePositionByTetri(Model.Tetri.Tetri tetri)
+        {
+            if (tetri != null && tetriObjectMap.TryGetValue(tetri, out var obj) && obj != null)
+            {
+                Vector3 worldPos = obj.transform.position;
+                return ScreenCenterPosition.InverseTransformPoint(worldPos);
+            }
+            return Vector3.zero;
+        }
+
     }
 }

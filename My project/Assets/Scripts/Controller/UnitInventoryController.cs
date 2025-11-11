@@ -26,19 +26,19 @@ namespace Controller {
         }
 
 
-        public void SetEnemyInventoryData(List<CharacterInfluenceGroup> enemyData)
+        public void SetEnemyInventoryData(List<CharacterPlacement> enemyData)
         {
             enemyUnitInventoryData.ResetInventoryData(enemyData);
         }
 
-        public void SetPlayerInventoryData(List<CharacterInfluenceGroup> playerData)
+        public void SetPlayerInventoryData(List<CharacterPlacement> playerData)
         {
             playerUnitInventoryData.ResetInventoryData(playerData);
         }
 
         public void PrepareTrainGroundUnitInventory()
         {
-            var itemsA = new List<CharacterInfluenceGroup>();
+            var itemsA = new List<CharacterPlacement>();
             foreach (var unitConfig in trainGroundSetup.FactionAUnits)
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
@@ -52,12 +52,13 @@ namespace Controller {
                             tetriCells.Add(cell);
                     }
                 }
-                var item = new CharacterInfluenceGroup(characterCell, tetriCells);
+                CharacterInfluence influence = new CharacterInfluence(characterCell, tetriCells, null);
+                var item = new CharacterPlacement(influence, Vector3.zero);
                 itemsA.Add(item);
             }
             trainGroundUnitInventoryDataA.ResetInventoryData(itemsA);
 
-            var itemsB = new List<CharacterInfluenceGroup>();
+            var itemsB = new List<CharacterPlacement>();
             foreach (var unitConfig in trainGroundSetup.FactionBUnits)
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
@@ -71,7 +72,8 @@ namespace Controller {
                             tetriCells.Add(cell);
                     }
                 }
-                var item = new CharacterInfluenceGroup(characterCell, tetriCells);
+                CharacterInfluence influence = new CharacterInfluence(characterCell, tetriCells, null);
+                var item = new CharacterPlacement(influence, Vector3.zero);
                 itemsB.Add(item);
             }
             trainGroundUnitInventoryDataB.ResetInventoryData(itemsB);

@@ -79,8 +79,8 @@ public class GameController : MonoBehaviour
         var type = tetri.ModelTetri.Type;
         if (type == Model.Tetri.Tetri.TetriType.Character)
         {
-            CharacterInfluenceGroup characterInfluenceGroup = operationTableController.GetCharacterInfluenceGroupByTetri(tetri.ModelTetri);
-            Units.Unit unit = unitFactory.CreateUnit(characterInfluenceGroup);
+            CharacterPlacement characterPlacement = operationTableController.GetCharacterPlacementByTetri(tetri.ModelTetri);
+            Units.Unit unit = unitFactory.CreateUnit(characterPlacement.CharacterInfluence);
             unit.transform.position = tetri.transform.position;
             unitInfo.ShowUnitInfo(unit);
             tempUnit = unit;
@@ -218,9 +218,9 @@ public class GameController : MonoBehaviour
 
     private void HandleBattleClicked()
     {
-        List<CharacterInfluenceGroup> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        List<CharacterPlacement> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
         unitInventoryController.SetEnemyInventoryData(levelData);
-        unitInventoryController.SetPlayerInventoryData(operationTableController.GetCharacterInfluenceGroups());
+        unitInventoryController.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 

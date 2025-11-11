@@ -11,25 +11,25 @@ namespace Units
         [SerializeField] private GameObject unitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping resourceMapping;
 
-        public Units.Unit CreateUnit(CharacterInfluenceGroup group)
+        public Units.Unit CreateUnit(CharacterInfluence influence)
         {
             GameObject go = Object.Instantiate(unitPrefab);
             Units.Unit unit = go.GetComponent<Units.Unit>();
 
             // 基础外观和数据初始化
-            Sprite characterSprite = resourceMapping.GetSprite(group.Character);
+            Sprite characterSprite = resourceMapping.GetSprite(influence.Character);
             unit.BodySpriteRenderer.sprite = characterSprite;
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;
 
-            group.Character.Apply(unit);
-            foreach (var cell in group.InfluencedCells)
+            influence.Character.Apply(unit);
+            foreach (var cell in influence.InfluencedCells)
             {
                 cell.Apply(unit);
             }
 
             var cellCounts = new Dictionary<AffinityType, int>();
-            foreach (var cell in group.InfluencedCells)
+            foreach (var cell in influence.InfluencedCells)
             {
                 if (!cellCounts.ContainsKey(cell.Affinity))
                     cellCounts[cell.Affinity] = 0;
@@ -52,8 +52,8 @@ namespace Units
         
         public Units.Unit CreateUnit(Model.Tetri.Character characterCell)
         {
-            var item = new Model.CharacterInfluenceGroup(characterCell, new List<Model.Tetri.Cell>());
-            return CreateUnit(item);
+            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
+            return CreateUnit(influence);
         }
     }
 }

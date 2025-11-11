@@ -85,10 +85,10 @@ namespace Model
         /// <summary>
         /// 获取当前关卡的敌人数据
         /// </summary>
-        public List<CharacterInfluenceGroup> GetEnemyData()
+        public List<CharacterPlacement> GetEnemyData()
         {
             // 转换为 InventoryItem 列表
-            List<CharacterInfluenceGroup> inventoryItems = new List<CharacterInfluenceGroup>();
+            List<CharacterPlacement> inventoryItems = new List<CharacterPlacement>();
             foreach (var enemy in enemyDatas)
             {
 
@@ -108,8 +108,9 @@ namespace Model
                     cell.Level = kv.Value; // 重复次数即为等级
                     tetriCells.Add(cell);
                 }
+                CharacterInfluence characterInfluence = new(characterInstance, tetriCells, null);
 
-                CharacterInfluenceGroup inventoryItem = new(characterInstance, tetriCells);
+                CharacterPlacement inventoryItem = new(characterInfluence, Vector3.zero);
                 inventoryItems.Add(inventoryItem);
             }
 

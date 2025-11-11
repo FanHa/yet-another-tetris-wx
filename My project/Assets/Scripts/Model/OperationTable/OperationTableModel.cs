@@ -13,13 +13,18 @@ namespace Model
         public event Action OnChanged;
 
         [SerializeField]
-        // private List<PlacedTetri> placedTetris = new List<PlacedTetri>();
-        // public IReadOnlyList<PlacedTetri> PlacedTetris => placedTetris;
 
         private Dictionary<Model.Tetri.Tetri, Vector2Int> placedMap = new();
         public IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> PlacedMap => placedMap;
 
-        private Model.Tetri.Cell[,] occupiedCellGrid;
+        // private Cell[,] occupiedCellGrid;
+        private OccupiedSlot[,] occupiedGrid;
+
+
+        private void Awake()
+        {
+            occupiedGrid = new OccupiedSlot[Width, Height];
+        }
 
         /// <summary>
         /// 尝试放置一个 Tetri 到指定位置
@@ -29,77 +34,62 @@ namespace Model
         /// <returns>是否放置成功</returns>
         public bool TryPlaceTetri(Model.Tetri.Tetri tetri, Vector2Int position)
         {
-            var cellsToOccupyGlobal = new List<Vector2Int>();
-            List<Vector2Int> tetriRelativeOccupiedPositions = tetri.GetOccupiedPositions();
-            foreach (var relativePos in tetriRelativeOccupiedPositions)
-            {
-                cellsToOccupyGlobal.Add(position + relativePos);
-            }
+            if (tetri == null) return false;
+            if (placedMap.ContainsKey(tetri)) return false;
 
-            foreach (var globalCellPos in cellsToOccupyGlobal)
+            List<Vector2Int> rels = tetri.GetOccupiedPositions();
+            // 边界 & 占用检测
+            foreach (Vector2Int r in rels)
             {
-                if (globalCellPos.x < 0 || globalCellPos.x >= occupiedCellGrid.GetLength(0) ||
-                    globalCellPos.y < 0 || globalCellPos.y >= occupiedCellGrid.GetLength(1))
-                {
-                    Debug.Log($"超出边界: {globalCellPos}");
-                    return false;
-                }
-                // 直接检查 cellGrid
-                if (occupiedCellGrid[globalCellPos.x, globalCellPos.y] != null)
-                {
-                    Debug.Log($"已被占用: {globalCellPos}");
-                    return false;
-                }
+                Vector2Int g = position + r;
+                if (g.x < 0 || g.x >= Width || g.y < 0 || g.y >= Height) return false;
+                if (occupiedGrid[g.x, g.y] != null) return false;
             }
-
             tetri.OnDataChanged += HandleTetriChanged;
-            foreach (var relativePos in tetriRelativeOccupiedPositions)
-            {
-                Vector2Int globalPos = position + relativePos;
-                Model.Tetri.Cell cellObject = tetri.Shape[relativePos.x, relativePos.y];
-                if (cellObject != null)
-                {
-                    if (globalPos.x >= 0 && globalPos.x < occupiedCellGrid.GetLength(0) &&
-                        globalPos.y >= 0 && globalPos.y < occupiedCellGrid.GetLength(1))
-                    {
-                        occupiedCellGrid[globalPos.x, globalPos.y] = cellObject;
-                    }
-                }
-            }
-            placedMap[tetri] = position;
 
+            // 写入
+            foreach (Vector2Int r in rels)
+            {
+                Vector2Int g = position + r;
+                Model.Tetri.Cell cell = tetri.Shape[r.x, r.y];
+                if (cell == null) continue;
+
+                occupiedGrid[g.x, g.y] = new OccupiedSlot
+                {
+                    Cell = cell,
+                    OwnerTetri = tetri,
+                    LocalInTetri = r
+                };
+            }
+
+            placedMap[tetri] = position;
             OnChanged?.Invoke();
             return true;
         }
 
         public void Clear()
         {
-            foreach (var kv in placedMap)
+            foreach (KeyValuePair<Tetri.Tetri, Vector2Int> kv in placedMap)
             {
                 kv.Key.OnDataChanged -= HandleTetriChanged;
             }
             placedMap.Clear();
-
-            occupiedCellGrid = new Model.Tetri.Cell[Width, Height]; // 重新创建空的 grid
+            occupiedGrid = new OccupiedSlot[Width, Height];
             OnChanged?.Invoke();
         }
 
-        public void RemoveTetri(Model.Tetri.Tetri placedTetriToRemove)
+        public void RemoveTetri(Model.Tetri.Tetri tetri)
         {
-            placedMap.TryGetValue(placedTetriToRemove, out var position);
-            placedTetriToRemove.OnDataChanged -= HandleTetriChanged;
-            List<Vector2Int> tetriRelativeOccupiedPositions = placedTetriToRemove.GetOccupiedPositions();
-            foreach (var relativePos in tetriRelativeOccupiedPositions)
+            if (tetri == null) return;
+            if (!placedMap.TryGetValue(tetri, out var topLeft)) return;
+            tetri.OnDataChanged -= HandleTetriChanged;
+            foreach (var r in tetri.GetOccupiedPositions())
             {
-                Vector2Int globalPos = position + relativePos;
-                // 不再需要从 occupiedCoordinates 移除
-                if (globalPos.x >= 0 && globalPos.x < occupiedCellGrid.GetLength(0) &&
-                    globalPos.y >= 0 && globalPos.y < occupiedCellGrid.GetLength(1))
-                {
-                    occupiedCellGrid[globalPos.x, globalPos.y] = null; // 从 grid 中清除
-                }
+                var g = topLeft + r;
+                if (g.x < 0 || g.x >= Width || g.y < 0 || g.y >= Height) continue;
+                occupiedGrid[g.x, g.y] = null;
             }
-            placedMap.Remove(placedTetriToRemove);
+            placedMap.Remove(tetri);
             OnChanged?.Invoke();
 
         }
@@ -110,20 +100,20 @@ namespace Model
             OnChanged?.Invoke();
         }
 
-        public List<CharacterInfluenceGroup> GetCharacterInfluenceGroups()
+        public List<CharacterInfluence> GetCharacterInfluences()
         {
-            var result = new List<CharacterInfluenceGroup>();
-            int width = occupiedCellGrid.GetLength(0);
-            int height = occupiedCellGrid.GetLength(1);
+            var result = new List<CharacterInfluence>();
+            int width = occupiedGrid.GetLength(0);
+            int height = occupiedGrid.GetLength(1);
 
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    var cell = occupiedCellGrid[x, y];
-                    if (cell is Model.Tetri.Character character)
+                    Model.OccupiedSlot slot = occupiedGrid[x, y];
+                    if (slot?.Cell is Model.Tetri.Character character)
                     {
-                        var group = new List<Cell>();
+                        var influencedCells = new List<Cell>();
                         var offsets = character.GetInfluenceOffsets();
 
                         foreach (var offset in offsets)
@@ -132,15 +122,15 @@ namespace Model
                             int ny = y + offset.y;
                             if (nx >= 0 && nx < width && ny >= 0 && ny < height)
                             {
-                                var neighbor = occupiedCellGrid[nx, ny];
-                                if (neighbor != null && !group.Contains(neighbor))
+                                var neighbor = occupiedGrid[nx, ny]?.Cell;
+                                if (neighbor != null && !influencedCells.Contains(neighbor))
                                 {
-                                    group.Add(neighbor);
+                                    influencedCells.Add(neighbor);
                                 }
                             }
                         }
-                        var characterGroup = new CharacterInfluenceGroup(character, group);
-                        result.Add(characterGroup);
+                        var characterInfluence = new CharacterInfluence(character, influencedCells, slot.OwnerTetri);
+                        result.Add(characterInfluence);
                     }
                 }
             }
@@ -148,43 +138,51 @@ namespace Model
             return result;
         }
 
-        public CharacterInfluenceGroup GetCharacterInfluenceGroupOf(Model.Tetri.Tetri tetri)
+        public CharacterInfluence GetCharacterInfluenceByTetri(Model.Tetri.Tetri tetri)
         {
-            placedMap.TryGetValue(tetri, out var position);
-            var basePosition = position + Vector2Int.one; // 主格子在 tetri 内的位置
-            int width = occupiedCellGrid.GetLength(0);
-            int height = occupiedCellGrid.GetLength(1);
-            var group = new List<Cell>();
-            var character = tetri.GetMainCell() as Model.Tetri.Character;
-            var offsets = character.GetInfluenceOffsets();
-            foreach (var offset in offsets)
+            if (tetri == null) return null;
+            if (!placedMap.TryGetValue(tetri, out var topLeft)) return null;
+
+            Model.Tetri.Character main = tetri.GetMainCell() as Model.Tetri.Character;
+            if (main == null) return null;
+
+            // 找主角色在 Tetri 内的局部坐标
+            Vector2Int? local = null;
+            var shape = tetri.Shape;
+            for (int i = 0; i < shape.GetLength(0) && !local.HasValue; i++)
+                for (int j = 0; j < shape.GetLength(1) && !local.HasValue; j++)
+                    if (ReferenceEquals(shape[i, j], main))
+                        local = new Vector2Int(i, j);
+            if (!local.HasValue) return null;
+
+            var basePos = topLeft + local.Value;
+            int w = occupiedGrid.GetLength(0);
+            int h = occupiedGrid.GetLength(1);
+
+            var influenced = new List<Cell>();
+            foreach (var o in main.GetInfluenceOffsets())
             {
-                int nx = basePosition.x + offset.x;
-                int ny = basePosition.y + offset.y;
-                if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+                int nx = basePos.x + o.x;
+                int ny = basePos.y + o.y;
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h)
                 {
-                    var neighbor = occupiedCellGrid[nx, ny];
-                    if (neighbor != null && !group.Contains(neighbor))
-                    {
-                        group.Add(neighbor);
-                    }
+                    var nCell = occupiedGrid[nx, ny]?.Cell;
+                    if (nCell != null && !influenced.Contains(nCell))
+                        influenced.Add(nCell);
                 }
             }
-            return new CharacterInfluenceGroup(character, group);
+
+            return new CharacterInfluence(main, influenced, tetri);
+
         }
 
-    }
-
-    public class CharacterInfluenceGroup
-    {
-        public Character Character { get; }
-        public List<Cell> InfluencedCells { get; }
-
-        public CharacterInfluenceGroup(Character character, List<Cell> influencedCells)
-        {
-            Character = character;
-            InfluencedCells = influencedCells;
-        }
     }
     
+    [Serializable]
+    public class OccupiedSlot
+    {
+        public Cell Cell;
+        public Model.Tetri.Tetri OwnerTetri;
+        public Vector2Int LocalInTetri;   // 该格在 Tetri 内的局部坐标
+    }
 }

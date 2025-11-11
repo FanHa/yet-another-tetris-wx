@@ -114,7 +114,6 @@ namespace UI.Reward
                 container.transform.SetParent(null, false); // 由外部决定父物体
                 return container;
             }
-            // todo 实现其他类型
             return null;
         }
 

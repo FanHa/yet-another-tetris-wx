@@ -12,7 +12,7 @@ namespace Controller
     public class OperationTableController : MonoBehaviour
     {
         public event Action<Operation.Tetri> OnTetriBeginDrag;
-        public event Action<List<CharacterInfluenceGroup>> OnCharacterInfluenceGroupsChanged;
+        // public event Action<List<CharacterPlacement>> OnCharacterInfluenceGroupsChanged;
         public event Action<Operation.Tetri> OnTetriClick;
 
         [Header("每个格子的间距")]
@@ -61,20 +61,35 @@ namespace Controller
         {
             // 让 View 根据 model.PlacedTetris 刷新显示
             view.Refresh(model.PlacedMap);
-            List<CharacterInfluenceGroup> groups = model.GetCharacterInfluenceGroups();
-            OnCharacterInfluenceGroupsChanged?.Invoke(groups);
+            // List<CharacterInfluence> influences = model.GetCharacterInfluences();
+            // OnCharacterInfluenceGroupsChanged?.Invoke(influences);
         }
 
-        public CharacterInfluenceGroup GetCharacterInfluenceGroupByTetri(Model.Tetri.Tetri tetri)
+        public CharacterPlacement GetCharacterPlacementByTetri(Model.Tetri.Tetri tetri)
         {
-            return model.GetCharacterInfluenceGroupOf(tetri);
+            CharacterInfluence influence = model.GetCharacterInfluenceByTetri(tetri);
+            var position = view.GetRelativePositionByTetri(tetri);
+            return new CharacterPlacement(influence, position);
+
         }
 
-        public List<CharacterInfluenceGroup> GetCharacterInfluenceGroups()
+        public List<CharacterPlacement> GetCharacterPlacements()
         {
-            return model.GetCharacterInfluenceGroups();
-        }
+            List<CharacterInfluence> influences = model.GetCharacterInfluences();
 
+            var placements = new List<CharacterPlacement>(influences.Count);
+
+            foreach (var influence in influences)
+            {
+                Model.Tetri.Tetri ownerTetri = influence.OwnerTetri;
+                Vector3 localPos = view.GetRelativePositionByTetri(ownerTetri);
+                var placement = new CharacterPlacement(influence, localPos);
+
+                placements.Add(placement);
+            }
+
+            return placements;
+        }
 
 
         public bool TryPlaceTetri(Model.Tetri.Tetri modelTetri, Vector3 worldPosition)
