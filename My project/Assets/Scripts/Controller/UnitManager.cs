@@ -66,8 +66,19 @@ namespace Controller
                     factionB.Add(unit);
                 }
                 unit.Setup();
-                unit.Activate();
+                // unit.Activate();
 
+            }
+        }
+
+        public void ActivateAllUnits()
+        {
+            foreach (var unit in factionA.Concat(factionB))
+            {
+                if (unit != null && !unit.IsActive)
+                {
+                    unit.Activate();
+                }
             }
         }
 

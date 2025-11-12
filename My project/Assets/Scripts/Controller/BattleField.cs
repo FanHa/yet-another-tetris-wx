@@ -33,6 +33,8 @@ namespace Controller {
         [Header("Spawn Points")]
         // public Transform spawnPointA;
         public Transform spawnPointB;
+        [SerializeField] private float timeDelayBeforeBattle; // 战斗开始前的延迟时间
+        private Coroutine spawnRoutine; // 处理战斗开始生成单位后需要延迟一小段时间再开打
 
         [Header("Data")]
         [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
@@ -45,7 +47,6 @@ namespace Controller {
 
         private List<CharacterPlacement> factionAConfig;
         private List<CharacterPlacement> factionBConfig;
-
 
         void Awake()
         {
@@ -85,10 +86,38 @@ namespace Controller {
 
         private void SpawnUnits()
         {
-            unitManager.SpawnUnits(factionAConfig, transform, Unit.Faction.FactionA, battlefieldMinBounds, battlefieldMaxBounds);
-            unitManager.SpawnUnits(factionBConfig, spawnPointB, Unit.Faction.FactionB, battlefieldMinBounds, battlefieldMaxBounds);
+            if (spawnRoutine != null)
+            {
+                StopCoroutine(spawnRoutine);
+            }
+            spawnRoutine = StartCoroutine(SpawnUnitsRoutine());
+
         }
 
+        private IEnumerator SpawnUnitsRoutine()
+        {
+            unitManager.SpawnUnits(
+                factionAConfig,
+                transform,
+                Unit.Faction.FactionA,
+                battlefieldMinBounds,
+                battlefieldMaxBounds
+            );
+
+            unitManager.SpawnUnits(
+                factionBConfig,
+                spawnPointB,
+                Unit.Faction.FactionB,
+                battlefieldMinBounds,
+                battlefieldMaxBounds
+            );
+
+            yield return new WaitForSeconds(timeDelayBeforeBattle);
+            // 4) 同时激活所有单位
+            unitManager.ActivateAllUnits();
+
+            spawnRoutine = null;
+        }
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
         {
