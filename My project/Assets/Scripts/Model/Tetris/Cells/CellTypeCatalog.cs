@@ -30,8 +30,9 @@ namespace Model.Tetri
         ShadowAttack,
         ShadowStep,
         ShadowArrow,
-        Charge
-        
+        Charge,
+        IceBreaker
+
     }
 
     public enum CharacterTypeId

@@ -44,6 +44,7 @@ namespace Model.Tetri
                 new(CellTypeId.IceShield, typeof(IceShield), cellLevelConfigManager.IceShieldConfigGroup),
                 new(CellTypeId.IcyCage, typeof(IcyCage), cellLevelConfigManager.IcyCageConfigGroup),
                 new(CellTypeId.Snowball, typeof(Snowball), cellLevelConfigManager.SnowballConfigGroup),
+                new(CellTypeId.IceBreaker, typeof(IceBreaker), cellLevelConfigManager.IceBreakerConfigGroup),
                 new(CellTypeId.Fireball, typeof(Fireball), cellLevelConfigManager.FireballConfigGroup),
                 new(CellTypeId.FlameInject, typeof(FlameInject), cellLevelConfigManager.FlameInjectConfigGroup),
                 new(CellTypeId.BlazingField, typeof(BlazingField), cellLevelConfigManager.BlazingFieldConfigGroup),

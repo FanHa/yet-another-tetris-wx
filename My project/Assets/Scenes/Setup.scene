@@ -1054,7 +1054,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &899487398
 Transform:
   m_ObjectHideFlags: 0
@@ -1303,8 +1303,8 @@ MonoBehaviour:
   floatingViewManager: {fileID: 1588624655}
   battleStatistics: {fileID: 634437515}
   statisticsController: {fileID: 85712747}
-  spawnPointA: {fileID: 656560514}
   spawnPointB: {fileID: 131970432}
+  timeDelayBeforeBattle: 1
   playerUnitInventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
   enemyUnitInventoryData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
   trainGroundDataFactionA: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
@@ -3193,6 +3193,10 @@ PrefabInstance:
       propertyPath: height
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 670501145282276523, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
+      propertyPath: ScreenCenterPosition
+      value: 
+      objectReference: {fileID: 1391442593}
     - target: {fileID: 2275502966279818182, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
       propertyPath: m_Size.x
       value: 16
