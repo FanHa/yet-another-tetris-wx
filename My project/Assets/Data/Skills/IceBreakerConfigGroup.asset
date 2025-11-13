@@ -15,9 +15,9 @@ MonoBehaviour:
   LevelConfigs:
   - BuffDuration: -1
     BaseExtraDamage: 5
-    MultiplierByChilledLayer: 1
+    MultiplierByChilledLayer: 0.1
     ExtraDamagePerIceCell: 1
   - BuffDuration: -1
     BaseExtraDamage: 10
-    MultiplierByChilledLayer: 2
-    ExtraDamagePerIceCell: 1.5
+    MultiplierByChilledLayer: 0.2
+    ExtraDamagePerIceCell: 2

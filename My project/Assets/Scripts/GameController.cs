@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.RewardController rewardController;
 
-    [SerializeField] private Controller.UnitInventoryController unitInventoryController;
+    [SerializeField] private Model.UnitInventoryService unitInventoryService;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
@@ -219,8 +219,8 @@ public class GameController : MonoBehaviour
     private void HandleBattleClicked()
     {
         List<CharacterPlacement> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
-        unitInventoryController.SetEnemyInventoryData(levelData);
-        unitInventoryController.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
+        unitInventoryService.SetEnemyInventoryData(levelData);
+        unitInventoryService.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
@@ -256,7 +256,7 @@ public class GameController : MonoBehaviour
             Debug.LogWarning("This method can only be called in Play mode.");
             return;
         }
-        unitInventoryController.PrepareTrainGroundUnitInventory();
+        unitInventoryService.PrepareTrainGroundUnitInventory();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartTrainGround();
     }

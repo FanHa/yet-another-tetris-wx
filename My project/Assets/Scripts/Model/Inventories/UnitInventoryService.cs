@@ -6,8 +6,9 @@ using Model.Tetri;
 using System.Linq;
 using Units;
 
-namespace Controller {
-    public class UnitInventoryController : MonoBehaviour
+namespace Model {
+    [CreateAssetMenu]
+    public class UnitInventoryService : ScriptableObject
     {
         [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
         [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
@@ -16,15 +17,6 @@ namespace Controller {
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
         [SerializeField] private Units.UnitFactory unitFactory;
         [SerializeField] private TetriCellFactory tetriCellFactory;
-
-        private void Awake()
-        {
-        }
-        private void Start()
-        {
-            
-        }
-
 
         public void SetEnemyInventoryData(List<CharacterPlacement> enemyData)
         {

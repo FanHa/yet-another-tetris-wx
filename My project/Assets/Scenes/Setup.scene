@@ -1979,7 +1979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleField: {fileID: 943837600}
   rewardController: {fileID: 1420456109}
-  unitInventoryController: {fileID: 1411337047}
+  unitInventoryService: {fileID: 0}
   levelConfig: {fileID: 11400000, guid: 51ba4ce3e20e5e143a814062bb766830, type: 2}
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}
@@ -2023,17 +2023,6 @@ Transform:
   - {fileID: 1842027254}
   m_Father: {fileID: 943837599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1411337047 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-  m_PrefabInstance: {fileID: 1770591512777316844}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50bdea73ea2aad548b8fa0690613bd31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1420456107 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4317380976789110526, guid: e086b492d79306e4699fea611f8bd0b6, type: 3}
@@ -3077,98 +3066,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca60e1817a002494f9649f876e2767f7, type: 3}
---- !u!1001 &1770591512777316844
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4631054940624509107, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5126733382530746276, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_Name
-      value: UnitInventory
-      objectReference: {fileID: 0}
-    - target: {fileID: 7567273035921818630, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: unitFactory
-      value: 
-      objectReference: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: tetriCellFactory
-      value: 
-      objectReference: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: trainGroundSetup
-      value: 
-      objectReference: {fileID: 11400000, guid: 72c7dd6fcdf0a574fb4e21734bed21e5, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: enemyUnitInventoryData
-      value: 
-      objectReference: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: playerUnitInventoryData
-      value: 
-      objectReference: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: trainGroundUnitInventoryDataA
-      value: 
-      objectReference: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
-    - target: {fileID: 8536415404827755800, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-      propertyPath: trainGroundUnitInventoryDataB
-      value: 
-      objectReference: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
-    m_RemovedComponents:
-    - {fileID: 6175498540815119729, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-    m_RemovedGameObjects:
-    - {fileID: 7567273035921818630, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-    - {fileID: 2015827838649298535, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 64948e673de5d2c41a35317574018bb0, type: 3}
 --- !u!1001 &2025217634856458810
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4240,7 +4137,6 @@ SceneRoots:
   - {fileID: 85712746}
   - {fileID: 2025217634856458810}
   - {fileID: 654725609620354711}
-  - {fileID: 1770591512777316844}
   - {fileID: 1588624656}
   - {fileID: 2081044360}
   - {fileID: 1987537969}
