@@ -320,6 +320,7 @@ namespace Units
 
             if (Attributes.CurrentHealth <= 0)
             {
+                animationController.TriggerDie();
                 Deactivate();
                 OnDeath?.Invoke(this);
             }
