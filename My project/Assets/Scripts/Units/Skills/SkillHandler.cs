@@ -1,38 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Units.Skills
 {
     public class SkillHandler : MonoBehaviour
     {
-        public float energyPerTick;
         public float energyDecayPerSkill;
-        private float tickTimer = 0f;
+        private float tickTimer;
         private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
-        private SkillManager skillManager = new();
         private Unit owner;
 
         public event Action<Unit, Skill> OnSkillCast;
         public event Action<Skill> OnSkillReady;
 
-        private readonly Queue<ActiveSkill> readyQueue = new Queue<ActiveSkill>();
-        private readonly HashSet<ActiveSkill> queuedSet = new HashSet<ActiveSkill>();
-
-        private Attributes attributes;
-
-        public void Initialize(Attributes attributes)
-        {
-            this.attributes = attributes;
-        }
+        private readonly List<Skill> skills = new();
+        private readonly Queue<ActiveSkill> readyQueue = new();
+        private readonly HashSet<ActiveSkill> queuedSet = new();
 
         void Awake()
         {
             owner = GetComponent<Unit>();
-            skillManager.EnergyDecayPerSkill = energyDecayPerSkill;
-            skillManager.OnSkillReady += HandleSkillReady;
         }
 
 
@@ -45,7 +36,7 @@ namespace Units.Skills
                 tickTimer -= TICK_INTERVAL;
 
                 float energyPerTick = owner.Attributes.EnergyPerSecond.finalValue * TICK_INTERVAL;
-                skillManager.Tick(energyPerTick);
+                DistributeEnergy(energyPerTick);
             }
         }
 
@@ -64,23 +55,37 @@ namespace Units.Skills
 
         public void AddSkill(Skill newSkill)
         {
+            if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
+                return;
             newSkill.Owner = owner; // 设置技能的拥有者
-            skillManager.AddSkill(newSkill);
+            skills.Add(newSkill);
+            
         }
 
         public IReadOnlyList<Skill> GetSkills()
         {
-            return skillManager.Skills;
+            return skills;
         }
 
-        private void HandleSkillReady(ActiveSkill skill)
+        public void DistributeEnergy(float baseEnergy)
         {
-            if (!queuedSet.Add(skill))
-                return;
+            var activeSkills = skills.OfType<ActiveSkill>().ToList();
+            if (activeSkills.Count == 0) return;
 
-            readyQueue.Enqueue(skill);
-            OnSkillReady?.Invoke(skill); // 用于 UI 高亮等
+            float decayFactor = Mathf.Pow(energyDecayPerSkill, Mathf.Max(0, activeSkills.Count - 1));
+            float gainPerSkill = baseEnergy * decayFactor;
+
+            foreach (var s in activeSkills)
+                s.AddEnergy(gainPerSkill);
+
+            var firstReady = activeSkills.FirstOrDefault(s => s.IsReady());
+            if (firstReady != null && queuedSet.Add(firstReady))
+            {
+                readyQueue.Enqueue(firstReady);
+                OnSkillReady?.Invoke(firstReady);
+            }
         }
+
 
         public void ExecutePendingSkill()
         {
@@ -88,8 +93,11 @@ namespace Units.Skills
 
             var skill = readyQueue.Peek();
 
-            skill.Execute();
-            OnSkillCast?.Invoke(owner, skill);
+            bool result = skill.Execute();
+            if (result)
+            {
+                OnSkillCast?.Invoke(owner, skill);
+            }
 
 
             // 无论是否执行成功，都出队一次，允许后续重新判定再入队

@@ -21,16 +21,19 @@ namespace Units.Skills
             }
         }
 
-        public virtual void Execute()
+        public virtual bool Execute()
         {
             if (ExecuteCore())
             {
                 CurrentEnergy -= RequiredEnergy; // 执行技能后消耗能量
+                return true;
             }
             else
             {
                 CurrentEnergy -= RequiredEnergy * 0.5f; // 执行失败时消耗一半能量
                 Debug.Log($"{Name()} 技能施放失败，消耗一半能量。单位：{Owner.name}");
+
+                return false;
             }
         }
 

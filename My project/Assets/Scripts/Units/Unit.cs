@@ -66,17 +66,13 @@ namespace Units
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
-
             hitEffect = GetComponent<HitEffect>();
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
-            
-        }
 
-        private void Start()
-        {
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
+            
         }
 
         // Update is called once per frame
@@ -100,12 +96,14 @@ namespace Units
             healthBar.SetAttributes(Attributes);
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
             movementController.Initialize(Attributes, UnitManager, this);
-            skillHandler.Initialize(Attributes);
+            
         }
 
         public void Activate()
         {
             skillHandler.Activate();
+            skillHandler.OnSkillCast += HandleSelfSkillCast;
+            UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
             isActive = true;
             healthBar.gameObject.SetActive(true);
         }
@@ -113,10 +111,27 @@ namespace Units
         public void Deactivate()
         {
             healthBar.gameObject.SetActive(false);
+            UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
+            skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
             buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
             isActive = false;
         }
+
+        private void HandleGlobalSkillCast(Unit caster, Skill skill)
+        {
+            foreach (var buff in buffHandler.GetActiveBuffs())
+            {
+                if (buff is IGlobalSkillCastTrigger t)
+                    t.OnGlobalSkillCast(caster, skill);
+            }
+        }
+
+        private void HandleSelfSkillCast(Unit unit, Skill skill)
+        {
+            OnSkillCast?.Invoke(unit, skill);
+        }
+
         public void SetHitAndRun(bool enable)
         {
             movementController.IsHitAndRun = enable;
@@ -156,6 +171,11 @@ namespace Units
         
         }
 
+        public void AddSkillEnergy(float energy)
+        {
+            skillHandler.DistributeEnergy(energy);
+        }
+
         private void ProcessSkill()
         {
             if (isInAction) return;
@@ -169,8 +189,8 @@ namespace Units
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            OnSkillCast?.Invoke(this, skillHandler.PeekReadySkill());
-            skillHandler.ExecutePendingSkill(); // 执行待处理的技能\
+            
+            skillHandler.ExecutePendingSkill(); // 执行待处理的技能
             isInAction = false;
 
         }

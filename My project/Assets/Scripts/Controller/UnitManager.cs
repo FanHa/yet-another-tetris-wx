@@ -15,7 +15,7 @@ namespace Controller
         public event Action<Unit> OnUnitDeath;
         public event Action<Unit.Faction> OnFactionAllDead;
         public event Action<Units.Damages.Damage> OnUnitDamageTaken;
-        public event Action<Units.Unit, Units.Skills.Skill> OnSkillCast;
+        public event Action<Units.Unit, Units.Skills.Skill> OnGlobalSkillCast;
 
         [SerializeField] private UnitFactory unitFactory;
         [SerializeField] private Transform factionARoot;
@@ -66,7 +66,6 @@ namespace Controller
                     factionB.Add(unit);
                 }
                 unit.Setup();
-                // unit.Activate();
 
             }
         }
@@ -135,7 +134,7 @@ namespace Controller
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
         {
-            OnSkillCast?.Invoke(unit, skill);
+            OnGlobalSkillCast?.Invoke(unit, skill);
         }
 
 
@@ -147,6 +146,11 @@ namespace Controller
         internal List<Unit> GetFactionAUnits()
         {
             return factionA;
+        }
+
+        public List<Unit> GetUnitsByFaction(Unit.Faction faction)
+        {
+            return faction == Unit.Faction.FactionA ? factionA : factionB;
         }
 
         public List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf = false)

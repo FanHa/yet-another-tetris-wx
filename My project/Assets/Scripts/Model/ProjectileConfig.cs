@@ -30,5 +30,6 @@ namespace Model
         public GameObject LifeBombPrefab;
 
         public GameObject ChargePrefab;
+
     }
 }

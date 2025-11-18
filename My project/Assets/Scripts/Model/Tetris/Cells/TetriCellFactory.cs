@@ -61,6 +61,8 @@ namespace Model.Tetri
                 new(CellTypeId.ShadowStep, typeof(ShadowStep), cellLevelConfigManager.ShadowStepConfigGroup),
                 new(CellTypeId.ShadowArrow, typeof(ShadowArrow), cellLevelConfigManager.ShadowArrowConfigGroup),
                 new(CellTypeId.Charge, typeof(Charge), cellLevelConfigManager.ChargeConfigGroup),
+                new(CellTypeId.EnergyAbsorb, typeof(EnergyAbsorb), cellLevelConfigManager.EnergyAbsorbConfigGroup),
+                
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };
 

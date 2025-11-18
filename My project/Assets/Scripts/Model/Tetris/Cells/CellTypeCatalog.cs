@@ -31,7 +31,8 @@ namespace Model.Tetri
         ShadowStep,
         ShadowArrow,
         Charge,
-        IceBreaker
+        IceBreaker,
+        EnergyAbsorb
 
     }
 

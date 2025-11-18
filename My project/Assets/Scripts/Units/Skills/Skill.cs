@@ -27,6 +27,6 @@ namespace Units.Skills
     {
         void AddEnergy(float amount);
         bool IsReady();
-        void Execute();
+        bool Execute();
     }
 }

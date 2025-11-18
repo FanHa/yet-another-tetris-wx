@@ -8,6 +8,7 @@ namespace Model.Tetri
         Wind,
         Life,
         Shadow,
-        Swift
+        Swift,
+        Absorb
     }
 }

@@ -58,7 +58,7 @@ namespace Controller {
             unitManager.OnUnitDeath += HandleUnitDeath;
             unitManager.OnFactionAllDead += HandleFactionAllDead;
             unitManager.OnUnitDamageTaken += HandleDamageTaken;
-            unitManager.OnSkillCast += HandleSkillCast;
+            unitManager.OnGlobalSkillCast += HandleSkillCast;
             unitManager.OnUnitClicked += HandleUnitClicked;
         }
 

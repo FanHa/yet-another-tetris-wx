@@ -39,5 +39,8 @@ namespace Model.Tetri
 
         [Header("迅捷")]
         public ChargeConfigGroup ChargeConfigGroup;
+
+        [Header("吸取")]
+        public EnergyAbsorbConfigGroup EnergyAbsorbConfigGroup;
     }
 }

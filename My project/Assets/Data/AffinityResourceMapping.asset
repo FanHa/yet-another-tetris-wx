@@ -37,3 +37,7 @@ MonoBehaviour:
     name: "\u8FC5"
     description: "\u5F3A\u5316\u8FC5\u7CFB\u6280\u80FD,\u63D0\u5347\u79FB\u52A8\u901F\u5EA6"
     icon: {fileID: 0}
+  - affinityType: 7
+    name: "\u6C72\u53D6"
+    description: "\u5438\u6536\u654C\u65B9\u884C\u4E3A,\u4E3A\u53CB\u65B9\u63D0\u4F9B\u589E\u76CA"
+    icon: {fileID: 0}

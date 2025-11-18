@@ -1979,7 +1979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleField: {fileID: 943837600}
   rewardController: {fileID: 1420456109}
-  unitInventoryService: {fileID: 0}
+  unitInventoryService: {fileID: 11400000, guid: 1930f7a15a853c941a70864fb585d0d9, type: 2}
   levelConfig: {fileID: 11400000, guid: 51ba4ce3e20e5e143a814062bb766830, type: 2}
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}
