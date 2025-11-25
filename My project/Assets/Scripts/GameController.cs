@@ -21,12 +21,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
+    [SerializeField] private Button previewButton;
     private bool isPaused = false;
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
     [SerializeField] private UnitInfo unitInfo;
     [SerializeField] private TetriInfo tetriInfo;
     [SerializeField] private Units.UnitFactory unitFactory;
+    [SerializeField] private UI.BattlePreview battlePreviewUI;
     private GameObject currentShadowTetri;
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
@@ -41,12 +43,13 @@ public class GameController : MonoBehaviour
 
         battleButton.onClick.AddListener(HandleBattleClicked);
         pauseButton.onClick.AddListener(HandlePauseClicked);
+        previewButton.onClick.AddListener(HandlePreviewButtonClicked);
 
         tetriInventoryController.OnTetriBeginDrag += HandleInventoryTetriBeginDrag;
         tetriInventoryController.OnTetriClick += HandleTetriInventoryTetriClick;
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnTetriClick += HandleOperationTableTetriClick; // 新增：监听操作台点击
-
+        battlePreviewUI.OnClosed += HandleBattlePreviewClosed;
         tetriInfo.OnRotateTetriClicked += HandleRotateTetri;
         unitInfo.OnClosed += () =>
         {
@@ -58,7 +61,9 @@ public class GameController : MonoBehaviour
         };
     }
 
-    private void HandleUnitClicked(Unit unit)
+    
+
+    private void HandleUnitClicked(Units.Unit unit)
     {
         unitInfo.ShowUnitInfo(unit);
     }
@@ -240,6 +245,25 @@ public class GameController : MonoBehaviour
             pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "恢复";
             isPaused = true;
         }
+    }
+
+    private void HandlePreviewButtonClicked()
+    {
+        List<CharacterPlacement> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
+        unitInventoryService.SetEnemyInventoryData(levelData);
+        unitInventoryService.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
+        var bfPos = battleField.transform.position;
+        Camera.main.transform.position = new Vector3(bfPos.x, bfPos.y, Camera.main.transform.position.z);
+        battlePreviewUI.Activate();
+        battleField.PreviewBattle();
+    }
+
+    private void HandleBattlePreviewClosed()
+    {
+        var mainPos = transform.position;
+        Camera.main.transform.position = new Vector3(mainPos.x, mainPos.y, Camera.main.transform.position.z);
+        battlePreviewUI.Deactivate();
+        battleField.ClearPreview();
     }
 
     private void OnDestroy()

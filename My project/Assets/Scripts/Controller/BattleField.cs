@@ -71,9 +71,9 @@ namespace Controller {
         {
             statisticsController.SetLevel(level); // 设置当前关卡
             factionAConfig = playerUnitInventoryData.Items;
-
             factionBConfig = enemyUnitInventoryData.Items;
             SpawnUnits();
+            StartCoroutine(DelayActivateUnitsCoroutine());
         }
 
         public void StartTrainGround()
@@ -81,20 +81,22 @@ namespace Controller {
             factionAConfig = trainGroundDataFactionA.Items;
             factionBConfig = trainGroundDataFactionB.Items;
             SpawnUnits();
+            StartCoroutine(DelayActivateUnitsCoroutine());
         }
 
+        public void PreviewBattle()
+        {
+            factionAConfig = playerUnitInventoryData.Items;
+            factionBConfig = enemyUnitInventoryData.Items;
+            SpawnUnits();
+        }
+
+        public void ClearPreview()
+        {
+            unitManager.Reset();
+        }
 
         private void SpawnUnits()
-        {
-            if (spawnRoutine != null)
-            {
-                StopCoroutine(spawnRoutine);
-            }
-            spawnRoutine = StartCoroutine(SpawnUnitsRoutine());
-
-        }
-
-        private IEnumerator SpawnUnitsRoutine()
         {
             unitManager.SpawnUnits(
                 factionAConfig,
@@ -111,12 +113,14 @@ namespace Controller {
                 battlefieldMinBounds,
                 battlefieldMaxBounds
             );
+        }
 
+
+
+        private IEnumerator DelayActivateUnitsCoroutine()
+        {
             yield return new WaitForSeconds(timeDelayBeforeBattle);
-            // 4) 同时激活所有单位
             unitManager.ActivateAllUnits();
-
-            spawnRoutine = null;
         }
 
         private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
@@ -172,6 +176,6 @@ namespace Controller {
             OnBattleEnd?.Invoke();
         }
 
-
+        
     }
 }
