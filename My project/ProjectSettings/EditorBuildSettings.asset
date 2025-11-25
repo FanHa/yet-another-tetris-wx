@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Setup.scene
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Battle.scene
     guid: 51cfb8816f1743b46b74aa3a804dd46a
   m_configObjects: {}
