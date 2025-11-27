@@ -11,6 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Battle.scene
     guid: 51cfb8816f1743b46b74aa3a804dd46a
+  m_BuildProfiles:
+  - enabled: 1
+    path: Assets/Settings/Build Profiles/New WeChat Profile.asset
+    guid: 12c191080318d4c4a92311d4de8dc669
   m_configObjects: {}
   m_SlimFeaturesWeixinMiniGame:
     AllocateOverhead: 1
@@ -19,3 +23,4 @@ EditorBuildSettings:
     DecompressETC: 1
     FreeTypeSfntPng: 1
     LightProbe: 2
+    UseStringInternPool: 2

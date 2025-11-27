@@ -1,7 +1,5 @@
 using Model.Tetri;
 using UnityEngine;
-using Wangsu.WcsLib.Core;
-
 namespace Units.Skills
 {
     public class IceShield : Skill, IPassiveSkill
