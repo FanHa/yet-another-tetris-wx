@@ -10,31 +10,13 @@ namespace UI.TetriInfo
     public class TetriInfo : MonoBehaviour
     {
         public event Action<Operation.Tetri> OnRotateTetriClicked;
-        [SerializeField] private Operation.TetriFactory tetriFactory;
         [SerializeField] private GameObject normalTetriPanelPrefab;
         [SerializeField] private GameObject characterTetriPanelPrefab;
         [SerializeField] private RectTransform detailSlotRoot;
         [SerializeField] private Button closeButton;
         [SerializeField] private Button rotateButton;
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
-        [SerializeField] private AffinityResourceMapping affinityResourceMapping;
-        [SerializeField] private ColorConfig affinityColorConfig;
-        [SerializeField] private GameObject affinityObject;
+
         [SerializeField] private GameObject blocker;
-
-        [Header("Skill")]
-        [SerializeField] private Image skillIcon;
-        [SerializeField] private TMPro.TextMeshProUGUI skillNameText;
-        [SerializeField] private TMPro.TextMeshProUGUI skillDescriptionText;
-
-        [Header("Affinity")]
-        [SerializeField] private Image affinityIcon;
-        [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
-
-        [Header("Character")]
-        [SerializeField] private TMPro.TextMeshProUGUI characterNameText;
-        [SerializeField] private TMPro.TextMeshProUGUI characterDescriptionText;
-        [SerializeField] private TMPro.TextMeshProUGUI characterAttributeText;
 
         [Header("实例中引用")]
         [SerializeField] private Camera tetriInfoCamera;
@@ -71,12 +53,6 @@ namespace UI.TetriInfo
             var detailPanel = detailPanelInstance.GetComponent<ITetriDetailPanel>();
             detailPanel.BindData(tetriComponent);
             closeButtonPositionCoordinator.PositionCloseButtonAtTopRight();
-
-            
-            // if (showRotateButton)
-            //     rotateButton.gameObject.SetActive(true);
-            // else
-            //     rotateButton.gameObject.SetActive(false);
                 
             Vector3 offset = new Vector3(0f, 0f, -10f);
             tetriInfoCamera.transform.position = tetriComponent.transform.position + offset;

@@ -10,7 +10,6 @@ namespace UI.UnitInfo
     public class UnitInfo : MonoBehaviour
     {
         public Action OnClosed;
-        [SerializeField] private GameObject panel;
         [SerializeField] private Button closeButton;
 
         [Header("属性")]
@@ -45,21 +44,20 @@ namespace UI.UnitInfo
 
         public void Start()
         {
-            panel.SetActive(false);
         }
 
 
         public void HideUnitInfo()
         {
             currentUnit = null;
-            panel.SetActive(false);
+            gameObject.SetActive(false);
             OnClosed?.Invoke();
         }
 
         public void ShowUnitInfo(Units.Unit unit)
         {
             currentUnit = unit;
-            panel.SetActive(true);
+            gameObject.SetActive(true);
             RefreshInfo();
             unit.BuffAdded += HandleUnitBuffChanged;
             unit.BuffRemoved += HandleUnitBuffChanged;
