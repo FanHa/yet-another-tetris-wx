@@ -29,15 +29,15 @@ RectTransform:
   m_GameObject: {fileID: 1055258629078185778}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4317380976789110526}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 1800}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4962635552907267996
 CanvasRenderer:
@@ -170,5 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 1551924660376688632, guid: 274894f655a6d5e4abea15e994c128db, type: 3}
   itemParent: {fileID: 3149637119101914206}
-  tetris: {fileID: 0}
   tetriFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
+  previewCameras: []
+  previewTextures: []
+  previewsRoot: {fileID: 0}
