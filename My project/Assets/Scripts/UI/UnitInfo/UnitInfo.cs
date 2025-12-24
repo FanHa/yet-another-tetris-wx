@@ -42,11 +42,6 @@ namespace UI.UnitInfo
             closeButton.onClick.AddListener(HideUnitInfo);
         }
 
-        public void Start()
-        {
-        }
-
-
         public void HideUnitInfo()
         {
             currentUnit = null;

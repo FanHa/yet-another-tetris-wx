@@ -30,18 +30,17 @@ namespace Units
         private Vector3 originalScale;
         private Vector3 originalPosition;
         private Vector3 effectOffset;
+        private bool isInitialized = false;
 
-
-        private void Awake()
+        public void Initialize()
         {
-            
-        }
+            if (isInitialized)
+                return;
 
-        private void Start()
-        {
             originalColor = bodySpriteRenderer.color;
             originalScale = bodySpriteRenderer.transform.localScale;
             originalPosition = bodySpriteRenderer.transform.localPosition;
+            isInitialized = true;
        
         }
 

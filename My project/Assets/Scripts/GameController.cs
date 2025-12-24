@@ -178,8 +178,6 @@ public class GameController : MonoBehaviour
             if (operationTableController.TryPlaceTetri(modelTetri, tetriWorldPosition))
             {
                 tetriInventoryController.MarkTetriAsUsed(modelTetri);
-                Debug.Log("Tetri placed successfully!");
-
             }
             // 销毁影子物体
             Destroy(currentShadowTetri);

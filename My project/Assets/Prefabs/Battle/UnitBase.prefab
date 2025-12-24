@@ -243,6 +243,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -298,6 +300,8 @@ TrailRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -598,6 +602,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -653,6 +659,8 @@ TrailRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -997,6 +1005,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1052,6 +1062,8 @@ TrailRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1440,7 +1452,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2675846051053125839
 Animator:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1451,6 +1463,8 @@ Animator:
   m_Controller: {fileID: 9100000, guid: db682bd0bb4df654d97adc1896842f12, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
+  m_UpdateFrequencyMode: 0
+  m_UpdateFrequency: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1602,7 +1616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 783bc0fa2cdd70d418896238967065ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyPerTick: 10
   energyDecayPerSkill: 0.9
 --- !u!114 &5975892864010684759
 MonoBehaviour:

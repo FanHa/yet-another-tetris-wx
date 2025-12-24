@@ -49,14 +49,13 @@ namespace Controller
                 Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
 
                 unit.transform.position = spawnPos;
-                unit.SetFaction(faction);
-                unit.SetBattlefieldBounds(minBounds, maxBounds);
                 unit.OnDeath += HandleUnitDeath;
                 unit.OnDamageTaken += HandleDamageTaken;
 
                 unit.OnSkillCast += HandleSkillCast;
                 unit.OnClicked += HandleUnitClicked;
                 unit.UnitManager = this;
+                unit.Setup(faction, minBounds, maxBounds);
                 if (unit.faction == Unit.Faction.FactionA)
                 {
                     factionA.Add(unit);
@@ -65,8 +64,6 @@ namespace Controller
                 {
                     factionB.Add(unit);
                 }
-                unit.Setup();
-
             }
         }
 

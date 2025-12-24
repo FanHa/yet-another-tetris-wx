@@ -91,12 +91,14 @@ namespace Units
             
         }
 
-        public void Setup()
+        public void Setup(Unit.Faction faction, Transform minBounds, Transform maxBounds)
         {
+            SetFaction(faction);
+            SetBattlefieldBounds(minBounds, maxBounds);
+
             healthBar.SetAttributes(Attributes);
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
             movementController.Initialize(Attributes, UnitManager, this);
-            
         }
 
         public void Activate()
@@ -106,6 +108,7 @@ namespace Units
             UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
             isActive = true;
             healthBar.gameObject.SetActive(true);
+            hitEffect.Initialize();
         }
 
         public void Deactivate()
@@ -155,7 +158,7 @@ namespace Units
         }
 
 
-        public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
+        private void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
         {
             movementController.SetBattlefieldBounds(minBounds, maxBounds);
         }
@@ -359,7 +362,7 @@ namespace Units
         /// <summary>
         /// Sets the faction of the unit and updates the color of the body sprite renderer accordingly.
         /// <param name="faction">The faction to set for the unit.</param>
-        public void SetFaction(Faction faction)
+        private void SetFaction(Faction faction)
         {
             this.faction = faction;
             Color color = faction == Faction.FactionA ? factionAColor : factionBColor;
