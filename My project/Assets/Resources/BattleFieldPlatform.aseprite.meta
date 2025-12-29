@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: CCkc43//AnqdnY3PH/Spz4qil0ojqssyKR0nmrD3oJqiswAyg2Cpkpg=
+guid: W3lN4C+kBSgVauTReWZUO2MNNKupbwqupf4DDtuMCZ2WGS1PCaYf/7w=
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 1
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -35,10 +36,10 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 2
     spriteExtrude: 1
-    spriteMeshType: 1
+    spriteMeshType: 0
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 64
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -78,7 +79,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -91,7 +92,7 @@ ScriptedImporter:
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
-    defaultPivotAlignment: 7
+    defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 4
     spritePadding: 0
@@ -100,7 +101,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 639023340847423254
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -124,18 +125,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: CellBox
+  - name: BattleFieldPlatform
     originalName: 
-    pivot: {x: 0.4954955, y: -0.06422018}
+    pivot: {x: 0.5, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 111
-      height: 109
-    spriteID: 163e6148e88874d498052fa9c54adfb9
+      width: 1024
+      height: 2048
+    spriteID: 48e4b13c069e67e4396164cacc5da463
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +148,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -764769901
-    name: CellBox
+    guid: -1813347061
+    name: BattleFieldPlatform
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: CellBox
+    - name: BattleFieldPlatform
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 9
-        y: 7
-        width: 111
-        height: 109
-      spriteId: 163e6148e88874d498052fa9c54adfb9
+        x: 0
+        y: 0
+        width: 1024
+        height: 2048
+      spriteId: 48e4b13c069e67e4396164cacc5da463
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -178,7 +179,47 @@ ScriptedImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    maxPlaceholderSize: 32
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    maxPlaceholderSize: 32
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: WeixinMiniGame
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    maxPlaceholderSize: 32
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 128, y: 128}
+  canvasSize: {x: 1024, y: 2048}
+  previousTextureSize: {x: 2048, y: 4096}
