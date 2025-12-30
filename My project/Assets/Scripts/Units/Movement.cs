@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static Units.Unit;
 
 namespace Units
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float minDistance; // 与其他单位保持的最小距离
@@ -12,13 +14,25 @@ namespace Units
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
         private Unit owner;
+        private NavMeshAgent agent;
+        private Vector3 lastDestination;
         public bool IsHitAndRun = false;
+
+        void Awake() // 或 Start
+        {
+            agent = GetComponent<NavMeshAgent>();
+            agent.enabled = false;
+            agent.updateRotation = false;
+            agent.updateUpAxis = false;
+            
+        }
 
         public void Initialize(Attributes attributes, Controller.UnitManager unitManager, Unit owner)
         {
             this.attributes = attributes;
             this.unitManager = unitManager;
             this.owner = owner;
+            agent.enabled = true;
         }
 
         public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
@@ -45,13 +59,11 @@ namespace Units
         {
             if (targetEnemy == null)
             {
-                ResolveCurrentOverlap();
                 return;
             }
 
             float distance = Vector2.Distance(transform.position, targetEnemy.position);
-
-            Vector2 direction;
+            Vector3 destination;
             if (IsHitAndRun)
             {
                 // HitAndRun逻辑：在攻击距离附近徘徊
@@ -59,43 +71,39 @@ namespace Units
                 if (distance < desiredDistance)
                 {
                     // 太近了，远离敌人
-                    direction = (transform.position - targetEnemy.position).normalized;
+                    Vector2 away = ((Vector2)transform.position - (Vector2)targetEnemy.position).normalized;
+                    destination = transform.position + (Vector3)(away * 0.5f);
                 }
                 else if (distance > attributes.AttackRange.finalValue)
                 {
                     // 太远了，靠近敌人
-                    direction = (targetEnemy.position - transform.position).normalized;
+                    destination = targetEnemy.position;
                 }
                 else
                 {
                     // 距离合适，随机微调方向或原地徘徊
-                    direction = Vector2.zero;
-                }
-            }
-            else
-            {
-                // 原计划：靠近敌人
-                if (distance <= attributes.AttackRange.finalValue)
-                {
-                    ResolveCurrentOverlap();
                     return;
                 }
-                direction = (targetEnemy.position - transform.position).normalized;
-            }
-
-            if (direction != Vector2.zero)
-            {
-                Vector2 adjustedDirection = AdjustDirectionToAvoidUnits(direction);
-                Vector2 newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + adjustedDirection, attributes.MoveSpeed.finalValue * Time.deltaTime);
-                transform.position = newPosition;
-
-                AdjustLookDirection(adjustedDirection);
-                ClampPositionToBattlefield();
             }
             else
             {
-                // 静止时也要检测并推开重叠
-                ResolveCurrentOverlap();
+                if (distance <= attributes.AttackRange.finalValue)
+                {
+                    return;
+                }
+                destination = targetEnemy.position;
+            }
+
+            if (Vector3.Distance(destination, lastDestination) > 0.5f)
+            {
+                agent.SetDestination(destination);
+                lastDestination = destination;
+            }
+
+            if (Vector3.Distance(destination, lastDestination) > 0.5f)
+            {
+                agent.SetDestination(destination);
+                lastDestination = destination;
             }
         }
 

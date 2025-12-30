@@ -98,7 +98,6 @@ namespace Units
 
             healthBar.SetAttributes(Attributes);
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
-            movementController.Initialize(Attributes, UnitManager, this);
         }
 
         public void Activate()
@@ -109,6 +108,7 @@ namespace Units
             isActive = true;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
+            movementController.Initialize(Attributes, UnitManager, this);
         }
 
         public void Deactivate()
