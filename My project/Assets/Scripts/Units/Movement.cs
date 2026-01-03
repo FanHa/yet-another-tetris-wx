@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -190,6 +191,16 @@ namespace Units
                     other.transform.position -= (Vector3)(dir * pushDist * 0.5f);
                 }
             }
+        }
+
+        public void StopMovement()
+        {
+            agent.isStopped = true;
+        }
+
+        public void ResumeMovement()
+        {
+            agent.isStopped = false;
         }
     }
 }

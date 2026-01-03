@@ -83,7 +83,7 @@ namespace Units
             UpdateEnemiesDistance();
             ProcessAttack();
             ProcessSkill();
-            if (!isInAction && enemyUnits != null && enemyUnits.Count > 0)
+            if (enemyUnits.Count > 0)
             {
                 Transform closestEnemy = enemyUnits[0].transform;
                 movementController.ExecuteMove(closestEnemy);
@@ -185,6 +185,7 @@ namespace Units
             if (skillHandler.HasReadySkill)
             {
                 isInAction = true;                  // 锁动作
+                movementController.StopMovement();
                 animationController.TriggerCastSkill(); // 播放施法动画
             }
         }
@@ -195,6 +196,7 @@ namespace Units
             
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能
             isInAction = false;
+            movementController.ResumeMovement();
 
         }
 
@@ -256,6 +258,8 @@ namespace Units
                 {
                     pendingAttackTarget = target;
                     isInAction = true; // 攻击动画开始，禁止移动
+
+                    movementController.StopMovement();
                     // 调整朝向
                     Vector2 direction = (target.transform.position - transform.position).normalized;
                     animationController.SetLookDirection(direction);
@@ -285,6 +289,8 @@ namespace Units
             }
             pendingAttackTarget = null;
             isInAction = false;
+
+            movementController.ResumeMovement();
             lastAttackTime = Time.time; // 更新攻击时间
         }
 
