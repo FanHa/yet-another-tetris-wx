@@ -108,6 +108,10 @@ namespace Units
             }
         }
 
+        public void Warp(Vector3 position)
+        {
+            agent.Warp(position);
+        }
         private void ClampPositionToBattlefield()
         {
             if (BattlefieldMinBounds == null || BattlefieldMaxBounds == null)

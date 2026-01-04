@@ -55,7 +55,7 @@ namespace Units.Skills
             Vector3 dir = (targetEnemy.transform.position - Owner.transform.position).normalized;
             Vector3 targetPos = targetEnemy.transform.position + dir * 1.2f; // 1.2f为身后距离，可调整
 
-            Owner.transform.position = targetPos;
+            Owner.Teleport(targetPos);
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 buffDuration: stats.DebuffDuration.Final, // 可根据需求调整持续时间

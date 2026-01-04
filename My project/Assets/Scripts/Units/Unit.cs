@@ -121,6 +121,11 @@ namespace Units
             isActive = false;
         }
 
+        public void Teleport(Vector3 position)
+        {
+            movementController.Warp(position);
+        }
+
         private void HandleGlobalSkillCast(Unit caster, Skill skill)
         {
             foreach (var buff in buffHandler.GetActiveBuffs())
