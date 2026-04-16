@@ -101,11 +101,6 @@ namespace Units
                 lastDestination = destination;
             }
 
-            if (Vector3.Distance(destination, lastDestination) > 0.5f)
-            {
-                agent.SetDestination(destination);
-                lastDestination = destination;
-            }
         }
 
         public void Warp(Vector3 position)
@@ -197,12 +192,12 @@ namespace Units
             }
         }
 
-        public void StopMovement()
+        public void PauseNavigation()
         {
             agent.isStopped = true;
         }
 
-        public void ResumeMovement()
+        public void ResumeNavigation()
         {
             agent.isStopped = false;
         }

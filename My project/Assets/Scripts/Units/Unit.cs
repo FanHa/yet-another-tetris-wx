@@ -126,6 +126,16 @@ namespace Units
             movementController.Warp(position);
         }
 
+        public void PauseNavigation()
+        {
+            movementController.PauseNavigation();
+        }
+
+        public void ResumeNavigation()
+        {
+            movementController.ResumeNavigation();
+        }
+
         private void HandleGlobalSkillCast(Unit caster, Skill skill)
         {
             foreach (var buff in buffHandler.GetActiveBuffs())
@@ -190,7 +200,7 @@ namespace Units
             if (skillHandler.HasReadySkill)
             {
                 isInAction = true;                  // 锁动作
-                movementController.StopMovement();
+                movementController.PauseNavigation();
                 animationController.TriggerCastSkill(); // 播放施法动画
             }
         }
@@ -201,7 +211,7 @@ namespace Units
             
             skillHandler.ExecutePendingSkill(); // 执行待处理的技能
             isInAction = false;
-            movementController.ResumeMovement();
+            movementController.ResumeNavigation();
 
         }
 
@@ -264,7 +274,7 @@ namespace Units
                     pendingAttackTarget = target;
                     isInAction = true; // 攻击动画开始，禁止移动
 
-                    movementController.StopMovement();
+                    movementController.PauseNavigation();
                     // 调整朝向
                     Vector2 direction = (target.transform.position - transform.position).normalized;
                     animationController.SetLookDirection(direction);
@@ -295,7 +305,7 @@ namespace Units
             pendingAttackTarget = null;
             isInAction = false;
 
-            movementController.ResumeMovement();
+            movementController.ResumeNavigation();
             lastAttackTime = Time.time; // 更新攻击时间
         }
 
