@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d58a16c80bc624f478a9bfc88c8b2749, type: 3}
   m_Name: UnitFactory
   m_EditorClassIdentifier: 
-  unitPrefab: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
+  battleUnitPrefab: {fileID: 3257186687159062623, guid: e24af89409bdbde439f9cc8254dac7ad, type: 3}
+  previewUnitPrefab: {fileID: 3650917277825002224, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
   resourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}

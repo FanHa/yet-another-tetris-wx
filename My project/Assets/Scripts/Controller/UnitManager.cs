@@ -36,14 +36,12 @@ namespace Controller
         public void SpawnUnits(
             List<CharacterPlacement> items,
             Transform spawnPoint,
-            Unit.Faction faction,
-            Transform minBounds,
-            Transform maxBounds
+            Unit.Faction faction
         )
         {
             foreach (Model.CharacterPlacement item in items)
             {
-                Unit unit = unitFactory.CreateUnit(item.CharacterInfluence);
+                Unit unit = unitFactory.CreateBattleUnit(item.CharacterInfluence);
                 unit.transform.SetParent(GetRootByFaction(faction), false);
 
                 Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
@@ -55,7 +53,7 @@ namespace Controller
                 unit.OnSkillCast += HandleSkillCast;
                 unit.OnClicked += HandleUnitClicked;
                 unit.UnitManager = this;
-                unit.Setup(faction, minBounds, maxBounds);
+                unit.Setup(faction);
                 if (unit.faction == Unit.Faction.FactionA)
                 {
                     factionA.Add(unit);

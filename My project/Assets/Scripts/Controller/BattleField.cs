@@ -16,10 +16,6 @@ namespace Controller {
     [RequireComponent(typeof(UnitManager))]
     public class BattleField : MonoBehaviour
     {
-        [Header("Battlefield Bounds")]
-        [SerializeField] private Transform battlefieldMinBounds;
-        [SerializeField] private Transform battlefieldMaxBounds;
-
         [Header("UI Elements")]
         [SerializeField] private GameObject damageTextPrefab;
         [SerializeField] private GameObject skillNameViewerPrefab;
@@ -101,17 +97,13 @@ namespace Controller {
             unitManager.SpawnUnits(
                 factionAConfig,
                 transform,
-                Unit.Faction.FactionA,
-                battlefieldMinBounds,
-                battlefieldMaxBounds
+                Unit.Faction.FactionA
             );
 
             unitManager.SpawnUnits(
                 factionBConfig,
                 spawnPointB,
-                Unit.Faction.FactionB,
-                battlefieldMinBounds,
-                battlefieldMaxBounds
+                Unit.Faction.FactionB
             );
         }
 

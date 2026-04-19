@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Model.Tetri;
-using TMPro;
 using UI;
 using Units.Buffs;
 using Units.Skills;
@@ -15,6 +13,8 @@ namespace Units
 {
     [RequireComponent(typeof(Units.Skills.SkillHandler))]
     [RequireComponent(typeof(BuffHandler))]
+    [RequireComponent(typeof(AnimationController))]
+    [RequireComponent(typeof(HitEffect))]
     public class Unit : MonoBehaviour, IPointerClickHandler
     {
         public Attributes Attributes;
@@ -91,10 +91,9 @@ namespace Units
             
         }
 
-        public void Setup(Unit.Faction faction, Transform minBounds, Transform maxBounds)
+        public void Setup(Unit.Faction faction)
         {
             SetFaction(faction);
-            SetBattlefieldBounds(minBounds, maxBounds);
 
             healthBar.SetAttributes(Attributes);
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
@@ -172,11 +171,6 @@ namespace Units
             Attributes.MoveSpeed.AddFlatModifier(this, swiftBonus);
         }
 
-
-        private void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
-        {
-            movementController.SetBattlefieldBounds(minBounds, maxBounds);
-        }
 
         public void AddSkill(Skills.Skill newSkill)
         {

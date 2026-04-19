@@ -8,13 +8,35 @@ namespace Units
     [CreateAssetMenu(fileName = "UnitFactory", menuName = "Units/UnitFactory")]
     public class UnitFactory : ScriptableObject
     {
-        [SerializeField] private GameObject unitPrefab;
+        [SerializeField] private Units.Unit battleUnitPrefab;
+        [SerializeField] private Units.Unit previewUnitPrefab;
         [SerializeField] private TetriCellTypeResourceMapping resourceMapping;
 
-        public Units.Unit CreateUnit(CharacterInfluence influence)
+        public Units.Unit CreateBattleUnit(CharacterInfluence influence)
         {
-            GameObject go = Object.Instantiate(unitPrefab);
-            Units.Unit unit = go.GetComponent<Units.Unit>();
+            return CreateUnitInternal(battleUnitPrefab, influence);
+        }
+
+        public Units.Unit CreatePreviewUnit(CharacterInfluence influence)
+        {
+            return CreateUnitInternal(previewUnitPrefab, influence);
+        }
+
+        public Units.Unit CreateBattleUnit(Model.Tetri.Character characterCell)
+        {
+            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
+            return CreateBattleUnit(influence);
+        }
+
+        public Units.Unit CreatePreviewUnit(Model.Tetri.Character characterCell)
+        {
+            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
+            return CreatePreviewUnit(influence);
+        }
+
+        private Units.Unit CreateUnitInternal(Units.Unit prefab, CharacterInfluence influence)
+        {
+            Units.Unit unit = Object.Instantiate(prefab);
 
             // 基础外观和数据初始化
             Sprite characterSprite = resourceMapping.GetSprite(influence.Character);
@@ -48,12 +70,6 @@ namespace Units
             unit.Attributes.RefillHealthToMax();
 
             return unit;
-        }
-        
-        public Units.Unit CreateUnit(Model.Tetri.Character characterCell)
-        {
-            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
-            return CreateUnit(influence);
         }
     }
 }

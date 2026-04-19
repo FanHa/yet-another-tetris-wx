@@ -10,8 +10,6 @@ namespace Units
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float minDistance; // 与其他单位保持的最小距离
-        public Transform BattlefieldMinBounds;
-        public Transform BattlefieldMaxBounds;
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
         private Unit owner;
@@ -34,27 +32,9 @@ namespace Units
             this.unitManager = unitManager;
             this.owner = owner;
             agent.enabled = true;
+
         }
 
-        public void SetBattlefieldBounds(Transform minBounds, Transform maxBounds)
-        {
-            BattlefieldMinBounds = minBounds;
-            BattlefieldMaxBounds = maxBounds;
-        }
-
-        public (Vector2 minBounds, Vector2 maxBounds) GetBattlefieldBounds()
-        {
-            if (BattlefieldMinBounds == null || BattlefieldMaxBounds == null)
-            {
-                Debug.LogWarning("Battlefield bounds are not set.");
-                return (Vector2.zero, Vector2.zero); // 返回默认值
-            }
-
-            Vector2 minBounds = BattlefieldMinBounds.position;
-            Vector2 maxBounds = BattlefieldMaxBounds.position;
-
-            return (minBounds, maxBounds);
-        }
 
         public void ExecuteMove(Transform targetEnemy)
         {
@@ -106,19 +86,6 @@ namespace Units
         public void Warp(Vector3 position)
         {
             agent.Warp(position);
-        }
-        private void ClampPositionToBattlefield()
-        {
-            if (BattlefieldMinBounds == null || BattlefieldMaxBounds == null)
-            {
-                Debug.LogWarning("Battlefield bounds are not set.");
-                return;
-            }
-
-            Vector3 clampedPosition = transform.position;
-            clampedPosition.x = Mathf.Clamp(clampedPosition.x, BattlefieldMinBounds.position.x, BattlefieldMaxBounds.position.x);
-            clampedPosition.y = Mathf.Clamp(clampedPosition.y, BattlefieldMinBounds.position.y, BattlefieldMaxBounds.position.y);
-            transform.position = clampedPosition;
         }
 
         private Vector2 AdjustDirectionToAvoidUnits(Vector2 originalDirection)

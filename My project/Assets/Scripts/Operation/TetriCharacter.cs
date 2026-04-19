@@ -27,7 +27,7 @@ namespace Operation
 
             if (mainCell != null)
             {
-                PreviewUnit = unitFactory.CreateUnit(mainCell);
+                PreviewUnit = unitFactory.CreatePreviewUnit(mainCell);
                 PreviewUnit.transform.SetParent(characterRoot, false);
                 PreviewUnit.OnClicked += HandlePreviewUnitClicked; // 订阅
 

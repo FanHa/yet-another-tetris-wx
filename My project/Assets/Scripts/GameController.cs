@@ -85,7 +85,7 @@ public class GameController : MonoBehaviour
         if (type == Model.Tetri.Tetri.TetriType.Character)
         {
             CharacterPlacement characterPlacement = operationTableController.GetCharacterPlacementByTetri(tetri.ModelTetri);
-            Units.Unit unit = unitFactory.CreateUnit(characterPlacement.CharacterInfluence);
+            Units.Unit unit = unitFactory.CreatePreviewUnit(characterPlacement.CharacterInfluence);
             unit.transform.position = tetri.transform.position;
             unitInfo.ShowUnitInfo(unit);
             tempUnit = unit;
