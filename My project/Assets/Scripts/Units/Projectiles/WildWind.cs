@@ -67,7 +67,6 @@ namespace Units.Projectiles
                 {
                     if (unit != null)
                     {
-                        Vector3 dir = (unit.transform.position - transform.position).normalized;
                         // 计算当前与中心的向量
                         Vector3 toUnit = unit.transform.position - transform.position;
                         // 旋转向量
@@ -75,8 +74,9 @@ namespace Units.Projectiles
                         Vector3 rotated = Quaternion.Euler(0, 0, angle) * toUnit;
                         // 计算目标位置
                         Vector3 targetPos = transform.position + rotated + rotated.normalized * pushSpeed * Time.deltaTime;
-                        // 移动unit
-                        unit.transform.position = targetPos;
+                        // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
+                        Vector3 delta = targetPos - unit.transform.position;
+                        unit.Movement.MoveStraightByDelta(delta);
                         var buff = new Units.Buffs.WildWindDebuff(
                             duration: debuffDuration,
                             moveSlowPercent: moveSlowPercent,

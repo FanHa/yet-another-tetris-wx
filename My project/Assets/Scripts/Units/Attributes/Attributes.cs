@@ -14,6 +14,7 @@ namespace Units
         [SerializeField] private Attribute attacksPerTenSeconds;
         [SerializeField] private Attribute energyPerSecond;
         [SerializeField] private Attribute attackRange;
+        [SerializeField] private bool canHitAndRun = true; // 风筝战术能力
 
         public Attribute MoveSpeed => moveSpeed;
         public Attribute AttackPower => attackPower;
@@ -21,6 +22,7 @@ namespace Units
         public Attribute AttacksPerTenSeconds => attacksPerTenSeconds;
         public Attribute EnergyPerSecond => energyPerSecond;
         public Attribute AttackRange => attackRange;
+        public bool CanHitAndRun => canHitAndRun;
 
         private float currentHealth;
         public float CurrentHealth
@@ -44,7 +46,8 @@ namespace Units
             float maxHealthBase,
             float attacksPerTenSecondsBase,
             float energyPerSecondBase,
-            float attackRange
+            float attackRange,
+            bool canHitAndRun = false
         )
         {
             moveSpeed = new Attribute("移速", moveSpeedBase);
@@ -53,6 +56,7 @@ namespace Units
             attacksPerTenSeconds = new Attribute("攻速", attacksPerTenSecondsBase);
             energyPerSecond = new Attribute("能量回复", energyPerSecondBase);
             this.attackRange = new Attribute("攻击范围", attackRange);
+            this.canHitAndRun = canHitAndRun;
 
             shields = new List<Shield>();
             CurrentHealth = MaxHealth.finalValue;
@@ -96,6 +100,11 @@ namespace Units
         public void RefillHealthToMax()
         {
             CurrentHealth = MaxHealth.finalValue;
+        }
+
+        public void SetHitAndRunAbility(bool enabled)
+        {
+            canHitAndRun = enabled;
         }
     }
 }

@@ -49,7 +49,14 @@ namespace Units.Projectiles
 
             Vector3 dir = (targetPosition - owner.transform.position).normalized;
             float step = speed * Time.deltaTime;
-            owner.transform.position += dir * step;
+            var moveResult = owner.Movement.MoveStraightByDelta(dir * step);
+
+            if (moveResult.ShouldTerminate)
+            {
+                isActive = false;
+                Destroy(gameObject);
+                return;
+            }
 
             var enemies = owner.UnitManager.FindEnemiesInRangeAtPosition(
                 owner.faction,

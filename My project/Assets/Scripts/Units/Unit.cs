@@ -60,6 +60,7 @@ namespace Units
 
         private bool isActive = false; // 是否处于活动状态
         public bool IsActive => isActive;
+        public Movement Movement => movementController;
         private bool isInAction = false;
         private Unit pendingAttackTarget;
 
@@ -86,7 +87,16 @@ namespace Units
             if (enemyUnits.Count > 0)
             {
                 Transform closestEnemy = enemyUnits[0].transform;
-                movementController.ExecuteMove(closestEnemy);
+                if (Attributes.CanHitAndRun)
+                {
+                    float maxDistance = Attributes.AttackRange.finalValue;
+                    float minDistance = maxDistance * 0.9f;
+                    movementController.MoveToDistanceFromTarget(closestEnemy, minDistance, maxDistance);
+                }
+                else
+                {
+                    movementController.MoveAlongPathToTarget(closestEnemy);
+                }
             }
             
         }
@@ -120,21 +130,6 @@ namespace Units
             isActive = false;
         }
 
-        public void Teleport(Vector3 position)
-        {
-            movementController.Warp(position);
-        }
-
-        public void PauseNavigation()
-        {
-            movementController.PauseNavigation();
-        }
-
-        public void ResumeNavigation()
-        {
-            movementController.ResumeNavigation();
-        }
-
         private void HandleGlobalSkillCast(Unit caster, Skill skill)
         {
             foreach (var buff in buffHandler.GetActiveBuffs())
@@ -151,7 +146,12 @@ namespace Units
 
         public void SetHitAndRun(bool enable)
         {
-            movementController.IsHitAndRun = enable;
+            Attributes.SetHitAndRunAbility(enable);
+        }
+
+        public void Teleport(Vector3 position)
+        {
+            movementController.Teleport(position);
         }
 
         public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)

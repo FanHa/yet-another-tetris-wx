@@ -9,13 +9,50 @@ namespace Units
     [RequireComponent(typeof(NavMeshAgent))]
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float minDistance; // 与其他单位保持的最小距离
+        [SerializeField] private float moveToTargetSampleRadius = 1.5f;
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
         private Unit owner;
         private NavMeshAgent agent;
         private Vector3 lastDestination;
-        public bool IsHitAndRun = false;
+
+        public enum MovementResultCode
+        {
+            Success,
+            PartialSuccess,
+            NoOp,
+            InvalidRequest,
+            AgentUnavailable,
+            NoReachablePoint,
+            Blocked,
+            ExecutionFailed
+        }
+
+        public readonly struct MovementResult
+        {
+            public MovementResultCode Code { get; }
+            public Vector3 RequestedPosition { get; }
+            public Vector3 FinalPosition { get; }
+            public Vector3 BlockedPosition { get; }
+            public bool HasBlockedPosition { get; }
+            public bool ShouldTerminate { get; }
+
+            public MovementResult(
+                MovementResultCode code,
+                Vector3 requestedPosition,
+                Vector3 finalPosition,
+                bool shouldTerminate,
+                bool hasBlockedPosition = false,
+                Vector3 blockedPosition = default)
+            {
+                Code = code;
+                RequestedPosition = requestedPosition;
+                FinalPosition = finalPosition;
+                ShouldTerminate = shouldTerminate;
+                HasBlockedPosition = hasBlockedPosition;
+                BlockedPosition = blockedPosition;
+            }
+        }
 
         void Awake() // 或 Start
         {
@@ -35,127 +72,168 @@ namespace Units
 
         }
 
-
-        public void ExecuteMove(Transform targetEnemy)
+        public MovementResult MoveAlongPathToTarget(Transform targetEnemy)
         {
             if (targetEnemy == null)
             {
-                return;
+                return new MovementResult(MovementResultCode.InvalidRequest, transform.position, transform.position, true);
+            }
+
+            Vector3 destination = targetEnemy.position;
+            
+            // 应用当前的 MoveSpeed 属性（包括 buff 修饰）
+            agent.speed = attributes.MoveSpeed.finalValue;
+
+            bool accepted = agent.SetDestination(destination);
+            if (!accepted)
+            {
+                return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
+            }
+
+            lastDestination = destination;
+            return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
+        }
+
+        public MovementResult MoveToDistanceFromTarget(Transform targetEnemy, float minTargetDistance, float maxTargetDistance)
+        {
+            if (targetEnemy == null)
+            {
+                return new MovementResult(MovementResultCode.InvalidRequest, transform.position, transform.position, true);
+            }
+
+            if (minTargetDistance < 0f || maxTargetDistance < minTargetDistance)
+            {
+                return new MovementResult(MovementResultCode.InvalidRequest, targetEnemy.position, transform.position, true);
             }
 
             float distance = Vector2.Distance(transform.position, targetEnemy.position);
             Vector3 destination;
-            if (IsHitAndRun)
+
+            if (distance < minTargetDistance)
             {
-                // HitAndRun逻辑：在攻击距离附近徘徊
-                float desiredDistance = attributes.AttackRange.finalValue * 0.9f; // 可微调徘徊距离
-                if (distance < desiredDistance)
-                {
-                    // 太近了，远离敌人
-                    Vector2 away = ((Vector2)transform.position - (Vector2)targetEnemy.position).normalized;
-                    destination = transform.position + (Vector3)(away * 0.5f);
-                }
-                else if (distance > attributes.AttackRange.finalValue)
-                {
-                    // 太远了，靠近敌人
-                    destination = targetEnemy.position;
-                }
-                else
-                {
-                    // 距离合适，随机微调方向或原地徘徊
-                    return;
-                }
+                Vector2 away = ((Vector2)transform.position - (Vector2)targetEnemy.position).normalized;
+                destination = transform.position + (Vector3)(away * 0.5f);
+            }
+            else if (distance > maxTargetDistance)
+            {
+                destination = targetEnemy.position;
             }
             else
             {
-                if (distance <= attributes.AttackRange.finalValue)
-                {
-                    return;
-                }
-                destination = targetEnemy.position;
+                return new MovementResult(MovementResultCode.NoOp, targetEnemy.position, transform.position, false);
             }
 
-            if (Vector3.Distance(destination, lastDestination) > 0.5f)
+            if (Vector3.Distance(destination, lastDestination) <= 0.5f)
             {
-                agent.SetDestination(destination);
-                lastDestination = destination;
+                return new MovementResult(MovementResultCode.NoOp, destination, transform.position, false);
             }
 
+            // 应用当前的 MoveSpeed 属性（包括 buff 修饰）
+            agent.speed = attributes.MoveSpeed.finalValue;
+
+            bool accepted = agent.SetDestination(destination);
+            if (!accepted)
+            {
+                return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
+            }
+
+            lastDestination = destination;
+            return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
         }
 
-        public void Warp(Vector3 position)
+        public MovementResult MoveStraightByDelta(Vector3 delta)
         {
-            agent.Warp(position);
-        }
+            Vector3 currentPosition = agent.nextPosition;
+            float requestedDistance = delta.magnitude;
 
-        private Vector2 AdjustDirectionToAvoidUnits(Vector2 originalDirection)
-        {
-
-
-            Vector2 avoidanceVector = Vector2.zero;
-            int avoidanceCount = 0;
-
-            var allies = unitManager.FindAlliesInRange(owner, minDistance, includeSelf: false);
-            var enemies = unitManager.FindEnemiesInRange(owner, minDistance);
-
-            if (allies != null)
+            Vector3 targetPosition = currentPosition + delta;
+            if (agent.Raycast(targetPosition, out NavMeshHit blockedHit))
             {
-                foreach (var other in allies)
+                Vector3 allowedDelta = blockedHit.position - currentPosition;
+                Vector3 raycastDelta = allowedDelta * 0.95f;
+                agent.Move(raycastDelta);
+                Vector3 movedPosition = agent.nextPosition;
+                lastDestination = movedPosition;
+
+                if ((movedPosition - currentPosition).magnitude <= 0.001f)
                 {
-                    if (other == null || !other.IsActive) continue;
-                    Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
-                    float dist = Mathf.Max(toOther.magnitude, 0.1f);
-                    avoidanceVector += toOther.normalized / dist;
-                    avoidanceCount++;
+                    return new MovementResult(
+                        MovementResultCode.Blocked,
+                        targetPosition,
+                        currentPosition,
+                        true,
+                        true,
+                        blockedHit.position);
                 }
-            }
-            if (enemies != null)
-            {
-                foreach (var other in enemies)
-                {
-                    if (other == null || !other.IsActive) continue;
-                    Vector2 toOther = (Vector2)transform.position - (Vector2)other.transform.position;
-                    float dist = Mathf.Max(toOther.magnitude, 0.1f);
-                    avoidanceVector += toOther.normalized / dist;
-                    avoidanceCount++;
-                }
-            }
-            if (avoidanceCount > 0)
-            {
-                // 平均避让方向
-                avoidanceVector /= avoidanceCount;
 
-                // 平衡目标方向和避让方向的权重
-                float targetWeight = 0.7f; // 目标方向的权重
-                float avoidanceWeight = 0.3f; // 避让方向的权重
-
-                return (originalDirection * targetWeight + avoidanceVector * avoidanceWeight).normalized;
+                return new MovementResult(
+                    MovementResultCode.PartialSuccess,
+                    targetPosition,
+                    movedPosition,
+                    true,
+                    true,
+                    blockedHit.position);
             }
 
-            // 如果没有需要避让的单位，返回原始方向
-            return originalDirection;
+            if (TryResolveReachablePosition(targetPosition, out Vector3 reachablePosition))
+            {
+                Vector3 moveDelta = reachablePosition - currentPosition;
+                if (moveDelta.magnitude <= 0.001f)
+                {
+                    return new MovementResult(
+                        MovementResultCode.Blocked,
+                        targetPosition,
+                        currentPosition,
+                        true,
+                        false,
+                        default);
+                }
+
+                agent.Move(moveDelta);
+                lastDestination = agent.nextPosition;
+
+                if (moveDelta.magnitude + 0.001f < requestedDistance)
+                {
+                    return new MovementResult(MovementResultCode.PartialSuccess, targetPosition, agent.nextPosition, true);
+                }
+
+                return new MovementResult(MovementResultCode.Success, targetPosition, agent.nextPosition, false);
+            }
+
+            return new MovementResult(MovementResultCode.NoReachablePoint, targetPosition, currentPosition, true);
         }
 
-        private void AdjustLookDirection(Vector2 direction)
+        public void PlaceAt(Vector3 position)
         {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 计算角度
-            transform.rotation = Quaternion.Euler(0, 0, angle - 90f); // 设置自身旋转
-        }
-        
-        private void ResolveCurrentOverlap()
-        {
-            var allUnits = unitManager.GetAllUnits();
-            foreach (var other in allUnits)
+            // spawn 时 agent 尚未启用，直接设置 transform.position
+            // (agent.Warp 在 agent.enabled=false 时会被忽略)
+            if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
             {
-                if (other == owner || !other.IsActive) continue;
-                float actualDist = Vector2.Distance(transform.position, other.transform.position);
-                if (actualDist < minDistance && actualDist > 0.01f)
-                {
-                    Vector2 dir = ((Vector2)transform.position - (Vector2)other.transform.position).normalized;
-                    float pushDist = minDistance - actualDist;
-                    transform.position += (Vector3)(dir * pushDist * 0.5f);
-                    other.transform.position -= (Vector3)(dir * pushDist * 0.5f);
-                }
+                transform.position = resolvedPosition;
+                lastDestination = resolvedPosition;
+            }
+            else
+            {
+                transform.position = position;
+                lastDestination = position;
+            }
+        }
+
+        public void Teleport(Vector3 position)
+        {
+            // 仅用于运行时（agent 已初始化），带 fail-fast 保护
+            if (!agent.enabled)
+                throw new InvalidOperationException("Movement must be initialized before calling Teleport");
+            
+            if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
+            {
+                agent.Warp(resolvedPosition);
+                lastDestination = resolvedPosition;
+            }
+            else
+            {
+                agent.Warp(position);
+                lastDestination = position;
             }
         }
 
@@ -168,5 +246,19 @@ namespace Units
         {
             agent.isStopped = false;
         }
+
+        private bool TryResolveReachablePosition(Vector3 targetPosition, out Vector3 resolvedPosition)
+        {
+            // 优先用目标点附近最接近的 NavMesh 点。
+            if (NavMesh.SamplePosition(targetPosition, out NavMeshHit sampleHit, moveToTargetSampleRadius, agent.areaMask))
+            {
+                resolvedPosition = sampleHit.position;
+                return true;
+            }
+
+            resolvedPosition = default;
+            return false;
+        }
+
     }
 }
