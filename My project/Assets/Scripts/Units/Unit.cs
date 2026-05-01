@@ -4,6 +4,7 @@ using System.Linq;
 using Controller;
 using Model.Tetri;
 using UI;
+using Units.Actions;
 using Units.Buffs;
 using Units.Skills;
 using UnityEngine;
@@ -61,8 +62,13 @@ namespace Units
         private bool isActive = false; // 是否处于活动状态
         public bool IsActive => isActive;
         public Movement Movement => movementController;
-        private bool isInAction = false;
-        private Unit pendingAttackTarget;
+        public AnimationController AnimationController => animationController;
+        public Units.Skills.SkillHandler SkillHandler => skillHandler;
+
+        private UnitActionRunner actionRunner;
+        private MoveAction moveAction;
+        private AttackAction attackAction;
+        private CastSkillAction castSkillAction;
 
         private void Awake()
         {
@@ -71,6 +77,11 @@ namespace Units
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
+
+            actionRunner = new UnitActionRunner();
+            moveAction = new MoveAction(this);
+            attackAction = new AttackAction(this);
+            castSkillAction = new CastSkillAction(this);
 
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
             
@@ -81,23 +92,12 @@ namespace Units
         {
             if (!isActive)
                 return;
+
             UpdateEnemiesDistance();
-            ProcessAttack();
-            ProcessSkill();
-            if (enemyUnits.Count > 0)
-            {
-                Transform closestEnemy = enemyUnits[0].transform;
-                if (Attributes.CanHitAndRun)
-                {
-                    float maxDistance = Attributes.AttackRange.finalValue;
-                    float minDistance = maxDistance * 0.9f;
-                    movementController.MoveToDistanceFromTarget(closestEnemy, minDistance, maxDistance);
-                }
-                else
-                {
-                    movementController.MoveAlongPathToTarget(closestEnemy);
-                }
-            }
+
+            actionRunner.TryStartHighestPriority(castSkillAction, attackAction, moveAction);
+
+            actionRunner.Tick();
             
         }
 
@@ -127,6 +127,7 @@ namespace Units
             skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
             buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
+            actionRunner.CancelCurrent();
             isActive = false;
         }
 
@@ -188,24 +189,13 @@ namespace Units
             skillHandler.DistributeEnergy(energy);
         }
 
-        private void ProcessSkill()
-        {
-            if (isInAction) return;
-            if (skillHandler.HasReadySkill)
-            {
-                isInAction = true;                  // 锁动作
-                movementController.PauseNavigation();
-                animationController.TriggerCastSkill(); // 播放施法动画
-            }
-        }
-
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            
-            skillHandler.ExecutePendingSkill(); // 执行待处理的技能
-            isInAction = false;
-            movementController.ResumeNavigation();
+            if (actionRunner.CurrentAction is CastSkillAction currentCastAction)
+            {
+                currentCastAction.HandleAnimationEnd();
+            }
 
         }
 
@@ -251,59 +241,33 @@ namespace Units
             if (closest != null) enemyUnits.Add(closest);
         }
 
-        protected void ProcessAttack()
-        {
-            if (isInAction)
-                return;
-            float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
-            if (Time.time < lastAttackTime + attackCooldown)
-                return; // 检查攻击冷却时间
-            if (enemyUnits != null && enemyUnits.Count > 0)
-            {
-                Unit target = enemyUnits[0];
-
-                float distance = Vector2.Distance(transform.position, target.transform.position);
-                if (distance <= Attributes.AttackRange.finalValue) // 检查最近的敌人是否在攻击范围内
-                {
-                    pendingAttackTarget = target;
-                    isInAction = true; // 攻击动画开始，禁止移动
-
-                    movementController.PauseNavigation();
-                    // 调整朝向
-                    Vector2 direction = (target.transform.position - transform.position).normalized;
-                    animationController.SetLookDirection(direction);
-                    animationController.TriggerAttack();
-                    
-                }
-                
-            }
-        }
-
-        
-
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()
         {
-            if (pendingAttackTarget == null)
-                return;
-
-            float distance = Vector2.Distance(transform.position, pendingAttackTarget.transform.position);
-            if (distance <= Attributes.AttackRange.finalValue)
+            if (actionRunner.CurrentAction is AttackAction currentAttackAction)
             {
-                Attack(pendingAttackTarget, Attributes.AttackPower.finalValue);
+                currentAttackAction.HandleAnimationEnd();
             }
-            else
-            {
-                // todo miss 处理
-            }
-            pendingAttackTarget = null;
-            isInAction = false;
-
-            movementController.ResumeNavigation();
-            lastAttackTime = Time.time; // 更新攻击时间
         }
 
-        private void Attack(Unit target, float damageValue)
+        public bool TryGetClosestEnemy(out Unit closestEnemy)
+        {
+            closestEnemy = enemyUnits.Count > 0 ? enemyUnits[0] : null;
+            return closestEnemy != null;
+        }
+
+        public bool CanAttackNow()
+        {
+            float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;
+            return Time.time >= lastAttackTime + attackCooldown;
+        }
+
+        public void MarkAttackExecuted()
+        {
+            lastAttackTime = Time.time;
+        }
+
+        public void ExecuteAttackProjectile(Unit target, float damageValue)
         {
             GameObject projectileObject;
             projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
@@ -377,6 +341,7 @@ namespace Units
         /// <summary>
         /// Sets the faction of the unit and updates the color of the body sprite renderer accordingly.
         /// <param name="faction">The faction to set for the unit.</param>
+        /// </summary>
         private void SetFaction(Faction faction)
         {
             this.faction = faction;
