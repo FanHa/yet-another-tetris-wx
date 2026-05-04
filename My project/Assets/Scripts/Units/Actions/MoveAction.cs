@@ -6,6 +6,8 @@ namespace Units.Actions
     {
         public override int Priority => 0;
 
+        private const float HitAndRunMinRatio = 0.9f;
+
         public MoveAction(Unit owner) : base(owner, UnitActionType.Move)
         {
         }
@@ -23,16 +25,15 @@ namespace Units.Actions
                 return;
             }
 
-            Transform targetTransform = enemy.transform;
             if (Owner.Attributes.CanHitAndRun)
             {
                 float maxDistance = Owner.Attributes.AttackRange.finalValue;
-                float minDistance = maxDistance * 0.9f;
-                Owner.Movement.MoveToDistanceFromTarget(targetTransform, minDistance, maxDistance);
+                float minDistance = maxDistance * HitAndRunMinRatio;
+                Owner.Movement.MoveToDistanceFromTarget(enemy.transform, minDistance, maxDistance);
             }
             else
             {
-                Owner.Movement.MoveAlongPathToTarget(targetTransform);
+                Owner.Movement.MoveAlongPathToTarget(enemy);
             }
 
             // Move action is a one-frame command; movement continues in NavMeshAgent.

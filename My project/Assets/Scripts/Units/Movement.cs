@@ -15,6 +15,7 @@ namespace Units
         private Unit owner;
         private NavMeshAgent agent;
         private Vector3 lastDestination;
+        public float AgentRadius => agent.radius;
 
         public enum MovementResultCode
         {
@@ -72,15 +73,16 @@ namespace Units
 
         }
 
-        public MovementResult MoveAlongPathToTarget(Transform targetEnemy)
+        public MovementResult MoveAlongPathToTarget(Unit targetEnemy)
         {
             if (targetEnemy == null)
             {
                 return new MovementResult(MovementResultCode.InvalidRequest, transform.position, transform.position, true);
             }
 
-            Vector3 destination = targetEnemy.position;
-            
+            Vector3 destination = targetEnemy.transform.position;
+            agent.stoppingDistance = owner.GetEffectiveAttackRangeTo(targetEnemy);
+
             // 应用当前的 MoveSpeed 属性（包括 buff 修饰）
             agent.speed = attributes.MoveSpeed.finalValue;
 

@@ -25,7 +25,7 @@ namespace Units.Actions
             }
 
             float distance = Vector2.Distance(Owner.transform.position, target.transform.position);
-            return distance <= Owner.Attributes.AttackRange.finalValue;
+            return distance <= Owner.GetEffectiveAttackRangeTo(target);
         }
 
         protected override void OnEnter()
@@ -55,17 +55,9 @@ namespace Units.Actions
                 return;
             }
 
-            if (pendingTarget != null)
+            if (pendingTarget != null && pendingTarget.IsActive)
             {
-                float distance = Vector2.Distance(Owner.transform.position, pendingTarget.transform.position);
-                if (distance <= Owner.Attributes.AttackRange.finalValue)
-                {
-                    Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
-                }
-                else
-                {
-                    // TODO: miss handling.
-                }
+                Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
             }
 
             Owner.MarkAttackExecuted();

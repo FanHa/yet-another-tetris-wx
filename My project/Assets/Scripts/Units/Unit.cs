@@ -262,6 +262,11 @@ namespace Units
             return Time.time >= lastAttackTime + attackCooldown;
         }
 
+        public float GetEffectiveAttackRangeTo(Unit target)
+        {
+            return Attributes.AttackRange.finalValue + movementController.AgentRadius + target.movementController.AgentRadius;
+        }
+
         public void MarkAttackExecuted()
         {
             lastAttackTime = Time.time;
