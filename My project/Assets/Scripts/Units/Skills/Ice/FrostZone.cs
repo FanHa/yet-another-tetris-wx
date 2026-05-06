@@ -24,9 +24,8 @@ namespace Units.Skills
             if (!base.IsReady())
                 return false;
 
-            // 找到攻击范围内的敌人
-            var targetEnemy = Owner.UnitManager.FindClosestEnemyInRange(Owner, Owner.Attributes.AttackRange.finalValue);
-            if (targetEnemy == null)
+            // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
+            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
             targetPosition = targetEnemy.transform.position;
             return true;

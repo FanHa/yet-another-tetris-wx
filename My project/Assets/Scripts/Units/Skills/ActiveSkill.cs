@@ -12,6 +12,10 @@ namespace Units.Skills
             return CurrentEnergy >= RequiredEnergy;
         }
 
+        // 检查入队时锁定的目标是否仍然可选中（存活且激活）
+        // 位置型技能默认 true；缓存 Unit 目标的技能需覆写
+        public virtual bool IsCachedTargetValid() => true;
+
         public virtual void AddEnergy(float amount)
         {
             CurrentEnergy += amount;

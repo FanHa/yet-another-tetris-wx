@@ -48,6 +48,8 @@ namespace Units.Skills
             return true;
         }
 
+        public override bool IsCachedTargetValid() =>
+            cachedTarget != null && cachedTarget.IsActive;
 
         protected override bool ExecuteCore()
         {

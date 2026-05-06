@@ -256,6 +256,17 @@ namespace Units
             return closestEnemy != null;
         }
 
+        // 与 AttackAction.CanStart() 使用相同的有效射程（含双方 AgentRadius）
+        public bool TryGetClosestEnemyInAttackRange(out Unit closestEnemy)
+        {
+            closestEnemy = null;
+            if (!TryGetClosestEnemy(out var candidate)) return false;
+            float distance = Vector2.Distance(transform.position, candidate.transform.position);
+            if (distance > GetEffectiveAttackRangeTo(candidate)) return false;
+            closestEnemy = candidate;
+            return true;
+        }
+
         public bool CanAttackNow()
         {
             float attackCooldown = 10f / Attributes.AttacksPerTenSeconds.finalValue;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -49,7 +49,7 @@ namespace Units.Skills
         public void Deactivate()
         {
             isActive = false;
-            readyQueue.Clear();          // 清空就绪队列，避免残留
+            readyQueue.Clear();
             queuedSet.Clear();
         }
 
@@ -57,9 +57,8 @@ namespace Units.Skills
         {
             if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
                 return;
-            newSkill.Owner = owner; // 设置技能的拥有者
+            newSkill.Owner = owner;
             skills.Add(newSkill);
-            
         }
 
         public IReadOnlyList<Skill> GetSkills()
@@ -78,11 +77,18 @@ namespace Units.Skills
             foreach (var s in activeSkills)
                 s.AddEnergy(gainPerSkill);
 
-            var firstReady = activeSkills.FirstOrDefault(s => s.IsReady());
-            if (firstReady != null && queuedSet.Add(firstReady))
+            // 入队只检查能量是否充足，不调用 IsReady()。
+            // 原因：部分技能在 IsReady() 中附加了"范围内是否有敌人"的目标查找副作用，
+            // 若 0.2s tick 恰好无敌人在射程，IsReady() 返回 false，导致技能永远不进入队列，
+            // CastSkillAction 永远无法启动。
+            foreach (var s in activeSkills)
             {
-                readyQueue.Enqueue(firstReady);
-                OnSkillReady?.Invoke(firstReady);
+                if (s.CurrentEnergy >= s.RequiredEnergy && queuedSet.Add(s))
+                {
+                    s.IsReady(); // 入队时做一次目标缓存（副作用），不依赖返回值
+                    readyQueue.Enqueue(s);
+                    OnSkillReady?.Invoke(s);
+                }
             }
         }
 
@@ -93,12 +99,20 @@ namespace Units.Skills
 
             var skill = readyQueue.Peek();
 
+            // 检查入队时锁定的目标是否仍然存活
+            // 若目标已死亡，保留能量（不扣除）并出队，等待下次重新锁定新目标
+            if (!skill.IsCachedTargetValid())
+            {
+                readyQueue.Dequeue();
+                queuedSet.Remove(skill);
+                return;
+            }
+
             bool result = skill.Execute();
             if (result)
             {
                 OnSkillCast?.Invoke(owner, skill);
             }
-
 
             // 无论是否执行成功，都出队一次，允许后续重新判定再入队
             readyQueue.Dequeue();

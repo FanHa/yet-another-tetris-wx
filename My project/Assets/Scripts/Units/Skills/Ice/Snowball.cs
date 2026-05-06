@@ -21,14 +21,17 @@ namespace Units.Skills
             if (!base.IsReady())
                 return false;
 
-            // 找到攻击范围内的敌人
-            cachedTarget = Owner.UnitManager.FindRandomEnemyInRange(Owner, Owner.Attributes.AttackRange.finalValue);
-            if (cachedTarget == null)
+            // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
+            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
+            cachedTarget = found;
 
             // 可以发射雪球
             return true;
         }
+
+        public override bool IsCachedTargetValid() => 
+            cachedTarget != null && cachedTarget.IsActive;
 
         protected override bool ExecuteCore()
         {
