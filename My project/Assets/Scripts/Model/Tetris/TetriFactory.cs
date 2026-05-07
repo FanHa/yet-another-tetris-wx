@@ -53,6 +53,11 @@ namespace Model.Tetri
                 }
             }
 
+            // 随机旋转 0~3 次，固定初始朝向
+            int rotations = UnityEngine.Random.Range(0, 4);
+            for (int r = 0; r < rotations; r++)
+                tetri.Rotate();
+
             return tetri;
         }
 

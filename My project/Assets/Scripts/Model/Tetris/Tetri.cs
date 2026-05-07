@@ -8,7 +8,6 @@ namespace Model.Tetri
     public class Tetri
     {
         public event Action OnDataChanged;
-        public event Action OnRotated;
         public enum TetriType
         {
             Character, // 角色类型
@@ -159,8 +158,6 @@ namespace Model.Tetri
                     shape[rows - 1 - j, i] = tempShape[i, j];
                 }
             }
-
-            OnRotated?.Invoke();
         }
 
         public void UpgradeCoreCell()

@@ -50,7 +50,6 @@ public class GameController : MonoBehaviour
         operationTableController.OnTetriBeginDrag += HandleOperationTableTetriBeginDrag;
         operationTableController.OnTetriClick += HandleOperationTableTetriClick; // 新增：监听操作台点击
         battlePreviewUI.OnClosed += HandleBattlePreviewClosed;
-        tetriInfo.OnRotateTetriClicked += HandleRotateTetri;
         unitInfo.OnClosed += () =>
         {
             if (tempUnit != null)
@@ -68,15 +67,9 @@ public class GameController : MonoBehaviour
         unitInfo.ShowUnitInfo(unit);
     }
 
-    private void HandleRotateTetri(Operation.Tetri tetri)
-    {
-        tetri.ModelTetri.Rotate();
-        tetriInfo.ShowTetriInfo(tetri, true);
-    }
-
     private void HandleTetriInventoryTetriClick(Operation.Tetri tetri)
     {
-        tetriInfo.ShowTetriInfo(tetri, true);
+        tetriInfo.ShowTetriInfo(tetri);
     }
 
     private void HandleOperationTableTetriClick(Operation.Tetri tetri)
@@ -93,7 +86,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            tetriInfo.ShowTetriInfo(tetri, false);
+            tetriInfo.ShowTetriInfo(tetri);
         }
     }
 

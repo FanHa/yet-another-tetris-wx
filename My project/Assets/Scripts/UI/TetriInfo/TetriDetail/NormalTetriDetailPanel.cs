@@ -13,7 +13,6 @@ namespace UI.TetriInfo
         [SerializeField] private TMPro.TextMeshProUGUI skillDescriptionText;
         [SerializeField] private Image affinityIcon;
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
-        [SerializeField] private Button rotateButton;
         
         [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
         [SerializeField] private AffinityResourceMapping affinityResourceMapping;

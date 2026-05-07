@@ -24,20 +24,11 @@ namespace Operation
         public void Initialize(Model.Tetri.Tetri modelTetri)
         {
             ModelTetri = modelTetri;
-            ModelTetri.OnRotated += OnModelRotated;
             RebuildFromModel();
         }
 
         private void OnDestroy()
         {
-            if (ModelTetri != null)
-                ModelTetri.OnRotated -= OnModelRotated;
-        }
-
-        private void OnModelRotated()
-        {
-            // 仅根据当前模型重建显示
-            RebuildFromModel();
         }
 
         protected abstract void RebuildFromModel();
