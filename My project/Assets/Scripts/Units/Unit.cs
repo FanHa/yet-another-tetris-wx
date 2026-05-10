@@ -60,12 +60,15 @@ namespace Units
         public UnitManager UnitManager;
 
         private bool isActive = false; // 是否处于活动状态
+        private int skillMotionLockCount = 0;
         public bool IsActive => isActive;
+        public bool IsSkillMotionActive => skillMotionLockCount > 0;
         public Movement Movement => movementController;
         public AnimationController AnimationController => animationController;
         public Units.Skills.SkillHandler SkillHandler => skillHandler;
 
         private UnitActionRunner actionRunner;
+        private SkillMotionAction skillMotionAction;
         private MoveAction moveAction;
         private AttackAction attackAction;
         private CastSkillAction castSkillAction;
@@ -79,6 +82,7 @@ namespace Units
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
 
             actionRunner = new UnitActionRunner();
+            skillMotionAction = new SkillMotionAction(this);
             moveAction = new MoveAction(this);
             attackAction = new AttackAction(this);
             castSkillAction = new CastSkillAction(this);
@@ -95,7 +99,7 @@ namespace Units
 
             UpdateEnemiesDistance();
 
-            actionRunner.TryStartHighestPriority(castSkillAction, attackAction, moveAction);
+            actionRunner.TryStartHighestPriority(skillMotionAction, castSkillAction, attackAction, moveAction);
 
             actionRunner.Tick();
             
@@ -128,6 +132,7 @@ namespace Units
             skillHandler.Deactivate(); // 如有需要
             buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
             actionRunner.CancelCurrent();
+            skillMotionLockCount = 0;
             isActive = false;
         }
 
@@ -153,6 +158,38 @@ namespace Units
         public void Teleport(Vector3 position)
         {
             movementController.Teleport(position);
+        }
+
+        public void EnterSkillMotion(int avoidancePriority)
+        {
+            skillMotionLockCount++;
+
+            if (skillMotionLockCount == 1)
+            {
+                actionRunner.CancelCurrent();
+                movementController.EnterSkillMotion(avoidancePriority);
+            }
+        }
+
+        public void ClearNavigationPathForSkillMotion()
+        {
+            movementController.ClearNavigationPath();
+        }
+
+        public void ExitSkillMotion()
+        {
+            if (skillMotionLockCount <= 0)
+            {
+                skillMotionLockCount = 0;
+                return;
+            }
+
+            skillMotionLockCount--;
+
+            if (skillMotionLockCount == 0)
+            {
+                movementController.ExitSkillMotion();
+            }
         }
 
         public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)

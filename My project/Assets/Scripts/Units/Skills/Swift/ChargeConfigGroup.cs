@@ -17,5 +17,7 @@ namespace Units.Skills
 
         public float DamageBonusPerSpeed;
 
+        public int AvoidancePriority = 0;
+
     }
 }

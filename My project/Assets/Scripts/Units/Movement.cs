@@ -15,6 +15,7 @@ namespace Units
         private Unit owner;
         private NavMeshAgent agent;
         private Vector3 lastDestination;
+        private int? cachedAvoidancePriority;
         public float AgentRadius => agent.radius;
 
         public enum MovementResultCode
@@ -247,6 +248,49 @@ namespace Units
         public void ResumeNavigation()
         {
             agent.isStopped = false;
+        }
+
+        public void ClearNavigationPath()
+        {
+            if (!agent.enabled)
+            {
+                return;
+            }
+
+            agent.ResetPath();
+            lastDestination = agent.nextPosition;
+        }
+
+        public void EnterSkillMotion(int avoidancePriority)
+        {
+            if (!agent.enabled)
+            {
+                return;
+            }
+
+            if (!cachedAvoidancePriority.HasValue)
+            {
+                cachedAvoidancePriority = agent.avoidancePriority;
+            }
+
+            agent.avoidancePriority = Mathf.Clamp(avoidancePriority, 0, 99);
+        }
+
+        public void ExitSkillMotion()
+        {
+            if (!agent.enabled)
+            {
+                cachedAvoidancePriority = null;
+                return;
+            }
+
+            if (!cachedAvoidancePriority.HasValue)
+            {
+                return;
+            }
+
+            agent.avoidancePriority = cachedAvoidancePriority.Value;
+            cachedAvoidancePriority = null;
         }
 
         private bool TryResolveReachablePosition(Vector3 targetPosition, out Vector3 resolvedPosition)

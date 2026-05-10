@@ -4,6 +4,7 @@ namespace Units.Actions
     {
         Move,
         Attack,
-        CastSkill
+        CastSkill,
+        SkillMotion
     }
 }

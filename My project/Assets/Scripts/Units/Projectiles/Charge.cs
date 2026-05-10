@@ -11,18 +11,21 @@ namespace Units.Projectiles
         private Vector3 targetPosition;
         private float speed;
         private float chargeDamage;
+        private int avoidancePriority;
         private Skill sourceSkill;
         private HashSet<Unit> damagedUnits = new HashSet<Unit>();
         private bool isActive = false;
+        private bool hasAcquiredSkillMotion = false;
         [SerializeField] private float overshootDistance = 1f;
 
 
-        public void Init(Unit owner, Unit target, float speed, float chargeDamage, Skill sourceSkill)
+        public void Init(Unit owner, Unit target, float speed, float chargeDamage, int avoidancePriority, Skill sourceSkill)
         {
             this.owner = owner;
             this.target = target;
             this.speed = speed;
             this.chargeDamage = chargeDamage;
+            this.avoidancePriority = avoidancePriority;
             this.sourceSkill = sourceSkill;
             Vector3 dir = target.transform.position - owner.transform.position;
             if (dir.sqrMagnitude < 0.0001f)
@@ -33,6 +36,7 @@ namespace Units.Projectiles
 
         public void Activate()
         {
+            AcquireSkillMotion();
             isActive = true;
         }
 
@@ -43,6 +47,7 @@ namespace Units.Projectiles
 
             if (owner == null || !owner.IsActive)
             {
+                ReleaseSkillMotion();
                 Destroy(gameObject);
                 return;
             }
@@ -54,6 +59,7 @@ namespace Units.Projectiles
             if (moveResult.ShouldTerminate)
             {
                 isActive = false;
+                ReleaseSkillMotion();
                 Destroy(gameObject);
                 return;
             }
@@ -61,7 +67,7 @@ namespace Units.Projectiles
             var enemies = owner.UnitManager.FindEnemiesInRangeAtPosition(
                 owner.faction,
                 (Vector2)owner.transform.position,
-                1f // 检测半径
+                1f // todo: 这里可以用合理的参数,而不是写死1f
             );
 
             if (enemies != null)
@@ -83,8 +89,36 @@ namespace Units.Projectiles
             if (Vector3.Distance(owner.transform.position, targetPosition) < 0.1f)
             {
                 isActive = false;
+                ReleaseSkillMotion();
                 Destroy(gameObject);
             }
+        }
+
+        private void AcquireSkillMotion()
+        {
+            if (hasAcquiredSkillMotion || owner == null)
+            {
+                return;
+            }
+
+            owner.EnterSkillMotion(avoidancePriority);
+            hasAcquiredSkillMotion = true;
+        }
+
+        private void ReleaseSkillMotion()
+        {
+            if (!hasAcquiredSkillMotion || owner == null)
+            {
+                return;
+            }
+
+            owner.ExitSkillMotion();
+            hasAcquiredSkillMotion = false;
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseSkillMotion();
         }
     }
 }
