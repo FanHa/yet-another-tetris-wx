@@ -22,6 +22,7 @@ namespace Units.Skills
                 $"{stats.ChilledDuration}\n" +
                 $"{stats.MoveSlowPercent}\n" +
                 $"{stats.AtkSlowPercent}\n" +
+                $"{stats.ActionSlowPercent}\n" +
                 $"{stats.EnergySlowPercent}";
         }
 
@@ -41,6 +42,7 @@ namespace Units.Skills
                 stats.ChilledDuration.Final,
                 (int)stats.MoveSlowPercent.Final,
                 (int)stats.AtkSlowPercent.Final,
+                (int)stats.ActionSlowPercent.Final,
                 (int)stats.EnergySlowPercent.Final,
                 Owner,
                 this
@@ -55,6 +57,7 @@ namespace Units.Skills
             public StatValue ChilledDuration;
             public StatValue MoveSlowPercent;
             public StatValue AtkSlowPercent;
+            public StatValue ActionSlowPercent;
             public StatValue EnergySlowPercent;
         }
 
@@ -67,6 +70,7 @@ namespace Units.Skills
                 ChilledDuration = new StatValue("反制减速持续", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationAdditionPerIceCell),
                 MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseMoveSlowPercent, iceCellCount * Config.MoveSlowPercentPerIceCell),
                 AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseAtkSlowPercent, iceCellCount * Config.AtkSlowPercentPerIceCell),
+                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseActionSlowPercent, iceCellCount * Config.ActionSlowPercentPerIceCell),
                 EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseEnergySlowPercent, iceCellCount * Config.EnergySlowPercentPerIceCell)
             };
         }

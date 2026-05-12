@@ -17,6 +17,8 @@ namespace Units.Skills
         public int MoveSlowPercentPerIceCell = 5;
         public int BaseAtkSlowPercent = 10;
         public int AtkSlowPercentPerIceCell = 5;
+        public int BaseActionSlowPercent = 10;
+        public int ActionSlowPercentPerIceCell = 5;
         public int BaseEnergySlowPercent = 15;
         public int EnergySlowPercentPerIceCell = 5;
 

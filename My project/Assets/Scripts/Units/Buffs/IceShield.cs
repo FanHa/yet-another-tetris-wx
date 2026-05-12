@@ -11,6 +11,7 @@ namespace Units.Buffs
         private float chilledDuration;         // Chilled Buff 持续时间（秒）
         private int chilledMoveSlowPercent;  // Chilled 移动速度减缓百分比
         private int chilledAttackSlowPercent;// Chilled 攻击速度减缓百分比
+        private int chilledActionSlowPercent;// Chilled 动作速率减缓百分比
         private int chilledEnergyRegenSlowPercent; // Chilled 能量回复减缓百分比
         private GameObject vfxInstance;
 
@@ -19,6 +20,7 @@ namespace Units.Buffs
             float chilledDuration,
             int chilledMoveSlowPercent,
             int chilledAttackSlowPercent,
+            int chilledActionSlowPercent,
             int chilledEnergyRegenSlowPercent,
             Unit sourceUnit,
             Skill sourceSkill
@@ -27,12 +29,13 @@ namespace Units.Buffs
             this.chilledDuration = chilledDuration;
             this.chilledMoveSlowPercent = chilledMoveSlowPercent;
             this.chilledAttackSlowPercent = chilledAttackSlowPercent;
+            this.chilledActionSlowPercent = chilledActionSlowPercent;
             this.chilledEnergyRegenSlowPercent = chilledEnergyRegenSlowPercent;
         }
 
         public override string Name() => "冰霜护盾";
         public override string Description() =>
-            $"被攻击时使攻击者获得Chilled:移速-{chilledMoveSlowPercent}%，攻速-{chilledAttackSlowPercent}%，能量回复-{chilledEnergyRegenSlowPercent}%，持续{chilledDuration}秒";
+            $"被攻击时使攻击者获得Chilled:移速-{chilledMoveSlowPercent}%，攻速-{chilledAttackSlowPercent}%，动作速率-{chilledActionSlowPercent}%，能量回复-{chilledEnergyRegenSlowPercent}%，持续{chilledDuration}秒";
 
         public void OnTakeHit(Unit self, Unit attacker, ref Damages.Damage damage)
         {
@@ -42,6 +45,7 @@ namespace Units.Buffs
                 chilledDuration,
                 chilledMoveSlowPercent,
                 chilledAttackSlowPercent,
+                chilledActionSlowPercent,
                 chilledEnergyRegenSlowPercent,
                 self,
                 sourceSkill
