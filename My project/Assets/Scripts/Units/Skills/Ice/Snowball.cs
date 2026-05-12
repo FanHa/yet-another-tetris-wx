@@ -51,6 +51,7 @@ namespace Units.Skills
                 stats.ChilledDuration.Final,
                 (int)stats.MoveSlowPercent.Final,
                 (int)stats.AtkSlowPercent.Final,
+                (int)stats.ActionSlowPercent.Final,
                 (int)stats.EnergySlowPercent.Final,
                 this
             );
@@ -68,6 +69,7 @@ namespace Units.Skills
                 $"{stats.ChilledDuration}\n" +
                 $"{stats.MoveSlowPercent}\n" +
                 $"{stats.AtkSlowPercent}\n" +
+                $"{stats.ActionSlowPercent}\n" +
                 $"{stats.EnergySlowPercent}";
         }
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,施加减速Debuff.";
@@ -83,6 +85,7 @@ namespace Units.Skills
             public StatValue ChilledDuration;
             public StatValue MoveSlowPercent;
             public StatValue AtkSlowPercent;
+            public StatValue ActionSlowPercent;
             public StatValue EnergySlowPercent;
         }
 
@@ -94,6 +97,7 @@ namespace Units.Skills
                 ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationPerIceCell),
                 MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, iceCellCount * Config.ChilledMoveSlowPercentPerIceCell),
                 AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, iceCellCount * Config.ChilledAtkSlowPercentPerIceCell),
+                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseChilledActionSlowPercent, iceCellCount * Config.ChilledActionSlowPercentPerIceCell),
                 EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, iceCellCount * Config.ChilledEnergySlowPercentPerIceCell)
             };
         }

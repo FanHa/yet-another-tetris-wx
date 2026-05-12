@@ -14,6 +14,11 @@ namespace Units.Actions
 
         public override bool CanStart()
         {
+            if (Owner.Attributes.ActionSpeed.finalValue <= 0f)
+            {
+                return false;
+            }
+
             if (!Owner.CanAttackNow())
             {
                 return false;
@@ -39,12 +44,14 @@ namespace Units.Actions
             Owner.Movement.PauseNavigation();
             Vector2 direction = (pendingTarget.transform.position - Owner.transform.position).normalized;
             Owner.AnimationController.SetLookDirection(direction);
+            Owner.SetActionAnimationSpeed(Owner.Attributes.ActionSpeed.finalValue);
             Owner.AnimationController.TriggerAttack();
         }
 
         protected override void OnExit()
         {
             pendingTarget = null;
+            Owner.ResetActionAnimationSpeed();
             Owner.Movement.ResumeNavigation();
         }
 

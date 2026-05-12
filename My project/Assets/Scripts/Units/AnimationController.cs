@@ -30,6 +30,16 @@ namespace Units
             animator.SetTrigger("Die");
         }
 
+        public void SetPlaybackSpeed(float speedMultiplier)
+        {
+            animator.speed = Mathf.Max(0f, speedMultiplier);
+        }
+
+        public void ResetPlaybackSpeed()
+        {
+            animator.speed = 1f;
+        }
+
         public void SetLookDirection(Vector2 direction)
         {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

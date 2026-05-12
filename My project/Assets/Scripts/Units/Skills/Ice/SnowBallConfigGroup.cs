@@ -23,6 +23,8 @@ namespace Units.Skills
         public int ChilledMoveSlowPercentPerIceCell = 3;
         public int BaseChilledAtkSlowPercent = 10;
         public int ChilledAtkSlowPercentPerIceCell = 3;
+        public int BaseChilledActionSlowPercent = 10;
+        public int ChilledActionSlowPercentPerIceCell = 3;
         public int BaseChilledEnergySlowPercent = 15;
         public int ChilledEnergySlowPercentPerIceCell = 4;
 

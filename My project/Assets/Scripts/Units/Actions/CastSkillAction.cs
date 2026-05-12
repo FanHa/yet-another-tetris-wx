@@ -10,17 +10,19 @@ namespace Units.Actions
 
         public override bool CanStart()
         {
-            return Owner.SkillHandler.HasReadySkill;
+            return Owner.SkillHandler.HasReadySkill && Owner.Attributes.ActionSpeed.finalValue > 0f;
         }
 
         protected override void OnEnter()
         {
             Owner.Movement.PauseNavigation();
+            Owner.SetActionAnimationSpeed(Owner.Attributes.ActionSpeed.finalValue);
             Owner.AnimationController.TriggerCastSkill();
         }
 
         protected override void OnExit()
         {
+            Owner.ResetActionAnimationSpeed();
             Owner.Movement.ResumeNavigation();
         }
 

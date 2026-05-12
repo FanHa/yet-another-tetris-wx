@@ -9,12 +9,14 @@ namespace Units.Buffs
     {
         public int MoveSlowPercent { get; }
         public int AttackSlowPercent { get; }
+        public int ActionSlowPercent { get; }
         public int EnergyRegenSlowPercent { get; }
 
         public Chilled(
             float duration,
             int moveSlowPercent,
             int attackSlowPercent,
+            int actionSlowPercent,
             int energyRegenSlowPercent,
             Unit sourceUnit,
             Skill sourceSkill
@@ -22,12 +24,13 @@ namespace Units.Buffs
         {
             MoveSlowPercent = moveSlowPercent;
             AttackSlowPercent = attackSlowPercent;
+            ActionSlowPercent = actionSlowPercent;
             EnergyRegenSlowPercent = energyRegenSlowPercent;
         }
 
         public override string Name() => "Chilled";
         public override string Description() =>
-            $"移速-{MoveSlowPercent}%，攻速-{AttackSlowPercent}%，能量回复-{EnergyRegenSlowPercent}%";
+            $"移速-{MoveSlowPercent}%，攻速-{AttackSlowPercent}%，动作速率-{ActionSlowPercent}%，能量回复-{EnergyRegenSlowPercent}%";
 
 
         public override void OnApply(Unit unit)
@@ -35,12 +38,14 @@ namespace Units.Buffs
             base.OnApply(unit);
             unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -AttackSlowPercent);
             unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
+            unit.Attributes.ActionSpeed.AddPercentageModifier(this, -ActionSlowPercent);
             unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -EnergyRegenSlowPercent);
         }
         public override void OnRemove()
         {
             owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
             owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            owner.Attributes.ActionSpeed.RemovePercentageModifier(this);
             owner.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
             base.OnRemove();
         }

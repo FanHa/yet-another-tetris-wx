@@ -7,6 +7,7 @@ namespace Units.Projectiles
         private float chilledDuration;
         private int moveSlowPercent;
         private int atkSlowPercent;
+        private int actionSlowPercent;
         private int energySlowPercent;
         private Units.Skills.Skill sourceSkill;
 
@@ -16,6 +17,7 @@ namespace Units.Projectiles
             float chilledDuration,
             int moveSlowPercent,
             int atkSlowPercent,
+            int actionSlowPercent,
             int energySlowPercent,
             Units.Skills.Skill sourceSkill
         )
@@ -24,6 +26,7 @@ namespace Units.Projectiles
             this.chilledDuration = chilledDuration;
             this.moveSlowPercent = moveSlowPercent;
             this.atkSlowPercent = atkSlowPercent;
+            this.actionSlowPercent = actionSlowPercent;
             this.energySlowPercent = energySlowPercent;
             this.sourceSkill = sourceSkill;
         }
@@ -35,6 +38,7 @@ namespace Units.Projectiles
                 chilledDuration,
                 moveSlowPercent,
                 atkSlowPercent,
+                actionSlowPercent,
                 energySlowPercent,
                 caster,
                 sourceSkill

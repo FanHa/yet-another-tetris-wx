@@ -160,6 +160,16 @@ namespace Units
             movementController.Teleport(position);
         }
 
+        public void SetActionAnimationSpeed(float speedMultiplier)
+        {
+            animationController.SetPlaybackSpeed(speedMultiplier);
+        }
+
+        public void ResetActionAnimationSpeed()
+        {
+            animationController.ResetPlaybackSpeed();
+        }
+
         public void EnterSkillMotion(int avoidancePriority)
         {
             skillMotionLockCount++;

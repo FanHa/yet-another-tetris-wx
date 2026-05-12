@@ -41,6 +41,10 @@ namespace Units.Skills
         public int BaseChilledAtkSlowPercent = 10;
         [Tooltip("每个冰块增加的攻击减速百分比")]
         public int ChilledAtkSlowPercentPerIceCell = 3;
+        [Tooltip("基础动作减速百分比")]
+        public int BaseChilledActionSlowPercent = 10;
+        [Tooltip("每个冰块增加的动作减速百分比")]
+        public int ChilledActionSlowPercentPerIceCell = 3;
         [Tooltip("基础能量回复减速百分比")]
         public int BaseChilledEnergySlowPercent = 15;
         [Tooltip("每个冰块增加的能量回复减速百分比")]

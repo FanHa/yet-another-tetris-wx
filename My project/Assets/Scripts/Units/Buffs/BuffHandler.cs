@@ -66,7 +66,11 @@ namespace Units.Buffs
 
         public void RemoveBuff(Buff buff)
         {
-            buffs.Remove(buff);
+            if (!buffs.Remove(buff))
+                return;
+            
+            buff.OnRemove();
+            BuffRemoved?.Invoke(buff);
         }
         public IEnumerable<Buff> GetActiveBuffs()
         {
