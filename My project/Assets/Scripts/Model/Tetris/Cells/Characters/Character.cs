@@ -37,7 +37,7 @@ namespace Model.Tetri
                 maxHealthBase: 100f,
                 attacksPerTenSecondsBase: 2.5f,
                 energyPerSecondBase: 5f,
-                attackRange: 1f
+                attackRange: 0.2f
             );
             unit.name = characterName;
         }
