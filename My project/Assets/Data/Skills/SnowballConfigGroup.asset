@@ -21,6 +21,8 @@ MonoBehaviour:
     ChilledMoveSlowPercentPerIceCell: 3
     BaseChilledAtkSlowPercent: 10
     ChilledAtkSlowPercentPerIceCell: 3
+    BaseChilledActionSlowPercent: 10
+    ChilledActionSlowPercentPerIceCell: 3
     BaseChilledEnergySlowPercent: 10
     ChilledEnergySlowPercentPerIceCell: 3
     RequiredEnergy: 40
@@ -32,6 +34,8 @@ MonoBehaviour:
     ChilledMoveSlowPercentPerIceCell: 3
     BaseChilledAtkSlowPercent: 10
     ChilledAtkSlowPercentPerIceCell: 3
+    BaseChilledActionSlowPercent: 10
+    ChilledActionSlowPercentPerIceCell: 3
     BaseChilledEnergySlowPercent: 10
     ChilledEnergySlowPercentPerIceCell: 3
     RequiredEnergy: 40
