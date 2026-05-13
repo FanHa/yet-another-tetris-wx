@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    [RequireComponent(typeof(Canvas))]
     public class HealthBar : MonoBehaviour
     {
         [SerializeField] private Slider lifeSlider;
@@ -14,11 +15,14 @@ namespace UI
 
         private void Awake()
         {
-            // 获取主相机的引用
-            if (healthCamera == null)
+            healthCamera = Camera.main;
+
+            Canvas canvas = GetComponent<Canvas>();
+            if (canvas.renderMode == RenderMode.WorldSpace)
             {
-                healthCamera = Camera.main;
+                canvas.worldCamera = healthCamera;
             }
+            
         }
 
         public void SetAttributes(Units.Attributes attributes)
@@ -30,7 +34,6 @@ namespace UI
 
         private void Update()
         {
-
             transform.rotation = healthCamera.transform.rotation;
             transform.position = target.position + offset;
 

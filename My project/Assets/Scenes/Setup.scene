@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 85712747}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: StatisticsCanvas
+  m_Name: Canvas-BattleStatistics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2136,7 +2136,7 @@ GameObject:
   - component: {fileID: 1176676514}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: DamageViewerCanvas
+  m_Name: Canvas-BattleInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3179,7 +3179,7 @@ GameObject:
   - component: {fileID: 1776533868}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: Canvas
+  m_Name: Canvas-MainUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3234,8 +3234,8 @@ Canvas:
   m_GameObject: {fileID: 1776533867}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 519420031}
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -5633,11 +5633,11 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1776533871}
+  - {fileID: 85712746}
+  - {fileID: 1176676516}
   - {fileID: 1391442593}
   - {fileID: 2021754828}
   - {fileID: 943837599}
-  - {fileID: 1176676516}
-  - {fileID: 85712746}
   - {fileID: 2025217634856458810}
   - {fileID: 654725609620354711}
   - {fileID: 1588624656}

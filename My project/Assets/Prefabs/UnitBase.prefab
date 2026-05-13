@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 2478126843348370136}
   - component: {fileID: 347640396795588166}
   - component: {fileID: 6515745096614915891}
+  - component: {fileID: 6341993586806216420}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: Shield
@@ -548,6 +549,29 @@ MonoBehaviour:
   shieldSlider: {fileID: 0}
   target: {fileID: 4503421608668510641}
   offset: {x: 0, y: 0.2, z: 0}
+--- !u!223 &6341993586806216420
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088789257912554342}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &2768629011979689127
 GameObject:
   m_ObjectHideFlags: 0
@@ -855,6 +879,7 @@ GameObject:
   - component: {fileID: 7201303523024613685}
   - component: {fileID: 4442008565583706885}
   - component: {fileID: 3173057223392682465}
+  - component: {fileID: 2212223529364400133}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: Life
@@ -951,6 +976,29 @@ MonoBehaviour:
   shieldSlider: {fileID: 0}
   target: {fileID: 4503421608668510641}
   offset: {x: 0, y: 0.2, z: 0}
+--- !u!223 &2212223529364400133
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436940434346827792}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &7474106867498017513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1231,7 +1279,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1509,6 +1557,11 @@ MonoBehaviour:
       Name: 
       baseValue: 0
       finalValue: 0
+    actionSpeed:
+      Name: 
+      baseValue: 0
+      finalValue: 0
+    canHitAndRun: 0
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
