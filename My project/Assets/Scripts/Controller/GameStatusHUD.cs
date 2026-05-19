@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Controller
 {
-    public class Statistics : MonoBehaviour
+    public class GameStatusHUD : MonoBehaviour
     {
         [Header("UI Elements")]
         [SerializeField] private TextMeshProUGUI levelText; // 显示关卡

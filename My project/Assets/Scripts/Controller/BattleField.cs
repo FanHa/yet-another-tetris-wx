@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units;
 using Model.Tetri;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace Controller {
         [SerializeField] private BattleStatistics battleStatistics;
 
         [Header("Controllers")]
-        [SerializeField] private Controller.Statistics statisticsController;
+
+        [SerializeField] private Controller.GameStatusHUD gameStatusHud;
 
         [Header("Spawn Points")]
         // public Transform spawnPointA;
@@ -65,7 +67,7 @@ namespace Controller {
 
         public void StartNewLevelBattle(int level)
         {
-            statisticsController.SetLevel(level); // 设置当前关卡
+            gameStatusHud.SetLevel(level); // 设置当前关卡
             factionAConfig = playerUnitInventoryData.Items;
             factionBConfig = enemyUnitInventoryData.Items;
             SpawnUnits();
@@ -139,14 +141,14 @@ namespace Controller {
 
         private void HandleUnitDeath(Unit deadUnit)
         {
-            statisticsController.AddScore(1);// todo 以后根据不同单位设置不同分数
+            gameStatusHud.AddScore(1);// todo 以后根据不同单位设置不同分数
         }
 
         private void HandleFactionAllDead(Unit.Faction faction)
         {
             if (faction == Unit.Faction.FactionA)
             {
-                statisticsController.DecreaseLife(1);
+                gameStatusHud.DecreaseLife(1);
                 Debug.Log("FactionA 全部死亡，生命值减少 1");
             }
 
