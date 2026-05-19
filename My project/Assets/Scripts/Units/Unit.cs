@@ -102,6 +102,7 @@ namespace Units
             actionRunner.TryStartHighestPriority(skillMotionAction, castSkillAction, attackAction, moveAction);
 
             actionRunner.Tick();
+            UpdateActionAnimationSpeed();
             
         }
 
@@ -110,6 +111,7 @@ namespace Units
             SetFaction(faction);
 
             healthBar.SetAttributes(Attributes);
+            UpdateActionAnimationSpeed();
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
         }
 
@@ -132,6 +134,7 @@ namespace Units
             skillHandler.Deactivate(); // 如有需要
             buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
             actionRunner.CancelCurrent();
+            animationController.ResetPlaybackSpeed();
             skillMotionLockCount = 0;
             isActive = false;
         }
@@ -158,16 +161,6 @@ namespace Units
         public void Teleport(Vector3 position)
         {
             movementController.Teleport(position);
-        }
-
-        public void SetActionAnimationSpeed(float speedMultiplier)
-        {
-            animationController.SetPlaybackSpeed(speedMultiplier);
-        }
-
-        public void ResetActionAnimationSpeed()
-        {
-            animationController.ResetPlaybackSpeed();
         }
 
         public void EnterSkillMotion(int avoidancePriority)
@@ -234,6 +227,13 @@ namespace Units
         public void AddSkillEnergy(float energy)
         {
             skillHandler.DistributeEnergy(energy);
+        }
+
+        private void UpdateActionAnimationSpeed()
+        {
+            float speed = Attributes?.ActionSpeed?.finalValue ?? 1f;
+            animationController.SetPlaybackSpeed(speed);
+
         }
 
         // 这个方法会被 Animator 的事件触发

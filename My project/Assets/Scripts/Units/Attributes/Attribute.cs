@@ -17,6 +17,7 @@ namespace Units
         public IEnumerable<float> PercentageModifiers => percentageModifiers.Values;
 
         public float finalValue;
+        public event Action<float> OnValueChanged;
         
 
         public Attribute(string name, float baseValue)
@@ -98,6 +99,8 @@ namespace Units
         /// </summary>
         private void RecalculateFinalValue()
         {
+            float previousValue = finalValue;
+
             float flatSum = 0f;
             foreach (var modifier in flatModifiers.Values)
             {
@@ -114,6 +117,11 @@ namespace Units
             if (finalValue < 0)
             {
                 finalValue = 0; // 确保最终值不为负
+            }
+
+            if (!Mathf.Approximately(previousValue, finalValue))
+            {
+                OnValueChanged?.Invoke(finalValue);
             }
         }
     }
