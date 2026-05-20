@@ -13,9 +13,12 @@ namespace UI.UnitInfo
         [SerializeField] private Button closeButton;
 
         [Header("属性")]
-        [SerializeField] private Transform attributeRoot;
-        [SerializeField] private UI.UnitInfo.Attribute unitAttributePrefab;
-        [SerializeField] private UI.UnitInfo.Health healthPrefab;
+        [SerializeField] private UI.UnitInfo.Health healthAttribute;
+        [SerializeField] private UI.UnitInfo.Attribute moveSpeedAttribute;
+        [SerializeField] private UI.UnitInfo.Attribute attackPowerAttribute;
+        [SerializeField] private UI.UnitInfo.Attribute attacksPerTenSecondsAttribute;
+        [SerializeField] private UI.UnitInfo.Attribute energyPerSecondAttribute;
+        [SerializeField] private UI.UnitInfo.Attribute attackRangeAttribute;
 
         [Header("Affinity")]
         [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
@@ -34,6 +37,7 @@ namespace UI.UnitInfo
         [Header("实例设置")]
         [SerializeField] private Utils.CameraFollower buffSourceUnitCamera;
         [SerializeField] private Utils.CameraFollower currentUnitCamera;
+
 
         private Units.Unit currentUnit;
 
@@ -101,28 +105,14 @@ namespace UI.UnitInfo
         {
             if (currentUnit == null) return;
 
-            foreach (Transform child in attributeRoot)
-                Destroy(child.gameObject);
-
             Units.Attributes attributes = currentUnit.Attributes;
 
-            var instantiatedHealth = Instantiate(healthPrefab, attributeRoot);
-            instantiatedHealth.BindAttributes(currentUnit.Attributes);
-
-            var AttributeToShow = new List<Units.Attribute>(
-                new[]
-                {
-                    attributes.MoveSpeed,
-                    attributes.AttackPower,
-                    attributes.AttacksPerTenSeconds,
-                    attributes.EnergyPerSecond
-                }
-            );
-            foreach (Units.Attribute attribute in AttributeToShow)
-            {
-                var instantiatedAttribute = Instantiate(unitAttributePrefab, attributeRoot);
-                instantiatedAttribute.SetAttribute(attribute);
-            }
+            healthAttribute.BindAttributes(attributes);
+            moveSpeedAttribute.SetAttribute(attributes.MoveSpeed);
+            attackPowerAttribute.SetAttribute(attributes.AttackPower);
+            attacksPerTenSecondsAttribute.SetAttribute(attributes.AttacksPerTenSeconds);
+            energyPerSecondAttribute.SetAttribute(attributes.EnergyPerSecond);
+            attackRangeAttribute.SetAttribute(attributes.AttackRange);
         }
         private void RefreshAffinity()
         {
