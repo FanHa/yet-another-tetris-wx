@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Model.Tetri;
 using TMPro;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace UI.UnitInfo
         [Header("Affinity")]
         [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
         [SerializeField] private Transform affinityRoot;
+        [SerializeField] private AffinityResourceMapping affinityResourceMapping;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
@@ -70,7 +72,7 @@ namespace UI.UnitInfo
 
         private void RefreshBuffInfo()
         {
-            buffDescriptionText.text = ""; // 清空原有内容
+            SetDetailText(""); // 清空描述区域
             if (currentUnit == null) return;
 
             foreach (Transform child in buffRoot)
@@ -89,7 +91,7 @@ namespace UI.UnitInfo
 
         private void RefreshSkillInfo()
         {
-            skillDescriptionText.text = ""; // 清空原有内容
+            SetDetailText(""); // 清空描述区域
             foreach (Transform child in skillRoot)
                 Destroy(child.gameObject);
             IReadOnlyList<Units.Skills.Skill> skills = currentUnit.GetSkills();
@@ -122,12 +124,14 @@ namespace UI.UnitInfo
                 Destroy(child.gameObject);
 
             Dictionary<Model.Tetri.AffinityType, int> affinities = currentUnit.CellCounts;
-            foreach (var affinity in affinities)
+            foreach (var affinity in affinities
+                         .Where(pair => pair.Key != Model.Tetri.AffinityType.None && pair.Value > 0)
+                         .OrderByDescending(pair => pair.Value)
+                         .ThenBy(pair => pair.Key))
             {
-                if (affinity.Key == Model.Tetri.AffinityType.None)
-                    continue;
                 UI.UnitInfo.Affinity affinityInfo = Instantiate(affinityInfoPrefab, affinityRoot);
                 affinityInfo.SetAffinity(affinity.Key, affinity.Value);
+                affinityInfo.OnClicked += ShowAffinityDescription;
             }
         }
 
@@ -143,9 +147,13 @@ namespace UI.UnitInfo
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)
         {
-            buffDescriptionText.text = "<b>" + buff.Name() + "</b>: " + buff.Description();
-            buffSourceUnitCamera.SetTarget(buff.SourceUnit.transform);
-            
+            SetDetailText("<b>" + buff.Name() + "</b>\n" + buff.Description());
+
+            // 部分 Buff 没有来源单位或未配置来源相机，描述展示不应因此失败。
+            if (buffSourceUnitCamera != null && buff.SourceUnit != null)
+            {
+                buffSourceUnitCamera.SetTarget(buff.SourceUnit.transform);
+            }
         }
         public void ShowSkillDescription(Units.Skills.Skill skill)
         {
@@ -161,7 +169,38 @@ namespace UI.UnitInfo
                     .Replace("<final>", "<color=#FFD700>")
                     .Replace("</final>", "</color>");
 
-            skillDescriptionText.text = "<b>" + skill.Name() + "</b>: " + desc;
+            SetDetailText("<b>" + skill.Name() + "</b>\n" + desc);
+        }
+
+        private void ShowAffinityDescription(AffinityType type, int count)
+        {
+            string affinityName = GetAffinityDisplayName(type);
+            string title = $"<b>{affinityName}加成 (X{count})</b>";
+            string description = GetAffinityDescription(type);
+            SetDetailText(title + "\n" + description);
+        }
+
+        private string GetAffinityDisplayName(AffinityType type)
+        {
+            return affinityResourceMapping.GetName(type);
+        }
+
+        private string GetAffinityDescription(AffinityType type)
+        {
+            return affinityResourceMapping.GetDescription(type);
+        }
+
+        private void SetDetailText(string text)
+        {
+            if (skillDescriptionText != null)
+            {
+                skillDescriptionText.text = text;
+            }
+
+            if (buffDescriptionText != null && buffDescriptionText != skillDescriptionText)
+            {
+                buffDescriptionText.text = text;
+            }
         }
     }
 }
