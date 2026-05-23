@@ -29,12 +29,14 @@ namespace UI.UnitInfo
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
         [SerializeField] private Transform skillRoot;
-        [SerializeField] private TMPro.TextMeshProUGUI skillDescriptionText;
 
         [Header("Buff")]
         [SerializeField] private UI.UnitInfo.Buff buffInfoPrefab;
         [SerializeField] private Transform buffRoot;
-        [SerializeField] private TMPro.TextMeshProUGUI buffDescriptionText;
+
+        [Header("详情")]
+        [SerializeField] private TMPro.TextMeshProUGUI detailDescriptionText;
+        [SerializeField] private GameObject sourceSection;
 
         [Header("实例设置")]
         [SerializeField] private Utils.CameraFollower buffSourceUnitCamera;
@@ -50,6 +52,7 @@ namespace UI.UnitInfo
 
         public void HideUnitInfo()
         {
+            UnbindCurrentUnitBuffEvents();
             currentUnit = null;
             gameObject.SetActive(false);
             OnClosed?.Invoke();
@@ -57,6 +60,7 @@ namespace UI.UnitInfo
 
         public void ShowUnitInfo(Units.Unit unit)
         {
+            UnbindCurrentUnitBuffEvents();
             currentUnit = unit;
             gameObject.SetActive(true);
             RefreshInfo();
@@ -68,6 +72,14 @@ namespace UI.UnitInfo
         private void HandleUnitBuffChanged(Units.Buffs.Buff buff)
         {
             RefreshBuffInfo();
+        }
+
+        private void UnbindCurrentUnitBuffEvents()
+        {
+            if (currentUnit == null) return;
+
+            currentUnit.BuffAdded -= HandleUnitBuffChanged;
+            currentUnit.BuffRemoved -= HandleUnitBuffChanged;
         }
 
         private void RefreshBuffInfo()
@@ -148,6 +160,7 @@ namespace UI.UnitInfo
         public void ShowBuffDescription(Units.Buffs.Buff buff)
         {
             SetDetailText("<b>" + buff.Name() + "</b>\n" + buff.Description());
+            ShowSourceSection(true);
 
             // 部分 Buff 没有来源单位或未配置来源相机，描述展示不应因此失败。
             if (buffSourceUnitCamera != null && buff.SourceUnit != null)
@@ -170,6 +183,7 @@ namespace UI.UnitInfo
                     .Replace("</final>", "</color>");
 
             SetDetailText("<b>" + skill.Name() + "</b>\n" + desc);
+            ShowSourceSection(false);
         }
 
         private void ShowAffinityDescription(AffinityType type, int count)
@@ -178,6 +192,7 @@ namespace UI.UnitInfo
             string title = $"<b>{affinityName}加成 (X{count})</b>";
             string description = GetAffinityDescription(type);
             SetDetailText(title + "\n" + description);
+            ShowSourceSection(false);
         }
 
         private string GetAffinityDisplayName(AffinityType type)
@@ -192,15 +207,23 @@ namespace UI.UnitInfo
 
         private void SetDetailText(string text)
         {
-            if (skillDescriptionText != null)
+            if (detailDescriptionText != null)
             {
-                skillDescriptionText.text = text;
+                detailDescriptionText.text = text;
             }
+        }
 
-            if (buffDescriptionText != null && buffDescriptionText != skillDescriptionText)
+        private void ShowSourceSection(bool show)
+        {
+            if (sourceSection != null)
             {
-                buffDescriptionText.text = text;
+                sourceSection.SetActive(show);
             }
+        }
+
+        private void OnDestroy()
+        {
+            UnbindCurrentUnitBuffEvents();
         }
     }
 }
