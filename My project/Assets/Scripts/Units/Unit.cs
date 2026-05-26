@@ -132,7 +132,7 @@ namespace Units
             UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
             skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
-            buffHandler.GetActiveBuffs().ToList().ForEach(buff => buffHandler.RemoveBuff(buff)); // 清理所有Buff
+            buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求并清理所有Buff
             actionRunner.CancelCurrent();
             animationController.ResetPlaybackSpeed();
             skillMotionLockCount = 0;
@@ -255,7 +255,6 @@ namespace Units
         public void RemoveBuff(Units.Buffs.Buff buff)
         {
             buffHandler.RemoveBuff(buff);
-            BuffRemoved?.Invoke(buff); // 触发Buff移除事件
         }
 
         private void UpdateEnemiesDistance()

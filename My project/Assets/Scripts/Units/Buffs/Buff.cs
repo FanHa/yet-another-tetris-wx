@@ -4,6 +4,15 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public enum BuffLifecycleState
+    {
+        None,
+        PendingAdd,
+        Active,
+        PendingRemove,
+        Removed
+    }
+
     public abstract class Buff
     {
         protected float duration; // -1为永久
