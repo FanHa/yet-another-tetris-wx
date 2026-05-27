@@ -83,17 +83,12 @@ namespace Units.Buffs
             return activeBuffs.ToArray();
         }
 
-        public void RequestRemoveAllActiveBuffs(bool flushImmediately = true)
+        public void RequestRemoveAllActiveBuffs()
         {
             Buff[] snapshot = activeBuffs.ToArray();
             for (int i = 0; i < snapshot.Length; i++)
             {
                 EnqueueRemove(snapshot[i]);
-            }
-
-            if (flushImmediately)
-            {
-                FlushPendingRequests();
             }
         }
 

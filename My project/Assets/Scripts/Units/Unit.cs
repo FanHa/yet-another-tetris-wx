@@ -133,7 +133,7 @@ namespace Units
             UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
             skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
-            buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求并清理所有Buff
+            buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求移除所有Buff（实际提交在BuffHandler.Update中）
             actionRunner.CancelCurrent();
             animationController.ResetPlaybackSpeed();
             skillMotionLockCount = 0;
