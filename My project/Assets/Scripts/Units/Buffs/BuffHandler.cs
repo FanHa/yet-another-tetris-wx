@@ -21,6 +21,7 @@ namespace Units.Buffs
         private readonly List<Buff> pendingAddQueue = new List<Buff>();
         private readonly List<Buff> pendingRemoveQueue = new List<Buff>();
 
+        public event Action<Buff> BuffAdded;
         public event Action<Buff> BuffRemoved;
 
         private void Awake()
@@ -165,6 +166,7 @@ namespace Units.Buffs
                 buff.OnApply(owner);
                 AddActiveBuff(buff);
                 SetState(buff, BuffLifecycleState.Active);
+                BuffAdded?.Invoke(buff);
             }
         }
 

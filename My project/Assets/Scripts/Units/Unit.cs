@@ -87,6 +87,7 @@ namespace Units
             attackAction = new AttackAction(this);
             castSkillAction = new CastSkillAction(this);
 
+            buffHandler.BuffAdded += (buff) => BuffAdded?.Invoke(buff);
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
             
         }
@@ -249,7 +250,6 @@ namespace Units
         public void AddBuff(Units.Buffs.Buff buff)
         {
             buffHandler.ApplyBuff(buff);
-            BuffAdded?.Invoke(buff); // 触发Buff添加事件
         }
 
         public void RemoveBuff(Units.Buffs.Buff buff)
