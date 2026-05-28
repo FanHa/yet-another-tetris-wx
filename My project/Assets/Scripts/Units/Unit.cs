@@ -118,13 +118,13 @@ namespace Units
 
         public void Activate()
         {
+            movementController.Initialize(Attributes, UnitManager, this);
             skillHandler.Activate();
             skillHandler.OnSkillCast += HandleSelfSkillCast;
             UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
-            isActive = true;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
-            movementController.Initialize(Attributes, UnitManager, this);
+            isActive = true;
         }
 
         public void Deactivate()

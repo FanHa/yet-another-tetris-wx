@@ -10,6 +10,8 @@ namespace Units
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float moveToTargetSampleRadius = 1.5f;
+        [SerializeField] private float softDisplacementMaxPerFrame = 0.2f;
+        [SerializeField] private float softDisplacementDeadZone = 0.001f;
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
         private Unit owner;
@@ -71,7 +73,6 @@ namespace Units
             this.unitManager = unitManager;
             this.owner = owner;
             agent.enabled = true;
-
         }
 
         public MovementResult MoveAlongPathToTarget(Unit targetEnemy)
@@ -206,6 +207,26 @@ namespace Units
             return new MovementResult(MovementResultCode.NoReachablePoint, targetPosition, currentPosition, true);
         }
 
+        /// <summary>
+        /// 非打断式轻位移入口：仅做位移，不影响当前攻击/施法动作状态。
+        /// </summary>
+        public MovementResult ApplySoftDisplacement(Vector3 delta)
+        {
+
+            float distance = delta.magnitude;
+            if (distance <= softDisplacementDeadZone)
+            {
+                return new MovementResult(MovementResultCode.NoOp, agent.nextPosition, agent.nextPosition, false);
+            }
+
+            if (distance > softDisplacementMaxPerFrame)
+            {
+                delta = delta.normalized * softDisplacementMaxPerFrame;
+            }
+
+            return MoveStraightByDelta(delta);
+        }
+
         public void PlaceAt(Vector3 position)
         {
             // spawn 时 agent 尚未启用，直接设置 transform.position
@@ -224,9 +245,6 @@ namespace Units
 
         public void Teleport(Vector3 position)
         {
-            // 仅用于运行时（agent 已初始化），带 fail-fast 保护
-            if (!agent.enabled)
-                throw new InvalidOperationException("Movement must be initialized before calling Teleport");
             
             if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
             {
@@ -252,21 +270,12 @@ namespace Units
 
         public void ClearNavigationPath()
         {
-            if (!agent.enabled)
-            {
-                return;
-            }
-
             agent.ResetPath();
             lastDestination = agent.nextPosition;
         }
 
         public void EnterSkillMotion(int avoidancePriority)
         {
-            if (!agent.enabled)
-            {
-                return;
-            }
 
             if (!cachedAvoidancePriority.HasValue)
             {
@@ -278,11 +287,6 @@ namespace Units
 
         public void ExitSkillMotion()
         {
-            if (!agent.enabled)
-            {
-                cachedAvoidancePriority = null;
-                return;
-            }
 
             if (!cachedAvoidancePriority.HasValue)
             {
