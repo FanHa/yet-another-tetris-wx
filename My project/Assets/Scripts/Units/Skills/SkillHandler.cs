@@ -120,6 +120,7 @@ namespace Units.Skills
         }
 
         public bool HasReadySkill => readyQueue.Count > 0;
+
         public ActiveSkill PeekReadySkill()
         {
             return readyQueue.Count > 0 ? readyQueue.Peek() : null;

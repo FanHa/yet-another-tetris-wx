@@ -68,10 +68,6 @@ namespace Units
         public Units.Skills.SkillHandler SkillHandler => skillHandler;
 
         private UnitActionRunner actionRunner;
-        private SkillMotionAction skillMotionAction;
-        private MoveAction moveAction;
-        private AttackAction attackAction;
-        private CastSkillAction castSkillAction;
 
         private void Awake()
         {
@@ -81,11 +77,7 @@ namespace Units
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
 
-            actionRunner = new UnitActionRunner();
-            skillMotionAction = new SkillMotionAction(this);
-            moveAction = new MoveAction(this);
-            attackAction = new AttackAction(this);
-            castSkillAction = new CastSkillAction(this);
+            actionRunner = new UnitActionRunner(this);
 
             buffHandler.BuffAdded += (buff) => BuffAdded?.Invoke(buff);
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
@@ -99,8 +91,6 @@ namespace Units
                 return;
 
             UpdateEnemiesDistance();
-
-            actionRunner.TryStartHighestPriority(skillMotionAction, castSkillAction, attackAction, moveAction);
 
             actionRunner.Tick();
             UpdateActionAnimationSpeed();
@@ -240,10 +230,7 @@ namespace Units
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            if (actionRunner.CurrentAction is CastSkillAction currentCastAction)
-            {
-                currentCastAction.HandleAnimationEnd();
-            }
+            actionRunner.NotifySkillCastAnimationEnd();
 
         }
 
@@ -290,10 +277,7 @@ namespace Units
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()
         {
-            if (actionRunner.CurrentAction is AttackAction currentAttackAction)
-            {
-                currentAttackAction.HandleAnimationEnd();
-            }
+            actionRunner.NotifyAttackAnimationEnd();
         }
 
         public bool TryGetClosestEnemy(out Unit closestEnemy)

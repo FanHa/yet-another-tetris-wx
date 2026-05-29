@@ -1,6 +1,11 @@
 namespace Units.Actions
 {
-    public sealed class CastSkillAction : UnitAction
+    public interface ISkillCastAnimationEndHandler
+    {
+        void HandleSkillCastAnimationEnd();
+    }
+
+    public sealed class CastSkillAction : UnitAction, ISkillCastAnimationEndHandler
     {
         public override int Priority => 20;
 
@@ -24,7 +29,7 @@ namespace Units.Actions
             Owner.Movement.ResumeNavigation();
         }
 
-        public void HandleAnimationEnd()
+        public void HandleSkillCastAnimationEnd()
         {
             if (IsCompleted)
             {

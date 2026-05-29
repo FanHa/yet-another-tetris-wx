@@ -2,7 +2,12 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public sealed class AttackAction : UnitAction
+    public interface IAttackAnimationEndHandler
+    {
+        void HandleAttackAnimationEnd();
+    }
+
+    public sealed class AttackAction : UnitAction, IAttackAnimationEndHandler
     {
         public override int Priority => 10;
 
@@ -53,7 +58,7 @@ namespace Units.Actions
             Owner.Movement.ResumeNavigation();
         }
 
-        public void HandleAnimationEnd()
+        public void HandleAttackAnimationEnd()
         {
             if (IsCompleted)
             {
