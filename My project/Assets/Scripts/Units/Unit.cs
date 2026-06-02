@@ -56,8 +56,6 @@ namespace Units
 
         private List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
-        [SerializeField] private bool canHitAndRun = true; // 风筝战术能力
-
         [Header("运行时注入")]
         public UnitManager UnitManager;
 
@@ -67,7 +65,6 @@ namespace Units
         public bool IsActive => isActive;
         public bool IsSkillMotionActive => skillMotionLockCount > 0;
         public bool IsStunned => stunLockCount > 0;
-        public bool CanHitAndRun => canHitAndRun;
         public Movement Movement => movementController;
         public AnimationController AnimationController => animationController;
         public Units.Skills.SkillHandler SkillHandler => skillHandler;
@@ -147,11 +144,6 @@ namespace Units
         private void HandleSelfSkillCast(Unit unit, Skill skill)
         {
             OnSkillCast?.Invoke(unit, skill);
-        }
-
-        public void SetHitAndRun(bool enable)
-        {
-            canHitAndRun = enable;
         }
 
         public void EnterStun()

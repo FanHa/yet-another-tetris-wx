@@ -25,16 +25,9 @@ namespace Units.Actions
                 return;
             }
 
-            if (Owner.CanHitAndRun)
-            {
-                float maxDistance = Owner.Attributes.AttackRange.finalValue;
-                float minDistance = maxDistance * HitAndRunMinRatio;
-                Owner.Movement.MoveToDistanceFromTarget(enemy.transform, minDistance, maxDistance);
-            }
-            else
-            {
-                Owner.Movement.MoveAlongPathToTarget(enemy);
-            }
+            float maxDistance = Owner.Attributes.AttackRange.finalValue;
+            float minDistance = maxDistance * HitAndRunMinRatio;
+            Owner.Movement.MoveToDistanceFromTarget(enemy.transform, minDistance, maxDistance);
 
             // Move action is a one-frame command; movement continues in NavMeshAgent.
             Complete();
