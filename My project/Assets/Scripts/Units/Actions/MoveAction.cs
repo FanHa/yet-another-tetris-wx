@@ -25,7 +25,7 @@ namespace Units.Actions
                 return;
             }
 
-            if (Owner.Attributes.CanHitAndRun)
+            if (Owner.CanHitAndRun)
             {
                 float maxDistance = Owner.Attributes.AttackRange.finalValue;
                 float minDistance = maxDistance * HitAndRunMinRatio;

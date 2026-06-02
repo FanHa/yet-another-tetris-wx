@@ -18,37 +18,6 @@ namespace Units.Actions
                 .ToList();
         }
 
-        public bool TryStart(UnitAction action)
-        {
-            if (action == null || !action.CanStart())
-            {
-                return false;
-            }
-
-            if (IsBusy)
-            {
-                bool canPreemptCurrent = action.Type == UnitActionType.Stun
-                    && CurrentAction.Type != UnitActionType.Stun;
-
-                if (!canPreemptCurrent)
-                {
-                    return false;
-                }
-
-                CompleteCurrent();
-            }
-
-            CurrentAction = action;
-            CurrentAction.Enter();
-
-            if (CurrentAction.IsCompleted)
-            {
-                CompleteCurrent();
-            }
-
-            return true;
-        }
-
         public void Tick()
         {
             TryStartHighestPriority();
@@ -61,9 +30,50 @@ namespace Units.Actions
             CurrentAction.Tick();
             if (CurrentAction.IsCompleted)
             {
-                CompleteCurrent();
+                ExitCurrent();
             }
         }
+
+        private void TryStartHighestPriority()
+        {
+            foreach (var action in actions)
+            {
+                if (TryStart(action))
+                {
+                    return;
+                }
+            }
+        }
+
+        private bool TryStart(UnitAction action)
+        {
+            if (!action.CanStart())
+            {
+                return false;
+            }
+
+            if (IsBusy)
+            {
+                if (!action.CanPreempt(CurrentAction))
+                {
+                    return false;
+                }
+
+                CancelCurrentInternal();
+            }
+
+            CurrentAction = action;
+            CurrentAction.Enter();
+
+            if (CurrentAction.IsCompleted)
+            {
+                ExitCurrent();
+            }
+
+            return true;
+        }
+
+        
 
         public void NotifyAttackAnimationEnd()
         {
@@ -88,29 +98,28 @@ namespace Units.Actions
                 return;
             }
 
-            CompleteCurrent();
+            CancelCurrentInternal();
         }
 
-        private void CompleteCurrent()
+        private void ExitCurrent()
         {
             var action = CurrentAction;
             CurrentAction = null;
             action.Exit();
         }
 
-        private void TryStartHighestPriority()
+        private void CancelCurrentInternal()
         {
-            foreach (var action in actions)
-            {
-                if (TryStart(action))
-                {
-                    return;
-                }
-            }
+            var action = CurrentAction;
+            CurrentAction = null;
+            action.Cancel();
         }
+
+        
 
         private static IEnumerable<UnitAction> CreateDefaultActions(Unit owner)
         {
+            yield return new StunAction(owner);
             yield return new SkillMotionAction(owner);
             yield return new CastSkillAction(owner);
             yield return new AttackAction(owner);

@@ -56,13 +56,18 @@ namespace Units
 
         private List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
+        [SerializeField] private bool canHitAndRun = true; // 风筝战术能力
+
         [Header("运行时注入")]
         public UnitManager UnitManager;
 
         private bool isActive = false; // 是否处于活动状态
         private int skillMotionLockCount = 0;
+        private int stunLockCount = 0;
         public bool IsActive => isActive;
         public bool IsSkillMotionActive => skillMotionLockCount > 0;
+        public bool IsStunned => stunLockCount > 0;
+        public bool CanHitAndRun => canHitAndRun;
         public Movement Movement => movementController;
         public AnimationController AnimationController => animationController;
         public Units.Skills.SkillHandler SkillHandler => skillHandler;
@@ -146,7 +151,23 @@ namespace Units
 
         public void SetHitAndRun(bool enable)
         {
-            Attributes.SetHitAndRunAbility(enable);
+            canHitAndRun = enable;
+        }
+
+        public void EnterStun()
+        {
+            stunLockCount++;
+        }
+
+        public void ExitStun()
+        {
+            if (stunLockCount <= 0)
+            {
+                stunLockCount = 0;
+                return;
+            }
+
+            stunLockCount--;
         }
 
         public void Teleport(Vector3 position)

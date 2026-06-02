@@ -19,6 +19,11 @@ namespace Units.Actions
             return true;
         }
 
+        public virtual bool CanPreempt(UnitAction currentAction)
+        {
+            return false;
+        }
+
         public void Enter()
         {
             IsCompleted = false;
@@ -40,6 +45,12 @@ namespace Units.Actions
             OnExit();
         }
 
+        public void Cancel()
+        {
+            IsCompleted = true;
+            OnCancel();
+        }
+
         protected void Complete()
         {
             IsCompleted = true;
@@ -53,6 +64,11 @@ namespace Units.Actions
 
         protected virtual void OnExit()
         {
+        }
+
+        protected virtual void OnCancel()
+        {
+            OnExit();
         }
     }
 }
