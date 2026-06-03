@@ -9,6 +9,9 @@ namespace Model.Tetri
         Life,
         Shadow,
         Swift,
-        Absorb
+        Absorb,
+        Electric,
+        End
+        
     }
 }

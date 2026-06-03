@@ -41,5 +41,8 @@ namespace Model.Tetri
 
         [Header("吸取")]
         public EnergyAbsorbConfigGroup EnergyAbsorbConfigGroup;
+
+        [Header("电系")]
+        public ThunderStrikeConfigGroup ThunderStrikeConfigGroup;
     }
 }

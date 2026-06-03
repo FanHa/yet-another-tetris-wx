@@ -41,3 +41,7 @@ MonoBehaviour:
     name: "\u6C72\u53D6"
     description: "\u5438\u6536\u654C\u65B9\u884C\u4E3A,\u4E3A\u53CB\u65B9\u63D0\u4F9B\u589E\u76CA"
     icon: {fileID: 0}
+  - affinityType: 8
+    name: "\u7535"
+    description: "\u5F3A\u5316\u7535\u7CFB\u6280\u80FD\u548CStun Buff"
+    icon: {fileID: 0}

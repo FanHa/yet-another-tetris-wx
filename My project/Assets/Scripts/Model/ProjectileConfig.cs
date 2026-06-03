@@ -14,6 +14,7 @@ namespace Model
         [Header("技能投射物")]
         public GameObject ShadowArrowPrefab;
         public GameObject ChainLightningPrefab;
+        public GameObject ThunderStrikePrefab;
 
         public GameObject FireballPrefab;
         public GameObject SnowballPrefab;
