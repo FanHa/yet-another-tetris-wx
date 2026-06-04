@@ -1,10 +1,16 @@
+using System.Globalization;
+using System.Text;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace UI.UnitInfo
 {
     public static class RichTextUtils
     {
+        private static string FormatValue(float value)
+        {
+            return value.ToString("0.##", CultureInfo.InvariantCulture);
+        }
+
         public static string BuildValueText(
             Units.Attribute attr,
             Color baseColor,
@@ -34,32 +40,32 @@ namespace UI.UnitInfo
             string hexNeg = ColorUtility.ToHtmlStringRGB(negativeColor);
             string hexFinal = ColorUtility.ToHtmlStringRGB(finalColor);
 
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             if (currentValue.HasValue)
             {
                 // Health 用： current / final
-                sb.Append($"<color=#{hexBase}>{currentValue.Value:F0}</color>/<color=#{hexFinal}>{attr.finalValue:F0}</color> ");
+                sb.Append($"<color=#{hexBase}>{FormatValue(currentValue.Value)}</color>/<color=#{hexFinal}>{FormatValue(attr.finalValue)}</color> ");
             }
             else
             {
-                sb.Append($"<color=#{hexFinal}>{attr.finalValue:F0}</color> ");
+                sb.Append($"<color=#{hexFinal}>{FormatValue(attr.finalValue)}</color> ");
             }
 
-            sb.Append($"[<color=#{hexBase}>{baseValue:F0}</color>");
+            sb.Append($"[<color=#{hexBase}>{FormatValue(baseValue)}</color>");
 
             if (flatSum != 0f)
             {
                 bool positive = flatSum > 0;
                 string hex = positive ? hexPos : hexNeg;
-                sb.Append($" <color=#{hex}>{(positive ? "+" : "")}{flatSum:F0}</color>");
+                sb.Append($" <color=#{hex}>{(positive ? "+" : "")}{FormatValue(flatSum)}</color>");
             }
 
             if (percentValue != 0f)
             {
                 bool positive = percentValue > 0;
                 string hex = positive ? hexPos : hexNeg;
-                sb.Append($" <color=#{hex}>{(positive ? "+" : "")}{percentValue:F0}({percentSum:F0}%)</color>");
+                sb.Append($" <color=#{hex}>{(positive ? "+" : "")}{FormatValue(percentValue)}({FormatValue(percentSum)}%)</color>");
             }
 
             sb.Append("]");
