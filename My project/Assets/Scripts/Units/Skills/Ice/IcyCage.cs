@@ -32,7 +32,7 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool IsCachedTargetValid() =>
+        public override bool CanExecuteNow() =>
             targetEnemy != null && targetEnemy.IsActive;
         
 

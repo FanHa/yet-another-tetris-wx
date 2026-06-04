@@ -97,26 +97,15 @@ namespace Units.Skills
         {
             if (readyQueue.Count == 0) return;
 
-            var skill = readyQueue.Peek();
-
-            // 检查入队时锁定的目标是否仍然存活
-            // 若目标已死亡，保留能量（不扣除）并出队，等待下次重新锁定新目标
-            if (!skill.IsCachedTargetValid())
-            {
-                readyQueue.Dequeue();
-                queuedSet.Remove(skill);
-                return;
-            }
+            // 先出队，避免 Execute() 过程中队列被清空后再次 Dequeue 引发异常
+            var skill = readyQueue.Dequeue();
+            queuedSet.Remove(skill);
 
             bool result = skill.Execute();
             if (result)
             {
                 OnSkillCast?.Invoke(owner, skill);
             }
-
-            // 无论是否执行成功，都出队一次，允许后续重新判定再入队
-            readyQueue.Dequeue();
-            queuedSet.Remove(skill);
         }
 
         public bool HasReadySkill => readyQueue.Count > 0;

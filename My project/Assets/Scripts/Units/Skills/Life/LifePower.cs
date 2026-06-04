@@ -46,7 +46,7 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool IsCachedTargetValid() =>
+        public override bool CanExecuteNow() =>
             cachedTarget != null && cachedTarget.IsActive;
 
         protected override bool ExecuteCore()

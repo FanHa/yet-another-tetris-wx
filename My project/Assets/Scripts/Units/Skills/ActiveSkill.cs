@@ -12,9 +12,9 @@ namespace Units.Skills
             return CurrentEnergy >= RequiredEnergy;
         }
 
-        // 检查入队时锁定的目标是否仍然可选中（存活且激活）
-        // 位置型技能默认 true；缓存 Unit 目标的技能需覆写
-        public virtual bool IsCachedTargetValid() => true;
+        // 施放前置条件检查（例如缓存目标是否仍有效）。
+        // 与缓存目标无关的技能可保持默认 true。
+        public virtual bool CanExecuteNow() => true;
 
         public virtual void AddEnergy(float amount)
         {
@@ -27,6 +27,12 @@ namespace Units.Skills
 
         public virtual bool Execute()
         {
+            // 前置条件不满足时直接失败，不消耗能量。
+            if (!CanExecuteNow())
+            {
+                return false;
+            }
+
             if (ExecuteCore())
             {
                 CurrentEnergy -= RequiredEnergy; // 执行技能后消耗能量
