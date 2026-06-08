@@ -13,6 +13,18 @@ using UI.TetriInfo;
 
 public class GameController : MonoBehaviour
 {
+    private enum UiPageState
+    {
+        Assembly,
+        Preview,
+        BattleRunning,
+        BattlePaused,
+        Reward
+    }
+
+    // 页面状态：先用于统一状态定义，后续步骤再接入显隐切换。
+    private UiPageState currentUiPageState = UiPageState.Assembly;
+
 
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.RewardController rewardController;
@@ -22,6 +34,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button previewButton;
+    [Header("UI Pages")]
+    [SerializeField] private GameObject assemblyPage;
+    [SerializeField] private GameObject battlePage;
+    
     private bool isPaused = false;
     [SerializeField] private Controller.TetriInventoryController tetriInventoryController;
     [SerializeField] private Controller.OperationTableController operationTableController;
@@ -33,6 +49,18 @@ public class GameController : MonoBehaviour
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
     private Units.Unit tempUnit;
+
+    private void ApplyUiPageState(UiPageState newState)
+    {
+        currentUiPageState = newState;
+
+        bool showAssemblyPage = newState == UiPageState.Assembly;
+        bool showBattlePage = newState == UiPageState.BattleRunning || newState == UiPageState.BattlePaused;
+
+        assemblyPage.SetActive(showAssemblyPage);
+        battlePage.SetActive(showBattlePage);
+        
+    }
 
     private void Start()
     {
@@ -58,6 +86,8 @@ public class GameController : MonoBehaviour
                 tempUnit = null;
             }
         };
+
+        ApplyUiPageState(UiPageState.Assembly);
     }
 
     
@@ -199,6 +229,7 @@ public class GameController : MonoBehaviour
 
     private void HandleBattleEnd()
     {
+        ApplyUiPageState(UiPageState.Reward);
         rewardController.EnterRewardSelectionPhase();
         rewardController.OnRewardSelected += HandleRewardSelected;
     }
@@ -208,6 +239,7 @@ public class GameController : MonoBehaviour
         rewardController.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
         levelConfig.AdvanceToNextLevel(); // 关卡增加
+        ApplyUiPageState(UiPageState.Assembly);
 
     }
 
@@ -220,6 +252,11 @@ public class GameController : MonoBehaviour
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(levelConfig.currentLevel);
 
+        Time.timeScale = 1;
+        isPaused = false;
+        pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "暂停";
+        ApplyUiPageState(UiPageState.BattleRunning);
+
     }
 
     private void HandlePauseClicked()
@@ -229,12 +266,14 @@ public class GameController : MonoBehaviour
             Time.timeScale = 1;
             pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "暂停";
             isPaused = false;
+            ApplyUiPageState(UiPageState.BattleRunning);
         }
         else
         {
             Time.timeScale = 0;
             pauseButton.GetComponentInChildren<TMPro.TMP_Text>().text = "恢复";
             isPaused = true;
+            ApplyUiPageState(UiPageState.BattlePaused);
         }
     }
 
@@ -245,6 +284,7 @@ public class GameController : MonoBehaviour
         unitInventoryService.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
         var bfPos = battleField.transform.position;
         Camera.main.transform.position = new Vector3(bfPos.x, bfPos.y, Camera.main.transform.position.z);
+        ApplyUiPageState(UiPageState.Preview);
         battlePreviewUI.Activate();
         battleField.PreviewBattle();
     }
@@ -255,6 +295,7 @@ public class GameController : MonoBehaviour
         Camera.main.transform.position = new Vector3(mainPos.x, mainPos.y, Camera.main.transform.position.z);
         battlePreviewUI.Deactivate();
         battleField.ClearPreview();
+        ApplyUiPageState(UiPageState.Assembly);
     }
 
     private void OnDestroy()
