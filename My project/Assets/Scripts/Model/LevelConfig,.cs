@@ -24,10 +24,7 @@ namespace Model
         
         private void OnEnable()
         {
-            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId))
-                .Cast<CellTypeId>()
-                .Where(typeId => typeId != CellTypeId.Padding)
-                .ToList();
+            availableCellTypeIds = tetriCellModelFactory.GetRegisteredPlayableCellTypeIds();
             availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
 

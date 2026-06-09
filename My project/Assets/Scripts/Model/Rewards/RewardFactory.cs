@@ -63,10 +63,7 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
-            availableCellTypeIds = Enum.GetValues(typeof(CellTypeId))
-                .Cast<CellTypeId>()
-                .Where(typeId => typeId != CellTypeId.Padding && typeId != CellTypeId.None)
-                .ToList();
+            availableCellTypeIds = tetriCellFactory.GetRegisteredPlayableCellTypeIds();
             availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)

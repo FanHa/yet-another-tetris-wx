@@ -92,6 +92,18 @@ namespace Model.Tetri
             return new Padding();
         }
 
+        public List<CellTypeId> GetRegisteredPlayableCellTypeIds()
+        {
+            if (CellTypeIdToType == null)
+            {
+                return new List<CellTypeId>();
+            }
+
+            return CellTypeIdToType.Keys
+                .Where(id => id != CellTypeId.Padding && id != CellTypeId.None)
+                .ToList();
+        }
+
 
         public Cell CreateCell(CellTypeId cellTypeId)
         {

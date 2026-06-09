@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Editor2
 {
-    public abstract class BaseListEditor : Editor
+    public abstract class BaseListEditor : UnityEditor.Editor
     {
 
         private Dictionary<string, bool> showLists = new Dictionary<string, bool>();
