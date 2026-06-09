@@ -31,8 +31,16 @@ namespace Units
             FactionA,
             FactionB
         }
+
+        public enum MoveBehaviorMode
+        {
+            TowardEnemy,
+            TowardAlly
+        }
+
         [SerializeField] private Color factionAColor;
         [SerializeField] private Color factionBColor;
+        [SerializeField] private MoveBehaviorMode moveBehaviorMode = MoveBehaviorMode.TowardEnemy;
 
         public event Action<Unit> OnDeath;
 
@@ -68,6 +76,7 @@ namespace Units
         public Movement Movement => movementController;
         public AnimationController AnimationController => animationController;
         public Units.Skills.SkillHandler SkillHandler => skillHandler;
+        public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
         private UnitActionRunner actionRunner;
 
@@ -216,6 +225,11 @@ namespace Units
             Attributes.MoveSpeed.AddFlatModifier(this, swiftBonus);
         }
 
+        public void SetMoveBehaviorMode(MoveBehaviorMode mode)
+        {
+            moveBehaviorMode = mode;
+        }
+
 
         public void AddSkill(Skills.Skill newSkill)
         {
@@ -297,6 +311,31 @@ namespace Units
         {
             closestEnemy = enemyUnits.Count > 0 ? enemyUnits[0] : null;
             return closestEnemy != null;
+        }
+
+        public bool TryGetClosestAlly(out Unit closestAlly)
+        {
+            closestAlly = null;
+            if (UnitManager == null) return false;
+
+            var allies = UnitManager.GetUnitsByFaction(faction);
+            float bestSqr = float.MaxValue;
+            Vector2 selfPos = transform.position;
+
+            for (int i = 0; i < allies.Count; i++)
+            {
+                var ally = allies[i];
+                if (ally == null || !ally.IsActive || ally == this) continue;
+
+                float d2 = ((Vector2)ally.transform.position - selfPos).sqrMagnitude;
+                if (d2 < bestSqr)
+                {
+                    bestSqr = d2;
+                    closestAlly = ally;
+                }
+            }
+
+            return closestAlly != null;
         }
 
         // 与 AttackAction.CanStart() 使用相同的有效射程（含双方 AgentRadius）
