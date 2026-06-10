@@ -2496,6 +2496,8 @@ MonoBehaviour:
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}
   previewButton: {fileID: 264512489}
+  assemblyPage: {fileID: 1683020383}
+  battlePage: {fileID: 674413502}
   tetriInventoryController: {fileID: 198430987}
   operationTableController: {fileID: 1031480436}
   unitInfo: {fileID: 753846434}
