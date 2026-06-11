@@ -19,15 +19,6 @@ namespace Model
         [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory; // TetriCell 工厂
 
-        private List<CellTypeId> availableCellTypeIds;
-        private List<CharacterTypeId> availableCharacterTypeIds;
-        
-        private void OnEnable()
-        {
-            availableCellTypeIds = tetriCellModelFactory.GetRegisteredPlayableCellTypeIds();
-            availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
-        }
-
         /// <summary>
         /// 主动增加关卡并生成敌人数据
         /// </summary>
@@ -39,6 +30,9 @@ namespace Model
 
         private void GenerateEnemyData()
         {
+            var availableCharacterTypeIds = tetriCellModelFactory.GetRegisteredCharacterTypeIds();
+            var availableCellTypeIds = tetriCellModelFactory.GetRegisteredPlayableCellTypeIds();
+
             // 计算当前关卡的敌人数量
             int enemyCount = Mathf.Min(1 + (currentLevel - 1) / levelsPerEnemyIncrease, maxEnemyCount);
 

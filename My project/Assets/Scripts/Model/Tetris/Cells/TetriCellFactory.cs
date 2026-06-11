@@ -33,9 +33,51 @@ namespace Model.Tetri
         public IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdToType { get; private set; }
         public IReadOnlyDictionary<Type, CharacterTypeId> TypeToCharacterTypeId { get; private set; }
 
+        private IReadOnlyDictionary<CellTypeId, Type> CellTypeIdMap
+        {
+            get
+            {
+                EnsureInitialized();
+                return CellTypeIdToType;
+            }
+        }
+
+        private IReadOnlyDictionary<Type, SkillConfigGroup> CellConfigMap
+        {
+            get
+            {
+                EnsureInitialized();
+                return CellTypeToConfig;
+            }
+        }
+
+        private IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdMap
+        {
+            get
+            {
+                EnsureInitialized();
+                return CharacterTypeIdToType;
+            }
+        }
+
         [SerializeField] private CellLevelConfigManager cellLevelConfigManager;
 
         private void OnEnable()
+        {
+            EnsureInitialized();
+        }
+
+        private void EnsureInitialized()
+        {
+            if (CellTypeIdToType != null && CharacterTypeIdToType != null)
+            {
+                return;
+            }
+
+            BuildTypeMaps();
+        }
+
+        private void BuildTypeMaps()
         {
             // 只在这里维护一份
             var cellTypeMetas = new List<CellTypeMeta>
@@ -95,20 +137,30 @@ namespace Model.Tetri
 
         public List<CellTypeId> GetRegisteredPlayableCellTypeIds()
         {
-            if (CellTypeIdToType == null)
+            if (CellTypeIdMap == null)
             {
                 return new List<CellTypeId>();
             }
 
-            return CellTypeIdToType.Keys
+            return CellTypeIdMap.Keys
                 .Where(id => id != CellTypeId.Padding && id != CellTypeId.None)
                 .ToList();
+        }
+
+        public List<CharacterTypeId> GetRegisteredCharacterTypeIds()
+        {
+            if (CharacterTypeIdMap == null)
+            {
+                return new List<CharacterTypeId>();
+            }
+
+            return CharacterTypeIdMap.Keys.ToList();
         }
 
 
         public Cell CreateCell(CellTypeId cellTypeId)
         {
-            if (!CellTypeIdToType.TryGetValue(cellTypeId, out var type))
+            if (!CellTypeIdMap.TryGetValue(cellTypeId, out var type))
                 throw new ArgumentException($"Unknown CellTypeId: {cellTypeId}");
 
             if (type == null || !typeof(Cell).IsAssignableFrom(type))
@@ -118,7 +170,7 @@ namespace Model.Tetri
             var cell = (Cell)Activator.CreateInstance(type);
 
             // 2. 查找并注入配置
-            if (CellTypeToConfig != null && CellTypeToConfig.TryGetValue(type, out var config) && config != null)
+            if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
             {
                 cell.SkillConfigGroup = config;
             }
@@ -132,7 +184,7 @@ namespace Model.Tetri
         
         public Character CreateCharacterCell(CharacterTypeId characterTypeId)
         {
-            if (!CharacterTypeIdToType.TryGetValue(characterTypeId, out var type))
+            if (!CharacterTypeIdMap.TryGetValue(characterTypeId, out var type))
                 throw new ArgumentException($"Unknown CharacterTypeId: {characterTypeId}");
 
             if (type == null || !typeof(Character).IsAssignableFrom(type))
@@ -142,7 +194,7 @@ namespace Model.Tetri
             var cell = (Character)Activator.CreateInstance(type);
 
             // todo character 似乎没有Config
-            if (CellTypeToConfig != null && CellTypeToConfig.TryGetValue(type, out var config) && config != null)
+            if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
             {
                 cell.SkillConfigGroup = config;
             }

@@ -64,7 +64,7 @@ namespace Model.Rewards
                 },
             };
             availableCellTypeIds = tetriCellFactory.GetRegisteredPlayableCellTypeIds();
-            availableCharacterTypeIds = Enum.GetValues(typeof(CharacterTypeId)).Cast<CharacterTypeId>().ToList();
+            availableCharacterTypeIds = tetriCellFactory.GetRegisteredCharacterTypeIds();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
