@@ -39,6 +39,13 @@ namespace Model.Tetri
             InitializeDictionary();
         }
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            InitializeDictionary();
+        }
+#endif
+
         private void InitializeDictionary()
         {
             cellResourceDictionary = new Dictionary<CellTypeId, Sprite>();
@@ -56,6 +63,11 @@ namespace Model.Tetri
 
         public Sprite GetSprite(CellTypeId cellTypeId)
         {
+            if (cellResourceDictionary == null)
+            {
+                InitializeDictionary();
+            }
+
             if (cellResourceDictionary.TryGetValue(cellTypeId, out var sprite))
             {
                 return sprite;
@@ -65,6 +77,11 @@ namespace Model.Tetri
 
         public Sprite GetSprite(CharacterTypeId characterTypeId)
         {
+            if (characterResourceDictionary == null)
+            {
+                InitializeDictionary();
+            }
+
             if (characterResourceDictionary.TryGetValue(characterTypeId, out var sprite))
             {
                 return sprite;

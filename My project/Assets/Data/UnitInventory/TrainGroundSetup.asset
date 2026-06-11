@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FactionAUnits:
   - characterId: 0
-    tetriCellIds: 
+    tetriCellIds: 19000000
   - characterId: 0
     tetriCellIds: 0f0000000a000000
   FactionBUnits:
