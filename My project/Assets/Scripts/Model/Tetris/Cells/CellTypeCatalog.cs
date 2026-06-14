@@ -39,7 +39,8 @@ namespace Model.Tetri
         IceBreaker = 22,
         EnergyAbsorb = 23,
         ThunderStrike = 24,
-        GuardAlly = 25
+        GuardAlly = 25,
+        WindKnockback = 26
 
     }
 

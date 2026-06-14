@@ -10,13 +10,15 @@ namespace Units
     public class Movement : MonoBehaviour
     {
         [SerializeField] private float moveToTargetSampleRadius = 1.5f;
+        [SerializeField] private float navigationRetargetDeadZone = 0.5f;
         [SerializeField] private float softDisplacementMaxPerFrame = 0.2f;
         [SerializeField] private float softDisplacementDeadZone = 0.001f;
         private Attributes attributes;
         private Controller.UnitManager unitManager; // 新增：由外部注入
         private Unit owner;
         private NavMeshAgent agent;
-        private Vector3 lastDestination;
+        private Vector3 lastPathDestination;
+        private bool hasLastPathDestination;
         private int? cachedAvoidancePriority;
         public float AgentRadius => agent.radius;
 
@@ -94,7 +96,7 @@ namespace Units
                 return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
             }
 
-            lastDestination = destination;
+            SetLastPathDestination(destination);
             return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
         }
 
@@ -127,7 +129,7 @@ namespace Units
                 return new MovementResult(MovementResultCode.NoOp, targetEnemy.position, transform.position, false);
             }
 
-            if (Vector3.Distance(destination, lastDestination) <= 0.5f)
+            if (hasLastPathDestination && Vector3.Distance(destination, lastPathDestination) <= navigationRetargetDeadZone)
             {
                 return new MovementResult(MovementResultCode.NoOp, destination, transform.position, false);
             }
@@ -141,7 +143,7 @@ namespace Units
                 return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
             }
 
-            lastDestination = destination;
+            SetLastPathDestination(destination);
             return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
         }
 
@@ -157,7 +159,6 @@ namespace Units
                 Vector3 raycastDelta = allowedDelta * 0.95f;
                 agent.Move(raycastDelta);
                 Vector3 movedPosition = agent.nextPosition;
-                lastDestination = movedPosition;
 
                 if ((movedPosition - currentPosition).magnitude <= 0.001f)
                 {
@@ -194,7 +195,6 @@ namespace Units
                 }
 
                 agent.Move(moveDelta);
-                lastDestination = agent.nextPosition;
 
                 if (moveDelta.magnitude + 0.001f < requestedDistance)
                 {
@@ -234,13 +234,13 @@ namespace Units
             if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
             {
                 transform.position = resolvedPosition;
-                lastDestination = resolvedPosition;
             }
             else
             {
                 transform.position = position;
-                lastDestination = position;
             }
+
+            InvalidateLastPathDestination();
         }
 
         public void Teleport(Vector3 position)
@@ -249,13 +249,13 @@ namespace Units
             if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
             {
                 agent.Warp(resolvedPosition);
-                lastDestination = resolvedPosition;
             }
             else
             {
                 agent.Warp(position);
-                lastDestination = position;
             }
+
+            InvalidateLastPathDestination();
         }
 
         public void PauseNavigation()
@@ -271,7 +271,7 @@ namespace Units
         public void ClearNavigationPath()
         {
             agent.ResetPath();
-            lastDestination = agent.nextPosition;
+            InvalidateLastPathDestination();
         }
 
         public void EnterSkillMotion(int avoidancePriority)
@@ -308,6 +308,18 @@ namespace Units
 
             resolvedPosition = default;
             return false;
+        }
+
+        private void SetLastPathDestination(Vector3 destination)
+        {
+            lastPathDestination = destination;
+            hasLastPathDestination = true;
+        }
+
+        private void InvalidateLastPathDestination()
+        {
+            hasLastPathDestination = false;
+            lastPathDestination = default;
         }
 
     }

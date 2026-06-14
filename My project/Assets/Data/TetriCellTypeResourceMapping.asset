@@ -63,6 +63,8 @@ MonoBehaviour:
     sprite: {fileID: 3655301165296326879, guid: b149bda6577d13a4785432d07a5e925b, type: 3}
   - cellTypeId: 25
     sprite: {fileID: -8150554673462657918, guid: 85c068f82d356a04abd05fc049fcdcd2, type: 3}
+  - cellTypeId: 26
+    sprite: {fileID: -6377495307504447203, guid: 6d602c25858f6704391736937dc0ef1a, type: 3}
   characterMappings:
   - characterTypeId: 0
     sprite: {fileID: 295863414502548795, guid: b3b684dd650e01c449f6ba4045ed1aad, type: 3}

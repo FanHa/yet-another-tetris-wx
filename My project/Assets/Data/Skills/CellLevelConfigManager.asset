@@ -24,10 +24,12 @@ MonoBehaviour:
   WindShiftConfigGroup: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}
   WildWindConfigGroup: {fileID: 11400000, guid: 2efad6ffda58cc449a2fde652c25fab0, type: 2}
   AttackBoostConfigGroup: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
+  WindKnockbackConfigGroup: {fileID: 11400000, guid: 1b6654a0ca2c0934baece62751e6ac67, type: 2}
   LifeBombConfigGroup: {fileID: 11400000, guid: 208605d500f1c43499f0044326cdc70d, type: 2}
   LifeShieldConfigGroup: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}
   LifePowerConfigGroup: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
   LifeEchoConfigGroup: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
+  GuardAllyConfigGroup: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
   ShadowAttackConfigGroup: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
   ShadowStepConfigGroup: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
   ShadowArrowConfigGroup: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}

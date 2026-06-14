@@ -105,6 +105,7 @@ namespace Model.Tetri
                 new(CellTypeId.EnergyAbsorb, typeof(EnergyAbsorb), cellLevelConfigManager.EnergyAbsorbConfigGroup),
                 new(CellTypeId.ThunderStrike, typeof(Model.Tetri.ThunderStrike), cellLevelConfigManager.ThunderStrikeConfigGroup),
                 new(CellTypeId.GuardAlly, typeof(GuardAlly), cellLevelConfigManager.GuardAllyConfigGroup),
+                new(CellTypeId.WindKnockback, typeof(WindKnockback), cellLevelConfigManager.WindKnockbackConfigGroup),
                 
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };

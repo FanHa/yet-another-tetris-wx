@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: WindKnockbackConfigGroup
+  m_EditorClassIdentifier: Assembly-CSharp:Units.Skills:WindKnockbackConfigGroup
+  LevelConfigs:
+  - BaseKnockbackDistance: 0.5
+    KnockbackDistancePerWindCell: 0.1
+    MaxKnockbackDistance: 1.2
+  - BaseKnockbackDistance: 0.5
+    KnockbackDistancePerWindCell: 0.1
+    MaxKnockbackDistance: 1.2

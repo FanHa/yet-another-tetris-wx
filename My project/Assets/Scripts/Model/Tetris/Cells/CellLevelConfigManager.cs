@@ -24,6 +24,7 @@ namespace Model.Tetri
         public WindShiftConfigGroup WindShiftConfigGroup;
         public WildWindConfigGroup WildWindConfigGroup;
         public AttackBoostConfigGroup AttackBoostConfigGroup;
+        public WindKnockbackConfigGroup WindKnockbackConfigGroup;
 
         [Header("生命")]
         public LifeBombConfigGroup LifeBombConfigGroup;
