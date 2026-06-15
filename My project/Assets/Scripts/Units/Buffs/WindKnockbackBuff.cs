@@ -37,10 +37,8 @@ namespace Units.Buffs
             float dist = Mathf.Min(knockbackDistance, maxKnockbackDistance);
 
             Vector3 delta = new Vector3(dir.x * dist, dir.y * dist, 0f);
-            // 先清理导航路径，避免 NavMeshAgent 立即沿旧路径把目标拉回去。
-            target.Movement.ClearNavigationPath();
-            // 击退是一次性位移，使用 MoveStraightByDelta，避免被 softDisplacementMaxPerFrame 截断到 0.2。
-            target.Movement.MoveStraightByDelta(delta);
+            // 击退通过统一位移接口，会自动清理导航路径并执行位移。
+            target.ApplyMovement(Movement.MovementRequest.DirectMove(delta));
         }
     }
 }

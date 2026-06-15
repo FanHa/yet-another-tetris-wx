@@ -27,7 +27,7 @@ namespace Units.Actions
             }
 
             GetMoveDistanceRange(target, out float minDistance, out float maxDistance);
-            Owner.Movement.MoveToDistanceFromTarget(target.transform, minDistance, maxDistance);
+            Owner.ApplyMovement(Movement.MovementRequest.PathfindToTarget(target.transform, minDistance, maxDistance));
 
             // Move action is a one-frame command; movement continues in NavMeshAgent.
             Complete();
@@ -40,7 +40,7 @@ namespace Units.Actions
                 case Unit.MoveBehaviorMode.TowardAlly:
                     // 靠近队友时尽量贴近，方便保护与协同。
                     minDistance = 0f;
-                    maxDistance = Owner.Movement.AgentRadius + target.Movement.AgentRadius + AllyProtectDistancePadding;
+                    maxDistance = Owner.BodyRadius + target.BodyRadius + AllyProtectDistancePadding;
                     break;
                 case Unit.MoveBehaviorMode.TowardEnemy:
                 default:

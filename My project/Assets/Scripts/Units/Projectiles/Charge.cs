@@ -45,7 +45,7 @@ namespace Units.Projectiles
             if (!isActive)
                 return;
 
-            if (owner == null || !owner.IsActive)
+            if (owner == null || !owner.IsActive || owner.IsStunned)
             {
                 ReleaseSkillMotion();
                 Destroy(gameObject);
@@ -54,7 +54,7 @@ namespace Units.Projectiles
 
             Vector3 dir = (targetPosition - owner.transform.position).normalized;
             float step = speed * Time.deltaTime;
-            var moveResult = owner.Movement.MoveStraightByDelta(dir * step);
+            var moveResult = owner.ApplyMovement(Movement.MovementRequest.DirectMove(dir * step));
 
             if (moveResult.ShouldTerminate)
             {

@@ -46,7 +46,7 @@ namespace Controller
 
                 Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
 
-                unit.Movement.PlaceAt(spawnPos);
+                unit.ApplyMovement(Movement.MovementRequest.PlaceAt(spawnPos));
                 unit.OnDeath += HandleUnitDeath;
                 unit.OnDamageTaken += HandleDamageTaken;
 

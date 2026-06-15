@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static Units.Unit;
 
 namespace Units
 {
@@ -11,11 +8,7 @@ namespace Units
     {
         [SerializeField] private float moveToTargetSampleRadius = 1.5f;
         [SerializeField] private float navigationRetargetDeadZone = 0.5f;
-        [SerializeField] private float softDisplacementMaxPerFrame = 0.2f;
-        [SerializeField] private float softDisplacementDeadZone = 0.001f;
         private Attributes attributes;
-        private Controller.UnitManager unitManager; // 新增：由外部注入
-        private Unit owner;
         private NavMeshAgent agent;
         private Vector3 lastPathDestination;
         private bool hasLastPathDestination;
@@ -60,6 +53,61 @@ namespace Units
             }
         }
 
+        // ============ 位移请求模型 ============
+        public enum MovementMode
+        {
+            DirectMove,          // 直线位移
+            PathfindToTarget,    // 寻路到目标距离
+            Teleport,            // 传送
+            PlaceAt              // 初始放置
+        }
+
+        public readonly struct MovementRequest
+        {
+            public MovementMode Mode { get; }
+            public Vector3 Delta { get; }
+            public Transform Target { get; }
+            public float MinDistance { get; }
+            public float MaxDistance { get; }
+            public Vector3 Position { get; }
+
+            private MovementRequest(
+                MovementMode mode,
+                Vector3 delta,
+                Transform target,
+                float minDistance,
+                float maxDistance,
+                Vector3 position)
+            {
+                Mode = mode;
+                Delta = delta;
+                Target = target;
+                MinDistance = minDistance;
+                MaxDistance = maxDistance;
+                Position = position;
+            }
+
+            public static MovementRequest DirectMove(Vector3 delta)
+            {
+                return new MovementRequest(MovementMode.DirectMove, delta, null, 0f, 0f, default);
+            }
+
+            public static MovementRequest PathfindToTarget(Transform target, float minDistance, float maxDistance)
+            {
+                return new MovementRequest(MovementMode.PathfindToTarget, default, target, minDistance, maxDistance, default);
+            }
+
+            public static MovementRequest Teleport(Vector3 position)
+            {
+                return new MovementRequest(MovementMode.Teleport, default, null, 0f, 0f, position);
+            }
+
+            public static MovementRequest PlaceAt(Vector3 position)
+            {
+                return new MovementRequest(MovementMode.PlaceAt, default, null, 0f, 0f, position);
+            }
+        }
+
         void Awake() // 或 Start
         {
             agent = GetComponent<NavMeshAgent>();
@@ -69,38 +117,13 @@ namespace Units
             
         }
 
-        public void Initialize(Attributes attributes, Controller.UnitManager unitManager, Unit owner)
+        public void Initialize(Attributes attributes)
         {
             this.attributes = attributes;
-            this.unitManager = unitManager;
-            this.owner = owner;
             agent.enabled = true;
         }
 
-        public MovementResult MoveAlongPathToTarget(Unit targetEnemy)
-        {
-            if (targetEnemy == null)
-            {
-                return new MovementResult(MovementResultCode.InvalidRequest, transform.position, transform.position, true);
-            }
-
-            Vector3 destination = targetEnemy.transform.position;
-            agent.stoppingDistance = owner.GetEffectiveAttackRangeTo(targetEnemy);
-
-            // 应用当前的 MoveSpeed 属性（包括 buff 修饰）
-            agent.speed = attributes.MoveSpeed.finalValue;
-
-            bool accepted = agent.SetDestination(destination);
-            if (!accepted)
-            {
-                return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
-            }
-
-            SetLastPathDestination(destination);
-            return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
-        }
-
-        public MovementResult MoveToDistanceFromTarget(Transform targetEnemy, float minTargetDistance, float maxTargetDistance)
+        private MovementResult MoveToDistanceFromTarget(Transform targetEnemy, float minTargetDistance, float maxTargetDistance)
         {
             if (targetEnemy == null)
             {
@@ -147,7 +170,7 @@ namespace Units
             return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
         }
 
-        public MovementResult MoveStraightByDelta(Vector3 delta)
+        private MovementResult MoveStraightByDelta(Vector3 delta)
         {
             Vector3 currentPosition = agent.nextPosition;
             float requestedDistance = delta.magnitude;
@@ -207,27 +230,7 @@ namespace Units
             return new MovementResult(MovementResultCode.NoReachablePoint, targetPosition, currentPosition, true);
         }
 
-        /// <summary>
-        /// 非打断式轻位移入口：仅做位移，不影响当前攻击/施法动作状态。
-        /// </summary>
-        public MovementResult ApplySoftDisplacement(Vector3 delta)
-        {
-
-            float distance = delta.magnitude;
-            if (distance <= softDisplacementDeadZone)
-            {
-                return new MovementResult(MovementResultCode.NoOp, agent.nextPosition, agent.nextPosition, false);
-            }
-
-            if (distance > softDisplacementMaxPerFrame)
-            {
-                delta = delta.normalized * softDisplacementMaxPerFrame;
-            }
-
-            return MoveStraightByDelta(delta);
-        }
-
-        public void PlaceAt(Vector3 position)
+        private void PlaceAt(Vector3 position)
         {
             // spawn 时 agent 尚未启用，直接设置 transform.position
             // (agent.Warp 在 agent.enabled=false 时会被忽略)
@@ -243,7 +246,7 @@ namespace Units
             InvalidateLastPathDestination();
         }
 
-        public void Teleport(Vector3 position)
+        private void Teleport(Vector3 position)
         {
             
             if (TryResolveReachablePosition(position, out Vector3 resolvedPosition))
@@ -258,23 +261,23 @@ namespace Units
             InvalidateLastPathDestination();
         }
 
-        public void PauseNavigation()
+        internal void PauseNavigation()
         {
             agent.isStopped = true;
         }
 
-        public void ResumeNavigation()
+        internal void ResumeNavigation()
         {
             agent.isStopped = false;
         }
 
-        public void ClearNavigationPath()
+        internal void ClearNavigationPath()
         {
             agent.ResetPath();
             InvalidateLastPathDestination();
         }
 
-        public void EnterSkillMotion(int avoidancePriority)
+        internal void EnterSkillMotion(int avoidancePriority)
         {
 
             if (!cachedAvoidancePriority.HasValue)
@@ -285,7 +288,7 @@ namespace Units
             agent.avoidancePriority = Mathf.Clamp(avoidancePriority, 0, 99);
         }
 
-        public void ExitSkillMotion()
+        internal void ExitSkillMotion()
         {
 
             if (!cachedAvoidancePriority.HasValue)
@@ -320,6 +323,46 @@ namespace Units
         {
             hasLastPathDestination = false;
             lastPathDestination = default;
+        }
+
+        // ============ 位移请求唯一入口 ============
+
+        /// <summary>
+        /// 应用位移操作。根据 MovementMode 执行相应的位移逻辑。所有位移都是同步执行。
+        /// </summary>
+        public MovementResult ApplyMovement(MovementRequest request)
+        {
+            switch (request.Mode)
+            {
+                case MovementMode.DirectMove:
+                    return MoveStraightByDelta(request.Delta);
+
+                case MovementMode.PathfindToTarget:
+                    return MoveToDistanceFromTarget(request.Target, request.MinDistance, request.MaxDistance);
+
+                case MovementMode.Teleport:
+                    Teleport(request.Position);
+                    return new MovementResult(
+                        MovementResultCode.Success,
+                        request.Position,
+                        transform.position,
+                        false);
+
+                case MovementMode.PlaceAt:
+                    PlaceAt(request.Position);
+                    return new MovementResult(
+                        MovementResultCode.Success,
+                        request.Position,
+                        transform.position,
+                        false);
+
+                default:
+                    return new MovementResult(
+                        MovementResultCode.InvalidRequest,
+                        Vector3.zero,
+                        transform.position,
+                        true);
+            }
         }
 
     }

@@ -20,7 +20,7 @@ namespace Units.Actions
 
 		protected override void OnEnter()
 		{
-			Owner.Movement.PauseNavigation();
+			Owner.PauseNavigation();
 		}
 
 		protected override void OnTick()
@@ -33,7 +33,7 @@ namespace Units.Actions
 
 		protected override void OnExit()
 		{
-			Owner.Movement.ResumeNavigation();
+			Owner.ResumeNavigation();
 		}
 	}
 }

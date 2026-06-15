@@ -76,7 +76,7 @@ namespace Units.Projectiles
                         Vector3 targetPos = transform.position + rotated + rotated.normalized * pushSpeed * Time.deltaTime;
                         // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
                         Vector3 delta = targetPos - unit.transform.position;
-                        unit.Movement.ApplySoftDisplacement(delta);
+                        unit.ApplyMovement(Movement.MovementRequest.DirectMove(delta));
                         var buff = new Units.Buffs.WildWindDebuff(
                             duration: debuffDuration,
                             moveSlowPercent: moveSlowPercent,

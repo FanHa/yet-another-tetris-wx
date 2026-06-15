@@ -73,9 +73,9 @@ namespace Units
         public bool IsActive => isActive;
         public bool IsSkillMotionActive => skillMotionLockCount > 0;
         public bool IsStunned => stunLockCount > 0;
-        public Movement Movement => movementController;
-        public AnimationController AnimationController => animationController;
-        public Units.Skills.SkillHandler SkillHandler => skillHandler;
+        internal Movement Movement => movementController;
+        internal AnimationController AnimationController => animationController;
+        internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
         private UnitActionRunner actionRunner;
@@ -119,7 +119,7 @@ namespace Units
 
         public void Activate()
         {
-            movementController.Initialize(Attributes, UnitManager, this);
+            movementController.Initialize(Attributes);
             skillHandler.Activate();
             skillHandler.OnSkillCast += HandleSelfSkillCast;
             UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
@@ -135,7 +135,7 @@ namespace Units
             skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
             buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求移除所有Buff（实际提交在BuffHandler.Update中）
-            actionRunner.CancelCurrent();
+            actionRunner.OnOwnerDeactivated();
             animationController.ResetPlaybackSpeed();
             skillMotionLockCount = 0;
             isActive = false;
@@ -173,7 +173,7 @@ namespace Units
 
         public void Teleport(Vector3 position)
         {
-            movementController.Teleport(position);
+            ApplyMovement(Movement.MovementRequest.Teleport(position));
         }
 
         public void EnterSkillMotion(int avoidancePriority)
@@ -182,8 +182,8 @@ namespace Units
 
             if (skillMotionLockCount == 1)
             {
-                actionRunner.CancelCurrent();
                 movementController.EnterSkillMotion(avoidancePriority);
+                movementController.ClearNavigationPath();
             }
         }
 
@@ -206,6 +206,75 @@ namespace Units
             {
                 movementController.ExitSkillMotion();
             }
+        }
+
+        // ============ 位移请求统一入口 ============
+
+        /// <summary>
+        /// 应用位移。所有位移操作必须通过 Unit 的这个入口。同步执行，立即返回结果。
+        /// </summary>
+        public Movement.MovementResult ApplyMovement(Movement.MovementRequest request)
+        {
+            return movementController.ApplyMovement(request);
+        }
+
+        // ============ 动画请求统一入口 ============
+
+        /// <summary>
+        /// 应用动画。所有动画操作必须通过 Unit 的这个入口。同步执行，立即返回结果。
+        /// </summary>
+        public AnimationController.AnimationResult ApplyAnimation(AnimationController.AnimationRequest request)
+        {
+            return animationController.ApplyAnimation(request);
+        }
+
+        // ============ 导航控制（状态管理） ============
+
+        /// <summary>
+        /// 暂停导航。用于技能施放或被击晕时停止自动移动。
+        /// </summary>
+        public void PauseNavigation()
+        {
+            movementController.PauseNavigation();
+        }
+
+        /// <summary>
+        /// 恢复导航。恢复被暂停的自动移动。
+        /// </summary>
+        public void ResumeNavigation()
+        {
+            movementController.ResumeNavigation();
+        }
+
+        /// <summary>
+        /// 初始化单位位置（不涉及 NavMesh 寻路，直接设置）。通常在生成单位时使用。
+        /// </summary>
+        public void PlaceAt(Vector3 position)
+        {
+            ApplyMovement(Movement.MovementRequest.PlaceAt(position));
+        }
+
+        /// <summary>
+        /// 检查动画版本是否最新（用于动画完成事件）。
+        /// </summary>
+        public bool IsAnimationVersionCurrent(int version)
+        {
+            return animationController.IsAnimationVersionCurrent(version);
+        }
+
+        // ============ 技能系统 API 包装 ============
+
+        /// <summary>
+        /// 检查是否有就绪的技能可以施放。
+        /// </summary>
+        public bool HasReadySkill => skillHandler.HasReadySkill;
+
+        /// <summary>
+        /// 执行待决的技能。
+        /// </summary>
+        public void ExecutePendingSkill()
+        {
+            skillHandler.ExecutePendingSkill();
         }
 
         public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)
@@ -355,9 +424,11 @@ namespace Units
             return Time.time >= lastAttackTime + attackCooldown;
         }
 
+        public float BodyRadius => movementController.AgentRadius;
+
         public float GetEffectiveAttackRangeTo(Unit target)
         {
-            return Attributes.AttackRange.finalValue + movementController.AgentRadius + target.movementController.AgentRadius;
+            return Attributes.AttackRange.finalValue + BodyRadius + target.BodyRadius;
         }
 
         public void MarkAttackExecuted()
@@ -420,8 +491,8 @@ namespace Units
 
             if (Attributes.CurrentHealth <= 0)
             {
-                animationController.TriggerDie();
                 Deactivate();
+                ApplyAnimation(new AnimationController.AnimationRequest { mode = AnimationController.AnimationMode.PlayDeath });
                 OnDeath?.Invoke(this);
             }
         }

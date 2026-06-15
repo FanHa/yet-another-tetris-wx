@@ -5,14 +5,15 @@ namespace Units.Actions
 {
     public sealed class UnitActionRunner
     {
+        private readonly Unit owner;
         private readonly List<UnitAction> actions;
+        private UnitAction currentAction;
 
-        public UnitAction CurrentAction { get; private set; }
-
-        public bool IsBusy => CurrentAction != null;
+        private bool HasCurrentAction => currentAction != null;
 
         public UnitActionRunner(Unit owner)
         {
+            this.owner = owner;
             actions = CreateDefaultActions(owner)
                 .OrderByDescending(action => action.Priority)
                 .ToList();
@@ -20,17 +21,31 @@ namespace Units.Actions
 
         public void Tick()
         {
+            SynchronizeOwnerState();
             TryStartHighestPriority();
 
-            if (!IsBusy)
+            if (!HasCurrentAction)
             {
                 return;
             }
 
-            CurrentAction.Tick();
-            if (CurrentAction.IsCompleted)
+            currentAction.Tick();
+            if (currentAction.IsCompleted)
             {
                 ExitCurrent();
+            }
+        }
+
+        private void SynchronizeOwnerState()
+        {
+            if (!HasCurrentAction)
+            {
+                return;
+            }
+
+            if (ShouldYieldToOwnerState(currentAction))
+            {
+                CancelCurrentInternal();
             }
         }
 
@@ -52,9 +67,9 @@ namespace Units.Actions
                 return false;
             }
 
-            if (IsBusy)
+            if (HasCurrentAction)
             {
-                if (!action.CanPreempt(CurrentAction))
+                if (!action.CanPreempt(currentAction))
                 {
                     return false;
                 }
@@ -62,10 +77,10 @@ namespace Units.Actions
                 CancelCurrentInternal();
             }
 
-            CurrentAction = action;
-            CurrentAction.Enter();
+            currentAction = action;
+            currentAction.Enter();
 
-            if (CurrentAction.IsCompleted)
+            if (currentAction.IsCompleted)
             {
                 ExitCurrent();
             }
@@ -77,7 +92,7 @@ namespace Units.Actions
 
         public void NotifyAttackAnimationEnd()
         {
-            if (CurrentAction is IAttackAnimationEndHandler handler)
+            if (currentAction is IAttackAnimationEndHandler handler)
             {
                 handler.HandleAttackAnimationEnd();
             }
@@ -85,15 +100,15 @@ namespace Units.Actions
 
         public void NotifySkillCastAnimationEnd()
         {
-            if (CurrentAction is ISkillCastAnimationEndHandler handler)
+            if (currentAction is ISkillCastAnimationEndHandler handler)
             {
                 handler.HandleSkillCastAnimationEnd();
             }
         }
 
-        public void CancelCurrent()
+        public void OnOwnerDeactivated()
         {
-            if (!IsBusy)
+            if (!HasCurrentAction)
             {
                 return;
             }
@@ -103,16 +118,31 @@ namespace Units.Actions
 
         private void ExitCurrent()
         {
-            var action = CurrentAction;
-            CurrentAction = null;
+            var action = currentAction;
+            currentAction = null;
             action.Exit();
         }
 
         private void CancelCurrentInternal()
         {
-            var action = CurrentAction;
-            CurrentAction = null;
+            var action = currentAction;
+            currentAction = null;
             action.Cancel();
+        }
+
+        private bool ShouldYieldToOwnerState(UnitAction action)
+        {
+            if (owner.IsStunned && action.Type != UnitActionType.Stun)
+            {
+                return true;
+            }
+
+            if (owner.IsSkillMotionActive && action.Type != UnitActionType.SkillMotion)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         
