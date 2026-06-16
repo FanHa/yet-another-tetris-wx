@@ -137,6 +137,11 @@ namespace Units
             buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求移除所有Buff（实际提交在BuffHandler.Update中）
             actionRunner.OnOwnerDeactivated();
             animationController.ResetPlaybackSpeed();
+            // 若单位在技能位移中途被回收，需恢复被覆盖的避让优先级，避免残留脏状态
+            if (skillMotionLockCount > 0)
+            {
+                movementController.PopAvoidancePriorityOverride();
+            }
             skillMotionLockCount = 0;
             isActive = false;
         }
@@ -182,7 +187,7 @@ namespace Units
 
             if (skillMotionLockCount == 1)
             {
-                movementController.EnterSkillMotion(avoidancePriority);
+                movementController.PushAvoidancePriorityOverride(avoidancePriority);
                 movementController.ClearNavigationPath();
             }
         }
@@ -204,7 +209,7 @@ namespace Units
 
             if (skillMotionLockCount == 0)
             {
-                movementController.ExitSkillMotion();
+                movementController.PopAvoidancePriorityOverride();
             }
         }
 

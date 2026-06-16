@@ -10,9 +10,7 @@ namespace Units
         [SerializeField] private float navigationRetargetDeadZone = 0.5f;
         private Attributes attributes;
         private NavMeshAgent agent;
-        private Vector3 lastPathDestination;
-        private bool hasLastPathDestination;
-        private int? cachedAvoidancePriority;
+        private int originalAvoidancePriority;
         public float AgentRadius => agent.radius;
 
         public enum MovementResultCode
@@ -121,6 +119,7 @@ namespace Units
         {
             this.attributes = attributes;
             agent.enabled = true;
+            originalAvoidancePriority = agent.avoidancePriority;
         }
 
         private MovementResult MoveToDistanceFromTarget(Transform targetEnemy, float minTargetDistance, float maxTargetDistance)
@@ -152,7 +151,7 @@ namespace Units
                 return new MovementResult(MovementResultCode.NoOp, targetEnemy.position, transform.position, false);
             }
 
-            if (hasLastPathDestination && Vector3.Distance(destination, lastPathDestination) <= navigationRetargetDeadZone)
+            if (agent.hasPath && Vector3.Distance(destination, agent.destination) <= navigationRetargetDeadZone)
             {
                 return new MovementResult(MovementResultCode.NoOp, destination, transform.position, false);
             }
@@ -166,7 +165,6 @@ namespace Units
                 return new MovementResult(MovementResultCode.ExecutionFailed, destination, transform.position, true);
             }
 
-            SetLastPathDestination(destination);
             return new MovementResult(MovementResultCode.Success, destination, transform.position, false);
         }
 
@@ -242,8 +240,6 @@ namespace Units
             {
                 transform.position = position;
             }
-
-            InvalidateLastPathDestination();
         }
 
         private void Teleport(Vector3 position)
@@ -257,8 +253,6 @@ namespace Units
             {
                 agent.Warp(position);
             }
-
-            InvalidateLastPathDestination();
         }
 
         internal void PauseNavigation()
@@ -274,30 +268,18 @@ namespace Units
         internal void ClearNavigationPath()
         {
             agent.ResetPath();
-            InvalidateLastPathDestination();
         }
 
-        internal void EnterSkillMotion(int avoidancePriority)
+        // 仅负责临时覆盖导航避让优先级，不表示进入完整技能状态。
+        internal void PushAvoidancePriorityOverride(int avoidancePriority)
         {
-
-            if (!cachedAvoidancePriority.HasValue)
-            {
-                cachedAvoidancePriority = agent.avoidancePriority;
-            }
-
             agent.avoidancePriority = Mathf.Clamp(avoidancePriority, 0, 99);
         }
 
-        internal void ExitSkillMotion()
+        // 与 PushAvoidancePriorityOverride 成对调用，恢复 Initialize 时记录的原始避让优先级。
+        internal void PopAvoidancePriorityOverride()
         {
-
-            if (!cachedAvoidancePriority.HasValue)
-            {
-                return;
-            }
-
-            agent.avoidancePriority = cachedAvoidancePriority.Value;
-            cachedAvoidancePriority = null;
+            agent.avoidancePriority = originalAvoidancePriority;
         }
 
         private bool TryResolveReachablePosition(Vector3 targetPosition, out Vector3 resolvedPosition)
@@ -311,18 +293,6 @@ namespace Units
 
             resolvedPosition = default;
             return false;
-        }
-
-        private void SetLastPathDestination(Vector3 destination)
-        {
-            lastPathDestination = destination;
-            hasLastPathDestination = true;
-        }
-
-        private void InvalidateLastPathDestination()
-        {
-            hasLastPathDestination = false;
-            lastPathDestination = default;
         }
 
         // ============ 位移请求唯一入口 ============
