@@ -8,7 +8,7 @@ namespace Units.Actions
     public sealed class CastSkillAction : UnitAction, ISkillCastAnimationEndHandler
     {
         public override int Priority => 20;
-        private int animationVersion;
+        private int animationToken;
 
         public CastSkillAction(Unit owner) : base(owner, UnitActionType.CastSkill)
         {
@@ -22,12 +22,8 @@ namespace Units.Actions
         protected override void OnEnter()
         {
             Owner.PauseNavigation();
-            var result = Owner.ApplyAnimation(new AnimationController.AnimationRequest 
-            { 
-                mode = AnimationController.AnimationMode.PlayAction,
-                actionKind = AnimationController.ActionAnimationKind.CastSkill
-            });
-            animationVersion = result.version;
+            var result = Owner.ApplyAnimation(new AnimationController.PlayCastSkillAnimationCommand());
+            animationToken = result.token;
         }
 
         protected override void OnExit()
@@ -38,15 +34,12 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimation(new AnimationController.AnimationRequest 
-            { 
-                mode = AnimationController.AnimationMode.StopAction
-            });
+            Owner.ApplyAnimation(new AnimationController.StopActionAnimationCommand());
         }
 
         public void HandleSkillCastAnimationEnd()
         {
-            if (IsCompleted || !Owner.IsAnimationVersionCurrent(animationVersion))
+            if (IsCompleted || !Owner.IsAnimationTokenCurrent(animationToken))
             {
                 return;
             }

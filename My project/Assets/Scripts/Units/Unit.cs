@@ -15,6 +15,7 @@ namespace Units
     [RequireComponent(typeof(Units.Skills.SkillHandler))]
     [RequireComponent(typeof(BuffHandler))]
     [RequireComponent(typeof(AnimationController))]
+    [RequireComponent(typeof(FacingController))]
     [RequireComponent(typeof(HitEffect))]
     public class Unit : MonoBehaviour, IPointerClickHandler
     {
@@ -23,6 +24,7 @@ namespace Units
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
+        private FacingController facingController;
         public Model.ProjectileConfig ProjectileConfig;
         public Dictionary<AffinityType, int> CellCounts = new();
 
@@ -83,6 +85,7 @@ namespace Units
         private void Awake()
         {
             animationController = GetComponent<AnimationController>();
+            facingController = GetComponent<FacingController>();
             hitEffect = GetComponent<HitEffect>();
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
@@ -228,9 +231,14 @@ namespace Units
         /// <summary>
         /// 应用动画。所有动画操作必须通过 Unit 的这个入口。同步执行，立即返回结果。
         /// </summary>
-        public AnimationController.AnimationResult ApplyAnimation(AnimationController.AnimationRequest request)
+        public AnimationController.AnimationResult ApplyAnimation(AnimationController.AnimationCommand command)
         {
-            return animationController.ApplyAnimation(request);
+            if (command is AnimationController.PlayAttackAnimationCommand attackCommand && attackCommand.LookDirection.HasValue)
+            {
+                facingController.FaceTowards(attackCommand.LookDirection.Value);
+            }
+
+            return animationController.Apply(command);
         }
 
         // ============ 导航控制（状态管理） ============
@@ -260,11 +268,11 @@ namespace Units
         }
 
         /// <summary>
-        /// 检查动画版本是否最新（用于动画完成事件）。
+        /// 检查动画令牌是否仍为当前（用于动画完成事件）。
         /// </summary>
-        public bool IsAnimationVersionCurrent(int version)
+        public bool IsAnimationTokenCurrent(int token)
         {
-            return animationController.IsAnimationVersionCurrent(version);
+            return animationController.IsTokenCurrent(token);
         }
 
         // ============ 技能系统 API 包装 ============
@@ -497,7 +505,7 @@ namespace Units
             if (Attributes.CurrentHealth <= 0)
             {
                 Deactivate();
-                ApplyAnimation(new AnimationController.AnimationRequest { mode = AnimationController.AnimationMode.PlayDeath });
+                ApplyAnimation(new AnimationController.PlayDeathAnimationCommand());
                 OnDeath?.Invoke(this);
             }
         }

@@ -8,13 +8,6 @@ namespace Units
         private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
         private static readonly int CastSkillTriggerHash = Animator.StringToHash("CastSkill");
         private static readonly int DieTriggerHash = Animator.StringToHash("Die");
-        private static readonly int IdleStateHash = Animator.StringToHash("IdleSwing");
-
-        public enum ActionAnimationKind
-        {
-            Attack,
-            CastSkill
-        }
 
         public enum UnitAnimationState
         {
@@ -24,24 +17,44 @@ namespace Units
             Death
         }
 
-        // 动画请求统一接口
-        public enum AnimationMode
-        {
-            PlayAction,   // 播放动作动画（Attack 或 CastSkill）
-            PlayDeath,    // 播放死亡动画
-            StopAction    // 停止当前动作回到Idle
-        }
-
-        public struct AnimationRequest
-        {
-            public AnimationMode mode;
-            public ActionAnimationKind? actionKind;      // 仅在 PlayAction 时使用
-            public Vector2? lookDirection;               // 可选的看向方向
-        }
-
         public struct AnimationResult
         {
-            public int version;
+            public int token;
+        }
+
+        public abstract class AnimationCommand
+        {
+        }
+
+        public sealed class PlayAttackAnimationCommand : AnimationCommand
+        {
+            public Vector2? LookDirection { get; }
+
+            public PlayAttackAnimationCommand(Vector2? lookDirection = null)
+            {
+                LookDirection = lookDirection;
+            }
+        }
+
+        public sealed class PlayCastSkillAnimationCommand : AnimationCommand
+        {
+            public PlayCastSkillAnimationCommand()
+            {
+            }
+        }
+
+        public sealed class PlayDeathAnimationCommand : AnimationCommand
+        {
+            public PlayDeathAnimationCommand()
+            {
+            }
+        }
+
+        public sealed class StopActionAnimationCommand : AnimationCommand
+        {
+            public StopActionAnimationCommand()
+            {
+            }
         }
 
         private Animator animator;
@@ -54,28 +67,28 @@ namespace Units
         }
 
         /// <summary>
-        /// 应用动画请求（统一动画控制入口）。
+        /// 类型安全入口。所有新调用应通过该方法提交动画命令。
         /// </summary>
-        public AnimationResult ApplyAnimation(AnimationRequest request)
+        public AnimationResult Apply(AnimationCommand command)
         {
-            switch (request.mode)
+            switch (command)
             {
-                case AnimationMode.PlayAction:
-                    if (request.actionKind.HasValue)
-                    {
-                        return new AnimationResult { version = PlayActionAnimation(request.actionKind.Value, request.lookDirection) };
-                    }
-                    break;
-                case AnimationMode.PlayDeath:
-                    return new AnimationResult { version = PlayDeathAnimation() };
-                case AnimationMode.StopAction:
+                case PlayAttackAnimationCommand attackCommand:
+                    return new AnimationResult { token = PlayAttackAnimation() };
+                case PlayCastSkillAnimationCommand:
+                    return new AnimationResult { token = PlayCastSkillAnimation() };
+                case PlayDeathAnimationCommand:
+                    return new AnimationResult { token = PlayDeathAnimation() };
+                case StopActionAnimationCommand:
                     StopActionAnimation();
-                    return new AnimationResult { version = animationVersion };
+                    return new AnimationResult { token = animationVersion };
+                default:
+                    Debug.LogWarning($"[AnimationController] Unknown animation command type on {name}: {command?.GetType().Name ?? "<null>"}");
+                    return new AnimationResult { token = animationVersion };
             }
-            return new AnimationResult { version = animationVersion };
         }
 
-        public int PlayActionAnimation(ActionAnimationKind kind, Vector2? lookDirection = null)
+        private int PlayAttackAnimation()
         {
             // 死亡是终态，动作动画请求不能覆盖死亡表现。
             if (currentState == UnitAnimationState.Death)
@@ -85,28 +98,27 @@ namespace Units
 
             animationVersion++;
 
-            if (lookDirection.HasValue)
-            {
-                float angle = Mathf.Atan2(lookDirection.Value.y, lookDirection.Value.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
-            }
-
-            switch (kind)
-            {
-                case ActionAnimationKind.Attack:
-                    currentState = UnitAnimationState.Attack;
-                    animator.SetTrigger(AttackTriggerHash);
-                    break;
-                case ActionAnimationKind.CastSkill:
-                    currentState = UnitAnimationState.CastSkill;
-                    animator.SetTrigger(CastSkillTriggerHash);
-                    break;
-            }
+            currentState = UnitAnimationState.Attack;
+            animator.SetTrigger(AttackTriggerHash);
 
             return animationVersion;
         }
 
-        public int PlayDeathAnimation()
+        private int PlayCastSkillAnimation()
+        {
+            if (currentState == UnitAnimationState.Death)
+            {
+                return animationVersion;
+            }
+
+            animationVersion++;
+            currentState = UnitAnimationState.CastSkill;
+            animator.SetTrigger(CastSkillTriggerHash);
+
+            return animationVersion;
+        }
+
+        private int PlayDeathAnimation()
         {
             if (currentState == UnitAnimationState.Death)
             {
@@ -119,7 +131,7 @@ namespace Units
             return animationVersion;
         }
 
-        public void StopActionAnimation()
+        private void StopActionAnimation()
         {
             if (currentState == UnitAnimationState.Death)
             {
@@ -131,12 +143,11 @@ namespace Units
 
             animator.ResetTrigger(AttackTriggerHash);
             animator.ResetTrigger(CastSkillTriggerHash);
-            animator.Play(IdleStateHash, 0, 0f);
         }
 
-        public bool IsAnimationVersionCurrent(int version)
+        public bool IsTokenCurrent(int token)
         {
-            return animationVersion == version;
+            return animationVersion == token;
         }
 
         public void SetPlaybackSpeed(float speedMultiplier)

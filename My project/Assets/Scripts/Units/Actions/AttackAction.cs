@@ -12,7 +12,7 @@ namespace Units.Actions
         public override int Priority => 10;
 
         private Unit pendingTarget;
-        private int animationVersion;
+        private int animationToken;
 
         public AttackAction(Unit owner) : base(owner, UnitActionType.Attack)
         {
@@ -49,13 +49,8 @@ namespace Units.Actions
 
             Owner.PauseNavigation();
             Vector2 direction = (pendingTarget.transform.position - Owner.transform.position).normalized;
-            var result = Owner.ApplyAnimation(new AnimationController.AnimationRequest 
-            { 
-                mode = AnimationController.AnimationMode.PlayAction,
-                actionKind = AnimationController.ActionAnimationKind.Attack,
-                lookDirection = direction
-            });
-            animationVersion = result.version;
+            var result = Owner.ApplyAnimation(new AnimationController.PlayAttackAnimationCommand(direction));
+            animationToken = result.token;
         }
 
         protected override void OnExit()
@@ -67,15 +62,12 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimation(new AnimationController.AnimationRequest 
-            { 
-                mode = AnimationController.AnimationMode.StopAction
-            });
+            Owner.ApplyAnimation(new AnimationController.StopActionAnimationCommand());
         }
 
         public void HandleAttackAnimationEnd()
         {
-            if (IsCompleted || !Owner.IsAnimationVersionCurrent(animationVersion))
+            if (IsCompleted || !Owner.IsAnimationTokenCurrent(animationToken))
             {
                 return;
             }
