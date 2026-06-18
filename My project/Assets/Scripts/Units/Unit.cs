@@ -231,7 +231,7 @@ namespace Units
         /// <summary>
         /// 应用动画。所有动画操作必须通过 Unit 的这个入口。同步执行，立即返回结果。
         /// </summary>
-        public AnimationController.AnimationResult ApplyAnimation(AnimationController.AnimationCommand command)
+        public AnimationController.AnimationResult ApplyAnimationCommand(AnimationController.AnimationCommand command)
         {
             if (command is AnimationController.PlayAttackAnimationCommand attackCommand && attackCommand.LookDirection.HasValue)
             {
@@ -339,8 +339,7 @@ namespace Units
         // 这个方法会被 Animator 的事件触发
         public void HandleSkillCastAnimationEnd()
         {
-            actionRunner.NotifySkillCastAnimationEnd();
-
+            actionRunner.NotifyAnimationEvent(Actions.AnimationEventType.CastSkillEnd);
         }
 
         public void AddBuff(Units.Buffs.Buff buff)
@@ -386,7 +385,7 @@ namespace Units
         // 这个方法会被animator的event触发
         public void HandleAttackAnimationEnd()
         {
-            actionRunner.NotifyAttackAnimationEnd();
+            actionRunner.NotifyAnimationEvent(Actions.AnimationEventType.AttackEnd);
         }
 
         public bool TryGetClosestEnemy(out Unit closestEnemy)
@@ -505,7 +504,7 @@ namespace Units
             if (Attributes.CurrentHealth <= 0)
             {
                 Deactivate();
-                ApplyAnimation(new AnimationController.PlayDeathAnimationCommand());
+                ApplyAnimationCommand(new AnimationController.PlayDeathAnimationCommand());
                 OnDeath?.Invoke(this);
             }
         }

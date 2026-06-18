@@ -1,11 +1,8 @@
+using UnityEngine;
+
 namespace Units.Actions
 {
-    public interface ISkillCastAnimationEndHandler
-    {
-        void HandleSkillCastAnimationEnd();
-    }
-
-    public sealed class CastSkillAction : UnitAction, ISkillCastAnimationEndHandler
+    public sealed class CastSkillAction : UnitAction, IAnimationEventHandler
     {
         public override int Priority => 20;
         private int animationToken;
@@ -22,7 +19,7 @@ namespace Units.Actions
         protected override void OnEnter()
         {
             Owner.PauseNavigation();
-            var result = Owner.ApplyAnimation(new AnimationController.PlayCastSkillAnimationCommand());
+            var result = Owner.ApplyAnimationCommand(new AnimationController.PlayCastSkillAnimationCommand());
             animationToken = result.token;
         }
 
@@ -34,13 +31,25 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimation(new AnimationController.StopActionAnimationCommand());
+            Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
         }
 
-        public void HandleSkillCastAnimationEnd()
+        public void HandleAnimationEvent(AnimationEventType eventType)
         {
-            if (IsCompleted || !Owner.IsAnimationTokenCurrent(animationToken))
+            if (eventType != AnimationEventType.CastSkillEnd)
             {
+                Debug.LogWarning($"[CastSkillAction] Unexpected animation event ignored. unit={Owner.name}, event={eventType}, expected={AnimationEventType.CastSkillEnd}, token={animationToken}, time={Time.time:F3}");
+                return;
+            }
+
+            if (IsCompleted)
+            {
+                return;
+            }
+
+            if (!Owner.IsAnimationTokenCurrent(animationToken))
+            {
+                Debug.LogWarning($"[CastSkillAction] Stale animation event ignored. unit={Owner.name}, event={eventType}, expectedToken={animationToken}, time={Time.time:F3}");
                 return;
             }
 

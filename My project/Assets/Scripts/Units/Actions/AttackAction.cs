@@ -2,12 +2,7 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public interface IAttackAnimationEndHandler
-    {
-        void HandleAttackAnimationEnd();
-    }
-
-    public sealed class AttackAction : UnitAction, IAttackAnimationEndHandler
+    public sealed class AttackAction : UnitAction, IAnimationEventHandler
     {
         public override int Priority => 10;
 
@@ -49,7 +44,7 @@ namespace Units.Actions
 
             Owner.PauseNavigation();
             Vector2 direction = (pendingTarget.transform.position - Owner.transform.position).normalized;
-            var result = Owner.ApplyAnimation(new AnimationController.PlayAttackAnimationCommand(direction));
+            var result = Owner.ApplyAnimationCommand(new AnimationController.PlayAttackAnimationCommand(direction));
             animationToken = result.token;
         }
 
@@ -62,13 +57,25 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimation(new AnimationController.StopActionAnimationCommand());
+            Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
         }
 
-        public void HandleAttackAnimationEnd()
+        public void HandleAnimationEvent(AnimationEventType eventType)
         {
-            if (IsCompleted || !Owner.IsAnimationTokenCurrent(animationToken))
+            if (eventType != AnimationEventType.AttackEnd)
             {
+                Debug.LogWarning($"[AttackAction] Unexpected animation event ignored. unit={Owner.name}, event={eventType}, expected={AnimationEventType.AttackEnd}, token={animationToken}, time={Time.time:F3}");
+                return;
+            }
+
+            if (IsCompleted)
+            {
+                return;
+            }
+
+            if (!Owner.IsAnimationTokenCurrent(animationToken))
+            {
+                Debug.LogWarning($"[AttackAction] Stale animation event ignored. unit={Owner.name}, event={eventType}, expectedToken={animationToken}, time={Time.time:F3}");
                 return;
             }
 

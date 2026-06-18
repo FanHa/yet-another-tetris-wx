@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Units.Actions
 {
@@ -90,20 +91,21 @@ namespace Units.Actions
 
         
 
-        public void NotifyAttackAnimationEnd()
+        public void NotifyAnimationEvent(AnimationEventType eventType)
         {
-            if (currentAction is IAttackAnimationEndHandler handler)
+            if (!HasCurrentAction)
             {
-                handler.HandleAttackAnimationEnd();
+                Debug.LogWarning($"[UnitActionRunner] Animation event dropped (no current action). unit={owner.name}, event={eventType}, time={Time.time:F3}");
+                return;
             }
-        }
 
-        public void NotifySkillCastAnimationEnd()
-        {
-            if (currentAction is ISkillCastAnimationEndHandler handler)
+            if (currentAction is IAnimationEventHandler handler)
             {
-                handler.HandleSkillCastAnimationEnd();
+                handler.HandleAnimationEvent(eventType);
+                return;
             }
+
+            Debug.LogWarning($"[UnitActionRunner] Animation event dropped (action not handler). unit={owner.name}, action={currentAction.GetType().Name}, event={eventType}, time={Time.time:F3}");
         }
 
         public void OnOwnerDeactivated()

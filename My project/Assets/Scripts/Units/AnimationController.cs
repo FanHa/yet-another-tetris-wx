@@ -9,14 +9,6 @@ namespace Units
         private static readonly int CastSkillTriggerHash = Animator.StringToHash("CastSkill");
         private static readonly int DieTriggerHash = Animator.StringToHash("Die");
 
-        public enum UnitAnimationState
-        {
-            Idle,
-            Attack,
-            CastSkill,
-            Death
-        }
-
         public struct AnimationResult
         {
             public int token;
@@ -58,12 +50,13 @@ namespace Units
         }
 
         private Animator animator;
-        private int animationVersion;
-        private UnitAnimationState currentState = UnitAnimationState.Idle;
+        private int animationToken;
+        private bool isDead;
 
         private void Awake()
         {
             animator = GetComponent<Animator>();
+            Debug.Assert(animator != null, $"[AnimationController] Animator missing on {name}");
         }
 
         /// <summary>
@@ -71,6 +64,17 @@ namespace Units
         /// </summary>
         public AnimationResult Apply(AnimationCommand command)
         {
+            if (command == null)
+            {
+                Debug.LogWarning($"[AnimationController] Null command ignored. unit={name}, token={animationToken}, time={Time.time:F3}");
+                return new AnimationResult { token = animationToken };
+            }
+
+            if (isDead)
+            {
+                return new AnimationResult { token = animationToken };
+            }
+
             switch (command)
             {
                 case PlayAttackAnimationCommand attackCommand:
@@ -81,73 +85,45 @@ namespace Units
                     return new AnimationResult { token = PlayDeathAnimation() };
                 case StopActionAnimationCommand:
                     StopActionAnimation();
-                    return new AnimationResult { token = animationVersion };
+                    return new AnimationResult { token = animationToken };
                 default:
-                    Debug.LogWarning($"[AnimationController] Unknown animation command type on {name}: {command?.GetType().Name ?? "<null>"}");
-                    return new AnimationResult { token = animationVersion };
+                    Debug.LogWarning($"[AnimationController] Unknown command ignored. unit={name}, command={command.GetType().Name}, token={animationToken}, time={Time.time:F3}");
+                    return new AnimationResult { token = animationToken };
             }
         }
 
         private int PlayAttackAnimation()
         {
-            // 死亡是终态，动作动画请求不能覆盖死亡表现。
-            if (currentState == UnitAnimationState.Death)
-            {
-                return animationVersion;
-            }
-
-            animationVersion++;
-
-            currentState = UnitAnimationState.Attack;
+            animationToken++;
             animator.SetTrigger(AttackTriggerHash);
-
-            return animationVersion;
+            return animationToken;
         }
 
         private int PlayCastSkillAnimation()
         {
-            if (currentState == UnitAnimationState.Death)
-            {
-                return animationVersion;
-            }
-
-            animationVersion++;
-            currentState = UnitAnimationState.CastSkill;
+            animationToken++;
             animator.SetTrigger(CastSkillTriggerHash);
-
-            return animationVersion;
+            return animationToken;
         }
 
         private int PlayDeathAnimation()
         {
-            if (currentState == UnitAnimationState.Death)
-            {
-                return animationVersion;
-            }
-
-            animationVersion++;
-            currentState = UnitAnimationState.Death;
+            animationToken++;
+            isDead = true;
             animator.SetTrigger(DieTriggerHash);
-            return animationVersion;
+            return animationToken;
         }
 
         private void StopActionAnimation()
         {
-            if (currentState == UnitAnimationState.Death)
-            {
-                return;
-            }
-
-            animationVersion++;
-            currentState = UnitAnimationState.Idle;
-
+            animationToken++;
             animator.ResetTrigger(AttackTriggerHash);
             animator.ResetTrigger(CastSkillTriggerHash);
         }
 
         public bool IsTokenCurrent(int token)
         {
-            return animationVersion == token;
+            return animationToken == token;
         }
 
         public void SetPlaybackSpeed(float speedMultiplier)
