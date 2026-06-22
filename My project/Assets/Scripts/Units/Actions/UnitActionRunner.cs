@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Units.Actions
 {
@@ -23,15 +22,28 @@ namespace Units.Actions
         public void Tick()
         {
             SynchronizeOwnerState();
-            TryStartHighestPriority();
+            bool startedActionThisTick = TryStartHighestPriority();
 
             if (!HasCurrentAction)
             {
                 return;
             }
 
-            currentAction.Tick();
-            if (currentAction.IsCompleted)
+            if (startedActionThisTick)
+            {
+                return;
+            }
+
+            var action = currentAction;
+            action.Tick();
+
+            // Tick 内可能触发中断/回收，导致 currentAction 被清空或替换。
+            if (currentAction != action)
+            {
+                return;
+            }
+
+            if (action.IsCompleted)
             {
                 ExitCurrent();
             }
@@ -50,15 +62,17 @@ namespace Units.Actions
             }
         }
 
-        private void TryStartHighestPriority()
+        private bool TryStartHighestPriority()
         {
             foreach (var action in actions)
             {
                 if (TryStart(action))
                 {
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private bool TryStart(UnitAction action)
@@ -79,33 +93,20 @@ namespace Units.Actions
             }
 
             currentAction = action;
-            currentAction.Enter();
+            var startedAction = currentAction;
+            startedAction.Enter();
 
-            if (currentAction.IsCompleted)
+            if (currentAction != startedAction)
+            {
+                return true;
+            }
+
+            if (startedAction.IsCompleted)
             {
                 ExitCurrent();
             }
 
             return true;
-        }
-
-        
-
-        public void NotifyAnimationEvent(AnimationEventType eventType)
-        {
-            if (!HasCurrentAction)
-            {
-                Debug.LogWarning($"[UnitActionRunner] Animation event dropped (no current action). unit={owner.name}, event={eventType}, time={Time.time:F3}");
-                return;
-            }
-
-            if (currentAction is IAnimationEventHandler handler)
-            {
-                handler.HandleAnimationEvent(eventType);
-                return;
-            }
-
-            Debug.LogWarning($"[UnitActionRunner] Animation event dropped (action not handler). unit={owner.name}, action={currentAction.GetType().Name}, event={eventType}, time={Time.time:F3}");
         }
 
         public void OnOwnerDeactivated()

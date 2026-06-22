@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public sealed class CastSkillAction : UnitAction, IAnimationEventHandler
+    public sealed class CastSkillAction : UnitAction
     {
         public override int Priority => 20;
-        private int animationToken;
+        private bool hasExecuted;
 
         public CastSkillAction(Unit owner) : base(owner, UnitActionType.CastSkill)
         {
@@ -19,8 +19,37 @@ namespace Units.Actions
         protected override void OnEnter()
         {
             Owner.PauseNavigation();
-            var result = Owner.ApplyAnimationCommand(new AnimationController.PlayCastSkillAnimationCommand());
-            animationToken = result.token;
+            Owner.ApplyAnimationCommand(new AnimationController.PlayCastSkillAnimationCommand());
+            hasExecuted = false;
+        }
+
+        protected override void OnTick()
+        {
+            var visualStatus = Owner.GetActionVisualStatus(AnimationController.ActionVisualType.CastSkill, out float progress);
+
+            if (visualStatus == AnimationController.ActionVisualStatus.Playing)
+            {
+                if (!hasExecuted && progress >= Owner.GetSkillCastCommitPhase())
+                {
+                    Owner.ExecutePendingSkill();
+                    hasExecuted = true;
+                }
+
+                return;
+            }
+
+            if (visualStatus == AnimationController.ActionVisualStatus.NotStarted)
+            {
+                return;
+            }
+
+            if (!hasExecuted)
+            {
+                Owner.ExecutePendingSkill();
+                hasExecuted = true;
+            }
+
+            Complete();
         }
 
         protected override void OnExit()
@@ -32,29 +61,6 @@ namespace Units.Actions
         {
             base.OnCancel();
             Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
-        }
-
-        public void HandleAnimationEvent(AnimationEventType eventType)
-        {
-            if (eventType != AnimationEventType.CastSkillEnd)
-            {
-                Debug.LogWarning($"[CastSkillAction] Unexpected animation event ignored. unit={Owner.name}, event={eventType}, expected={AnimationEventType.CastSkillEnd}, token={animationToken}, time={Time.time:F3}");
-                return;
-            }
-
-            if (IsCompleted)
-            {
-                return;
-            }
-
-            if (!Owner.IsAnimationTokenCurrent(animationToken))
-            {
-                Debug.LogWarning($"[CastSkillAction] Stale animation event ignored. unit={Owner.name}, event={eventType}, expectedToken={animationToken}, time={Time.time:F3}");
-                return;
-            }
-
-            Owner.ExecutePendingSkill();
-            Complete();
         }
     }
 }

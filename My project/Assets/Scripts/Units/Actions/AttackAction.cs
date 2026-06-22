@@ -2,12 +2,13 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public sealed class AttackAction : UnitAction, IAnimationEventHandler
+    public sealed class AttackAction : UnitAction
     {
         public override int Priority => 10;
 
         private Unit pendingTarget;
-        private int animationToken;
+        private bool hasLaunchedProjectile;
+        private bool hasMarkedAttackExecuted;
 
         public AttackAction(Unit owner) : base(owner, UnitActionType.Attack)
         {
@@ -44,8 +45,47 @@ namespace Units.Actions
 
             Owner.PauseNavigation();
             Vector2 direction = (pendingTarget.transform.position - Owner.transform.position).normalized;
-            var result = Owner.ApplyAnimationCommand(new AnimationController.PlayAttackAnimationCommand(direction));
-            animationToken = result.token;
+            Owner.ApplyAnimationCommand(new AnimationController.PlayAttackAnimationCommand(direction));
+            hasLaunchedProjectile = false;
+            hasMarkedAttackExecuted = false;
+        }
+
+        protected override void OnTick()
+        {
+            var visualStatus = Owner.GetActionVisualStatus(AnimationController.ActionVisualType.Attack, out float progress);
+
+            if (visualStatus == AnimationController.ActionVisualStatus.Playing)
+            {
+                if (!hasLaunchedProjectile && progress >= Owner.GetAttackHitPhase())
+                {
+                    if (pendingTarget != null && pendingTarget.IsActive)
+                    {
+                        Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
+                    }
+
+                    hasLaunchedProjectile = true;
+                    if (!hasMarkedAttackExecuted)
+                    {
+                        Owner.MarkAttackExecuted();
+                        hasMarkedAttackExecuted = true;
+                    }
+                }
+
+                return;
+            }
+
+            if (visualStatus == AnimationController.ActionVisualStatus.NotStarted)
+            {
+                return;
+            }
+
+            if (!hasMarkedAttackExecuted)
+            {
+                Owner.MarkAttackExecuted();
+                hasMarkedAttackExecuted = true;
+            }
+
+            Complete();
         }
 
         protected override void OnExit()
@@ -58,34 +98,6 @@ namespace Units.Actions
         {
             base.OnCancel();
             Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
-        }
-
-        public void HandleAnimationEvent(AnimationEventType eventType)
-        {
-            if (eventType != AnimationEventType.AttackEnd)
-            {
-                Debug.LogWarning($"[AttackAction] Unexpected animation event ignored. unit={Owner.name}, event={eventType}, expected={AnimationEventType.AttackEnd}, token={animationToken}, time={Time.time:F3}");
-                return;
-            }
-
-            if (IsCompleted)
-            {
-                return;
-            }
-
-            if (!Owner.IsAnimationTokenCurrent(animationToken))
-            {
-                Debug.LogWarning($"[AttackAction] Stale animation event ignored. unit={Owner.name}, event={eventType}, expectedToken={animationToken}, time={Time.time:F3}");
-                return;
-            }
-
-            if (pendingTarget != null && pendingTarget.IsActive)
-            {
-                Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
-            }
-
-            Owner.MarkAttackExecuted();
-            Complete();
         }
     }
 }

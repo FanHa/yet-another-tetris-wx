@@ -1469,6 +1469,7 @@ GameObject:
   - component: {fileID: 7649338840882115303}
   - component: {fileID: 4572052767030387485}
   - component: {fileID: 5975892864010684759}
+  - component: {fileID: 995620710062889832}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: UnitBase
@@ -1561,10 +1562,14 @@ MonoBehaviour:
       Name: 
       baseValue: 0
       finalValue: 0
-    canHitAndRun: 0
   ProjectileConfig: {fileID: 11400000, guid: 0d811f8f01ef7db4287b889e77cf7d60, type: 2}
   factionAColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   factionBColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  moveBehaviorMode: 0
+  attackHitDelaySeconds: 0.28
+  skillCastCommitDelaySeconds: 0.22
+  attackHitPhase: 0.952
+  skillCastCommitPhase: 1
   faction: 0
   healthBar: {fileID: 2119846270201577330}
   BodySpriteRenderer: {fileID: 5410986790312629488}
@@ -1663,5 +1668,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac8396bdd853a904b9a2110bd752b137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &995620710062889832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661248642372273568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2579c548684fe2f479425c697def905f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

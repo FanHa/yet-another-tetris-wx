@@ -43,6 +43,10 @@ namespace Units
         [SerializeField] private Color factionAColor;
         [SerializeField] private Color factionBColor;
         [SerializeField] private MoveBehaviorMode moveBehaviorMode = MoveBehaviorMode.TowardEnemy;
+        [SerializeField] private float attackHitDelaySeconds = 0.28f;
+        [SerializeField] private float skillCastCommitDelaySeconds = 0.22f;
+        [SerializeField, Range(0f, 1f)] private float attackHitPhase = 0.95f;
+        [SerializeField, Range(0f, 1f)] private float skillCastCommitPhase = 0.95f;
 
         public event Action<Unit> OnDeath;
 
@@ -267,12 +271,44 @@ namespace Units
             ApplyMovement(Movement.MovementRequest.PlaceAt(position));
         }
 
-        /// <summary>
-        /// 检查动画令牌是否仍为当前（用于动画完成事件）。
-        /// </summary>
-        public bool IsAnimationTokenCurrent(int token)
+        private float GetCurrentActionSpeed()
         {
-            return animationController.IsTokenCurrent(token);
+            return Attributes?.ActionSpeed?.finalValue ?? 1f;
+        }
+
+        public float GetActionTimelineSpeed()
+        {
+            return Mathf.Max(0f, GetCurrentActionSpeed());
+        }
+
+        public float GetAttackHitBaseDurationSeconds()
+        {
+            return Mathf.Max(0.001f, attackHitDelaySeconds);
+        }
+
+        public float GetSkillCastCommitBaseDurationSeconds()
+        {
+            return Mathf.Max(0.001f, skillCastCommitDelaySeconds);
+        }
+
+        public float GetAttackHitPhase()
+        {
+            return Mathf.Clamp01(attackHitPhase);
+        }
+
+        public float GetSkillCastCommitPhase()
+        {
+            return Mathf.Clamp01(skillCastCommitPhase);
+        }
+
+        public bool TryGetActionVisualProgress(AnimationController.ActionVisualType visualType, out float progress)
+        {
+            return animationController.TryGetActionVisualProgress(visualType, out progress);
+        }
+
+        public AnimationController.ActionVisualStatus GetActionVisualStatus(AnimationController.ActionVisualType visualType, out float progress)
+        {
+            return animationController.GetActionVisualStatus(visualType, out progress);
         }
 
         // ============ 技能系统 API 包装 ============
@@ -331,15 +367,8 @@ namespace Units
 
         private void UpdateActionAnimationSpeed()
         {
-            float speed = Attributes?.ActionSpeed?.finalValue ?? 1f;
-            animationController.SetPlaybackSpeed(speed);
+            animationController.SetPlaybackSpeed(GetCurrentActionSpeed());
 
-        }
-
-        // 这个方法会被 Animator 的事件触发
-        public void HandleSkillCastAnimationEnd()
-        {
-            actionRunner.NotifyAnimationEvent(Actions.AnimationEventType.CastSkillEnd);
         }
 
         public void AddBuff(Units.Buffs.Buff buff)
@@ -382,11 +411,6 @@ namespace Units
             if (closest != null) enemyUnits.Add(closest);
         }
 
-        // 这个方法会被animator的event触发
-        public void HandleAttackAnimationEnd()
-        {
-            actionRunner.NotifyAnimationEvent(Actions.AnimationEventType.AttackEnd);
-        }
 
         public bool TryGetClosestEnemy(out Unit closestEnemy)
         {

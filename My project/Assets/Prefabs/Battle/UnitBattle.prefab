@@ -102,5 +102,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f535c46b225a34eb7e06df16afca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0.3
-  IsHitAndRun: 0
+  moveToTargetSampleRadius: 1.5
+  navigationRetargetDeadZone: 0.5
