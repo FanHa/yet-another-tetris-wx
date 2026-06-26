@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,18 @@ namespace Units.Actions
 
         private bool HasCurrentAction => currentAction != null;
 
+        /// <summary>动作成功进入，Enter() 已执行。</summary>
+        public event Action<UnitActionType> OnActionStarted;
+
+        /// <summary>动作按预期完成，Exit() 已执行。</summary>
+        public event Action<UnitActionType> OnActionCompleted;
+
+        /// <summary>动作被外部状态（眩晕/强制位移/Deactivate）中止。</summary>
+        public event Action<UnitActionType> OnActionCanceled;
+
+        /// <summary>动作被更高优先级动作抢占。</summary>
+        public event Action<UnitActionType> OnActionInterrupted;
+
         public UnitActionRunner(Unit owner)
         {
             this.owner = owner;
@@ -19,7 +32,7 @@ namespace Units.Actions
                 .ToList();
         }
 
-        public void Tick()
+        public void Tick(global::Units.Actions.ActionTickContext context)
         {
             SynchronizeOwnerState();
             bool startedActionThisTick = TryStartHighestPriority();
@@ -35,7 +48,7 @@ namespace Units.Actions
             }
 
             var action = currentAction;
-            action.Tick();
+            action.Tick(context);
 
             // Tick 内可能触发中断/回收，导致 currentAction 被清空或替换。
             if (currentAction != action)
@@ -58,7 +71,7 @@ namespace Units.Actions
 
             if (ShouldYieldToOwnerState(currentAction))
             {
-                CancelCurrentInternal();
+                CancelCurrentInternal(interrupted: false);
             }
         }
 
@@ -89,12 +102,13 @@ namespace Units.Actions
                     return false;
                 }
 
-                CancelCurrentInternal();
+                CancelCurrentInternal(interrupted: true);
             }
 
             currentAction = action;
             var startedAction = currentAction;
             startedAction.Enter();
+            OnActionStarted?.Invoke(startedAction.Type);
 
             if (currentAction != startedAction)
             {
@@ -116,7 +130,7 @@ namespace Units.Actions
                 return;
             }
 
-            CancelCurrentInternal();
+            CancelCurrentInternal(interrupted: false);
         }
 
         private void ExitCurrent()
@@ -124,13 +138,18 @@ namespace Units.Actions
             var action = currentAction;
             currentAction = null;
             action.Exit();
+            OnActionCompleted?.Invoke(action.Type);
         }
 
-        private void CancelCurrentInternal()
+        private void CancelCurrentInternal(bool interrupted)
         {
             var action = currentAction;
             currentAction = null;
             action.Cancel();
+            if (interrupted)
+                OnActionInterrupted?.Invoke(action.Type);
+            else
+                OnActionCanceled?.Invoke(action.Type);
         }
 
         private bool ShouldYieldToOwnerState(UnitAction action)

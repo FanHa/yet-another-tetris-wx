@@ -43,10 +43,6 @@ namespace Units
         [SerializeField] private Color factionAColor;
         [SerializeField] private Color factionBColor;
         [SerializeField] private MoveBehaviorMode moveBehaviorMode = MoveBehaviorMode.TowardEnemy;
-        [SerializeField] private float attackHitDelaySeconds = 0.28f;
-        [SerializeField] private float skillCastCommitDelaySeconds = 0.22f;
-        [SerializeField, Range(0f, 1f)] private float attackHitPhase = 0.95f;
-        [SerializeField, Range(0f, 1f)] private float skillCastCommitPhase = 0.95f;
 
         public event Action<Unit> OnDeath;
 
@@ -80,7 +76,6 @@ namespace Units
         public bool IsSkillMotionActive => skillMotionLockCount > 0;
         public bool IsStunned => stunLockCount > 0;
         internal Movement Movement => movementController;
-        internal AnimationController AnimationController => animationController;
         internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
@@ -96,6 +91,9 @@ namespace Units
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
 
             actionRunner = new UnitActionRunner(this);
+            actionRunner.OnActionStarted += HandleActionStarted;
+            actionRunner.OnActionCanceled += HandleActionStopped;
+            actionRunner.OnActionInterrupted += HandleActionStopped;
 
             buffHandler.BuffAdded += (buff) => BuffAdded?.Invoke(buff);
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
@@ -109,10 +107,22 @@ namespace Units
                 return;
 
             UpdateEnemiesDistance();
+            UpdateFacing();
 
-            actionRunner.Tick();
+            actionRunner.Tick(new global::Units.Actions.ActionTickContext(
+                Time.deltaTime,
+                GetActionTimelineSpeed()));
             UpdateActionAnimationSpeed();
             
+        }
+
+        private void UpdateFacing()
+        {
+            if (TryGetClosestEnemy(out var enemy))
+            {
+                Vector2 direction = ((Vector2)enemy.transform.position - (Vector2)transform.position).normalized;
+                facingController.FaceTowards(direction);
+            }
         }
 
         public void Setup(Unit.Faction faction)
@@ -230,20 +240,55 @@ namespace Units
             return movementController.ApplyMovement(request);
         }
 
-        // ============ 动画请求统一入口 ============
+        // ============ 动画编排系统（Animation Orchestration） ============
+        // 
+        // 职责: 处理所有与 AnimationController 的交互，集中管理动画命令的下发和监听。
+        //       确保 Unit 是 Actions 与 AnimationController 之间的唯一协调者。
+        //
+        // 架构流程:
+        //   1. ActionRunner 发出事件 (OnActionStarted/Completed/Canceled/Interrupted)
+        //   2. Unit 的 HandleAction* 方法响应事件，调用 AnimationController 播放/停止动画
+        //   3. Actions 通过 GetAttackActionDurationSeconds()/GetSkillActionDurationSeconds() 获取时间基准
+        //   4. Unit.Update() 每帧调用 UpdateActionAnimationSpeed() 更新速度
+        //
+        // 关键原则:
+        //   - 事件驱动: 仅在 Action 生命周期边界（Start/Stop）下发动画命令
+        //   - 查询分离: Actions 通过时间线进度驱动，不直接读取 Animator 状态
+        //   - 速度管理: 动画播放速度由 Buff/Attributes 决定，每帧同步更新
 
         /// <summary>
-        /// 应用动画。所有动画操作必须通过 Unit 的这个入口。同步执行，立即返回结果。
+        /// 响应 ActionRunner 事件：Action 启动时，根据类型播放对应动画。
+        /// 由 Unit.Awake() 中的事件订阅自动触发，外部不应调用。
         /// </summary>
-        public AnimationController.AnimationResult ApplyAnimationCommand(AnimationController.AnimationCommand command)
+        private void HandleActionStarted(UnitActionType actionType)
         {
-            if (command is AnimationController.PlayAttackAnimationCommand attackCommand && attackCommand.LookDirection.HasValue)
+            switch (actionType)
             {
-                facingController.FaceTowards(attackCommand.LookDirection.Value);
+                case UnitActionType.Attack:
+                    animationController.PlayAttack();
+                    break;
+                case UnitActionType.CastSkill:
+                    animationController.PlayCastSkill();
+                    break;
             }
-
-            return animationController.Apply(command);
         }
+
+        /// <summary>
+        /// 响应 ActionRunner 事件：Action 停止（取消/中断）时，停止对应动画。
+        /// 由 Unit.Awake() 中的事件订阅自动触发，外部不应调用。
+        /// </summary>
+        private void HandleActionStopped(UnitActionType actionType)
+        {
+            switch (actionType)
+            {
+                case UnitActionType.Attack:
+                case UnitActionType.CastSkill:
+                    animationController.StopAction();
+                    break;
+            }
+        }
+
+
 
         // ============ 导航控制（状态管理） ============
 
@@ -271,44 +316,43 @@ namespace Units
             ApplyMovement(Movement.MovementRequest.PlaceAt(position));
         }
 
+        /// <summary>
+        /// 获取当前动作速度乘数。从 Attributes 系统读取（包含所有 Buff 修改器）。
+        /// 返回值: 1.0 = 标准速度，0.5 = 半速，2.0 = 双速，依此类推。
+        /// </summary>
         private float GetCurrentActionSpeed()
         {
             return Attributes?.ActionSpeed?.finalValue ?? 1f;
         }
 
+        /// <summary>
+        /// 获取经过钳制的动作速度（最小为 0）。
+        /// 供外部（如 ActionRunner）读取当前速度时使用。
+        /// </summary>
         public float GetActionTimelineSpeed()
         {
             return Mathf.Max(0f, GetCurrentActionSpeed());
         }
 
-        public float GetAttackHitBaseDurationSeconds()
+        // ============ 时间参数（Timing） ============
+        //
+        // 这组方法为 Actions 提供攻击/技能动作的时间基准。
+        // Actions 用这些参数初始化 ActionTimelineProgress，推进后由 timeline 自行决定触发时机。
+
+        /// <summary>
+        /// 获取攻击动作总时长（秒）。由 AnimationController 提供，作为 AttackAction 的时间线长度。
+        /// </summary>
+        public float GetAttackActionDurationSeconds()
         {
-            return Mathf.Max(0.001f, attackHitDelaySeconds);
+            return animationController.GetAttackActionDurationSeconds();
         }
 
-        public float GetSkillCastCommitBaseDurationSeconds()
+        /// <summary>
+        /// 获取技能动作总时长（秒）。作为 CastSkillAction 的时间线长度。
+        /// </summary>
+        public float GetSkillActionDurationSeconds()
         {
-            return Mathf.Max(0.001f, skillCastCommitDelaySeconds);
-        }
-
-        public float GetAttackHitPhase()
-        {
-            return Mathf.Clamp01(attackHitPhase);
-        }
-
-        public float GetSkillCastCommitPhase()
-        {
-            return Mathf.Clamp01(skillCastCommitPhase);
-        }
-
-        public bool TryGetActionVisualProgress(AnimationController.ActionVisualType visualType, out float progress)
-        {
-            return animationController.TryGetActionVisualProgress(visualType, out progress);
-        }
-
-        public AnimationController.ActionVisualStatus GetActionVisualStatus(AnimationController.ActionVisualType visualType, out float progress)
-        {
-            return animationController.GetActionVisualStatus(visualType, out progress);
+            return animationController.GetSkillActionDurationSeconds();
         }
 
         // ============ 技能系统 API 包装 ============
@@ -365,10 +409,19 @@ namespace Units
             skillHandler.DistributeEnergy(energy);
         }
 
+        /// <summary>
+        /// 每帧更新动画播放速度。当 Unit 的 ActionSpeed 属性改变时，
+        /// 需要同步到 Animator，使动画快进/减速生效。
+        /// 
+        /// 调用时机: Unit.Update() 和 Unit.Setup() 中调用，确保速度始终同步。
+        /// 
+        /// 实现原理:
+        ///   - GetCurrentActionSpeed() 从 Buff/Attributes 获取最新速度值
+        ///   - animationController.SetPlaybackSpeed() 将其应用到 Animator
+        /// </summary>
         private void UpdateActionAnimationSpeed()
         {
             animationController.SetPlaybackSpeed(GetCurrentActionSpeed());
-
         }
 
         public void AddBuff(Units.Buffs.Buff buff)
@@ -528,7 +581,7 @@ namespace Units
             if (Attributes.CurrentHealth <= 0)
             {
                 Deactivate();
-                ApplyAnimationCommand(new AnimationController.PlayDeathAnimationCommand());
+                animationController.PlayDeath();
                 OnDeath?.Invoke(this);
             }
         }

@@ -23,7 +23,7 @@ namespace Units.Actions
 			Owner.PauseNavigation();
 		}
 
-		protected override void OnTick()
+		protected override void OnTick(global::Units.Actions.ActionTickContext context)
 		{
 			if (!Owner.IsStunned)
 			{

@@ -9,6 +9,7 @@ namespace Units.Actions
         private Unit pendingTarget;
         private bool hasLaunchedProjectile;
         private bool hasMarkedAttackExecuted;
+        private readonly ActionTimelineProgress attackTimeline = new();
 
         public AttackAction(Unit owner) : base(owner, UnitActionType.Attack)
         {
@@ -35,6 +36,43 @@ namespace Units.Actions
             return distance <= Owner.GetEffectiveAttackRangeTo(target);
         }
 
+        // Timeline mapping for AttackAction:
+        // speed        <- Unit.GetActionTimelineSpeed()
+        // duration     <- Unit.GetAttackActionDurationSeconds()
+        private float GetAttackTimelineDurationSeconds() => Owner.GetAttackActionDurationSeconds();
+
+        private float AdvanceAttackTimeline(global::Units.Actions.ActionTickContext context)
+        {
+            return attackTimeline.Advance(
+            context.DeltaTime,
+            context.TimelineSpeed,
+                GetAttackTimelineDurationSeconds());
+        }
+
+        private bool HasCompletedAttackTimeline(float timelineProgress)
+        {
+            return timelineProgress >= 1f;
+        }
+
+        private void TryLaunchProjectile()
+        {
+            if (pendingTarget != null && pendingTarget.IsActive)
+            {
+                Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
+            }
+        }
+
+        private void MarkAttackExecutedIfNeeded()
+        {
+            if (hasMarkedAttackExecuted)
+            {
+                return;
+            }
+
+            Owner.MarkAttackExecuted();
+            hasMarkedAttackExecuted = true;
+        }
+
         protected override void OnEnter()
         {
             if (!Owner.TryGetClosestEnemy(out pendingTarget) || pendingTarget == null)
@@ -44,46 +82,27 @@ namespace Units.Actions
             }
 
             Owner.PauseNavigation();
-            Vector2 direction = (pendingTarget.transform.position - Owner.transform.position).normalized;
-            Owner.ApplyAnimationCommand(new AnimationController.PlayAttackAnimationCommand(direction));
             hasLaunchedProjectile = false;
             hasMarkedAttackExecuted = false;
+            attackTimeline.Reset();
         }
 
-        protected override void OnTick()
+        protected override void OnTick(global::Units.Actions.ActionTickContext context)
         {
-            var visualStatus = Owner.GetActionVisualStatus(AnimationController.ActionVisualType.Attack, out float progress);
+            float timelineProgress = AdvanceAttackTimeline(context);
 
-            if (visualStatus == AnimationController.ActionVisualStatus.Playing)
-            {
-                if (!hasLaunchedProjectile && progress >= Owner.GetAttackHitPhase())
-                {
-                    if (pendingTarget != null && pendingTarget.IsActive)
-                    {
-                        Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
-                    }
-
-                    hasLaunchedProjectile = true;
-                    if (!hasMarkedAttackExecuted)
-                    {
-                        Owner.MarkAttackExecuted();
-                        hasMarkedAttackExecuted = true;
-                    }
-                }
-
-                return;
-            }
-
-            if (visualStatus == AnimationController.ActionVisualStatus.NotStarted)
+            if (!HasCompletedAttackTimeline(timelineProgress))
             {
                 return;
             }
 
-            if (!hasMarkedAttackExecuted)
+            if (!hasLaunchedProjectile)
             {
-                Owner.MarkAttackExecuted();
-                hasMarkedAttackExecuted = true;
+                TryLaunchProjectile();
+                hasLaunchedProjectile = true;
             }
+
+            MarkAttackExecutedIfNeeded();
 
             Complete();
         }
@@ -97,7 +116,6 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
         }
     }
 }

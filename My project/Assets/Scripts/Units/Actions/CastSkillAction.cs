@@ -1,11 +1,10 @@
-using UnityEngine;
-
 namespace Units.Actions
 {
     public sealed class CastSkillAction : UnitAction
     {
         public override int Priority => 20;
         private bool hasExecuted;
+        private readonly ActionTimelineProgress castSkillTimeline = new();
 
         public CastSkillAction(Unit owner) : base(owner, UnitActionType.CastSkill)
         {
@@ -19,26 +18,30 @@ namespace Units.Actions
         protected override void OnEnter()
         {
             Owner.PauseNavigation();
-            Owner.ApplyAnimationCommand(new AnimationController.PlayCastSkillAnimationCommand());
             hasExecuted = false;
+            castSkillTimeline.Reset();
         }
 
-        protected override void OnTick()
+        private float GetCastSkillTimelineDurationSeconds() => Owner.GetSkillActionDurationSeconds();
+
+        private float AdvanceCastSkillTimeline(global::Units.Actions.ActionTickContext context)
         {
-            var visualStatus = Owner.GetActionVisualStatus(AnimationController.ActionVisualType.CastSkill, out float progress);
+            return castSkillTimeline.Advance(
+                context.DeltaTime,
+                context.TimelineSpeed,
+                GetCastSkillTimelineDurationSeconds());
+        }
 
-            if (visualStatus == AnimationController.ActionVisualStatus.Playing)
-            {
-                if (!hasExecuted && progress >= Owner.GetSkillCastCommitPhase())
-                {
-                    Owner.ExecutePendingSkill();
-                    hasExecuted = true;
-                }
+        private bool HasCompletedCastSkillTimeline(float timelineProgress)
+        {
+            return timelineProgress >= 1f;
+        }
 
-                return;
-            }
+        protected override void OnTick(global::Units.Actions.ActionTickContext context)
+        {
+            float timelineProgress = AdvanceCastSkillTimeline(context);
 
-            if (visualStatus == AnimationController.ActionVisualStatus.NotStarted)
+            if (!HasCompletedCastSkillTimeline(timelineProgress))
             {
                 return;
             }
@@ -60,7 +63,6 @@ namespace Units.Actions
         protected override void OnCancel()
         {
             base.OnCancel();
-            Owner.ApplyAnimationCommand(new AnimationController.StopActionAnimationCommand());
         }
     }
 }

@@ -30,14 +30,14 @@ namespace Units.Actions
             OnEnter();
         }
 
-        public void Tick()
+        public void Tick(global::Units.Actions.ActionTickContext context)
         {
             if (IsCompleted)
             {
                 return;
             }
 
-            OnTick();
+            OnTick(context);
         }
 
         public void Exit()
@@ -58,7 +58,7 @@ namespace Units.Actions
 
         protected abstract void OnEnter();
 
-        protected virtual void OnTick()
+        protected virtual void OnTick(global::Units.Actions.ActionTickContext context)
         {
         }
 

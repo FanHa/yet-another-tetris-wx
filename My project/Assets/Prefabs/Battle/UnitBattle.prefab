@@ -48,6 +48,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7649338840882115303, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
+      propertyPath: skillActionDurationSeconds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7649338840882115303, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
+      propertyPath: attackActionDurationSeconds
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8661248642372273568, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
       propertyPath: m_Name
       value: UnitBattle

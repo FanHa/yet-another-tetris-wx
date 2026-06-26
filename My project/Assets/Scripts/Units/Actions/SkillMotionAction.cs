@@ -18,7 +18,7 @@ namespace Units.Actions
             Owner.ClearNavigationPathForSkillMotion();
         }
 
-        protected override void OnTick()
+        protected override void OnTick(global::Units.Actions.ActionTickContext context)
         {
             if (!Owner.IsSkillMotionActive)
             {
