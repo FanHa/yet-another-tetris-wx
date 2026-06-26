@@ -108,7 +108,6 @@ namespace Units.Actions
             currentAction = action;
             var startedAction = currentAction;
             startedAction.Enter();
-            OnActionStarted?.Invoke(startedAction.Type);
 
             if (currentAction != startedAction)
             {
@@ -118,7 +117,10 @@ namespace Units.Actions
             if (startedAction.IsCompleted)
             {
                 ExitCurrent();
+                return true;
             }
+
+            OnActionStarted?.Invoke(startedAction.Type);
 
             return true;
         }

@@ -92,6 +92,12 @@ namespace Units.Buffs
             }
         }
 
+        public void RemoveAllActiveBuffsImmediately()
+        {
+            RequestRemoveAllActiveBuffs();
+            FlushPendingRequests();
+        }
+
         private void FlushPendingRequests()
         {
             int safetyCounter = 0;

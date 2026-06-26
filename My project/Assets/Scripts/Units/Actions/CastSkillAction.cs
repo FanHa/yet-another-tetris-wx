@@ -4,7 +4,7 @@ namespace Units.Actions
     {
         public override int Priority => 20;
         private bool hasExecuted;
-        private readonly ActionTimelineProgress castSkillTimeline = new();
+        private float castSkillElapsedSeconds;
 
         public CastSkillAction(Unit owner) : base(owner, UnitActionType.CastSkill)
         {
@@ -19,29 +19,25 @@ namespace Units.Actions
         {
             Owner.PauseNavigation();
             hasExecuted = false;
-            castSkillTimeline.Reset();
+            castSkillElapsedSeconds = 0f;
         }
 
-        private float GetCastSkillTimelineDurationSeconds() => Owner.GetSkillActionDurationSeconds();
-
-        private float AdvanceCastSkillTimeline(global::Units.Actions.ActionTickContext context)
+        private void AdvanceCastSkillTimeline(global::Units.Actions.ActionTickContext context)
         {
-            return castSkillTimeline.Advance(
-                context.DeltaTime,
-                context.TimelineSpeed,
-                GetCastSkillTimelineDurationSeconds());
+            castSkillElapsedSeconds += context.DeltaTime * UnityEngine.Mathf.Max(0f, context.TimelineSpeed);
         }
 
-        private bool HasCompletedCastSkillTimeline(float timelineProgress)
+        private bool HasCompletedCastSkillTimeline()
         {
-            return timelineProgress >= 1f;
+            float durationSeconds = UnityEngine.Mathf.Max(0.001f, Owner.GetSkillActionDurationSeconds());
+            return castSkillElapsedSeconds >= durationSeconds;
         }
 
         protected override void OnTick(global::Units.Actions.ActionTickContext context)
         {
-            float timelineProgress = AdvanceCastSkillTimeline(context);
+            AdvanceCastSkillTimeline(context);
 
-            if (!HasCompletedCastSkillTimeline(timelineProgress))
+            if (!HasCompletedCastSkillTimeline())
             {
                 return;
             }

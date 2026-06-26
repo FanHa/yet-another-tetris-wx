@@ -151,7 +151,7 @@ namespace Units
             UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
             skillHandler.OnSkillCast -= HandleSelfSkillCast;
             skillHandler.Deactivate(); // 如有需要
-            buffHandler.RequestRemoveAllActiveBuffs(); // 批量请求移除所有Buff（实际提交在BuffHandler.Update中）
+            buffHandler.RemoveAllActiveBuffsImmediately();
             actionRunner.OnOwnerDeactivated();
             animationController.ResetPlaybackSpeed();
             // 若单位在技能位移中途被回收，需恢复被覆盖的避让优先级，避免残留脏状态
@@ -248,7 +248,7 @@ namespace Units
         // 架构流程:
         //   1. ActionRunner 发出事件 (OnActionStarted/Completed/Canceled/Interrupted)
         //   2. Unit 的 HandleAction* 方法响应事件，调用 AnimationController 播放/停止动画
-        //   3. Actions 通过 GetAttackActionDurationSeconds()/GetSkillActionDurationSeconds() 获取时间基准
+        //   3. Actions 通过 GetAttackActionDurationSeconds()/GetSkillActionDurationSeconds() 获取动作总时长
         //   4. Unit.Update() 每帧调用 UpdateActionAnimationSpeed() 更新速度
         //
         // 关键原则:
@@ -337,7 +337,7 @@ namespace Units
         // ============ 时间参数（Timing） ============
         //
         // 这组方法为 Actions 提供攻击/技能动作的时间基准。
-        // Actions 用这些参数初始化 ActionTimelineProgress，推进后由 timeline 自行决定触发时机。
+        // Actions 用这些参数和每帧 deltaTime/speed 计算已消耗时间，再与总时长比较。
 
         /// <summary>
         /// 获取攻击动作总时长（秒）。由 AnimationController 提供，作为 AttackAction 的时间线长度。
@@ -525,7 +525,7 @@ namespace Units
             lastAttackTime = Time.time;
         }
 
-        public void ExecuteAttackProjectile(Unit target, float damageValue)
+        public void ExecuteAttackProjectile(Unit target)
         {
             GameObject projectileObject;
             projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);

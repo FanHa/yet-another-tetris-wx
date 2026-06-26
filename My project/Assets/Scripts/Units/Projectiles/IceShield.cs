@@ -28,7 +28,11 @@ namespace Units.Projectiles
             if (!initialized)
                 return;
 
-            // todo unit 死亡需要销毁
+            if (owner == null || !owner.IsActive)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
             // 计算旋转位置
             angle += rotateSpeed * Time.deltaTime;

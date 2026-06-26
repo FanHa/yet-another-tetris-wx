@@ -9,7 +9,7 @@ namespace Units.Actions
         private Unit pendingTarget;
         private bool hasLaunchedProjectile;
         private bool hasMarkedAttackExecuted;
-        private readonly ActionTimelineProgress attackTimeline = new();
+        private float attackElapsedSeconds;
 
         public AttackAction(Unit owner) : base(owner, UnitActionType.Attack)
         {
@@ -36,29 +36,22 @@ namespace Units.Actions
             return distance <= Owner.GetEffectiveAttackRangeTo(target);
         }
 
-        // Timeline mapping for AttackAction:
-        // speed        <- Unit.GetActionTimelineSpeed()
-        // duration     <- Unit.GetAttackActionDurationSeconds()
-        private float GetAttackTimelineDurationSeconds() => Owner.GetAttackActionDurationSeconds();
-
-        private float AdvanceAttackTimeline(global::Units.Actions.ActionTickContext context)
+        private void AdvanceAttackTimeline(global::Units.Actions.ActionTickContext context)
         {
-            return attackTimeline.Advance(
-            context.DeltaTime,
-            context.TimelineSpeed,
-                GetAttackTimelineDurationSeconds());
+            attackElapsedSeconds += context.DeltaTime * Mathf.Max(0f, context.TimelineSpeed);
         }
 
-        private bool HasCompletedAttackTimeline(float timelineProgress)
+        private bool HasCompletedAttackTimeline()
         {
-            return timelineProgress >= 1f;
+            float durationSeconds = Mathf.Max(0.001f, Owner.GetAttackActionDurationSeconds());
+            return attackElapsedSeconds >= durationSeconds;
         }
 
         private void TryLaunchProjectile()
         {
             if (pendingTarget != null && pendingTarget.IsActive)
             {
-                Owner.ExecuteAttackProjectile(pendingTarget, Owner.Attributes.AttackPower.finalValue);
+                Owner.ExecuteAttackProjectile(pendingTarget);
             }
         }
 
@@ -84,14 +77,14 @@ namespace Units.Actions
             Owner.PauseNavigation();
             hasLaunchedProjectile = false;
             hasMarkedAttackExecuted = false;
-            attackTimeline.Reset();
+            attackElapsedSeconds = 0f;
         }
 
         protected override void OnTick(global::Units.Actions.ActionTickContext context)
         {
-            float timelineProgress = AdvanceAttackTimeline(context);
+            AdvanceAttackTimeline(context);
 
-            if (!HasCompletedAttackTimeline(timelineProgress))
+            if (!HasCompletedAttackTimeline())
             {
                 return;
             }
