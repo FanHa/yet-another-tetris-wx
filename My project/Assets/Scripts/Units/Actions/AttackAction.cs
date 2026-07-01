@@ -11,29 +11,29 @@ namespace Units.Actions
         private bool hasMarkedAttackExecuted;
         private float attackElapsedSeconds;
 
-        public AttackAction(Unit owner) : base(owner, UnitActionType.Attack)
+        public AttackAction(IUnitActionContext context) : base(context, UnitActionType.Attack)
         {
         }
 
         public override bool CanStart()
         {
-            if (Owner.Attributes.ActionSpeed.finalValue <= 0f)
+            if (Context.ActionSpeed <= 0f)
             {
                 return false;
             }
 
-            if (!Owner.CanAttackNow())
+            if (!Context.CanAttackNow())
             {
                 return false;
             }
 
-            if (!Owner.TryGetClosestEnemy(out var target))
+            if (!Context.TryGetClosestEnemy(out var target))
             {
                 return false;
             }
 
-            float distance = Vector2.Distance(Owner.transform.position, target.transform.position);
-            return distance <= Owner.GetEffectiveAttackRangeTo(target);
+            float distance = Vector2.Distance(Context.Position, target.transform.position);
+            return distance <= Context.GetEffectiveAttackRangeTo(target);
         }
 
         private void AdvanceAttackTimeline(global::Units.Actions.ActionTickContext context)
@@ -43,7 +43,7 @@ namespace Units.Actions
 
         private bool HasCompletedAttackTimeline()
         {
-            float durationSeconds = Mathf.Max(0.001f, Owner.GetAttackActionDurationSeconds());
+            float durationSeconds = Mathf.Max(0.001f, Context.GetAttackActionDurationSeconds());
             return attackElapsedSeconds >= durationSeconds;
         }
 
@@ -51,7 +51,8 @@ namespace Units.Actions
         {
             if (pendingTarget != null && pendingTarget.IsActive)
             {
-                Owner.ExecuteAttackProjectile(pendingTarget);
+                Context.ExecuteAttackProjectile(pendingTarget);
+                RaiseCommitted(UnitActionCommitKind.AttackProjectileLaunched);
             }
         }
 
@@ -62,19 +63,19 @@ namespace Units.Actions
                 return;
             }
 
-            Owner.MarkAttackExecuted();
+            Context.MarkAttackExecuted();
             hasMarkedAttackExecuted = true;
         }
 
         protected override void OnEnter()
         {
-            if (!Owner.TryGetClosestEnemy(out pendingTarget) || pendingTarget == null)
+            if (!Context.TryGetClosestEnemy(out pendingTarget) || pendingTarget == null)
             {
                 Complete();
                 return;
             }
 
-            Owner.PauseNavigation();
+            Context.PauseNavigation();
             hasLaunchedProjectile = false;
             hasMarkedAttackExecuted = false;
             attackElapsedSeconds = 0f;
@@ -103,7 +104,7 @@ namespace Units.Actions
         protected override void OnExit()
         {
             pendingTarget = null;
-            Owner.ResumeNavigation();
+            Context.ResumeNavigation();
         }
 
         protected override void OnCancel()

@@ -4,13 +4,13 @@ namespace Units.Actions
 	{
 		public override int Priority => 100;
 
-		public StunAction(Unit owner) : base(owner, UnitActionType.Stun)
+		public StunAction(IUnitActionContext context) : base(context, UnitActionType.Stun)
 		{
 		}
 
 		public override bool CanStart()
 		{
-			return Owner.IsStunned;
+			return Context.IsStunned;
 		}
 
 		public override bool CanPreempt(UnitAction currentAction)
@@ -20,12 +20,12 @@ namespace Units.Actions
 
 		protected override void OnEnter()
 		{
-			Owner.PauseNavigation();
+			Context.PauseNavigation();
 		}
 
 		protected override void OnTick(global::Units.Actions.ActionTickContext context)
 		{
-			if (!Owner.IsStunned)
+			if (!Context.IsStunned)
 			{
 				Complete();
 			}
@@ -33,7 +33,7 @@ namespace Units.Actions
 
 		protected override void OnExit()
 		{
-			Owner.ResumeNavigation();
+			Context.ResumeNavigation();
 		}
 	}
 }

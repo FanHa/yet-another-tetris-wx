@@ -1,16 +1,19 @@
+using System;
+
 namespace Units.Actions
 {
     public abstract class UnitAction
     {
-        protected readonly Unit Owner;
+        protected readonly IUnitActionContext Context;
+        public event Action<UnitActionType, UnitActionCommitKind> OnCommitted;
 
         public UnitActionType Type { get; }
         public bool IsCompleted { get; protected set; }
         public virtual int Priority => 0;
 
-        protected UnitAction(Unit owner, UnitActionType type)
+        protected UnitAction(IUnitActionContext context, UnitActionType type)
         {
-            Owner = owner;
+            Context = context;
             Type = type;
         }
 
@@ -54,6 +57,11 @@ namespace Units.Actions
         protected void Complete()
         {
             IsCompleted = true;
+        }
+
+        protected void RaiseCommitted(UnitActionCommitKind commitKind)
+        {
+            OnCommitted?.Invoke(Type, commitKind);
         }
 
         protected abstract void OnEnter();

@@ -6,18 +6,18 @@ namespace Units.Actions
         private bool hasExecuted;
         private float castSkillElapsedSeconds;
 
-        public CastSkillAction(Unit owner) : base(owner, UnitActionType.CastSkill)
+        public CastSkillAction(IUnitActionContext context) : base(context, UnitActionType.CastSkill)
         {
         }
 
         public override bool CanStart()
         {
-            return Owner.HasReadySkill && Owner.Attributes.ActionSpeed.finalValue > 0f;
+            return Context.HasReadySkill && Context.ActionSpeed > 0f;
         }
 
         protected override void OnEnter()
         {
-            Owner.PauseNavigation();
+            Context.PauseNavigation();
             hasExecuted = false;
             castSkillElapsedSeconds = 0f;
         }
@@ -29,7 +29,7 @@ namespace Units.Actions
 
         private bool HasCompletedCastSkillTimeline()
         {
-            float durationSeconds = UnityEngine.Mathf.Max(0.001f, Owner.GetSkillActionDurationSeconds());
+            float durationSeconds = UnityEngine.Mathf.Max(0.001f, Context.GetSkillActionDurationSeconds());
             return castSkillElapsedSeconds >= durationSeconds;
         }
 
@@ -44,7 +44,8 @@ namespace Units.Actions
 
             if (!hasExecuted)
             {
-                Owner.ExecutePendingSkill();
+                Context.ExecutePendingSkill();
+                RaiseCommitted(UnitActionCommitKind.SkillExecuted);
                 hasExecuted = true;
             }
 
@@ -53,7 +54,7 @@ namespace Units.Actions
 
         protected override void OnExit()
         {
-            Owner.ResumeNavigation();
+            Context.ResumeNavigation();
         }
 
         protected override void OnCancel()

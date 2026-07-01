@@ -17,7 +17,8 @@ namespace Units
     [RequireComponent(typeof(AnimationController))]
     [RequireComponent(typeof(FacingController))]
     [RequireComponent(typeof(HitEffect))]
-    public class Unit : MonoBehaviour, IPointerClickHandler
+    [RequireComponent(typeof(UnitActionFeedbackListener))]
+    public class Unit : MonoBehaviour, IPointerClickHandler, IUnitActionContext, IUnitActionRunnerContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -49,6 +50,11 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
+        public event Action<Units.Unit, UnitActionType> OnActionStarted;
+        public event Action<Units.Unit, UnitActionType> OnActionCompleted;
+        public event Action<Units.Unit, UnitActionType> OnActionCanceled;
+        public event Action<Units.Unit, UnitActionType> OnActionInterrupted;
+        public event Action<Units.Unit, UnitActionType, UnitActionCommitKind> OnActionCommitted;
         public event Action<Buff> BuffAdded;
         public event Action<Buff> BuffRemoved;
 
@@ -90,10 +96,12 @@ namespace Units
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
 
-            actionRunner = new UnitActionRunner(this);
+            actionRunner = new UnitActionRunner(this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
-            actionRunner.OnActionCanceled += HandleActionStopped;
-            actionRunner.OnActionInterrupted += HandleActionStopped;
+            actionRunner.OnActionCompleted += HandleActionCompleted;
+            actionRunner.OnActionCanceled += HandleActionCanceled;
+            actionRunner.OnActionInterrupted += HandleActionInterrupted;
+            actionRunner.OnActionCommitted += HandleActionCommitted;
 
             buffHandler.BuffAdded += (buff) => BuffAdded?.Invoke(buff);
             buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
@@ -262,30 +270,31 @@ namespace Units
         /// </summary>
         private void HandleActionStarted(UnitActionType actionType)
         {
-            switch (actionType)
-            {
-                case UnitActionType.Attack:
-                    animationController.PlayAttack();
-                    break;
-                case UnitActionType.CastSkill:
-                    animationController.PlayCastSkill();
-                    break;
-            }
+            OnActionStarted?.Invoke(this, actionType);
+        }
+
+        private void HandleActionCompleted(UnitActionType actionType)
+        {
+            OnActionCompleted?.Invoke(this, actionType);
         }
 
         /// <summary>
         /// 响应 ActionRunner 事件：Action 停止（取消/中断）时，停止对应动画。
         /// 由 Unit.Awake() 中的事件订阅自动触发，外部不应调用。
         /// </summary>
-        private void HandleActionStopped(UnitActionType actionType)
+        private void HandleActionCanceled(UnitActionType actionType)
         {
-            switch (actionType)
-            {
-                case UnitActionType.Attack:
-                case UnitActionType.CastSkill:
-                    animationController.StopAction();
-                    break;
-            }
+            OnActionCanceled?.Invoke(this, actionType);
+        }
+
+        private void HandleActionInterrupted(UnitActionType actionType)
+        {
+            OnActionInterrupted?.Invoke(this, actionType);
+        }
+
+        private void HandleActionCommitted(UnitActionType actionType, UnitActionCommitKind commitKind)
+        {
+            OnActionCommitted?.Invoke(this, actionType, commitKind);
         }
 
 
@@ -333,6 +342,10 @@ namespace Units
         {
             return Mathf.Max(0f, GetCurrentActionSpeed());
         }
+
+        float IUnitActionContext.ActionSpeed => Attributes.ActionSpeed.finalValue;
+        float IUnitActionContext.AttackRange => Attributes.AttackRange.finalValue;
+        Vector3 IUnitActionContext.Position => transform.position;
 
         // ============ 时间参数（Timing） ============
         //

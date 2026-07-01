@@ -6,7 +6,8 @@ namespace Units.Actions
 {
     public sealed class UnitActionRunner
     {
-        private readonly Unit owner;
+        private readonly IUnitActionContext actionContext;
+        private readonly IUnitActionRunnerContext runnerContext;
         private readonly List<UnitAction> actions;
         private UnitAction currentAction;
 
@@ -24,12 +25,26 @@ namespace Units.Actions
         /// <summary>动作被更高优先级动作抢占。</summary>
         public event Action<UnitActionType> OnActionInterrupted;
 
-        public UnitActionRunner(Unit owner)
+        /// <summary>动作业务效果已提交（例如发射投射物、执行技能）。</summary>
+        public event Action<UnitActionType, UnitActionCommitKind> OnActionCommitted;
+
+        public UnitActionRunner(IUnitActionContext actionContext, IUnitActionRunnerContext runnerContext)
         {
-            this.owner = owner;
-            actions = CreateDefaultActions(owner)
+            this.actionContext = actionContext;
+            this.runnerContext = runnerContext;
+            actions = CreateDefaultActions(actionContext)
                 .OrderByDescending(action => action.Priority)
                 .ToList();
+
+            foreach (var action in actions)
+            {
+                action.OnCommitted += HandleActionCommitted;
+            }
+        }
+
+        private void HandleActionCommitted(UnitActionType actionType, UnitActionCommitKind commitKind)
+        {
+            OnActionCommitted?.Invoke(actionType, commitKind);
         }
 
         public void Tick(global::Units.Actions.ActionTickContext context)
@@ -156,12 +171,12 @@ namespace Units.Actions
 
         private bool ShouldYieldToOwnerState(UnitAction action)
         {
-            if (owner.IsStunned && action.Type != UnitActionType.Stun)
+            if (runnerContext.IsStunned && action.Type != UnitActionType.Stun)
             {
                 return true;
             }
 
-            if (owner.IsSkillMotionActive && action.Type != UnitActionType.SkillMotion)
+            if (runnerContext.IsSkillMotionActive && action.Type != UnitActionType.SkillMotion)
             {
                 return true;
             }
@@ -171,13 +186,13 @@ namespace Units.Actions
 
         
 
-        private static IEnumerable<UnitAction> CreateDefaultActions(Unit owner)
+        private static IEnumerable<UnitAction> CreateDefaultActions(IUnitActionContext actionContext)
         {
-            yield return new StunAction(owner);
-            yield return new SkillMotionAction(owner);
-            yield return new CastSkillAction(owner);
-            yield return new AttackAction(owner);
-            yield return new MoveAction(owner);
+            yield return new StunAction(actionContext);
+            yield return new SkillMotionAction(actionContext);
+            yield return new CastSkillAction(actionContext);
+            yield return new AttackAction(actionContext);
+            yield return new MoveAction(actionContext);
         }
     }
 }

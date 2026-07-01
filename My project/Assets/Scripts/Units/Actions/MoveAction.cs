@@ -9,7 +9,7 @@ namespace Units.Actions
         private const float HitAndRunMinRatio = 0.9f;
         private const float AllyProtectDistancePadding = 0.1f;
 
-        public MoveAction(Unit owner) : base(owner, UnitActionType.Move)
+        public MoveAction(IUnitActionContext context) : base(context, UnitActionType.Move)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Units.Actions
             }
 
             GetMoveDistanceRange(target, out float minDistance, out float maxDistance);
-            Owner.ApplyMovement(Movement.MovementRequest.PathfindToTarget(target.transform, minDistance, maxDistance));
+            Context.ApplyMovement(Movement.MovementRequest.PathfindToTarget(target.transform, minDistance, maxDistance));
 
             // Move action is a one-frame command; movement continues in NavMeshAgent.
             Complete();
@@ -35,16 +35,16 @@ namespace Units.Actions
 
         private void GetMoveDistanceRange(Unit target, out float minDistance, out float maxDistance)
         {
-            switch (Owner.CurrentMoveBehaviorMode)
+            switch (Context.CurrentMoveBehaviorMode)
             {
                 case Unit.MoveBehaviorMode.TowardAlly:
                     // 靠近队友时尽量贴近，方便保护与协同。
                     minDistance = 0f;
-                    maxDistance = Owner.BodyRadius + target.BodyRadius + AllyProtectDistancePadding;
+                    maxDistance = Context.BodyRadius + target.BodyRadius + AllyProtectDistancePadding;
                     break;
                 case Unit.MoveBehaviorMode.TowardEnemy:
                 default:
-                    maxDistance = Owner.Attributes.AttackRange.finalValue;
+                    maxDistance = Context.AttackRange;
                     minDistance = maxDistance * HitAndRunMinRatio;
                     break;
             }
@@ -52,18 +52,18 @@ namespace Units.Actions
 
         private bool TryGetMoveTarget(out Unit target)
         {
-            switch (Owner.CurrentMoveBehaviorMode)
+            switch (Context.CurrentMoveBehaviorMode)
             {
                 case Unit.MoveBehaviorMode.TowardAlly:
-                    if (Owner.TryGetClosestAlly(out target))
+                    if (Context.TryGetClosestAlly(out target))
                     {
                         return true;
                     }
 
-                    return Owner.TryGetClosestEnemy(out target);
+                    return Context.TryGetClosestEnemy(out target);
                 case Unit.MoveBehaviorMode.TowardEnemy:
                 default:
-                    return Owner.TryGetClosestEnemy(out target);
+                    return Context.TryGetClosestEnemy(out target);
             }
         }
     }

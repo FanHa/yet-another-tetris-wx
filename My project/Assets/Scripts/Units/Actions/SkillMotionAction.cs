@@ -4,23 +4,23 @@ namespace Units.Actions
     {
         public override int Priority => 30;
 
-        public SkillMotionAction(Unit owner) : base(owner, UnitActionType.SkillMotion)
+        public SkillMotionAction(IUnitActionContext context) : base(context, UnitActionType.SkillMotion)
         {
         }
 
         public override bool CanStart()
         {
-            return Owner.IsSkillMotionActive;
+            return Context.IsSkillMotionActive;
         }
 
         protected override void OnEnter()
         {
-            Owner.ClearNavigationPathForSkillMotion();
+            Context.ClearNavigationPathForSkillMotion();
         }
 
         protected override void OnTick(global::Units.Actions.ActionTickContext context)
         {
-            if (!Owner.IsSkillMotionActive)
+            if (!Context.IsSkillMotionActive)
             {
                 Complete();
             }
