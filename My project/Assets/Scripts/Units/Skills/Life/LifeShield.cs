@@ -37,8 +37,7 @@ namespace Units.Skills
                 return false;
 
             // 找到友方目标（不包括自己）
-            cachedTarget = Owner.UnitManager.FindRandomAlly(
-                self: Owner,
+                cachedTarget = Owner.FindRandomAlly(
                 range: float.MaxValue,
                 includeSelf: false
             );
@@ -62,20 +61,20 @@ namespace Units.Skills
             var buff = new Units.Buffs.LifeShieldBuff(
                 shieldAmount,         // 护盾值
                 stats.BuffDuration.Final,  // 持续时间
-                Owner,               // 来源单位
+                Owner.SelfUnit,               // 来源单位
                 this                  // 来源技能
             );
             var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
             var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
-            projectile.Init(Owner, cachedTarget, buff);
+            projectile.Init(Owner.SelfUnit, cachedTarget, buff);
             projectile.Activate();
 
             var damage = new Damages.Damage(shieldAmount, Damages.DamageType.Skill);
-            damage.SetSourceUnit(Owner);
-            damage.SetTargetUnit(Owner);
+            damage.SetSourceUnit(Owner.SelfUnit);
+            damage.SetTargetUnit(Owner.SelfUnit);
             damage.SetSourceLabel(Name());
-            Owner.TakeDamage(damage);
+            Owner.SelfUnit.TakeDamage(damage);
 
             cachedTarget = null;
             return true;

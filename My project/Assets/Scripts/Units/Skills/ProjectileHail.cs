@@ -26,7 +26,7 @@ namespace Units.Skills
             float attackFrequency = Owner.Attributes.AttacksPerTenSeconds.finalValue;
             int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
 
-            List<Unit> enemiesInRange = Owner.UnitManager.FindEnemiesInRange(Owner, attackRange);
+            List<Unit> enemiesInRange = Owner.FindEnemiesInRange(attackRange);
             if (enemiesInRange.Count == 0)
             {
                 Debug.LogWarning("No valid targets found within range for ProjectileHail.");
@@ -46,7 +46,7 @@ namespace Units.Skills
                 }
                 var damage = new Units.Damages.Damage(damageValue, Units.Damages.DamageType.Hit);
                 damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(Owner);
+                damage.SetSourceUnit(Owner.SelfUnit);
                 damage.SetTargetUnit(targetEnemy);
                 // caster.Attack(targetEnemy, damage);
 

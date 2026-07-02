@@ -4,16 +4,14 @@ namespace Units.Actions
 {
     public abstract class UnitAction
     {
-        protected readonly IUnitActionContext Context;
         public event Action<UnitActionType, UnitActionCommitKind> OnCommitted;
 
         public UnitActionType Type { get; }
         public bool IsCompleted { get; protected set; }
         public virtual int Priority => 0;
 
-        protected UnitAction(IUnitActionContext context, UnitActionType type)
+        protected UnitAction(UnitActionType type)
         {
-            Context = context;
             Type = type;
         }
 
@@ -77,6 +75,16 @@ namespace Units.Actions
         protected virtual void OnCancel()
         {
             OnExit();
+        }
+    }
+
+    public abstract class UnitAction<TContext> : UnitAction
+    {
+        protected readonly TContext Context;
+
+        protected UnitAction(TContext context, UnitActionType type) : base(type)
+        {
+            Context = context;
         }
     }
 }

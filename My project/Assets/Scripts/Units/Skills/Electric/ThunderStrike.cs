@@ -53,7 +53,7 @@ namespace Units.Skills
             }
 
             thunderStrikeEffect.Init(
-                Owner,
+                Owner.SelfUnit,
                 cachedTarget,
                 stats.Damage.Final,
                 stats.StunDuration,

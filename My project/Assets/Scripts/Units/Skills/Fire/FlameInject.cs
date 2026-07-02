@@ -57,7 +57,7 @@ namespace Units.Skills
                 stats.DotDps.Final,
                 stats.DotDuration.Final,
                 stats.BuffDuration.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             );
             Owner.AddBuff(buff);

@@ -38,7 +38,7 @@ namespace Units.Buffs
 
             Vector3 delta = new Vector3(dir.x * dist, dir.y * dist, 0f);
             // 击退通过统一位移接口，会自动清理导航路径并执行位移。
-            target.ApplyMovement(Movement.MovementRequest.DirectMove(delta));
+            target.MoveBy(delta);
         }
     }
 }

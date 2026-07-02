@@ -44,7 +44,7 @@ namespace Units.Skills
                 (int)stats.AtkSlowPercent.Final,
                 (int)stats.ActionSlowPercent.Final,
                 (int)stats.EnergySlowPercent.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             );
 

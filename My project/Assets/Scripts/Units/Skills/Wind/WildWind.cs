@@ -68,7 +68,7 @@ namespace Units.Skills
             var wildWindObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var wildWind = wildWindObj.GetComponent<Units.Projectiles.WildWind>();
             wildWind.Initialize(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.Duration.Final,
                 damage: stats.Damage.Final,

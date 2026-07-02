@@ -54,7 +54,7 @@ namespace Units.Skills
             var buff = new Buffs.EnergyAbsorb(
                 stats.EnergyAbsorbPerSkillCast.Final,
                 stats.BuffDuration.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             );
             Owner.AddBuff(buff);

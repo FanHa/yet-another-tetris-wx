@@ -50,7 +50,7 @@ namespace Units.Skills
                 baseExtraDamage: stats.BaseExtraDamage.Final,
                 percentSlowMultiplier: stats.MultiplierByChilledLayer.Final,
                 buffDuration: -1f,
-                sourceUnit: Owner,
+                sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
             ));
         }

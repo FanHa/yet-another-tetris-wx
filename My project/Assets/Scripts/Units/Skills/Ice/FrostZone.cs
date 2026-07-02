@@ -38,7 +38,7 @@ namespace Units.Skills
             var frostZoneObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
             frostZone.Initialize(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.Duration.Final,
                 damage: stats.Damage.Final,

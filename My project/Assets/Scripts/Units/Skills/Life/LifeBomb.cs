@@ -63,7 +63,7 @@ namespace Units.Skills
             Units.Projectiles.LifeBomb lifeBomb = projectileInstance.GetComponent<Units.Projectiles.LifeBomb>();
 
             lifeBomb.Init(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 temporaryTarget: tempTarget,
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this

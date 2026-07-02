@@ -46,7 +46,7 @@ namespace Units.Skills
             );
             Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
             snowBall.Init(
-                Owner,
+                Owner.SelfUnit,
                 cachedTarget,
                 stats.ChilledDuration.Final,
                 (int)stats.MoveSlowPercent.Final,

@@ -35,8 +35,7 @@ namespace Units.Skills
         {
             if (!base.IsReady())
                 return false;
-            cachedTarget = Owner.UnitManager.FindRandomAlly(
-                self: Owner,
+            cachedTarget = Owner.FindRandomAlly(
                 range: float.MaxValue,
                 includeSelf: true
             );
@@ -61,7 +60,7 @@ namespace Units.Skills
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 atkBoost,
                 stats.BuffDuration.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             ));
             cachedTarget = null;

@@ -1,10 +1,10 @@
 namespace Units.Actions
 {
-    public sealed class SkillMotionAction : UnitAction
+    public sealed class SkillMotionAction : UnitAction<IStatusActionContext>
     {
         public override int Priority => 30;
 
-        public SkillMotionAction(IUnitActionContext context) : base(context, UnitActionType.SkillMotion)
+        public SkillMotionAction(IStatusActionContext context) : base(context, UnitActionType.SkillMotion)
         {
         }
 
@@ -15,7 +15,7 @@ namespace Units.Actions
 
         protected override void OnEnter()
         {
-            Context.ClearNavigationPathForSkillMotion();
+            Context.PrepareForSkillMotion();
         }
 
         protected override void OnTick(global::Units.Actions.ActionTickContext context)

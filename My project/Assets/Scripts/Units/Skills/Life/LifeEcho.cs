@@ -40,7 +40,7 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
-                Owner,
+                Owner.SelfUnit,
                 this,
                 stats.ReflectPercent.Final
             ));

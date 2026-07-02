@@ -6,7 +6,10 @@ namespace Units.Actions
 {
     public sealed class UnitActionRunner
     {
-        private readonly IUnitActionContext actionContext;
+        private readonly IMoveActionContext moveContext;
+        private readonly IAttackActionContext attackContext;
+        private readonly ISkillActionContext skillContext;
+        private readonly IStatusActionContext statusContext;
         private readonly IUnitActionRunnerContext runnerContext;
         private readonly List<UnitAction> actions;
         private UnitAction currentAction;
@@ -28,11 +31,19 @@ namespace Units.Actions
         /// <summary>动作业务效果已提交（例如发射投射物、执行技能）。</summary>
         public event Action<UnitActionType, UnitActionCommitKind> OnActionCommitted;
 
-        public UnitActionRunner(IUnitActionContext actionContext, IUnitActionRunnerContext runnerContext)
+        public UnitActionRunner(
+            IMoveActionContext moveContext,
+            IAttackActionContext attackContext,
+            ISkillActionContext skillContext,
+            IStatusActionContext statusContext,
+            IUnitActionRunnerContext runnerContext)
         {
-            this.actionContext = actionContext;
+            this.moveContext = moveContext;
+            this.attackContext = attackContext;
+            this.skillContext = skillContext;
+            this.statusContext = statusContext;
             this.runnerContext = runnerContext;
-            actions = CreateDefaultActions(actionContext)
+            actions = CreateDefaultActions(moveContext, attackContext, skillContext, statusContext)
                 .OrderByDescending(action => action.Priority)
                 .ToList();
 
@@ -186,13 +197,17 @@ namespace Units.Actions
 
         
 
-        private static IEnumerable<UnitAction> CreateDefaultActions(IUnitActionContext actionContext)
+        private static IEnumerable<UnitAction> CreateDefaultActions(
+            IMoveActionContext moveContext,
+            IAttackActionContext attackContext,
+            ISkillActionContext skillContext,
+            IStatusActionContext statusContext)
         {
-            yield return new StunAction(actionContext);
-            yield return new SkillMotionAction(actionContext);
-            yield return new CastSkillAction(actionContext);
-            yield return new AttackAction(actionContext);
-            yield return new MoveAction(actionContext);
+            yield return new StunAction(statusContext);
+            yield return new SkillMotionAction(statusContext);
+            yield return new CastSkillAction(skillContext);
+            yield return new AttackAction(attackContext);
+            yield return new MoveAction(moveContext);
         }
     }
 }

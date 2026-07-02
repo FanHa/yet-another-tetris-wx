@@ -57,7 +57,7 @@ namespace Units.Skills
             var blazingFieldObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
             var effect = blazingFieldObj.GetComponent<Units.Projectiles.BlazingField>();
             effect.Init(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.Duration.Final,
                 dotDps: stats.DotDps.Final,

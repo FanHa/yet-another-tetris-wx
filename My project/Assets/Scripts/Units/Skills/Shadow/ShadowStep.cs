@@ -48,7 +48,7 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Owner.UnitManager.FindWeakestEnemy(Owner);
+            Unit targetEnemy = Owner.FindWeakestEnemy();
             if (targetEnemy == null)
                 return false;
 
@@ -60,14 +60,14 @@ namespace Units.Skills
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 buffDuration: stats.DebuffDuration.Final, // 可根据需求调整持续时间
                 extraDamagePercent: stats.VulnerabilityPercent.Final,
-                sourceUnit: Owner,
+                sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
             );
             targetEnemy.AddBuff(vulnerabilityBuff);
 
             // 造成伤害
             var damage = new Damages.Damage(Config.Damage, Damages.DamageType.Hit);
-            damage.SetSourceUnit(Owner);
+            damage.SetSourceUnit(Owner.SelfUnit);
             damage.SetTargetUnit(targetEnemy);
             damage.SetSourceLabel(Name());
             targetEnemy.TakeDamage(damage);

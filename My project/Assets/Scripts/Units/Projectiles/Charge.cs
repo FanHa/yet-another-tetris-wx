@@ -54,7 +54,7 @@ namespace Units.Projectiles
 
             Vector3 dir = (targetPosition - owner.transform.position).normalized;
             float step = speed * Time.deltaTime;
-            var moveResult = owner.ApplyMovement(Movement.MovementRequest.DirectMove(dir * step));
+            var moveResult = owner.MoveBy(dir * step);
 
             if (moveResult.ShouldTerminate)
             {

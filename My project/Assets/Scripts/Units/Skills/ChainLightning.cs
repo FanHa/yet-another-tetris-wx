@@ -20,7 +20,7 @@ namespace Units.Skills
         protected override bool ExecuteCore()
         {
             // 找到范围内最近的敌人
-            Unit initialTarget = Owner.UnitManager.FindClosestEnemyInRange(Owner, range);
+            Unit initialTarget = Owner.FindClosestEnemyInRange(range);
             if (initialTarget == null)
             {
                 Debug.LogWarning("No valid targets found within range for ChainLightning.");
@@ -28,11 +28,11 @@ namespace Units.Skills
             }
 
             // 开始闪电弹射逻辑
-            Owner.StartCoroutine(ChainLightningRoutine(Owner, initialTarget));
+            Owner.StartCoroutine(ChainLightningRoutine(Owner.SelfUnit, initialTarget));
             return true;
         }
 
-        private System.Collections.IEnumerator ChainLightningRoutine(Unit caster, Unit initialTarget)
+        private System.Collections.IEnumerator ChainLightningRoutine(IUnitSkillContext caster, Unit initialTarget)
         {
             Unit currentTarget = initialTarget;
             float currentDamage = baseDamage;
@@ -46,7 +46,7 @@ namespace Units.Skills
             {
                 var damage = new Units.Damages.Damage(currentDamage, Damages.DamageType.Skill);
                 damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(caster);
+                damage.SetSourceUnit(caster.SelfUnit);
                 damage.SetTargetUnit(currentTarget);
                 currentTarget.TakeDamage(damage);
 
@@ -67,7 +67,7 @@ namespace Units.Skills
                 hitTargets.Add(currentTarget);
 
                 // 查找下一个最近的敌人
-                Unit nextTarget = caster.UnitManager.FindEnemiesInRange(caster, range)
+                Unit nextTarget = caster.FindEnemiesInRange(range)
                     .Where(enemy => !hitTargets.Contains(enemy)) // 排除已命中的敌人
                     .OrderBy(enemy => (currentTarget.transform.position - enemy.transform.position).sqrMagnitude)
                     .FirstOrDefault();

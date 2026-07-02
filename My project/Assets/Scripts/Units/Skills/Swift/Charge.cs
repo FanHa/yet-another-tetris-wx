@@ -35,7 +35,7 @@ namespace Units.Skills
             var stats = CalcStats();
 
             // 找到距离自己最远的敌人
-            Unit targetEnemy = Owner.UnitManager.FindFurthestEnemy(Owner);
+            Unit targetEnemy = Owner.FindFurthestEnemy();
             if (targetEnemy == null)
                 return false;
 
@@ -43,7 +43,7 @@ namespace Units.Skills
             var chargeObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var chargeProjectile = chargeObj.GetComponent<Units.Projectiles.Charge>();
             chargeProjectile.Init(
-                owner: Owner,
+                owner: Owner.SelfUnit,
                 target: targetEnemy,
                 speed: 2f * Owner.Attributes.MoveSpeed.finalValue,
                 chargeDamage: stats.ChargeDamage.Final,

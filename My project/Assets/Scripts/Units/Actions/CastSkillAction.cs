@@ -1,12 +1,12 @@
 namespace Units.Actions
 {
-    public sealed class CastSkillAction : UnitAction
+    public sealed class CastSkillAction : UnitAction<ISkillActionContext>
     {
         public override int Priority => 20;
         private bool hasExecuted;
         private float castSkillElapsedSeconds;
 
-        public CastSkillAction(IUnitActionContext context) : base(context, UnitActionType.CastSkill)
+        public CastSkillAction(ISkillActionContext context) : base(context, UnitActionType.CastSkill)
         {
         }
 
@@ -17,7 +17,7 @@ namespace Units.Actions
 
         protected override void OnEnter()
         {
-            Context.PauseNavigation();
+            Context.SuspendAutoMovement();
             hasExecuted = false;
             castSkillElapsedSeconds = 0f;
         }
@@ -54,7 +54,7 @@ namespace Units.Actions
 
         protected override void OnExit()
         {
-            Context.ResumeNavigation();
+            Context.ResumeAutoMovement();
         }
 
         protected override void OnCancel()

@@ -54,14 +54,14 @@ namespace Units.Skills
             var buff = new Buffs.AttackBoostBuff(
                 duration: stats.Duration.Final,
                 atkSpeedPercent: stats.AtkSpeedPercent.Final,
-                sourceUnit: Owner,
+                sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
             );
 
             var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
             var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
             var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
-            projectile.Init(Owner, Owner, buff); // 目标为自己
+            projectile.Init(Owner.SelfUnit, Owner.SelfUnit, buff); // 目标为自己
             projectile.Activate();
             return true;
         }

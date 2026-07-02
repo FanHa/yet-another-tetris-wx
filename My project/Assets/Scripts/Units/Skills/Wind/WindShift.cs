@@ -50,7 +50,7 @@ namespace Units.Skills
             var stats = CalcStats();
             Owner.AddBuff(new Buffs.WindShiftBuff(
                 duration: -1f,
-                sourceUnit: Owner,
+                sourceUnit: Owner.SelfUnit,
                 sourceSkill: this,
                 attackRangeBonus: stats.AttackRangeBonus.Final
             ));

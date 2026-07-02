@@ -57,7 +57,7 @@ namespace Units.Skills
             Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
 
             fireball.Init(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 target: targetEnemy,
                 burnDps: stats.BurnDps.Final,
                 burnDuration: stats.BurnDuration.Final,

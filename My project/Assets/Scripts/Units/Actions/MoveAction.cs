@@ -2,14 +2,14 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public sealed class MoveAction : UnitAction
+    public sealed class MoveAction : UnitAction<IMoveActionContext>
     {
         public override int Priority => 0;
 
         private const float HitAndRunMinRatio = 0.9f;
         private const float AllyProtectDistancePadding = 0.1f;
 
-        public MoveAction(IUnitActionContext context) : base(context, UnitActionType.Move)
+        public MoveAction(IMoveActionContext context) : base(context, UnitActionType.Move)
         {
         }
 

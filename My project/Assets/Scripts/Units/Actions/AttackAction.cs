@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Actions
 {
-    public sealed class AttackAction : UnitAction
+    public sealed class AttackAction : UnitAction<IAttackActionContext>
     {
         public override int Priority => 10;
 
@@ -11,7 +11,7 @@ namespace Units.Actions
         private bool hasMarkedAttackExecuted;
         private float attackElapsedSeconds;
 
-        public AttackAction(IUnitActionContext context) : base(context, UnitActionType.Attack)
+        public AttackAction(IAttackActionContext context) : base(context, UnitActionType.Attack)
         {
         }
 
@@ -75,7 +75,7 @@ namespace Units.Actions
                 return;
             }
 
-            Context.PauseNavigation();
+            Context.SuspendAutoMovement();
             hasLaunchedProjectile = false;
             hasMarkedAttackExecuted = false;
             attackElapsedSeconds = 0f;
@@ -104,7 +104,7 @@ namespace Units.Actions
         protected override void OnExit()
         {
             pendingTarget = null;
-            Context.ResumeNavigation();
+            Context.ResumeAutoMovement();
         }
 
         protected override void OnCancel()

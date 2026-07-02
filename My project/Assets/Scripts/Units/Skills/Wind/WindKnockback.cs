@@ -53,7 +53,7 @@ namespace Units.Skills
             Owner.AddBuff(new Buffs.WindKnockbackBuff(
                 knockbackDistance: dist,
                 maxKnockbackDistance: stats.MaxKnockbackDistance.Final,
-                sourceUnit: Owner,
+                sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
             ));
         }

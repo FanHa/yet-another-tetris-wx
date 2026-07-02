@@ -1,10 +1,10 @@
 namespace Units.Actions
 {
-	public sealed class StunAction : UnitAction
+	public sealed class StunAction : UnitAction<IStatusActionContext>
 	{
 		public override int Priority => 100;
 
-		public StunAction(IUnitActionContext context) : base(context, UnitActionType.Stun)
+		public StunAction(IStatusActionContext context) : base(context, UnitActionType.Stun)
 		{
 		}
 
@@ -20,7 +20,7 @@ namespace Units.Actions
 
 		protected override void OnEnter()
 		{
-			Context.PauseNavigation();
+			Context.SuspendAutoMovement();
 		}
 
 		protected override void OnTick(global::Units.Actions.ActionTickContext context)
@@ -33,7 +33,7 @@ namespace Units.Actions
 
 		protected override void OnExit()
 		{
-			Context.ResumeNavigation();
+			Context.ResumeAutoMovement();
 		}
 	}
 }

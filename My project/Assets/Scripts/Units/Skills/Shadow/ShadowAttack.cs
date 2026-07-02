@@ -48,7 +48,7 @@ namespace Units.Skills
             var buff = new Buffs.ShadowAttackBuff(
                 stats.VulnerabilityPercent.Final,
                 stats.DotDuration.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             );
             Owner.AddBuff(buff);

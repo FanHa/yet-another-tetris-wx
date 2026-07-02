@@ -255,14 +255,9 @@ namespace Units
             }
         }
 
-        internal void PauseNavigation()
+        internal void SetNavigationEnabled(bool enabled)
         {
-            agent.isStopped = true;
-        }
-
-        internal void ResumeNavigation()
-        {
-            agent.isStopped = false;
+            agent.isStopped = !enabled;
         }
 
         internal void ClearNavigationPath()

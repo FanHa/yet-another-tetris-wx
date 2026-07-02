@@ -34,7 +34,7 @@ namespace Units.Skills
         protected override bool ExecuteCore()
         {
             // 查找最弱敌人
-            Unit targetEnemy = Owner.UnitManager.FindWeakestEnemy(Owner);
+            Unit targetEnemy = Owner.FindWeakestEnemy();
             if (targetEnemy == null)
                 return false;
 
@@ -45,7 +45,7 @@ namespace Units.Skills
                 .GetComponent<Units.Projectiles.ShadowArrow>();
 
             projectile.Init(
-                caster: Owner,
+                caster: Owner.SelfUnit,
                 target: targetEnemy,
                 vulnerabilityPercent: stats.VulnerabilityPercent.Final,
                 vulnerabilityDuration: stats.VulnerabilityDuration.Final,

@@ -18,7 +18,7 @@ namespace Units
     [RequireComponent(typeof(FacingController))]
     [RequireComponent(typeof(HitEffect))]
     [RequireComponent(typeof(UnitActionFeedbackListener))]
-    public class Unit : MonoBehaviour, IPointerClickHandler, IUnitActionContext, IUnitActionRunnerContext
+    public class Unit : MonoBehaviour, IPointerClickHandler, IMoveActionContext, IAttackActionContext, ISkillActionContext, IStatusActionContext, IUnitActionRunnerContext, IUnitSkillContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -81,6 +81,10 @@ namespace Units
         public bool IsActive => isActive;
         public bool IsSkillMotionActive => skillMotionLockCount > 0;
         public bool IsStunned => stunLockCount > 0;
+        public float ActionSpeed => Attributes.ActionSpeed.finalValue;
+        public float AttackRange => Attributes.AttackRange.finalValue;
+        public Vector3 Position => transform.position;
+        public Unit SelfUnit => this;
         internal Movement Movement => movementController;
         internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
@@ -96,7 +100,7 @@ namespace Units
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
 
-            actionRunner = new UnitActionRunner(this, this);
+            actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
             actionRunner.OnActionCompleted += HandleActionCompleted;
             actionRunner.OnActionCanceled += HandleActionCanceled;
@@ -206,6 +210,44 @@ namespace Units
             ApplyMovement(Movement.MovementRequest.Teleport(position));
         }
 
+        /// <summary>
+        /// 按位移量推动单位。用于击退、冲锋等强制位移效果。
+        /// </summary>
+        public Movement.MovementResult MoveBy(Vector3 delta)
+        {
+            return ApplyMovement(Movement.MovementRequest.DirectMove(delta));
+        }
+
+        Attributes IUnitSkillContext.Attributes => Attributes;
+        Dictionary<AffinityType, int> IUnitSkillContext.CellCounts => CellCounts;
+        Model.ProjectileConfig IUnitSkillContext.ProjectileConfig => ProjectileConfig;
+        Transform IUnitSkillContext.projectileSpawnPoint => projectileSpawnPoint;
+
+        List<Unit> IUnitSkillContext.FindEnemiesInRange(float range)
+        {
+            return UnitManager.FindEnemiesInRange(this, range);
+        }
+
+        Unit IUnitSkillContext.FindRandomAlly(float range, bool includeSelf)
+        {
+            return UnitManager.FindRandomAlly(this, range, includeSelf);
+        }
+
+        Unit IUnitSkillContext.FindClosestEnemyInRange(float range)
+        {
+            return UnitManager.FindClosestEnemyInRange(this, range);
+        }
+
+        Unit IUnitSkillContext.FindWeakestEnemy()
+        {
+            return UnitManager.FindWeakestEnemy(this);
+        }
+
+        Unit IUnitSkillContext.FindFurthestEnemy()
+        {
+            return UnitManager.FindFurthestEnemy(this);
+        }
+
         public void EnterSkillMotion(int avoidancePriority)
         {
             skillMotionLockCount++;
@@ -217,7 +259,7 @@ namespace Units
             }
         }
 
-        public void ClearNavigationPathForSkillMotion()
+        public void PrepareForSkillMotion()
         {
             movementController.ClearNavigationPath();
         }
@@ -302,19 +344,19 @@ namespace Units
         // ============ 导航控制（状态管理） ============
 
         /// <summary>
-        /// 暂停导航。用于技能施放或被击晕时停止自动移动。
+        /// 暂停自动移动。用于技能施放或被击晕时停止自动移动。
         /// </summary>
-        public void PauseNavigation()
+        public void SuspendAutoMovement()
         {
-            movementController.PauseNavigation();
+            movementController.SetNavigationEnabled(false);
         }
 
         /// <summary>
-        /// 恢复导航。恢复被暂停的自动移动。
+        /// 恢复自动移动。恢复被暂停的自动移动。
         /// </summary>
-        public void ResumeNavigation()
+        public void ResumeAutoMovement()
         {
-            movementController.ResumeNavigation();
+            movementController.SetNavigationEnabled(true);
         }
 
         /// <summary>
@@ -342,10 +384,6 @@ namespace Units
         {
             return Mathf.Max(0f, GetCurrentActionSpeed());
         }
-
-        float IUnitActionContext.ActionSpeed => Attributes.ActionSpeed.finalValue;
-        float IUnitActionContext.AttackRange => Attributes.AttackRange.finalValue;
-        Vector3 IUnitActionContext.Position => transform.position;
 
         // ============ 时间参数（Timing） ============
         //

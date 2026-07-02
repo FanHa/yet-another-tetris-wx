@@ -41,7 +41,7 @@ namespace Units.Skills
             var stats = CalcStats();
             var freezeBuff = new Buffs.Freeze(
                 stats.FreezeDuration.Final,
-                Owner,
+                Owner.SelfUnit,
                 this
             );
             // todo 判断TargetEnemy 是否还活跃
