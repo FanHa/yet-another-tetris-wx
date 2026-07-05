@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class SkillHandler : MonoBehaviour
+    public class SkillHandler
     {
         public float energyDecayPerSkill;
         private float tickTimer;
         private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
-        private ISkillRuntimeContext runtimeContext;
-        private IUnitSkillContext skillContext;
+        private readonly ISkillRuntimeContext runtimeContext;
+        private readonly IUnitSkillContext skillContext;
 
         public event Action<Skill> OnSkillReady;
         public event Action<SkillQueuedEvent> OnSkillQueued;
@@ -25,34 +25,21 @@ namespace Units.Skills
         private readonly Queue<ActiveSkill> readyQueue = new();
         private readonly HashSet<ActiveSkill> queuedSet = new();
 
-        void Awake()
+        public SkillHandler(ISkillRuntimeContext runtimeContext, IUnitSkillContext skillContext, float energyDecayPerSkill = 1f)
         {
-            ResolveContexts();
+            this.runtimeContext = runtimeContext ?? throw new ArgumentNullException(nameof(runtimeContext));
+            this.skillContext = skillContext ?? throw new ArgumentNullException(nameof(skillContext));
+            this.energyDecayPerSkill = energyDecayPerSkill;
         }
 
-        public void Inject(ISkillRuntimeContext runtimeContext, IUnitSkillContext skillContext)
+        public void Tick(float deltaTime)
         {
-            this.runtimeContext = runtimeContext;
-            this.skillContext = skillContext;
-        }
-
-        private void ResolveContexts()
-        {
-            if (runtimeContext != null && skillContext != null)
+            if (!isActive)
             {
                 return;
             }
 
-            var unit = GetComponent<Unit>();
-            runtimeContext ??= unit;
-            skillContext ??= unit;
-        }
-
-
-        void Update()
-        {
-            if (!isActive) return;
-            tickTimer += Time.deltaTime;
+            tickTimer += deltaTime;
             if (tickTimer >= TICK_INTERVAL)
             {
                 tickTimer -= TICK_INTERVAL;
@@ -62,21 +49,38 @@ namespace Units.Skills
             }
         }
 
+        private void EnsureContextInjected()
+        {
+            if (runtimeContext == null || skillContext == null)
+            {
+                throw new InvalidOperationException("SkillHandler contexts are not injected.");
+            }
+        }
+
         public void Activate()
         {
+            EnsureContextInjected();
             isActive = true;
             tickTimer = 0f;
+            readyQueue.Clear();
+            queuedSet.Clear();
         }
 
         public void Deactivate()
         {
             isActive = false;
+            tickTimer = 0f;
             readyQueue.Clear();
             queuedSet.Clear();
         }
 
         public void AddSkill(Skill newSkill)
         {
+            if (skillContext == null)
+            {
+                throw new InvalidOperationException("SkillHandler skill context is not injected.");
+            }
+
             if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
                 return;
             newSkill.Owner = skillContext;

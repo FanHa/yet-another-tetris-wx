@@ -12,7 +12,6 @@ using UnityEngine.EventSystems;
 
 namespace Units
 {
-    [RequireComponent(typeof(Units.Skills.SkillHandler))]
     [RequireComponent(typeof(BuffHandler))]
     [RequireComponent(typeof(AnimationController))]
     [RequireComponent(typeof(FacingController))]
@@ -102,8 +101,7 @@ namespace Units
             hitEffect = GetComponent<HitEffect>();
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
-            skillHandler = GetComponent<Units.Skills.SkillHandler>();
-            skillHandler.Inject(this, this);
+            skillHandler = new Units.Skills.SkillHandler(this, this);
 
             actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
@@ -123,6 +121,7 @@ namespace Units
             if (!isActive)
                 return;
 
+            skillHandler.Tick(Time.deltaTime);
             UpdateEnemiesDistance();
             UpdateFacing();
 
