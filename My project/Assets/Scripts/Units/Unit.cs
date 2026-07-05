@@ -18,7 +18,7 @@ namespace Units
     [RequireComponent(typeof(FacingController))]
     [RequireComponent(typeof(HitEffect))]
     [RequireComponent(typeof(UnitActionFeedbackListener))]
-    public class Unit : MonoBehaviour, IPointerClickHandler, IMoveActionContext, IAttackActionContext, ISkillActionContext, IStatusActionContext, IUnitActionRunnerContext, IUnitSkillContext
+    public class Unit : MonoBehaviour, IPointerClickHandler, IMoveActionContext, IAttackActionContext, ISkillActionContext, IStatusActionContext, IUnitActionRunnerContext, IUnitSkillContext, ISkillRuntimeContext, ISkillExecutionPort
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -50,6 +50,10 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
+        public event Action<SkillQueuedEvent> OnSkillQueued;
+        public event Action<SkillCastStartedEvent> OnSkillCastStarted;
+        public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
+        public event Action<SkillCastFailedEvent> OnSkillCastFailed;
         public event Action<Units.Unit, UnitActionType> OnActionStarted;
         public event Action<Units.Unit, UnitActionType> OnActionCompleted;
         public event Action<Units.Unit, UnitActionType> OnActionCanceled;
@@ -99,6 +103,7 @@ namespace Units
             buffHandler = GetComponent<Units.Buffs.BuffHandler>();
             movementController = GetComponent<Movement>();
             skillHandler = GetComponent<Units.Skills.SkillHandler>();
+            skillHandler.Inject(this, this);
 
             actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
@@ -150,7 +155,10 @@ namespace Units
         {
             movementController.Initialize(Attributes);
             skillHandler.Activate();
-            skillHandler.OnSkillCast += HandleSelfSkillCast;
+            skillHandler.OnSkillQueued += HandleSkillQueued;
+            skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
+            skillHandler.OnSkillCastSucceeded += HandleSkillCastSucceeded;
+            skillHandler.OnSkillCastFailed += HandleSkillCastFailed;
             UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
@@ -161,7 +169,10 @@ namespace Units
         {
             healthBar.gameObject.SetActive(false);
             UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
-            skillHandler.OnSkillCast -= HandleSelfSkillCast;
+            skillHandler.OnSkillQueued -= HandleSkillQueued;
+            skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
+            skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
+            skillHandler.OnSkillCastFailed -= HandleSkillCastFailed;
             skillHandler.Deactivate(); // 如有需要
             buffHandler.RemoveAllActiveBuffsImmediately();
             actionRunner.OnOwnerDeactivated();
@@ -184,9 +195,25 @@ namespace Units
             }
         }
 
-        private void HandleSelfSkillCast(Unit unit, Skill skill)
+        private void HandleSkillQueued(SkillQueuedEvent skillQueuedEvent)
         {
-            OnSkillCast?.Invoke(unit, skill);
+            OnSkillQueued?.Invoke(skillQueuedEvent);
+        }
+
+        private void HandleSkillCastStarted(SkillCastStartedEvent skillCastStartedEvent)
+        {
+            OnSkillCastStarted?.Invoke(skillCastStartedEvent);
+        }
+
+        private void HandleSkillCastSucceeded(SkillCastSucceededEvent skillCastSucceededEvent)
+        {
+            OnSkillCastSucceeded?.Invoke(skillCastSucceededEvent);
+            OnSkillCast?.Invoke(skillCastSucceededEvent.Owner, skillCastSucceededEvent.Skill);
+        }
+
+        private void HandleSkillCastFailed(SkillCastFailedEvent skillCastFailedEvent)
+        {
+            OnSkillCastFailed?.Invoke(skillCastFailedEvent);
         }
 
         public void EnterStun()
@@ -408,17 +435,11 @@ namespace Units
 
         // ============ 技能系统 API 包装 ============
 
-        /// <summary>
-        /// 检查是否有就绪的技能可以施放。
-        /// </summary>
-        public bool HasReadySkill => skillHandler.HasReadySkill;
+        bool ISkillActionContext.HasReadySkill => skillHandler.HasReadySkill;
 
-        /// <summary>
-        /// 执行待决的技能。
-        /// </summary>
-        public void ExecutePendingSkill()
+        SkillCastResult ISkillActionContext.TryCastNextSkill()
         {
-            skillHandler.ExecutePendingSkill();
+            return skillHandler.TryCastNextSkill();
         }
 
         public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)

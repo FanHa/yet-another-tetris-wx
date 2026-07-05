@@ -1,3 +1,4 @@
+using Units.Skills;
 using UnityEngine;
 
 namespace Units.Actions
@@ -58,7 +59,7 @@ namespace Units.Actions
 
         float GetSkillActionDurationSeconds();
 
-        void ExecutePendingSkill();
+        SkillCastResult TryCastNextSkill();
 
         void SuspendAutoMovement();
         void ResumeAutoMovement();

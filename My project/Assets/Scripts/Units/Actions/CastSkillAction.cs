@@ -44,8 +44,11 @@ namespace Units.Actions
 
             if (!hasExecuted)
             {
-                Context.ExecutePendingSkill();
-                RaiseCommitted(UnitActionCommitKind.SkillExecuted);
+                var castResult = Context.TryCastNextSkill();
+                if (castResult.Succeeded)
+                {
+                    RaiseCommitted(UnitActionCommitKind.SkillExecuted);
+                }
                 hasExecuted = true;
             }
 
