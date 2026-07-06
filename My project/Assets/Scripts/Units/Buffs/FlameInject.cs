@@ -27,7 +27,7 @@ namespace Units.Buffs
         public override string Description() =>
             $"攻击时对目标附加{dotDps}/s灼烧({dotDuration}秒)";
 
-        public void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var burn = new Burn(
                 dps: dotDps,

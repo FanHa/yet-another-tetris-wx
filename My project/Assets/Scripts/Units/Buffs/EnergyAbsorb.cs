@@ -27,15 +27,15 @@ namespace Units.Buffs
             return "能量汲取";
         }
 
-        public void OnGlobalSkillCast(Unit caster, Skill skill)
+        public void OnGlobalSkillCast(IBuffEventContext context, Unit caster, Skill skill)
         {
-            if (caster.faction != owner.faction)
+            if (caster.faction != context.faction)
             {
                 // 向己方所有单位分配能量
-                List<Unit> allies = owner.UnitManager.GetUnitsByFaction(owner.faction);
+                List<Unit> allies = context.UnitManager.GetUnitsByFaction(context.faction);
                 foreach (var ally in allies)
                 {
-                    if (ally.IsActive && ally != owner)
+                    if (ally.IsActive && ally != context.SelfUnit)
                     {
                         ally.AddSkillEnergy(energyAbsorbPerSkillCast);
                     }

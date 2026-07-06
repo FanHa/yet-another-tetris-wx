@@ -12,12 +12,22 @@ using UnityEngine.EventSystems;
 
 namespace Units
 {
-    [RequireComponent(typeof(BuffHandler))]
     [RequireComponent(typeof(AnimationController))]
     [RequireComponent(typeof(FacingController))]
     [RequireComponent(typeof(HitEffect))]
     [RequireComponent(typeof(UnitActionFeedbackListener))]
-    public class Unit : MonoBehaviour, IPointerClickHandler, IMoveActionContext, IAttackActionContext, ISkillActionContext, IStatusActionContext, IUnitActionRunnerContext, IUnitSkillContext, ISkillRuntimeContext, ISkillExecutionPort
+    public class Unit :
+        MonoBehaviour,
+        IPointerClickHandler,
+        IMoveActionContext,
+        IAttackActionContext,
+        ISkillActionContext,
+        IStatusActionContext,
+        IUnitActionRunnerContext,
+        IUnitSkillContext,
+        ISkillRuntimeContext,
+        ISkillExecutionPort,
+        IBuffEventContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -92,6 +102,10 @@ namespace Units
         internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
+        Units.Unit.Faction IBuffEventContext.faction => faction;
+        Units.Attributes IBuffEventContext.Attributes => Attributes;
+        Controller.UnitManager IBuffEventContext.UnitManager => UnitManager;
+
         private UnitActionRunner actionRunner;
 
         private void Awake()
@@ -99,7 +113,7 @@ namespace Units
             animationController = GetComponent<AnimationController>();
             facingController = GetComponent<FacingController>();
             hitEffect = GetComponent<HitEffect>();
-            buffHandler = GetComponent<Units.Buffs.BuffHandler>();
+            buffHandler = new Units.Buffs.BuffHandler(this);
             movementController = GetComponent<Movement>();
             skillHandler = new Units.Skills.SkillHandler(this, this);
 
@@ -110,9 +124,19 @@ namespace Units
             actionRunner.OnActionInterrupted += HandleActionInterrupted;
             actionRunner.OnActionCommitted += HandleActionCommitted;
 
-            buffHandler.BuffAdded += (buff) => BuffAdded?.Invoke(buff);
-            buffHandler.BuffRemoved += (buff) => BuffRemoved?.Invoke(buff);
+            buffHandler.BuffAdded += HandleBuffAdded;
+            buffHandler.BuffRemoved += HandleBuffRemoved;
             
+        }
+
+        private void HandleBuffAdded(Buff buff)
+        {
+            BuffAdded?.Invoke(buff);
+        }
+
+        private void HandleBuffRemoved(Buff buff)
+        {
+            BuffRemoved?.Invoke(buff);
         }
 
         // Update is called once per frame
@@ -121,6 +145,7 @@ namespace Units
             if (!isActive)
                 return;
 
+            buffHandler.Tick(Time.deltaTime);
             skillHandler.Tick(Time.deltaTime);
             UpdateEnemiesDistance();
             UpdateFacing();
@@ -187,11 +212,7 @@ namespace Units
 
         private void HandleGlobalSkillCast(Unit caster, Skill skill)
         {
-            foreach (var buff in buffHandler.GetActiveBuffs())
-            {
-                if (buff is IGlobalSkillCastTrigger t)
-                    t.OnGlobalSkillCast(caster, skill);
-            }
+            buffHandler.DispatchGlobalSkillCast(skill);
         }
 
         private void HandleSkillQueued(SkillQueuedEvent skillQueuedEvent)
@@ -609,42 +630,20 @@ namespace Units
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)
         {
-            List<Buff> buffs = buffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
-            foreach (Buff buff in buffs)
-            {
-                if (buff is IAttackHitTrigger attackBuff)
-                {
-                    attackBuff.OnAttackHit(this, target, ref damage);
-                }
-            }
+            buffHandler.DispatchAttackHit(target, ref damage);
         }
 
         public void TakeHit(Unit attacker, ref Damages.Damage damage)
         {
-            List<Buff> buffs = buffHandler.GetActiveBuffs().ToList(); // 复制一份，避免遍历时修改
-            foreach (Buff buff in buffs)
-            {
-                if (buff is ITakeHitTrigger takeHitTrigger)
-                {
-                    takeHitTrigger.OnTakeHit(this, attacker, ref damage);
-                }
-            }
+            buffHandler.DispatchTakeHit(attacker, ref damage);
             // 处理被攻击逻辑
             TakeDamage(damage);
         }
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
-            var buffs = buffHandler.GetActiveBuffs().ToList();
-
             Attributes.TakeDamage(damageReceived.Value);
-            foreach (var buff in buffs)
-            {
-                if (buff is IAfterTakeDamageTrigger trigger)
-                {
-                    trigger.OnAfterTakeDamage(ref damageReceived);
-                }
-            }
+            buffHandler.DispatchAfterTakeDamage(ref damageReceived);
 
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
@@ -685,9 +684,10 @@ namespace Units
             OnClicked?.Invoke(this);
         }
 
-        public List<Units.Buffs.Buff> GetActiveBuffs()
+        public IReadOnlyList<Units.Buffs.Buff> GetActiveBuffsReadOnly()
         {
-            return buffHandler.GetActiveBuffs().ToList();
-        }        
+            return buffHandler.GetActiveBuffsReadOnly();
+        }
+
     }
 }

@@ -17,7 +17,7 @@ namespace Units.Buffs
 
         public override string Description() => $"受到伤害后反弹{reflectPercent}%伤害给来源单位.";
 
-        public void OnAfterTakeDamage(ref Damages.Damage damage)
+        public void OnAfterTakeDamage(IBuffEventContext context, ref Damages.Damage damage)
         {
             if (damage.Type == Damages.DamageType.Hit || damage.Type == Damages.DamageType.Skill)
             {

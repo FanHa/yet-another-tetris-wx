@@ -17,7 +17,7 @@ namespace Units.Buffs
         public override string Description() => $"攻击时额外造成{atkBoost}伤害";
 
         // 攻击时触发，增加伤害
-        public void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var extraDamage = new Damages.Damage(atkBoost,Damages.DamageType.Skill)
                 .SetSourceUnit(attacker)

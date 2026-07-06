@@ -29,11 +29,11 @@ namespace Units.Buffs
             $"命中时移除目标全部 Chilled。额外伤害 = {baseExtraDamage} + {percentSlowMultiplier} * (减速百分比)";
 
 
-        public void OnAttackHit(Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             if (target == null) return;
 
-            var chilledBuffs = target.GetActiveBuffs()
+            var chilledBuffs = target.GetActiveBuffsReadOnly()
                                      .OfType<Chilled>()
                                      .ToList();
             if (chilledBuffs.Count == 0) return;

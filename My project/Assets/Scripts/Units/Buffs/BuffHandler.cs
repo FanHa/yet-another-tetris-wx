@@ -1,14 +1,15 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public class BuffHandler : MonoBehaviour
+    public class BuffHandler
     {
         private float buffTickTimer = 0f;
         private const float BUFF_TICK_INTERVAL = 1f;
-        private Unit owner;
+        private IBuffEventContext owner;
 
         // Active Buff storage.
         private readonly List<Buff> activeBuffs = new List<Buff>();
@@ -20,16 +21,19 @@ namespace Units.Buffs
         // Request queues (to be consumed by future commit pipeline).
         private readonly List<Buff> pendingAddQueue = new List<Buff>();
         private readonly List<Buff> pendingRemoveQueue = new List<Buff>();
+        private IReadOnlyList<Buff> activeBuffsReadOnly;
+        private bool isClearingAllBuffs = false;
 
-        public event Action<Buff> BuffAdded;
-        public event Action<Buff> BuffRemoved;
+        internal event Action<Buff> BuffAdded;
+        internal event Action<Buff> BuffRemoved;
 
-        private void Awake()
+        public BuffHandler(IBuffEventContext owner)
         {
-            owner = GetComponent<Unit>();
+            this.owner = owner;
+            activeBuffsReadOnly = activeBuffs.AsReadOnly();
         }
 
-        private void Update()
+        public void Tick(float deltaTime)
         {
             if (activeBuffs.Count == 0 && pendingAddQueue.Count == 0 && pendingRemoveQueue.Count == 0)
                 return;
@@ -39,31 +43,38 @@ namespace Units.Buffs
             if (activeBuffs.Count == 0)
                 return;
 
-            buffTickTimer += Time.deltaTime;
+            buffTickTimer += deltaTime;
             if (buffTickTimer >= BUFF_TICK_INTERVAL)
             {
                 buffTickTimer -= BUFF_TICK_INTERVAL;
-                Tick(BUFF_TICK_INTERVAL);
+                TickBuffInterval(BUFF_TICK_INTERVAL);
             }
 
             FlushPendingRequests();
         }
 
-        private void Tick(float interval)
+        private void TickBuffInterval(float interval)
         {
-            Buff[] snapshot = activeBuffs.ToArray();
-            for (int i = snapshot.Length - 1; i >= 0; i--)
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
             {
-                Buff buff = snapshot[i];
-                buff.UpdateTime(interval);
-                if (buff is ITick tickBuff)
+                for (int i = count - 1; i >= 0; i--)
                 {
-                    tickBuff.OnTick(owner);
+                    Buff buff = snapshot[i];
+                    buff.UpdateTime(interval);
+                    if (buff is ITick tickBuff)
+                    {
+                        tickBuff.OnTick(owner);
+                    }
+                    if (buff.IsExpired())
+                    {
+                        EnqueueRemove(buff);
+                    }
                 }
-                if (buff.IsExpired())
-                {
-                    EnqueueRemove(buff);
-                }
+            }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
             }
         }
 
@@ -78,24 +89,165 @@ namespace Units.Buffs
             EnqueueRemove(buff);
         }
 
-        public IEnumerable<Buff> GetActiveBuffs()
+        public IReadOnlyList<Buff> GetActiveBuffsReadOnly()
         {
-            return activeBuffs.ToArray();
+            return activeBuffsReadOnly;
+        }
+
+        public void DispatchAttackHit(Unit target, ref Damages.Damage damage)
+        {
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Buff buff = snapshot[i];
+                    if (buff is IAttackHitTrigger attackHitTrigger)
+                    {
+                        attackHitTrigger.OnAttackHit(owner, owner.SelfUnit, target, ref damage);
+                    }
+                }
+            }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
+            }
+        }
+
+        public void DispatchTakeHit(Unit attacker, ref Damages.Damage damage)
+        {
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Buff buff = snapshot[i];
+                    if (buff is ITakeHitTrigger takeHitTrigger)
+                    {
+                        takeHitTrigger.OnTakeHit(owner, owner.SelfUnit, attacker, ref damage);
+                    }
+                }
+            }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
+            }
+        }
+
+        public void DispatchAfterTakeDamage(ref Damages.Damage damage)
+        {
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Buff buff = snapshot[i];
+                    if (buff is IAfterTakeDamageTrigger afterTakeDamageTrigger)
+                    {
+                        afterTakeDamageTrigger.OnAfterTakeDamage(owner, ref damage);
+                    }
+                }
+            }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
+            }
+        }
+
+        public void DispatchGlobalSkillCast(Skills.Skill skill)
+        {
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    Buff buff = snapshot[i];
+                    if (buff is IGlobalSkillCastTrigger globalSkillCastTrigger)
+                    {
+                        globalSkillCastTrigger.OnGlobalSkillCast(owner, owner.SelfUnit, skill);
+                    }
+                }
+            }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
+            }
         }
 
         public void RequestRemoveAllActiveBuffs()
         {
-            Buff[] snapshot = activeBuffs.ToArray();
-            for (int i = 0; i < snapshot.Length; i++)
+            var snapshot = RentActiveBuffSnapshot(out int count);
+            try
             {
-                EnqueueRemove(snapshot[i]);
+                for (int i = 0; i < count; i++)
+                {
+                    EnqueueRemove(snapshot[i]);
+                }
             }
+            finally
+            {
+                ReturnActiveBuffSnapshot(snapshot, count);
+            }
+        }
+
+        private Buff[] RentActiveBuffSnapshot(out int count)
+        {
+            count = activeBuffs.Count;
+            int rentSize = count > 0 ? count : 1;
+            Buff[] snapshot = ArrayPool<Buff>.Shared.Rent(rentSize);
+            for (int i = 0; i < count; i++)
+            {
+                snapshot[i] = activeBuffs[i];
+            }
+
+            return snapshot;
+        }
+
+        private static void ReturnActiveBuffSnapshot(Buff[] snapshot, int count)
+        {
+            Array.Clear(snapshot, 0, count);
+            ArrayPool<Buff>.Shared.Return(snapshot);
         }
 
         public void RemoveAllActiveBuffsImmediately()
         {
+            if (isClearingAllBuffs)
+                return;
+
+            isClearingAllBuffs = true;
+            try
+            {
+                DiscardPendingAdds();
             RequestRemoveAllActiveBuffs();
             FlushPendingRequests();
+
+                pendingAddQueue.Clear();
+                pendingRemoveQueue.Clear();
+            }
+            finally
+            {
+                isClearingAllBuffs = false;
+            }
+        }
+
+        private void DiscardPendingAdds()
+        {
+            if (pendingAddQueue.Count == 0)
+                return;
+
+            for (int i = 0; i < pendingAddQueue.Count; i++)
+            {
+                Buff buff = pendingAddQueue[i];
+                if (buff == null)
+                    continue;
+
+                if (!IsTrackedAsActive(buff))
+                {
+                    SetState(buff, BuffLifecycleState.Removed);
+                }
+            }
+
+            pendingAddQueue.Clear();
         }
 
         private void FlushPendingRequests()
@@ -164,7 +316,7 @@ namespace Units.Buffs
                 }
 
                 SetState(buff, BuffLifecycleState.PendingAdd);
-                buff.OnApply(owner);
+                buff.OnApply(owner.SelfUnit);
                 AddActiveBuff(buff);
                 SetState(buff, BuffLifecycleState.Active);
                 BuffAdded?.Invoke(buff);
@@ -236,6 +388,9 @@ namespace Units.Buffs
         private void EnqueueAdd(Buff buff)
         {
             if (buff == null)
+                return;
+
+            if (isClearingAllBuffs)
                 return;
 
             string key = buff.GetKey();

@@ -27,13 +27,13 @@ namespace Units.Buffs
         }
         public override string Description() => $"每秒造成{dps}点火焰伤害";
 
-        public void OnTick(Unit unit)
+        public void OnTick(IBuffEventContext context)
         {
             var damage = new Damages.Damage(dps, Damages.DamageType.Skill);
             damage.SetSourceUnit(sourceUnit);
             damage.SetSourceLabel(sourceSkill.Name() + "-" +label);
-            damage.SetTargetUnit(unit);
-            unit.TakeDamage(damage);
+            damage.SetTargetUnit(context.SelfUnit);
+            context.SelfUnit.TakeDamage(damage);
         }
     }
 }

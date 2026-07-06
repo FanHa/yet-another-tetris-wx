@@ -50,6 +50,20 @@ namespace UI.UnitInfo
             closeButton.onClick.AddListener(HideUnitInfo);
         }
 
+        private void OnDisable()
+        {
+            UnbindCurrentUnitBuffEvents();
+        }
+
+        private void OnDestroy()
+        {
+            UnbindCurrentUnitBuffEvents();
+            if (closeButton != null)
+            {
+                closeButton.onClick.RemoveListener(HideUnitInfo);
+            }
+        }
+
         public void HideUnitInfo()
         {
             UnbindCurrentUnitBuffEvents();
@@ -60,12 +74,15 @@ namespace UI.UnitInfo
 
         public void ShowUnitInfo(Units.Unit unit)
         {
+            if (unit == null)
+                return;
+
             UnbindCurrentUnitBuffEvents();
             currentUnit = unit;
             gameObject.SetActive(true);
             RefreshInfo();
-            unit.BuffAdded += HandleUnitBuffChanged;
-            unit.BuffRemoved += HandleUnitBuffChanged;
+            currentUnit.BuffAdded += HandleUnitBuffChanged;
+            currentUnit.BuffRemoved += HandleUnitBuffChanged;
             
         }
         
@@ -90,7 +107,7 @@ namespace UI.UnitInfo
             foreach (Transform child in buffRoot)
                 Destroy(child.gameObject);
 
-            List<Units.Buffs.Buff> buffs = currentUnit.GetActiveBuffs();
+            IReadOnlyList<Units.Buffs.Buff> buffs = currentUnit.GetActiveBuffsReadOnly();
 
             foreach (Units.Buffs.Buff buff in buffs)
             {
@@ -221,9 +238,5 @@ namespace UI.UnitInfo
             }
         }
 
-        private void OnDestroy()
-        {
-            UnbindCurrentUnitBuffEvents();
-        }
     }
 }
