@@ -65,25 +65,25 @@ namespace Units.Buffs
 
     public interface IAttackHitTrigger
     {
-        void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage);
+        void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage);
     }
     public interface ITakeHitTrigger
     {
-        void OnTakeHit(IBuffEventContext context, Unit self, Unit attacker, ref Damages.Damage damage);
+        void OnTakeHit(IBuffContext context, Unit self, Unit attacker, ref Damages.Damage damage);
     }
     public interface ITick
     {
-        void OnTick(IBuffEventContext context);
+        void OnTick(IBuffContext context);
     }
 
     public interface IAfterTakeDamageTrigger
     {
-        void OnAfterTakeDamage(IBuffEventContext context, ref Damages.Damage damage);
+        void OnAfterTakeDamage(IBuffContext context, ref Damages.Damage damage);
     }
 
     public interface IGlobalSkillCastTrigger
     {
-        void OnGlobalSkillCast(IBuffEventContext context, Units.Unit caster, Units.Skills.Skill skill);
+        void OnGlobalSkillCast(IBuffContext context, Units.Unit caster, Units.Skills.Skill skill);
     }
     
 }

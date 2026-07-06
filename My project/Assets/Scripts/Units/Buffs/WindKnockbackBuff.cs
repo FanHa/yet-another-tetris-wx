@@ -26,7 +26,7 @@ namespace Units.Buffs
         public override string Description() =>
             $"普攻命中时将目标击退{knockbackDistance:F2}（最多{maxKnockbackDistance:F2}）";
 
-        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             if (target == null || !target.IsActive) return;
 

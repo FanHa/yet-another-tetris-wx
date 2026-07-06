@@ -8,7 +8,7 @@ namespace Units.Buffs
     /// Buff 事件触发过程中，单位侧需要暴露的共用运行时能力集合。
     /// 所有 Buff 事件共用这一份上下文，事件差异通过方法参数表达。
     /// </summary>
-    public interface IBuffEventContext
+    public interface IBuffContext
     {
         Units.Unit SelfUnit { get; }
         bool IsActive { get; }

@@ -9,7 +9,7 @@ namespace Units.Buffs
     {
         private float buffTickTimer = 0f;
         private const float BUFF_TICK_INTERVAL = 1f;
-        private IBuffEventContext owner;
+        private global::Units.Buffs.IBuffContext owner;
 
         // Active Buff storage.
         private readonly List<Buff> activeBuffs = new List<Buff>();
@@ -27,7 +27,7 @@ namespace Units.Buffs
         internal event Action<Buff> BuffAdded;
         internal event Action<Buff> BuffRemoved;
 
-        public BuffHandler(IBuffEventContext owner)
+        public BuffHandler(global::Units.Buffs.IBuffContext owner)
         {
             this.owner = owner;
             activeBuffsReadOnly = activeBuffs.AsReadOnly();

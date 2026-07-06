@@ -27,7 +27,7 @@ namespace Units
         IUnitSkillContext,
         ISkillRuntimeContext,
         ISkillExecutionPort,
-        IBuffEventContext
+        global::Units.Buffs.IBuffContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -102,9 +102,9 @@ namespace Units
         internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
-        Units.Unit.Faction IBuffEventContext.faction => faction;
-        Units.Attributes IBuffEventContext.Attributes => Attributes;
-        Controller.UnitManager IBuffEventContext.UnitManager => UnitManager;
+        Units.Unit.Faction global::Units.Buffs.IBuffContext.faction => faction;
+        Units.Attributes global::Units.Buffs.IBuffContext.Attributes => Attributes;
+        Controller.UnitManager global::Units.Buffs.IBuffContext.UnitManager => UnitManager;
 
         private UnitActionRunner actionRunner;
 

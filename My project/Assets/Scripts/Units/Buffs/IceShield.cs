@@ -37,7 +37,7 @@ namespace Units.Buffs
         public override string Description() =>
             $"被攻击时使攻击者获得Chilled:移速-{chilledMoveSlowPercent}%，攻速-{chilledAttackSlowPercent}%，动作速率-{chilledActionSlowPercent}%，能量回复-{chilledEnergyRegenSlowPercent}%，持续{chilledDuration}秒";
 
-        public void OnTakeHit(IBuffEventContext context, Unit self, Unit attacker, ref Damages.Damage damage)
+        public void OnTakeHit(IBuffContext context, Unit self, Unit attacker, ref Damages.Damage damage)
         {
             if (attacker == null)
                 return;

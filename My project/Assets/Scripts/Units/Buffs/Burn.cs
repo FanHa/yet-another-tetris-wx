@@ -27,7 +27,7 @@ namespace Units.Buffs
         }
         public override string Description() => $"每秒造成{dps}点火焰伤害";
 
-        public void OnTick(IBuffEventContext context)
+        public void OnTick(IBuffContext context)
         {
             var damage = new Damages.Damage(dps, Damages.DamageType.Skill);
             damage.SetSourceUnit(sourceUnit);

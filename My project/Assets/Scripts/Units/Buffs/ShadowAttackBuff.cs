@@ -26,7 +26,7 @@ namespace Units.Buffs
         public override string Description() =>
             $"攻击时对目标施加{vulnerabilityPercent}%易伤Debuff，持续{dotDuration}秒";
 
-        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var vulnerability = new Vulnerability(
                 buffDuration: dotDuration, // 可根据技能配置调整

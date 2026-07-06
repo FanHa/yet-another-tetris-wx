@@ -27,7 +27,7 @@ namespace Units.Buffs
             return "能量汲取";
         }
 
-        public void OnGlobalSkillCast(IBuffEventContext context, Unit caster, Skill skill)
+        public void OnGlobalSkillCast(IBuffContext context, Unit caster, Skill skill)
         {
             if (caster.faction != context.faction)
             {

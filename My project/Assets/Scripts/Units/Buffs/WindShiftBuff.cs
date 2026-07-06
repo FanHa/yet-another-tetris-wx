@@ -35,7 +35,7 @@ namespace Units.Buffs
             base.OnRemove();
         }
 
-        public void OnAttackHit(IBuffEventContext context, Unit attacker, Unit target, ref Damages.Damage damage)
+        public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             // 附加伤害与当前攻击距离相关（可配合其他攻击距离加成机制）
             float extraDamage = attacker.Attributes.AttackRange.finalValue;
