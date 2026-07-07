@@ -22,15 +22,15 @@ namespace Units.Buffs
         public override string Name() => "疾风加速";
         public override string Description() => $"攻击速度提升{AtkSpeedPercent}%";
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, AtkSpeedPercent);
+            base.OnApply(context);
+            context.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, AtkSpeedPercent);
         }
 
         public override void OnRemove()
         {
-            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            context.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
             base.OnRemove();
         }
     }

@@ -33,20 +33,20 @@ namespace Units.Buffs
             $"移速-{MoveSlowPercent}%，攻速-{AttackSlowPercent}%，动作速率-{ActionSlowPercent}%，能量回复-{EnergyRegenSlowPercent}%";
 
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -AttackSlowPercent);
-            unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
-            unit.Attributes.ActionSpeed.AddPercentageModifier(this, -ActionSlowPercent);
-            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -EnergyRegenSlowPercent);
+            base.OnApply(context);
+            context.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -AttackSlowPercent);
+            context.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
+            context.Attributes.ActionSpeed.AddPercentageModifier(this, -ActionSlowPercent);
+            context.Attributes.EnergyPerSecond.AddPercentageModifier(this, -EnergyRegenSlowPercent);
         }
         public override void OnRemove()
         {
-            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            owner.Attributes.ActionSpeed.RemovePercentageModifier(this);
-            owner.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
+            context.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            context.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            context.Attributes.ActionSpeed.RemovePercentageModifier(this);
+            context.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
             base.OnRemove();
         }
     }

@@ -23,14 +23,14 @@ namespace Units.Buffs
             {
                 // 反弹伤害给来源Unit
                 var attacker = damage.SourceUnit;
-                if (attacker != null && attacker != owner)
+                if (attacker != null && attacker != context.SelfUnit)
                 {
                     float reflectValue = damage.Value * (reflectPercent / 100f);
                     var reflectDamage = new Damages.Damage(reflectValue, Damages.DamageType.Reflect)
-                        .SetSourceUnit(owner)
+                        .SetSourceUnit(context.SelfUnit)
                         .SetTargetUnit(attacker)
                         .SetSourceLabel("生命回响·反弹");
-                    attacker.TakeDamage(reflectDamage);
+                    context.DealDamageTo(attacker, reflectDamage);
                 }
             }
         }

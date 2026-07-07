@@ -16,18 +16,18 @@ namespace Units.Buffs
         public override string Name() => "生命护盾";
         public override string Description() => $"受到伤害时吸收伤害，最多吸收{shieldValue}点，持续{duration}秒";
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
+            base.OnApply(context);
             shield = new Shield(this, shieldValue);
             shield.OnBroken += OnShieldBroken;
-            unit.Attributes.AddShield(shield);
+            context.Attributes.AddShield(shield);
         }
 
         public override void OnRemove()
         {
             shield.OnBroken -= OnShieldBroken;
-            owner.Attributes.RemoveShield(shield);
+            context.Attributes.RemoveShield(shield);
             base.OnRemove();
         }
 
@@ -35,7 +35,7 @@ namespace Units.Buffs
         {
             // 护盾破碎时的处理逻辑
             // 例如：播放特效、移除Buff等
-            owner.RemoveBuff(this);
+            context.RemoveBuff(this);
         }
     }
 }

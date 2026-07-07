@@ -32,14 +32,14 @@ namespace Units.Buffs
             $"对周围敌人施加灼烧DeBuff,每秒造成{dotDps}点伤害";
 
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            var prefab = unit.ProjectileConfig.FlameRingPrefab;
-            var effectObj = Object.Instantiate(prefab, unit.transform.position, Quaternion.identity, unit.transform);
+            base.OnApply(context);
+            var prefab = context.SelfUnit.ProjectileConfig.FlameRingPrefab;
+            var effectObj = Object.Instantiate(prefab, context.SelfUnit.transform.position, Quaternion.identity, context.SelfUnit.transform);
             var flameRingEntity = effectObj.GetComponent<Units.Projectiles.FlameRing>();
             flameRingEntity.Initialize(
-                owner: unit,
+                owner: context.SelfUnit,
                 radius: radius,
                 sourceSkill: sourceSkill,
                 dotDps: dotDps,

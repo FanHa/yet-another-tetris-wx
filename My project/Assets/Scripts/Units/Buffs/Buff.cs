@@ -19,7 +19,9 @@ namespace Units.Buffs
         public float TimeLeft;
         protected Unit sourceUnit { get; set; }
         public Unit SourceUnit => sourceUnit;
-        protected Unit owner;
+        protected IBuffContext context;
+        public IBuffContext Context => context;
+        protected Unit owner => context?.SelfUnit;
         protected Units.Skills.Skill sourceSkill { get; set; } // 施加此Buff的技能
         public Units.Skills.Skill SourceSkill => sourceSkill;
         public event Action Removed;
@@ -35,10 +37,10 @@ namespace Units.Buffs
         public abstract string Description();
         public virtual Type BuffType => GetType();
 
-        public virtual void OnApply(Unit unit)
+        public virtual void OnApply(IBuffContext context)
         {
             TimeLeft = duration;
-            owner = unit;
+            this.context = context;
         }
         public virtual void OnRemove()
         {

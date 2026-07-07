@@ -24,7 +24,7 @@ namespace Units.Buffs
                 .SetTargetUnit(target)
                 .SetSourceLabel(Name())
                 .SetValue(atkBoost);
-            target.TakeDamage(extraDamage);
+            context.DealDamageTo(target, extraDamage);
         }
     }
 }

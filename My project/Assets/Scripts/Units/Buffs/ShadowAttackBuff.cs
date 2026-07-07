@@ -34,7 +34,7 @@ namespace Units.Buffs
                 sourceUnit: attacker,
                 sourceSkill: sourceSkill
             );
-            target.AddBuff(vulnerability);
+            context.AddBuffTo(target, vulnerability);
         }
     }
 }

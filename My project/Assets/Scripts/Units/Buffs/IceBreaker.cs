@@ -42,7 +42,7 @@ namespace Units.Buffs
             foreach (Chilled buff in chilledBuffs)
             {
                 totalPercentSlow += (buff.MoveSlowPercent + buff.AttackSlowPercent + buff.EnergyRegenSlowPercent) / 3;
-                target.RemoveBuff(buff);
+                context.RemoveBuffFrom(target, buff);
             }
 
             float extraDamage = baseExtraDamage + percentSlowMultiplier * totalPercentSlow;
@@ -52,7 +52,7 @@ namespace Units.Buffs
             bonus.SetTargetUnit(target);
             bonus.SetSourceLabel("破冰加成");
 
-            target.TakeDamage(bonus);
+            context.DealDamageTo(target, bonus);
         }
     }
 }

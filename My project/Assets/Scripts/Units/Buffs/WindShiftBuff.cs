@@ -22,16 +22,16 @@ namespace Units.Buffs
             $"攻击距离+{attackRangeBonus}，攻击时获得额外的与攻击距离相关的伤害加成";
 
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            unit.Attributes.AttackRange.AddFlatModifier(this, attackRangeBonus);
+            base.OnApply(context);
+            context.Attributes.AttackRange.AddFlatModifier(this, attackRangeBonus);
         }
 
 
         public override void OnRemove()
         {
-            owner.Attributes.AttackRange.RemoveFlatModifier(this);
+            context.Attributes.AttackRange.RemoveFlatModifier(this);
             base.OnRemove();
         }
 
@@ -44,7 +44,7 @@ namespace Units.Buffs
             windDamage.SetTargetUnit(target);
             windDamage.SetSourceLabel("风形态加成");
 
-            target.TakeDamage(windDamage);
+            context.DealDamageTo(target, windDamage);
         }
     }
 }

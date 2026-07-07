@@ -105,6 +105,30 @@ namespace Units
         Units.Unit.Faction global::Units.Buffs.IBuffContext.faction => faction;
         Units.Attributes global::Units.Buffs.IBuffContext.Attributes => Attributes;
         Controller.UnitManager global::Units.Buffs.IBuffContext.UnitManager => UnitManager;
+        void global::Units.Buffs.IBuffContext.AddBuffTo(Units.Unit target, Units.Buffs.Buff buff)
+        {
+            target.AddBuff(buff);
+        }
+
+        void global::Units.Buffs.IBuffContext.RemoveBuffFrom(Units.Unit target, Units.Buffs.Buff buff)
+        {
+            target.RemoveBuff(buff);
+        }
+
+        void global::Units.Buffs.IBuffContext.DealDamageTo(Units.Unit target, Units.Damages.Damage damage)
+        {
+            target.TakeDamage(damage);
+        }
+
+        void global::Units.Buffs.IBuffContext.EnterStun()
+        {
+            EnterStun();
+        }
+
+        void global::Units.Buffs.IBuffContext.ExitStun()
+        {
+            ExitStun();
+        }
 
         private UnitActionRunner actionRunner;
 

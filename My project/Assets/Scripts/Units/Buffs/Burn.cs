@@ -33,7 +33,7 @@ namespace Units.Buffs
             damage.SetSourceUnit(sourceUnit);
             damage.SetSourceLabel(sourceSkill.Name() + "-" +label);
             damage.SetTargetUnit(context.SelfUnit);
-            context.SelfUnit.TakeDamage(damage);
+            context.TakeDamage(damage);
         }
     }
 }

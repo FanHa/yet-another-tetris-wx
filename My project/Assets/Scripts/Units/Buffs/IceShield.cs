@@ -50,16 +50,16 @@ namespace Units.Buffs
                 self,
                 sourceSkill
             );
-            attacker.AddBuff(chilled);
+            context.AddBuffTo(attacker, chilled);
         }
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            var vfxPrefab = unit.ProjectileConfig.IceShieldPrefab;
-            vfxInstance = Object.Instantiate(vfxPrefab, unit.transform.position, Quaternion.identity);
+            base.OnApply(context);
+            var vfxPrefab = context.SelfUnit.ProjectileConfig.IceShieldPrefab;
+            vfxInstance = Object.Instantiate(vfxPrefab, context.SelfUnit.transform.position, Quaternion.identity);
             var iceShieldComp = vfxInstance.GetComponent<Units.Projectiles.IceShield>();
-            iceShieldComp.Initialize(unit);
+            iceShieldComp.Initialize(context.SelfUnit);
             iceShieldComp.Activate();
         }
 

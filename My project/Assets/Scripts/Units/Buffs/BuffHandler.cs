@@ -316,7 +316,7 @@ namespace Units.Buffs
                 }
 
                 SetState(buff, BuffLifecycleState.PendingAdd);
-                buff.OnApply(owner.SelfUnit);
+                buff.OnApply(owner);
                 AddActiveBuff(buff);
                 SetState(buff, BuffLifecycleState.Active);
                 BuffAdded?.Invoke(buff);

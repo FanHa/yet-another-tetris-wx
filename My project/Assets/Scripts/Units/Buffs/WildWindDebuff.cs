@@ -26,17 +26,17 @@ namespace Units.Buffs
         public override string Description() =>
             $"移速-{MoveSlowPercent}%，攻击力-{AtkReducePercent}%";
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            unit.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
-            unit.Attributes.AttackPower.AddPercentageModifier(this, -AtkReducePercent);
+            base.OnApply(context);
+            context.Attributes.MoveSpeed.AddPercentageModifier(this, -MoveSlowPercent);
+            context.Attributes.AttackPower.AddPercentageModifier(this, -AtkReducePercent);
         }
 
         public override void OnRemove()
         {
-            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            owner.Attributes.AttackPower.RemovePercentageModifier(this);
+            context.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            context.Attributes.AttackPower.RemovePercentageModifier(this);
             base.OnRemove();
         }
     }

@@ -18,15 +18,15 @@ namespace Units.Buffs
         public override string Name() => "ThunderStrike";
         public override string Description() => "雷击致晕，无法行动";
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
-            unit.EnterStun();
+            base.OnApply(context);
+            context.EnterStun();
         }
 
         public override void OnRemove()
         {
-            owner.ExitStun();
+            context.ExitStun();
             base.OnRemove();
         }
     }

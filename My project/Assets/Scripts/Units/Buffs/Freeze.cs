@@ -20,28 +20,28 @@ namespace Units.Buffs
         public override string Name() => "Freeze";
         public override string Description() => "完全冻结,无法行动,能量回复为0";
 
-        public override void OnApply(Unit unit)
+        public override void OnApply(IBuffContext context)
         {
-            base.OnApply(unit);
+            base.OnApply(context);
             // 攻速、移速、能量回复全部-100%
-            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -100);
-            unit.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
-            unit.Attributes.ActionSpeed.AddPercentageModifier(this, -100);
-            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, -100);
-            var vfxPrefab = unit.ProjectileConfig.IcyCagePrefab;
-            vfxInstance = Object.Instantiate(vfxPrefab, unit.transform.position, Quaternion.identity);
+            context.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, -100);
+            context.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
+            context.Attributes.ActionSpeed.AddPercentageModifier(this, -100);
+            context.Attributes.EnergyPerSecond.AddPercentageModifier(this, -100);
+            var vfxPrefab = context.SelfUnit.ProjectileConfig.IcyCagePrefab;
+            vfxInstance = Object.Instantiate(vfxPrefab, context.SelfUnit.transform.position, Quaternion.identity);
             var icyCageComp = vfxInstance.GetComponent<Units.Projectiles.IcyCage>();
-            icyCageComp.Initialize(unit);
+            icyCageComp.Initialize(context.SelfUnit);
             icyCageComp.Activate();
 
         }
 
         public override void OnRemove()
         {
-            owner.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
-            owner.Attributes.MoveSpeed.RemovePercentageModifier(this);
-            owner.Attributes.ActionSpeed.RemovePercentageModifier(this);
-            owner.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
+            context.Attributes.AttacksPerTenSeconds.RemovePercentageModifier(this);
+            context.Attributes.MoveSpeed.RemovePercentageModifier(this);
+            context.Attributes.ActionSpeed.RemovePercentageModifier(this);
+            context.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
             if (vfxInstance != null)
             {
                 Object.Destroy(vfxInstance);
