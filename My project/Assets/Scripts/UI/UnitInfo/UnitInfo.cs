@@ -81,12 +81,11 @@ namespace UI.UnitInfo
             currentUnit = unit;
             gameObject.SetActive(true);
             RefreshInfo();
-            currentUnit.BuffAdded += HandleUnitBuffChanged;
-            currentUnit.BuffRemoved += HandleUnitBuffChanged;
+            currentUnit.OnBuffChanged += HandleUnitBuffChanged;
             
         }
         
-        private void HandleUnitBuffChanged(Units.Buffs.Buff buff)
+        private void HandleUnitBuffChanged(Units.UnitBuffChangedEvent buffChangedEvent)
         {
             RefreshBuffInfo();
         }
@@ -95,8 +94,7 @@ namespace UI.UnitInfo
         {
             if (currentUnit == null) return;
 
-            currentUnit.BuffAdded -= HandleUnitBuffChanged;
-            currentUnit.BuffRemoved -= HandleUnitBuffChanged;
+            currentUnit.OnBuffChanged -= HandleUnitBuffChanged;
         }
 
         private void RefreshBuffInfo()

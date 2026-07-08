@@ -68,8 +68,7 @@ namespace Units
         public event Action<Units.Unit, UnitActionType> OnActionCanceled;
         public event Action<Units.Unit, UnitActionType> OnActionInterrupted;
         public event Action<Units.Unit, UnitActionType, UnitActionCommitKind> OnActionCommitted;
-        public event Action<Buff> BuffAdded;
-        public event Action<Buff> BuffRemoved;
+        public event Action<UnitBuffChangedEvent> OnBuffChanged;
 
         public Faction faction; // 单位的阵营
         protected float lastAttackTime = 0;
@@ -109,8 +108,12 @@ namespace Units
             animationController = GetComponent<AnimationController>();
             facingController = GetComponent<FacingController>();
             hitEffect = GetComponent<HitEffect>();
+
             buffContext = new UnitBuffContext(this);
             buffHandler = new Units.Buffs.BuffHandler(buffContext);
+            buffHandler.BuffAdded += HandleBuffAdded;
+            buffHandler.BuffRemoved += HandleBuffRemoved;
+            
             movementController = GetComponent<Movement>();
             skillHandler = new Units.Skills.SkillHandler(this, this);
 
@@ -121,19 +124,18 @@ namespace Units
             actionRunner.OnActionInterrupted += HandleActionInterrupted;
             actionRunner.OnActionCommitted += HandleActionCommitted;
 
-            buffHandler.BuffAdded += HandleBuffAdded;
-            buffHandler.BuffRemoved += HandleBuffRemoved;
+            
             
         }
 
         private void HandleBuffAdded(Buff buff)
         {
-            BuffAdded?.Invoke(buff);
+            OnBuffChanged?.Invoke(new UnitBuffChangedEvent(this, buff, BuffChangeKind.Added));
         }
 
         private void HandleBuffRemoved(Buff buff)
         {
-            BuffRemoved?.Invoke(buff);
+            OnBuffChanged?.Invoke(new UnitBuffChangedEvent(this, buff, BuffChangeKind.Removed));
         }
 
         // Update is called once per frame
