@@ -23,10 +23,7 @@ namespace Units
         IAttackActionContext,
         ISkillActionContext,
         IStatusActionContext,
-        IUnitActionRunnerContext,
-        IUnitSkillContext,
-        ISkillRuntimeContext,
-        ISkillExecutionPort
+        IUnitActionRunnerContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
@@ -87,6 +84,7 @@ namespace Units
         [Header("运行时注入")]
         private UnitManager unitManager;
         public UnitManager UnitManager => unitManager;
+        private Units.Skills.SkillContext skillContext;
 
         public void InjectUnitManager(UnitManager manager)
         {
@@ -146,7 +144,8 @@ namespace Units
             buffHandler.BuffRemoved += HandleBuffRemoved;
             
             movementController = GetComponent<Movement>();
-            skillHandler = new Units.Skills.SkillHandler(this, this);
+            skillContext = new Units.Skills.SkillContext(this);
+            skillHandler = new Units.Skills.SkillHandler(skillContext);
 
             actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
@@ -307,36 +306,6 @@ namespace Units
         public Movement.MovementResult MoveBy(Vector3 delta)
         {
             return ApplyMovement(Movement.MovementRequest.DirectMove(delta));
-        }
-
-        Attributes IUnitSkillContext.Attributes => Attributes;
-        Dictionary<AffinityType, int> IUnitSkillContext.CellCounts => CellCounts;
-        Model.ProjectileConfig IUnitSkillContext.ProjectileConfig => ProjectileConfig;
-        Transform IUnitSkillContext.projectileSpawnPoint => projectileSpawnPoint;
-
-        List<Unit> IUnitSkillContext.FindEnemiesInRange(float range)
-        {
-            return RequireUnitManager().FindEnemiesInRange(this, range);
-        }
-
-        Unit IUnitSkillContext.FindRandomAlly(float range, bool includeSelf)
-        {
-            return RequireUnitManager().FindRandomAlly(this, range, includeSelf);
-        }
-
-        Unit IUnitSkillContext.FindClosestEnemyInRange(float range)
-        {
-            return RequireUnitManager().FindClosestEnemyInRange(this, range);
-        }
-
-        Unit IUnitSkillContext.FindLowestMaxHealthEnemy()
-        {
-            return RequireUnitManager().FindLowestMaxHealthEnemy(this);
-        }
-
-        Unit IUnitSkillContext.FindFurthestEnemy()
-        {
-            return RequireUnitManager().FindFurthestEnemy(this);
         }
 
         public void EnterSkillMotion(int avoidancePriority)
@@ -630,17 +599,6 @@ namespace Units
             }
 
             return closestAlly != null;
-        }
-
-        // 与 AttackAction.CanStart() 使用相同的有效射程（含双方 AgentRadius）
-        public bool TryGetClosestEnemyInAttackRange(out Unit closestEnemy)
-        {
-            closestEnemy = null;
-            if (!TryGetClosestEnemy(out var candidate)) return false;
-            float distance = Vector2.Distance(transform.position, candidate.transform.position);
-            if (distance > GetEffectiveAttackRangeTo(candidate)) return false;
-            closestEnemy = candidate;
-            return true;
         }
 
         public bool CanAttackNow()

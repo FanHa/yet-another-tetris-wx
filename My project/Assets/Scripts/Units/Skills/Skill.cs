@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public interface IUnitSkillContext
+    public interface ISkillContext
     {
         Unit SelfUnit { get; }
 
@@ -30,7 +30,6 @@ namespace Units.Skills
         bool TryGetClosestEnemyInAttackRange(out Unit target);
         bool TryGetClosestEnemy(out Unit target);
         bool TryGetClosestAlly(out Unit target);
-        float GetEffectiveAttackRangeTo(Unit target);
 
         void SetMoveBehaviorMode(Unit.MoveBehaviorMode mode);
         void Teleport(Vector3 position);
@@ -46,7 +45,7 @@ namespace Units.Skills
         public abstract string Name();
         public abstract string Description();
 
-        public IUnitSkillContext Owner { get; set; } // 技能的拥有者
+        public ISkillContext Owner { get; set; } // 技能的拥有者
         
 
     }

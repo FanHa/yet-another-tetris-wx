@@ -12,8 +12,7 @@ namespace Units.Skills
         private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
-        private readonly ISkillRuntimeContext runtimeContext;
-        private readonly IUnitSkillContext skillContext;
+        private readonly ISkillContext context;
 
         public event Action<Skill> OnSkillReady;
         public event Action<SkillQueuedEvent> OnSkillQueued;
@@ -25,10 +24,9 @@ namespace Units.Skills
         private readonly Queue<ActiveSkill> readyQueue = new();
         private readonly HashSet<ActiveSkill> queuedSet = new();
 
-        public SkillHandler(ISkillRuntimeContext runtimeContext, IUnitSkillContext skillContext, float energyDecayPerSkill = 1f)
+        public SkillHandler(ISkillContext context, float energyDecayPerSkill = 1f)
         {
-            this.runtimeContext = runtimeContext ?? throw new ArgumentNullException(nameof(runtimeContext));
-            this.skillContext = skillContext ?? throw new ArgumentNullException(nameof(skillContext));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.energyDecayPerSkill = energyDecayPerSkill;
         }
 
@@ -44,22 +42,13 @@ namespace Units.Skills
             {
                 tickTimer -= TICK_INTERVAL;
 
-                float energyPerTick = runtimeContext.Attributes.EnergyPerSecond.finalValue * TICK_INTERVAL;
+                float energyPerTick = context.Attributes.EnergyPerSecond.finalValue * TICK_INTERVAL;
                 DistributeEnergy(energyPerTick);
-            }
-        }
-
-        private void EnsureContextInjected()
-        {
-            if (runtimeContext == null || skillContext == null)
-            {
-                throw new InvalidOperationException("SkillHandler contexts are not injected.");
             }
         }
 
         public void Activate()
         {
-            EnsureContextInjected();
             isActive = true;
             tickTimer = 0f;
             readyQueue.Clear();
@@ -76,14 +65,9 @@ namespace Units.Skills
 
         public void AddSkill(Skill newSkill)
         {
-            if (skillContext == null)
-            {
-                throw new InvalidOperationException("SkillHandler skill context is not injected.");
-            }
-
             if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
                 return;
-            newSkill.Owner = skillContext;
+            newSkill.Owner = context;
             skills.Add(newSkill);
         }
 
@@ -113,7 +97,7 @@ namespace Units.Skills
                     s.IsReady();
                     readyQueue.Enqueue(s);
                     OnSkillReady?.Invoke(s);
-                    OnSkillQueued?.Invoke(new SkillQueuedEvent(skillContext.SelfUnit, s, s.CurrentEnergy, s.RequiredEnergy));
+                    OnSkillQueued?.Invoke(new SkillQueuedEvent(context.SelfUnit, s, s.CurrentEnergy, s.RequiredEnergy));
                 }
             }
         }
@@ -123,7 +107,7 @@ namespace Units.Skills
         {
             if (readyQueue.Count == 0)
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(skillContext.SelfUnit, null, SkillCastFailureReason.NoPendingSkill));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, null, SkillCastFailureReason.NoPendingSkill));
                 return SkillCastResult.Failure(null, SkillCastFailureReason.NoPendingSkill);
             }
 
@@ -134,26 +118,26 @@ namespace Units.Skills
             // 二次校验：入队只代表能量达标，真正施放前需再次确认前置条件。
             if (!skill.IsReady())
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(skillContext.SelfUnit, skill, SkillCastFailureReason.PrerequisiteNotMet));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.PrerequisiteNotMet));
                 return SkillCastResult.Failure(skill, SkillCastFailureReason.PrerequisiteNotMet);
             }
 
             if (!skill.CanExecuteNow())
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(skillContext.SelfUnit, skill, SkillCastFailureReason.InvalidTarget));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.InvalidTarget));
                 return SkillCastResult.Failure(skill, SkillCastFailureReason.InvalidTarget);
             }
 
-            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(skillContext.SelfUnit, skill));
+            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(context.SelfUnit, skill));
 
             bool result = skill.Execute();
             if (result)
             {
-                OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(skillContext.SelfUnit, skill));
+                OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.SelfUnit, skill));
                 return SkillCastResult.Success(skill);
             }
 
-            OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(skillContext.SelfUnit, skill, SkillCastFailureReason.ExecuteCoreFailed));
+            OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.ExecuteCoreFailed));
             return SkillCastResult.Failure(skill, SkillCastFailureReason.ExecuteCoreFailed);
         }
 

@@ -196,6 +196,43 @@ namespace Controller
             return allies[UnityEngine.Random.Range(0, allies.Count)];
         }
 
+        public Unit FindClosestEnemy(Unit self)
+        {
+            var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
+            return FindClosestUnit(enemyList, self, includeSelf: false);
+        }
+
+        public Unit FindClosestAlly(Unit self, bool includeSelf = false)
+        {
+            var allyList = self.faction == Unit.Faction.FactionA ? factionA : factionB;
+            return FindClosestUnit(allyList, self, includeSelf);
+        }
+
+        private static Unit FindClosestUnit(IReadOnlyList<Unit> units, Unit self, bool includeSelf)
+        {
+            Vector2 selfPos = self.transform.position;
+            float bestSqr = float.MaxValue;
+            Unit closestUnit = null;
+
+            for (int i = 0; i < units.Count; i++)
+            {
+                Unit candidate = units[i];
+                if (candidate == null || !candidate.IsActive || (!includeSelf && candidate == self))
+                {
+                    continue;
+                }
+
+                float sqrDistance = ((Vector2)candidate.transform.position - selfPos).sqrMagnitude;
+                if (sqrDistance < bestSqr)
+                {
+                    bestSqr = sqrDistance;
+                    closestUnit = candidate;
+                }
+            }
+
+            return closestUnit;
+        }
+
         public List<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
         {
             var list = selfFaction == Unit.Faction.FactionA ? factionB : factionA;

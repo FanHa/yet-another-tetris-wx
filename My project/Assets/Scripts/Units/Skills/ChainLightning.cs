@@ -28,11 +28,11 @@ namespace Units.Skills
             }
 
             // 开始闪电弹射逻辑
-            Owner.StartCoroutine(ChainLightningRoutine(Owner.SelfUnit, initialTarget));
+            Owner.StartCoroutine(ChainLightningRoutine(Owner, initialTarget));
             return true;
         }
 
-        private System.Collections.IEnumerator ChainLightningRoutine(IUnitSkillContext caster, Unit initialTarget)
+        private System.Collections.IEnumerator ChainLightningRoutine(ISkillContext caster, Unit initialTarget)
         {
             Unit currentTarget = initialTarget;
             float currentDamage = baseDamage;
