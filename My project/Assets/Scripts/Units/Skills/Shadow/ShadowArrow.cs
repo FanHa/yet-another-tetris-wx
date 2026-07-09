@@ -33,8 +33,8 @@ namespace Units.Skills
         }
         protected override bool ExecuteCore()
         {
-            // 查找最弱敌人
-            Unit targetEnemy = Owner.FindWeakestEnemy();
+            // 查找最大生命值最低的敌人
+            Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
             if (targetEnemy == null)
                 return false;
 
@@ -65,7 +65,7 @@ namespace Units.Skills
                 $"{stats.VulnerabilityDuration}\n";
         }
 
-        public static string DescriptionStatic() => "向脆弱的敌人发射暗影箭,施加易伤Debuff并造成伤害";
+        public static string DescriptionStatic() => "向最大生命值最低的敌人发射暗影箭,施加易伤Debuff并造成伤害";
 
         public override string Name() => NameStatic();
         public static string NameStatic() => "暗影箭";

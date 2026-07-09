@@ -64,7 +64,16 @@ namespace Units.Projectiles
                 return;
             }
 
-            var enemies = owner.UnitManager.FindEnemiesInRangeAtPosition(
+            var unitManager = owner.UnitManager;
+            if (unitManager == null)
+            {
+                isActive = false;
+                ReleaseSkillMotion();
+                Destroy(gameObject);
+                return;
+            }
+
+            var enemies = unitManager.FindEnemiesInRangeAtPosition(
                 owner.faction,
                 (Vector2)owner.transform.position,
                 1f // todo: 这里可以用合理的参数,而不是写死1f

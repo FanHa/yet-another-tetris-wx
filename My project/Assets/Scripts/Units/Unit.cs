@@ -85,7 +85,38 @@ namespace Units
         private List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
         [Header("运行时注入")]
-        public UnitManager UnitManager;
+        private UnitManager unitManager;
+        public UnitManager UnitManager => unitManager;
+
+        public void InjectUnitManager(UnitManager manager)
+        {
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (unitManager != null && unitManager != manager)
+            {
+                throw new InvalidOperationException($"Unit '{name}' already has a different UnitManager injected.");
+            }
+
+            if (unitManager == manager)
+            {
+                return;
+            }
+
+            unitManager = manager;
+        }
+
+        private UnitManager RequireUnitManager()
+        {
+            if (unitManager == null)
+            {
+                throw new InvalidOperationException($"Unit '{name}' requires an injected UnitManager for this operation.");
+            }
+
+            return unitManager;
+        }
 
         private bool isActive = false; // 是否处于活动状态
         private int skillMotionLockCount = 0;
@@ -176,13 +207,24 @@ namespace Units
 
         public void Activate()
         {
+            if (isActive)
+            {
+                return;
+            }
+
+            if (unitManager == null)
+            {
+                Debug.LogError($"[Unit] Cannot activate '{name}' because UnitManager was not injected.", this);
+                return;
+            }
+
             movementController.Initialize(Attributes);
             skillHandler.Activate();
             skillHandler.OnSkillQueued += HandleSkillQueued;
             skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded += HandleSkillCastSucceeded;
             skillHandler.OnSkillCastFailed += HandleSkillCastFailed;
-            UnitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
+            unitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
             isActive = true;
@@ -191,7 +233,10 @@ namespace Units
         public void Deactivate()
         {
             healthBar.gameObject.SetActive(false);
-            UnitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
+            if (unitManager != null)
+            {
+                unitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
+            }
             skillHandler.OnSkillQueued -= HandleSkillQueued;
             skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
@@ -271,27 +316,27 @@ namespace Units
 
         List<Unit> IUnitSkillContext.FindEnemiesInRange(float range)
         {
-            return UnitManager.FindEnemiesInRange(this, range);
+            return RequireUnitManager().FindEnemiesInRange(this, range);
         }
 
         Unit IUnitSkillContext.FindRandomAlly(float range, bool includeSelf)
         {
-            return UnitManager.FindRandomAlly(this, range, includeSelf);
+            return RequireUnitManager().FindRandomAlly(this, range, includeSelf);
         }
 
         Unit IUnitSkillContext.FindClosestEnemyInRange(float range)
         {
-            return UnitManager.FindClosestEnemyInRange(this, range);
+            return RequireUnitManager().FindClosestEnemyInRange(this, range);
         }
 
-        Unit IUnitSkillContext.FindWeakestEnemy()
+        Unit IUnitSkillContext.FindLowestMaxHealthEnemy()
         {
-            return UnitManager.FindWeakestEnemy(this);
+            return RequireUnitManager().FindLowestMaxHealthEnemy(this);
         }
 
         Unit IUnitSkillContext.FindFurthestEnemy()
         {
-            return UnitManager.FindFurthestEnemy(this);
+            return RequireUnitManager().FindFurthestEnemy(this);
         }
 
         public void EnterSkillMotion(int avoidancePriority)
@@ -527,11 +572,11 @@ namespace Units
 
         private void UpdateEnemiesDistance()
         {
-            if (UnitManager == null) return;
+            if (unitManager == null) return;
 
             var list = faction == Faction.FactionA
-                ? UnitManager.GetFactionBUnits()
-                : UnitManager.GetFactionAUnits();
+                ? unitManager.GetFactionBUnits()
+                : unitManager.GetFactionAUnits();
 
             Unit closest = null;
             float bestSqr = float.MaxValue;
@@ -565,9 +610,9 @@ namespace Units
         public bool TryGetClosestAlly(out Unit closestAlly)
         {
             closestAlly = null;
-            if (UnitManager == null) return false;
+            if (unitManager == null) return false;
 
-            var allies = UnitManager.GetUnitsByFaction(faction);
+            var allies = unitManager.GetUnitsByFaction(faction);
             float bestSqr = float.MaxValue;
             Vector2 selfPos = transform.position;
 

@@ -31,8 +31,13 @@ namespace Units.Buffs
         {
             if (caster.faction != context.faction)
             {
+                if (context.UnitManager == null)
+                {
+                    return;
+                }
+
                 // 向己方所有单位分配能量
-                List<Unit> allies = context.UnitManager.GetUnitsByFaction(context.faction);
+                IReadOnlyList<Unit> allies = context.UnitManager.GetUnitsByFaction(context.faction);
                 foreach (var ally in allies)
                 {
                     if (ally.IsActive && ally != context.SelfUnit)

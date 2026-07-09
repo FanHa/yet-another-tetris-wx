@@ -48,7 +48,7 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Owner.FindWeakestEnemy();
+            Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
             if (targetEnemy == null)
                 return false;
 
@@ -86,7 +86,7 @@ namespace Units.Skills
                 $"{stats.DebuffDuration}\n";
         }
 
-        public static string DescriptionStatic() => "闪现到最脆弱敌人身后,施加易伤并造成伤害";
+        public static string DescriptionStatic() => "闪现到最大生命值最低的敌人身后,施加易伤并造成伤害";
 
         public override string Name() => NameStatic();
         public static string NameStatic() => "影步";

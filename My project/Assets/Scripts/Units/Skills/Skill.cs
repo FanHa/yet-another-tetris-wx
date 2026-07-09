@@ -24,7 +24,7 @@ namespace Units.Skills
         List<Unit> FindEnemiesInRange(float range);
         Unit FindRandomAlly(float range, bool includeSelf = false);
         Unit FindClosestEnemyInRange(float range);
-        Unit FindWeakestEnemy();
+        Unit FindLowestMaxHealthEnemy();
         Unit FindFurthestEnemy();
 
         bool TryGetClosestEnemyInAttackRange(out Unit target);

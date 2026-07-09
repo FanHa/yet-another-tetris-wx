@@ -23,16 +23,12 @@ namespace Controller
         private List<Unit> factionA = new();
         private List<Unit> factionB = new();
 
-        private const float RandomOffsetRangeX = 5f;
-        private const float RandomOffsetRangeY = 0.5f;
-
         /// <summary>
         /// 批量生成单位
         /// </summary>
         /// <param name="items">单位配置列表</param>
         /// <param name="spawnPoint">出生点</param>
         /// <param name="faction">阵营</param>
-        /// <param name="parent">父物体</param>
         public void SpawnUnits(
             List<CharacterPlacement> items,
             Transform spawnPoint,
@@ -52,7 +48,7 @@ namespace Controller
 
                 unit.OnSkillCast += HandleSkillCast;
                 unit.OnClicked += HandleUnitClicked;
-                unit.UnitManager = this;
+                unit.InjectUnitManager(this);
                 unit.Setup(faction);
                 if (unit.faction == Unit.Faction.FactionA)
                 {
@@ -133,17 +129,17 @@ namespace Controller
         }
 
 
-        internal List<Unit> GetFactionBUnits()
+        internal IReadOnlyList<Unit> GetFactionBUnits()
         {
             return factionB;
         }
 
-        internal List<Unit> GetFactionAUnits()
+        internal IReadOnlyList<Unit> GetFactionAUnits()
         {
             return factionA;
         }
 
-        public List<Unit> GetUnitsByFaction(Unit.Faction faction)
+        public IReadOnlyList<Unit> GetUnitsByFaction(Unit.Faction faction)
         {
             return faction == Unit.Faction.FactionA ? factionA : factionB;
         }
@@ -210,7 +206,7 @@ namespace Controller
                 .ToList();
         }
 
-        public Unit FindWeakestEnemy(Unit self)
+        public Unit FindLowestMaxHealthEnemy(Unit self)
         {
             var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
 
@@ -231,7 +227,7 @@ namespace Controller
                 .FirstOrDefault();
         }
 
-        public List<Unit> GetAllUnits()
+        public IReadOnlyList<Unit> GetAllUnits()
         {
             // 返回所有阵营的活动单位
             return factionA.Concat(factionB)
