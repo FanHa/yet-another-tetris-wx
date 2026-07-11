@@ -37,6 +37,7 @@ namespace Model.Tetri
         public ShadowAttackConfigGroup ShadowAttackConfigGroup;
         public ShadowStepConfigGroup ShadowStepConfigGroup;
         public ShadowArrowConfigGroup ShadowArrowConfigGroup;
+        public VulnerabilityFieldConfigGroup VulnerabilityFieldConfigGroup;
 
         [Header("迅捷")]
         public ChargeConfigGroup ChargeConfigGroup;

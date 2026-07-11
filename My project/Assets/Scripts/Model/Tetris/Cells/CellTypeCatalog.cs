@@ -40,7 +40,8 @@ namespace Model.Tetri
         EnergyAbsorb = 23,
         ThunderStrike = 24,
         GuardAlly = 25,
-        WindKnockback = 26
+        WindKnockback = 26,
+        VulnerabilityField = 27
 
     }
 

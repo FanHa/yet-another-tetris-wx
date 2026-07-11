@@ -101,6 +101,7 @@ namespace Model.Tetri
                 new(CellTypeId.ShadowAttack, typeof(ShadowAttack), cellLevelConfigManager.ShadowAttackConfigGroup),
                 new(CellTypeId.ShadowStep, typeof(ShadowStep), cellLevelConfigManager.ShadowStepConfigGroup),
                 new(CellTypeId.ShadowArrow, typeof(ShadowArrow), cellLevelConfigManager.ShadowArrowConfigGroup),
+                new(CellTypeId.VulnerabilityField, typeof(VulnerabilityField), cellLevelConfigManager.VulnerabilityFieldConfigGroup),
                 new(CellTypeId.Charge, typeof(Charge), cellLevelConfigManager.ChargeConfigGroup),
                 new(CellTypeId.EnergyAbsorb, typeof(EnergyAbsorb), cellLevelConfigManager.EnergyAbsorbConfigGroup),
                 new(CellTypeId.ThunderStrike, typeof(Model.Tetri.ThunderStrike), cellLevelConfigManager.ThunderStrikeConfigGroup),

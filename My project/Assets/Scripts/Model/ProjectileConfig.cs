@@ -32,5 +32,7 @@ namespace Model
 
         public GameObject ChargePrefab;
 
+        public GameObject VulnerabilityFieldEmitterPrefab;
+
     }
 }
