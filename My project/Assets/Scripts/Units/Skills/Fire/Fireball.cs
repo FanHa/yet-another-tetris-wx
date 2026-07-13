@@ -7,10 +7,10 @@ namespace Units.Skills
     public class Fireball : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.Fireball;
-        public FireballConfig Config { get; }
+        public FireballLevelConfig Config { get; }
         private Unit targetEnemy;
 
-        public Fireball(FireballConfig config)
+        public Fireball(FireballLevelConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;

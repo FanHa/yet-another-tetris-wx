@@ -12,13 +12,13 @@ namespace Model.Tetri
     {
         public CellTypeId id;
         public Type type;
-        public SkillConfigGroup configGroup;
+        public SkillConfig skillConfig;
 
-        public CellTypeMeta(CellTypeId id, Type type, SkillConfigGroup configGroup)
+        public CellTypeMeta(CellTypeId id, Type type, SkillConfig skillConfig)
         {
             this.id = id;
             this.type = type;
-            this.configGroup = configGroup;
+            this.skillConfig = skillConfig;
         }
     }
 
@@ -28,7 +28,7 @@ namespace Model.Tetri
 
         public IReadOnlyDictionary<CellTypeId, Type> CellTypeIdToType { get; private set; }
         public IReadOnlyDictionary<Type, CellTypeId> TypeToCellTypeId { get; private set; }
-        public IReadOnlyDictionary<Type, SkillConfigGroup> CellTypeToConfig { get; private set; }
+        public IReadOnlyDictionary<Type, SkillConfig> CellTypeToConfig { get; private set; }
 
         public IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdToType { get; private set; }
         public IReadOnlyDictionary<Type, CharacterTypeId> TypeToCharacterTypeId { get; private set; }
@@ -42,7 +42,7 @@ namespace Model.Tetri
             }
         }
 
-        private IReadOnlyDictionary<Type, SkillConfigGroup> CellConfigMap
+        private IReadOnlyDictionary<Type, SkillConfig> CellConfigMap
         {
             get
             {
@@ -87,7 +87,7 @@ namespace Model.Tetri
                 new(CellTypeId.IcyCage, typeof(IcyCage), cellLevelConfigManager.IcyCageConfigGroup),
                 new(CellTypeId.Snowball, typeof(Snowball), cellLevelConfigManager.SnowballConfigGroup),
                 new(CellTypeId.IceBreaker, typeof(IceBreaker), cellLevelConfigManager.IceBreakerConfigGroup),
-                new(CellTypeId.Fireball, typeof(Fireball), cellLevelConfigManager.FireballConfigGroup),
+                new(CellTypeId.Fireball, typeof(Fireball), cellLevelConfigManager.FireballSkillConfig),
                 new(CellTypeId.FlameInject, typeof(FlameInject), cellLevelConfigManager.FlameInjectConfigGroup),
                 new(CellTypeId.BlazingField, typeof(BlazingField), cellLevelConfigManager.BlazingFieldConfigGroup),
                 new(CellTypeId.FlameRing, typeof(FlameRing), cellLevelConfigManager.FlameRingConfigGroup),
@@ -114,7 +114,7 @@ namespace Model.Tetri
             // 自动生成映射表
             CellTypeIdToType = cellTypeMetas.ToDictionary(m => m.id, m => m.type);
             TypeToCellTypeId = cellTypeMetas.ToDictionary(m => m.type, m => m.id);
-            CellTypeToConfig = cellTypeMetas.ToDictionary(m => m.type, m => m.configGroup);
+            CellTypeToConfig = cellTypeMetas.ToDictionary(m => m.type, m => m.skillConfig);
 
             // 角色类型映射表
             var characterTypeMetas = new List<(CharacterTypeId id, Type type)>
@@ -174,7 +174,7 @@ namespace Model.Tetri
             // 2. 查找并注入配置
             if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
             {
-                cell.SkillConfigGroup = config;
+                cell.SkillConfig = config;
             }
             else
             {
@@ -198,7 +198,7 @@ namespace Model.Tetri
             // todo character 似乎没有Config
             if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
             {
-                cell.SkillConfigGroup = config;
+                cell.SkillConfig = config;
             }
             return cell;
         }
@@ -207,7 +207,7 @@ namespace Model.Tetri
         {
 
             var clone = (Cell)Activator.CreateInstance(cell.GetType());
-            clone.SkillConfigGroup = cell.SkillConfigGroup; // 复制技能配置组
+            clone.SkillConfig = cell.SkillConfig; // 复制技能配置
             clone.Level = cell.Level;
             return clone;
         }

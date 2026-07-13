@@ -9,7 +9,7 @@ namespace Model.Tetri
     {
         [Header("火系技能")]
         public BlazingFieldConfigGroup BlazingFieldConfigGroup;
-        public FireballConfigGroup FireballConfigGroup;
+        public FireballSkillConfig FireballSkillConfig;
         public FlameInjectConfigGroup FlameInjectConfigGroup;
         public FlameRingConfigGroup FlameRingConfigGroup;
 
