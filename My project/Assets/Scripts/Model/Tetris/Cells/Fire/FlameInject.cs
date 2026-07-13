@@ -21,7 +21,7 @@ namespace Model.Tetri
         public override void Apply(Unit unit)
         {
             var configGroup = SkillConfig as Units.Skills.FlameInjectSkillConfig;
-            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
+            var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.FlameInject(config);
             unit.AddSkill(skillInstance);
         }

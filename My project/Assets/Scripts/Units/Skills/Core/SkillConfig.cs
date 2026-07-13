@@ -12,22 +12,20 @@ namespace Units.Skills
         [Header("等级配置")]
         public List<TLevelConfig> LevelConfigs = new();
 
-        public bool TryGetLevelConfig(int level, out TLevelConfig config)
+        public TLevelConfig GetLevelConfig(int level)
         {
-            config = default;
             if (LevelConfigs == null || LevelConfigs.Count == 0)
             {
-                return false;
+                return default;
             }
 
             int index = level - 1;
             if (index < 0 || index >= LevelConfigs.Count)
             {
-                return false;
+                return default;
             }
 
-            config = LevelConfigs[index];
-            return config != null;
+            return LevelConfigs[index];
         }
     }
 

@@ -22,7 +22,7 @@ namespace Model.Tetri
         public override void Apply(Unit unit)
         {
             var configGroup = SkillConfig as Units.Skills.ShadowAttackSkillConfig;
-            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
+            var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.ShadowAttack(config);
             unit.AddSkill(skillInstance);
         }

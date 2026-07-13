@@ -22,7 +22,7 @@ namespace Model.Tetri
         public override void Apply(Unit unit)
         {
             var configGroup = SkillConfig as Units.Skills.FrostZoneSkillConfig;
-            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
+            var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.FrostZone(config);
             unit.AddSkill(skillInstance);
         }

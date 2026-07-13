@@ -22,7 +22,7 @@ namespace Model.Tetri
         public override void Apply(Unit unit)
         {
             var configGroup = SkillConfig as Units.Skills.EnergyAbsorbSkillConfig;
-            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
+            var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.EnergyAbsorb(config);
             unit.AddSkill(skillInstance);
         }
