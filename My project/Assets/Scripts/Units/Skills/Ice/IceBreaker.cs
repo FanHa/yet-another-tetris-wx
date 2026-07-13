@@ -8,9 +8,9 @@ namespace Units.Skills
     public class IceBreaker : Skill, IPassiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.IceBreaker;
-        public IceBreakerConfig Config { get; }
+        public IceBreakerLevelConfig Config { get; }
 
-        public IceBreaker(IceBreakerConfig config)
+        public IceBreaker(IceBreakerLevelConfig config)
         {
             Config = config;
         }

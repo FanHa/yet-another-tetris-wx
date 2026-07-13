@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FrostZoneConfigGroup")]
-    public class FrostZoneConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/FrostZoneSkillConfig")]
+    public class FrostZoneSkillConfig : SkillConfig<FrostZoneLevelConfig>
     {
-        public List<FrostZoneConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class FrostZoneConfig : SkillConfig
+    public class FrostZoneLevelConfig : SkillLevelConfig
     {
         [Header("基础属性")]
         [Tooltip("基础半径")]

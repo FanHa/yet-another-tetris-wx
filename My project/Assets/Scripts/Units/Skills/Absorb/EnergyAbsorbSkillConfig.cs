@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/EnergyAbsorbConfigGroup")]
-    public class EnergyAbsorbConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/EnergyAbsorbSkillConfig")]
+    public class EnergyAbsorbSkillConfig : SkillConfig<EnergyAbsorbLevelConfig>
     {
-        public List<EnergyAbsorbConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class EnergyAbsorbConfig: SkillConfig
+    public class EnergyAbsorbLevelConfig : SkillLevelConfig
     {
         public float BuffDuration;
         public float BaseEnergyAbsorbPerSkillCast;

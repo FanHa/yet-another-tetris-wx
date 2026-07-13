@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/WindShiftConfigGroup")]
-    public class WindShiftConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/WindShiftSkillConfig")]
+    public class WindShiftSkillConfig : SkillConfig<WindShiftLevelConfig>
     {
-        public List<WindShiftConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class WindShiftConfig : SkillConfig
+    public class WindShiftLevelConfig : SkillLevelConfig
     {
 
         public float AttackRangeBonus;

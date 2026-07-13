@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 471d8271c75338642998164340799e76, type: 3}
   m_Name: CellLevelConfigManager
   m_EditorClassIdentifier: 
-  BlazingFieldConfigGroup: {fileID: 11400000, guid: 65f215bb04314cc4b88e85fa107975fb, type: 2}
-  FireballConfigGroup: {fileID: 11400000, guid: 6a1eef4ac1cdb2c4c96a4c7a27f946a2, type: 2}
-  FlameInjectConfigGroup: {fileID: 11400000, guid: ce0abe232f3541c4a9c1050f48a27157, type: 2}
-  FlameRingConfigGroup: {fileID: 11400000, guid: 639063875c5662a42900ab258b3c458b, type: 2}
-  SnowballConfigGroup: {fileID: 11400000, guid: a77e06cb856e8d24bb479470b7e993b7, type: 2}
-  IcyCageConfigGroup: {fileID: 11400000, guid: 2e084169d1806404ebc15a3a8bed4951, type: 2}
-  IceShieldConfigGroup: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
-  FrostZoneConfigGroup: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}
-  IceBreakerConfigGroup: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
-  WindShiftConfigGroup: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}
-  WildWindConfigGroup: {fileID: 11400000, guid: 2efad6ffda58cc449a2fde652c25fab0, type: 2}
-  AttackBoostConfigGroup: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
-  WindKnockbackConfigGroup: {fileID: 11400000, guid: 1b6654a0ca2c0934baece62751e6ac67, type: 2}
-  LifeBombConfigGroup: {fileID: 11400000, guid: 208605d500f1c43499f0044326cdc70d, type: 2}
-  LifeShieldConfigGroup: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}
-  LifePowerConfigGroup: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
-  LifeEchoConfigGroup: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
-  GuardAllyConfigGroup: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
-  ShadowAttackConfigGroup: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
-  ShadowStepConfigGroup: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
-  ShadowArrowConfigGroup: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}
-  VulnerabilityFieldConfigGroup: {fileID: 11400000, guid: 19d59c7650b835544982712fb5b003e8, type: 2}
-  ChargeConfigGroup: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
-  EnergyAbsorbConfigGroup: {fileID: 11400000, guid: 3b7ae0941fe7b7f47a05c23b93c4dcf2, type: 2}
-  ThunderStrikeConfigGroup: {fileID: 11400000, guid: 854b82e1f822f79428ffaa8a926da091, type: 2}
+  BlazingFieldSkillConfig: {fileID: 11400000, guid: 65f215bb04314cc4b88e85fa107975fb, type: 2}
+  FireballSkillConfig: {fileID: 11400000, guid: 6a1eef4ac1cdb2c4c96a4c7a27f946a2, type: 2}
+  FlameInjectSkillConfig: {fileID: 11400000, guid: ce0abe232f3541c4a9c1050f48a27157, type: 2}
+  FlameRingSkillConfig: {fileID: 11400000, guid: 639063875c5662a42900ab258b3c458b, type: 2}
+  SnowballSkillConfig: {fileID: 11400000, guid: a77e06cb856e8d24bb479470b7e993b7, type: 2}
+  IcyCageSkillConfig: {fileID: 11400000, guid: 2e084169d1806404ebc15a3a8bed4951, type: 2}
+  IceShieldSkillConfig: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
+  FrostZoneSkillConfig: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}
+  IceBreakerSkillConfig: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
+  WindShiftSkillConfig: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}
+  WildWindSkillConfig: {fileID: 11400000, guid: 2efad6ffda58cc449a2fde652c25fab0, type: 2}
+  AttackBoostSkillConfig: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
+  WindKnockbackSkillConfig: {fileID: 0}
+  LifeBombSkillConfig: {fileID: 11400000, guid: 208605d500f1c43499f0044326cdc70d, type: 2}
+  LifeShieldSkillConfig: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}
+  LifePowerSkillConfig: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
+  LifeEchoSkillConfig: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
+  GuardAllySkillConfig: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
+  ShadowAttackSkillConfig: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
+  ShadowStepSkillConfig: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
+  ShadowArrowSkillConfig: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}
+  VulnerabilityFieldSkillConfig: {fileID: 11400000, guid: 19d59c7650b835544982712fb5b003e8, type: 2}
+  ChargeSkillConfig: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
+  EnergyAbsorbSkillConfig: {fileID: 11400000, guid: 3b7ae0941fe7b7f47a05c23b93c4dcf2, type: 2}
+  ThunderStrikeSkillConfig: {fileID: 11400000, guid: 854b82e1f822f79428ffaa8a926da091, type: 2}

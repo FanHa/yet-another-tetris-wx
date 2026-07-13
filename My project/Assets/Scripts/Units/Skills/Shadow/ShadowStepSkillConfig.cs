@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ShadowStepConfigGroup")]
-    public class ShadowStepConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/ShadowStepSkillConfig")]
+    public class ShadowStepSkillConfig : SkillConfig<ShadowStepLevelConfig>
     {
-        public List<ShadowStepConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class ShadowStepConfig : SkillConfig
+    public class ShadowStepLevelConfig : SkillLevelConfig
     {
 
         [Header("消耗")]

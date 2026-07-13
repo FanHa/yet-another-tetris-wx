@@ -1,15 +1,13 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ChargeConfigGroup")]
-    public class ChargeConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/ChargeSkillConfig")]
+    public class ChargeSkillConfig : SkillConfig<ChargeLevelConfig>
     {
-        public List<ChargeConfig> LevelConfigs;
     }
     [System.Serializable]
-    public class ChargeConfig : SkillConfig
+    public class ChargeLevelConfig : SkillLevelConfig
     {
         public float RequiredEnergy;
 

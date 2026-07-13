@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/LifeShieldConfigGroup")]
-    public class LifeShieldConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/LifeShieldSkillConfig")]
+    public class LifeShieldSkillConfig : SkillConfig<LifeShieldLevelConfig>
     {
-        public List<LifeShieldConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class LifeShieldConfig : SkillConfig
+    public class LifeShieldLevelConfig : SkillLevelConfig
     {
         [Header("通用")]
         public float RequiredEnergy;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Model.Tetri;
 using UnityEngine;
 
@@ -8,9 +7,9 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.WindKnockback;
 
-        public WindKnockbackConfig Config { get; }
+        public WindKnockbackLevelConfig Config { get; }
 
-        public WindKnockback(WindKnockbackConfig config)
+        public WindKnockback(WindKnockbackLevelConfig config)
         {
             Config = config;
         }
@@ -57,20 +56,5 @@ namespace Units.Skills
                 sourceSkill: this
             ));
         }
-    }
-
-    [CreateAssetMenu(menuName = "SkillConfig/WindKnockbackConfigGroup")]
-    public class WindKnockbackConfigGroup : SkillConfigGroup
-    {
-        public List<WindKnockbackConfig> LevelConfigs;
-    }
-
-    [System.Serializable]
-    public class WindKnockbackConfig : SkillConfig
-    {
-        [Header("属性")]
-        public float BaseKnockbackDistance = 0.12f;
-        public float KnockbackDistancePerWindCell = 0.01f;
-        public float MaxKnockbackDistance = 0.18f;
     }
 }

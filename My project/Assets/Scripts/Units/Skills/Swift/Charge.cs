@@ -6,9 +6,9 @@ namespace Units.Skills
     public class Charge : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.Charge;
-        public ChargeConfig Config { get; }
+        public ChargeLevelConfig Config { get; }
 
-        public Charge(ChargeConfig config)
+        public Charge(ChargeLevelConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;

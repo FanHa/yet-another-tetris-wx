@@ -14,38 +14,38 @@ namespace Model.Tetri
         public FlameRingSkillConfig FlameRingSkillConfig;
 
         [Header("冰系技能")]
-        public SnowballConfigGroup SnowballConfigGroup;
-        public IcyCageConfigGroup IcyCageConfigGroup;
-        public IceShieldConfigGroup IceShieldConfigGroup;
-        public FrostZoneConfigGroup FrostZoneConfigGroup;
-        public IceBreakerConfigGroup IceBreakerConfigGroup;
+        public SnowballSkillConfig SnowballSkillConfig;
+        public IcyCageSkillConfig IcyCageSkillConfig;
+        public IceShieldSkillConfig IceShieldSkillConfig;
+        public FrostZoneSkillConfig FrostZoneSkillConfig;
+        public IceBreakerSkillConfig IceBreakerSkillConfig;
 
         [Header("风系技能")]
-        public WindShiftConfigGroup WindShiftConfigGroup;
-        public WildWindConfigGroup WildWindConfigGroup;
-        public AttackBoostConfigGroup AttackBoostConfigGroup;
-        public WindKnockbackConfigGroup WindKnockbackConfigGroup;
+        public WindShiftSkillConfig WindShiftSkillConfig;
+        public WildWindSkillConfig WildWindSkillConfig;
+        public AttackBoostSkillConfig AttackBoostSkillConfig;
+        public WindKnockbackSkillConfig WindKnockbackSkillConfig;
 
         [Header("生命")]
-        public LifeBombConfigGroup LifeBombConfigGroup;
-        public LifeShieldConfigGroup LifeShieldConfigGroup;
-        public LifePowerConfigGroup LifePowerConfigGroup;
-        public LifeEchoConfigGroup LifeEchoConfigGroup;
-        public GuardAllyConfigGroup GuardAllyConfigGroup;
+        public LifeBombSkillConfig LifeBombSkillConfig;
+        public LifeShieldSkillConfig LifeShieldSkillConfig;
+        public LifePowerSkillConfig LifePowerSkillConfig;
+        public LifeEchoSkillConfig LifeEchoSkillConfig;
+        public GuardAllySkillConfig GuardAllySkillConfig;
 
         [Header("暗影")]
-        public ShadowAttackConfigGroup ShadowAttackConfigGroup;
-        public ShadowStepConfigGroup ShadowStepConfigGroup;
-        public ShadowArrowConfigGroup ShadowArrowConfigGroup;
-        public VulnerabilityFieldConfigGroup VulnerabilityFieldConfigGroup;
+        public ShadowAttackSkillConfig ShadowAttackSkillConfig;
+        public ShadowStepSkillConfig ShadowStepSkillConfig;
+        public ShadowArrowSkillConfig ShadowArrowSkillConfig;
+        public VulnerabilityFieldSkillConfig VulnerabilityFieldSkillConfig;
 
         [Header("迅捷")]
-        public ChargeConfigGroup ChargeConfigGroup;
+        public ChargeSkillConfig ChargeSkillConfig;
 
         [Header("吸取")]
-        public EnergyAbsorbConfigGroup EnergyAbsorbConfigGroup;
+        public EnergyAbsorbSkillConfig EnergyAbsorbSkillConfig;
 
         [Header("电系")]
-        public ThunderStrikeConfigGroup ThunderStrikeConfigGroup;
+        public ThunderStrikeSkillConfig ThunderStrikeSkillConfig;
     }
 }

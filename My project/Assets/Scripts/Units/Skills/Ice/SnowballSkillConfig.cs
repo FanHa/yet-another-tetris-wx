@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/SnowballConfigGroup")]
-    public class SnowballConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/SnowballSkillConfig")]
+    public class SnowballSkillConfig : SkillConfig<SnowballLevelConfig>
     {
-        public List<SnowballConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class SnowballConfig : SkillConfig
+    public class SnowballLevelConfig : SkillLevelConfig
     {
         [Header("伤害")]
         public float BaseDamage = 10f;

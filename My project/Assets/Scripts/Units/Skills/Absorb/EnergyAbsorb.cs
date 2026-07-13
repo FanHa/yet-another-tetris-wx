@@ -8,9 +8,9 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.EnergyAbsorb;
 
-        public EnergyAbsorbConfig Config { get; }
+        public EnergyAbsorbLevelConfig Config { get; }
 
-        public EnergyAbsorb(EnergyAbsorbConfig config)
+        public EnergyAbsorb(EnergyAbsorbLevelConfig config)
         {
             Config = config;
         }

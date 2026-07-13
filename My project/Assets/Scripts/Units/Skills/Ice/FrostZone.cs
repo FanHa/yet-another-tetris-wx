@@ -9,11 +9,11 @@ namespace Units.Skills
     public class FrostZone : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.FrostZone;
-        public FrostZoneConfig Config { get; }
+        public FrostZoneLevelConfig Config { get; }
         private Vector3 targetPosition;
 
 
-        public FrostZone(FrostZoneConfig config)
+        public FrostZone(FrostZoneLevelConfig config)
         {
             RequiredEnergy = config.RequiredEnergy;
             this.Config = config;

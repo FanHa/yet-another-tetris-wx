@@ -7,10 +7,10 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.ThunderStrike;
 
-        public ThunderStrikeConfig Config { get; }
+        public ThunderStrikeLevelConfig Config { get; }
         private Unit cachedTarget;
 
-        public ThunderStrike(ThunderStrikeConfig config)
+        public ThunderStrike(ThunderStrikeLevelConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;

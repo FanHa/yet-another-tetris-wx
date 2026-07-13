@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/IceShieldConfigGroup")]
-    public class IceShieldConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/IceShieldSkillConfig")]
+    public class IceShieldSkillConfig : SkillConfig<IceShieldLevelConfig>
     {
-        public List<IceShieldConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class IceShieldConfig : SkillConfig
+    public class IceShieldLevelConfig : SkillLevelConfig
     {
         [Header("减速效果")]
         public int BaseMoveSlowPercent = 10;

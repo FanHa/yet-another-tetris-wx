@@ -21,8 +21,8 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfigGroup as Units.Skills.IceBreakerConfigGroup;
-            var config = configGroup?.LevelConfigs[Level - 1];
+            var configGroup = SkillConfig as Units.Skills.IceBreakerSkillConfig;
+            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
             var skillInstance = new Units.Skills.IceBreaker(config);
             unit.AddSkill(skillInstance);
         }

@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/IceBreakerConfigGroup")]
-    public class IceBreakerConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/IceBreakerSkillConfig")]
+    public class IceBreakerSkillConfig : SkillConfig<IceBreakerLevelConfig>
     {
-        public List<IceBreakerConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class IceBreakerConfig : SkillConfig
+    public class IceBreakerLevelConfig : SkillLevelConfig
     {
         [Header("通用")]
         public float BuffDuration;

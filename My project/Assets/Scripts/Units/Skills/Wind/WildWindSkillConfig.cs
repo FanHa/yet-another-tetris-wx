@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/WildWindConfigGroup")]
-    public class WildWindConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/WildWindSkillConfig")]
+    public class WildWindSkillConfig : SkillConfig<WildWindLevelConfig>
     {
-        public List<WildWindConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class WildWindConfig : SkillConfig
+    public class WildWindLevelConfig : SkillLevelConfig
     {
         [Header("技能消耗")]
         public float RequiredEnergy;

@@ -5,9 +5,9 @@ namespace Units.Skills
 {
     public class AttackBoost : ActiveSkill
     {
-        public AttackBoostConfig Config { get; }
+        public AttackBoostLevelConfig Config { get; }
 
-        public AttackBoost(AttackBoostConfig config)
+        public AttackBoost(AttackBoostLevelConfig config)
         {
             Config = config;
             this.RequiredEnergy = config.RequiredEnergy;

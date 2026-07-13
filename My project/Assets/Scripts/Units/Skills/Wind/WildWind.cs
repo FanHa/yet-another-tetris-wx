@@ -5,9 +5,9 @@ namespace Units.Skills
 {
     public class WildWind : ActiveSkill
     {
-        public WildWindConfig Config { get; }
+        public WildWindLevelConfig Config { get; }
 
-        public WildWind(WildWindConfig config)
+        public WildWind(WildWindLevelConfig config)
         {
             this.Config = config;
             this.RequiredEnergy = config.RequiredEnergy;

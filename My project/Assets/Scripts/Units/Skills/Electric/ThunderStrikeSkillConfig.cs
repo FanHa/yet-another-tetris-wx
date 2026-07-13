@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ThunderStrikeConfigGroup")]
-    public class ThunderStrikeConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/ThunderStrikeSkillConfig")]
+    public class ThunderStrikeSkillConfig : SkillConfig<ThunderStrikeLevelConfig>
     {
-        public List<ThunderStrikeConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class ThunderStrikeConfig : SkillConfig
+    public class ThunderStrikeLevelConfig : SkillLevelConfig
     {
         [Header("伤害")]
         [Tooltip("基础技能伤害")]

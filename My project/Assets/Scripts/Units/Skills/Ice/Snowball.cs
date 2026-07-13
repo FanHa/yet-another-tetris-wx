@@ -7,10 +7,10 @@ namespace Units.Skills
     public class Snowball : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.Snowball;
-        public SnowballConfig Config { get; }
+        public SnowballLevelConfig Config { get; }
         private Unit cachedTarget;
 
-        public Snowball(SnowballConfig config)
+        public Snowball(SnowballLevelConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;

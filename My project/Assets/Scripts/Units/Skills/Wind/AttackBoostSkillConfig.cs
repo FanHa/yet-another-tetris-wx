@@ -1,15 +1,13 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/AttackBoostConfigGroup")]
-    public class AttackBoostConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/AttackBoostSkillConfig")]
+    public class AttackBoostSkillConfig : SkillConfig<AttackBoostLevelConfig>
     {
-        public List<AttackBoostConfig> LevelConfigs;
     }
     [System.Serializable]
-    public class AttackBoostConfig : SkillConfig
+    public class AttackBoostLevelConfig : SkillLevelConfig
     {
         [Header("通用")]
         public float RequiredEnergy;

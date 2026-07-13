@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ShadowAttackConfigGroup")]
-    public class ShadowAttackConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/ShadowAttackSkillConfig")]
+    public class ShadowAttackSkillConfig : SkillConfig<ShadowAttackLevelConfig>
     {
-        public List<ShadowAttackConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class ShadowAttackConfig : SkillConfig
+    public class ShadowAttackLevelConfig : SkillLevelConfig
     {
         public float VulnerabilityPercent;
 

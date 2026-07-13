@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: WindKnockbackConfigGroup
-  m_EditorClassIdentifier: Assembly-CSharp:Units.Skills:WindKnockbackConfigGroup
+  m_Name: Wind Knockback Skill Config
+  m_EditorClassIdentifier: Assembly-CSharp:Units.Skills:WindKnockbackSkillConfig
   LevelConfigs:
-  - BaseKnockbackDistance: 0.5
+  - BaseKnockbackDistance: 1
     KnockbackDistancePerWindCell: 0.1
-    MaxKnockbackDistance: 1.2
-  - BaseKnockbackDistance: 0.5
+    MaxKnockbackDistance: 2
+  - BaseKnockbackDistance: 1
     KnockbackDistancePerWindCell: 0.1
-    MaxKnockbackDistance: 1.2
+    MaxKnockbackDistance: 2

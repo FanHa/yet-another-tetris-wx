@@ -4,10 +4,10 @@ namespace Units.Skills
 {
     public class WindShift : Skill, IPassiveSkill
     {
-        public WindShiftConfig Config { get; }
+        public WindShiftLevelConfig Config { get; }
         public override CellTypeId CellTypeId => CellTypeId.WindShift;
 
-        public WindShift(WindShiftConfig config)
+        public WindShift(WindShiftLevelConfig config)
         {
             Config = config;
         }

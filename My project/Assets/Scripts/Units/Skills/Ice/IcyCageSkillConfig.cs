@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/IcyCageConfigGroup")]
-    public class IcyCageConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/IcyCageSkillConfig")]
+    public class IcyCageSkillConfig : SkillConfig<IcyCageLevelConfig>
     {
-        public List<IcyCageConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class IcyCageConfig : SkillConfig
+    public class IcyCageLevelConfig : SkillLevelConfig
     {
         [Header("冻结效果")]
         [Tooltip("基础冻结持续时间")]

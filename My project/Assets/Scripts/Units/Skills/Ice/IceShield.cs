@@ -6,9 +6,9 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.IceShield;
 
-        public IceShieldConfig Config { get; }
+        public IceShieldLevelConfig Config { get; }
 
-        public IceShield(IceShieldConfig config)
+        public IceShield(IceShieldLevelConfig config)
         {
             Config = config;
         }

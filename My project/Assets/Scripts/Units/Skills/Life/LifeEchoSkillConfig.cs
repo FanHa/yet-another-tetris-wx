@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/LifeEchoConfigGroup")]
-    public class LifeEchoConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/LifeEchoSkillConfig")]
+    public class LifeEchoSkillConfig : SkillConfig<LifeEchoLevelConfig>
     {
-        public List<LifeEchoConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class LifeEchoConfig : SkillConfig
+    public class LifeEchoLevelConfig : SkillLevelConfig
     {
         [Header("属性")]
         public float DamagePercentToReflect; // 反射伤害百分比

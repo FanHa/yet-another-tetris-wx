@@ -19,8 +19,8 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfigGroup as Units.Skills.ThunderStrikeConfigGroup;
-            var config = configGroup?.LevelConfigs[Level - 1];
+            var configGroup = SkillConfig as Units.Skills.ThunderStrikeSkillConfig;
+            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
             var skillInstance = new Units.Skills.ThunderStrike(config);
             unit.AddSkill(skillInstance);
         }
