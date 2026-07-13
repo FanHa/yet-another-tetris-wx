@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FlameRingConfigGroup")]
-    public class FlameRingConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/FlameRingSkillConfig")]
+    public class FlameRingSkillConfig : SkillConfig<FlameRingLevelConfig>
     {
-        public List<FlameRingConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class FlameRingConfig: SkillConfig
+    public class FlameRingLevelConfig: SkillLevelConfig
     {
         [Header("灼烧效果")]
         public float BaseDotDps = 2f;

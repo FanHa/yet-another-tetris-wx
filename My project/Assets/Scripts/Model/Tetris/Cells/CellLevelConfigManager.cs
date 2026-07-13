@@ -8,10 +8,10 @@ namespace Model.Tetri
     public class CellLevelConfigManager : ScriptableObject
     {
         [Header("火系技能")]
-        public BlazingFieldConfigGroup BlazingFieldConfigGroup;
+        public BlazingFieldSkillConfig BlazingFieldSkillConfig;
         public FireballSkillConfig FireballSkillConfig;
-        public FlameInjectConfigGroup FlameInjectConfigGroup;
-        public FlameRingConfigGroup FlameRingConfigGroup;
+        public FlameInjectSkillConfig FlameInjectSkillConfig;
+        public FlameRingSkillConfig FlameRingSkillConfig;
 
         [Header("冰系技能")]
         public SnowballConfigGroup SnowballConfigGroup;

@@ -8,9 +8,9 @@ namespace Units.Skills
     {
         public override CellTypeId CellTypeId => CellTypeId.FlameRing;
 
-        public FlameRingConfig Config { get; }
+        public FlameRingLevelConfig Config { get; }
 
-        public FlameRing(FlameRingConfig config)
+        public FlameRing(FlameRingLevelConfig config)
         {
             Config = config;
         }

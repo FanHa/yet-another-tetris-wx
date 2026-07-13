@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/BlazingFieldConfigGroup")]
-    public class BlazingFieldConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/BlazingFieldSkillConfig")]
+    public class BlazingFieldSkillConfig : SkillConfig<BlazingFieldLevelConfig>
     {
-        public List<BlazingFieldConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class BlazingFieldConfig : SkillConfig
+    public class BlazingFieldLevelConfig : SkillLevelConfig
     {
         [Header("基础属性")]
         public float BaseRadius = 1.5f;

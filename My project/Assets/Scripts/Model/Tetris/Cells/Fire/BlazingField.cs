@@ -20,8 +20,8 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfigGroup as Units.Skills.BlazingFieldConfigGroup;
-            var config = configGroup?.LevelConfigs[Level - 1];
+            var configGroup = SkillConfig as Units.Skills.BlazingFieldSkillConfig;
+            var config = configGroup?.TryGetLevelConfig(Level, out var levelConfig) == true ? levelConfig : null;
             var skillInstance = new Units.Skills.BlazingField(config);
             unit.AddSkill(skillInstance);
         }

@@ -1,16 +1,14 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FlameInjectConfigGroup")]
-    public class FlameInjectConfigGroup : SkillConfigGroup
+    [CreateAssetMenu(menuName = "SkillConfig/FlameInjectSkillConfig")]
+    public class FlameInjectSkillConfig : SkillConfig<FlameInjectLevelConfig>
     {
-        public List<FlameInjectConfig> LevelConfigs;
     }
 
     [System.Serializable]
-    public class FlameInjectConfig : SkillConfig
+    public class FlameInjectLevelConfig : SkillLevelConfig
     {
         [Header("通用")]
         public float BuffDuration;

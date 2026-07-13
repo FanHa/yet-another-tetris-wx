@@ -9,9 +9,9 @@ namespace Units.Skills
     public class BlazingField : ActiveSkill
     {
         public override CellTypeId CellTypeId => CellTypeId.BlazingField;
-        public BlazingFieldConfig Config { get; }
+        public BlazingFieldLevelConfig Config { get; }
         private Vector3 targetPosition;
-        public BlazingField(BlazingFieldConfig config)
+        public BlazingField(BlazingFieldLevelConfig config)
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
