@@ -20,7 +20,7 @@ namespace Model.Tetri
 
         private BaseStats ResolveBaseStats()
         {
-            var config = (Units.Skills.CharacterBaseStatConfig)SkillConfig;
+            var config = (Units.Skills.CharacterBaseStatConfig)Config;
 
             return new BaseStats
             {

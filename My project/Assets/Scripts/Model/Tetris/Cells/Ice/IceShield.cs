@@ -13,7 +13,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.IceShieldSkillConfig;
+            var configGroup = Config as Units.Skills.IceShieldSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.IceShield(config);
             unit.AddSkill(skillInstance);

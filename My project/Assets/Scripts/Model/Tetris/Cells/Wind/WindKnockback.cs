@@ -22,10 +22,11 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.WindKnockbackSkillConfig;
+            var configGroup = Config as Units.Skills.WindKnockbackSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.WindKnockback(config);
             unit.AddSkill(skillInstance);
         }
     }
 }
+

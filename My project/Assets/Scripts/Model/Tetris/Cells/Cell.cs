@@ -18,7 +18,7 @@ namespace Model.Tetri
             set => level = Mathf.Max(1, value);
         }
         public virtual CellTypeId CellTypeId { get; }
-        public SkillConfig SkillConfig;
+        public SkillConfig Config;
 
         public abstract string Description();
         public abstract string Name();

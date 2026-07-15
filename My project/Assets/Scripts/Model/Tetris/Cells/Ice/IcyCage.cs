@@ -21,7 +21,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.IcyCageSkillConfig;
+            var configGroup = Config as Units.Skills.IcyCageSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.IcyCage(config);
             unit.AddSkill(skillInstance);

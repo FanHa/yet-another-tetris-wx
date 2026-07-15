@@ -207,7 +207,7 @@ namespace Model.Tetri
             // 2. 查找并注入配置
             if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
             {
-                cell.SkillConfig = config;
+                cell.Config = config;
             }
             else
             {
@@ -230,7 +230,7 @@ namespace Model.Tetri
 
             if (CharacterConfigMap != null && CharacterConfigMap.TryGetValue(type, out var config) && config != null)
             {
-                cell.SkillConfig = config;
+                cell.Config = config;
             }
             else
             {
@@ -245,7 +245,7 @@ namespace Model.Tetri
                 throw new ArgumentNullException(nameof(cell), $"Source cell is null. {BuildErrorContext(nameof(Clone), CellTypeId.None)}");
 
             var clone = (Cell)Activator.CreateInstance(cell.GetType());
-            clone.SkillConfig = cell.SkillConfig;
+            clone.Config = cell.Config;
             clone.Level = cell.Level;
 
             if (cell is Padding sourcePadding && clone is Padding clonePadding)
@@ -258,3 +258,4 @@ namespace Model.Tetri
     }
 
 }
+

@@ -21,7 +21,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.LifePowerSkillConfig;
+            var configGroup = Config as Units.Skills.LifePowerSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.LifePower(config);
             unit.AddSkill(skillInstance);

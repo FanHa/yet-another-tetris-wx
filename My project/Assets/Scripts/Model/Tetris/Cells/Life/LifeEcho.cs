@@ -21,7 +21,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.LifeEchoSkillConfig;
+            var configGroup = Config as Units.Skills.LifeEchoSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.LifeEcho(config);
             unit.AddSkill(skillInstance);

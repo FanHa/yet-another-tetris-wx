@@ -20,7 +20,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.FlameRingSkillConfig;
+            var configGroup = Config as Units.Skills.FlameRingSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.FlameRing(config);
             unit.AddSkill(skillInstance);

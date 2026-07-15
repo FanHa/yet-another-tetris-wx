@@ -19,10 +19,11 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.ThunderStrikeSkillConfig;
+            var configGroup = Config as Units.Skills.ThunderStrikeSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.ThunderStrike(config);
             unit.AddSkill(skillInstance);
         }
     }
 }
+

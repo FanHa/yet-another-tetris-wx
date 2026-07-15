@@ -21,7 +21,7 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var configGroup = SkillConfig as Units.Skills.WildWindSkillConfig;
+            var configGroup = Config as Units.Skills.WildWindSkillConfig;
             var config = configGroup?.GetLevelConfig(Level);
             var skillInstance = new Units.Skills.WildWind(config);
             unit.AddSkill(skillInstance);
