@@ -12,13 +12,27 @@ namespace Model.Tetri
     {
         public CellTypeId id;
         public Type type;
-        public SkillConfig skillConfig;
+        public SkillConfig config;
 
-        public CellTypeMeta(CellTypeId id, Type type, SkillConfig skillConfig)
+        public CellTypeMeta(CellTypeId id, Type type, SkillConfig config)
         {
             this.id = id;
             this.type = type;
-            this.skillConfig = skillConfig;
+            this.config = config;
+        }
+    }
+
+    public class CharacterTypeMeta
+    {
+        public CharacterTypeId id;
+        public Type type;
+        public SkillConfig config;
+
+        public CharacterTypeMeta(CharacterTypeId id, Type type, SkillConfig config)
+        {
+            this.id = id;
+            this.type = type;
+            this.config = config;
         }
     }
 
@@ -32,6 +46,7 @@ namespace Model.Tetri
 
         public IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdToType { get; private set; }
         public IReadOnlyDictionary<Type, CharacterTypeId> TypeToCharacterTypeId { get; private set; }
+        public IReadOnlyDictionary<Type, SkillConfig> CharacterTypeToConfig { get; private set; }
 
         private IReadOnlyDictionary<CellTypeId, Type> CellTypeIdMap
         {
@@ -57,6 +72,15 @@ namespace Model.Tetri
             {
                 EnsureInitialized();
                 return CharacterTypeIdToType;
+            }
+        }
+
+        private IReadOnlyDictionary<Type, SkillConfig> CharacterConfigMap
+        {
+            get
+            {
+                EnsureInitialized();
+                return CharacterTypeToConfig;
             }
         }
 
@@ -114,20 +138,29 @@ namespace Model.Tetri
             // 自动生成映射表
             CellTypeIdToType = cellTypeMetas.ToDictionary(m => m.id, m => m.type);
             TypeToCellTypeId = cellTypeMetas.ToDictionary(m => m.type, m => m.id);
-            CellTypeToConfig = cellTypeMetas.ToDictionary(m => m.type, m => m.skillConfig);
+            CellTypeToConfig = cellTypeMetas.ToDictionary(m => m.type, m => m.config);
 
             // 角色类型映射表
-            var characterTypeMetas = new List<(CharacterTypeId id, Type type)>
+            var characterTypeMetas = new List<CharacterTypeMeta>
             {
-                (CharacterTypeId.Square, typeof(Square)),
-                (CharacterTypeId.Triangle, typeof(Triangle)),
-                (CharacterTypeId.Circle, typeof(Circle)),
-                (CharacterTypeId.Aim, typeof(Aim)),
-                (CharacterTypeId.Hourglass, typeof(Hourglass))
+                new(CharacterTypeId.Square, typeof(Square), cellLevelConfigManager.SquareCharacterBaseStatConfig),
+                new(CharacterTypeId.Triangle, typeof(Triangle), cellLevelConfigManager.TriangleCharacterBaseStatConfig),
+                new(CharacterTypeId.Circle, typeof(Circle), cellLevelConfigManager.CircleCharacterBaseStatConfig),
+                new(CharacterTypeId.Aim, typeof(Aim), cellLevelConfigManager.AimCharacterBaseStatConfig),
+                new(CharacterTypeId.Hourglass, typeof(Hourglass), cellLevelConfigManager.HourglassCharacterBaseStatConfig)
             };
             CharacterTypeIdToType = characterTypeMetas.ToDictionary(m => m.id, m => m.type);
             TypeToCharacterTypeId = characterTypeMetas.ToDictionary(m => m.type, m => m.id);
+            CharacterTypeToConfig = characterTypeMetas.ToDictionary(m => m.type, m => m.config);
 
+        }
+
+        private static string BuildErrorContext(string entry, Enum id, Type resolvedType = null, Cell sourceCell = null)
+        {
+            string typeName = resolvedType?.FullName ?? "<null>";
+            string sourceTypeName = sourceCell?.GetType().FullName ?? "<null>";
+            int sourceLevel = sourceCell?.Level ?? -1;
+            return $"[{nameof(TetriCellFactory)}.{entry}] Id={id}, ResolvedType={typeName}, SourceCellType={sourceTypeName}, SourceLevel={sourceLevel}";
         }
 
 
@@ -163,10 +196,10 @@ namespace Model.Tetri
         public Cell CreateCell(CellTypeId cellTypeId)
         {
             if (!CellTypeIdMap.TryGetValue(cellTypeId, out var type))
-                throw new ArgumentException($"Unknown CellTypeId: {cellTypeId}");
+                throw new ArgumentException($"Unknown CellTypeId. {BuildErrorContext(nameof(CreateCell), cellTypeId)}", nameof(cellTypeId));
 
             if (type == null || !typeof(Cell).IsAssignableFrom(type))
-                throw new ArgumentException("Invalid cell type provided.");
+                throw new ArgumentException($"Resolved type is not a valid {nameof(Cell)}. {BuildErrorContext(nameof(CreateCell), cellTypeId, type)}", nameof(cellTypeId));
 
             // 1. 创建Cell实例（无参构造）
             var cell = (Cell)Activator.CreateInstance(type);
@@ -187,28 +220,39 @@ namespace Model.Tetri
         public Character CreateCharacterCell(CharacterTypeId characterTypeId)
         {
             if (!CharacterTypeIdMap.TryGetValue(characterTypeId, out var type))
-                throw new ArgumentException($"Unknown CharacterTypeId: {characterTypeId}");
+                throw new ArgumentException($"Unknown CharacterTypeId. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId)}", nameof(characterTypeId));
 
             if (type == null || !typeof(Character).IsAssignableFrom(type))
-                throw new ArgumentException("Invalid character type provided.");
+                throw new ArgumentException($"Resolved type is not a valid {nameof(Character)}. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId, type)}", nameof(characterTypeId));
 
             // 1. 创建Cell实例（无参构造）
             var cell = (Character)Activator.CreateInstance(type);
 
-            // todo character 似乎没有Config
-            if (CellConfigMap != null && CellConfigMap.TryGetValue(type, out var config) && config != null)
+            if (CharacterConfigMap != null && CharacterConfigMap.TryGetValue(type, out var config) && config != null)
             {
                 cell.SkillConfig = config;
+            }
+            else
+            {
+                Debug.LogWarning($"No config registered for character type: {type.Name}");
             }
             return cell;
         }
 
         public Cell Clone(Cell cell)
         {
+            if (cell == null)
+                throw new ArgumentNullException(nameof(cell), $"Source cell is null. {BuildErrorContext(nameof(Clone), CellTypeId.None)}");
 
             var clone = (Cell)Activator.CreateInstance(cell.GetType());
-            clone.SkillConfig = cell.SkillConfig; // 复制技能配置
+            clone.SkillConfig = cell.SkillConfig;
             clone.Level = cell.Level;
+
+            if (cell is Padding sourcePadding && clone is Padding clonePadding)
+            {
+                clonePadding.Affinity = sourcePadding.Affinity;
+            }
+
             return clone;
         }
     }

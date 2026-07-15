@@ -8,6 +8,31 @@ namespace Model.Tetri
     [Serializable]
     public abstract class Character : Cell
     {
+        private struct BaseStats
+        {
+            public float MoveSpeedBase;
+            public float AttackPowerBase;
+            public float MaxHealthBase;
+            public float AttacksPerTenSecondsBase;
+            public float EnergyPerSecondBase;
+            public float AttackRangeBase;
+        }
+
+        private BaseStats ResolveBaseStats()
+        {
+            var config = (Units.Skills.CharacterBaseStatConfig)SkillConfig;
+
+            return new BaseStats
+            {
+                MoveSpeedBase = config.MoveSpeedBase,
+                AttackPowerBase = config.AttackPowerBase,
+                MaxHealthBase = config.MaxHealthBase,
+                AttacksPerTenSecondsBase = config.AttacksPerTenSecondsBase,
+                EnergyPerSecondBase = config.EnergyPerSecondBase,
+                AttackRangeBase = config.AttackRangeBase
+            };
+        }
+
         public override CellTypeId CellTypeId => CellTypeId.Padding;
         public abstract CharacterTypeId CharacterTypeId { get; }
         [SerializeField] private string characterName; // 永久角色名
@@ -31,13 +56,14 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
+            var stats = ResolveBaseStats();
             unit.Attributes = new Units.Attributes(
-                moveSpeedBase: 2f,
-                attackPowerBase: 10f,
-                maxHealthBase: 100f,
-                attacksPerTenSecondsBase: 2.5f,
-                energyPerSecondBase: 5f,
-                attackRange: 0.2f
+                moveSpeedBase: stats.MoveSpeedBase,
+                attackPowerBase: stats.AttackPowerBase,
+                maxHealthBase: stats.MaxHealthBase,
+                attacksPerTenSecondsBase: stats.AttacksPerTenSecondsBase,
+                energyPerSecondBase: stats.EnergyPerSecondBase,
+                attackRange: stats.AttackRangeBase
             );
             unit.name = characterName;
         }
