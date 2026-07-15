@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 471d8271c75338642998164340799e76, type: 3}
-  m_Name: CellLevelConfigManager
+  m_Script: {fileID: 11500000, guid: e1d8ed0528c7cb943b324dcf983b0b16, type: 3}
+  m_Name: Cell Skill Config Registry
   m_EditorClassIdentifier: 
   BlazingFieldSkillConfig: {fileID: 11400000, guid: 65f215bb04314cc4b88e85fa107975fb, type: 2}
   FireballSkillConfig: {fileID: 11400000, guid: 6a1eef4ac1cdb2c4c96a4c7a27f946a2, type: 2}
@@ -37,8 +37,3 @@ MonoBehaviour:
   ChargeSkillConfig: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
   EnergyAbsorbSkillConfig: {fileID: 11400000, guid: 3b7ae0941fe7b7f47a05c23b93c4dcf2, type: 2}
   ThunderStrikeSkillConfig: {fileID: 11400000, guid: 854b82e1f822f79428ffaa8a926da091, type: 2}
-  SquareCharacterBaseStatConfig: {fileID: 0}
-  TriangleCharacterBaseStatConfig: {fileID: 0}
-  CircleCharacterBaseStatConfig: {fileID: 0}
-  AimCharacterBaseStatConfig: {fileID: 0}
-  HourglassCharacterBaseStatConfig: {fileID: 0}

@@ -1,11 +1,10 @@
 using UnityEngine;
 using Units.Skills;
 
-
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "SkillConfig/CellLevelConfigManager")]
-    public class CellLevelConfigManager : ScriptableObject
+    [CreateAssetMenu(menuName = "ConfigRegistry/CellSkillConfigRegistry")]
+    public class CellSkillConfigRegistry : ScriptableObject
     {
         [Header("火系技能")]
         public BlazingFieldSkillConfig BlazingFieldSkillConfig;
@@ -47,12 +46,5 @@ namespace Model.Tetri
 
         [Header("电系")]
         public ThunderStrikeSkillConfig ThunderStrikeSkillConfig;
-
-        [Header("角色基础属性")]
-        public CharacterBaseStatConfig SquareCharacterBaseStatConfig;
-        public CharacterBaseStatConfig TriangleCharacterBaseStatConfig;
-        public CharacterBaseStatConfig CircleCharacterBaseStatConfig;
-        public CharacterBaseStatConfig AimCharacterBaseStatConfig;
-        public CharacterBaseStatConfig HourglassCharacterBaseStatConfig;
     }
 }

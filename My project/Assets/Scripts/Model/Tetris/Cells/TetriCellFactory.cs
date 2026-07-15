@@ -84,7 +84,8 @@ namespace Model.Tetri
             }
         }
 
-        [SerializeField] private CellLevelConfigManager cellLevelConfigManager;
+        [SerializeField] private CellSkillConfigRegistry cellSkillConfigRegistry;
+        [SerializeField] private CharacterConfigRegistry characterConfigRegistry;
 
         private void OnEnable()
         {
@@ -106,31 +107,31 @@ namespace Model.Tetri
             // 只在这里维护一份
             var cellTypeMetas = new List<CellTypeMeta>
             {
-                new(CellTypeId.FrostZone, typeof(FrostZone), cellLevelConfigManager.FrostZoneSkillConfig),
-                new(CellTypeId.IceShield, typeof(IceShield), cellLevelConfigManager.IceShieldSkillConfig),
-                new(CellTypeId.IcyCage, typeof(IcyCage), cellLevelConfigManager.IcyCageSkillConfig),
-                new(CellTypeId.Snowball, typeof(Snowball), cellLevelConfigManager.SnowballSkillConfig),
-                new(CellTypeId.IceBreaker, typeof(IceBreaker), cellLevelConfigManager.IceBreakerSkillConfig),
-                new(CellTypeId.Fireball, typeof(Fireball), cellLevelConfigManager.FireballSkillConfig),
-                new(CellTypeId.FlameInject, typeof(FlameInject), cellLevelConfigManager.FlameInjectSkillConfig),
-                new(CellTypeId.BlazingField, typeof(BlazingField), cellLevelConfigManager.BlazingFieldSkillConfig),
-                new(CellTypeId.FlameRing, typeof(FlameRing), cellLevelConfigManager.FlameRingSkillConfig),
-                new(CellTypeId.WindShift, typeof(WindShift), cellLevelConfigManager.WindShiftSkillConfig),
-                new(CellTypeId.WildWind, typeof(WildWind), cellLevelConfigManager.WildWindSkillConfig),
-                new(CellTypeId.AttackBoost, typeof(AttackBoost), cellLevelConfigManager.AttackBoostSkillConfig),
-                new(CellTypeId.LifeBomb, typeof(LifeBomb), cellLevelConfigManager.LifeBombSkillConfig),
-                new(CellTypeId.LifeShield, typeof(LifeShield), cellLevelConfigManager.LifeShieldSkillConfig),
-                new(CellTypeId.LifePower, typeof(LifePower), cellLevelConfigManager.LifePowerSkillConfig),
-                new(CellTypeId.LifeEcho, typeof(LifeEcho), cellLevelConfigManager.LifeEchoSkillConfig),
-                new(CellTypeId.ShadowAttack, typeof(ShadowAttack), cellLevelConfigManager.ShadowAttackSkillConfig),
-                new(CellTypeId.ShadowStep, typeof(ShadowStep), cellLevelConfigManager.ShadowStepSkillConfig),
-                new(CellTypeId.ShadowArrow, typeof(ShadowArrow), cellLevelConfigManager.ShadowArrowSkillConfig),
-                new(CellTypeId.VulnerabilityField, typeof(VulnerabilityField), cellLevelConfigManager.VulnerabilityFieldSkillConfig),
-                new(CellTypeId.Charge, typeof(Charge), cellLevelConfigManager.ChargeSkillConfig),
-                new(CellTypeId.EnergyAbsorb, typeof(EnergyAbsorb), cellLevelConfigManager.EnergyAbsorbSkillConfig),
-                new(CellTypeId.ThunderStrike, typeof(Model.Tetri.ThunderStrike), cellLevelConfigManager.ThunderStrikeSkillConfig),
-                new(CellTypeId.GuardAlly, typeof(GuardAlly), cellLevelConfigManager.GuardAllySkillConfig),
-                new(CellTypeId.WindKnockback, typeof(WindKnockback), cellLevelConfigManager.WindKnockbackSkillConfig),
+                new(CellTypeId.FrostZone, typeof(FrostZone), cellSkillConfigRegistry.FrostZoneSkillConfig),
+                new(CellTypeId.IceShield, typeof(IceShield), cellSkillConfigRegistry.IceShieldSkillConfig),
+                new(CellTypeId.IcyCage, typeof(IcyCage), cellSkillConfigRegistry.IcyCageSkillConfig),
+                new(CellTypeId.Snowball, typeof(Snowball), cellSkillConfigRegistry.SnowballSkillConfig),
+                new(CellTypeId.IceBreaker, typeof(IceBreaker), cellSkillConfigRegistry.IceBreakerSkillConfig),
+                new(CellTypeId.Fireball, typeof(Fireball), cellSkillConfigRegistry.FireballSkillConfig),
+                new(CellTypeId.FlameInject, typeof(FlameInject), cellSkillConfigRegistry.FlameInjectSkillConfig),
+                new(CellTypeId.BlazingField, typeof(BlazingField), cellSkillConfigRegistry.BlazingFieldSkillConfig),
+                new(CellTypeId.FlameRing, typeof(FlameRing), cellSkillConfigRegistry.FlameRingSkillConfig),
+                new(CellTypeId.WindShift, typeof(WindShift), cellSkillConfigRegistry.WindShiftSkillConfig),
+                new(CellTypeId.WildWind, typeof(WildWind), cellSkillConfigRegistry.WildWindSkillConfig),
+                new(CellTypeId.AttackBoost, typeof(AttackBoost), cellSkillConfigRegistry.AttackBoostSkillConfig),
+                new(CellTypeId.LifeBomb, typeof(LifeBomb), cellSkillConfigRegistry.LifeBombSkillConfig),
+                new(CellTypeId.LifeShield, typeof(LifeShield), cellSkillConfigRegistry.LifeShieldSkillConfig),
+                new(CellTypeId.LifePower, typeof(LifePower), cellSkillConfigRegistry.LifePowerSkillConfig),
+                new(CellTypeId.LifeEcho, typeof(LifeEcho), cellSkillConfigRegistry.LifeEchoSkillConfig),
+                new(CellTypeId.ShadowAttack, typeof(ShadowAttack), cellSkillConfigRegistry.ShadowAttackSkillConfig),
+                new(CellTypeId.ShadowStep, typeof(ShadowStep), cellSkillConfigRegistry.ShadowStepSkillConfig),
+                new(CellTypeId.ShadowArrow, typeof(ShadowArrow), cellSkillConfigRegistry.ShadowArrowSkillConfig),
+                new(CellTypeId.VulnerabilityField, typeof(VulnerabilityField), cellSkillConfigRegistry.VulnerabilityFieldSkillConfig),
+                new(CellTypeId.Charge, typeof(Charge), cellSkillConfigRegistry.ChargeSkillConfig),
+                new(CellTypeId.EnergyAbsorb, typeof(EnergyAbsorb), cellSkillConfigRegistry.EnergyAbsorbSkillConfig),
+                new(CellTypeId.ThunderStrike, typeof(Model.Tetri.ThunderStrike), cellSkillConfigRegistry.ThunderStrikeSkillConfig),
+                new(CellTypeId.GuardAlly, typeof(GuardAlly), cellSkillConfigRegistry.GuardAllySkillConfig),
+                new(CellTypeId.WindKnockback, typeof(WindKnockback), cellSkillConfigRegistry.WindKnockbackSkillConfig),
                 
                 new(CellTypeId.Padding, typeof(Padding), null) // Padding 不需要配置
             };
@@ -143,11 +144,11 @@ namespace Model.Tetri
             // 角色类型映射表
             var characterTypeMetas = new List<CharacterTypeMeta>
             {
-                new(CharacterTypeId.Square, typeof(Square), cellLevelConfigManager.SquareCharacterBaseStatConfig),
-                new(CharacterTypeId.Triangle, typeof(Triangle), cellLevelConfigManager.TriangleCharacterBaseStatConfig),
-                new(CharacterTypeId.Circle, typeof(Circle), cellLevelConfigManager.CircleCharacterBaseStatConfig),
-                new(CharacterTypeId.Aim, typeof(Aim), cellLevelConfigManager.AimCharacterBaseStatConfig),
-                new(CharacterTypeId.Hourglass, typeof(Hourglass), cellLevelConfigManager.HourglassCharacterBaseStatConfig)
+                new(CharacterTypeId.Square, typeof(Square), characterConfigRegistry.SquareCharacterBaseStatConfig),
+                new(CharacterTypeId.Triangle, typeof(Triangle), characterConfigRegistry.TriangleCharacterBaseStatConfig),
+                new(CharacterTypeId.Circle, typeof(Circle), characterConfigRegistry.CircleCharacterBaseStatConfig),
+                new(CharacterTypeId.Aim, typeof(Aim), characterConfigRegistry.AimCharacterBaseStatConfig),
+                new(CharacterTypeId.Hourglass, typeof(Hourglass), characterConfigRegistry.HourglassCharacterBaseStatConfig)
             };
             CharacterTypeIdToType = characterTypeMetas.ToDictionary(m => m.id, m => m.type);
             TypeToCharacterTypeId = characterTypeMetas.ToDictionary(m => m.type, m => m.id);

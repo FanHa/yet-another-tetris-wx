@@ -30,6 +30,11 @@
 
 完整规范见: `Doc/新增Skill完整流程.md`
 
+当前实现约束:
+
+- 技能配置以 `CellSkillConfigRegistry` 为准，不再沿用 `CellLevelConfigManager` 作为技能配置入口。
+- 角色原型配置以 `CharacterConfigRegistry` 为准；如果任务同时涉及角色原型，再按角色流程处理。
+
 执行步骤:
 
 1. 读取 `Doc/新增Skill完整流程.md`，以其中的清单作为 Todo 的覆盖依据

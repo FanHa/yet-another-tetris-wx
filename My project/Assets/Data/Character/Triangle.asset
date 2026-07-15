@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d07050b21985f94eb666a5e53704222, type: 3}
   m_Name: Triangle
   m_EditorClassIdentifier: 
+  DisplayName: "\u4E09\u89D2"
+  Description: 
   MoveSpeedBase: 2
-  AttackPowerBase: 10
-  MaxHealthBase: 100
+  AttackPowerBase: 14
+  MaxHealthBase: 60
   AttacksPerTenSecondsBase: 2.5
   EnergyPerSecondBase: 5
   AttackRangeBase: 0.2
+  MoveSpeedPercentModifier: 0
+  AttackPowerPercentModifier: 15
+  MaxHealthPercentModifier: -15
+  AttacksPerTenSecondsPercentModifier: 0
+  EnergyPerSecondPercentModifier: 0
+  AttackRangePercentModifier: 0

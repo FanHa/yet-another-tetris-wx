@@ -8,41 +8,15 @@ namespace Model.Tetri
     [Serializable]
     public abstract class Character : Cell
     {
-        private struct BaseStats
+        private Units.Skills.CharacterBaseStatConfig ResolveConfig()
         {
-            public float MoveSpeedBase;
-            public float AttackPowerBase;
-            public float MaxHealthBase;
-            public float AttacksPerTenSecondsBase;
-            public float EnergyPerSecondBase;
-            public float AttackRangeBase;
-        }
-
-        private BaseStats ResolveBaseStats()
-        {
-            var config = (Units.Skills.CharacterBaseStatConfig)Config;
-
-            return new BaseStats
-            {
-                MoveSpeedBase = config.MoveSpeedBase,
-                AttackPowerBase = config.AttackPowerBase,
-                MaxHealthBase = config.MaxHealthBase,
-                AttacksPerTenSecondsBase = config.AttacksPerTenSecondsBase,
-                EnergyPerSecondBase = config.EnergyPerSecondBase,
-                AttackRangeBase = config.AttackRangeBase
-            };
+            return (Units.Skills.CharacterBaseStatConfig)Config;
         }
 
         public override CellTypeId CellTypeId => CellTypeId.Padding;
         public abstract CharacterTypeId CharacterTypeId { get; }
         [SerializeField] private string characterName; // 永久角色名
         public string CharacterName => characterName; // 只读属性，获取角色名
-
-        // 基础属性
-        public float AttackPowerValue = 10f; // 默认攻击力
-        public float MaxCoreValue = 100f;  // 默认最大生命值
-        public float MoveSpeedValue = 1f;
-        public float AttacksPerTenSeconds = 3f;
 
         public Character()
         {
@@ -56,21 +30,30 @@ namespace Model.Tetri
 
         public override void Apply(Unit unit)
         {
-            var stats = ResolveBaseStats();
+            var config = ResolveConfig();
             unit.Attributes = new Units.Attributes(
-                moveSpeedBase: stats.MoveSpeedBase,
-                attackPowerBase: stats.AttackPowerBase,
-                maxHealthBase: stats.MaxHealthBase,
-                attacksPerTenSecondsBase: stats.AttacksPerTenSecondsBase,
-                energyPerSecondBase: stats.EnergyPerSecondBase,
-                attackRange: stats.AttackRangeBase
+                moveSpeedBase: config.MoveSpeedBase,
+                attackPowerBase: config.AttackPowerBase,
+                maxHealthBase: config.MaxHealthBase,
+                attacksPerTenSecondsBase: config.AttacksPerTenSecondsBase,
+                energyPerSecondBase: config.EnergyPerSecondBase,
+                attackRange: config.AttackRangeBase
             );
+
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, config.MoveSpeedPercentModifier);
+            unit.Attributes.AttackPower.AddPercentageModifier(this, config.AttackPowerPercentModifier);
+            unit.Attributes.MaxHealth.AddPercentageModifier(this, config.MaxHealthPercentModifier);
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, config.AttacksPerTenSecondsPercentModifier);
+            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, config.EnergyPerSecondPercentModifier);
+            unit.Attributes.AttackRange.AddPercentageModifier(this, config.AttackRangePercentModifier);
+
             unit.name = characterName;
         }
 
         public override string Description()
         {
-            return $"攻击力: {AttackPowerValue}, 生命值: {MaxCoreValue}, 攻击频率: {AttacksPerTenSeconds}, 移动速度: {MoveSpeedValue}";
+            var config = ResolveConfig();
+            return $"攻击力: {config.AttackPowerBase}, 生命值: {config.MaxHealthBase}, 攻击频率: {config.AttacksPerTenSecondsBase}, 移动速度: {config.MoveSpeedBase}";
         }
 
         public List<Vector2Int> GetInfluenceOffsets()
