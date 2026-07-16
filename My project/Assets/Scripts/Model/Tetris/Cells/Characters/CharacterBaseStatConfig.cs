@@ -1,6 +1,7 @@
 using UnityEngine;
+using Units.Skills;
 
-namespace Units.Skills
+namespace Model.Tetri
 {
     [CreateAssetMenu(menuName = "CharacterConfig/CharacterBaseStatConfig")]
     public class CharacterBaseStatConfig : SkillConfig

@@ -8,10 +8,6 @@ namespace Model.Tetri
     public class Square : Character
     {
         public override CharacterTypeId CharacterTypeId => CharacterTypeId.Square;
-        public override string Name()
-        {
-            return "小方";
-        }
 
         public override string Description()
         {

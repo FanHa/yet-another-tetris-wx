@@ -8,11 +8,6 @@ namespace Model.Tetri
     {
         public override CharacterTypeId CharacterTypeId => CharacterTypeId.Triangle;
 
-        public override string Name()
-        {
-            return "小三";
-        }
-
         public override string Description()
         {
             return "攻击力极高，生命值较低，移动速度较快。";
