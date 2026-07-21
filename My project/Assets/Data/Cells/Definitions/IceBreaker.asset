@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Name: IceBreaker
+  m_EditorClassIdentifier: 
+  id: IceBreaker
+  runtimeTypeName: Model.Tetri.IceBreaker, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  config: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
+  affinity: 2
+  displayName: "\u7834\u51B0"
+  description: "\u653B\u51FB\u65F6\u82E5\u76EE\u6807\u5E26\u6709Chilled\u5219\u5F15\u7206\u5E76\u6E05\u9664\u8BE5\u6548\u679C\uFF0C\u6309\u5C42\u6570\u9020\u6210\u989D\u5916\u4F24\u5BB3"
+  icon: {fileID: 0}
+  isHidden: 0
+  isDebugOnly: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Name: FlameRing
+  m_EditorClassIdentifier: 
+  id: FlameRing
+  runtimeTypeName: Model.Tetri.FlameRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  config: {fileID: 11400000, guid: 639063875c5662a42900ab258b3c458b, type: 2}
+  affinity: 1
+  displayName: "\u706B\u73AF"
+  description: "\u5BF9\u5468\u56F4\u4E00\u5708\u654C\u4EBA\u6301\u7EED\u9020\u6210\u706B\u7130\u4F24\u5BB3"
+  icon: {fileID: 0}
+  isHidden: 0
+  isDebugOnly: 0

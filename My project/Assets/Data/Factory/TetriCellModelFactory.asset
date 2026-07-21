@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978f257ca5340ca47acc91f92152bf1a, type: 3}
   m_Name: TetriCellModelFactory
   m_EditorClassIdentifier: 
-  cellSkillConfigRegistry: {fileID: 11400000, guid: 4a569b31803d9e44c8b20479ce9182fb, type: 2}
   characterConfigRegistry: {fileID: 11400000, guid: 3d8119154c3f46548bbe3c2a52c6044b, type: 2}
+  cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Name: IceShield
+  m_EditorClassIdentifier: 
+  id: IceShield
+  runtimeTypeName: Model.Tetri.IceShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  config: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
+  affinity: 2
+  displayName: "\u51B0\u971C\u62A4\u76FE"
+  description: "\u83B7\u5F97\u4E00\u6B21\u6027\u51B0\u971C\u62A4\u76FE\uFF0C\u88AB\u653B\u51FB\u65F6\u53CD\u5236\u653B\u51FB\u8005\uFF0C\u964D\u4F4E\u5176\u79FB\u901F\u3001\u653B\u901F\u548C\u80FD\u91CF\u83B7\u53D6\u901F\u5EA6."
+  icon: {fileID: 0}
+  isHidden: 0
+  isDebugOnly: 0

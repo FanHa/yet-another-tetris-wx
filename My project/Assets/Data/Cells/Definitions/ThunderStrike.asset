@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Name: ThunderStrike
+  m_EditorClassIdentifier: 
+  id: ThunderStrike
+  runtimeTypeName: Model.Tetri.ThunderStrike, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  config: {fileID: 11400000, guid: 854b82e1f822f79428ffaa8a926da091, type: 2}
+  affinity: 8
+  displayName: "\u96F7\u51FB"
+  description: "\u5BF9\u653B\u51FB\u8303\u56F4\u5185\u4E00\u4E2A\u654C\u4EBA\u5934\u9876\u964D\u4E0B\u96F7\u51FB\uFF0C\u9020\u6210\u4F24\u5BB3\u5E76\u65BD\u52A0\u7729\u6655"
+  icon: {fileID: 0}
+  isHidden: 0
+  isDebugOnly: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Name: ShadowAttack
+  m_EditorClassIdentifier: 
+  id: ShadowAttack
+  runtimeTypeName: Model.Tetri.ShadowAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+  config: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
+  affinity: 5
+  displayName: "\u5F71\u88AD"
+  description: "\u653B\u51FB\u65F6\u9644\u52A0\u6613\u4F24"
+  icon: {fileID: 0}
+  isHidden: 0
+  isDebugOnly: 0
