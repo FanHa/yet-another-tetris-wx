@@ -9,6 +9,6 @@ namespace Model.TrainGround
     public class UnitConfig
     {
         public CharacterTypeId characterId; // 单位的 CharacterCell
-        public List<CellTypeId> tetriCellIds;   // 单位的 TetriCells 列表
+        public List<string> cellIds;   // 单位的 TetriCells 列表
     }
 }

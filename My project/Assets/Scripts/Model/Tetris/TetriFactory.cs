@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -23,8 +22,11 @@ namespace Model.Tetri
         };
 
 
-        public Tetri CreateRandomShapeWithCell(CellTypeId cellTypeId)
+        public Tetri CreateRandomShapeWithCell(string cellId)
         {
+            if (string.IsNullOrWhiteSpace(cellId))
+                throw new ArgumentException("Cell id is null or empty.", nameof(cellId));
+
             // 1. 随机选择一个形状
             var shapeKeys = new List<string> { "T", "I", "L", "J", "S", "Z" };
             var randomKey = shapeKeys[UnityEngine.Random.Range(0, shapeKeys.Count)];
@@ -35,7 +37,7 @@ namespace Model.Tetri
 
             // 3. 随机选择一个格子用于填充目标 Cell
             int specialIndex = UnityEngine.Random.Range(0, positions.Count);
-            Cell specialCell = tetriCellModelFactory.CreateCell(cellTypeId);
+            Cell specialCell = tetriCellModelFactory.CreateCell(cellId);
             AffinityType targetAffinity = specialCell.Affinity;
 
             for (int i = 0; i < positions.Count; i++)
@@ -60,6 +62,7 @@ namespace Model.Tetri
 
             return tetri;
         }
+
 
         public Tetri CreateCharacterTetri(CharacterTypeId characterTypeId)
         {

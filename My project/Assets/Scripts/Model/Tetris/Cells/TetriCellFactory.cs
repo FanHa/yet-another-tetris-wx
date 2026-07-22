@@ -23,15 +23,9 @@ namespace Model.Tetri
     [CreateAssetMenu(menuName = "Factory/TetriCellModelFactory")]
     public class TetriCellFactory : ScriptableObject
     {
-        public IReadOnlyDictionary<Type, CellTypeId> TypeToCellTypeId => cellDatabase != null ? cellDatabase.TypeBridgeToCellTypeId : emptyTypeToCellTypeId;
-
         public IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdToType { get; private set; }
         public IReadOnlyDictionary<Type, CharacterTypeId> TypeToCharacterTypeId { get; private set; }
         public IReadOnlyDictionary<Type, SkillConfig> CharacterTypeToConfig { get; private set; }
-
-        private static readonly IReadOnlyDictionary<CellTypeId, Type> emptyCellTypeIdToType = new Dictionary<CellTypeId, Type>();
-        private static readonly IReadOnlyDictionary<Type, CellTypeId> emptyTypeToCellTypeId = new Dictionary<Type, CellTypeId>();
-        private static readonly IReadOnlyDictionary<Type, SkillConfig> emptyCellTypeToConfig = new Dictionary<Type, SkillConfig>();
 
         private IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdMap
         {
@@ -53,6 +47,7 @@ namespace Model.Tetri
 
         [SerializeField] private CharacterConfigRegistry characterConfigRegistry;
         [SerializeField] private CellDatabase cellDatabase;
+        [SerializeField] private CellSkillBindingDatabase cellSkillBindingDatabase;
 
         private void OnEnable()
         {
@@ -107,16 +102,6 @@ namespace Model.Tetri
             return new Padding();
         }
 
-        public List<CellTypeId> GetRegisteredPlayableCellTypeIds()
-        {
-            return cellDatabase.GetPlayableCellTypeIds();
-        }
-
-        public List<string> GetRegisteredPlayableCellIds()
-        {
-            return cellDatabase.GetPlayableCellIds();
-        }
-
         public List<CharacterTypeId> GetRegisteredCharacterTypeIds()
         {
             if (CharacterTypeIdMap == null)
@@ -128,15 +113,6 @@ namespace Model.Tetri
         }
 
 
-        public Cell CreateCell(CellTypeId cellTypeId)
-        {
-            if (!cellDatabase.TryGetCellType(cellTypeId, out var type))
-                throw new ArgumentException($"Unknown CellTypeId. {BuildErrorContext(nameof(CreateCell), cellTypeId)}", nameof(cellTypeId));
-
-            cellDatabase.TryGetConfig(cellTypeId, out SkillConfig config);
-            return CreateCellFromResolvedType(type, config, $"cell type: {cellTypeId}", nameof(cellTypeId));
-        }
-
         public Cell CreateCell(string cellId)
         {
             if (string.IsNullOrWhiteSpace(cellId))
@@ -145,8 +121,20 @@ namespace Model.Tetri
             if (!cellDatabase.TryGetCellType(cellId, out var type))
                 throw new ArgumentException($"Unknown cell id. {BuildErrorContext(nameof(CreateCell), cellId)}", nameof(cellId));
 
-            cellDatabase.TryGetConfig(cellId, out SkillConfig config);
+            SkillConfig config = ResolveCellSkillConfig(type);
             return CreateCellFromResolvedType(type, config, $"cell id: {cellId}", nameof(cellId));
+        }
+
+        private SkillConfig ResolveCellSkillConfig(Type cellType)
+        {
+            if (cellSkillBindingDatabase == null)
+            {
+                return null;
+            }
+
+            return cellSkillBindingDatabase.TryGetSkillConfig(cellType, cellDatabase, out SkillConfig config)
+                ? config
+                : null;
         }
 
         private Cell CreateCellFromResolvedType(Type type, SkillConfig config, string debugTarget, string argumentName)

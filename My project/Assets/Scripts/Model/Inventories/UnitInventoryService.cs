@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Model;
 using Model.Tetri;
 using System.Linq;
+using UnityEngine;
 using Units;
 
 namespace Model {
@@ -15,7 +15,6 @@ namespace Model {
         [SerializeField] private Model.UnitInventoryModel trainGroundUnitInventoryDataA;
         [SerializeField] private Model.UnitInventoryModel trainGroundUnitInventoryDataB;
         [SerializeField] private Model.TrainGround.Setup trainGroundSetup;
-        [SerializeField] private Units.UnitFactory unitFactory;
         [SerializeField] private TetriCellFactory tetriCellFactory;
 
         public void SetEnemyInventoryData(List<CharacterPlacement> enemyData)
@@ -35,9 +34,9 @@ namespace Model {
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
                 var tetriCells = new List<Model.Tetri.Cell>();
-                if (unitConfig.tetriCellIds != null)
+                if (unitConfig.cellIds != null)
                 {
-                    foreach (var cellId in unitConfig.tetriCellIds)
+                    foreach (var cellId in unitConfig.cellIds)
                     {
                         var cell = tetriCellFactory.CreateCell(cellId);
                         if (cell != null)
@@ -55,9 +54,9 @@ namespace Model {
             {
                 var characterCell = tetriCellFactory.CreateCharacterCell(unitConfig.characterId);
                 var tetriCells = new List<Model.Tetri.Cell>();
-                if (unitConfig.tetriCellIds != null)
+                if (unitConfig.cellIds != null)
                 {
-                    foreach (var cellId in unitConfig.tetriCellIds)
+                    foreach (var cellId in unitConfig.cellIds)
                     {
                         var cell = tetriCellFactory.CreateCell(cellId);
                         if (cell != null)

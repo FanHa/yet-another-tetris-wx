@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model.Tetri;
-using Operation;
 using UnityEngine;
-using WeChatWASM;
 
 namespace Model
 {
@@ -17,11 +15,12 @@ namespace Model
         [SerializeField] private List<Model.Tetri.Tetri> usableTetriList = new List<Model.Tetri.Tetri>();
         [SerializeField] private List<Model.Tetri.Tetri> usedTetriList = new List<Model.Tetri.Tetri>();
         [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
+        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
 
-        private readonly HashSet<CellTypeId> existCellTypeIds = new();
-        public IReadOnlyCollection<CellTypeId> ExistCellTypeIds => existCellTypeIds;
+        private readonly HashSet<string> existCellIds = new(StringComparer.Ordinal);
+        public IReadOnlyCollection<string> ExistCellIds => existCellIds;
 
         private readonly HashSet<CharacterTypeId> existCharacterTypeIds = new();
         public IReadOnlyCollection<CharacterTypeId> ExistCharacterTypeIds => existCharacterTypeIds;
@@ -44,12 +43,12 @@ namespace Model
         {
             TetriInventoryInitConfig config = initialConfigs[avaliableConfigIndex];
 
-            List<CellTypeId> initialCellIds = config.CellTypeIds;
+            List<string> initialCellIds = config.CellIds;
             List<CharacterTypeId> initialCharacterIds = config.CharacterTypeIds;
 
-            foreach (var cellTypeId in initialCellIds)
+            foreach (var cellId in initialCellIds)
             {
-                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellTypeId);
+                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellId);
                 AddTetri(tetri, silent: true); 
             }
 
@@ -59,16 +58,16 @@ namespace Model
                 AddTetri(characterTetri, silent: true);
             }
 
-            RecalculateCellTypes(); 
+            RecalculateCellIds(); 
             OnDataChanged?.Invoke(); 
         }
 
-        private void RecalculateCellTypes()
+        private void RecalculateCellIds()
         {
-            existCellTypeIds.Clear();
+            existCellIds.Clear();
             existCharacterTypeIds.Clear();
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
-                UpdateCellTypesForTetri(tetri);
+                UpdateCellIdsForTetri(tetri);
         }
 
         public void MarkTetriAsUsed(Model.Tetri.Tetri tetri)
@@ -95,13 +94,13 @@ namespace Model
             // 添加到 usableTetriList
             usableTetriList.Add(modelTetri);
             modelTetri.OnDataChanged += HandleTetriChanged;
-            UpdateCellTypesForTetri(modelTetri);
+            UpdateCellIdsForTetri(modelTetri);
             // 触发数据变化事件
             if (!silent)
                 OnDataChanged?.Invoke();
         }
 
-        private void UpdateCellTypesForTetri(Tetri.Tetri tetri)
+        private void UpdateCellIdsForTetri(Tetri.Tetri tetri)
         {
             foreach (var position in tetri.GetOccupiedPositions())
             {
@@ -113,8 +112,15 @@ namespace Model
                 }
                 else
                 {
-                    // 如果是普通方块类型，添加方块类型 ID
-                    existCellTypeIds.Add(cell.CellTypeId);
+                    // 普通方块按 cellId 建立索引。
+                    if (cellDatabase != null && cellDatabase.TryGetId(cell.GetType(), out string cellId) && !string.IsNullOrWhiteSpace(cellId))
+                    {
+                        existCellIds.Add(cellId);
+                    }
+                    else
+                    {
+                        existCellIds.Add(cell.CellTypeId.ToString());
+                    }
                 }
             }
         }
@@ -125,14 +131,14 @@ namespace Model
             {
                 // 解绑事件
                 tetri.OnDataChanged -= HandleTetriChanged;
-                RecalculateCellTypes(); // 重新计算 CellTypeIds
+                RecalculateCellIds(); // 重新计算 CellIds
                 OnDataChanged?.Invoke();
             }
         }
 
         private void HandleTetriChanged()
         {
-            RecalculateCellTypes(); // 重新计算 CellTypeIds
+            RecalculateCellIds(); // 重新计算 CellIds
             // 处理 Tetri 数据变化
             OnDataChanged?.Invoke();
         }

@@ -14,7 +14,7 @@ namespace UI.TetriInfo
         [SerializeField] private Image affinityIcon;
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
         
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
+        [SerializeField] private CellDatabase cellDatabase;
         [SerializeField] private AffinityResourceMapping affinityResourceMapping;
         [SerializeField] private ColorConfig affinityColorConfig;
 
@@ -22,8 +22,12 @@ namespace UI.TetriInfo
         {
             Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
             Model.Tetri.Cell mainCell = tetri.GetMainCell();
-            
-            skillIcon.sprite = tetriCellTypeResourceMapping.GetSprite(mainCell);
+
+            if (cellDatabase != null && cellDatabase.TryGetSprite(mainCell.GetType(), out Sprite sprite))
+            {
+                skillIcon.sprite = sprite;
+            }
+
             skillNameText.text = mainCell.Name();
             skillDescriptionText.text = mainCell.Description();
 

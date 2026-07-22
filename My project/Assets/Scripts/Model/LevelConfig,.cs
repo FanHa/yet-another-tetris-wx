@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Model.Rewards;
 using Model.Tetri;
 using UnityEngine;
@@ -18,6 +17,7 @@ namespace Model
         [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
         [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory; // TetriCell 工厂
+        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
 
         /// <summary>
         /// 主动增加关卡并生成敌人数据
@@ -31,7 +31,12 @@ namespace Model
         private void GenerateEnemyData()
         {
             var availableCharacterTypeIds = tetriCellModelFactory.GetRegisteredCharacterTypeIds();
-            var availableCellTypeIds = tetriCellModelFactory.GetRegisteredPlayableCellTypeIds();
+            var registeredCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
+
+            if (registeredCellIds.Count == 0)
+            {
+                Debug.LogWarning("[LevelConfig] No registered cell ids found in CellDatabase.");
+            }
 
             // 计算当前关卡的敌人数量
             int enemyCount = Mathf.Min(1 + (currentLevel - 1) / levelsPerEnemyIncrease, maxEnemyCount);
@@ -49,7 +54,7 @@ namespace Model
                 enemyDatas.Add(new EnemyData
                 {
                     characterId = randomCharacterId,
-                    tetriCellIds = new List<CellTypeId>()
+                    tetriCellIds = new List<string>()
                 });
             }
 
@@ -63,12 +68,17 @@ namespace Model
             int additionalCells = Mathf.Min((currentLevel - 1) / levelsPerCellIncrease + 1, maxAddedCellCount); // 每10关增加一个随机 TetriCell，最多10个
             for (int i = 0; i < additionalCells; i++)
             {
+                if (registeredCellIds.Count == 0)
+                {
+                    break;
+                }
+
                 // 随机选择一个敌人
                 int randomEnemyIndex = UnityEngine.Random.Range(0, enemyDatas.Count);
                 var randomEnemy = enemyDatas[randomEnemyIndex];
 
                 // 随机添加一个 TetriCell
-                var randomCellId = availableCellTypeIds[UnityEngine.Random.Range(0, availableCellTypeIds.Count)];
+                var randomCellId = registeredCellIds[UnityEngine.Random.Range(0, registeredCellIds.Count)];
                 randomEnemy.tetriCellIds.Add(randomCellId);
             }
         }
@@ -84,7 +94,7 @@ namespace Model
             {
 
                 var characterInstance = (Tetri.Character)tetriCellModelFactory.CreateCharacterCell(enemy.characterId);
-                var cellCountDict = new Dictionary<CellTypeId, int>();
+                var cellCountDict = new Dictionary<string, int>(StringComparer.Ordinal);
                 foreach (var cellId in enemy.tetriCellIds)
                 {
                     if (!cellCountDict.ContainsKey(cellId))
@@ -126,7 +136,7 @@ namespace Model
         [Serializable]
         public struct EnemyData {
             public CharacterTypeId characterId; // 敌人名称
-            public List<CellTypeId> tetriCellIds; // TetriCell 列表
+            public List<string> tetriCellIds; // TetriCell id 列表
         }
     }
 }

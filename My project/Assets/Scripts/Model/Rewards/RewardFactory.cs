@@ -26,11 +26,12 @@ namespace Model.Rewards
         [SerializeField] private int rewardCount;
         [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
+        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
 
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
         // [SerializeField] private CellTypeCatalog cellTypeCatalog;
         private List<RewardTypeConfig> rewardTypeConfigs;
-        private List<CellTypeId> availableCellTypeIds;
+        private List<string> availableCellIds;
         private List<CharacterTypeId> availableCharacterTypeIds;
 
 
@@ -63,13 +64,13 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
-            availableCellTypeIds = tetriCellFactory.GetRegisteredPlayableCellTypeIds();
+            availableCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
             availableCharacterTypeIds = tetriCellFactory.GetRegisteredCharacterTypeIds();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<CellTypeId> ownedTypeIds = inventory.ExistCellTypeIds;
-            return availableCellTypeIds.Any(typeId => !ownedTypeIds.Contains(typeId));
+            IReadOnlyCollection<string> ownedIds = inventory.ExistCellIds;
+            return availableCellIds.Any(cellId => !ownedIds.Contains(cellId));
         }
 
         private bool HasEnoughUpgradeableTetri(Model.TetriInventoryModel inventory)
@@ -181,7 +182,13 @@ namespace Model.Rewards
             switch (reward)
             {
                 case AddTetri addTetri:
-                    return "AddTetri_" + addTetri.GetTetri().GetMainCell().CellTypeId;
+                    var mainCell = addTetri.GetTetri().GetMainCell();
+                    if (cellDatabase != null && cellDatabase.TryGetId(mainCell.GetType(), out string cellId) && !string.IsNullOrWhiteSpace(cellId))
+                    {
+                        return "AddTetri_" + cellId;
+                    }
+
+                    return "AddTetri_" + mainCell.CellTypeId;
                 case NewCharacter newChar:
                     var characterCell = newChar.GetTetri().GetMainCell() as Character;
                     return "NewCharacter_" + characterCell.CharacterTypeId;
@@ -196,19 +203,19 @@ namespace Model.Rewards
 
         private Reward CreateNewTetriReward()
         {
-            var ownedTypeIds = tetriInventoryData.ExistCellTypeIds;
-            var unownedTypeIds = availableCellTypeIds.Where(type => !ownedTypeIds.Contains(type)).ToList();
+            var ownedIds = tetriInventoryData.ExistCellIds;
+            var unownedIds = availableCellIds.Where(id => !ownedIds.Contains(id)).ToList();
 
-            if (unownedTypeIds.Count == 0)
+            if (unownedIds.Count == 0)
             {
                 Debug.LogError("没有可用的Cell类型，无法生成NewTetri奖励。");
                 return null;
             }
 
-            // 4. 随机选择一个Cell类型
-            var selectedCellType = unownedTypeIds[UnityEngine.Random.Range(0, unownedTypeIds.Count)];
+            // 4. 随机选择一个Cell id
+            var selectedCellId = unownedIds[UnityEngine.Random.Range(0, unownedIds.Count)];
 
-            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedCellType);
+            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedCellId);
 
             // 7. 返回AddTetri奖励
             return new AddTetri(tetriInstance);

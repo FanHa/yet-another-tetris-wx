@@ -7,7 +7,7 @@ namespace Model
     [CreateAssetMenu(fileName = "TetriInventoryInitConfig", menuName = "Tetris/TetriInventoryInitConfig")]
     public class TetriInventoryInitConfig : ScriptableObject
     {
-        public List<CellTypeId> CellTypeIds;
+        public List<string> CellIds;
         public List<CharacterTypeId> CharacterTypeIds;
 
     }

@@ -7,7 +7,7 @@ namespace UI.UnitInfo
 {
     public class Skill : MonoBehaviour
     {
-        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
+        [SerializeField] private CellDatabase cellDatabase;
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
         [SerializeField] private Slider energySlider;
@@ -30,7 +30,11 @@ namespace UI.UnitInfo
         public void SetSkill(Units.Skills.Skill skill)
         {
             this.skill = skill;
-            icon.sprite = cellTypeResourceMapping.GetSprite(skill.CellTypeId);
+            if (cellDatabase != null && cellDatabase.TryGetSprite(skill.CellTypeId.ToString(), out Sprite sprite))
+            {
+                icon.sprite = sprite;
+            }
+
             if (skill is Units.Skills.ActiveSkill activeSkill)
             {
                 energySlider.gameObject.SetActive(true);

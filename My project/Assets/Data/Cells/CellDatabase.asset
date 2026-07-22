@@ -14,15 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   definitions:
   - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
-  - {fileID: 11400000, guid: bc21659a71743f94bbbbf64e8e704922, type: 2}
   - {fileID: 11400000, guid: ddf10467aa8a56842ba49ba6bce3587a, type: 2}
   - {fileID: 11400000, guid: 77a83fb8ef94118449c47454171f9bbb, type: 2}
   - {fileID: 11400000, guid: f205a5333e1d4d547a9322f39b4cee57, type: 2}

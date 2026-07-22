@@ -15,10 +15,4 @@ MonoBehaviour:
   id: AttackBoost
   runtimeTypeName: Model.Tetri.AttackBoost, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
-  config: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
-  affinity: 3
-  displayName: "\u653B\u51FB\u52A0\u901F"
-  description: "\u63D0\u5347\u653B\u51FB\u901F\u5EA6"
-  icon: {fileID: 0}
-  isHidden: 0
-  isDebugOnly: 0
+  icon: {fileID: 6614277198255979678, guid: 05b2f746cff6252489f5ed8dcd013957, type: 3}

@@ -9,23 +9,22 @@ namespace Model.Tetri
     {
         [SerializeField] private string id;
         [SerializeField] private string runtimeTypeName;
-        [SerializeField] private SkillConfig config;
-        [SerializeField] private AffinityType affinity = AffinityType.None;
-        [SerializeField] private string displayName;
-        [SerializeField] [TextArea] private string description;
         [SerializeField] private Sprite icon;
-        [SerializeField] private bool isHidden;
-        [SerializeField] private bool isDebugOnly;
 
         public string Id => id;
         public string RuntimeTypeName => runtimeTypeName;
-        public SkillConfig Config => config;
-        public AffinityType Affinity => affinity;
-        public string DisplayName => displayName;
-        public string Description => description;
         public Sprite Icon => icon;
-        public bool IsHidden => isHidden;
-        public bool IsDebugOnly => isDebugOnly;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (TryGetExpectedId(out string expectedId) && !string.IsNullOrWhiteSpace(expectedId))
+            {
+                id = expectedId;
+            }
+        }
+#endif
+
 
         public bool TryResolveCellType(out Type cellType, out string error)
         {
@@ -53,6 +52,32 @@ namespace Model.Tetri
 
             cellType = resolvedType;
             return true;
+        }
+
+        public bool TryGetExpectedId(out string expectedId)
+        {
+            expectedId = null;
+
+            if (!TryResolveCellType(out Type cellType, out _))
+            {
+                return false;
+            }
+
+            try
+            {
+                Cell cell = Activator.CreateInstance(cellType) as Cell;
+                if (cell == null)
+                {
+                    return false;
+                }
+
+                expectedId = cell.CellTypeId.ToString();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

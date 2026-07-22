@@ -11,12 +11,17 @@ namespace Operation
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField] private Model.Tetri.TetriCellTypeResourceMapping resourceMapping;
+        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
         [SerializeField] private Model.Tetri.ColorConfig colorConfig; // 新增：颜色配置
 
         public void Init(Model.Tetri.Cell modelCell)
         {
-            Sprite sprite = resourceMapping.GetSprite(modelCell);
+            Sprite sprite = null;
+            if (cellDatabase != null)
+            {
+                cellDatabase.TryGetSprite(modelCell.GetType(), out sprite);
+            }
+
             if (sprite != null)
             {
                 icon.sprite = sprite;

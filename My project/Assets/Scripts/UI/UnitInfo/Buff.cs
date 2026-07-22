@@ -8,7 +8,7 @@ namespace UI.UnitInfo
     public class Buff : MonoBehaviour
     {
         public event Action<Units.Buffs.Buff> OnBuffClicked;
-        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
+        [SerializeField] private CellDatabase cellDatabase;
         [SerializeField] private TMPro.TextMeshProUGUI remainTimeDurationText;
         [SerializeField] private Image buffIcon;
         [SerializeField] private Button buffButton;
@@ -40,7 +40,10 @@ namespace UI.UnitInfo
         public void SetBuff(Units.Buffs.Buff buff)
         {
             this.buff = buff;
-            buffIcon.sprite = cellTypeResourceMapping.GetSprite(buff.SourceSkill.CellTypeId);
+            if (cellDatabase != null && cellDatabase.TryGetSprite(buff.SourceSkill.CellTypeId.ToString(), out Sprite sprite))
+            {
+                buffIcon.sprite = sprite;
+            }
         }
 
         private void HandleClick()

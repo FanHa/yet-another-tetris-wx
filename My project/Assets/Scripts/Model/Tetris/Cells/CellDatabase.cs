@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Units.Skills;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -14,16 +13,8 @@ namespace Model.Tetri
         private Dictionary<string, CellDefinition> definitionById;
         private Dictionary<string, Type> cellTypeById;
         private Dictionary<Type, string> idByCellType;
-        private Dictionary<string, SkillConfig> configById;
-
-        private Dictionary<CellTypeId, Type> bridgeTypeByCellTypeId;
-        private Dictionary<Type, CellTypeId> bridgeCellTypeIdByType;
-        private Dictionary<Type, SkillConfig> bridgeConfigByType;
 
         public IReadOnlyList<CellDefinition> Definitions => definitions;
-        public IReadOnlyDictionary<CellTypeId, Type> CellTypeIdBridgeToType => bridgeTypeByCellTypeId;
-        public IReadOnlyDictionary<Type, CellTypeId> TypeBridgeToCellTypeId => bridgeCellTypeIdByType;
-        public IReadOnlyDictionary<Type, SkillConfig> CellTypeBridgeToConfig => bridgeConfigByType;
 
         private void OnEnable()
         {
@@ -42,11 +33,6 @@ namespace Model.Tetri
             definitionById = new Dictionary<string, CellDefinition>(StringComparer.Ordinal);
             cellTypeById = new Dictionary<string, Type>(StringComparer.Ordinal);
             idByCellType = new Dictionary<Type, string>();
-            configById = new Dictionary<string, SkillConfig>(StringComparer.Ordinal);
-
-            bridgeTypeByCellTypeId = new Dictionary<CellTypeId, Type>();
-            bridgeCellTypeIdByType = new Dictionary<Type, CellTypeId>();
-            bridgeConfigByType = new Dictionary<Type, SkillConfig>();
 
             if (definitions == null)
             {
@@ -61,7 +47,6 @@ namespace Model.Tetri
                 }
 
                 definitionById[definition.Id] = definition;
-                configById[definition.Id] = definition.Config;
 
                 if (!definition.TryResolveCellType(out Type cellType, out _))
                 {
@@ -70,13 +55,6 @@ namespace Model.Tetri
 
                 cellTypeById[definition.Id] = cellType;
                 idByCellType[cellType] = definition.Id;
-
-                if (Activator.CreateInstance(cellType) is Cell cell)
-                {
-                    bridgeTypeByCellTypeId[cell.CellTypeId] = cellType;
-                    bridgeCellTypeIdByType[cellType] = cell.CellTypeId;
-                    bridgeConfigByType[cellType] = definition.Config;
-                }
             }
         }
 
@@ -92,31 +70,6 @@ namespace Model.Tetri
             return cellTypeById.TryGetValue(id, out cellType);
         }
 
-        public bool TryGetCellType(CellTypeId cellTypeId, out Type cellType)
-        {
-            EnsureInitialized();
-            return bridgeTypeByCellTypeId.TryGetValue(cellTypeId, out cellType);
-        }
-
-        public bool TryGetConfig(string id, out SkillConfig config)
-        {
-            EnsureInitialized();
-            return configById.TryGetValue(id, out config);
-        }
-
-        public bool TryGetConfig(CellTypeId cellTypeId, out SkillConfig config)
-        {
-            EnsureInitialized();
-            config = null;
-
-            if (!bridgeTypeByCellTypeId.TryGetValue(cellTypeId, out Type cellType))
-            {
-                return false;
-            }
-
-            return bridgeConfigByType.TryGetValue(cellType, out config);
-        }
-
         public bool TryGetId(Type cellType, out string id)
         {
             EnsureInitialized();
@@ -130,6 +83,43 @@ namespace Model.Tetri
             return idByCellType.TryGetValue(cellType, out id);
         }
 
+        public bool TryGetSprite(string id, out Sprite sprite)
+        {
+            EnsureInitialized();
+            sprite = null;
+
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return false;
+            }
+
+            if (!definitionById.TryGetValue(id, out CellDefinition definition) || definition == null)
+            {
+                return false;
+            }
+
+            sprite = definition.Icon;
+            return sprite != null;
+        }
+
+        public bool TryGetSprite(Type cellType, out Sprite sprite)
+        {
+            EnsureInitialized();
+            sprite = null;
+
+            if (cellType == null)
+            {
+                return false;
+            }
+
+            if (!TryGetId(cellType, out string id) || string.IsNullOrWhiteSpace(id))
+            {
+                return false;
+            }
+
+            return TryGetSprite(id, out sprite);
+        }
+
         public List<CellDefinition> GetDefinitions()
         {
             if (definitions == null)
@@ -140,19 +130,11 @@ namespace Model.Tetri
             return new List<CellDefinition>(definitions);
         }
 
-        public List<string> GetPlayableCellIds()
+        public List<string> GetRegisteredCellIds()
         {
             EnsureInitialized();
             return definitionById.Keys
                 .Where(id => !string.IsNullOrWhiteSpace(id))
-                .ToList();
-        }
-
-        public List<CellTypeId> GetPlayableCellTypeIds()
-        {
-            EnsureInitialized();
-            return bridgeTypeByCellTypeId.Keys
-                .Where(id => id != CellTypeId.Padding && id != CellTypeId.None)
                 .ToList();
         }
 

@@ -59,7 +59,6 @@ namespace Editor.Validation
 
             CellDatabase[] databases = LoadAssets<CellDatabase>();
             TetriCellFactory[] factories = LoadAssets<TetriCellFactory>();
-            TetriCellTypeResourceMapping[] mappings = LoadAssets<TetriCellTypeResourceMapping>();
 
             if (databases.Length == 0)
             {
@@ -81,7 +80,7 @@ namespace Editor.Validation
 
             foreach (TetriCellFactory factory in factories)
             {
-                hasErrors |= ValidateFactory(factory, mappings);
+                hasErrors |= ValidateFactory(factory, databases);
             }
 
             return !hasErrors;
@@ -142,19 +141,20 @@ namespace Editor.Validation
             return hasErrors;
         }
 
-        private static bool ValidateFactory(TetriCellFactory factory, TetriCellTypeResourceMapping[] mappings)
+        private static bool ValidateFactory(TetriCellFactory factory, CellDatabase[] databases)
         {
             bool hasErrors = false;
             string factoryPath = AssetDatabase.GetAssetPath(factory);
-            List<string> playableCellIds = factory.GetRegisteredPlayableCellIds();
+            CellDatabase database = databases.FirstOrDefault();
+            List<string> registeredIds = database != null ? database.GetRegisteredCellIds() : new List<string>();
 
-            if (playableCellIds.Count == 0)
+            if (registeredIds.Count == 0)
             {
-                Debug.LogError($"{LogPrefix} Factory has no playable cell ids: {factoryPath}");
+                Debug.LogError($"{LogPrefix} Factory has no registered Cell ids: {factoryPath}");
                 return true;
             }
 
-            foreach (string cellId in playableCellIds)
+            foreach (string cellId in registeredIds)
             {
                 try
                 {
@@ -179,29 +179,17 @@ namespace Editor.Validation
                 }
             }
 
-            var playableIds = factory.GetRegisteredPlayableCellTypeIds();
-
-            if (playableIds.Count == 0)
+            if (database == null)
             {
-                Debug.LogWarning($"{LogPrefix} Factory has no legacy playable CellTypeIds: {factoryPath}");
-            }
-
-            if (mappings.Length == 0)
-            {
-                Debug.LogWarning($"{LogPrefix} No TetriCellTypeResourceMapping asset found.");
+                Debug.LogWarning($"{LogPrefix} No CellDatabase asset found for sprite validation.");
                 return hasErrors;
             }
 
-            foreach (TetriCellTypeResourceMapping mapping in mappings)
+            foreach (string cellId in registeredIds)
             {
-                string mappingPath = AssetDatabase.GetAssetPath(mapping);
-                foreach (CellTypeId cellTypeId in playableIds)
+                if (!database.TryGetSprite(cellId, out Sprite sprite) || sprite == null)
                 {
-                    Sprite sprite = mapping.GetSprite(cellTypeId);
-                    if (sprite == null)
-                    {
-                        Debug.LogWarning($"{LogPrefix} Missing sprite mapping for {cellTypeId} in {mappingPath}");
-                    }
+                    Debug.LogWarning($"{LogPrefix} Missing sprite for cell id {cellId} in {AssetDatabase.GetAssetPath(database)}");
                 }
             }
 

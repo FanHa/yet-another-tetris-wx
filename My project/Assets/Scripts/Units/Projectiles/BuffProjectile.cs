@@ -23,7 +23,7 @@ namespace Units.Projectiles
         }
         private BuffProjectilePhase phase = BuffProjectilePhase.Growing;
         private SpriteRenderer spriteRenderer;
-        [SerializeField] private TetriCellTypeResourceMapping cellTypeResourceMapping;
+        [SerializeField] private CellDatabase cellDatabase;
 
         void Awake()
         {
@@ -87,9 +87,11 @@ namespace Units.Projectiles
             this.caster = caster;
             this.target = target;
             this.buff = buff;
-            var cellTypeId = buff.SourceSkill.CellTypeId;
-            var sprite = cellTypeResourceMapping.GetSprite(cellTypeId);
-            spriteRenderer.sprite = sprite;
+
+            if (cellDatabase != null && cellDatabase.TryGetSprite(buff.SourceSkill.CellTypeId.ToString(), out Sprite sprite))
+            {
+                spriteRenderer.sprite = sprite;
+            }
 
             SetAlpha(0f);
             timer = 0f;

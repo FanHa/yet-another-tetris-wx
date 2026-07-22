@@ -39,7 +39,7 @@ namespace Units
             Units.Unit unit = Object.Instantiate(prefab);
 
             // 基础外观和数据初始化
-            Sprite characterSprite = resourceMapping.GetSprite(influence.Character);
+            Sprite characterSprite = resourceMapping.GetSprite(influence.Character.GetType());
             unit.BodySpriteRenderer.sprite = characterSprite;
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;
