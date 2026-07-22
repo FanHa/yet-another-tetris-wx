@@ -20,6 +20,6 @@ MonoBehaviour:
   displayName: "\u971C\u57DF"
   description: "\u5728\u76EE\u6807\u533A\u57DF\u5236\u9020\u4E00\u7247\u6781\u5BD2\u5730\u5E26,
     \u5BF9\u8303\u56F4\u5185\u654C\u4EBA\u9020\u6210\u51B0\u5C5E\u6027\u4F24\u5BB3\u5E76\u964D\u4F4E\u654C\u65B9\u901F\u5EA6."
-  icon: {fileID: 0}
+  icon: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}
   isHidden: 0
   isDebugOnly: 0

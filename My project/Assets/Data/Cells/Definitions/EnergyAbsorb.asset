@@ -19,6 +19,6 @@ MonoBehaviour:
   affinity: 7
   displayName: "\u80FD\u91CF\u6C72\u53D6"
   description: "\u88AB\u52A8\uFF1A\u6BCF\u5F53\u654C\u5BF9\u5355\u4F4D\u65BD\u653E\u6280\u80FD\u65F6\uFF0C\u6C72\u53D6\u80FD\u91CF\u5E76\u5206\u914D\u5230\u5DF1\u65B9\u6240\u6709\u5355\u4F4D"
-  icon: {fileID: 0}
+  icon: {fileID: 7569832779607618052, guid: 1f1653995ca9b6645a7e65ac0705e448, type: 3}
   isHidden: 0
   isDebugOnly: 0
