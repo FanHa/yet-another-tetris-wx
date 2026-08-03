@@ -48,13 +48,13 @@ namespace Editor.Validation
             {
                 SerializedProperty itemProperty = bindingsProperty.GetArrayElementAtIndex(i);
                 SerializedProperty cellIdProperty = itemProperty.FindPropertyRelative("cellId");
-                SerializedProperty skillConfigProperty = itemProperty.FindPropertyRelative("skillConfig");
+                SerializedProperty skillDefinitionProperty = itemProperty.FindPropertyRelative("skillDefinition");
 
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField($"Binding {i}", EditorStyles.boldLabel);
 
                 DrawCellIdSelector(cellIdProperty, availableCellIds);
-                EditorGUILayout.PropertyField(skillConfigProperty);
+                EditorGUILayout.PropertyField(skillDefinitionProperty);
 
                 if (GUILayout.Button("Remove"))
                 {
@@ -111,7 +111,7 @@ namespace Editor.Validation
                 bindingsProperty.InsertArrayElementAtIndex(bindingsProperty.arraySize);
                 SerializedProperty item = bindingsProperty.GetArrayElementAtIndex(bindingsProperty.arraySize - 1);
                 item.FindPropertyRelative("cellId").stringValue = string.Empty;
-                item.FindPropertyRelative("skillConfig").objectReferenceValue = null;
+                item.FindPropertyRelative("skillDefinition").objectReferenceValue = null;
             }
 
             EditorGUILayout.EndHorizontal();

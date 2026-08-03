@@ -121,8 +121,7 @@ namespace Model.Tetri
             var definition = cellDatabase.GetDefinition(cellId);
             var type = definition.RuntimeType;
 
-            SkillConfig config = null;
-            cellSkillBindingDatabase.TryGetSkillConfig(cellId, out config);
+            SkillConfig config = cellSkillBindingDatabase.GetResolvedSkillConfig(cellId);
             
             return CreateCellFromResolvedType(type, config, $"cell id: {cellId}", nameof(cellId));
         }
@@ -137,10 +136,6 @@ namespace Model.Tetri
             if (config != null)
             {
                 cell.Config = config;
-            }
-            else
-            {
-                Debug.LogWarning($"No config registered for {debugTarget}.");
             }
 
             return cell;

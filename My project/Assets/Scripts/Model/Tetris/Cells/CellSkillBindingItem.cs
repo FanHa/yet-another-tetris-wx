@@ -1,6 +1,7 @@
 using System;
 using Units.Skills;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Model.Tetri
 {
@@ -8,9 +9,9 @@ namespace Model.Tetri
     public sealed class CellSkillBindingItem
     {
         [SerializeField] private string cellId;
-        [SerializeField] private SkillConfig skillConfig;
+        [SerializeField] private SkillDefinition skillDefinition;
 
         public string CellId => cellId;
-        public SkillConfig SkillConfig => skillConfig;
+        public SkillDefinition SkillDefinition => skillDefinition;
     }
 }

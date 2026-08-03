@@ -11,7 +11,7 @@ namespace Model.Tetri
     {
         [SerializeField] private List<CellSkillBindingItem> bindings = new();
 
-        private Dictionary<string, SkillConfig> skillConfigByCellId;
+        private Dictionary<string, CellSkillBindingItem> bindingByCellId;
 
         public IReadOnlyList<CellSkillBindingItem> Bindings => bindings;
 
@@ -27,17 +27,17 @@ namespace Model.Tetri
         }
 #endif
 
-        public bool TryGetSkillConfig(string cellId, out SkillConfig skillConfig)
+        public SkillDefinition GetSkillDefinition(string cellId)
         {
             EnsureInitialized();
-            skillConfig = null;
+            CellSkillBindingItem binding = bindingByCellId[cellId];
+            return binding.SkillDefinition;
+        }
 
-            if (string.IsNullOrWhiteSpace(cellId))
-            {
-                return false;
-            }
-
-            return skillConfigByCellId.TryGetValue(cellId, out skillConfig);
+        public SkillConfig GetResolvedSkillConfig(string cellId)
+        {
+            SkillDefinition skillDefinition = GetSkillDefinition(cellId);
+            return skillDefinition.Config;
         }
 
         public List<CellSkillBindingItem> GetBindings()
@@ -48,12 +48,12 @@ namespace Model.Tetri
         public List<string> GetBoundCellIds()
         {
             EnsureInitialized();
-            return skillConfigByCellId.Keys.ToList();
+            return bindingByCellId.Keys.ToList();
         }
 
         private void RebuildIndex()
         {
-            skillConfigByCellId = new Dictionary<string, SkillConfig>(StringComparer.Ordinal);
+            bindingByCellId = new Dictionary<string, CellSkillBindingItem>(StringComparer.Ordinal);
 
             foreach (CellSkillBindingItem item in bindings)
             {
@@ -62,13 +62,13 @@ namespace Model.Tetri
                     continue;
                 }
 
-                skillConfigByCellId[item.CellId] = item.SkillConfig;
+                bindingByCellId[item.CellId] = item;
             }
         }
 
         private void EnsureInitialized()
         {
-            if (skillConfigByCellId != null)
+            if (bindingByCellId != null)
             {
                 return;
             }
