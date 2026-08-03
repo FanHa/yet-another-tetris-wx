@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bindings:
   - cellId: AttackBoost
-    skillConfig: {fileID: 0}
+    skillDefinition: {fileID: 0}
