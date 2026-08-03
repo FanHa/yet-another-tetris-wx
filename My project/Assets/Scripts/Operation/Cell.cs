@@ -19,7 +19,8 @@ namespace Operation
             Sprite sprite = null;
             if (cellDatabase != null)
             {
-                cellDatabase.TryGetSprite(modelCell.GetType(), out sprite);
+                string cellId = modelCell.GetType().Name;
+                cellDatabase.TryGetSprite(cellId, out sprite);
             }
 
             if (sprite != null)

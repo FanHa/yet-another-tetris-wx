@@ -11,8 +11,6 @@ namespace Model.Tetri
         [SerializeField] private List<CellDefinition> definitions = new();
 
         private Dictionary<string, CellDefinition> definitionById;
-        private Dictionary<string, Type> cellTypeById;
-        private Dictionary<Type, string> idByCellType;
 
         public IReadOnlyList<CellDefinition> Definitions => definitions;
 
@@ -31,8 +29,6 @@ namespace Model.Tetri
         private void InitializeIndexes()
         {
             definitionById = new Dictionary<string, CellDefinition>(StringComparer.Ordinal);
-            cellTypeById = new Dictionary<string, Type>(StringComparer.Ordinal);
-            idByCellType = new Dictionary<Type, string>();
 
             if (definitions == null)
             {
@@ -47,40 +43,24 @@ namespace Model.Tetri
                 }
 
                 definitionById[definition.Id] = definition;
-
-                if (!definition.TryResolveCellType(out Type cellType, out _))
-                {
-                    continue;
-                }
-
-                cellTypeById[definition.Id] = cellType;
-                idByCellType[cellType] = definition.Id;
             }
         }
 
-        public bool TryGetDefinition(string id, out CellDefinition definition)
-        {
-            EnsureInitialized();
-            return definitionById.TryGetValue(id, out definition);
-        }
-
-        public bool TryGetCellType(string id, out Type cellType)
-        {
-            EnsureInitialized();
-            return cellTypeById.TryGetValue(id, out cellType);
-        }
-
-        public bool TryGetId(Type cellType, out string id)
+        public CellDefinition GetDefinition(string id)
         {
             EnsureInitialized();
 
-            if (cellType == null)
+            if (string.IsNullOrWhiteSpace(id))
             {
-                id = null;
-                return false;
+                throw new ArgumentException("Cell id is null or empty.", nameof(id));
             }
 
-            return idByCellType.TryGetValue(cellType, out id);
+            if (!definitionById.TryGetValue(id, out CellDefinition definition) || definition == null)
+            {
+                throw new KeyNotFoundException($"Unknown cell id: {id}");
+            }
+
+            return definition;
         }
 
         public bool TryGetSprite(string id, out Sprite sprite)
@@ -102,24 +82,6 @@ namespace Model.Tetri
             return sprite != null;
         }
 
-        public bool TryGetSprite(Type cellType, out Sprite sprite)
-        {
-            EnsureInitialized();
-            sprite = null;
-
-            if (cellType == null)
-            {
-                return false;
-            }
-
-            if (!TryGetId(cellType, out string id) || string.IsNullOrWhiteSpace(id))
-            {
-                return false;
-            }
-
-            return TryGetSprite(id, out sprite);
-        }
-
         public List<CellDefinition> GetDefinitions()
         {
             if (definitions == null)
@@ -133,14 +95,15 @@ namespace Model.Tetri
         public List<string> GetRegisteredCellIds()
         {
             EnsureInitialized();
-            return definitionById.Keys
-                .Where(id => !string.IsNullOrWhiteSpace(id))
+            return definitions
+                .Where(definition => definition != null && !string.IsNullOrWhiteSpace(definition.Id))
+                .Select(definition => definition.Id)
                 .ToList();
         }
 
         private void EnsureInitialized()
         {
-            if (definitionById != null && cellTypeById != null && idByCellType != null)
+            if (definitionById != null)
             {
                 return;
             }

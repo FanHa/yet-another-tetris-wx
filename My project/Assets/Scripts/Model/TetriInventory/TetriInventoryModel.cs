@@ -112,15 +112,8 @@ namespace Model
                 }
                 else
                 {
-                    // 普通方块按 cellId 建立索引。
-                    if (cellDatabase != null && cellDatabase.TryGetId(cell.GetType(), out string cellId) && !string.IsNullOrWhiteSpace(cellId))
-                    {
-                        existCellIds.Add(cellId);
-                    }
-                    else
-                    {
-                        existCellIds.Add(cell.CellTypeId.ToString());
-                    }
+                    // 普通方块直接按 cellId 建立索引。
+                    existCellIds.Add(cell.CellTypeId.ToString());
                 }
             }
         }

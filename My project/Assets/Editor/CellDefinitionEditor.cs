@@ -41,11 +41,7 @@ namespace Editor.Validation
 
             serializedObject.ApplyModifiedProperties();
 
-            if (target is CellDefinition definition && definition.TryGetExpectedId(out string expectedId) && idProperty.stringValue != expectedId)
-            {
-                idProperty.stringValue = expectedId;
-                serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
+            SyncIdPropertyFromRuntimeType();
         }
 
         private void DrawRuntimeTypePopup()
@@ -75,6 +71,36 @@ namespace Editor.Validation
             {
                 EditorGUILayout.PropertyField(idProperty, IdLabel);
             }
+        }
+
+        private void SyncIdPropertyFromRuntimeType()
+        {
+            if (idProperty == null || runtimeTypeNameProperty == null)
+            {
+                return;
+            }
+
+            string runtimeTypeName = runtimeTypeNameProperty.stringValue;
+            if (string.IsNullOrWhiteSpace(runtimeTypeName))
+            {
+                return;
+            }
+
+            Type runtimeType = Type.GetType(runtimeTypeName, false);
+            if (runtimeType == null)
+            {
+                return;
+            }
+
+            string expectedId = runtimeType.Name;
+            if (idProperty.stringValue == expectedId)
+            {
+                return;
+            }
+
+            serializedObject.Update();
+            idProperty.stringValue = expectedId;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void EnsureTypeCache()

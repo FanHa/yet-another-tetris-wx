@@ -124,12 +124,7 @@ namespace Editor.Validation
                     hasErrors = true;
                 }
 
-                if (!definition.TryResolveCellType(out Type cellType, out string error))
-                {
-                    Debug.LogError($"{LogPrefix} Invalid CellDefinition type: {definitionPath}. {error}");
-                    hasErrors = true;
-                    continue;
-                }
+                Type cellType = definition.RuntimeType;
 
                 if (!seenTypes.Add(cellType))
                 {

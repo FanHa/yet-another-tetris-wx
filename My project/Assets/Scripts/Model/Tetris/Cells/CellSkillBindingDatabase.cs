@@ -40,36 +40,8 @@ namespace Model.Tetri
             return skillConfigByCellId.TryGetValue(cellId, out skillConfig);
         }
 
-        public bool TryGetSkillConfig(CellDefinition definition, out SkillConfig skillConfig)
-        {
-            skillConfig = null;
-            return definition != null && TryGetSkillConfig(definition.Id, out skillConfig);
-        }
-
-        public bool TryGetSkillConfig(Type cellType, CellDatabase cellDatabase, out SkillConfig skillConfig)
-        {
-            skillConfig = null;
-
-            if (cellType == null || cellDatabase == null)
-            {
-                return false;
-            }
-
-            if (!cellDatabase.TryGetId(cellType, out string cellId) || string.IsNullOrWhiteSpace(cellId))
-            {
-                return false;
-            }
-
-            return TryGetSkillConfig(cellId, out skillConfig);
-        }
-
         public List<CellSkillBindingItem> GetBindings()
         {
-            if (bindings == null)
-            {
-                return new List<CellSkillBindingItem>();
-            }
-
             return new List<CellSkillBindingItem>(bindings);
         }
 
@@ -82,11 +54,6 @@ namespace Model.Tetri
         private void RebuildIndex()
         {
             skillConfigByCellId = new Dictionary<string, SkillConfig>(StringComparer.Ordinal);
-
-            if (bindings == null)
-            {
-                return;
-            }
 
             foreach (CellSkillBindingItem item in bindings)
             {

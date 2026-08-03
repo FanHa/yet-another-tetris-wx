@@ -118,23 +118,13 @@ namespace Model.Tetri
             if (string.IsNullOrWhiteSpace(cellId))
                 throw new ArgumentException($"Cell id is null or empty. {BuildErrorContext(nameof(CreateCell), cellId)}", nameof(cellId));
 
-            if (!cellDatabase.TryGetCellType(cellId, out var type))
-                throw new ArgumentException($"Unknown cell id. {BuildErrorContext(nameof(CreateCell), cellId)}", nameof(cellId));
+            var definition = cellDatabase.GetDefinition(cellId);
+            var type = definition.RuntimeType;
 
-            SkillConfig config = ResolveCellSkillConfig(type);
+            SkillConfig config = null;
+            cellSkillBindingDatabase.TryGetSkillConfig(cellId, out config);
+            
             return CreateCellFromResolvedType(type, config, $"cell id: {cellId}", nameof(cellId));
-        }
-
-        private SkillConfig ResolveCellSkillConfig(Type cellType)
-        {
-            if (cellSkillBindingDatabase == null)
-            {
-                return null;
-            }
-
-            return cellSkillBindingDatabase.TryGetSkillConfig(cellType, cellDatabase, out SkillConfig config)
-                ? config
-                : null;
         }
 
         private Cell CreateCellFromResolvedType(Type type, SkillConfig config, string debugTarget, string argumentName)
