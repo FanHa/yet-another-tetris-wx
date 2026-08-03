@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad391397dde28b41aca1f84e781d955, type: 3}
+  m_Name: CellSkillDefinitionBindingDatabase
+  m_EditorClassIdentifier: 
+  bindings:
+  - cellId: AttackBoost
+    skillDefinition: {fileID: 11400000, guid: b0352d8c7e3a3504fa8fe94f865fdef6, type: 2}
+  - cellId: BlazingField
+    skillDefinition: {fileID: 11400000, guid: 111315917941123478a31e9e793bea49, type: 2}
+  - cellId: Charge
+    skillDefinition: {fileID: 11400000, guid: 32b2e42cff705b340810efb9724bd2ee, type: 2}
+  - cellId: EnergyAbsorb
+    skillDefinition: {fileID: 11400000, guid: b864ac5a9d8871346be38e57f79d9d7e, type: 2}
+  - cellId: Fireball
+    skillDefinition: {fileID: 11400000, guid: 841b30b29e3420746b7559e0ad2db608, type: 2}
+  - cellId: FlameInject
+    skillDefinition: {fileID: 11400000, guid: 3fbcbf2a7f9ec624aa80bce20f323c65, type: 2}
+  - cellId: FlameRing
+    skillDefinition: {fileID: 11400000, guid: 3bfac8483a5deba4589b6059cd62d928, type: 2}
+  - cellId: FrostZone
+    skillDefinition: {fileID: 11400000, guid: b6d78b350be028e4ead069f875708880, type: 2}
+  - cellId: GuardAlly
+    skillDefinition: {fileID: 11400000, guid: 335fa219d4a672341ab186ed90a65548, type: 2}
+  - cellId: IceBreaker
+    skillDefinition: {fileID: 11400000, guid: d5f96687131510843b6c2cc44c0b8932, type: 2}
+  - cellId: IceShield
+    skillDefinition: {fileID: 11400000, guid: 0ac382e5f8b65684c879b32e40845df5, type: 2}
+  - cellId: IcyCage
+    skillDefinition: {fileID: 11400000, guid: 84ea59bf39d4a3c44a0939ad397f9414, type: 2}
+  - cellId: LifeBomb
+    skillDefinition: {fileID: 11400000, guid: b41223e9eb9031b43a4a04f086e64f7f, type: 2}
+  - cellId: LifeEcho
+    skillDefinition: {fileID: 11400000, guid: b02134c126bebdf43b31e6f04f10dd52, type: 2}
+  - cellId: LifePower
+    skillDefinition: {fileID: 11400000, guid: 49da97fd06bcc784c99cdff854743a87, type: 2}
+  - cellId: LifeShield
+    skillDefinition: {fileID: 11400000, guid: ecad0012de8eb5e44b1643763a2785ce, type: 2}
+  - cellId: ShadowArrow
+    skillDefinition: {fileID: 11400000, guid: c6db5dc027c2a9545885634b17711c4e, type: 2}
+  - cellId: ShadowAttack
+    skillDefinition: {fileID: 11400000, guid: d848376f6649b684ba1fdd612a967789, type: 2}
+  - cellId: ShadowStep
+    skillDefinition: {fileID: 11400000, guid: 136207362c8f06747a8736546ef3e6cf, type: 2}
+  - cellId: Snowball
+    skillDefinition: {fileID: 11400000, guid: fe28ca5620d6f424baf35dbaa942464e, type: 2}
+  - cellId: ThunderStrike
+    skillDefinition: {fileID: 11400000, guid: d8b21d41905e99c4f9a5e6515afe2748, type: 2}
+  - cellId: VulnerabilityField
+    skillDefinition: {fileID: 11400000, guid: 3d592758a12ec1c4296875083abd91d5, type: 2}
+  - cellId: WildWind
+    skillDefinition: {fileID: 11400000, guid: 4ad49ea69ed940548a5bf872eb450ac1, type: 2}
+  - cellId: WindKnockback
+    skillDefinition: {fileID: 11400000, guid: 2178451fb95d2f2498d92da0feded67a, type: 2}
+  - cellId: WindShift
+    skillDefinition: {fileID: 11400000, guid: 74b27c225f9672c4cadeea9f69dbe1ad, type: 2}
