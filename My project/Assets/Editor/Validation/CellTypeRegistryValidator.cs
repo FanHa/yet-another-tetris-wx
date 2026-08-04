@@ -9,12 +9,12 @@ using UnityEngine;
 namespace Editor.Validation
 {
     [InitializeOnLoad]
-    public static class CellTypeRegistryStartupValidator
+    public static class CellTypeRegistryValidator
     {
         private const string LogPrefix = "[CellTypeValidator]";
         private static bool hasValidatedThisSession;
 
-        static CellTypeRegistryStartupValidator()
+        static CellTypeRegistryValidator()
         {
             EditorApplication.delayCall += ValidateOnEditorLoad;
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;

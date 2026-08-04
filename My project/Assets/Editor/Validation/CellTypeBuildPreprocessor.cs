@@ -1,5 +1,6 @@
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using Editor.Validation;
 
 namespace Editor.Validation
 {
@@ -9,7 +10,7 @@ namespace Editor.Validation
 
         public void OnPreprocessBuild(BuildReport report)
         {
-            if (!CellTypeRegistryStartupValidator.ValidateAllAndGetResult())
+            if (!CellTypeRegistryValidator.ValidateAllAndGetResult())
             {
                 throw new BuildFailedException("Cell type validation failed. Fix validation errors before building.");
             }
