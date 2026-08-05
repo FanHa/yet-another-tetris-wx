@@ -115,22 +115,16 @@ namespace Model.Tetri
 
         public Cell CreateCell(string cellId)
         {
-            if (string.IsNullOrWhiteSpace(cellId))
-                throw new ArgumentException($"Cell id is null or empty. {BuildErrorContext(nameof(CreateCell), cellId)}", nameof(cellId));
-
             var definition = cellDatabase.GetDefinition(cellId);
             var type = definition.RuntimeType;
 
             SkillConfig config = cellSkillBindingDatabase.GetResolvedSkillConfig(cellId);
             
-            return CreateCellFromResolvedType(type, config, $"cell id: {cellId}", nameof(cellId));
+            return CreateCellFromResolvedType(type, config);
         }
 
-        private Cell CreateCellFromResolvedType(Type type, SkillConfig config, string debugTarget, string argumentName)
+        private Cell CreateCellFromResolvedType(Type type, SkillConfig config)
         {
-            if (type == null || !typeof(Cell).IsAssignableFrom(type))
-                throw new ArgumentException($"Resolved type is not a valid {nameof(Cell)} for {debugTarget}.", argumentName);
-
             var cell = (Cell)Activator.CreateInstance(type);
 
             if (config != null)
@@ -153,14 +147,9 @@ namespace Model.Tetri
             // 1. 创建Cell实例（无参构造）
             var cell = (Character)Activator.CreateInstance(type);
 
-            if (CharacterConfigMap != null && CharacterConfigMap.TryGetValue(type, out var config) && config != null)
-            {
-                cell.Config = config;
-            }
-            else
-            {
-                Debug.LogWarning($"No config registered for character type: {type.Name}");
-            }
+            cell.Config = CharacterConfigMap[type] ?? throw new InvalidOperationException(
+                $"Character config is null. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId, type)}");
+
             return cell;
         }
 
