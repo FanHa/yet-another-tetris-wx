@@ -63,6 +63,11 @@ namespace Model.Tetri
             return tetri;
         }
 
+        public Tetri CreateRandomShapeWithCell(CellDefinition definition)
+        {
+            return CreateRandomShapeWithCell(definition.Id);
+        }
+
 
         public Tetri CreateCharacterTetri(CharacterTypeId characterTypeId)
         {

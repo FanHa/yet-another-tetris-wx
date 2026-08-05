@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterConfigRegistry: {fileID: 11400000, guid: 3d8119154c3f46548bbe3c2a52c6044b, type: 2}
   cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}
+  cellSkillBindingDatabase: {fileID: 11400000, guid: 8fc564e3795f91841a7ccc96ec8ea714, type: 2}

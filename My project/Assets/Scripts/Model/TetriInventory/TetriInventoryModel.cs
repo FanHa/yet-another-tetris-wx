@@ -15,7 +15,6 @@ namespace Model
         [SerializeField] private List<Model.Tetri.Tetri> usableTetriList = new List<Model.Tetri.Tetri>();
         [SerializeField] private List<Model.Tetri.Tetri> usedTetriList = new List<Model.Tetri.Tetri>();
         [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
-        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
 
@@ -42,13 +41,12 @@ namespace Model
         private void GenerateInitialTetris()
         {
             TetriInventoryInitConfig config = initialConfigs[avaliableConfigIndex];
-
-            List<string> initialCellIds = config.CellIds;
+            List<CellDefinition> initialCellDefinitions = config.CellDefinitions;
             List<CharacterTypeId> initialCharacterIds = config.CharacterTypeIds;
 
-            foreach (var cellId in initialCellIds)
+            foreach (var definition in initialCellDefinitions)
             {
-                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellId);
+                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(definition);
                 AddTetri(tetri, silent: true); 
             }
 

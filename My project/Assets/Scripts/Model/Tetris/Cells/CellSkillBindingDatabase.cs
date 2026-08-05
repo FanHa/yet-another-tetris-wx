@@ -30,8 +30,7 @@ namespace Model.Tetri
         public SkillDefinition GetSkillDefinition(string cellId)
         {
             EnsureInitialized();
-            CellSkillBindingItem binding = bindingByCellId[cellId];
-            return binding.SkillDefinition;
+            return bindingByCellId[cellId].SkillDefinition;
         }
 
         public SkillConfig GetResolvedSkillConfig(string cellId)
@@ -57,12 +56,12 @@ namespace Model.Tetri
 
             foreach (CellSkillBindingItem item in bindings)
             {
-                if (item == null || string.IsNullOrWhiteSpace(item.CellId))
+                if (item == null || item.CellDefinition == null || string.IsNullOrWhiteSpace(item.CellDefinition.Id))
                 {
                     continue;
                 }
 
-                bindingByCellId[item.CellId] = item;
+                bindingByCellId[item.CellDefinition.Id] = item;
             }
         }
 

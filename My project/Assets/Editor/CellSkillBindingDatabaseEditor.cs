@@ -10,7 +10,7 @@ namespace Editor.Validation
     [CustomEditor(typeof(CellSkillBindingDatabase))]
     public sealed class CellSkillBindingDatabaseEditor : UnityEditor.Editor
     {
-        private static readonly GUIContent CellIdLabel = new("Cell Id");
+        private static readonly GUIContent CellDefinitionLabel = new("Cell Definition");
 
         private SerializedProperty bindingsProperty;
 
@@ -23,14 +23,13 @@ namespace Editor.Validation
         {
             serializedObject.Update();
 
-            List<string> availableCellIds = LoadRegisteredCellIds();
-            DrawBindings(availableCellIds);
+            DrawBindings();
             DrawToolbar();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawBindings(List<string> availableCellIds)
+        private void DrawBindings()
         {
             if (bindingsProperty == null)
             {
@@ -47,14 +46,16 @@ namespace Editor.Validation
             for (int i = 0; i < bindingsProperty.arraySize; i++)
             {
                 SerializedProperty itemProperty = bindingsProperty.GetArrayElementAtIndex(i);
-                SerializedProperty cellIdProperty = itemProperty.FindPropertyRelative("cellId");
+                SerializedProperty cellDefinitionProperty = itemProperty.FindPropertyRelative("cellDefinition");
                 SerializedProperty skillDefinitionProperty = itemProperty.FindPropertyRelative("skillDefinition");
 
                 EditorGUILayout.BeginVertical("box");
                 EditorGUILayout.LabelField($"Binding {i}", EditorStyles.boldLabel);
 
-                DrawCellIdSelector(cellIdProperty, availableCellIds);
+                EditorGUILayout.PropertyField(cellDefinitionProperty, CellDefinitionLabel);
                 EditorGUILayout.PropertyField(skillDefinitionProperty);
+
+                DrawBindingWarnings(cellDefinitionProperty, skillDefinitionProperty);
 
                 if (GUILayout.Button("Remove"))
                 {
@@ -67,38 +68,16 @@ namespace Editor.Validation
             }
         }
 
-        private void DrawCellIdSelector(SerializedProperty cellIdProperty, List<string> availableCellIds)
+        private static void DrawBindingWarnings(SerializedProperty cellDefinitionProperty, SerializedProperty skillDefinitionProperty)
         {
-            string currentValue = cellIdProperty.stringValue;
-
-            if (availableCellIds.Count == 0)
+            if (cellDefinitionProperty.objectReferenceValue == null)
             {
-                EditorGUILayout.PropertyField(cellIdProperty, CellIdLabel);
-                EditorGUILayout.HelpBox("No CellDatabase entries found. Configure CellDatabase first.", MessageType.Warning);
-                return;
+                EditorGUILayout.HelpBox("CellDefinition is required.", MessageType.Warning);
             }
 
-            List<string> options = new List<string>(availableCellIds);
-            bool hasCurrent = !string.IsNullOrWhiteSpace(currentValue) && options.Contains(currentValue, StringComparer.Ordinal);
-
-            if (!hasCurrent && !string.IsNullOrWhiteSpace(currentValue))
+            if (skillDefinitionProperty.objectReferenceValue == null)
             {
-                options.Add(currentValue);
-            }
-
-            int currentIndex = Mathf.Max(0, options.FindIndex(id => string.Equals(id, currentValue, StringComparison.Ordinal)));
-            int nextIndex = EditorGUILayout.Popup(CellIdLabel, currentIndex, options.ToArray());
-            nextIndex = Mathf.Clamp(nextIndex, 0, options.Count - 1);
-
-            string selected = options[nextIndex];
-            if (!string.Equals(selected, currentValue, StringComparison.Ordinal))
-            {
-                cellIdProperty.stringValue = selected;
-            }
-
-            if (!hasCurrent && !string.IsNullOrWhiteSpace(currentValue))
-            {
-                EditorGUILayout.HelpBox($"Current CellId '{currentValue}' is not registered in any CellDatabase.", MessageType.Warning);
+                EditorGUILayout.HelpBox("SkillDefinition is required.", MessageType.Warning);
             }
         }
 
@@ -110,44 +89,11 @@ namespace Editor.Validation
             {
                 bindingsProperty.InsertArrayElementAtIndex(bindingsProperty.arraySize);
                 SerializedProperty item = bindingsProperty.GetArrayElementAtIndex(bindingsProperty.arraySize - 1);
-                item.FindPropertyRelative("cellId").stringValue = string.Empty;
+                item.FindPropertyRelative("cellDefinition").objectReferenceValue = null;
                 item.FindPropertyRelative("skillDefinition").objectReferenceValue = null;
             }
 
             EditorGUILayout.EndHorizontal();
-        }
-
-        private static List<string> LoadRegisteredCellIds()
-        {
-            string[] databaseGuids = AssetDatabase.FindAssets("t:CellDatabase");
-            if (databaseGuids == null || databaseGuids.Length == 0)
-            {
-                return new List<string>();
-            }
-
-            HashSet<string> idSet = new(StringComparer.Ordinal);
-
-            foreach (string guid in databaseGuids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                CellDatabase database = AssetDatabase.LoadAssetAtPath<CellDatabase>(path);
-                if (database == null)
-                {
-                    continue;
-                }
-
-                foreach (string id in database.GetRegisteredCellIds())
-                {
-                    if (!string.IsNullOrWhiteSpace(id))
-                    {
-                        idSet.Add(id);
-                    }
-                }
-            }
-
-            return idSet
-                .OrderBy(id => id, StringComparer.Ordinal)
-                .ToList();
         }
     }
 }

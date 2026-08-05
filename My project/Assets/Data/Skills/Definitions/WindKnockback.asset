@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:yousandi.cn,2023:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -16,4 +16,4 @@ MonoBehaviour:
   displayName: 
   runtimeTypeName: Units.Skills.WindKnockback, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
-  config: {fileID: 11400000, guid: 3b9e88f06f0f28c43b13538c5919767e, type: 2}
+  config: {fileID: 11400000, guid: dd0603002b0516a4c9a05d087ee0b059, type: 2}

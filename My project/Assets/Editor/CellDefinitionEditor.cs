@@ -21,9 +21,11 @@ namespace Editor.Validation
         private SerializedProperty idProperty;
         private SerializedProperty runtimeTypeNameProperty;
         private SerializedProperty iconProperty;
+        private SerializedProperty scriptProperty;
 
         private void OnEnable()
         {
+            scriptProperty = serializedObject.FindProperty("m_Script");
             idProperty = serializedObject.FindProperty("id");
             runtimeTypeNameProperty = serializedObject.FindProperty("runtimeTypeName");
             iconProperty = serializedObject.FindProperty("icon");
@@ -33,6 +35,7 @@ namespace Editor.Validation
         {
             serializedObject.Update();
 
+            DrawScriptField();
             EnsureTypeCache();
 
             DrawRuntimeTypePopup();
@@ -42,6 +45,21 @@ namespace Editor.Validation
             serializedObject.ApplyModifiedProperties();
 
             SyncIdPropertyFromRuntimeType();
+        }
+
+        private void DrawScriptField()
+        {
+            if (scriptProperty == null)
+            {
+                return;
+            }
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUILayout.PropertyField(scriptProperty);
+            }
+
+            EditorGUILayout.Space();
         }
 
         private void DrawRuntimeTypePopup()

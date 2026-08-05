@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: aab57ad004d896f42b91c6793b7a7cfc, type: 3}
   m_Name: WindKnockbackSkillConfig
-  m_EditorClassIdentifier: Assembly-CSharp:Units.Skills:WindKnockbackSkillConfig
+  m_EditorClassIdentifier: 
   LevelConfigs:
   - BaseKnockbackDistance: 1
     KnockbackDistancePerWindCell: 0.1
-    MaxKnockbackDistance: 2
-  - BaseKnockbackDistance: 1
-    KnockbackDistancePerWindCell: 0.1
-    MaxKnockbackDistance: 2
+    MaxKnockbackDistance: 3
+  - BaseKnockbackDistance: 1.5
+    KnockbackDistancePerWindCell: 0.15
+    MaxKnockbackDistance: 3
