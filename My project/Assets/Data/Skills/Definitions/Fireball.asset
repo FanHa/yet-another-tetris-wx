@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:yousandi.cn,2023:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -17,3 +17,4 @@ MonoBehaviour:
   runtimeTypeName: Units.Skills.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 6a1eef4ac1cdb2c4c96a4c7a27f946a2, type: 2}
+  icon: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}

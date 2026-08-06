@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:yousandi.cn,2023:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -17,3 +17,4 @@ MonoBehaviour:
   runtimeTypeName: Units.Skills.ShadowStep, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
+  icon: {fileID: -311389461584822456, guid: c377b6acedee55648b17ff1601303fa1, type: 3}

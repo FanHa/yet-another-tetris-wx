@@ -17,3 +17,4 @@ MonoBehaviour:
   runtimeTypeName: Units.Skills.AttackBoost, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}
+  icon: {fileID: 6614277198255979678, guid: 05b2f746cff6252489f5ed8dcd013957, type: 3}

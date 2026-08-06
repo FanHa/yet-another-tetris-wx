@@ -17,3 +17,4 @@ MonoBehaviour:
   runtimeTypeName: Units.Skills.WindKnockback, Assembly-CSharp, Version=0.0.0.0,
     Culture=neutral, PublicKeyToken=null
   config: {fileID: 11400000, guid: dd0603002b0516a4c9a05d087ee0b059, type: 2}
+  icon: {fileID: -6377495307504447203, guid: 6d602c25858f6704391736937dc0ef1a, type: 3}

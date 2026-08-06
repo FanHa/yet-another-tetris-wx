@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:yousandi.cn,2023:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -17,3 +17,4 @@ MonoBehaviour:
   runtimeTypeName: Units.Skills.Charge, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
+  icon: {fileID: 3028569641589395924, guid: a60f877582fabe340944cdd77215f94f, type: 3}
