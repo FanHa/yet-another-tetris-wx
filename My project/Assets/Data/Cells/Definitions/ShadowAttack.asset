@@ -9,16 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 87fd063c3d865564e8cec11725df14e0, type: 3}
   m_Name: ShadowAttack
   m_EditorClassIdentifier: 
   id: ShadowAttack
   runtimeTypeName: Model.Tetri.ShadowAttack, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
-  config: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
-  affinity: 5
-  displayName: "\u5F71\u88AD"
-  description: "\u653B\u51FB\u65F6\u9644\u52A0\u6613\u4F24"
-  icon: {fileID: 4472188088645480083, guid: bed8afd836b9a9f459a96a386010473b, type: 3}
-  isHidden: 0
-  isDebugOnly: 0
+  skillDefinition: {fileID: 11400000, guid: d848376f6649b684ba1fdd612a967789, type: 2}

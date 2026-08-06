@@ -9,16 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 87fd063c3d865564e8cec11725df14e0, type: 3}
   m_Name: LifeEcho
   m_EditorClassIdentifier: 
   id: LifeEcho
   runtimeTypeName: Model.Tetri.LifeEcho, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
-  config: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
-  affinity: 4
-  displayName: "\u751F\u547D\u56DE\u54CD"
-  description: "\u53CD\u5F39\u53D7\u5230\u7684\u4F24\u5BB3"
-  icon: {fileID: -5587755329506514606, guid: 0ffef48aa8f00064696c938ff3c24b3e, type: 3}
-  isHidden: 0
-  isDebugOnly: 0
+  skillDefinition: {fileID: 11400000, guid: b02134c126bebdf43b31e6f04f10dd52, type: 2}

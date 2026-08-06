@@ -9,16 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 87fd063c3d865564e8cec11725df14e0, type: 3}
   m_Name: ShadowStep
   m_EditorClassIdentifier: 
   id: ShadowStep
   runtimeTypeName: Model.Tetri.ShadowStep, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
-  config: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
-  affinity: 5
-  displayName: "\u5F71\u6B65"
-  description: "\u95EA\u73B0\u5230\u6700\u5927\u751F\u547D\u503C\u6700\u4F4E\u7684\u654C\u4EBA\u8EAB\u540E,\u65BD\u52A0\u6613\u4F24\u5E76\u9020\u6210\u4F24\u5BB3"
-  icon: {fileID: -311389461584822456, guid: c377b6acedee55648b17ff1601303fa1, type: 3}
-  isHidden: 0
-  isDebugOnly: 0
+  skillDefinition: {fileID: 11400000, guid: 136207362c8f06747a8736546ef3e6cf, type: 2}

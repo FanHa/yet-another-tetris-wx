@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Base
   m_EditorClassIdentifier: 
   CellDefinitions:
-  - {fileID: 11400000, guid: db41af9476289844d9428daa64377b3d, type: 2}
-  - {fileID: 11400000, guid: b8fc2b45592ff8a4bafd609a247f53ec, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   CharacterTypeIds: 00000000

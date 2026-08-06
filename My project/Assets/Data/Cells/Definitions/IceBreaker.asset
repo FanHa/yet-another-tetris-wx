@@ -9,16 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2db5a933e9d1fa4190cc14f46cb63ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 87fd063c3d865564e8cec11725df14e0, type: 3}
   m_Name: IceBreaker
   m_EditorClassIdentifier: 
   id: IceBreaker
   runtimeTypeName: Model.Tetri.IceBreaker, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
-  config: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
-  affinity: 2
-  displayName: "\u7834\u51B0"
-  description: "\u653B\u51FB\u65F6\u82E5\u76EE\u6807\u5E26\u6709Chilled\u5219\u5F15\u7206\u5E76\u6E05\u9664\u8BE5\u6548\u679C\uFF0C\u6309\u5C42\u6570\u9020\u6210\u989D\u5916\u4F24\u5BB3"
-  icon: {fileID: -5738798183895495778, guid: b6462b6d64e9c274780607b4e9cd521e, type: 3}
-  isHidden: 0
-  isDebugOnly: 0
+  skillDefinition: {fileID: 11400000, guid: d5f96687131510843b6c2cc44c0b8932, type: 2}
