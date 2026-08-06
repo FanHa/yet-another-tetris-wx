@@ -6,8 +6,6 @@ namespace Model.Tetri
 {
     public class WindKnockback : Cell
     {
-        // Todo5 完成 CellType 注册后将 None 替换�?CellTypeId.WindKnockback
-        public override CellTypeId CellTypeId => CellTypeId.WindKnockback;
         public override AffinityType Affinity => AffinityType.Wind;
 
         public override string Description()

@@ -41,6 +41,7 @@ namespace Units.Skills
     {
 
         public virtual CellTypeId CellTypeId => CellTypeId.None; // 默认值，子类可以覆盖
+        public virtual string CellId => CellTypeId != CellTypeId.None ? CellTypeId.ToString() : GetType().Name;
 
         public abstract string Name();
         public abstract string Description();

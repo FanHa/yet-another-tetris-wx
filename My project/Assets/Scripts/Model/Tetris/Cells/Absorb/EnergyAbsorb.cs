@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class EnergyAbsorb : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.EnergyAbsorb;
         public override AffinityType Affinity => AffinityType.Absorb;
 
         public override string Description()

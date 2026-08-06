@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class LifeShield : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifeShield;
         public override AffinityType Affinity => AffinityType.Life;
 
         public override string Description()

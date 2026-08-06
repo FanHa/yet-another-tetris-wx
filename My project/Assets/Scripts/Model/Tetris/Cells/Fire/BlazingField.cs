@@ -5,7 +5,6 @@ namespace Model.Tetri
 {
     public class BlazingField : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public override AffinityType Affinity => AffinityType.Fire;
 
         public override string Description()

@@ -16,6 +16,7 @@ namespace Editor.Validation
         private static readonly GUIContent DisplayNameLabel = new("Display Name");
         private static readonly GUIContent RuntimeTypeLabel = new("Runtime Type");
         private static readonly GUIContent ConfigLabel = new("Config");
+        private static readonly GUIContent IconLabel = new("Icon");
 
         private static List<Type> cachedSkillTypes;
         private static List<string> cachedDisplayNames;
@@ -24,6 +25,7 @@ namespace Editor.Validation
         private SerializedProperty displayNameProperty;
         private SerializedProperty runtimeTypeNameProperty;
         private SerializedProperty configProperty;
+        private SerializedProperty iconProperty;
 
         private void OnEnable()
         {
@@ -31,6 +33,7 @@ namespace Editor.Validation
             displayNameProperty = serializedObject.FindProperty("displayName");
             runtimeTypeNameProperty = serializedObject.FindProperty("runtimeTypeName");
             configProperty = serializedObject.FindProperty("config");
+            iconProperty = serializedObject.FindProperty("icon");
         }
 
         public override void OnInspectorGUI()
@@ -43,6 +46,7 @@ namespace Editor.Validation
             DrawReadOnlyId();
             EditorGUILayout.PropertyField(displayNameProperty, DisplayNameLabel);
             EditorGUILayout.PropertyField(configProperty, ConfigLabel);
+            EditorGUILayout.PropertyField(iconProperty, IconLabel);
 
             serializedObject.ApplyModifiedProperties();
 

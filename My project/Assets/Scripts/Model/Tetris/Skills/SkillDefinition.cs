@@ -11,11 +11,13 @@ namespace Model.Tetri
         [SerializeField] private string displayName;
         [SerializeField] private string runtimeTypeName;
         [SerializeField] private SkillConfig config;
+        [SerializeField] private Sprite icon;
 
         public string Id => id;
         public string DisplayName => displayName;
         public string RuntimeTypeName => runtimeTypeName;
         public SkillConfig Config => config;
+        public Sprite Icon => icon;
         public Type RuntimeType => ResolveRuntimeType();
 
 #if UNITY_EDITOR

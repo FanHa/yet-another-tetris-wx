@@ -1,29 +1,38 @@
 using System;
-using Units.Skills;
 using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Cells/Cell Definition")]
-    public sealed class CellDefinition : ScriptableObject
+    public abstract class CellDefinition : ScriptableObject
     {
         [SerializeField] private string id;
         [SerializeField] private string runtimeTypeName;
-        [SerializeField] private Sprite icon;
 
-        public string Id => RuntimeType.Name;
+        public string Id => ResolveRuntimeType().Name;
         public string RuntimeTypeName => runtimeTypeName;
-        public Sprite Icon => icon;
+        public abstract Sprite Icon { get; }
         public Type RuntimeType => ResolveRuntimeType();
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            id = RuntimeType.Name;
+            if (string.IsNullOrWhiteSpace(runtimeTypeName))
+            {
+                return;
+            }
+
+            try
+            {
+                id = ResolveRuntimeType().Name;
+            }
+            catch
+            {
+                // Keep editing experience smooth while runtime type is being fixed.
+            }
         }
 #endif
 
-        private Type ResolveRuntimeType()
+        protected Type ResolveRuntimeType()
         {
             if (string.IsNullOrWhiteSpace(runtimeTypeName))
             {

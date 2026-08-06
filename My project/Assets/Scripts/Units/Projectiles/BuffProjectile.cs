@@ -88,10 +88,7 @@ namespace Units.Projectiles
             this.target = target;
             this.buff = buff;
 
-            if (cellDatabase != null && cellDatabase.TryGetSprite(buff.SourceSkill.CellTypeId.ToString(), out Sprite sprite))
-            {
-                spriteRenderer.sprite = sprite;
-            }
+            spriteRenderer.sprite = cellDatabase != null ? cellDatabase.GetSprite(buff.SourceSkill.CellId) : null;
 
             SetAlpha(0f);
             timer = 0f;

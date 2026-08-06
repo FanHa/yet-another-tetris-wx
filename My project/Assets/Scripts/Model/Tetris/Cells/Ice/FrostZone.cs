@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class FrostZone : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public override AffinityType Affinity => AffinityType.Ice;
 
         public override string Description()

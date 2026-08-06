@@ -183,7 +183,7 @@ namespace Model.Rewards
             {
                 case AddTetri addTetri:
                     var mainCell = addTetri.GetTetri().GetMainCell();
-                    return "AddTetri_" + mainCell.CellTypeId;
+                    return "AddTetri_" + mainCell.CellId;
                 case NewCharacter newChar:
                     var characterCell = newChar.GetTetri().GetMainCell() as Character;
                     return "NewCharacter_" + characterCell.CharacterTypeId;

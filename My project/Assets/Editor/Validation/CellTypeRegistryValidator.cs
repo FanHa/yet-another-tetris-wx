@@ -60,7 +60,6 @@ namespace Editor.Validation
 
             CellDatabase[] databases = LoadAssets<CellDatabase>();
             TetriCellFactory[] factories = LoadAssets<TetriCellFactory>();
-            CellSkillBindingDatabase[] bindingDatabases = LoadAssets<CellSkillBindingDatabase>();
             TetriInventoryInitConfig[] inventoryInitConfigs = LoadAssets<TetriInventoryInitConfig>();
 
             if (databases.Length == 0)
@@ -86,93 +85,12 @@ namespace Editor.Validation
                 hasErrors |= ValidateFactory(factory, databases);
             }
 
-            foreach (CellSkillBindingDatabase bindingDatabase in bindingDatabases)
-            {
-                hasErrors |= ValidateBindingDatabase(bindingDatabase, databases);
-            }
-
             foreach (TetriInventoryInitConfig initConfig in inventoryInitConfigs)
             {
                 hasErrors |= ValidateInventoryInitConfig(initConfig, databases);
             }
 
             return !hasErrors;
-        }
-
-        private static bool ValidateBindingDatabase(CellSkillBindingDatabase bindingDatabase, CellDatabase[] databases)
-        {
-            bool hasErrors = false;
-            string bindingDatabasePath = AssetDatabase.GetAssetPath(bindingDatabase);
-            List<CellSkillBindingItem> bindings = bindingDatabase.GetBindings();
-            HashSet<string> registeredIds = new(databases.SelectMany(database => database.GetRegisteredCellIds()), StringComparer.Ordinal);
-            HashSet<string> seenIds = new(StringComparer.Ordinal);
-
-            if (bindings.Count == 0)
-            {
-                Debug.LogWarning($"{LogPrefix} CellSkillBindingDatabase has no bindings: {bindingDatabasePath}");
-                return false;
-            }
-
-            foreach (CellSkillBindingItem binding in bindings)
-            {
-                if (binding == null)
-                {
-                    Debug.LogError($"{LogPrefix} CellSkillBindingDatabase contains a null binding: {bindingDatabasePath}");
-                    hasErrors = true;
-                    continue;
-                }
-
-                if (binding.CellDefinition == null)
-                {
-                    Debug.LogError($"{LogPrefix} CellSkillBindingDatabase contains a binding with null CellDefinition: {bindingDatabasePath}");
-                    hasErrors = true;
-                    continue;
-                }
-
-                if (binding.SkillDefinition == null)
-                {
-                    Debug.LogError($"{LogPrefix} CellSkillBindingDatabase contains a binding with null SkillDefinition for cell '{binding.CellDefinition.name}': {bindingDatabasePath}");
-                    hasErrors = true;
-                    continue;
-                }
-
-                string cellId = binding.CellDefinition.Id;
-                if (string.IsNullOrWhiteSpace(cellId))
-                {
-                    Debug.LogError($"{LogPrefix} CellDefinition has empty id in binding database: {bindingDatabasePath}");
-                    hasErrors = true;
-                    continue;
-                }
-
-                if (!seenIds.Add(cellId))
-                {
-                    Debug.LogError($"{LogPrefix} Duplicate CellDefinition binding for cell id '{cellId}' in {bindingDatabasePath}");
-                    hasErrors = true;
-                }
-
-                if (!registeredIds.Contains(cellId))
-                {
-                    Debug.LogError($"{LogPrefix} Binding references CellDefinition '{cellId}' that is not registered in any CellDatabase: {bindingDatabasePath}");
-                    hasErrors = true;
-                }
-
-                if (binding.SkillDefinition.Config == null)
-                {
-                    Debug.LogError($"{LogPrefix} SkillDefinition '{binding.SkillDefinition.name}' has null Config for cell id '{cellId}' in {bindingDatabasePath}");
-                    hasErrors = true;
-                }
-            }
-
-            foreach (string registeredId in registeredIds)
-            {
-                if (!seenIds.Contains(registeredId))
-                {
-                    Debug.LogError($"{LogPrefix} Missing skill binding for registered cell id '{registeredId}' in {bindingDatabasePath}");
-                    hasErrors = true;
-                }
-            }
-
-            return hasErrors;
         }
 
         private static bool ValidateInventoryInitConfig(TetriInventoryInitConfig initConfig, CellDatabase[] databases)
@@ -251,6 +169,47 @@ namespace Editor.Validation
                     Debug.LogError($"{LogPrefix} Duplicate CellDefinition runtime type '{cellType.FullName}' in {databasePath}");
                     hasErrors = true;
                 }
+
+                if (definition is SkillCellDefinition skillCellDefinition)
+                {
+                    if (skillCellDefinition.SkillDefinition == null)
+                    {
+                        Debug.LogError($"{LogPrefix} SkillCellDefinition is missing SkillDefinition: {definitionPath}");
+                        hasErrors = true;
+                        continue;
+                    }
+
+                    if (skillCellDefinition.SkillDefinition.Config == null)
+                    {
+                        Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has null Config: {definitionPath}");
+                        hasErrors = true;
+                    }
+
+                    if (skillCellDefinition.SkillDefinition.Icon == null)
+                    {
+                        Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has null Icon: {definitionPath}");
+                        hasErrors = true;
+                    }
+
+                    continue;
+                }
+
+                if (definition is UtilityCellDefinition)
+                {
+                    if (definition.Icon == null)
+                    {
+                        Debug.LogError($"{LogPrefix} UtilityCellDefinition has null Icon: {definitionPath}");
+                        hasErrors = true;
+                    }
+
+                    continue;
+                }
+
+                if (definition.Icon == null)
+                {
+                    Debug.LogError($"{LogPrefix} CellDefinition has null Icon: {definitionPath}");
+                    hasErrors = true;
+                }
             }
 
             return hasErrors;
@@ -281,9 +240,9 @@ namespace Editor.Validation
                         continue;
                     }
 
-                    if (IsDeprecated(cell.CellTypeId))
+                    if (TryParseLegacyCellTypeId(cellId, out CellTypeId legacyCellTypeId) && IsDeprecated(legacyCellTypeId))
                     {
-                        Debug.LogError($"{LogPrefix} Deprecated CellTypeId is still registered in factory: {cell.CellTypeId} ({factoryPath})");
+                        Debug.LogError($"{LogPrefix} Deprecated legacy CellTypeId is still registered in factory: {legacyCellTypeId} ({factoryPath})");
                         hasErrors = true;
                     }
                 }
@@ -302,13 +261,26 @@ namespace Editor.Validation
 
             foreach (string cellId in registeredIds)
             {
-                if (!database.TryGetSprite(cellId, out Sprite sprite) || sprite == null)
+                Sprite sprite = database.GetSprite(cellId);
+                if (sprite == null)
                 {
-                    Debug.LogWarning($"{LogPrefix} Missing sprite for cell id {cellId} in {AssetDatabase.GetAssetPath(database)}");
+                    Debug.LogError($"{LogPrefix} Missing resolved sprite for cell id {cellId} in {AssetDatabase.GetAssetPath(database)}. If this cell is skill-based, ensure bound SkillDefinition has Icon; otherwise set CellDefinition.Icon.");
+                    hasErrors = true;
                 }
             }
 
             return hasErrors;
+        }
+
+        private static bool TryParseLegacyCellTypeId(string cellId, out CellTypeId cellTypeId)
+        {
+            if (string.IsNullOrWhiteSpace(cellId))
+            {
+                cellTypeId = default;
+                return false;
+            }
+
+            return Enum.TryParse(cellId, out cellTypeId) && Enum.IsDefined(typeof(CellTypeId), cellTypeId);
         }
 
         private static bool IsDeprecated(CellTypeId cellTypeId)

@@ -23,11 +23,7 @@ namespace UI.TetriInfo
             Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
             Model.Tetri.Cell mainCell = tetri.GetMainCell();
 
-            string cellId = mainCell.GetType().Name;
-            if (cellDatabase != null && cellDatabase.TryGetSprite(cellId, out Sprite sprite))
-            {
-                skillIcon.sprite = sprite;
-            }
+            skillIcon.sprite = cellDatabase != null ? cellDatabase.GetSprite(mainCell) : null;
 
             skillNameText.text = mainCell.Name();
             skillDescriptionText.text = mainCell.Description();

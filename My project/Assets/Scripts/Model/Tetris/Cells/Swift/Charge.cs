@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class Charge : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.Charge;
         public override AffinityType Affinity => AffinityType.Swift;
 
         public override string Description()

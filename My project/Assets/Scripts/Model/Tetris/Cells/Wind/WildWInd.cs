@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class WildWind : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.WildWind;
         public override AffinityType Affinity => AffinityType.Wind;
 
         public override string Description()

@@ -110,8 +110,8 @@ namespace Model
                 }
                 else
                 {
-                    // 普通方块直接按 cellId 建立索引。
-                    existCellIds.Add(cell.CellTypeId.ToString());
+                    // 普通方块按 CellDefinition 体系的运行时 CellId 建立索引。
+                    existCellIds.Add(cell.CellId);
                 }
             }
         }

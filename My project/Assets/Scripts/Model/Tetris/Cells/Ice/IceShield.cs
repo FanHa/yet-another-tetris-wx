@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class IceShield : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.IceShield;
         public override AffinityType Affinity => AffinityType.Ice;
         public override string Description() => Units.Skills.IceShield.DescriptionStatic();
         public override string Name() => Units.Skills.IceShield.NameStatic();

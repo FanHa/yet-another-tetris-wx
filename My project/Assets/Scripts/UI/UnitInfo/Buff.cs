@@ -40,10 +40,8 @@ namespace UI.UnitInfo
         public void SetBuff(Units.Buffs.Buff buff)
         {
             this.buff = buff;
-            if (cellDatabase != null && cellDatabase.TryGetSprite(buff.SourceSkill.CellTypeId.ToString(), out Sprite sprite))
-            {
-                buffIcon.sprite = sprite;
-            }
+            buffIcon.sprite = cellDatabase != null ? cellDatabase.GetSprite(buff.SourceSkill.CellId) : null;
+
         }
 
         private void HandleClick()

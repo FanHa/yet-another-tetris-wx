@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class ShadowStep : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.ShadowStep;
         public override AffinityType Affinity => AffinityType.Shadow;
 
         public override string Description()

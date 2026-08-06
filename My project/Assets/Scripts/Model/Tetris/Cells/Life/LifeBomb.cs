@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class LifeBomb : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifeBomb;
         public override AffinityType Affinity => AffinityType.Life;
 
         public override string Description()

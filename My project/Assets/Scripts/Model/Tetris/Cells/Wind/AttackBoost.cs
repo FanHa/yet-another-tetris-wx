@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class AttackBoost : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.AttackBoost;
         public override AffinityType Affinity => AffinityType.Wind;
 
         public override string Description()

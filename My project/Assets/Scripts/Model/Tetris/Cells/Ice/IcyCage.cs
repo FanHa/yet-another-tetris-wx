@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class IcyCage : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public override AffinityType Affinity => AffinityType.Ice;
 
         public override string Description()

@@ -4,7 +4,6 @@ namespace Model.Tetri
 {
     public class ThunderStrike : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.ThunderStrike;
         public override AffinityType Affinity => AffinityType.Electric;
 
         public override string Description()

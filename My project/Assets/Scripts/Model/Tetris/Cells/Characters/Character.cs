@@ -18,7 +18,6 @@ namespace Model.Tetri
             return ResolveConfig().DisplayName;
         }
 
-        public override CellTypeId CellTypeId => CellTypeId.Padding;
         public abstract CharacterTypeId CharacterTypeId { get; }
         [SerializeField] private string characterName; // 永久角色名
         public string CharacterName => EnsureCharacterName(); // 只读属性，获取角色名

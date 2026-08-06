@@ -63,32 +63,47 @@ namespace Model.Tetri
             return definition;
         }
 
-        public bool TryGetSprite(string id, out Sprite sprite)
+        public Sprite GetSprite(string id)
         {
             EnsureInitialized();
-            sprite = null;
 
             if (string.IsNullOrWhiteSpace(id))
             {
-                return false;
+                return null;
             }
 
             if (!definitionById.TryGetValue(id, out CellDefinition definition) || definition == null)
             {
-                return false;
+                return null;
             }
 
-            sprite = definition.Icon;
-            return sprite != null;
+            Sprite sprite = ResolveSprite(definition);
+            return sprite;
+        }
+
+        public Sprite GetSprite(Cell cell)
+        {
+            if (cell == null)
+            {
+                return null;
+            }
+
+            return GetSprite(cell.CellId);
+        }
+
+        private Sprite ResolveSprite(CellDefinition definition)
+        {
+            if (definition == null)
+            {
+                return null;
+            }
+
+            return definition.Icon;
+
         }
 
         public List<CellDefinition> GetDefinitions()
         {
-            if (definitions == null)
-            {
-                return new List<CellDefinition>();
-            }
-
             return new List<CellDefinition>(definitions);
         }
 

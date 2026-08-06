@@ -5,7 +5,6 @@ namespace Model.Tetri
 {
     public class FlameInject : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.FlameInject;
         public override AffinityType Affinity => AffinityType.Fire;
 
         public override string Description()

@@ -8,27 +8,23 @@ using UnityEngine;
 
 namespace Editor.Validation
 {
-    [CustomEditor(typeof(CellDefinition))]
-    public sealed class CellDefinitionEditor : UnityEditor.Editor
+    public abstract class CellDefinitionEditorBase : UnityEditor.Editor
     {
-        private static readonly GUIContent IdLabel = new("Id");
-        private static readonly GUIContent RuntimeTypeLabel = new("Runtime Type");
-        private static readonly GUIContent IconLabel = new("Icon");
+        protected static readonly GUIContent IdLabel = new("Id");
+        protected static readonly GUIContent RuntimeTypeLabel = new("Runtime Type");
 
         private static List<Type> cachedCellTypes;
         private static List<string> cachedDisplayNames;
 
-        private SerializedProperty idProperty;
-        private SerializedProperty runtimeTypeNameProperty;
-        private SerializedProperty iconProperty;
-        private SerializedProperty scriptProperty;
+        protected SerializedProperty idProperty;
+        protected SerializedProperty runtimeTypeNameProperty;
+        protected SerializedProperty scriptProperty;
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             scriptProperty = serializedObject.FindProperty("m_Script");
             idProperty = serializedObject.FindProperty("id");
             runtimeTypeNameProperty = serializedObject.FindProperty("runtimeTypeName");
-            iconProperty = serializedObject.FindProperty("icon");
         }
 
         public override void OnInspectorGUI()
@@ -40,14 +36,16 @@ namespace Editor.Validation
 
             DrawRuntimeTypePopup();
             DrawReadOnlyId();
-            EditorGUILayout.PropertyField(iconProperty, IconLabel);
+            DrawDerivedFields();
 
             serializedObject.ApplyModifiedProperties();
 
             SyncIdPropertyFromRuntimeType();
         }
 
-        private void DrawScriptField()
+        protected abstract void DrawDerivedFields();
+
+        protected void DrawScriptField()
         {
             if (scriptProperty == null)
             {
@@ -62,7 +60,7 @@ namespace Editor.Validation
             EditorGUILayout.Space();
         }
 
-        private void DrawRuntimeTypePopup()
+        protected void DrawRuntimeTypePopup()
         {
             if (cachedCellTypes.Count == 0)
             {
@@ -83,7 +81,7 @@ namespace Editor.Validation
             }
         }
 
-        private void DrawReadOnlyId()
+        protected void DrawReadOnlyId()
         {
             using (new EditorGUI.DisabledScope(true))
             {
@@ -91,7 +89,7 @@ namespace Editor.Validation
             }
         }
 
-        private void SyncIdPropertyFromRuntimeType()
+        protected void SyncIdPropertyFromRuntimeType()
         {
             if (idProperty == null || runtimeTypeNameProperty == null)
             {
@@ -121,7 +119,7 @@ namespace Editor.Validation
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static void EnsureTypeCache()
+        protected static void EnsureTypeCache()
         {
             if (cachedCellTypes != null && cachedDisplayNames != null)
             {

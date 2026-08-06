@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class Snowball : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.Snowball;
         public override AffinityType Affinity => AffinityType.Ice;
 
 

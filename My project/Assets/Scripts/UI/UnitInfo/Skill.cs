@@ -30,11 +30,7 @@ namespace UI.UnitInfo
         public void SetSkill(Units.Skills.Skill skill)
         {
             this.skill = skill;
-            if (cellDatabase != null && cellDatabase.TryGetSprite(skill.CellTypeId.ToString(), out Sprite sprite))
-            {
-                icon.sprite = sprite;
-            }
-
+            icon.sprite = cellDatabase != null ? cellDatabase.GetSprite(skill.CellId) : null;
             if (skill is Units.Skills.ActiveSkill activeSkill)
             {
                 energySlider.gameObject.SetActive(true);

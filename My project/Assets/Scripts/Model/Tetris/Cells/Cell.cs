@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using Units.Skills;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -12,12 +8,16 @@ namespace Model.Tetri
     public abstract class Cell
     {
         private int level = 1;
+
         public int Level
         {
             get => level;
             set => level = Mathf.Max(1, value);
         }
-        public virtual CellTypeId CellTypeId { get; }
+
+        // Runtime primary id for the CellDefinition workflow.
+        public virtual string CellId => GetType().Name;
+
         public SkillConfig Config;
 
         public abstract string Description();
@@ -29,6 +29,5 @@ namespace Model.Tetri
             get => AffinityType.None;
             set { }
         }
-
     }
 }

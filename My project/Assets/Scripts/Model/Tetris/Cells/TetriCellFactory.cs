@@ -47,7 +47,6 @@ namespace Model.Tetri
 
         [SerializeField] private CharacterConfigRegistry characterConfigRegistry;
         [SerializeField] private CellDatabase cellDatabase;
-        [SerializeField] private CellSkillBindingDatabase cellSkillBindingDatabase;
 
         private void OnEnable()
         {
@@ -118,7 +117,7 @@ namespace Model.Tetri
             var definition = cellDatabase.GetDefinition(cellId);
             var type = definition.RuntimeType;
 
-            SkillConfig config = cellSkillBindingDatabase.GetResolvedSkillConfig(cellId);
+            SkillConfig config = (definition as SkillCellDefinition)?.SkillDefinition?.Config;
             
             return CreateCellFromResolvedType(type, config);
         }

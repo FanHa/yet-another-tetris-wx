@@ -6,7 +6,6 @@ namespace Model.Tetri
 {
     public class IceBreaker : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.IceBreaker;
         public override AffinityType Affinity => AffinityType.Ice;
 
         public override string Description()

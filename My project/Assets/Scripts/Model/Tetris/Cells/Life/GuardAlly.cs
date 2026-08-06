@@ -4,7 +4,6 @@ namespace Model.Tetri
 {
     public class GuardAlly : Cell
     {
-        public override CellTypeId CellTypeId => CellTypeId.GuardAlly;
         public override AffinityType Affinity => AffinityType.Life;
 
         public override string Description()
