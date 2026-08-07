@@ -37,12 +37,20 @@ namespace Editor.Validation
             DrawScriptField();
             EnsureTypeCache();
 
-            DrawRuntimeTypePopup();
+            if (ShouldDrawRuntimeTypeField())
+            {
+                DrawRuntimeTypePopup();
+            }
             DrawAffinityField();
             DrawEditableId();
             DrawDerivedFields();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        protected virtual bool ShouldDrawRuntimeTypeField()
+        {
+            return true;
         }
 
         protected abstract void DrawDerivedFields();
