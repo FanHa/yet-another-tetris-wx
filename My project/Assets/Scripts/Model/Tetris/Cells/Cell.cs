@@ -5,9 +5,12 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public abstract class Cell
+    public class Cell
     {
         private int level = 1;
+        private SkillBackedCellDefinition definition;
+        private SkillDefinition skillDefinition;
+        private AffinityType affinity = AffinityType.None;
 
         public int Level
         {
@@ -16,18 +19,30 @@ namespace Model.Tetri
         }
 
         // Runtime primary id for the CellDefinition workflow.
-        public virtual string CellId => GetType().Name;
+        public virtual string CellId => definition?.Id ?? GetType().Name;
+
+        public SkillBackedCellDefinition Definition => definition;
+        public SkillDefinition SkillDefinition => skillDefinition;
+        public bool IsSkillBacked => skillDefinition != null;
 
         public SkillConfig Config;
 
-        public abstract string Description();
-        public abstract string Name();
+        public virtual string Description() => skillDefinition != null ? skillDefinition.Description : GetType().Name;
+        public virtual string Name() => skillDefinition != null ? skillDefinition.DisplayName : GetType().Name;
+
+        public virtual void Initialize(SkillBackedCellDefinition skillCellDefinition)
+        {
+            definition = skillCellDefinition;
+            skillDefinition = skillCellDefinition?.SkillDefinition;
+            affinity = skillCellDefinition?.Affinity ?? AffinityType.None;
+            Config = skillDefinition?.Config;
+        }
 
         public virtual void Apply(Units.Unit unit) { }
         public virtual AffinityType Affinity
         {
-            get => AffinityType.None;
-            set { }
+            get => affinity;
+            set => affinity = value;
         }
     }
 }

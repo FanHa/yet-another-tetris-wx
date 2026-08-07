@@ -10,7 +10,7 @@ namespace Model.Tetri
         [SerializeField] private SkillDefinition skillDefinition;
 
         public SkillDefinition SkillDefinition => skillDefinition;
-        public override Type RuntimeType => typeof(SkillCell);
+        public override Type RuntimeType => typeof(Cell);
         public override Sprite Icon => skillDefinition != null ? skillDefinition.Icon : null;
     }
 }

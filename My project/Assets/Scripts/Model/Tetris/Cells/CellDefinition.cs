@@ -13,7 +13,7 @@ namespace Model.Tetri
         public string RuntimeTypeName => runtimeTypeName;
         public AffinityType Affinity => affinity;
         public abstract Sprite Icon { get; }
-        public Type RuntimeType => ResolveRuntimeType();
+        public virtual Type RuntimeType => ResolveRuntimeType();
 
 #if UNITY_EDITOR
         private void OnValidate()

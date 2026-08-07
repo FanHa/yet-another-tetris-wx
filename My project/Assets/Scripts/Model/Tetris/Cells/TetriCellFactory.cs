@@ -115,28 +115,19 @@ namespace Model.Tetri
         public Cell CreateCell(string cellId)
         {
             var definition = cellDatabase.GetDefinition(cellId);
-
-            if (definition is SkillBackedCellDefinition skillBackedDefinition)
-            {
-                return CreateSkillCell(skillBackedDefinition);
-            }
-
             var type = definition.RuntimeType;
-            return CreateCellFromResolvedType(type, null);
+            return CreateCellFromResolvedType(type, null, definition);
         }
 
-        private static SkillCell CreateSkillCell(SkillBackedCellDefinition definition)
-        {
-            var cell = new SkillCell();
-            cell.Initialize(definition);
-            return cell;
-        }
-
-        private Cell CreateCellFromResolvedType(Type type, SkillConfig config)
+        private Cell CreateCellFromResolvedType(Type type, SkillConfig config, CellDefinition definition = null)
         {
             var cell = (Cell)Activator.CreateInstance(type);
 
-            if (config != null)
+            if (definition is SkillBackedCellDefinition skillBackedDefinition)
+            {
+                cell.Initialize(skillBackedDefinition);
+            }
+            else if (config != null)
             {
                 cell.Config = config;
             }
@@ -167,16 +158,15 @@ namespace Model.Tetri
             if (cell == null)
                 throw new ArgumentNullException(nameof(cell), $"Source cell is null. {BuildErrorContext(nameof(Clone), CellTypeId.None)}");
 
-            if (cell is SkillCell sourceSkillCell)
-            {
-                var cloneSkillCell = new SkillCell();
-                cloneSkillCell.Initialize(sourceSkillCell.Definition);
-                cloneSkillCell.Level = sourceSkillCell.Level;
-                return cloneSkillCell;
-            }
-
             var clone = (Cell)Activator.CreateInstance(cell.GetType());
-            clone.Config = cell.Config;
+            if (cell.Definition != null)
+            {
+                clone.Initialize(cell.Definition);
+            }
+            else
+            {
+                clone.Config = cell.Config;
+            }
             clone.Level = cell.Level;
 
             if (cell is Padding sourcePadding && clone is Padding clonePadding)
