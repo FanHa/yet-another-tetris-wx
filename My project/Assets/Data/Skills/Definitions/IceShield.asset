@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: IceShield
   m_EditorClassIdentifier: 
   id: IceShield
-  displayName: 
+  displayName: Ice Shield
+  description: "\u91CA\u653E Ice Shield\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.IceShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}

@@ -14,6 +14,7 @@ namespace Editor.Validation
     {
         private static readonly GUIContent IdLabel = new("Id");
         private static readonly GUIContent DisplayNameLabel = new("Display Name");
+        private static readonly GUIContent DescriptionLabel = new("Description");
         private static readonly GUIContent RuntimeTypeLabel = new("Runtime Type");
         private static readonly GUIContent ConfigLabel = new("Config");
         private static readonly GUIContent IconLabel = new("Icon");
@@ -23,6 +24,7 @@ namespace Editor.Validation
 
         private SerializedProperty idProperty;
         private SerializedProperty displayNameProperty;
+        private SerializedProperty descriptionProperty;
         private SerializedProperty runtimeTypeNameProperty;
         private SerializedProperty configProperty;
         private SerializedProperty iconProperty;
@@ -31,6 +33,7 @@ namespace Editor.Validation
         {
             idProperty = serializedObject.FindProperty("id");
             displayNameProperty = serializedObject.FindProperty("displayName");
+            descriptionProperty = serializedObject.FindProperty("description");
             runtimeTypeNameProperty = serializedObject.FindProperty("runtimeTypeName");
             configProperty = serializedObject.FindProperty("config");
             iconProperty = serializedObject.FindProperty("icon");
@@ -45,6 +48,7 @@ namespace Editor.Validation
             DrawRuntimeTypePopup();
             DrawReadOnlyId();
             EditorGUILayout.PropertyField(displayNameProperty, DisplayNameLabel);
+            EditorGUILayout.PropertyField(descriptionProperty, DescriptionLabel);
             EditorGUILayout.PropertyField(configProperty, ConfigLabel);
             EditorGUILayout.PropertyField(iconProperty, IconLabel);
 

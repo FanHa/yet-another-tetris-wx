@@ -221,6 +221,18 @@ namespace Editor.Validation
                         hasErrors = true;
                     }
 
+                    if (string.IsNullOrWhiteSpace(skillCellDefinition.SkillDefinition.DisplayName))
+                    {
+                        Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has empty DisplayName: {definitionPath}");
+                        hasErrors = true;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(skillCellDefinition.SkillDefinition.Description))
+                    {
+                        Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has empty Description: {definitionPath}");
+                        hasErrors = true;
+                    }
+
                     if (skillCellDefinition.SkillDefinition.Icon == null)
                     {
                         Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has null Icon: {definitionPath}");

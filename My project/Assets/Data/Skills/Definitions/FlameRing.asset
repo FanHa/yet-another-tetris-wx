@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: FlameRing
   m_EditorClassIdentifier: 
   id: FlameRing
-  displayName: 
+  displayName: Flame Ring
+  description: "\u91CA\u653E Flame Ring\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.FlameRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 639063875c5662a42900ab258b3c458b, type: 2}

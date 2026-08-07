@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: LifeShield
   m_EditorClassIdentifier: 
   id: LifeShield
-  displayName: 
+  displayName: Life Shield
+  description: "\u91CA\u653E Life Shield\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.LifeShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   id: Fireball
-  displayName: 
+  displayName: Fireball
+  description: "\u91CA\u653E Fireball\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.Fireball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 6a1eef4ac1cdb2c4c96a4c7a27f946a2, type: 2}

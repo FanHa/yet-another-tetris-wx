@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Snowball
   m_EditorClassIdentifier: 
   id: Snowball
-  displayName: 
+  displayName: Snowball
+  description: "\u91CA\u653E Snowball\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.Snowball, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: a77e06cb856e8d24bb479470b7e993b7, type: 2}

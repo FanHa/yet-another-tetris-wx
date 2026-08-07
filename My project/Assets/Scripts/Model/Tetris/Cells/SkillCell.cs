@@ -31,12 +31,12 @@ namespace Model.Tetri
 
         public override string Description()
         {
-            return string.IsNullOrWhiteSpace(skillDefinition.DisplayName) ? skillDefinition.name : skillDefinition.DisplayName;
+            return skillDefinition.Description;
         }
 
         public override string Name()
         {
-            return string.IsNullOrWhiteSpace(skillDefinition.DisplayName) ? skillDefinition.name : skillDefinition.DisplayName;
+            return skillDefinition.DisplayName;
         }
 
         public override void Apply(Unit unit)

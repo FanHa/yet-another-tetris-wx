@@ -9,12 +9,14 @@ namespace Model.Tetri
     {
         [SerializeField] private string id;
         [SerializeField] private string displayName;
+        [SerializeField] private string description;
         [SerializeField] private string runtimeTypeName;
         [SerializeField] private SkillConfig config;
         [SerializeField] private Sprite icon;
 
         public string Id => id;
         public string DisplayName => displayName;
+        public string Description => description;
         public string RuntimeTypeName => runtimeTypeName;
         public SkillConfig Config => config;
         public Sprite Icon => icon;

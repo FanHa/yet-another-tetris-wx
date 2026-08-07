@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: WindShift
   m_EditorClassIdentifier: 
   id: WindShift
-  displayName: 
+  displayName: Wind Shift
+  description: "\u91CA\u653E Wind Shift\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.WindShift, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 1a705eea29f9e064e951a05c138588f2, type: 2}

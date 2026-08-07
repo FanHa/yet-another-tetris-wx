@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: FrostZone
   m_EditorClassIdentifier: 
   id: FrostZone
-  displayName: 
+  displayName: Frost Zone
+  description: "\u91CA\u653E Frost Zone\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.FrostZone, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}

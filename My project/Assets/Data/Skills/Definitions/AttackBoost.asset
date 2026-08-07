@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: AttackBoost
   m_EditorClassIdentifier: 
   id: AttackBoost
-  displayName: 
+  displayName: Attack Boost
+  description: "\u91CA\u653E Attack Boost\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.AttackBoost, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: d15a61219ab0b16449c2414f0c31a2e3, type: 2}

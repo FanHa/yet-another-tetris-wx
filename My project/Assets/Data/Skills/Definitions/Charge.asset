@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Charge
   m_EditorClassIdentifier: 
   id: Charge
-  displayName: 
+  displayName: Charge
+  description: "\u91CA\u653E Charge\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   runtimeTypeName: Units.Skills.Charge, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   config: {fileID: 11400000, guid: 2b1c4fa7766fa904f8a13bf2c88e0d7a, type: 2}
