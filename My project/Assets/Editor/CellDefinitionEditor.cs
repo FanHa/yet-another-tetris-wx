@@ -12,12 +12,14 @@ namespace Editor.Validation
     {
         protected static readonly GUIContent IdLabel = new("Id");
         protected static readonly GUIContent RuntimeTypeLabel = new("Runtime Type");
+        protected static readonly GUIContent AffinityLabel = new("Affinity");
 
         private static List<Type> cachedCellTypes;
         private static List<string> cachedDisplayNames;
 
         protected SerializedProperty idProperty;
         protected SerializedProperty runtimeTypeNameProperty;
+        protected SerializedProperty affinityProperty;
         protected SerializedProperty scriptProperty;
 
         protected virtual void OnEnable()
@@ -25,6 +27,7 @@ namespace Editor.Validation
             scriptProperty = serializedObject.FindProperty("m_Script");
             idProperty = serializedObject.FindProperty("id");
             runtimeTypeNameProperty = serializedObject.FindProperty("runtimeTypeName");
+            affinityProperty = serializedObject.FindProperty("affinity");
         }
 
         public override void OnInspectorGUI()
@@ -35,12 +38,11 @@ namespace Editor.Validation
             EnsureTypeCache();
 
             DrawRuntimeTypePopup();
-            DrawReadOnlyId();
+            DrawAffinityField();
+            DrawEditableId();
             DrawDerivedFields();
 
             serializedObject.ApplyModifiedProperties();
-
-            SyncIdPropertyFromRuntimeType();
         }
 
         protected abstract void DrawDerivedFields();
@@ -81,42 +83,19 @@ namespace Editor.Validation
             }
         }
 
-        protected void DrawReadOnlyId()
+        protected void DrawEditableId()
         {
-            using (new EditorGUI.DisabledScope(true))
-            {
-                EditorGUILayout.PropertyField(idProperty, IdLabel);
-            }
+            EditorGUILayout.PropertyField(idProperty, IdLabel);
         }
 
-        protected void SyncIdPropertyFromRuntimeType()
+        protected void DrawAffinityField()
         {
-            if (idProperty == null || runtimeTypeNameProperty == null)
+            if (affinityProperty == null)
             {
                 return;
             }
 
-            string runtimeTypeName = runtimeTypeNameProperty.stringValue;
-            if (string.IsNullOrWhiteSpace(runtimeTypeName))
-            {
-                return;
-            }
-
-            Type runtimeType = Type.GetType(runtimeTypeName, false);
-            if (runtimeType == null)
-            {
-                return;
-            }
-
-            string expectedId = runtimeType.Name;
-            if (idProperty.stringValue == expectedId)
-            {
-                return;
-            }
-
-            serializedObject.Update();
-            idProperty.stringValue = expectedId;
-            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            EditorGUILayout.PropertyField(affinityProperty, AffinityLabel);
         }
 
         protected static void EnsureTypeCache()

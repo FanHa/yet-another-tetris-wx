@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87fd063c3d865564e8cec11725df14e0, type: 3}
+  m_Script: {fileID: 11500000, guid: b2e2d403ed929554f84852a11866fdd3, type: 3}
   m_Name: WildWind
   m_EditorClassIdentifier: 
   id: WildWind
-  runtimeTypeName: Model.Tetri.WildWind, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+  affinity: 3
   skillDefinition: {fileID: 11400000, guid: 4ad49ea69ed940548a5bf872eb450ac1, type: 2}

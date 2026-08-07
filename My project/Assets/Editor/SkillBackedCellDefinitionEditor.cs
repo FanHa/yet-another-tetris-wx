@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Editor.Validation
 {
-    [CustomEditor(typeof(SkillCellDefinition))]
-    public sealed class SkillCellDefinitionEditor : CellDefinitionEditorBase
+    [CustomEditor(typeof(SkillBackedCellDefinition))]
+    public sealed class SkillBackedCellDefinitionEditor : CellDefinitionEditorBase
     {
         private static readonly GUIContent SkillDefinitionLabel = new("Skill Definition");
         private SerializedProperty skillDefinitionProperty;

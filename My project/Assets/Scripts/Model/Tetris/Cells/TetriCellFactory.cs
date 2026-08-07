@@ -115,11 +115,21 @@ namespace Model.Tetri
         public Cell CreateCell(string cellId)
         {
             var definition = cellDatabase.GetDefinition(cellId);
-            var type = definition.RuntimeType;
 
-            SkillConfig config = (definition as SkillCellDefinition)?.SkillDefinition?.Config;
-            
-            return CreateCellFromResolvedType(type, config);
+            if (definition is SkillBackedCellDefinition skillBackedDefinition)
+            {
+                return CreateSkillCell(skillBackedDefinition);
+            }
+
+            var type = definition.RuntimeType;
+            return CreateCellFromResolvedType(type, null);
+        }
+
+        private static SkillCell CreateSkillCell(SkillBackedCellDefinition definition)
+        {
+            var cell = new SkillCell();
+            cell.Initialize(definition);
+            return cell;
         }
 
         private Cell CreateCellFromResolvedType(Type type, SkillConfig config)
@@ -156,6 +166,14 @@ namespace Model.Tetri
         {
             if (cell == null)
                 throw new ArgumentNullException(nameof(cell), $"Source cell is null. {BuildErrorContext(nameof(Clone), CellTypeId.None)}");
+
+            if (cell is SkillCell sourceSkillCell)
+            {
+                var cloneSkillCell = new SkillCell();
+                cloneSkillCell.Initialize(sourceSkillCell.Definition);
+                cloneSkillCell.Level = sourceSkillCell.Level;
+                return cloneSkillCell;
+            }
 
             var clone = (Cell)Activator.CreateInstance(cell.GetType());
             clone.Config = cell.Config;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Model;
 using Model.Tetri;
 using UnityEditor;
@@ -13,6 +14,7 @@ namespace Editor.Validation
     public static class CellTypeRegistryValidator
     {
         private const string LogPrefix = "[CellTypeValidator]";
+        private static readonly Regex CellIdPattern = new("^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
         private static bool hasValidatedThisSession;
 
         static CellTypeRegistryValidator()
@@ -137,7 +139,7 @@ namespace Editor.Validation
             }
 
             var seenIds = new HashSet<string>(StringComparer.Ordinal);
-            var seenTypes = new HashSet<Type>();
+            var seenNonSkillTypes = new HashSet<Type>();
 
             foreach (CellDefinition definition in definitions)
             {
@@ -156,25 +158,59 @@ namespace Editor.Validation
                     continue;
                 }
 
+                if (!string.Equals(definition.Id.Trim(), definition.Id, StringComparison.Ordinal))
+                {
+                    Debug.LogError($"{LogPrefix} CellDefinition id has leading/trailing spaces '{definition.Id}': {definitionPath}");
+                    hasErrors = true;
+                }
+
+                if (!CellIdPattern.IsMatch(definition.Id))
+                {
+                    Debug.LogError($"{LogPrefix} CellDefinition id '{definition.Id}' is invalid. Expected pattern: {CellIdPattern}: {definitionPath}");
+                    hasErrors = true;
+                }
+
                 if (!seenIds.Add(definition.Id))
                 {
                     Debug.LogError($"{LogPrefix} Duplicate CellDefinition id '{definition.Id}' in {databasePath}");
                     hasErrors = true;
                 }
 
-                Type cellType = definition.RuntimeType;
-
-                if (!seenTypes.Add(cellType))
+                Type cellType;
+                try
                 {
-                    Debug.LogError($"{LogPrefix} Duplicate CellDefinition runtime type '{cellType.FullName}' in {databasePath}");
+                    cellType = definition.RuntimeType;
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"{LogPrefix} CellDefinition '{definition.name}' runtime type resolve failed: {ex.Message} ({definitionPath})");
+                    hasErrors = true;
+                    continue;
+                }
+
+                if (definition.Affinity == AffinityType.None)
+                {
+                    Debug.LogError($"{LogPrefix} CellDefinition '{definition.name}' has invalid Affinity None: {definitionPath}");
                     hasErrors = true;
                 }
 
-                if (definition is SkillCellDefinition skillCellDefinition)
+                if (definition is SkillBackedCellDefinition skillCellDefinition)
                 {
+                    if (cellType != typeof(SkillCell))
+                    {
+                        Debug.LogError($"{LogPrefix} SkillBackedCellDefinition must use runtime type '{typeof(SkillCell).FullName}', but got '{cellType.FullName}': {definitionPath}");
+                        hasErrors = true;
+                    }
+
+                    if (skillCellDefinition.Affinity == AffinityType.None)
+                    {
+                        Debug.LogError($"{LogPrefix} SkillBackedCellDefinition has invalid Affinity None: {definitionPath}");
+                        hasErrors = true;
+                    }
+
                     if (skillCellDefinition.SkillDefinition == null)
                     {
-                        Debug.LogError($"{LogPrefix} SkillCellDefinition is missing SkillDefinition: {definitionPath}");
+                        Debug.LogError($"{LogPrefix} SkillBackedCellDefinition is missing SkillDefinition: {definitionPath}");
                         hasErrors = true;
                         continue;
                     }
@@ -192,6 +228,12 @@ namespace Editor.Validation
                     }
 
                     continue;
+                }
+
+                if (!seenNonSkillTypes.Add(cellType))
+                {
+                    Debug.LogError($"{LogPrefix} Duplicate non-skill CellDefinition runtime type '{cellType.FullName}' in {databasePath}");
+                    hasErrors = true;
                 }
 
                 if (definition is UtilityCellDefinition)

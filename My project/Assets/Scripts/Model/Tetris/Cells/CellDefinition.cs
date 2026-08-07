@@ -7,27 +7,21 @@ namespace Model.Tetri
     {
         [SerializeField] private string id;
         [SerializeField] private string runtimeTypeName;
+        [SerializeField] private AffinityType affinity = AffinityType.None;
 
-        public string Id => ResolveRuntimeType().Name;
+        public string Id => id;
         public string RuntimeTypeName => runtimeTypeName;
+        public AffinityType Affinity => affinity;
         public abstract Sprite Icon { get; }
         public Type RuntimeType => ResolveRuntimeType();
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (string.IsNullOrWhiteSpace(runtimeTypeName))
+            if (string.IsNullOrWhiteSpace(id))
             {
-                return;
-            }
-
-            try
-            {
-                id = ResolveRuntimeType().Name;
-            }
-            catch
-            {
-                // Keep editing experience smooth while runtime type is being fixed.
+                // Keep id stable and explicit instead of coupling it to runtime type.
+                id = name;
             }
         }
 #endif

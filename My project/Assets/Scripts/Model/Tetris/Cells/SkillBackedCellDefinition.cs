@@ -3,8 +3,8 @@ using Units.Skills;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Cells/Skill Cell Definition")]
-    public sealed class SkillCellDefinition : CellDefinition
+    [CreateAssetMenu(menuName = "Config/Cells/Skill Backed Cell Definition")]
+    public sealed class SkillBackedCellDefinition : CellDefinition
     {
         [SerializeField] private SkillDefinition skillDefinition;
 
