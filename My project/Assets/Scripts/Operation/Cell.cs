@@ -12,7 +12,6 @@ namespace Operation
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
         [SerializeField] private Model.Tetri.ColorConfig colorConfig;
 
         private SpriteRenderer maskRenderer;
@@ -31,8 +30,7 @@ namespace Operation
 
             EnsureValidated();
 
-            string cellId = modelCell.GetType().Name;
-            icon.sprite = cellDatabase.GetSprite(cellId);
+            icon.sprite = modelCell.Icon;
 
             var colorEntry = colorConfig.GetColorEntry(modelCell.Affinity)
                 ?? throw new InvalidOperationException($"Missing color config for affinity '{modelCell.Affinity}'.");
@@ -77,7 +75,6 @@ namespace Operation
             if (borderBottom == null) throw new InvalidOperationException("Cell.borderBottom is not assigned.");
             if (borderLeft == null) throw new InvalidOperationException("Cell.borderLeft is not assigned.");
             if (borderRight == null) throw new InvalidOperationException("Cell.borderRight is not assigned.");
-            if (cellDatabase == null) throw new InvalidOperationException("Cell.cellDatabase is not assigned.");
             if (colorConfig == null) throw new InvalidOperationException("Cell.colorConfig is not assigned.");
 
             maskRenderer = mask.GetComponent<SpriteRenderer>()

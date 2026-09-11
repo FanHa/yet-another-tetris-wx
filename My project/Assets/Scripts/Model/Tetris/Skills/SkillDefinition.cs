@@ -1,4 +1,3 @@
-using System;
 using Units.Skills;
 using UnityEngine;
 
@@ -10,56 +9,23 @@ namespace Model.Tetri
         [SerializeField] private string id;
         [SerializeField] private string displayName;
         [SerializeField] private string description;
-        [SerializeField] private string runtimeTypeName;
         [SerializeField] private SkillConfig config;
         [SerializeField] private Sprite icon;
 
         public string Id => id;
         public string DisplayName => displayName;
         public string Description => description;
-        public string RuntimeTypeName => runtimeTypeName;
         public SkillConfig Config => config;
         public Sprite Icon => icon;
-        public Type RuntimeType => ResolveRuntimeType();
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (string.IsNullOrWhiteSpace(runtimeTypeName))
+            if (string.IsNullOrWhiteSpace(id))
             {
-                return;
-            }
-
-            try
-            {
-                id = ResolveRuntimeType()?.Name;
-            }
-            catch
-            {
-                // Ignore validation errors until the runtime type is fixed.
+                id = name;
             }
         }
 #endif
-
-        private Type ResolveRuntimeType()
-        {
-            if (string.IsNullOrWhiteSpace(runtimeTypeName))
-            {
-                throw new InvalidOperationException($"RuntimeTypeName is empty. Definition={name}");
-            }
-
-            Type resolvedType = Type.GetType(runtimeTypeName, false);
-            if (resolvedType == null)
-            {
-                throw new InvalidOperationException($"Cannot resolve RuntimeTypeName '{runtimeTypeName}'. Definition={name}");
-            }
-
-            if (!typeof(Skill).IsAssignableFrom(resolvedType))
-            {
-                throw new InvalidOperationException($"Resolved type '{resolvedType.FullName}' is not assignable to {nameof(Skill)}. Definition={name}");
-            }
-
-            return resolvedType;
-        }
     }
 }

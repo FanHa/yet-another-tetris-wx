@@ -8,11 +8,13 @@ namespace Model.Tetri
     [CreateAssetMenu(fileName = "CellDatabase", menuName = "Config/Cells/Cell Database")]
     public sealed class CellDatabase : ScriptableObject
     {
-        [SerializeField] private List<CellDefinition> definitions = new();
+
+        [SerializeField] private CellDefinition paddingDefinition;
+        [SerializeField] private List<CellDefinition> registeredCellDefinitions = new();
 
         private Dictionary<string, CellDefinition> definitionById;
 
-        public IReadOnlyList<CellDefinition> Definitions => definitions;
+        public IReadOnlyList<CellDefinition> RegisteredDefinitions => registeredCellDefinitions;
 
         private void OnEnable()
         {
@@ -30,12 +32,7 @@ namespace Model.Tetri
         {
             definitionById = new Dictionary<string, CellDefinition>(StringComparer.Ordinal);
 
-            if (definitions == null)
-            {
-                return;
-            }
-
-            foreach (CellDefinition definition in definitions)
+            foreach (CellDefinition definition in registeredCellDefinitions)
             {
                 if (definition == null || string.IsNullOrWhiteSpace(definition.Id))
                 {
@@ -61,6 +58,11 @@ namespace Model.Tetri
             }
 
             return definition;
+        }
+
+        public CellDefinition GetPaddingDefinition()
+        {
+            return paddingDefinition;
         }
 
         public Sprite GetSprite(string id)
@@ -102,17 +104,28 @@ namespace Model.Tetri
 
         }
 
-        public List<CellDefinition> GetDefinitions()
+        public List<CellDefinition> GetRegisteredDefinitions()
         {
-            return new List<CellDefinition>(definitions);
+            return new List<CellDefinition>(registeredCellDefinitions);
         }
 
         public List<string> GetRegisteredCellIds()
         {
             EnsureInitialized();
-            return definitions
+            return registeredCellDefinitions
                 .Where(definition => definition != null && !string.IsNullOrWhiteSpace(definition.Id))
                 .Select(definition => definition.Id)
+                .ToList();
+        }
+
+        public List<string> GetRegisteredCharacterIds()
+        {
+            EnsureInitialized();
+            return registeredCellDefinitions
+                .Where(definition => definition is CharacterDefinition)
+                .Select(definition => definition.Id)
+                .Where(id => !string.IsNullOrWhiteSpace(id))
+                .Distinct(StringComparer.Ordinal)
                 .ToList();
         }
 

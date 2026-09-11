@@ -8,8 +8,7 @@ namespace Model.Tetri
     public class Cell
     {
         private int level = 1;
-        private SkillBackedCellDefinition definition;
-        private SkillDefinition skillDefinition;
+        private CellDefinition definition;
         private AffinityType affinity = AffinityType.None;
 
         public int Level
@@ -19,23 +18,18 @@ namespace Model.Tetri
         }
 
         // Runtime primary id for the CellDefinition workflow.
-        public virtual string CellId => definition?.Id ?? GetType().Name;
+        public virtual string CellId => definition.Id;
 
-        public SkillBackedCellDefinition Definition => definition;
-        public SkillDefinition SkillDefinition => skillDefinition;
-        public bool IsSkillBacked => skillDefinition != null;
+        public CellDefinition Definition => definition;
+        public virtual Sprite Icon => definition.Icon;
 
-        public SkillConfig Config;
+        public virtual string Description() => definition.Description;
+        public virtual string Name() => definition.DisplayName;
 
-        public virtual string Description() => skillDefinition != null ? skillDefinition.Description : GetType().Name;
-        public virtual string Name() => skillDefinition != null ? skillDefinition.DisplayName : GetType().Name;
-
-        public virtual void Initialize(SkillBackedCellDefinition skillCellDefinition)
+        public virtual void Initialize(CellDefinition cellDefinition)
         {
-            definition = skillCellDefinition;
-            skillDefinition = skillCellDefinition?.SkillDefinition;
-            affinity = skillCellDefinition?.Affinity ?? AffinityType.None;
-            Config = skillDefinition?.Config;
+            definition = cellDefinition ?? throw new ArgumentNullException(nameof(cellDefinition));
+            affinity = definition.Affinity;
         }
 
         public virtual void Apply(Units.Unit unit) { }

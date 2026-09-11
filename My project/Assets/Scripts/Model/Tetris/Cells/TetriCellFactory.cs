@@ -1,182 +1,85 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Units.Skills;
 using UnityEngine;
 
 namespace Model.Tetri
 {
-    public class CharacterTypeMeta
-    {
-        public CharacterTypeId id;
-        public Type type;
-        public SkillConfig config;
-
-        public CharacterTypeMeta(CharacterTypeId id, Type type, SkillConfig config)
-        {
-            this.id = id;
-            this.type = type;
-            this.config = config;
-        }
-    }
-
     [CreateAssetMenu(menuName = "Factory/TetriCellModelFactory")]
     public class TetriCellFactory : ScriptableObject
     {
-        public IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdToType { get; private set; }
-        public IReadOnlyDictionary<Type, CharacterTypeId> TypeToCharacterTypeId { get; private set; }
-        public IReadOnlyDictionary<Type, SkillConfig> CharacterTypeToConfig { get; private set; }
-
-        private IReadOnlyDictionary<CharacterTypeId, Type> CharacterTypeIdMap
-        {
-            get
-            {
-                EnsureInitialized();
-                return CharacterTypeIdToType;
-            }
-        }
-
-        private IReadOnlyDictionary<Type, SkillConfig> CharacterConfigMap
-        {
-            get
-            {
-                EnsureInitialized();
-                return CharacterTypeToConfig;
-            }
-        }
-
-        [SerializeField] private CharacterConfigRegistry characterConfigRegistry;
         [SerializeField] private CellDatabase cellDatabase;
 
-        private void OnEnable()
+        public Cell CreatePadding()
         {
-            EnsureInitialized();
+            CellDefinition definition = cellDatabase?.GetPaddingDefinition();
+            return CreateCell(definition);
         }
-
-        private void EnsureInitialized()
-        {
-            if (CharacterTypeIdToType != null)
-            {
-                return;
-            }
-
-            BuildTypeMaps();
-        }
-
-        private void BuildTypeMaps()
-        {
-            // 角色类型映射表
-            var characterTypeMetas = new List<CharacterTypeMeta>
-            {
-                new(CharacterTypeId.Square, typeof(Square), characterConfigRegistry.SquareCharacterBaseStatConfig),
-                new(CharacterTypeId.Triangle, typeof(Triangle), characterConfigRegistry.TriangleCharacterBaseStatConfig),
-                new(CharacterTypeId.Circle, typeof(Circle), characterConfigRegistry.CircleCharacterBaseStatConfig),
-                new(CharacterTypeId.Aim, typeof(Aim), characterConfigRegistry.AimCharacterBaseStatConfig),
-                new(CharacterTypeId.Hourglass, typeof(Hourglass), characterConfigRegistry.HourglassCharacterBaseStatConfig)
-            };
-            CharacterTypeIdToType = characterTypeMetas.ToDictionary(m => m.id, m => m.type);
-            TypeToCharacterTypeId = characterTypeMetas.ToDictionary(m => m.type, m => m.id);
-            CharacterTypeToConfig = characterTypeMetas.ToDictionary(m => m.type, m => m.config);
-
-        }
-
-        private static string BuildErrorContext(string entry, Enum id, Type resolvedType = null, Cell sourceCell = null)
-        {
-            string typeName = resolvedType?.FullName ?? "<null>";
-            string sourceTypeName = sourceCell?.GetType().FullName ?? "<null>";
-            int sourceLevel = sourceCell?.Level ?? -1;
-            return $"[{nameof(TetriCellFactory)}.{entry}] Id={id}, ResolvedType={typeName}, SourceCellType={sourceTypeName}, SourceLevel={sourceLevel}";
-        }
-
-        private static string BuildErrorContext(string entry, string id, Type resolvedType = null)
-        {
-            string typeName = resolvedType?.FullName ?? "<null>";
-            return $"[{nameof(TetriCellFactory)}.{entry}] Id={id ?? "<null>"}, ResolvedType={typeName}";
-        }
-
-
-
-        public Padding CreatePadding()
-        {
-            return new Padding();
-        }
-
-        public List<CharacterTypeId> GetRegisteredCharacterTypeIds()
-        {
-            if (CharacterTypeIdMap == null)
-            {
-                return new List<CharacterTypeId>();
-            }
-
-            return CharacterTypeIdMap.Keys.ToList();
-        }
-
 
         public Cell CreateCell(string cellId)
         {
-            var definition = cellDatabase.GetDefinition(cellId);
-            var type = definition.RuntimeType;
-            return CreateCellFromResolvedType(type, null, definition);
-        }
-
-        private Cell CreateCellFromResolvedType(Type type, SkillConfig config, CellDefinition definition = null)
-        {
-            var cell = (Cell)Activator.CreateInstance(type);
-
-            if (definition is SkillBackedCellDefinition skillBackedDefinition)
+            if (string.IsNullOrWhiteSpace(cellId))
             {
-                cell.Initialize(skillBackedDefinition);
-            }
-            else if (config != null)
-            {
-                cell.Config = config;
+                throw new ArgumentException("Cell id is null or empty.", nameof(cellId));
             }
 
-            return cell;
+            var definition = cellDatabase != null ? cellDatabase.GetDefinition(cellId) : throw new InvalidOperationException("CellDatabase is missing.");
+            return CreateCell(definition);
         }
-        
-        
-        public Character CreateCharacterCell(CharacterTypeId characterTypeId)
+
+        public Character CreateCharacterCell(string definitionId)
         {
-            if (!CharacterTypeIdMap.TryGetValue(characterTypeId, out var type))
-                throw new ArgumentException($"Unknown CharacterTypeId. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId)}", nameof(characterTypeId));
+            if (string.IsNullOrWhiteSpace(definitionId))
+            {
+                throw new ArgumentException("Character definition id is null or empty.", nameof(definitionId));
+            }
 
-            if (type == null || !typeof(Character).IsAssignableFrom(type))
-                throw new ArgumentException($"Resolved type is not a valid {nameof(Character)}. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId, type)}", nameof(characterTypeId));
+            var definition = cellDatabase != null ? cellDatabase.GetDefinition(definitionId) : throw new InvalidOperationException("CellDatabase is missing.");
+            return CreateCharacterCell(definition as CharacterDefinition ?? throw new ArgumentException($"Definition '{definitionId}' is not a CharacterDefinition.", nameof(definitionId)));
+        }
 
-            // 1. 创建Cell实例（无参构造）
-            var cell = (Character)Activator.CreateInstance(type);
+        public Character CreateCharacterCell(CharacterDefinition definition)
+        {
+            if (definition == null)
+            {
+                throw new ArgumentNullException(nameof(definition));
+            }
 
-            cell.Config = CharacterConfigMap[type] ?? throw new InvalidOperationException(
-                $"Character config is null. {BuildErrorContext(nameof(CreateCharacterCell), characterTypeId, type)}");
+            var character = new Character();
+            character.Initialize(definition);
+            return character;
+        }
 
+        private Cell CreateCell(CellDefinition definition)
+        {
+            var cell = new Cell();
+            if (definition != null)
+            {
+                cell.Initialize(definition);
+            }
             return cell;
         }
 
         public Cell Clone(Cell cell)
         {
             if (cell == null)
-                throw new ArgumentNullException(nameof(cell), $"Source cell is null. {BuildErrorContext(nameof(Clone), CellTypeId.None)}");
+            {
+                throw new ArgumentNullException(nameof(cell));
+            }
 
-            var clone = (Cell)Activator.CreateInstance(cell.GetType());
+            if (cell is Character character)
+            {
+                return CreateCharacterCell(character.DefinitionData);
+            }
+
+            var clone = new Cell();
             if (cell.Definition != null)
             {
                 clone.Initialize(cell.Definition);
             }
-            else
-            {
-                clone.Config = cell.Config;
-            }
+
             clone.Level = cell.Level;
-
-            if (cell is Padding sourcePadding && clone is Padding clonePadding)
-            {
-                clonePadding.Affinity = sourcePadding.Affinity;
-            }
-
             return clone;
         }
     }
-
 }
 

@@ -30,7 +30,7 @@ namespace Model
 
         private void GenerateEnemyData()
         {
-            var availableCharacterTypeIds = tetriCellModelFactory.GetRegisteredCharacterTypeIds();
+            var availableCharacterTypeIds = cellDatabase != null ? cellDatabase.GetRegisteredCharacterIds() : new List<string>();
             var registeredCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
 
             if (registeredCellIds.Count == 0)
@@ -135,7 +135,7 @@ namespace Model
 
         [Serializable]
         public struct EnemyData {
-            public CharacterTypeId characterId; // 敌人名称
+            public string characterId; // 敌人名称（CharacterDefinition.Id）
             public List<string> tetriCellIds; // TetriCell id 列表
         }
     }

@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edd6ca668bb9e2f4abbe85dd9ef17d15, type: 3}
   m_Name: CellDatabase
   m_EditorClassIdentifier: 
-  definitions:
+  paddingDefinition: {fileID: 11400000, guid: 50a8e9a2e33ac68419e9c9c3113efbd1, type: 2}
+  registeredCellDefinitions:
+  - {fileID: 11400000, guid: 7c4a7a65f9a4460cad284f7c65ef3256, type: 2}
+  - {fileID: 11400000, guid: 8d3980d1dd824b8fb4ea6237a2eb7894, type: 2}
+  - {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
+  - {fileID: 11400000, guid: 46bf0f0dc8db4d93b41a4b61ed43fca7, type: 2}
+  - {fileID: 11400000, guid: d5d1a51a42bb42b08c3185d4a8391c55, type: 2}
   - {fileID: 11400000, guid: 772017bfaf2bfa34dbc3384a3f7a6129, type: 2}
   - {fileID: 11400000, guid: c1abc2b8ee77e8e49930001a715824a4, type: 2}
   - {fileID: 11400000, guid: faa1f0815d158294bb46d3025fa6b1ab, type: 2}

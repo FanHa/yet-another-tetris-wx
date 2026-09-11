@@ -130,7 +130,7 @@ namespace Editor.Validation
         {
             bool hasErrors = false;
             string databasePath = AssetDatabase.GetAssetPath(database);
-            List<CellDefinition> definitions = database.GetDefinitions();
+            List<CellDefinition> definitions = database.GetRegisteredDefinitions();
 
             if (definitions.Count == 0)
             {
@@ -139,7 +139,6 @@ namespace Editor.Validation
             }
 
             var seenIds = new HashSet<string>(StringComparer.Ordinal);
-            var seenNonSkillTypes = new HashSet<Type>();
 
             foreach (CellDefinition definition in definitions)
             {
@@ -176,19 +175,7 @@ namespace Editor.Validation
                     hasErrors = true;
                 }
 
-                Type cellType;
-                try
-                {
-                    cellType = definition.RuntimeType;
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"{LogPrefix} CellDefinition '{definition.name}' runtime type resolve failed: {ex.Message} ({definitionPath})");
-                    hasErrors = true;
-                    continue;
-                }
-
-                if (definition.Affinity == AffinityType.None)
+                if (definition is not CharacterDefinition && definition.Affinity == AffinityType.None)
                 {
                     Debug.LogError($"{LogPrefix} CellDefinition '{definition.name}' has invalid Affinity None: {definitionPath}");
                     hasErrors = true;
@@ -196,11 +183,6 @@ namespace Editor.Validation
 
                 if (definition is SkillBackedCellDefinition skillCellDefinition)
                 {
-                    if (cellType != typeof(SkillCell))
-                    {
-                        Debug.LogError($"{LogPrefix} SkillBackedCellDefinition must use runtime type '{typeof(SkillCell).FullName}', but got '{cellType.FullName}': {definitionPath}");
-                        hasErrors = true;
-                    }
 
                     if (skillCellDefinition.Affinity == AffinityType.None)
                     {
@@ -240,12 +222,6 @@ namespace Editor.Validation
                     }
 
                     continue;
-                }
-
-                if (!seenNonSkillTypes.Add(cellType))
-                {
-                    Debug.LogError($"{LogPrefix} Duplicate non-skill CellDefinition runtime type '{cellType.FullName}' in {databasePath}");
-                    hasErrors = true;
                 }
 
                 if (definition is UtilityCellDefinition)

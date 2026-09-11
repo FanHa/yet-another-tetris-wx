@@ -32,7 +32,7 @@ namespace Model.Rewards
         // [SerializeField] private CellTypeCatalog cellTypeCatalog;
         private List<RewardTypeConfig> rewardTypeConfigs;
         private List<string> availableCellIds;
-        private List<CharacterTypeId> availableCharacterTypeIds;
+        private List<string> availableCharacterTypeIds;
 
 
         public void OnEnable()
@@ -65,7 +65,7 @@ namespace Model.Rewards
                 },
             };
             availableCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
-            availableCharacterTypeIds = tetriCellFactory.GetRegisteredCharacterTypeIds();
+            availableCharacterTypeIds = cellDatabase != null ? cellDatabase.GetRegisteredCharacterIds() : new List<string>();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
@@ -88,7 +88,7 @@ namespace Model.Rewards
 
         public bool HasUnownedCharacterCell(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<CharacterTypeId> ownedCharacterTypeIds = inventory.ExistCharacterTypeIds;
+            IReadOnlyCollection<string> ownedCharacterTypeIds = inventory.ExistCharacterTypeIds;
             return availableCharacterTypeIds.Any(type => !ownedCharacterTypeIds.Contains(type));
         }
 
@@ -186,7 +186,7 @@ namespace Model.Rewards
                     return "AddTetri_" + mainCell.CellId;
                 case NewCharacter newChar:
                     var characterCell = newChar.GetTetri().GetMainCell() as Character;
-                    return "NewCharacter_" + characterCell.CharacterTypeId;
+                    return "NewCharacter_" + characterCell.DefinitionData.Id;
                 case UpgradeCoreCell upgradeCore:
                     return "UpgradeCoreCell_" + upgradeCore.TargetTetri.GetHashCode();
                 case UpgradeCharacter upgradeChar:
@@ -218,7 +218,7 @@ namespace Model.Rewards
 
         private Reward CreateNewCharacterReward()
         {
-            IReadOnlyCollection<CharacterTypeId> existCharacterTypeIds = tetriInventoryData.ExistCharacterTypeIds;
+            IReadOnlyCollection<string> existCharacterTypeIds = tetriInventoryData.ExistCharacterTypeIds;
 
             // 3. 找出未拥有的Character类型
             var unownedTypeIds = availableCharacterTypeIds.Where(type => !existCharacterTypeIds.Contains(type)).ToList();

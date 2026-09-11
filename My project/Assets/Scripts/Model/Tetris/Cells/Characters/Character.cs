@@ -6,25 +6,25 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public abstract class Character : Cell
+    public class Character : Cell
     {
-        private CharacterBaseStatConfig ResolveConfig()
-        {
-            return (CharacterBaseStatConfig)Config;
-        }
+        private CharacterDefinition definitionData;
+
+        public CharacterDefinition DefinitionData => definitionData;
+
+        public virtual string CharacterKey => definitionData.Id;
 
         public override string Name()
         {
-            return ResolveConfig().DisplayName;
+            return string.IsNullOrWhiteSpace(definitionData.DisplayName) ? base.Name() : definitionData.DisplayName;
         }
 
-        public abstract CharacterTypeId CharacterTypeId { get; }
-        [SerializeField] private string characterName; // 永久角色名
-        public string CharacterName => EnsureCharacterName(); // 只读属性，获取角色名
+        [SerializeField] private string characterName;
+        public string CharacterName => EnsureCharacterName();
 
         private string GenerateUniqueName()
         {
-            return $"{Name()}_{Guid.NewGuid().ToString("N").Substring(0, 8)}"; // 生成基于角色类型和GUID的唯一名称
+            return $"{Name()}_{Guid.NewGuid().ToString("N").Substring(0, 8)}";
         }
 
         private string EnsureCharacterName()
@@ -37,37 +37,40 @@ namespace Model.Tetri
             return characterName;
         }
 
+        public override void Initialize(CellDefinition cellDefinition)
+        {
+            base.Initialize(cellDefinition);
+            definitionData = cellDefinition as CharacterDefinition ?? throw new ArgumentException($"Expected CharacterDefinition for {GetType().Name}.", nameof(cellDefinition));
+        }
+
         public override void Apply(Unit unit)
         {
-            var config = ResolveConfig();
             unit.Attributes = new Units.Attributes(
-                moveSpeedBase: config.MoveSpeedBase,
-                attackPowerBase: config.AttackPowerBase,
-                maxHealthBase: config.MaxHealthBase,
-                attacksPerTenSecondsBase: config.AttacksPerTenSecondsBase,
-                energyPerSecondBase: config.EnergyPerSecondBase,
-                attackRange: config.AttackRangeBase
+                moveSpeedBase: definitionData.MoveSpeedBase,
+                attackPowerBase: definitionData.AttackPowerBase,
+                maxHealthBase: definitionData.MaxHealthBase,
+                attacksPerTenSecondsBase: definitionData.AttacksPerTenSecondsBase,
+                energyPerSecondBase: definitionData.EnergyPerSecondBase,
+                attackRange: definitionData.AttackRangeBase
             );
 
-            unit.Attributes.MoveSpeed.AddPercentageModifier(this, config.MoveSpeedPercentModifier);
-            unit.Attributes.AttackPower.AddPercentageModifier(this, config.AttackPowerPercentModifier);
-            unit.Attributes.MaxHealth.AddPercentageModifier(this, config.MaxHealthPercentModifier);
-            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, config.AttacksPerTenSecondsPercentModifier);
-            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, config.EnergyPerSecondPercentModifier);
-            unit.Attributes.AttackRange.AddPercentageModifier(this, config.AttackRangePercentModifier);
+            unit.Attributes.MoveSpeed.AddPercentageModifier(this, definitionData.MoveSpeedPercentModifier);
+            unit.Attributes.AttackPower.AddPercentageModifier(this, definitionData.AttackPowerPercentModifier);
+            unit.Attributes.MaxHealth.AddPercentageModifier(this, definitionData.MaxHealthPercentModifier);
+            unit.Attributes.AttacksPerTenSeconds.AddPercentageModifier(this, definitionData.AttacksPerTenSecondsPercentModifier);
+            unit.Attributes.EnergyPerSecond.AddPercentageModifier(this, definitionData.EnergyPerSecondPercentModifier);
+            unit.Attributes.AttackRange.AddPercentageModifier(this, definitionData.AttackRangePercentModifier);
 
             unit.name = EnsureCharacterName();
         }
 
         public override string Description()
         {
-            var config = ResolveConfig();
-            return $"攻击力: {config.AttackPowerBase}, 生命值: {config.MaxHealthBase}, 攻击频率: {config.AttacksPerTenSecondsBase}, 移动速度: {config.MoveSpeedBase}";
+            return $"攻击力: {definitionData.AttackPowerBase}, 生命值: {definitionData.MaxHealthBase}, 攻击频率: {definitionData.AttacksPerTenSecondsBase}, 移动速度: {definitionData.MoveSpeedBase}";
         }
 
         public List<Vector2Int> GetInfluenceOffsets()
         {
-            // 本体
             var selfOffsets = new HashSet<Vector2Int>
             {
                 new Vector2Int(0, 0),
@@ -80,15 +83,12 @@ namespace Model.Tetri
 
             if (Level >= 1)
             {
-                // Level1: 4x4外围一圈
                 for (int dx = -1; dx <= 2; dx++)
                 {
                     for (int dy = -1; dy <= 2; dy++)
                     {
                         var pos = new Vector2Int(dx, dy);
-                        // 跳过本体
                         if (selfOffsets.Contains(pos)) continue;
-                        // 只加外围
                         if (dx == -1 || dx == 2 || dy == -1 || dy == 2)
                             offsets.Add(pos);
                     }
@@ -97,7 +97,6 @@ namespace Model.Tetri
 
             if (Level >= 2)
             {
-                // Level2: 上下左右各延申2格
                 offsets.Add(new Vector2Int(-2, 0));
                 offsets.Add(new Vector2Int(-2, 1));
                 offsets.Add(new Vector2Int(2, 0));
@@ -110,6 +109,5 @@ namespace Model.Tetri
 
             return offsets;
         }
-
     }
 }

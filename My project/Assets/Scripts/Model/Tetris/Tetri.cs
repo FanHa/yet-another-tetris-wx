@@ -17,8 +17,10 @@ namespace Model.Tetri
         [SerializeField] private TetriType tetriType;
         public TetriType Type => tetriType;
         [SerializeField] private Serializable2DArray<Cell> shape;
+        private Cell mainCell;
 
         public Serializable2DArray<Cell> Shape => shape;
+        public Cell MainCell => mainCell;
 
         // TODO
         public int UpgradedTimes = 0;
@@ -46,12 +48,29 @@ namespace Model.Tetri
         {
             if (row >= 0 && row < shape.GetLength(0) && column >= 0 && column < shape.GetLength(1))
             {
+                var previousCell = shape[row, column];
                 shape[row, column] = cell;
+
+                if (ReferenceEquals(previousCell, mainCell))
+                {
+                    mainCell = cell;
+                }
             }
             else
             {
                 Debug.LogWarning("Invalid row or column index.");
             }
+        }
+
+        public void SetMainCell(Cell cell)
+        {
+            if (cell == null || cell is Empty)
+            {
+                mainCell = null;
+                return;
+            }
+
+            mainCell = cell;
         }
 
 
@@ -73,25 +92,20 @@ namespace Model.Tetri
 
         public Cell GetMainCell()
         {
-            var occupiedPositions = GetOccupiedPositions();
-            foreach (var pos in occupiedPositions)
+            if (mainCell != null && !(mainCell is Empty))
+            {
+                return mainCell;
+            }
+
+            foreach (var pos in GetOccupiedPositions())
             {
                 var cell = shape[pos.x, pos.y];
-                if (cell is not Padding)
+                if (cell is not Empty)
                 {
                     return cell;
                 }
             }
-            // 没有主Cell，查找已有的Padding
-            foreach (var pos in occupiedPositions)
-            {
-                var cell = shape[pos.x, pos.y];
-                if (cell is Padding)
-                {
-                    return cell;
-                }
-            }
-            // 没有主Cell也没有Padding
+
             return null;
         }
 
@@ -168,31 +182,6 @@ namespace Model.Tetri
             UpgradedTimes += 1;
             OnDataChanged?.Invoke();
         }
-
-        public void UpgradeNoneCoreCells()
-        {
-            if (!CanBeUpgraded()) return;
-
-            var mainCell = GetMainCell();
-            if (mainCell == null) return;
-
-            var mainAffinity = mainCell.Affinity;
-
-            for (int x = 0; x < Shape.GetLength(0); x++)
-            {
-                for (int y = 0; y < Shape.GetLength(1); y++)
-                {
-                    var cell = Shape[x, y];
-                    if (cell is Model.Tetri.Padding paddingCell)
-                    {
-                        paddingCell.Affinity = mainAffinity;
-                    }
-                }
-            }
-            UpgradedTimes += 1;
-            OnDataChanged?.Invoke();
-        }
-
 
     }
 }

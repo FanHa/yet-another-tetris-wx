@@ -45,13 +45,5 @@ namespace Model.Tetri
 
     }
 
-    public enum CharacterTypeId
-    {
-        Square,
-        Triangle,
-        Circle,
-        Aim,
-        Hourglass
-    }
 }
 

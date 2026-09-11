@@ -14,6 +14,10 @@
 - 对于可在 Unity 编辑器中直接完成的简单任务:
   - 只要任务可在 Unity Inspector 或 Hierarchy 完成，就先给步骤，不改文件，指导用户自己在编辑器里完成。
   - 未获确认前，禁止修改 scene、prefab、asset 文件
+- Unity/MCP 资产创建流程必须遵守以下边界：
+  - 若 MCP/Unity Editor API 返回 “unsupported / invalid / failed / ScriptableObject not supported / menu item invalid” 等错误，必须先明确告知用户错误原因和当前限制，而不是继续自作主张绕过限制。
+  - 对于 ScriptableObject、.asset、scene、prefab 等 Unity 资产，禁止裸写 YAML / 手工编辑 asset 文件；必须走受支持的 Unity Editor API、AssetDatabase 或明确的编辑器菜单/脚本创建流程。
+  - 在使用任何 Unity 资产创建方案前，必须先核实目标目录和落盘结果，确保文件确实存在于项目中，不得仅凭中间状态或 API 返回值推断“已创建成功”。
 - 配置驱动模块默认遵循“配置期校验、运行时直取值”原则：
   - 编辑器/构建前校验负责检查空引用、缺失映射、越界和重复配置。
   - 业务运行时代码避免堆叠非必要防御性分支，优先保持主流程简洁清晰。

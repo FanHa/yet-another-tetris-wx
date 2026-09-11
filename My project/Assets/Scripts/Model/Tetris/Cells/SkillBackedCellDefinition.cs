@@ -1,6 +1,5 @@
 using UnityEngine;
 using Units.Skills;
-using System;
 
 namespace Model.Tetri
 {
@@ -10,7 +9,8 @@ namespace Model.Tetri
         [SerializeField] private SkillDefinition skillDefinition;
 
         public SkillDefinition SkillDefinition => skillDefinition;
-        public override Type RuntimeType => typeof(Cell);
         public override Sprite Icon => skillDefinition != null ? skillDefinition.Icon : null;
+        public override string DisplayName => skillDefinition != null ? skillDefinition.DisplayName : null;
+        public override string Description => skillDefinition != null ? skillDefinition.Description : null;
     }
 }

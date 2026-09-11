@@ -16,11 +16,6 @@ namespace Editor.Validation
             skillDefinitionProperty = serializedObject.FindProperty("skillDefinition");
         }
 
-        protected override bool ShouldDrawRuntimeTypeField()
-        {
-            return false;
-        }
-
         protected override void DrawDerivedFields()
         {
             if (skillDefinitionProperty != null)

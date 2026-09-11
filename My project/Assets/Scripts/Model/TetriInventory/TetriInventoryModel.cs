@@ -21,8 +21,8 @@ namespace Model
         private readonly HashSet<string> existCellIds = new(StringComparer.Ordinal);
         public IReadOnlyCollection<string> ExistCellIds => existCellIds;
 
-        private readonly HashSet<CharacterTypeId> existCharacterTypeIds = new();
-        public IReadOnlyCollection<CharacterTypeId> ExistCharacterTypeIds => existCharacterTypeIds;
+        private readonly HashSet<string> existCharacterTypeIds = new(StringComparer.Ordinal);
+        public IReadOnlyCollection<string> ExistCharacterTypeIds => existCharacterTypeIds;
 
         [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
         [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
@@ -42,7 +42,7 @@ namespace Model
         {
             TetriInventoryInitConfig config = initialConfigs[avaliableConfigIndex];
             List<CellDefinition> initialCellDefinitions = config.CellDefinitions;
-            List<CharacterTypeId> initialCharacterIds = config.CharacterTypeIds;
+            List<string> initialCharacterIds = config.CharacterTypeIds;
 
             foreach (var definition in initialCellDefinitions)
             {
@@ -105,8 +105,8 @@ namespace Model
                 Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
                 if (cell is Character character)
                 {
-                    // 如果是角色类型，添加角色类型 ID
-                    existCharacterTypeIds.Add(character.CharacterTypeId);
+                    // 角色仍然按 definition 的稳定 Id 识别，而不是运行时枚举.
+                    existCharacterTypeIds.Add(character.DefinitionData.Id);
                 }
                 else
                 {

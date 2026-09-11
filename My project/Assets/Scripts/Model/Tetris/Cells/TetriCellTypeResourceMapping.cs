@@ -10,14 +10,14 @@ namespace Model.Tetri
         [Serializable]
         public struct CharacterTypeResourcePair
         {
-            public CharacterTypeId characterTypeId;
+            public string characterTypeId;
             public Sprite sprite;
         }
 
         [SerializeField]
         private List<CharacterTypeResourcePair> characterMappings;
 
-        private Dictionary<CharacterTypeId, Sprite> characterResourceDictionary;
+        private Dictionary<string, Sprite> characterResourceDictionary;
 
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
 
@@ -35,14 +35,17 @@ namespace Model.Tetri
 
         private void InitializeDictionary()
         {
-            characterResourceDictionary = new Dictionary<CharacterTypeId, Sprite>();
+            characterResourceDictionary = new Dictionary<string, Sprite>(StringComparer.Ordinal);
             foreach (var pair in characterMappings)
             {
+                if (string.IsNullOrWhiteSpace(pair.characterTypeId))
+                    continue;
+
                 characterResourceDictionary[pair.characterTypeId] = pair.sprite;
             }
         }
 
-        public Sprite GetSprite(CharacterTypeId characterTypeId)
+        public Sprite GetSprite(string characterTypeId)
         {
             if (characterResourceDictionary == null)
             {
@@ -58,11 +61,6 @@ namespace Model.Tetri
 
         public Sprite GetSprite(Type type)
         {
-            if (tetriCellFactory.TypeToCharacterTypeId != null &&
-                tetriCellFactory.TypeToCharacterTypeId.TryGetValue(type, out var characterTypeId))
-            {
-                return GetSprite(characterTypeId);
-            }
             return null;
         }
     }
