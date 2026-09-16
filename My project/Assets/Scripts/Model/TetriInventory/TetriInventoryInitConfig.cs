@@ -8,7 +8,6 @@ namespace Model
     public class TetriInventoryInitConfig : ScriptableObject
     {
         public List<CellDefinition> CellDefinitions;
-        public List<string> CharacterTypeIds;
-
+        public List<CharacterDefinition> CharacterDefinitions;
     }
 }

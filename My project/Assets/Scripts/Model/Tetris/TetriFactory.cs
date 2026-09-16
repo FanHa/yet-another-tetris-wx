@@ -71,16 +71,7 @@ namespace Model.Tetri
         }
 
 
-        public Tetri CreateCharacterTetri(string characterDefinitionId)
-        {
-            if (string.IsNullOrWhiteSpace(characterDefinitionId))
-                throw new ArgumentException("Character definition id is null or empty.", nameof(characterDefinitionId));
-
-            var definition = tetriCellModelFactory.CreateCharacterCell(characterDefinitionId).DefinitionData;
-            return CreateCharacterTetri(definition);
-        }
-
-        private Tetri CreateCharacterTetri(CharacterDefinition definition)
+        public Tetri CreateCharacterTetri(CharacterDefinition definition)
         {
             if (definition == null)
                 throw new ArgumentNullException(nameof(definition));

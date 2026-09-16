@@ -10,7 +10,6 @@ namespace Units
     {
         [SerializeField] private Units.Unit battleUnitPrefab;
         [SerializeField] private Units.Unit previewUnitPrefab;
-        [SerializeField] private TetriCellTypeResourceMapping resourceMapping;
 
         public Units.Unit CreateBattleUnit(CharacterInfluence influence)
         {
@@ -39,7 +38,7 @@ namespace Units
             Units.Unit unit = Object.Instantiate(prefab);
 
             // 基础外观和数据初始化
-            Sprite characterSprite = resourceMapping.GetSprite(influence.Character.GetType());
+            Sprite characterSprite = influence.Character.Icon;
             unit.BodySpriteRenderer.sprite = characterSprite;
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;

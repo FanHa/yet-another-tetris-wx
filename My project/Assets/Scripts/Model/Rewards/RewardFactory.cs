@@ -32,8 +32,6 @@ namespace Model.Rewards
         // [SerializeField] private CellTypeCatalog cellTypeCatalog;
         private List<RewardTypeConfig> rewardTypeConfigs;
         private List<string> availableCellIds;
-        private List<string> availableCharacterTypeIds;
-
 
         public void OnEnable()
         {
@@ -65,7 +63,6 @@ namespace Model.Rewards
                 },
             };
             availableCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
-            availableCharacterTypeIds = cellDatabase != null ? cellDatabase.GetRegisteredCharacterIds() : new List<string>();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
@@ -88,8 +85,10 @@ namespace Model.Rewards
 
         public bool HasUnownedCharacterCell(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<string> ownedCharacterTypeIds = inventory.ExistCharacterTypeIds;
-            return availableCharacterTypeIds.Any(type => !ownedCharacterTypeIds.Contains(type));
+            IReadOnlyCollection<CharacterDefinition> ownedCharacterDefinitions = inventory.ExistCharacterDefinitions;
+            return cellDatabase.GetRegisteredDefinitions()
+                .OfType<CharacterDefinition>()
+                .Any(definition => !ownedCharacterDefinitions.Contains(definition));
         }
 
         private bool HasUpgradeableCharacter(TetriInventoryModel inventory)
@@ -218,22 +217,25 @@ namespace Model.Rewards
 
         private Reward CreateNewCharacterReward()
         {
-            IReadOnlyCollection<string> existCharacterTypeIds = tetriInventoryData.ExistCharacterTypeIds;
+            IReadOnlyCollection<CharacterDefinition> existCharacterDefinitions = tetriInventoryData.ExistCharacterDefinitions;
 
-            // 3. 找出未拥有的Character类型
-            var unownedTypeIds = availableCharacterTypeIds.Where(type => !existCharacterTypeIds.Contains(type)).ToList();
+            // 3. 找出未拥有的Character定义
+            var unownedDefinitions = cellDatabase.GetRegisteredDefinitions()
+                .OfType<CharacterDefinition>()
+                .Where(definition => !existCharacterDefinitions.Contains(definition))
+                .ToList();
 
-            if (unownedTypeIds.Count == 0)
+            if (unownedDefinitions.Count == 0)
             {
                 Debug.LogError("没有可用的Character类型，无法生成NewCharacter奖励。");
                 return null;
             }
 
-            // 4. 随机选择一个Character类型
-            var selectedCharacterTypeId = unownedTypeIds[UnityEngine.Random.Range(0, unownedTypeIds.Count)];
+            // 4. 随机选择一个Character定义
+            var selectedDefinition = unownedDefinitions[UnityEngine.Random.Range(0, unownedDefinitions.Count)];
 
             // 5. 创建Character实例
-            var tetriInstance = tetriModelFactory.CreateCharacterTetri(selectedCharacterTypeId);
+            var tetriInstance = tetriModelFactory.CreateCharacterTetri(selectedDefinition);
 
             // 6. 返回NewCharacter奖励
             return new NewCharacter(tetriInstance);

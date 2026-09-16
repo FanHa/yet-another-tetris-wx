@@ -21,8 +21,8 @@ namespace Model
         private readonly HashSet<string> existCellIds = new(StringComparer.Ordinal);
         public IReadOnlyCollection<string> ExistCellIds => existCellIds;
 
-        private readonly HashSet<string> existCharacterTypeIds = new(StringComparer.Ordinal);
-        public IReadOnlyCollection<string> ExistCharacterTypeIds => existCharacterTypeIds;
+        private readonly HashSet<CharacterDefinition> existCharacterDefinitions = new();
+        public IReadOnlyCollection<CharacterDefinition> ExistCharacterDefinitions => existCharacterDefinitions;
 
         [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
         [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
@@ -42,17 +42,17 @@ namespace Model
         {
             TetriInventoryInitConfig config = initialConfigs[avaliableConfigIndex];
             List<CellDefinition> initialCellDefinitions = config.CellDefinitions;
-            List<string> initialCharacterIds = config.CharacterTypeIds;
+            List<CharacterDefinition> initialCharacterIds = config.CharacterDefinitions;
 
-            foreach (var definition in initialCellDefinitions)
+            foreach (var cellDefinition in initialCellDefinitions)
             {
-                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(definition);
+                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellDefinition);
                 AddTetri(tetri, silent: true); 
             }
 
-            foreach (var characterTypeId in initialCharacterIds)
+            foreach (var characterDefinition in initialCharacterIds)
             {
-                Tetri.Tetri characterTetri = tetriModelFactory.CreateCharacterTetri(characterTypeId);
+                Tetri.Tetri characterTetri = tetriModelFactory.CreateCharacterTetri(characterDefinition);
                 AddTetri(characterTetri, silent: true);
             }
 
@@ -63,7 +63,7 @@ namespace Model
         private void RecalculateCellIds()
         {
             existCellIds.Clear();
-            existCharacterTypeIds.Clear();
+            existCharacterDefinitions.Clear();
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
                 UpdateCellIdsForTetri(tetri);
         }
@@ -105,8 +105,7 @@ namespace Model
                 Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
                 if (cell is Character character)
                 {
-                    // 角色仍然按 definition 的稳定 Id 识别，而不是运行时枚举.
-                    existCharacterTypeIds.Add(character.DefinitionData.Id);
+                    existCharacterDefinitions.Add(character.DefinitionData);
                 }
                 else
                 {

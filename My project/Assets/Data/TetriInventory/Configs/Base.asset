@@ -15,4 +15,5 @@ MonoBehaviour:
   CellDefinitions:
   - {fileID: 11400000, guid: 772017bfaf2bfa34dbc3384a3f7a6129, type: 2}
   - {fileID: 11400000, guid: db41af9476289844d9428daa64377b3d, type: 2}
-  CharacterTypeIds: 00000000
+  CharacterDefinitions:
+  - {fileID: 11400000, guid: 7c4a7a65f9a4460cad284f7c65ef3256, type: 2}

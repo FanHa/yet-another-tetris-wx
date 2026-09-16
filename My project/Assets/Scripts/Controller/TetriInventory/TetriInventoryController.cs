@@ -1,4 +1,3 @@
-// This file is part of the TetriGame project.
 using System;
 using System.Collections.Generic;
 using Model.Tetri;
