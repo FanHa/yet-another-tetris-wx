@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Model;
 using Model.Tetri;
+using Units.Skills;
 using UnityEditor;
 using UnityEngine;
 
@@ -202,6 +203,10 @@ namespace Editor.Validation
                         Debug.LogError($"{LogPrefix} SkillDefinition '{skillCellDefinition.SkillDefinition.name}' has null Config: {definitionPath}");
                         hasErrors = true;
                     }
+                    else
+                    {
+                        hasErrors |= ValidateSkillDefinition(skillCellDefinition.SkillDefinition, definitionPath);
+                    }
 
                     if (string.IsNullOrWhiteSpace(skillCellDefinition.SkillDefinition.DisplayName))
                     {
@@ -238,6 +243,41 @@ namespace Editor.Validation
                 if (definition.Icon == null)
                 {
                     Debug.LogError($"{LogPrefix} CellDefinition has null Icon: {definitionPath}");
+                    hasErrors = true;
+                }
+            }
+
+            return hasErrors;
+        }
+
+        private static bool ValidateSkillDefinition(SkillDefinition skillDefinition, string definitionPath)
+        {
+            bool hasErrors = false;
+            Type skillType = typeof(Units.Skills.Skill).Assembly.GetType($"Units.Skills.{skillDefinition.Id}");
+            if (skillType == null || !typeof(Units.Skills.Skill).IsAssignableFrom(skillType))
+            {
+                Debug.LogError($"{LogPrefix} SkillDefinition '{skillDefinition.name}' has no matching Skill type for id '{skillDefinition.Id}': {definitionPath}");
+                hasErrors = true;
+            }
+
+            if (!Enum.TryParse(skillDefinition.Id, out CellTypeId cellTypeId) || cellTypeId == CellTypeId.None)
+            {
+                Debug.LogError($"{LogPrefix} SkillDefinition '{skillDefinition.name}' has invalid skill id '{skillDefinition.Id}': {definitionPath}");
+                hasErrors = true;
+            }
+
+            if (skillDefinition.Config is SkillConfig<SkillLevelConfig> config && (config.LevelConfigs == null || config.LevelConfigs.Count == 0))
+            {
+                Debug.LogError($"{LogPrefix} SkillDefinition '{skillDefinition.name}' has no level configs: {definitionPath}");
+                hasErrors = true;
+            }
+
+            if (skillType != null && skillDefinition.Config != null && skillType.GetConstructor(Type.EmptyTypes) == null)
+            {
+                Type levelConfigType = skillDefinition.Config.GetType().BaseType?.GetGenericArguments()[0];
+                if (levelConfigType == null || skillType.GetConstructor(new[] { levelConfigType }) == null)
+                {
+                    Debug.LogError($"{LogPrefix} SkillDefinition '{skillDefinition.name}' has no matching Skill constructor: {definitionPath}");
                     hasErrors = true;
                 }
             }

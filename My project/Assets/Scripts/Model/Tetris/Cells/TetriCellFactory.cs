@@ -51,7 +51,11 @@ namespace Model.Tetri
 
         private Cell CreateCell(CellDefinition definition)
         {
-            var cell = new Cell();
+            var cell = definition switch
+            {
+                SkillBackedCellDefinition => new SkillCell(),
+                _ => new Cell()
+            };
             if (definition != null)
             {
                 cell.Initialize(definition);
@@ -71,7 +75,7 @@ namespace Model.Tetri
                 return CreateCharacterCell(character.DefinitionData);
             }
 
-            var clone = new Cell();
+            var clone = cell is SkillCell ? new SkillCell() : new Cell();
             if (cell.Definition != null)
             {
                 clone.Initialize(cell.Definition);
