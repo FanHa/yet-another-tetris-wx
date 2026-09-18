@@ -24,8 +24,7 @@ namespace Model
         private readonly HashSet<CharacterDefinition> existCharacterDefinitions = new();
         public IReadOnlyCollection<CharacterDefinition> ExistCharacterDefinitions => existCharacterDefinitions;
 
-        [SerializeField] private List<TetriInventoryInitConfig> initialConfigs = new List<TetriInventoryInitConfig>();
-        [SerializeField] private int avaliableConfigIndex; // 当前使用的配置索引
+        [SerializeField] private TetriInventoryInitConfig initialConfig;
 
 
         public void Init()
@@ -40,9 +39,8 @@ namespace Model
 
         private void GenerateInitialTetris()
         {
-            TetriInventoryInitConfig config = initialConfigs[avaliableConfigIndex];
-            List<CellDefinition> initialCellDefinitions = config.CellDefinitions;
-            List<CharacterDefinition> initialCharacterIds = config.CharacterDefinitions;
+            List<CellDefinition> initialCellDefinitions = initialConfig.CellDefinitions;
+            List<CharacterDefinition> initialCharacterIds = initialConfig.CharacterDefinitions;
 
             foreach (var cellDefinition in initialCellDefinitions)
             {

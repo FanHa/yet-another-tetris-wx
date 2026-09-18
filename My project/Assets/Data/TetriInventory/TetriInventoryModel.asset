@@ -17,19 +17,20 @@ MonoBehaviour:
     shape:
       rows: 4
       cols: 4
+      array: []
     UpgradedTimes: 0
   - tetriType: 1
     shape:
       rows: 4
       cols: 4
+      array: []
     UpgradedTimes: 0
   - tetriType: 0
     shape:
       rows: 4
       cols: 4
+      array: []
     UpgradedTimes: 0
   usedTetriList: []
   tetriModelFactory: {fileID: 11400000, guid: bbc0821158c9cd04da22c630746033be, type: 2}
-  initialConfigs:
-  - {fileID: 11400000, guid: 87108f55f764e41419f6b08faf724f4c, type: 2}
-  avaliableConfigIndex: 0
+  initialConfig: {fileID: 11400000, guid: 87108f55f764e41419f6b08faf724f4c, type: 2}
