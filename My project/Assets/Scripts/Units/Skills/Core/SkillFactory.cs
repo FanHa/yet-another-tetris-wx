@@ -10,15 +10,21 @@ namespace Units.Skills
         {
             Type skillType = typeof(Skill).Assembly.GetType($"Units.Skills.{skillDefinition.Id}");
             ConstructorInfo parameterlessConstructor = skillType.GetConstructor(Type.EmptyTypes);
+            Skill skill;
             if (parameterlessConstructor != null)
             {
-                return (Skill)parameterlessConstructor.Invoke(null);
+                skill = (Skill)parameterlessConstructor.Invoke(null);
+            }
+            else
+            {
+                MethodInfo getLevelConfig = skillDefinition.Config.GetType().GetMethod(nameof(SkillConfig<SkillLevelConfig>.GetLevelConfig));
+                SkillLevelConfig levelConfig = (SkillLevelConfig)getLevelConfig.Invoke(skillDefinition.Config, new object[] { level });
+                ConstructorInfo configuredConstructor = skillType.GetConstructor(new[] { levelConfig.GetType() });
+                skill = (Skill)configuredConstructor.Invoke(new object[] { levelConfig });
             }
 
-            MethodInfo getLevelConfig = skillDefinition.Config.GetType().GetMethod(nameof(SkillConfig<SkillLevelConfig>.GetLevelConfig));
-            SkillLevelConfig levelConfig = (SkillLevelConfig)getLevelConfig.Invoke(skillDefinition.Config, new object[] { level });
-            ConstructorInfo configuredConstructor = skillType.GetConstructor(new[] { levelConfig.GetType() });
-            return (Skill)configuredConstructor.Invoke(new object[] { levelConfig });
+            skill.Definition = skillDefinition;
+            return skill;
         }
     }
 }

@@ -46,6 +46,7 @@ namespace Units.Skills
         public abstract string Name();
         public abstract string Description();
 
+        public SkillDefinition Definition { get; internal set; }
         public ISkillContext Owner { get; set; } // 技能的拥有者
         
 

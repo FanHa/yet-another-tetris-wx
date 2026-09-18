@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9078f39fdd91642b9f97ad47fe506d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  cellDatabase: {fileID: 0}
   icon: {fileID: 860590030355882424}
   button: {fileID: 6877192327959651712}
   energySlider: {fileID: 7583181620397315428}

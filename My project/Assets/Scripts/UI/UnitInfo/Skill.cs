@@ -7,7 +7,6 @@ namespace UI.UnitInfo
 {
     public class Skill : MonoBehaviour
     {
-        [SerializeField] private CellDatabase cellDatabase;
         [SerializeField] private Image icon;
         [SerializeField] private Button button;
         [SerializeField] private Slider energySlider;
@@ -30,7 +29,7 @@ namespace UI.UnitInfo
         public void SetSkill(Units.Skills.Skill skill)
         {
             this.skill = skill;
-            icon.sprite = cellDatabase != null ? cellDatabase.GetSprite(skill.CellId) : null;
+            icon.sprite = skill.Definition.Icon;
             if (skill is Units.Skills.ActiveSkill activeSkill)
             {
                 energySlider.gameObject.SetActive(true);
