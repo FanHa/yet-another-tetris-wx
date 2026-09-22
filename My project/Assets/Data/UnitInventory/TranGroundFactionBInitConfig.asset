@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890fe2f0be0262742b82031eb4b9a72d, type: 3}
+  m_Name: TranGroundFactionBInitConfig
+  m_EditorClassIdentifier: 
+  items:
+  - characterDefinition: {fileID: 11400000, guid: 8d3980d1dd824b8fb4ea6237a2eb7894, type: 2}
+    cellDefinitions: []
+    relativePositionFromCenter: {x: 0, y: 0, z: 0}

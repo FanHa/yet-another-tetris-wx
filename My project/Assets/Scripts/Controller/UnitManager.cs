@@ -30,7 +30,7 @@ namespace Controller
         /// <param name="spawnPoint">出生点</param>
         /// <param name="faction">阵营</param>
         public void SpawnUnits(
-            List<CharacterPlacement> items,
+            IReadOnlyList<CharacterPlacement> items,
             Transform spawnPoint,
             Unit.Faction faction
         )

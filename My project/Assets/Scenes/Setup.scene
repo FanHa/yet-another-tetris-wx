@@ -1447,10 +1447,6 @@ MonoBehaviour:
   gameStatusHud: {fileID: 506519725}
   spawnPointB: {fileID: 131970432}
   timeDelayBeforeBattle: 1
-  playerUnitInventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
-  enemyUnitInventoryData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
-  trainGroundDataFactionA: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
-  trainGroundDataFactionB: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
 --- !u!114 &943837602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2491,7 +2487,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleField: {fileID: 943837600}
   rewardController: {fileID: 1420456109}
-  unitInventoryService: {fileID: 11400000, guid: 1930f7a15a853c941a70864fb585d0d9, type: 2}
+  playerUnitInventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
+  enemyUnitInventoryData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
+  trainGroundFactionAInventoryData: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
+  trainGroundFactionBInventoryData: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
+  trainGroundFactionAInitConfig: {fileID: 11400000, guid: 418e3318e818f7548b69854f45c75d3e, type: 2}
+  trainGroundFactionBInitConfig: {fileID: 11400000, guid: 7c8d893fb762bb64c909b4d731f661d6, type: 2}
+  unitInventoryFactory: {fileID: 11400000, guid: 42b28f62851c4ea458c49dfff198c3cf, type: 2}
   levelConfig: {fileID: 11400000, guid: 51ba4ce3e20e5e143a814062bb766830, type: 2}
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}

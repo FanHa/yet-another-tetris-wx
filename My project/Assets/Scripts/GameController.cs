@@ -29,7 +29,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.RewardController rewardController;
 
-    [SerializeField] private Model.UnitInventoryService unitInventoryService;
+    [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
+    [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
+    [SerializeField] private Model.UnitInventoryModel trainGroundFactionAInventoryData;
+    [SerializeField] private Model.UnitInventoryModel trainGroundFactionBInventoryData;
+    [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionAInitConfig;
+    [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionBInitConfig;
+    [SerializeField] private Model.UnitInventoryFactory unitInventoryFactory;
     [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
@@ -243,14 +249,28 @@ public class GameController : MonoBehaviour
 
     }
 
+    private void UpdateBattleInventoryModels()
+    {
+        enemyUnitInventoryData.ResetInventoryData(levelConfig.GetEnemyData());
+        playerUnitInventoryData.ResetInventoryData(operationTableController.GetCharacterPlacements());
+    }
+
+    private void UpdateTrainGroundInventoryModels()
+    {
+        trainGroundFactionAInventoryData.ResetInventoryData(
+            unitInventoryFactory.Build(trainGroundFactionAInitConfig));
+        trainGroundFactionBInventoryData.ResetInventoryData(
+            unitInventoryFactory.Build(trainGroundFactionBInitConfig));
+    }
 
     private void HandleBattleClicked()
     {
-        List<CharacterPlacement> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
-        unitInventoryService.SetEnemyInventoryData(levelData);
-        unitInventoryService.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
+        UpdateBattleInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
-        battleField.StartNewLevelBattle(levelConfig.currentLevel);
+        battleField.StartNewLevelBattle(
+            levelConfig.currentLevel,
+            playerUnitInventoryData.Items,
+            enemyUnitInventoryData.Items);
 
         Time.timeScale = 1;
         isPaused = false;
@@ -279,14 +299,14 @@ public class GameController : MonoBehaviour
 
     private void HandlePreviewButtonClicked()
     {
-        List<CharacterPlacement> levelData = levelConfig.GetEnemyData(); // 获取当前关卡数据
-        unitInventoryService.SetEnemyInventoryData(levelData);
-        unitInventoryService.SetPlayerInventoryData(operationTableController.GetCharacterPlacements());
+        UpdateBattleInventoryModels();
         var bfPos = battleField.transform.position;
         Camera.main.transform.position = new Vector3(bfPos.x, bfPos.y, Camera.main.transform.position.z);
         ApplyUiPageState(UiPageState.Preview);
         battlePreviewUI.Activate();
-        battleField.PreviewBattle();
+        battleField.PreviewBattle(
+            playerUnitInventoryData.Items,
+            enemyUnitInventoryData.Items);
     }
 
     private void HandleBattlePreviewClosed()
@@ -312,9 +332,11 @@ public class GameController : MonoBehaviour
             Debug.LogWarning("This method can only be called in Play mode.");
             return;
         }
-        unitInventoryService.PrepareTrainGroundUnitInventory();
+        UpdateTrainGroundInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
-        battleField.StartTrainGround();
+        battleField.StartTrainGround(
+            trainGroundFactionAInventoryData.Items,
+            trainGroundFactionBInventoryData.Items);
     }
 #endif
 }

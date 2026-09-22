@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,14 +10,10 @@ namespace Model{
     {
         [field: SerializeField] private List<CharacterPlacement> items = new List<CharacterPlacement>();
 
-        public List<CharacterPlacement> Items
-        {
-            get => items;
-            set => items = value;
-        }
-        public event Action<List<CharacterPlacement>> OnDataChanged;
+        public IReadOnlyList<CharacterPlacement> Items => items;
+        public event Action<IReadOnlyList<CharacterPlacement>> OnDataChanged;
 
-        public void AddItems(List<CharacterPlacement> newItems)
+        public void AddItems(IReadOnlyList<CharacterPlacement> newItems)
         {
             items.AddRange(newItems);
             OnDataChanged?.Invoke(items);
@@ -29,7 +24,7 @@ namespace Model{
             return items[itemIndex];
         }
 
-        public void ResetInventoryData(List<CharacterPlacement> newItems)
+        public void ResetInventoryData(IReadOnlyList<CharacterPlacement> newItems)
         {
             items.Clear();
             AddItems(newItems);

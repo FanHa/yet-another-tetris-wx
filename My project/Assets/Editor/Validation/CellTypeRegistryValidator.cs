@@ -46,11 +46,7 @@ namespace Editor.Validation
         public static void ValidateAll()
         {
             bool isValid = ValidateAllAndGetResult();
-            if (isValid)
-            {
-                Debug.Log($"{LogPrefix} Validation passed.");
-            }
-            else
+            if (!isValid)
             {
                 Debug.LogError($"{LogPrefix} Validation failed.");
             }

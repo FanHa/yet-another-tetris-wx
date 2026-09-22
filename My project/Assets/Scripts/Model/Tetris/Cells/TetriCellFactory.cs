@@ -49,7 +49,7 @@ namespace Model.Tetri
             return character;
         }
 
-        private Cell CreateCell(CellDefinition definition)
+        public Cell CreateCell(CellDefinition definition)
         {
             var cell = definition switch
             {

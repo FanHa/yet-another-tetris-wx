@@ -35,16 +35,12 @@ namespace Controller {
         private Coroutine spawnRoutine; // 处理战斗开始生成单位后需要延迟一小段时间再开打
 
         [Header("Data")]
-        [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
-        [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
-        [SerializeField] private Model.UnitInventoryModel trainGroundDataFactionA;
-        [SerializeField] private Model.UnitInventoryModel trainGroundDataFactionB;
         private UnitManager unitManager;
         public event Action OnBattleEnd;
         public event Action<Unit> OnUnitClicked;
 
-        private List<CharacterPlacement> factionAConfig;
-        private List<CharacterPlacement> factionBConfig;
+        private IReadOnlyList<CharacterPlacement> factionAConfig;
+        private IReadOnlyList<CharacterPlacement> factionBConfig;
 
         void Awake()
         {
@@ -65,27 +61,34 @@ namespace Controller {
             OnUnitClicked?.Invoke(unit);
         }
 
-        public void StartNewLevelBattle(int level)
+        public void StartNewLevelBattle(
+            int level,
+            IReadOnlyList<CharacterPlacement> factionAItems,
+            IReadOnlyList<CharacterPlacement> factionBItems)
         {
             gameStatusHud.SetLevel(level); // 设置当前关卡
-            factionAConfig = playerUnitInventoryData.Items;
-            factionBConfig = enemyUnitInventoryData.Items;
+            factionAConfig = factionAItems;
+            factionBConfig = factionBItems;
             SpawnUnits();
             StartCoroutine(DelayActivateUnitsCoroutine());
         }
 
-        public void StartTrainGround()
+        public void StartTrainGround(
+            IReadOnlyList<CharacterPlacement> factionAItems,
+            IReadOnlyList<CharacterPlacement> factionBItems)
         {
-            factionAConfig = trainGroundDataFactionA.Items;
-            factionBConfig = trainGroundDataFactionB.Items;
+            factionAConfig = factionAItems;
+            factionBConfig = factionBItems;
             SpawnUnits();
             StartCoroutine(DelayActivateUnitsCoroutine());
         }
 
-        public void PreviewBattle()
+        public void PreviewBattle(
+            IReadOnlyList<CharacterPlacement> factionAItems,
+            IReadOnlyList<CharacterPlacement> factionBItems)
         {
-            factionAConfig = playerUnitInventoryData.Items;
-            factionBConfig = enemyUnitInventoryData.Items;
+            factionAConfig = factionAItems;
+            factionBConfig = factionBItems;
             SpawnUnits();
         }
 

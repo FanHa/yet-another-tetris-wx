@@ -9,14 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 758648277906f6048aea1cf6c92fe4f5, type: 3}
-  m_Name: TrainGroundSetup
+  m_Script: {fileID: 11500000, guid: 5a2124b9aa64e2344b986ab2caaa0084, type: 3}
+  m_Name: UnitInventoryFactory
   m_EditorClassIdentifier: 
-  FactionAUnits:
-  - characterId: 0
-    tetriCellIds: 1a000000
-  - characterId: 0
-    tetriCellIds: 0f0000000a000000
-  FactionBUnits:
-  - characterId: 2
-    tetriCellIds: 01000000
+  tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
