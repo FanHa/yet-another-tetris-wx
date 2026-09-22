@@ -36,7 +36,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionAInitConfig;
     [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionBInitConfig;
     [SerializeField] private Model.UnitInventoryFactory unitInventoryFactory;
-    [SerializeField] private Model.LevelConfig levelConfig; // 关卡配置
+    [SerializeField] private Model.LevelState levelState; // 关卡运行时状态
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button previewButton;
@@ -73,7 +73,7 @@ public class GameController : MonoBehaviour
         // 初始化资源面板和操作表
         battleField.OnBattleEnd += HandleBattleEnd;
         battleField.OnUnitClicked += HandleUnitClicked;
-        levelConfig.Reset();
+        levelState.Reset();
 
         battleButton.onClick.AddListener(HandleBattleClicked);
         pauseButton.onClick.AddListener(HandlePauseClicked);
@@ -244,14 +244,15 @@ public class GameController : MonoBehaviour
     {
         rewardController.OnRewardSelected -= HandleRewardSelected;
         Camera.main.transform.position = new Vector3(0, 0, -10); // todo magic num
-        levelConfig.AdvanceToNextLevel(); // 关卡增加
+        levelState.AdvanceToNextLevel(); // 关卡增加
         ApplyUiPageState(UiPageState.Assembly);
 
     }
 
     private void UpdateBattleInventoryModels()
     {
-        enemyUnitInventoryData.ResetInventoryData(levelConfig.GetEnemyData());
+        var enemySquads = new EnemySquadFactory(levelState.CellDatabase).Build(levelState);
+        enemyUnitInventoryData.ResetInventoryData(unitInventoryFactory.Build(enemySquads));
         playerUnitInventoryData.ResetInventoryData(operationTableController.GetCharacterPlacements());
     }
 
@@ -268,7 +269,7 @@ public class GameController : MonoBehaviour
         UpdateBattleInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(
-            levelConfig.currentLevel,
+            levelState.currentLevel,
             playerUnitInventoryData.Items,
             enemyUnitInventoryData.Items);
 
