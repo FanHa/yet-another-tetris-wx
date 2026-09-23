@@ -7,7 +7,7 @@ namespace Model.Tetri.Editor
 {
     public static class CharacterDefinitionAssetCreator
     {
-        private const string RootPath = "Assets/Data/Cells/Definitions/Characters";
+    private const string RootPath = "Assets/Data/Gameplay/Cells/Definitions/Characters";
 
         [MenuItem("Tools/Tetris/Create Character Definitions")]
         public static void CreateAll()
@@ -38,7 +38,7 @@ namespace Model.Tetri.Editor
         {
             if (!AssetDatabase.IsValidFolder(RootPath))
             {
-                var parent = "Assets/Data/Cells/Definitions";
+                 var parent = "Assets/Data/Gameplay/Cells/Definitions";
                 AssetDatabase.CreateFolder(parent, "Characters");
             }
         }
@@ -73,7 +73,7 @@ namespace Model.Tetri.Editor
 
         private static void RegisterToDatabase(IEnumerable<CharacterSpec> definitions)
         {
-            var databasePath = "Assets/Data/Cells/CellDatabase.asset";
+              var databasePath = "Assets/Data/Gameplay/Cells/CellDatabase.asset";
             var database = AssetDatabase.LoadAssetAtPath<CellDatabase>(databasePath);
             if (database == null)
             {
