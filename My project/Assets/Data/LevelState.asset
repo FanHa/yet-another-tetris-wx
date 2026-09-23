@@ -9,16 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b45bc9cc2adf348b66418a2dc64dfa, type: 3}
-  m_Name: LevelConfig
+  m_Script: {fileID: 11500000, guid: d044f1d72eef7544c90168cd90589898, type: 3}
+  m_Name: LevelState
   m_EditorClassIdentifier: 
-  currentLevel: 0
-  enemyDatas:
-  - characterId: 3
-    tetriCellIds: []
-  levelsPerEnemyIncrease: 2
+  levelsPerEnemyIncrease: 3
   maxEnemyCount: 10
-  levelsPerCellIncrease: 5
+  levelsPerCellIncrease: 8
   maxAddedCellCount: 10
-  tetriCellModelFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
   cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}

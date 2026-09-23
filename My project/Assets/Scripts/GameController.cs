@@ -4,6 +4,7 @@ using UI;
 using Controller;
 using Model.Tetri;
 using Model;
+using Model.UnitInventory;
 using System.Collections;
 using UnityEngine.UI;
 using System;
@@ -29,13 +30,13 @@ public class GameController : MonoBehaviour
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.RewardController rewardController;
 
-    [SerializeField] private Model.UnitInventoryModel playerUnitInventoryData;
-    [SerializeField] private Model.UnitInventoryModel enemyUnitInventoryData;
-    [SerializeField] private Model.UnitInventoryModel trainGroundFactionAInventoryData;
-    [SerializeField] private Model.UnitInventoryModel trainGroundFactionBInventoryData;
-    [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionAInitConfig;
-    [SerializeField] private Model.UnitInventoryInitConfig trainGroundFactionBInitConfig;
-    [SerializeField] private Model.UnitInventoryFactory unitInventoryFactory;
+    [SerializeField] private UnitInventoryModel playerUnitInventoryData;
+    [SerializeField] private UnitInventoryModel enemyUnitInventoryData;
+    [SerializeField] private UnitInventoryModel trainGroundFactionAInventoryData;
+    [SerializeField] private UnitInventoryModel trainGroundFactionBInventoryData;
+    [SerializeField] private UnitInventoryInitConfig trainGroundFactionAInitConfig;
+    [SerializeField] private UnitInventoryInitConfig trainGroundFactionBInitConfig;
+    [SerializeField] private UnitInventoryFactory unitInventoryFactory;
     [SerializeField] private Model.LevelState levelState; // 关卡运行时状态
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
@@ -55,6 +56,16 @@ public class GameController : MonoBehaviour
     [SerializeField] private Operation.TetriFactory tetriFactory;
     private Operation.Tetri draggingTetriFromOperationTable;
     private Units.Unit tempUnit;
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (levelState == null)
+        {
+            Debug.LogError($"[{nameof(GameController)}] Level state is missing.", this);
+        }
+    }
+#endif
 
     private void ApplyUiPageState(UiPageState newState)
     {
@@ -251,17 +262,27 @@ public class GameController : MonoBehaviour
 
     private void UpdateBattleInventoryModels()
     {
-        var enemySquads = new EnemySquadFactory(levelState.CellDatabase).Build(levelState);
-        enemyUnitInventoryData.ResetInventoryData(unitInventoryFactory.Build(enemySquads));
+        enemyUnitInventoryData.ResetInventoryData(BuildEnemyInventoryForCurrentLevel());
         playerUnitInventoryData.ResetInventoryData(operationTableController.GetCharacterPlacements());
     }
 
     private void UpdateTrainGroundInventoryModels()
     {
-        trainGroundFactionAInventoryData.ResetInventoryData(
-            unitInventoryFactory.Build(trainGroundFactionAInitConfig));
-        trainGroundFactionBInventoryData.ResetInventoryData(
-            unitInventoryFactory.Build(trainGroundFactionBInitConfig));
+        trainGroundFactionAInventoryData.ResetInventoryData(BuildTrainGroundInventory(trainGroundFactionAInitConfig));
+        trainGroundFactionBInventoryData.ResetInventoryData(BuildTrainGroundInventory(trainGroundFactionBInitConfig));
+    }
+
+    private List<CharacterPlacement> BuildEnemyInventoryForCurrentLevel()
+    {
+        var enemySquads = new EnemySquadFactory(levelState.CellDatabase).Build(levelState);
+        return unitInventoryFactory.Build(
+            UnitInventoryBuildDataAdapter.FromEnemySquads(enemySquads));
+    }
+
+    private List<CharacterPlacement> BuildTrainGroundInventory(UnitInventoryInitConfig initConfig)
+    {
+        return unitInventoryFactory.Build(
+            UnitInventoryBuildDataAdapter.FromInitConfig(initConfig));
     }
 
     private void HandleBattleClicked()
@@ -269,7 +290,7 @@ public class GameController : MonoBehaviour
         UpdateBattleInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
         battleField.StartNewLevelBattle(
-            levelState.currentLevel,
+            levelState.CurrentLevel,
             playerUnitInventoryData.Items,
             enemyUnitInventoryData.Items);
 

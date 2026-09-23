@@ -3,7 +3,7 @@ using System.Linq;
 using Model.Tetri;
 using UnityEngine;
 
-namespace Model
+namespace Model.UnitInventory
 {
     [CreateAssetMenu(fileName = "UnitInventoryInitConfig", menuName = "Tetris/UnitInventoryInitConfig")]
     public class UnitInventoryInitConfig : ScriptableObject

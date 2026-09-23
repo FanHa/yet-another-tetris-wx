@@ -2494,7 +2494,7 @@ MonoBehaviour:
   trainGroundFactionAInitConfig: {fileID: 11400000, guid: 418e3318e818f7548b69854f45c75d3e, type: 2}
   trainGroundFactionBInitConfig: {fileID: 11400000, guid: 7c8d893fb762bb64c909b4d731f661d6, type: 2}
   unitInventoryFactory: {fileID: 11400000, guid: 42b28f62851c4ea458c49dfff198c3cf, type: 2}
-  levelConfig: {fileID: 11400000, guid: 51ba4ce3e20e5e143a814062bb766830, type: 2}
+  levelState: {fileID: 11400000, guid: b4d275d0b08dc3f4899970f66f0d5699, type: 2}
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}
   previewButton: {fileID: 264512489}

@@ -38,7 +38,7 @@ namespace Model
                 .ToList();
 
             var squads = new List<EnemySquadData>();
-            int enemyCount = Mathf.Min(1 + (levelState.currentLevel - 1) / levelState.LevelsPerEnemyIncrease, levelState.MaxEnemyCount);
+            int enemyCount = Mathf.Min(1 + (levelState.CurrentLevel - 1) / levelState.LevelsPerEnemyIncrease, levelState.MaxEnemyCount);
 
             for (int i = 0; i < enemyCount; i++)
             {
@@ -57,7 +57,7 @@ namespace Model
                     cellConfigs = new List<EnemyCellData>()
                 };
 
-                int additionalCells = Mathf.Min((levelState.currentLevel - 1) / levelState.LevelsPerCellIncrease + 1, levelState.MaxAddedCellCount);
+                int additionalCells = Mathf.Min((levelState.CurrentLevel - 1) / levelState.LevelsPerCellIncrease + 1, levelState.MaxAddedCellCount);
                 for (int cellIndex = 0; cellIndex < additionalCells; cellIndex++)
                 {
                     if (availableCellDefinitions.Count == 0)

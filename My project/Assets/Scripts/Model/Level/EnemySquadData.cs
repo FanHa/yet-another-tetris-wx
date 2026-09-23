@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Model
 {
+    /// <summary>
+    /// Plain generated data used to describe one enemy squad for the current battle.
+    /// This is not a ScriptableObject or asset configuration; it is just a runtime-transfer object.
+    /// </summary>
     [Serializable]
     public class EnemySquadData
     {
