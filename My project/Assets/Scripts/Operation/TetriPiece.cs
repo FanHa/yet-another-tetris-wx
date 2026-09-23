@@ -7,7 +7,6 @@ namespace Operation
     {
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private Transform cellsRoot;
-        [SerializeField] private TetriCellTypeResourceMapping tetriCellTypeResourceMapping;
 
         protected override void RebuildFromModel()
         {
