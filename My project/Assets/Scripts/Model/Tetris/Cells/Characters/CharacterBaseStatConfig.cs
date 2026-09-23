@@ -3,7 +3,7 @@ using Units.Skills;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "CharacterConfig/CharacterBaseStatConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Characters/Legacy/Base Stat Config")]
     public class CharacterBaseStatConfig : SkillConfig
     {
         [Header("展示信息")]

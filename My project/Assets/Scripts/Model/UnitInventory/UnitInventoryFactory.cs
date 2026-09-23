@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Model.UnitInventory
 {
-    [CreateAssetMenu(fileName = "UnitInventoryFactory", menuName = "Tetris/UnitInventoryFactory")]
+    [CreateAssetMenu(fileName = "UnitInventoryFactory", menuName = "Game Data/Bootstrap/Factories/Unit Inventory Factory")]
     public class UnitInventoryFactory : ScriptableObject
     {
         [SerializeField] private TetriCellFactory tetriCellFactory;

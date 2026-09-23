@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Skills/Skill Database")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Skill Database")]
     public sealed class SkillDatabase : ScriptableObject
     {
         [SerializeField] private List<SkillDefinition> definitions = new();

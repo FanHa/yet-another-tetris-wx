@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "TetriInventoryInitConfig", menuName = "Tetris/TetriInventoryInitConfig")]
+    [CreateAssetMenu(fileName = "TetriInventoryInitConfig", menuName = "Game Data/Gameplay/Inventory/Tetri/Init Config")]
     public class TetriInventoryInitConfig : ScriptableObject
     {
         public List<CellDefinition> CellDefinitions;

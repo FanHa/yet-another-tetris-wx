@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/LifeEchoSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Echo")]
     public class LifeEchoSkillConfig : SkillConfig<LifeEchoLevelConfig>
     {
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ChargeSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Swift/Charge")]
     public class ChargeSkillConfig : SkillConfig<ChargeLevelConfig>
     {
     }

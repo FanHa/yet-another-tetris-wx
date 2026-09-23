@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/WindKnockbackSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Wind Knockback")]
     public class WindKnockbackSkillConfig : SkillConfig<WindKnockbackLevelConfig>
     {
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/LifePowerSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Power")]
     public class LifePowerSkillConfig : SkillConfig<LifePowerLevelConfig>
     {
     }

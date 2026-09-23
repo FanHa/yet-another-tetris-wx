@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/AttackBoostSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Attack Boost")]
     public class AttackBoostSkillConfig : SkillConfig<AttackBoostLevelConfig>
     {
     }

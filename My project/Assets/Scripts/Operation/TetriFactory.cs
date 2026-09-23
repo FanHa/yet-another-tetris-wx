@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Operation
 {
-    [CreateAssetMenu(menuName = "Config/TetriFactory")]
+    [CreateAssetMenu(menuName = "Game Data/Bootstrap/Factories/Operation Tetri Factory")]
     public class TetriFactory : ScriptableObject
     {
         // [SerializeField] private Operation.Tetri tetriPrefab;

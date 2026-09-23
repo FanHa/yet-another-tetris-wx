@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FlameInjectSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Flame Inject")]
     public class FlameInjectSkillConfig : SkillConfig<FlameInjectLevelConfig>
     {
     }

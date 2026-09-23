@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/BlazingFieldSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Blazing Field")]
     public class BlazingFieldSkillConfig : SkillConfig<BlazingFieldLevelConfig>
     {
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FireballSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Fireball")]
     public class FireballSkillConfig : SkillConfig<FireballLevelConfig>
     {
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ShadowAttackSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Shadow/Shadow Attack")]
     public class ShadowAttackSkillConfig : SkillConfig<ShadowAttackLevelConfig>
     {
     }

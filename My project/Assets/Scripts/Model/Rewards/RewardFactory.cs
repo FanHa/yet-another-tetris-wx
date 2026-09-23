@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Model.Rewards
 {
-    [CreateAssetMenu(menuName = "Config/RewardFactory")]
+    [CreateAssetMenu(menuName = "Game Data/Bootstrap/Factories/Reward Factory")]
     public class RewardFactory : ScriptableObject
     {
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/LifeBombSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Bomb")]
     public class LifeBombSkillConfig : SkillConfig<LifeBombLevelConfig>
     {
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Units
 {
-    [CreateAssetMenu(fileName = "UnitFactory", menuName = "Units/UnitFactory")]
+    [CreateAssetMenu(fileName = "UnitFactory", menuName = "Game Data/Bootstrap/Factories/Unit Factory")]
     public class UnitFactory : ScriptableObject
     {
         [SerializeField] private Units.Unit battleUnitPrefab;

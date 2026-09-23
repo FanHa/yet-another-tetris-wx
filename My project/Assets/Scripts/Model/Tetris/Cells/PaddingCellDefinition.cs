@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Cells/Padding Cell Definition")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Cells/Definitions/Utility/Padding Cell Definition")]
     public sealed class PaddingCellDefinition : CellDefinition
     {
         [SerializeField] private Sprite icon;

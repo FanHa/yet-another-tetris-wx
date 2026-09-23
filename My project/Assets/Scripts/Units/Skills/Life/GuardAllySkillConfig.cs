@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/GuardAllySkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Guard Ally")]
     public class GuardAllySkillConfig : SkillConfig<GuardAllyLevelConfig>
     {
     }

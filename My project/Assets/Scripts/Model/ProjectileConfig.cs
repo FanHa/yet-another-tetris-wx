@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "Configs/ProjectileConfig")]
+    [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "Game Data/Shared/Projectiles/Projectile Config")]
     public class ProjectileConfig : ScriptableObject
     {
         [Header("通用")]

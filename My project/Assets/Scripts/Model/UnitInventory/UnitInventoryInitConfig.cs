@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Model.UnitInventory
 {
-    [CreateAssetMenu(fileName = "UnitInventoryInitConfig", menuName = "Tetris/UnitInventoryInitConfig")]
+    [CreateAssetMenu(fileName = "UnitInventoryInitConfig", menuName = "Game Data/Gameplay/Inventory/Units/Init Config")]
     public class UnitInventoryInitConfig : ScriptableObject
     {
         [SerializeField] private List<UnitInventoryItemInitConfig> items = new();

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/WindShiftSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Wind Shift")]
     public class WindShiftSkillConfig : SkillConfig<WindShiftLevelConfig>
     {
     }

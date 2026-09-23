@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/ThunderStrikeSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Electric/Thunder Strike")]
     public class ThunderStrikeSkillConfig : SkillConfig<ThunderStrikeLevelConfig>
     {
     }

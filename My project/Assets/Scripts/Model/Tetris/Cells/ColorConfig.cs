@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/AffinityColorConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Shared/Affinities/Color Config")]
     public class ColorConfig : ScriptableObject
     {
         [System.Serializable]

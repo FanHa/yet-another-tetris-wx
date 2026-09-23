@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/IcyCageSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Icy Cage")]
     public class IcyCageSkillConfig : SkillConfig<IcyCageLevelConfig>
     {
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(fileName = "AffinityResourceMapping", menuName = "Tetris/AffinityResourceMapping")]
+    [CreateAssetMenu(fileName = "AffinityResourceMapping", menuName = "Game Data/Shared/Affinities/Resource Mapping")]
     public class AffinityResourceMapping : ScriptableObject
     {
         [Serializable]

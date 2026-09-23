@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Characters/Character Definition")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Cells/Definitions/Characters/Character Definition")]
     public sealed class CharacterDefinition : CellDefinition
     {
         [SerializeField] private Sprite icon;

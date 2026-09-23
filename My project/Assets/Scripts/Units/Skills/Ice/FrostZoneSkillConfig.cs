@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/FrostZoneSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Frost Zone")]
     public class FrostZoneSkillConfig : SkillConfig<FrostZoneLevelConfig>
     {
     }

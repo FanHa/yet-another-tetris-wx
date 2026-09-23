@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "ConfigRegistry/CharacterConfigRegistry")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Characters/Legacy/Registry")]
     public class CharacterConfigRegistry : ScriptableObject
     {
         [Header("角色基础属性")]

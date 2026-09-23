@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(fileName = "CellDatabase", menuName = "Config/Cells/Cell Database")]
+    [CreateAssetMenu(fileName = "CellDatabase", menuName = "Game Data/Gameplay/Cells/Cell Database")]
     public sealed class CellDatabase : ScriptableObject
     {
 

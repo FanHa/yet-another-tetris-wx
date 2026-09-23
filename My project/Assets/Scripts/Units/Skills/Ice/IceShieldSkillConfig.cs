@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/IceShieldSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Ice Shield")]
     public class IceShieldSkillConfig : SkillConfig<IceShieldLevelConfig>
     {
     }

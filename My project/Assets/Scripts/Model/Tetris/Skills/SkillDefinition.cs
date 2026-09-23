@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Config/Skills/Skill Definition")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Definitions/Skill Definition")]
     public sealed class SkillDefinition : ScriptableObject
     {
         [SerializeField] private string id;

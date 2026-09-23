@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    [CreateAssetMenu(menuName = "SkillConfig/EnergyAbsorbSkillConfig")]
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Absorb/Energy Absorb")]
     public class EnergyAbsorbSkillConfig : SkillConfig<EnergyAbsorbLevelConfig>
     {
     }
