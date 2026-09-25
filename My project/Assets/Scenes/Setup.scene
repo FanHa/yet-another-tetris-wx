@@ -1546,9 +1546,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4507417060986137102, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
   m_PrefabInstance: {fileID: 2025217634856458810}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1031480436 stripped
+--- !u!114 &1031480438 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 166284706532188988, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3705389467913877569, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
   m_PrefabInstance: {fileID: 2025217634856458810}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -2487,21 +2487,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleField: {fileID: 943837600}
   rewardController: {fileID: 1420456109}
-  playerUnitInventoryData: {fileID: 11400000, guid: f7ebffce0137cf8449eede6cfe5ae091, type: 2}
-  enemyUnitInventoryData: {fileID: 11400000, guid: 7bdbe4abd7cf8fe4c92f5caf1f8efe94, type: 2}
-  trainGroundFactionAInventoryData: {fileID: 11400000, guid: 2f4e79f2b49b0ae429c4c6971745f93a, type: 2}
-  trainGroundFactionBInventoryData: {fileID: 11400000, guid: 818b73c1d90aa6e4ea22efc5fb134b00, type: 2}
   trainGroundFactionAInitConfig: {fileID: 11400000, guid: 418e3318e818f7548b69854f45c75d3e, type: 2}
   trainGroundFactionBInitConfig: {fileID: 11400000, guid: 7c8d893fb762bb64c909b4d731f661d6, type: 2}
   unitInventoryFactory: {fileID: 11400000, guid: 42b28f62851c4ea458c49dfff198c3cf, type: 2}
-  levelState: {fileID: 11400000, guid: b4d275d0b08dc3f4899970f66f0d5699, type: 2}
+  cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}
+  levelState: {fileID: 11400000, guid: 0c0331af3606d934db604cea1bb04360, type: 2}
   battleButton: {fileID: 183505954}
   pauseButton: {fileID: 935782121}
   previewButton: {fileID: 264512489}
   assemblyPage: {fileID: 1683020383}
   battlePage: {fileID: 674413502}
   tetriInventoryController: {fileID: 198430987}
-  operationTableController: {fileID: 1031480436}
+  operationTableController: {fileID: 1031480438}
   unitInfo: {fileID: 753846434}
   tetriInfo: {fileID: 1440587108}
   unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
@@ -4410,6 +4407,10 @@ PrefabInstance:
       propertyPath: width
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 166284706532188988, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: ce96e20113fd2a3409af25cbeed5db33, type: 2}
     - target: {fileID: 166284706532188988, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
       propertyPath: height
       value: 16

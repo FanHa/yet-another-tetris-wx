@@ -5,14 +5,11 @@ using UnityEngine;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "OperationTableModel", menuName = "Tetris/OperationTableModel")]
-    public class OperationTableModel : ScriptableObject
+    public sealed class OperationTableModel
     {
-        public int Width;
-        public int Height;
+        public int Width { get; }
+        public int Height { get; }
         public event Action OnChanged;
-
-        [SerializeField]
 
         private Dictionary<Model.Tetri.Tetri, Vector2Int> placedMap = new();
         public IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> PlacedMap => placedMap;
@@ -21,9 +18,11 @@ namespace Model
         private OccupiedSlot[,] occupiedGrid;
 
 
-        private void Awake()
+        public OperationTableModel(int width, int height)
         {
-            occupiedGrid = new OccupiedSlot[Width, Height];
+            Width = width;
+            Height = height;
+            occupiedGrid = new OccupiedSlot[width, height];
         }
 
         /// <summary>

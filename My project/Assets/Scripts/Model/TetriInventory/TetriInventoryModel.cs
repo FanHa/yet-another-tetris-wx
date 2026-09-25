@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "TetriInventoryModel", menuName = "SO/TetriInventoryModel", order = 1)]
+    [CreateAssetMenu(fileName = "TetriInventoryModel", menuName = "Game Data/Gameplay/Inventory/Tetri/Runtime Inventory", order = 1)]
 
     public class TetriInventoryModel : ScriptableObject
     {
         public event Action OnDataChanged;
 
-        [SerializeField] private List<Model.Tetri.Tetri> usableTetriList = new List<Model.Tetri.Tetri>();
-        [SerializeField] private List<Model.Tetri.Tetri> usedTetriList = new List<Model.Tetri.Tetri>();
+        private readonly List<Model.Tetri.Tetri> usableTetriList = new();
+        private readonly List<Model.Tetri.Tetri> usedTetriList = new();
         [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 

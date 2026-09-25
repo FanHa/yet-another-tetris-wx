@@ -1,43 +1,42 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Model.Rewards;
-using Model.Tetri;
 using UnityEngine;
 
-namespace Model 
+namespace Model
 {
-    /// <summary>
-    /// Runtime state of the current level run.
-    /// The mutable progress value lives here, while the numeric tuning values are editor-adjustable parameters
-    /// that shape the difficulty curve.
-    /// </summary>
-    [CreateAssetMenu(fileName = "LevelState", menuName = "ScriptableObjects/LevelState", order = 1)]
-    public class LevelState : ScriptableObject
+    [CreateAssetMenu(fileName = "LevelState", menuName = "Game Data/Gameplay/Level/Level State")]
+    public sealed class LevelState : ScriptableObject
     {
-        private int currentLevel = 0;
+        [SerializeField] private int levelsPerEnemyIncrease = 3;
+        [SerializeField] private int maxEnemyCount = 10;
+        [SerializeField] private int levelsPerCellIncrease = 8;
+        [SerializeField] private int maxAddedCellCount = 10;
 
-        [SerializeField] private int levelsPerEnemyIncrease = 3; // 每增加一个敌人的关卡数
-        [SerializeField] private int maxEnemyCount = 10; // 最大敌人数量
-        [SerializeField] private int levelsPerCellIncrease = 8; // 每增加一个 TetriCell 的关卡数
-        [SerializeField] private int maxAddedCellCount = 10; // 每个敌人最多的 TetriCell 数量
-        [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
+        [System.NonSerialized]
+        private int currentLevel;
 
-        public int CurrentLevel => currentLevel;
         public int LevelsPerEnemyIncrease => levelsPerEnemyIncrease;
         public int MaxEnemyCount => maxEnemyCount;
         public int LevelsPerCellIncrease => levelsPerCellIncrease;
         public int MaxAddedCellCount => maxAddedCellCount;
-        public Model.Tetri.CellDatabase CellDatabase => cellDatabase;
+        public int CurrentLevel => currentLevel;
 
         public void AdvanceToNextLevel()
         {
             currentLevel++;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             currentLevel = 0;
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (levelsPerEnemyIncrease < 1 || maxEnemyCount < 1 || levelsPerCellIncrease < 1 || maxAddedCellCount < 1)
+            {
+                Debug.LogError($"[{nameof(LevelState)}] Level configuration values must be at least 1.", this);
+            }
+        }
+#endif
     }
 }

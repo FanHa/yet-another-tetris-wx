@@ -18,13 +18,30 @@ namespace Controller
         [Header("每个格子的间距")]
         [SerializeField] private float cellSize;
 
-        [SerializeField] private Model.OperationTableModel model;
+        [SerializeField] private int width = 16;
+        [SerializeField] private int height = 16;
+        private OperationTableModel model;
         private View.OperationTableView view;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (width < 1)
+            {
+                Debug.LogError($"[{nameof(OperationTableController)}] Width must be at least 1.", this);
+            }
+
+            if (height < 1)
+            {
+                Debug.LogError($"[{nameof(OperationTableController)}] Height must be at least 1.", this);
+            }
+        }
+#endif
 
         private void Awake()
         {
             view = GetComponent<View.OperationTableView>();
-            
+            model = new OperationTableModel(width, height);
         }
 
         private void Start()

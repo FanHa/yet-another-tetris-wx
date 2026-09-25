@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Model.UnitInventory{
-
-    [CreateAssetMenu]
+namespace Model.UnitInventory
+{
     [Serializable]
-    public class UnitInventoryModel : ScriptableObject
+    public class UnitInventoryModel
     {
-        [field: SerializeField] private List<CharacterPlacement> items = new List<CharacterPlacement>();
+        private readonly List<CharacterPlacement> items = new();
 
         public IReadOnlyList<CharacterPlacement> Items => items;
         public event Action<IReadOnlyList<CharacterPlacement>> OnDataChanged;
@@ -30,5 +28,4 @@ namespace Model.UnitInventory{
             AddItems(newItems);
         }
     }
-
 }

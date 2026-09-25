@@ -30,14 +30,15 @@ public class GameController : MonoBehaviour
     [SerializeField] private BattleField battleField;
     [SerializeField] private Controller.RewardController rewardController;
 
-    [SerializeField] private UnitInventoryModel playerUnitInventoryData;
-    [SerializeField] private UnitInventoryModel enemyUnitInventoryData;
-    [SerializeField] private UnitInventoryModel trainGroundFactionAInventoryData;
-    [SerializeField] private UnitInventoryModel trainGroundFactionBInventoryData;
+    private UnitInventoryModel playerUnitInventoryData;
+    private UnitInventoryModel enemyUnitInventoryData;
+    private UnitInventoryModel trainGroundFactionAInventoryData;
+    private UnitInventoryModel trainGroundFactionBInventoryData;
     [SerializeField] private UnitInventoryInitConfig trainGroundFactionAInitConfig;
     [SerializeField] private UnitInventoryInitConfig trainGroundFactionBInitConfig;
     [SerializeField] private UnitInventoryFactory unitInventoryFactory;
-    [SerializeField] private Model.LevelState levelState; // 关卡运行时状态
+    [SerializeField] private CellDatabase cellDatabase;
+    [SerializeField] private LevelState levelState;
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button previewButton;
@@ -57,12 +58,29 @@ public class GameController : MonoBehaviour
     private Operation.Tetri draggingTetriFromOperationTable;
     private Units.Unit tempUnit;
 
+    private void Awake()
+    {
+        playerUnitInventoryData = new UnitInventoryModel();
+        enemyUnitInventoryData = new UnitInventoryModel();
+        trainGroundFactionAInventoryData = new UnitInventoryModel();
+        trainGroundFactionBInventoryData = new UnitInventoryModel();
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
         if (levelState == null)
         {
             Debug.LogError($"[{nameof(GameController)}] Level state is missing.", this);
+        }
+
+        if (cellDatabase == null)
+        {
+            Debug.LogError($"[{nameof(GameController)}] Cell database is missing.", this);
+        }
+        if (operationTableController == null)
+        {
+            Debug.LogError($"[{nameof(GameController)}] Operation table controller is missing.", this);
         }
     }
 #endif
@@ -274,7 +292,7 @@ public class GameController : MonoBehaviour
 
     private List<CharacterPlacement> BuildEnemyInventoryForCurrentLevel()
     {
-        var enemySquads = new EnemySquadFactory(levelState.CellDatabase).Build(levelState);
+        var enemySquads = new EnemySquadFactory(cellDatabase).Build(levelState);
         return unitInventoryFactory.Build(
             UnitInventoryBuildDataAdapter.FromEnemySquads(enemySquads));
     }
