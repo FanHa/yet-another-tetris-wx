@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using TMPro;
 using Model.Tetri;
@@ -12,7 +13,8 @@ namespace UI.UnitInfo
     {
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text countText;
-        [SerializeField] private Model.Tetri.ColorConfig colorConfig;
+        [SerializeField, FormerlySerializedAs("colorConfig")]
+        private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
 
         public Action<AffinityType, int> OnClicked;
 
@@ -25,7 +27,7 @@ namespace UI.UnitInfo
             currentType = type;
             currentCount = count;
 
-            Model.Tetri.ColorConfig.AffinityColorEntry entry = colorConfig.GetColorEntry(type);
+            Model.Tetri.AffinityDisplayConfig.AffinityDisplayEntry entry = affinityDisplayConfig.GetDisplayEntry(type);
             countText.text = "X" + count.ToString();
             icon.color = entry.borderColor;
         }

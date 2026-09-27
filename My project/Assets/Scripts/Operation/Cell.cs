@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Operation
 {
@@ -12,7 +13,8 @@ namespace Operation
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField] private Model.Tetri.ColorConfig colorConfig;
+        [SerializeField, FormerlySerializedAs("colorConfig")]
+        private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
 
         private SpriteRenderer maskRenderer;
         private SpriteRenderer borderTopRenderer;
@@ -20,6 +22,16 @@ namespace Operation
         private SpriteRenderer borderLeftRenderer;
         private SpriteRenderer borderRightRenderer;
         private bool isValidated;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (affinityDisplayConfig == null)
+            {
+                Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
+            }
+        }
+#endif
 
         public void Init(Model.Tetri.Cell modelCell)
         {
@@ -32,11 +44,11 @@ namespace Operation
 
             icon.sprite = modelCell.Icon;
 
-            var colorEntry = colorConfig.GetColorEntry(modelCell.Affinity)
-                ?? throw new InvalidOperationException($"Missing color config for affinity '{modelCell.Affinity}'.");
+            var displayEntry = affinityDisplayConfig.GetDisplayEntry(modelCell.Affinity)
+                ?? throw new InvalidOperationException($"Missing affinity display config for '{modelCell.Affinity}'.");
 
-            SetMaskColor(colorEntry.maskColor);
-            SetBorderColor(colorEntry.borderColor);
+            SetMaskColor(displayEntry.maskColor);
+            SetBorderColor(displayEntry.borderColor);
 
         }
 
@@ -75,8 +87,6 @@ namespace Operation
             if (borderBottom == null) throw new InvalidOperationException("Cell.borderBottom is not assigned.");
             if (borderLeft == null) throw new InvalidOperationException("Cell.borderLeft is not assigned.");
             if (borderRight == null) throw new InvalidOperationException("Cell.borderRight is not assigned.");
-            if (colorConfig == null) throw new InvalidOperationException("Cell.colorConfig is not assigned.");
-
             maskRenderer = mask.GetComponent<SpriteRenderer>()
                 ?? throw new InvalidOperationException("Cell.mask missing SpriteRenderer.");
             borderTopRenderer = borderTop.GetComponent<SpriteRenderer>()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Model.Tetri;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.TetriInfo
@@ -14,8 +15,8 @@ namespace UI.TetriInfo
         [SerializeField] private Image affinityIcon;
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
 
-        [SerializeField] private AffinityResourceMapping affinityResourceMapping;
-        [SerializeField] private ColorConfig affinityColorConfig;
+        [SerializeField, FormerlySerializedAs("affinityColorConfig")]
+        private AffinityDisplayConfig affinityDisplayConfig;
 
         public void BindData(Operation.Tetri tetriComponent)
         {
@@ -31,12 +32,11 @@ namespace UI.TetriInfo
             string affinityDesc = "";
             foreach (var kvp in affinityCounts)
             {
-                var res = affinityResourceMapping.GetResource(kvp.Key);
-                var colorEntry = affinityColorConfig.GetColorEntry(kvp.Key);
-                affinityIcon.color = colorEntry.maskColor;
+                var displayEntry = affinityDisplayConfig.GetDisplayEntry(kvp.Key);
+                affinityIcon.color = displayEntry.maskColor;
                 var outline = affinityIcon.GetComponent<UnityEngine.UI.Outline>();
-                if (outline != null) outline.effectColor = colorEntry.borderColor;
-                affinityDesc += $"{res.name}: {res.description} ( X {kvp.Value} )\n";
+                if (outline != null) outline.effectColor = displayEntry.borderColor;
+                affinityDesc += $"{displayEntry.name}: {displayEntry.description} ( X {kvp.Value} )\n";
                 break;
             }
             affinityDescriptionText.text = affinityDesc.TrimEnd('\n');

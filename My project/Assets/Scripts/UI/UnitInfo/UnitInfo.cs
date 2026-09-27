@@ -4,6 +4,7 @@ using System.Linq;
 using Model.Tetri;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.UnitInfo
@@ -24,7 +25,8 @@ namespace UI.UnitInfo
         [Header("Affinity")]
         [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
         [SerializeField] private Transform affinityRoot;
-        [SerializeField] private AffinityResourceMapping affinityResourceMapping;
+        [SerializeField, FormerlySerializedAs("affinityColorConfig")]
+        private AffinityDisplayConfig affinityDisplayConfig;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
@@ -212,12 +214,12 @@ namespace UI.UnitInfo
 
         private string GetAffinityDisplayName(AffinityType type)
         {
-            return affinityResourceMapping.GetName(type);
+            return affinityDisplayConfig.GetName(type);
         }
 
         private string GetAffinityDescription(AffinityType type)
         {
-            return affinityResourceMapping.GetDescription(type);
+            return affinityDisplayConfig.GetDescription(type);
         }
 
         private void SetDetailText(string text)
