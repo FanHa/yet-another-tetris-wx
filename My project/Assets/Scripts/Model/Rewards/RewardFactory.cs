@@ -66,7 +66,7 @@ namespace Model.Rewards
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<string> ownedIds = inventory.ExistCellIds;
+            IReadOnlyCollection<string> ownedIds = inventory.OwnedCellDefinitionIds;
             return availableCellIds.Any(cellId => !ownedIds.Contains(cellId));
         }
 
@@ -182,7 +182,7 @@ namespace Model.Rewards
             {
                 case AddTetri addTetri:
                     var mainCell = addTetri.GetTetri().GetMainCell();
-                    return "AddTetri_" + mainCell.CellId;
+                    return "AddTetri_" + mainCell.Definition.Id;
                 case NewCharacter newChar:
                     var characterCell = newChar.GetTetri().GetMainCell() as Character;
                     return "NewCharacter_" + characterCell.DefinitionData.Id;
@@ -197,7 +197,7 @@ namespace Model.Rewards
 
         private Reward CreateNewTetriReward()
         {
-            var ownedIds = tetriInventoryData.ExistCellIds;
+            var ownedIds = tetriInventoryData.OwnedCellDefinitionIds;
             var unownedIds = availableCellIds.Where(id => !ownedIds.Contains(id)).ToList();
 
             if (unownedIds.Count == 0)

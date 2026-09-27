@@ -7,7 +7,6 @@ namespace Units.Skills
     // 仿照 FlameInject：被动技能。命中时若目标有 Chilled Buff -> 计算层数额外伤害并移除该 Buff
     public class IceBreaker : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.IceBreaker;
         public IceBreakerLevelConfig Config { get; }
 
         public IceBreaker(IceBreakerLevelConfig config)

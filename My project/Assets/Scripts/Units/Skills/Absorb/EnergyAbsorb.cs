@@ -6,8 +6,6 @@ namespace Units.Skills
     // 仿照 FlameRing 的结构，具体公式与行为先占位
     public class EnergyAbsorb : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.EnergyAbsorb;
-
         public EnergyAbsorbLevelConfig Config { get; }
 
         public EnergyAbsorb(EnergyAbsorbLevelConfig config)

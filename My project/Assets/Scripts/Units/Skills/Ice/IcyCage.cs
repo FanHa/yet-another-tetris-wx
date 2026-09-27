@@ -9,7 +9,6 @@ namespace Units.Skills
     /// </summary>
     public class IcyCage : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.IcyCage;
         public IcyCageLevelConfig Config { get; }
         private Unit targetEnemy;
 

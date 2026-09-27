@@ -5,7 +5,6 @@ namespace Units.Skills
 {
     public class ShadowStep : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.ShadowStep;
         public ShadowStepLevelConfig Config { get; }
 
         public ShadowStep(ShadowStepLevelConfig config)

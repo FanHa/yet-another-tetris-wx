@@ -5,7 +5,6 @@ namespace Units.Skills
 {
     public class ShadowAttack : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.ShadowAttack;
         public ShadowAttackLevelConfig Config { get; }
 
         public ShadowAttack(ShadowAttackLevelConfig config)

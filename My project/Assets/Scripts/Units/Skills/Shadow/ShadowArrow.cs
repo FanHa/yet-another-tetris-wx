@@ -5,7 +5,6 @@ namespace Units.Skills
 {
     public class ShadowArrow : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.ShadowArrow;
         public ShadowArrowLevelConfig Config { get; }
 
         public ShadowArrow(ShadowArrowLevelConfig config)

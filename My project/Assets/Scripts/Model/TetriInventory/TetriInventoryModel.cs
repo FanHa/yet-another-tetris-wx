@@ -18,8 +18,8 @@ namespace Model
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
 
-        private readonly HashSet<string> existCellIds = new(StringComparer.Ordinal);
-        public IReadOnlyCollection<string> ExistCellIds => existCellIds;
+        private readonly HashSet<string> ownedCellDefinitionIds = new(StringComparer.Ordinal);
+        public IReadOnlyCollection<string> OwnedCellDefinitionIds => ownedCellDefinitionIds;
 
         private readonly HashSet<CharacterDefinition> existCharacterDefinitions = new();
         public IReadOnlyCollection<CharacterDefinition> ExistCharacterDefinitions => existCharacterDefinitions;
@@ -60,7 +60,7 @@ namespace Model
 
         private void RecalculateCellIds()
         {
-            existCellIds.Clear();
+            ownedCellDefinitionIds.Clear();
             existCharacterDefinitions.Clear();
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
                 UpdateCellIdsForTetri(tetri);
@@ -108,7 +108,7 @@ namespace Model
                 else
                 {
                     // 普通方块按 CellDefinition 体系的运行时 CellId 建立索引。
-                    existCellIds.Add(cell.CellId);
+                    ownedCellDefinitionIds.Add(cell.Definition.Id);
                 }
             }
         }

@@ -17,8 +17,6 @@ namespace Model.Tetri
             set => level = Mathf.Max(1, value);
         }
 
-        // Runtime primary id for the CellDefinition workflow.
-        public virtual string CellId => definition.Id;
 
         public CellDefinition Definition => definition;
         public virtual Sprite Icon => definition.Icon;

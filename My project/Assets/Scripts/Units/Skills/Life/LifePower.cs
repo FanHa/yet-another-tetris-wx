@@ -5,7 +5,6 @@ namespace Units.Skills
 {
     public class LifePower : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifePower; // 如果有专属ID请替换
         public LifePowerLevelConfig Config { get; }
         private Unit cachedTarget;
 

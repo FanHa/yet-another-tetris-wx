@@ -8,7 +8,6 @@ namespace Units.Skills
 {
     public class FrostZone : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.FrostZone;
         public FrostZoneLevelConfig Config { get; }
         private Vector3 targetPosition;
 

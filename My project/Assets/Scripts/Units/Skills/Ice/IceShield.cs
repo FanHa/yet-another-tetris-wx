@@ -4,8 +4,6 @@ namespace Units.Skills
 {
     public class IceShield : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.IceShield;
-
         public IceShieldLevelConfig Config { get; }
 
         public IceShield(IceShieldLevelConfig config)

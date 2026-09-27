@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class LifeShield : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifeShield;
         public LifeShieldLevelConfig Config { get; }
         private Unit cachedTarget;
 

@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class Snowball : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.Snowball;
         public SnowballLevelConfig Config { get; }
         private Unit cachedTarget;
 

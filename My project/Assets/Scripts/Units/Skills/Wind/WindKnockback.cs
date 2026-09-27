@@ -5,8 +5,6 @@ namespace Units.Skills
 {
     public class WindKnockback : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.WindKnockback;
-
         public WindKnockbackLevelConfig Config { get; }
 
         public WindKnockback(WindKnockbackLevelConfig config)

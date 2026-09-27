@@ -4,8 +4,6 @@ namespace Units.Skills
 {
     public class GuardAlly : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.GuardAlly;
-
         public override string Name() => NameStatic();
         public static string NameStatic() => "护卫姿态";
 

@@ -4,7 +4,6 @@ namespace Units.Skills
 {
     public class LifeEcho : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifeEcho;
         public LifeEchoLevelConfig Config { get; }
 
         public LifeEcho(LifeEchoLevelConfig config)

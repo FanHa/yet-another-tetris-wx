@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class FlameInject : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.FlameInject;
         public FlameInjectLevelConfig Config { get; }
 
         public FlameInject(FlameInjectLevelConfig config)

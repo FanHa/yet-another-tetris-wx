@@ -9,6 +9,20 @@ namespace Operation
         [SerializeField] private Operation.TetriPiece tetriPiecePrefab;
         [SerializeField] private Operation.TetriCharacter tetriCharacterPrefab;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (tetriPiecePrefab == null)
+            {
+                Debug.LogError($"[{nameof(TetriFactory)}] Tetri piece prefab is missing.", this);
+            }
+
+            if (tetriCharacterPrefab == null)
+            {
+                Debug.LogError($"[{nameof(TetriFactory)}] Tetri character prefab is missing.", this);
+            }
+        }
+#endif
 
         public Operation.Tetri CreateTetri(Model.Tetri.Tetri modelTetri)
         {

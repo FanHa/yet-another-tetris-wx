@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class LifeBomb : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.LifeBomb;
         public LifeBombLevelConfig Config { get; }
         private Vector3 cachedTargetPos; 
 

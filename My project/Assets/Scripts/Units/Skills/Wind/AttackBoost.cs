@@ -13,8 +13,6 @@ namespace Units.Skills
             this.RequiredEnergy = config.RequiredEnergy;
         }
 
-        public override CellTypeId CellTypeId => CellTypeId.AttackBoost;
-
         private struct AttackBoostStats
         {
             public StatValue AtkSpeedPercent;

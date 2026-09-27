@@ -6,8 +6,6 @@ namespace Units.Skills
 {
     public class FlameRing : Skill, IPassiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.FlameRing;
-
         public FlameRingLevelConfig Config { get; }
 
         public FlameRing(FlameRingLevelConfig config)

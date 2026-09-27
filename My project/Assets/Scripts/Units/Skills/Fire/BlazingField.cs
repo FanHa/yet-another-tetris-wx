@@ -8,7 +8,6 @@ namespace Units.Skills
 {
     public class BlazingField : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.BlazingField;
         public BlazingFieldLevelConfig Config { get; }
         private Vector3 targetPosition;
         public BlazingField(BlazingFieldLevelConfig config)

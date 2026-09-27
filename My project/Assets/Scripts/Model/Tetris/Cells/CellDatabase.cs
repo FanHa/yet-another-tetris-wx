@@ -83,16 +83,6 @@ namespace Model.Tetri
             return sprite;
         }
 
-        public Sprite GetSprite(Cell cell)
-        {
-            if (cell == null)
-            {
-                return null;
-            }
-
-            return GetSprite(cell.CellId);
-        }
-
         private Sprite ResolveSprite(CellDefinition definition)
         {
             if (definition == null)

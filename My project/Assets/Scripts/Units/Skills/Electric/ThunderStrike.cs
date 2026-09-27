@@ -5,8 +5,6 @@ namespace Units.Skills
 {
     public class ThunderStrike : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.ThunderStrike;
-
         public ThunderStrikeLevelConfig Config { get; }
         private Unit cachedTarget;
 

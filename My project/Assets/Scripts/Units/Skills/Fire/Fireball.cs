@@ -6,7 +6,6 @@ namespace Units.Skills
 {
     public class Fireball : ActiveSkill
     {
-        public override CellTypeId CellTypeId => CellTypeId.Fireball;
         public FireballLevelConfig Config { get; }
         private Unit targetEnemy;
 

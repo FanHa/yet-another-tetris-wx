@@ -23,7 +23,6 @@ namespace Units.Projectiles
         }
         private BuffProjectilePhase phase = BuffProjectilePhase.Growing;
         private SpriteRenderer spriteRenderer;
-        [SerializeField] private CellDatabase cellDatabase;
 
         void Awake()
         {
@@ -87,8 +86,7 @@ namespace Units.Projectiles
             this.caster = caster;
             this.target = target;
             this.buff = buff;
-
-            spriteRenderer.sprite = cellDatabase != null ? cellDatabase.GetSprite(buff.SourceSkill.CellId) : null;
+            spriteRenderer.sprite = buff.SourceSkill.Definition.Icon;
 
             SetAlpha(0f);
             timer = 0f;
