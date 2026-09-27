@@ -21,14 +21,52 @@ namespace Operation
         private SpriteRenderer borderBottomRenderer;
         private SpriteRenderer borderLeftRenderer;
         private SpriteRenderer borderRightRenderer;
-        private bool isValidated;
+
+        private void Awake()
+        {
+            maskRenderer = mask.GetComponent<SpriteRenderer>();
+            borderTopRenderer = borderTop.GetComponent<SpriteRenderer>();
+            borderBottomRenderer = borderBottom.GetComponent<SpriteRenderer>();
+            borderLeftRenderer = borderLeft.GetComponent<SpriteRenderer>();
+            borderRightRenderer = borderRight.GetComponent<SpriteRenderer>();
+        }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (affinityDisplayConfig == null)
+            ValidateRenderer(icon, nameof(icon));
+            ValidateRenderer(mask, nameof(mask));
+            ValidateRenderer(borderTop, nameof(borderTop));
+            ValidateRenderer(borderBottom, nameof(borderBottom));
+            ValidateRenderer(borderLeft, nameof(borderLeft));
+            ValidateRenderer(borderRight, nameof(borderRight));
+            ValidateReference(affinityDisplayConfig, nameof(affinityDisplayConfig));
+        }
+
+        private void ValidateRenderer(GameObject target, string fieldName)
+        {
+            if (target == null)
             {
-                Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
+                Debug.LogError($"{fieldName} is not assigned.", this);
+                return;
+            }
+
+            if (!target.TryGetComponent(out SpriteRenderer _))
+            {
+                Debug.LogError($"{fieldName} is missing a SpriteRenderer.", this);
+            }
+        }
+
+        private void ValidateRenderer(SpriteRenderer target, string fieldName)
+        {
+            ValidateReference(target, fieldName);
+        }
+
+        private void ValidateReference(UnityEngine.Object target, string fieldName)
+        {
+            if (target == null)
+            {
+                Debug.LogError($"{fieldName} is not assigned.", this);
             }
         }
 #endif
@@ -39,8 +77,6 @@ namespace Operation
             {
                 throw new ArgumentNullException(nameof(modelCell));
             }
-
-            EnsureValidated();
 
             icon.sprite = modelCell.Icon;
 
@@ -67,38 +103,10 @@ namespace Operation
 
         public void SetBorderVisibility(bool top, bool bottom, bool left, bool right)
         {
-            EnsureValidated();
             borderTop.SetActive(top);
             borderBottom.SetActive(bottom);
             borderLeft.SetActive(left);
             borderRight.SetActive(right);
-        }
-
-        private void EnsureValidated()
-        {
-            if (isValidated)
-            {
-                return;
-            }
-
-            if (mask == null) throw new InvalidOperationException("Cell.mask is not assigned.");
-            if (icon == null) throw new InvalidOperationException("Cell.icon is not assigned.");
-            if (borderTop == null) throw new InvalidOperationException("Cell.borderTop is not assigned.");
-            if (borderBottom == null) throw new InvalidOperationException("Cell.borderBottom is not assigned.");
-            if (borderLeft == null) throw new InvalidOperationException("Cell.borderLeft is not assigned.");
-            if (borderRight == null) throw new InvalidOperationException("Cell.borderRight is not assigned.");
-            maskRenderer = mask.GetComponent<SpriteRenderer>()
-                ?? throw new InvalidOperationException("Cell.mask missing SpriteRenderer.");
-            borderTopRenderer = borderTop.GetComponent<SpriteRenderer>()
-                ?? throw new InvalidOperationException("Cell.borderTop missing SpriteRenderer.");
-            borderBottomRenderer = borderBottom.GetComponent<SpriteRenderer>()
-                ?? throw new InvalidOperationException("Cell.borderBottom missing SpriteRenderer.");
-            borderLeftRenderer = borderLeft.GetComponent<SpriteRenderer>()
-                ?? throw new InvalidOperationException("Cell.borderLeft missing SpriteRenderer.");
-            borderRightRenderer = borderRight.GetComponent<SpriteRenderer>()
-                ?? throw new InvalidOperationException("Cell.borderRight missing SpriteRenderer.");
-
-            isValidated = true;
         }
 
     }
