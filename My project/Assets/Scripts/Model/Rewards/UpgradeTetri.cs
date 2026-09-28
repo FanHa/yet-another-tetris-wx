@@ -15,7 +15,7 @@ namespace Model.Rewards
         {
             this.TargetTetri = targetTetri;
 
-            // 假设升级后 Tetri 里有一个新 Cell（非 Padding/Empty），用它来生成 name/description
+            // 假设升级后 Tetri 里有一个新 Cell（非 FillerCell/EmptySlot），用它来生成 name/description
             Tetri.Cell mainCell = TargetTetri.GetMainCell();
             if (mainCell != null)
             {

@@ -28,7 +28,7 @@ namespace Operation
                 for (int j = 0; j < cols; j++)
                 {
                     var cell = shape[i, j];
-                    if (cell is not Model.Tetri.Empty)
+                    if (cell is not Model.Tetri.EmptySlot)
                     {
                         GameObject cellObj = Instantiate(cellPrefab, this.cellsRoot);
                         float localX = i - offsetX;

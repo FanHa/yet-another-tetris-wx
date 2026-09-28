@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Model.Tetri
 {
@@ -9,7 +10,8 @@ namespace Model.Tetri
     public sealed class CellDatabase : ScriptableObject
     {
 
-        [SerializeField] private CellDefinition paddingDefinition;
+        [SerializeField, FormerlySerializedAs("paddingDefinition")]
+        private CellDefinition fillerDefinition;
         [SerializeField] private List<CellDefinition> registeredCellDefinitions = new();
 
         private Dictionary<string, CellDefinition> definitionById;
@@ -60,9 +62,9 @@ namespace Model.Tetri
             return definition;
         }
 
-        public CellDefinition GetPaddingDefinition()
+        public CellDefinition GetFillerDefinition()
         {
-            return paddingDefinition;
+            return fillerDefinition;
         }
 
         public Sprite GetSprite(string id)

@@ -9,9 +9,9 @@ namespace Model.Tetri
     {
         [SerializeField] private CellDatabase cellDatabase;
 
-        public Cell CreatePadding()
+        public Cell CreateFillerCell()
         {
-            CellDefinition definition = cellDatabase?.GetPaddingDefinition();
+            CellDefinition definition = cellDatabase?.GetFillerDefinition();
             return CreateCell(definition);
         }
 

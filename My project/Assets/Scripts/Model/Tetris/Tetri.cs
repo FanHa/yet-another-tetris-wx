@@ -40,7 +40,7 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    shape[i, j] = new Empty();
+                    shape[i, j] = new EmptySlot();
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace Model.Tetri
 
         public void SetMainCell(Cell cell)
         {
-            if (cell == null || cell is Empty)
+            if (cell == null || cell is EmptySlot)
             {
                 mainCell = null;
                 return;
@@ -81,7 +81,7 @@ namespace Model.Tetri
             {
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
-                    if (shape[i, j] is not Empty)
+                    if (shape[i, j] is not EmptySlot)
                     {
                         occupiedPositions.Add(new Vector2Int(i, j));
                     }
@@ -92,7 +92,7 @@ namespace Model.Tetri
 
         public Cell GetMainCell()
         {
-            if (mainCell != null && !(mainCell is Empty))
+            if (mainCell != null && !(mainCell is EmptySlot))
             {
                 return mainCell;
             }
@@ -100,7 +100,7 @@ namespace Model.Tetri
             foreach (var pos in GetOccupiedPositions())
             {
                 var cell = shape[pos.x, pos.y];
-                if (cell is not Empty)
+                if (cell is not EmptySlot)
                 {
                     return cell;
                 }
@@ -126,7 +126,7 @@ namespace Model.Tetri
                 for (int j = 0; j < shape.GetLength(1); j++)
                 {
                     var cell = shape[i, j];
-                    if (cell is not Empty)
+                    if (cell is not EmptySlot)
                     {
                         cells.Add(cell);
                     }

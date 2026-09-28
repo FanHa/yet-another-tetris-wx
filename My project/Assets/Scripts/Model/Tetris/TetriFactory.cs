@@ -49,9 +49,9 @@ namespace Model.Tetri
                 }
                 else
                 {
-                    Cell padding = tetriCellModelFactory.CreatePadding();
-                    padding.Affinity = targetAffinity; // 设置为目标 Cell 的 Affinity
-                    tetri.SetCell(row, col, padding);
+                    Cell fillerCell = tetriCellModelFactory.CreateFillerCell();
+                    fillerCell.Affinity = targetAffinity;
+                    tetri.SetCell(row, col, fillerCell);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace Model.Tetri
                 }
                 else
                 {
-                    tetri.SetCell(row, col, tetriCellModelFactory.CreatePadding());
+                    tetri.SetCell(row, col, tetriCellModelFactory.CreateFillerCell());
                 }
             }
 
