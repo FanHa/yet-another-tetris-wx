@@ -15,4 +15,5 @@ MonoBehaviour:
   rewardCount: 3
   tetriModelFactory: {fileID: 11400000, guid: bbc0821158c9cd04da22c630746033be, type: 2}
   tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
+  cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}
   tetriInventoryData: {fileID: 11400000, guid: 0ec7254a647b3ed4f974283cbd9bc1fb, type: 2}

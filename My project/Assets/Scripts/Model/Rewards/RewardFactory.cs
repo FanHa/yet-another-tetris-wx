@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Controller;
 using Model.Tetri;
-using Operation;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 namespace Model.Rewards
@@ -29,9 +24,30 @@ namespace Model.Rewards
         [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
 
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
-        // [SerializeField] private CellTypeCatalog cellTypeCatalog;
         private List<RewardTypeConfig> rewardTypeConfigs;
         private List<string> availableCellIds;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(tetriModelFactory, nameof(tetriModelFactory));
+            ValidateRequiredReference(cellDatabase, nameof(cellDatabase));
+            ValidateRequiredReference(tetriInventoryData, nameof(tetriInventoryData));
+
+            if (rewardCount < 0)
+            {
+                Debug.LogError($"{nameof(rewardCount)} cannot be negative.", this);
+            }
+        }
+
+        private void ValidateRequiredReference(UnityEngine.Object reference, string fieldName)
+        {
+            if (reference == null)
+            {
+                Debug.LogError($"{fieldName} is not assigned.", this);
+            }
+        }
+#endif
 
         public void OnEnable()
         {
@@ -62,7 +78,7 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
-            availableCellIds = cellDatabase != null ? cellDatabase.GetRegisteredCellIds() : new List<string>();
+            availableCellIds = cellDatabase.GetRegisteredCellIds();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
