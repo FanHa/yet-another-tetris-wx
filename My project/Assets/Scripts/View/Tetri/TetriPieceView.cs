@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace View.Tetri
 {
-    public class TetriPiece : TetriView
+    public class TetriPieceView : TetriView
     {
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private Transform cellsRoot;
@@ -18,7 +18,7 @@ namespace View.Tetri
             int rows = shape.GetLength(0);
             int cols = shape.GetLength(1);
 
-            var cellObjs = new View.OperationTable.Cell[rows, cols];
+            var cellObjs = new View.OperationTable.CellView[rows, cols];
 
             float offsetX = (rows - 1) / 2f;
             float offsetY = (cols - 1) / 2f;
@@ -35,7 +35,7 @@ namespace View.Tetri
                         float localY = -j + offsetY;
                         cellObj.transform.localPosition = new Vector3(localX, localY, 0);
 
-                        var cellComp = cellObj.GetComponent<View.OperationTable.Cell>();
+                        var cellComp = cellObj.GetComponent<View.OperationTable.CellView>();
                         cellComp.Init(cell);
                         cellObjs[i, j] = cellComp;
                     }

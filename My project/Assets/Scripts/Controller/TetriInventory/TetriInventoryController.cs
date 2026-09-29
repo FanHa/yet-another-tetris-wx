@@ -15,7 +15,7 @@ namespace Controller
         [SerializeField] private Model.TetriInventoryModel model;
         public event Action<View.Tetri.TetriView> OnTetriBeginDrag; // 新增事件
         public event Action<View.Tetri.TetriView> OnTetriClick; // 新增事件
-        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
+        [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
 
         private float minY;
         private float maxY;

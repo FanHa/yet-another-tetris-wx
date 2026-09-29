@@ -17,7 +17,7 @@ namespace View.OperationTable
         private float cellSize;
         private int width;
         private int height;
-        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
+        [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
         [SerializeField] private Transform ScreenCenterPosition;
 
         private readonly Dictionary<Model.Tetri.Tetri, View.Tetri.TetriView> tetriObjectMap = new();

@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Units.UnitFactory unitFactory;
     [SerializeField] private UI.BattlePreview battlePreviewUI;
     private GameObject currentShadowTetri;
-    [SerializeField] private View.Tetri.TetriFactory tetriFactory;
+    [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
     private View.Tetri.TetriView draggingTetriFromOperationTable;
     private Units.Unit tempUnit;
 

@@ -17,7 +17,7 @@ namespace UI.TetriInfo
             characterNameText.text = mainCell.CharacterName;
             characterDescriptionText.text = mainCell.Description();
             
-            var character = tetriComponent as View.Tetri.TetriCharacter;
+            var character = tetriComponent as View.Tetri.TetriCharacterView;
             characterAttributeText.text = BuildAttributesText(character.PreviewUnit.Attributes);
         }
 

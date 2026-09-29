@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace View.OperationTable
 {
-    public class Cell : MonoBehaviour
+    public class CellView : MonoBehaviour
     {
         [Header("Visual Components")]
         [SerializeField] private GameObject mask;

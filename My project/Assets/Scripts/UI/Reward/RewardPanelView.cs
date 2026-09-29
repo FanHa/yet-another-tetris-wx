@@ -13,7 +13,7 @@ namespace UI.Reward
         public ItemSlot itemPrefab;
         public Transform itemParent;
         public event Action<Model.Rewards.Reward> OnItemSelected;
-        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
+        [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
 
         [Header("运行时引用")]
         [SerializeField] private Camera[] previewCameras;

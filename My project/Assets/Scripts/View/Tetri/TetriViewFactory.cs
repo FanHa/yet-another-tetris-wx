@@ -3,22 +3,22 @@ using UnityEngine;
 namespace View.Tetri
 {
     [CreateAssetMenu(menuName = "Game Data/Bootstrap/Factories/Operation Tetri Factory")]
-    public class TetriFactory : ScriptableObject
+    public class TetriViewFactory : ScriptableObject
     {
-        [SerializeField] private View.Tetri.TetriPiece tetriPiecePrefab;
-        [SerializeField] private View.Tetri.TetriCharacter tetriCharacterPrefab;
+        [SerializeField] private View.Tetri.TetriPieceView tetriPiecePrefab;
+        [SerializeField] private View.Tetri.TetriCharacterView tetriCharacterPrefab;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
             if (tetriPiecePrefab == null)
             {
-                Debug.LogError($"[{nameof(TetriFactory)}] Tetri piece prefab is missing.", this);
+                Debug.LogError($"[{nameof(TetriViewFactory)}] Tetri piece prefab is missing.", this);
             }
 
             if (tetriCharacterPrefab == null)
             {
-                Debug.LogError($"[{nameof(TetriFactory)}] Tetri character prefab is missing.", this);
+                Debug.LogError($"[{nameof(TetriViewFactory)}] Tetri character prefab is missing.", this);
             }
         }
 #endif

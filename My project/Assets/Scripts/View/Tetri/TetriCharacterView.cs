@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace View.Tetri
 {
-    public class TetriCharacter : TetriView
+    public class TetriCharacterView : TetriView
     {
         [SerializeField] private Transform characterRoot;
         [SerializeField] private Units.UnitFactory unitFactory;
