@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Game Data/Shared/Affinities/Display Config")]
+    [CreateAssetMenu(menuName = "Game Data/Shared/Affinity Display Config")]
     public class AffinityDisplayConfig : ScriptableObject
     {
         [System.Serializable]
@@ -14,13 +13,15 @@ namespace Model.Tetri
             public string name;
             [TextArea] public string description;
             public Sprite icon;
-            public Color borderColor = Color.white;
-            public Color maskColor = new Color(1f, 1f, 1f, 0.3f);
+            public Color baseColor = Color.white;
+
+            public Color BorderColor => new(baseColor.r, baseColor.g, baseColor.b, 1f);
+            public Color MaskColor => new(baseColor.r, baseColor.g, baseColor.b, MaskAlpha);
         }
 
-        [SerializeField]
-        [FormerlySerializedAs("affinityColors")]
-        private AffinityDisplayEntry[] affinityEntries;
+        private const float MaskAlpha = 0.19607843f;
+
+        [SerializeField] private AffinityDisplayEntry[] affinityEntries;
 
         private Dictionary<AffinityType, AffinityDisplayEntry> entriesByAffinity;
 

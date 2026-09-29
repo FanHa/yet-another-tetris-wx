@@ -2124,7 +2124,7 @@ MonoBehaviour:
   attackRangeAttribute: {fileID: 4635990761094482812}
   affinityInfoPrefab: {fileID: 8667045601642223198, guid: fd8d8bb8a47499e44a45a0efdb83e725, type: 3}
   affinityRoot: {fileID: 8919646790203924623}
-  affinityResourceMapping: {fileID: 11400000, guid: 911b305d6a503bd48b0a3536e08e9ff3, type: 2}
+  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
   unitSkillPrefab: {fileID: 385390242833999299, guid: c1efffced46363b4cac9b9aa6da119be, type: 3}
   skillRoot: {fileID: 6428394106732198846}
   buffInfoPrefab: {fileID: 5197384663177692662, guid: 90267a52306032147b1a0dbc35d80adc, type: 3}

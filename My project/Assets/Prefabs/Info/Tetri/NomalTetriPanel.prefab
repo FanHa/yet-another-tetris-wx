@@ -112,9 +112,7 @@ MonoBehaviour:
   skillDescriptionText: {fileID: 1012919542617337212}
   affinityIcon: {fileID: 2816108005959405559}
   affinityDescriptionText: {fileID: 6256930944305777810}
-  tetriCellTypeResourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
-  affinityResourceMapping: {fileID: 11400000, guid: 911b305d6a503bd48b0a3536e08e9ff3, type: 2}
-  affinityColorConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
 --- !u!1 &580446386497076072
 GameObject:
   m_ObjectHideFlags: 0

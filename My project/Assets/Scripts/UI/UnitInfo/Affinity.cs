@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using TMPro;
 using Model.Tetri;
@@ -13,13 +11,22 @@ namespace UI.UnitInfo
     {
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text countText;
-        [SerializeField, FormerlySerializedAs("colorConfig")]
-        private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
 
         public Action<AffinityType, int> OnClicked;
 
         private AffinityType currentType;
         private int currentCount;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (affinityDisplayConfig == null)
+            {
+                Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
+            }
+        }
+#endif
 
         // 公共方法：传入亲和类型与数量，设置图标与文本
         public void SetAffinity(Model.Tetri.AffinityType type, int count)
@@ -29,7 +36,7 @@ namespace UI.UnitInfo
 
             Model.Tetri.AffinityDisplayConfig.AffinityDisplayEntry entry = affinityDisplayConfig.GetDisplayEntry(type);
             countText.text = "X" + count.ToString();
-            icon.color = entry.borderColor;
+            icon.color = entry.BorderColor;
         }
 
         public void OnPointerClick(PointerEventData eventData)

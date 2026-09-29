@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Model.Tetri;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.TetriInfo
@@ -15,8 +14,17 @@ namespace UI.TetriInfo
         [SerializeField] private Image affinityIcon;
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
 
-        [SerializeField, FormerlySerializedAs("affinityColorConfig")]
-        private AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private AffinityDisplayConfig affinityDisplayConfig;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (affinityDisplayConfig == null)
+            {
+                Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
+            }
+        }
+#endif
 
         public void BindData(Operation.Tetri tetriComponent)
         {
@@ -33,9 +41,9 @@ namespace UI.TetriInfo
             foreach (var kvp in affinityCounts)
             {
                 var displayEntry = affinityDisplayConfig.GetDisplayEntry(kvp.Key);
-                affinityIcon.color = displayEntry.maskColor;
+                affinityIcon.color = displayEntry.MaskColor;
                 var outline = affinityIcon.GetComponent<UnityEngine.UI.Outline>();
-                if (outline != null) outline.effectColor = displayEntry.borderColor;
+                if (outline != null) outline.effectColor = displayEntry.BorderColor;
                 affinityDesc += $"{displayEntry.name}: {displayEntry.description} ( X {kvp.Value} )\n";
                 break;
             }

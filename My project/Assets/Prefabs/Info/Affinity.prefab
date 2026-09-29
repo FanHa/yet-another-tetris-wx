@@ -143,6 +143,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: X1
+  m_enableAdvanceTextProcess: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1f41ff75d1d64884fa276f7cf59fc04f, type: 2}
   m_sharedMaterial: {fileID: -4619342943888056379, guid: 1f41ff75d1d64884fa276f7cf59fc04f, type: 2}
@@ -291,4 +292,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 6954949842844291247}
   countText: {fileID: 9083014349023771566}
-  colorConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}

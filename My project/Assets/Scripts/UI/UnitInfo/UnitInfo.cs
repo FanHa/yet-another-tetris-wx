@@ -4,7 +4,6 @@ using System.Linq;
 using Model.Tetri;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.UnitInfo
@@ -25,8 +24,7 @@ namespace UI.UnitInfo
         [Header("Affinity")]
         [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
         [SerializeField] private Transform affinityRoot;
-        [SerializeField, FormerlySerializedAs("affinityColorConfig")]
-        private AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private AffinityDisplayConfig affinityDisplayConfig;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
@@ -44,8 +42,40 @@ namespace UI.UnitInfo
         [SerializeField] private Utils.CameraFollower buffSourceUnitCamera;
         [SerializeField] private Utils.CameraFollower currentUnitCamera;
 
-
         private Units.Unit currentUnit;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(closeButton, nameof(closeButton));
+            ValidateRequiredReference(healthAttribute, nameof(healthAttribute));
+            ValidateRequiredReference(moveSpeedAttribute, nameof(moveSpeedAttribute));
+            ValidateRequiredReference(attackPowerAttribute, nameof(attackPowerAttribute));
+            ValidateRequiredReference(attacksPerTenSecondsAttribute, nameof(attacksPerTenSecondsAttribute));
+            ValidateRequiredReference(energyPerSecondAttribute, nameof(energyPerSecondAttribute));
+            ValidateRequiredReference(attackRangeAttribute, nameof(attackRangeAttribute));
+            ValidateRequiredReference(affinityInfoPrefab, nameof(affinityInfoPrefab));
+            ValidateRequiredReference(affinityRoot, nameof(affinityRoot));
+            ValidateRequiredReference(affinityDisplayConfig, nameof(affinityDisplayConfig));
+            ValidateRequiredReference(unitSkillPrefab, nameof(unitSkillPrefab));
+            ValidateRequiredReference(skillRoot, nameof(skillRoot));
+            ValidateRequiredReference(buffInfoPrefab, nameof(buffInfoPrefab));
+            ValidateRequiredReference(buffRoot, nameof(buffRoot));
+
+            if (!UnityEditor.PrefabUtility.IsPartOfPrefabAsset(this))
+            {
+                ValidateRequiredReference(currentUnitCamera, nameof(currentUnitCamera));
+            }
+        }
+
+        private void ValidateRequiredReference(UnityEngine.Object reference, string fieldName)
+        {
+            if (reference == null)
+            {
+                Debug.LogError($"{fieldName} is not assigned.", this);
+            }
+        }
+#endif
 
         public void Awake()
         {

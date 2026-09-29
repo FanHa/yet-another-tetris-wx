@@ -13,8 +13,7 @@ namespace Operation
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField, FormerlySerializedAs("colorConfig")]
-        private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
 
         private SpriteRenderer maskRenderer;
         private SpriteRenderer borderTopRenderer;
@@ -83,8 +82,8 @@ namespace Operation
             var displayEntry = affinityDisplayConfig.GetDisplayEntry(modelCell.Affinity)
                 ?? throw new InvalidOperationException($"Missing affinity display config for '{modelCell.Affinity}'.");
 
-            SetMaskColor(displayEntry.maskColor);
-            SetBorderColor(displayEntry.borderColor);
+            SetMaskColor(displayEntry.MaskColor);
+            SetBorderColor(displayEntry.BorderColor);
 
         }
 

@@ -503,8 +503,7 @@ MonoBehaviour:
   borderBottom: {fileID: 2830815023309121479}
   borderLeft: {fileID: 4294463648908689000}
   borderRight: {fileID: 706487565432902992}
-  cellDatabase: {fileID: 11400000, guid: 83178ca35b7c07e4bb6887fa4af4e0ae, type: 2}
-  colorConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
 --- !u!61 &2851294537409801921
 BoxCollider2D:
   m_ObjectHideFlags: 0

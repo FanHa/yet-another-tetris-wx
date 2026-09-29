@@ -10,8 +10,7 @@ namespace Model.Tetri
     public sealed class CellDatabase : ScriptableObject
     {
 
-        [SerializeField, FormerlySerializedAs("paddingDefinition")]
-        private CellDefinition fillerDefinition;
+        [SerializeField] private CellDefinition fillerDefinition;
         [SerializeField] private List<CellDefinition> registeredCellDefinitions = new();
 
         private Dictionary<string, CellDefinition> definitionById;
