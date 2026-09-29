@@ -2,30 +2,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Model;
-using Operation;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using View.OperationTable;
 
 namespace Controller
 {
 
     public class OperationTableController : MonoBehaviour
     {
-        public event Action<Operation.Tetri> OnTetriBeginDrag;
+        public event Action<View.Tetri.TetriView> OnTetriBeginDrag;
         // public event Action<List<CharacterPlacement>> OnCharacterInfluenceGroupsChanged;
-        public event Action<Operation.Tetri> OnTetriClick;
+        public event Action<View.Tetri.TetriView> OnTetriClick;
 
         [Header("每个格子的间距")]
         [SerializeField] private float cellSize;
 
         [SerializeField] private int width = 16;
         [SerializeField] private int height = 16;
+        [SerializeField] private OperationTableView view;
         private OperationTableModel model;
-        private View.OperationTableView view;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (view == null)
+            {
+                Debug.LogError($"[{nameof(OperationTableController)}] View is not assigned.", this);
+            }
+
             if (width < 1)
             {
                 Debug.LogError($"[{nameof(OperationTableController)}] Width must be at least 1.", this);
@@ -40,7 +45,6 @@ namespace Controller
 
         private void Awake()
         {
-            view = GetComponent<View.OperationTableView>();
             model = new OperationTableModel(width, height);
         }
 
@@ -52,18 +56,18 @@ namespace Controller
             model.Clear();
         }
 
-        private void HandleTetriCreated(Operation.Tetri tetri)
+        private void HandleTetriCreated(View.Tetri.TetriView tetri)
         {
             tetri.OnBeginDragEvent += HandleTetriBeginDrag;
             tetri.OnClickEvent += HandleTetriClick;
         }
 
-        private void HandleTetriBeginDrag(Operation.Tetri tetri)
+        private void HandleTetriBeginDrag(View.Tetri.TetriView tetri)
         {
             OnTetriBeginDrag?.Invoke(tetri);
         }
 
-        private void HandleTetriClick(Operation.Tetri tetri)
+        private void HandleTetriClick(View.Tetri.TetriView tetri)
         {
             OnTetriClick?.Invoke(tetri);
         }

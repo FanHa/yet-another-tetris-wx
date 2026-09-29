@@ -1546,6 +1546,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4507417060986137102, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
   m_PrefabInstance: {fileID: 2025217634856458810}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1031480437 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 670501145282276523, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
+  m_PrefabInstance: {fileID: 2025217634856458810}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15dfaec0f8442194e980c946e9bedc6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1031480438 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3705389467913877569, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
@@ -4443,6 +4454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: OperationTable
       objectReference: {fileID: 0}
+    - target: {fileID: 3705389467913877569, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
+      propertyPath: view
+      value: 
+      objectReference: {fileID: 1031480437}
     - target: {fileID: 4507417060986137102, guid: fd7a4a0bfd0ee6b4289ed5ad321ad55c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

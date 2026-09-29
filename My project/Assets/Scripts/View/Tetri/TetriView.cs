@@ -4,15 +4,15 @@ using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Operation
+namespace View.Tetri
 {
-    public abstract class Tetri : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public abstract class TetriView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
 
-        public event Action<Operation.Tetri> OnBeginDragEvent;
+        public event Action<TetriView> OnBeginDragEvent;
         public event Action<Vector3> OnDragEvent;
         public event Action OnEndDragEvent;
-        public event Action<Operation.Tetri> OnClickEvent;
+        public event Action<TetriView> OnClickEvent;
 
         public Model.Tetri.Tetri ModelTetri { get; private set; }
         private Camera mainCamera;

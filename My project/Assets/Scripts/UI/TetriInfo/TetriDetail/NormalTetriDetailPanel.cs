@@ -26,7 +26,7 @@ namespace UI.TetriInfo
         }
 #endif
 
-        public void BindData(Operation.Tetri tetriComponent)
+        public void BindData(View.Tetri.TetriView tetriComponent)
         {
             Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
             Model.Tetri.Cell mainCell = tetri.GetMainCell();

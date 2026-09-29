@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Operation
+namespace View.Tetri
 {
-    public class TetriCharacter : Tetri
+    public class TetriCharacter : TetriView
     {
         [SerializeField] private Transform characterRoot;
         [SerializeField] private Units.UnitFactory unitFactory;

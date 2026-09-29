@@ -19,7 +19,7 @@ namespace UI.TetriInfo
         [Header("实例中引用")]
         [SerializeField] private Camera tetriInfoCamera;
 
-        private Operation.Tetri currentTetri;
+        private View.Tetri.TetriView currentTetri;
         private CloseButtonPositionCoordinator closeButtonPositionCoordinator;
 
         private void Awake()
@@ -36,7 +36,7 @@ namespace UI.TetriInfo
         }
 
 
-        public void ShowTetriInfo(Operation.Tetri tetriComponent)
+        public void ShowTetriInfo(View.Tetri.TetriView tetriComponent)
         {
             currentTetri = tetriComponent;
             blocker.SetActive(true);

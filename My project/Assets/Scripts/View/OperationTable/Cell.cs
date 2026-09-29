@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Operation
+namespace View.OperationTable
 {
     public class Cell : MonoBehaviour
     {

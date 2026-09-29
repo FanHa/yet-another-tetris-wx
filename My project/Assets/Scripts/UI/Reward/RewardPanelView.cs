@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System;
 using Model.Tetri;
 using WeChatWASM;
-using Operation;
 
 namespace UI.Reward
 {
@@ -14,7 +13,7 @@ namespace UI.Reward
         public ItemSlot itemPrefab;
         public Transform itemParent;
         public event Action<Model.Rewards.Reward> OnItemSelected;
-        [SerializeField] private Operation.TetriFactory tetriFactory;
+        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
 
         [Header("运行时引用")]
         [SerializeField] private Camera[] previewCameras;

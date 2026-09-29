@@ -1,9 +1,9 @@
 using Model.Tetri;
 using UnityEngine;
 
-namespace Operation
+namespace View.Tetri
 {
-    public class TetriPiece : Tetri
+    public class TetriPiece : TetriView
     {
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private Transform cellsRoot;
@@ -18,7 +18,7 @@ namespace Operation
             int rows = shape.GetLength(0);
             int cols = shape.GetLength(1);
 
-            var cellObjs = new Operation.Cell[rows, cols];
+            var cellObjs = new View.OperationTable.Cell[rows, cols];
 
             float offsetX = (rows - 1) / 2f;
             float offsetY = (cols - 1) / 2f;
@@ -35,7 +35,7 @@ namespace Operation
                         float localY = -j + offsetY;
                         cellObj.transform.localPosition = new Vector3(localX, localY, 0);
 
-                        var cellComp = cellObj.GetComponent<Operation.Cell>();
+                        var cellComp = cellObj.GetComponent<View.OperationTable.Cell>();
                         cellComp.Init(cell);
                         cellObjs[i, j] = cellComp;
                     }

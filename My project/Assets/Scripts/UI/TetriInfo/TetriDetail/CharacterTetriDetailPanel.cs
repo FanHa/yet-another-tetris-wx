@@ -9,7 +9,7 @@ namespace UI.TetriInfo
         [SerializeField] private TMPro.TextMeshProUGUI characterDescriptionText;
         [SerializeField] private TMPro.TextMeshProUGUI characterAttributeText;
 
-        public void BindData(Operation.Tetri tetriComponent)
+        public void BindData(View.Tetri.TetriView tetriComponent)
         {
             Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
             Model.Tetri.Character mainCell = tetri.GetMainCell() as Model.Tetri.Character;
@@ -17,7 +17,7 @@ namespace UI.TetriInfo
             characterNameText.text = mainCell.CharacterName;
             characterDescriptionText.text = mainCell.Description();
             
-            var character = tetriComponent as Operation.TetriCharacter;
+            var character = tetriComponent as View.Tetri.TetriCharacter;
             characterAttributeText.text = BuildAttributesText(character.PreviewUnit.Attributes);
         }
 

@@ -13,9 +13,9 @@ namespace Controller
         [SerializeField] private Transform operationTableTransform;
         private View.TetriInventoryView view;
         [SerializeField] private Model.TetriInventoryModel model;
-        public event Action<Operation.Tetri> OnTetriBeginDrag; // 新增事件
-        public event Action<Operation.Tetri> OnTetriClick; // 新增事件
-        [SerializeField] private Operation.TetriFactory tetriFactory;
+        public event Action<View.Tetri.TetriView> OnTetriBeginDrag; // 新增事件
+        public event Action<View.Tetri.TetriView> OnTetriClick; // 新增事件
+        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
 
         private float minY;
         private float maxY;
@@ -72,7 +72,7 @@ namespace Controller
             foreach (var tetriModel in model.UsableTetriList)
             {
                 // 创建 Tetri 实例
-                Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetriModel);
+                View.Tetri.TetriView tetriComponent = tetriFactory.CreateTetri(tetriModel);
                 tetriComponent.OnBeginDragEvent += HandleTetriBeginDrag;
                 tetriComponent.OnClickEvent += HandleTetriClick;
                 tetriList.Add(tetriComponent.gameObject);
@@ -81,7 +81,7 @@ namespace Controller
             view.ShowItems(tetriList);
         }
 
-        private void HandleTetriBeginDrag(Operation.Tetri tetri)
+        private void HandleTetriBeginDrag(View.Tetri.TetriView tetri)
         {
             OnTetriBeginDrag?.Invoke(tetri);
         }
@@ -91,7 +91,7 @@ namespace Controller
             model.AddTetri(modelTetri);
         }
         
-        private void HandleTetriClick(Operation.Tetri tetri)
+        private void HandleTetriClick(View.Tetri.TetriView tetri)
         {
             OnTetriClick?.Invoke(tetri);
         }

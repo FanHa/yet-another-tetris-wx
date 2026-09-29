@@ -4,11 +4,11 @@ using Model;
 using Model.Tetri;
 using UnityEngine;
 
-namespace View
+namespace View.OperationTable
 {
     public class OperationTableView : MonoBehaviour
     {
-        public event Action<Operation.Tetri> OnItemCreated;
+        public event Action<View.Tetri.TetriView> OnItemCreated;
         [SerializeField] private GameObject backgroundGridPrefab;
         [SerializeField] private GameObject TetriPrefab;
 
@@ -17,10 +17,10 @@ namespace View
         private float cellSize;
         private int width;
         private int height;
-        [SerializeField] private Operation.TetriFactory tetriFactory;
+        [SerializeField] private View.Tetri.TetriFactory tetriFactory;
         [SerializeField] private Transform ScreenCenterPosition;
 
-        private readonly Dictionary<Model.Tetri.Tetri, Operation.Tetri> tetriObjectMap = new();
+        private readonly Dictionary<Model.Tetri.Tetri, View.Tetri.TetriView> tetriObjectMap = new();
 
         public void Initialize(int width, int height, float cellSize)
         {
@@ -54,9 +54,9 @@ namespace View
 
             foreach (var placed in placedTetris)
             {
-                Tetri tetri = placed.Key;
+                Model.Tetri.Tetri tetri = placed.Key;
                 Vector2Int position = placed.Value;
-                Operation.Tetri tetriComponent = tetriFactory.CreateTetri(tetri);
+                View.Tetri.TetriView tetriComponent = tetriFactory.CreateTetri(tetri);
                 tetriComponent.transform.SetParent(placedTetrisRoot, false);
                 tetriComponent.Initialize(tetri);
 
