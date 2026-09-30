@@ -25,6 +25,8 @@ MonoBehaviour:
     ChilledMoveSlowPercentPerIceCell: 3
     BaseChilledAtkSlowPercent: 10
     ChilledAtkSlowPercentPerIceCell: 3
+    BaseChilledActionSlowPercent: 10
+    ChilledActionSlowPercentPerIceCell: 3
     BaseChilledEnergySlowPercent: 15
     ChilledEnergySlowPercentPerIceCell: 4
     RequiredEnergy: 120
@@ -40,6 +42,9 @@ MonoBehaviour:
     ChilledMoveSlowPercentPerIceCell: 6
     BaseChilledAtkSlowPercent: 15
     ChilledAtkSlowPercentPerIceCell: 6
+    BaseChilledActionSlowPercent: 10
+    ChilledActionSlowPercentPerIceCell: 3
     BaseChilledEnergySlowPercent: 25
     ChilledEnergySlowPercentPerIceCell: 6
     RequiredEnergy: 120
+  projectilePrefab: {fileID: 9111316188251510382, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}

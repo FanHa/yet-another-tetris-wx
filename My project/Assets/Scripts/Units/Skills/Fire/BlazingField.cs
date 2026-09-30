@@ -11,6 +11,9 @@ namespace Units.Skills
     {
         public BlazingFieldLevelConfig Config { get; }
         private Vector3 targetPosition;
+
+        private BlazingFieldSkillConfig SkillConfig => (BlazingFieldSkillConfig)Definition.Config;
+
         public BlazingField(BlazingFieldLevelConfig config)
         {
             Config = config;
@@ -53,9 +56,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.BlazingFieldPrefab;
-            var blazingFieldObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
-            var effect = blazingFieldObj.GetComponent<Units.Projectiles.BlazingField>();
+            var effect = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                targetPosition,
+                Quaternion.identity
+            );
             effect.Init(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,

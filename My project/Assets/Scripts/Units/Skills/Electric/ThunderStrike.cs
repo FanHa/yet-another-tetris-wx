@@ -9,6 +9,8 @@ namespace Units.Skills
         public ThunderStrikeLevelConfig Config { get; }
         private Unit cachedTarget;
 
+        private ThunderStrikeSkillConfig SkillConfig => (ThunderStrikeSkillConfig)Definition.Config;
+
         public ThunderStrike(ThunderStrikeLevelConfig config)
         {
             Config = config;
@@ -34,22 +36,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.ThunderStrikePrefab;
-            if (prefab == null)
-                return false;
-
-            GameObject effectInstance = Object.Instantiate(
-                prefab,
+            Units.Projectiles.ThunderStrikeProjectile thunderStrikeEffect = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
                 cachedTarget.transform.position,
                 Quaternion.identity
             );
-
-            var thunderStrikeEffect = effectInstance.GetComponent<Units.Projectiles.ThunderStrikeProjectile>();
-            if (thunderStrikeEffect == null)
-            {
-                Object.Destroy(effectInstance);
-                return false;
-            }
 
             thunderStrikeEffect.Init(
                 Owner.SelfUnit,

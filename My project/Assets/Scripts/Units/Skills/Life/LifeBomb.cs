@@ -10,6 +10,8 @@ namespace Units.Skills
         public LifeBombLevelConfig Config { get; }
         private Vector3 cachedTargetPos; 
 
+        private LifeBombSkillConfig SkillConfig => (LifeBombSkillConfig)Definition.Config;
+
         public LifeBomb(LifeBombLevelConfig config)
         {
             Config = config;
@@ -55,12 +57,11 @@ namespace Units.Skills
             tempTarget.name = "临时目标 By " + Owner.name + " " + Name();
 
             // 投射炸弹
-            GameObject projectileInstance = Object.Instantiate(
-                Owner.ProjectileConfig.LifeBombPrefab,
+            Units.Projectiles.LifeBomb lifeBomb = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
                 Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
-            Units.Projectiles.LifeBomb lifeBomb = projectileInstance.GetComponent<Units.Projectiles.LifeBomb>();
 
             lifeBomb.Init(
                 caster: Owner.SelfUnit,

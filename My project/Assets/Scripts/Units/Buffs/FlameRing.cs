@@ -1,4 +1,5 @@
 using System.Linq;
+using Model.Skills;
 using Units.Skills;
 using UnityEngine;
 
@@ -35,9 +36,13 @@ namespace Units.Buffs
         public override void OnApply(IBuffContext context)
         {
             base.OnApply(context);
-            var prefab = context.SelfUnit.ProjectileConfig.FlameRingPrefab;
-            var effectObj = Object.Instantiate(prefab, context.SelfUnit.transform.position, Quaternion.identity, context.SelfUnit.transform);
-            var flameRingEntity = effectObj.GetComponent<Units.Projectiles.FlameRing>();
+            var skillConfig = (FlameRingSkillConfig)sourceSkill.Definition.Config;
+            var flameRingEntity = Object.Instantiate(
+                skillConfig.ProjectilePrefab,
+                context.SelfUnit.transform.position,
+                Quaternion.identity,
+                context.SelfUnit.transform
+            );
             flameRingEntity.Initialize(
                 owner: context.SelfUnit,
                 radius: radius,

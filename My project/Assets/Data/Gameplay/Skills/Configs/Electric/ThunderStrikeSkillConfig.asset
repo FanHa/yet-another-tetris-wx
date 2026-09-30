@@ -25,3 +25,4 @@ MonoBehaviour:
     StunDurationPerElectricCell: 0.1
     MaxStunDuration: 2
     RequiredEnergy: 60
+  projectilePrefab: {fileID: 6601108763138610009, guid: 767e31535e0abfa4a8c57f28033de199, type: 3}

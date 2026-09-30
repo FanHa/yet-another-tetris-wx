@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Icy Cage")]
     public class IcyCageSkillConfig : SkillConfig<IcyCageLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private IcyCage projectilePrefab;
+
+        public IcyCage ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

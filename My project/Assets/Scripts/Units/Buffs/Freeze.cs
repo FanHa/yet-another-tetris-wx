@@ -1,4 +1,5 @@
 using Units.Skills;
+using Model.Skills;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -8,7 +9,7 @@ namespace Units.Buffs
     /// </summary>
     public class Freeze : Buff
     {
-        private GameObject vfxInstance;
+        private Units.Projectiles.IcyCage vfxInstance;
         public Freeze(
             float duration,
             Unit sourceUnit,
@@ -28,11 +29,14 @@ namespace Units.Buffs
             context.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
             context.Attributes.ActionSpeed.AddPercentageModifier(this, -100);
             context.Attributes.EnergyPerSecond.AddPercentageModifier(this, -100);
-            var vfxPrefab = context.SelfUnit.ProjectileConfig.IcyCagePrefab;
-            vfxInstance = Object.Instantiate(vfxPrefab, context.SelfUnit.transform.position, Quaternion.identity);
-            var icyCageComp = vfxInstance.GetComponent<Units.Projectiles.IcyCage>();
-            icyCageComp.Initialize(context.SelfUnit);
-            icyCageComp.Activate();
+            var skillConfig = (IcyCageSkillConfig)sourceSkill.Definition.Config;
+            vfxInstance = Object.Instantiate(
+                skillConfig.ProjectilePrefab,
+                context.SelfUnit.transform.position,
+                Quaternion.identity
+            );
+            vfxInstance.Initialize(context.SelfUnit);
+            vfxInstance.Activate();
 
         }
 

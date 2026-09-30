@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Fireball")]
     public class FireballSkillConfig : SkillConfig<FireballLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private Fireball projectilePrefab;
+
+        public Fireball ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

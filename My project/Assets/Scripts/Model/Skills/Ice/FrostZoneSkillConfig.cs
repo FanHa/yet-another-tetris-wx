@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Frost Zone")]
     public class FrostZoneSkillConfig : SkillConfig<FrostZoneLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private FrostZone projectilePrefab;
+
+        public FrostZone ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

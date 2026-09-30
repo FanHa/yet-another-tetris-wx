@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Wild Wind")]
     public class WildWindSkillConfig : SkillConfig<WildWindLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private WildWind projectilePrefab;
+
+        public WildWind ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

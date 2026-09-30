@@ -10,6 +10,8 @@ namespace Units.Skills
         public SnowballLevelConfig Config { get; }
         private Unit cachedTarget;
 
+        private SnowballSkillConfig SkillConfig => (SnowballSkillConfig)Definition.Config;
+
         public Snowball(SnowballLevelConfig config)
         {
             Config = config;
@@ -39,12 +41,11 @@ namespace Units.Skills
             // Todo 判断cachedTarget是否依然活跃
 
             // 实例化雪球投射物
-            GameObject projectileInstance = Object.Instantiate(
-                Owner.ProjectileConfig.SnowballPrefab,
+            Units.Projectiles.Snowball snowBall = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
                 Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
-            Units.Projectiles.Snowball snowBall = projectileInstance.GetComponent<Units.Projectiles.Snowball>();
             snowBall.Init(
                 Owner.SelfUnit,
                 cachedTarget,

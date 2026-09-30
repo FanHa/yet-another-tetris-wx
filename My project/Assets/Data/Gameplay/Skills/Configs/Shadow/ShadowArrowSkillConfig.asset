@@ -25,3 +25,4 @@ MonoBehaviour:
     VulnerabilityPercent: 10
     VulnerabilityPercentPerShadowCell: 1
     VulnerabilityDuration: 15
+  projectilePrefab: {fileID: 6908931028135595306, guid: 928e49a1b111acf4d883165a6e13ffc7, type: 3}

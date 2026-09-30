@@ -10,6 +10,8 @@ namespace Units.Skills
         public FireballLevelConfig Config { get; }
         private Unit targetEnemy;
 
+        private FireballSkillConfig SkillConfig => (FireballSkillConfig)Definition.Config;
+
         public Fireball(FireballLevelConfig config)
         {
             Config = config;
@@ -53,8 +55,11 @@ namespace Units.Skills
             // todo targetEnemy 是否依然活跃
             var stats = CalcStats();
 
-            GameObject projectileInstance = Object.Instantiate(Owner.ProjectileConfig.FireballPrefab, Owner.projectileSpawnPoint.position, Quaternion.identity);
-            Units.Projectiles.Fireball fireball = projectileInstance.GetComponent<Units.Projectiles.Fireball>();
+            Units.Projectiles.Fireball fireball = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                Owner.projectileSpawnPoint.position,
+                Quaternion.identity
+            );
 
             fireball.Init(
                 caster: Owner.SelfUnit,

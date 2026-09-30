@@ -8,6 +8,8 @@ namespace Units.Skills
     {
         public WildWindLevelConfig Config { get; }
 
+        private WildWindSkillConfig SkillConfig => (WildWindSkillConfig)Definition.Config;
+
         public WildWind(WildWindLevelConfig config)
         {
             this.Config = config;
@@ -63,9 +65,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.WildWindPrefab;
-            var wildWindObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
-            var wildWind = wildWindObj.GetComponent<Units.Projectiles.WildWind>();
+            var wildWind = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity
+            );
             wildWind.Initialize(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,

@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Ice Shield")]
     public class IceShieldSkillConfig : SkillConfig<IceShieldLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private IceShield projectilePrefab;
+
+        public IceShield ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

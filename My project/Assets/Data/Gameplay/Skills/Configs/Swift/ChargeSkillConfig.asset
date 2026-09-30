@@ -16,6 +16,9 @@ MonoBehaviour:
   - RequiredEnergy: 60
     ChargeDamage: 20
     DamageBonusPerSpeed: 2
+    AvoidancePriority: 0
   - RequiredEnergy: 60
     ChargeDamage: 40
     DamageBonusPerSpeed: 4
+    AvoidancePriority: 0
+  projectilePrefab: {fileID: 5870661204446153464, guid: cf629d04663a76b43b6cbe7574d44ff5, type: 3}

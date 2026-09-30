@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Model.Skills;
 using UnityEngine;
 
 namespace Units.Skills
@@ -10,6 +11,8 @@ namespace Units.Skills
         public float damageIncreasePercentage = 20f; // 每次弹射伤害增加百分比
         public int maxBounces = 5; // 最大弹射次数
         public float range = 5f; // 闪电作用范围
+
+        private ChainLightningSkillConfig SkillConfig => (ChainLightningSkillConfig)Definition.Config;
 
         public override string Description()
         {
@@ -51,16 +54,13 @@ namespace Units.Skills
                 currentTarget.TakeDamage(damage);
 
 
-                // 创建 ChainLightningController 实例并设置起点和终点
-                if (caster.ProjectileConfig.ChainLightningPrefab != null)
-                {
-                    var lightningInstance = Object.Instantiate(caster.ProjectileConfig.ChainLightningPrefab, caster.transform.position, Quaternion.identity);
-                    var controller = lightningInstance.GetComponent<Projectiles.ChainLightning>();
-                    if (controller != null)
-                    {
-                        controller.SetLinePoints(previousPosition, currentTarget.transform.position);
-                    }
-                }
+                // 创建闪电视觉并设置起点和终点
+                var controller = Object.Instantiate(
+                    SkillConfig.ProjectilePrefab,
+                    caster.transform.position,
+                    Quaternion.identity
+                );
+                controller.SetLinePoints(previousPosition, currentTarget.transform.position);
 
                 previousPosition = currentTarget.transform.position;
                 // 记录已命中的目标

@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Flame Ring")]
     public class FlameRingSkillConfig : SkillConfig<FlameRingLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private FlameRing projectilePrefab;
+
+        public FlameRing ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

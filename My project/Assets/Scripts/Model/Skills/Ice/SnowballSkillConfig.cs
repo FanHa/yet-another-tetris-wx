@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Snowball")]
     public class SnowballSkillConfig : SkillConfig<SnowballLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private Snowball projectilePrefab;
+
+        public Snowball ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

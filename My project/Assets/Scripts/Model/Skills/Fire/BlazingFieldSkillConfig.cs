@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Blazing Field")]
     public class BlazingFieldSkillConfig : SkillConfig<BlazingFieldLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private BlazingField projectilePrefab;
+
+        public BlazingField ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

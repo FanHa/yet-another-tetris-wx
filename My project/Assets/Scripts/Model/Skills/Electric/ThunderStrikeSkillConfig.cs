@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Electric/Thunder Strike")]
     public class ThunderStrikeSkillConfig : SkillConfig<ThunderStrikeLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private ThunderStrikeProjectile projectilePrefab;
+
+        public ThunderStrikeProjectile ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

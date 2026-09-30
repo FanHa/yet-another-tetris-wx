@@ -1,4 +1,5 @@
 using Units.Skills;
+using Model.Skills;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -13,7 +14,7 @@ namespace Units.Buffs
         private int chilledAttackSlowPercent;// Chilled 攻击速度减缓百分比
         private int chilledActionSlowPercent;// Chilled 动作速率减缓百分比
         private int chilledEnergyRegenSlowPercent; // Chilled 能量回复减缓百分比
-        private GameObject vfxInstance;
+        private Units.Projectiles.IceShield vfxInstance;
 
         public IceShield(
             float buffDuration,
@@ -56,11 +57,14 @@ namespace Units.Buffs
         public override void OnApply(IBuffContext context)
         {
             base.OnApply(context);
-            var vfxPrefab = context.SelfUnit.ProjectileConfig.IceShieldPrefab;
-            vfxInstance = Object.Instantiate(vfxPrefab, context.SelfUnit.transform.position, Quaternion.identity);
-            var iceShieldComp = vfxInstance.GetComponent<Units.Projectiles.IceShield>();
-            iceShieldComp.Initialize(context.SelfUnit);
-            iceShieldComp.Activate();
+            var skillConfig = (IceShieldSkillConfig)sourceSkill.Definition.Config;
+            vfxInstance = Object.Instantiate(
+                skillConfig.ProjectilePrefab,
+                context.SelfUnit.transform.position,
+                Quaternion.identity
+            );
+            vfxInstance.Initialize(context.SelfUnit);
+            vfxInstance.Activate();
         }
 
         public override void OnRemove()

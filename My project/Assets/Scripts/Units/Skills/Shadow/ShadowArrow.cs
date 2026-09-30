@@ -8,6 +8,8 @@ namespace Units.Skills
     {
         public ShadowArrowLevelConfig Config { get; }
 
+        private ShadowArrowSkillConfig SkillConfig => (ShadowArrowSkillConfig)Definition.Config;
+
         public ShadowArrow(ShadowArrowLevelConfig config)
         {
             Config = config;
@@ -40,9 +42,11 @@ namespace Units.Skills
 
             var stats = CalcStats();
             // 创建并发射暗影箭
-            var projectilePrefab = Owner.ProjectileConfig.ShadowArrowPrefab;
-            var projectile = Object.Instantiate(projectilePrefab, Owner.transform.position, Quaternion.identity)
-                .GetComponent<Units.Projectiles.ShadowArrow>();
+            var projectile = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity
+            );
 
             projectile.Init(
                 caster: Owner.SelfUnit,

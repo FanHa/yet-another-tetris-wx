@@ -8,6 +8,8 @@ namespace Units.Skills
     {
         public ChargeLevelConfig Config { get; }
 
+        private ChargeSkillConfig SkillConfig => (ChargeSkillConfig)Definition.Config;
+
         public Charge(ChargeLevelConfig config)
         {
             Config = config;
@@ -39,9 +41,11 @@ namespace Units.Skills
             if (targetEnemy == null)
                 return false;
 
-            var prefab = Owner.ProjectileConfig.ChargePrefab;
-            var chargeObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
-            var chargeProjectile = chargeObj.GetComponent<Units.Projectiles.Charge>();
+            var chargeProjectile = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity
+            );
             chargeProjectile.Init(
                 owner: Owner.SelfUnit,
                 target: targetEnemy,

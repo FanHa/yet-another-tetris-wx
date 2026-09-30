@@ -31,3 +31,4 @@ MonoBehaviour:
     DotDpsPerFireCell: 4
     DotDurationPerFireCell: 0.5
     RequiredEnergy: 120
+  projectilePrefab: {fileID: 4527722017122255586, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}

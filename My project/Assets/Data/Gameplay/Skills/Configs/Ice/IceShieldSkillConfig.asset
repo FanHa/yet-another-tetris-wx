@@ -17,6 +17,8 @@ MonoBehaviour:
     MoveSlowPercentPerIceCell: 3
     BaseAtkSlowPercent: 10
     AtkSlowPercentPerIceCell: 3
+    BaseActionSlowPercent: 10
+    ActionSlowPercentPerIceCell: 5
     BaseEnergySlowPercent: 10
     EnergySlowPercentPerIceCell: 3
     BuffDuration: -1
@@ -26,8 +28,11 @@ MonoBehaviour:
     MoveSlowPercentPerIceCell: 6
     BaseAtkSlowPercent: 20
     AtkSlowPercentPerIceCell: 6
+    BaseActionSlowPercent: 10
+    ActionSlowPercentPerIceCell: 5
     BaseEnergySlowPercent: 20
     EnergySlowPercentPerIceCell: 6
     BuffDuration: -1
     BaseChilledDuration: 3
     ChilledDurationAdditionPerIceCell: 0.5
+  projectilePrefab: {fileID: 8363342164250943101, guid: f25552e189446a041af81469fcfa1836, type: 3}

@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Shadow/Shadow Arrow")]
     public class ShadowArrowSkillConfig : SkillConfig<ShadowArrowLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private ShadowArrow projectilePrefab;
+
+        public ShadowArrow ProjectilePrefab => projectilePrefab;
     }
 
     [System.Serializable]

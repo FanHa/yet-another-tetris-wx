@@ -27,3 +27,4 @@ MonoBehaviour:
     BuffDuration: -1
     BaseRadius: 1
     RadiusPerFireCell: 0.2
+  projectilePrefab: {fileID: 6674140992886737915, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}

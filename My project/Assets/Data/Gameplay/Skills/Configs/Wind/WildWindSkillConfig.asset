@@ -29,3 +29,4 @@ MonoBehaviour:
     Radius: 1.5
     Duration: 2
     DamageAdditionPerWindCell: 5
+  projectilePrefab: {fileID: -3437638926683533559, guid: 0a417b4fc79a18846800e1363a2a09f5, type: 3}

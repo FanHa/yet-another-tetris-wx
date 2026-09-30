@@ -12,6 +12,8 @@ namespace Units.Skills
         public FrostZoneLevelConfig Config { get; }
         private Vector3 targetPosition;
 
+        private FrostZoneSkillConfig SkillConfig => (FrostZoneSkillConfig)Definition.Config;
+
 
         public FrostZone(FrostZoneLevelConfig config)
         {
@@ -34,9 +36,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            var prefab = Owner.ProjectileConfig.FrostZonePrefab;
-            var frostZoneObj = Object.Instantiate(prefab, targetPosition, Quaternion.identity);
-            var frostZone = frostZoneObj.GetComponent<Units.Projectiles.FrostZone>();
+            var frostZone = Object.Instantiate(
+                SkillConfig.ProjectilePrefab,
+                targetPosition,
+                Quaternion.identity
+            );
             frostZone.Initialize(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
