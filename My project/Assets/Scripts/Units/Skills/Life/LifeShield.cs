@@ -10,6 +10,8 @@ namespace Units.Skills
         public LifeShieldLevelConfig Config { get; }
         private Unit cachedTarget;
 
+        private LifeShieldSkillConfig SkillConfig => (LifeShieldSkillConfig)Definition.Config;
+
         public LifeShield(LifeShieldLevelConfig config)
         {
             Config = config;
@@ -64,9 +66,11 @@ namespace Units.Skills
                 Owner.SelfUnit,               // 来源单位
                 this                  // 来源技能
             );
-            var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
-            var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
-            var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
+            var projectile = Object.Instantiate(
+                SkillConfig.BuffProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity
+            );
             projectile.Init(Owner.SelfUnit, cachedTarget, buff);
             projectile.Activate();
 

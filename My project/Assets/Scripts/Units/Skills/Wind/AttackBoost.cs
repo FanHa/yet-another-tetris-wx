@@ -8,6 +8,8 @@ namespace Units.Skills
     {
         public AttackBoostLevelConfig Config { get; }
 
+        private AttackBoostSkillConfig SkillConfig => (AttackBoostSkillConfig)Definition.Config;
+
         public AttackBoost(AttackBoostLevelConfig config)
         {
             Config = config;
@@ -57,9 +59,11 @@ namespace Units.Skills
                 sourceSkill: this
             );
 
-            var prefab = Owner.ProjectileConfig.BuffProjectilePrefab;
-            var projectileObj = Object.Instantiate(prefab, Owner.transform.position, Quaternion.identity);
-            var projectile = projectileObj.GetComponent<Units.Projectiles.BuffProjectile>();
+            var projectile = Object.Instantiate(
+                SkillConfig.BuffProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity
+            );
             projectile.Init(Owner.SelfUnit, Owner.SelfUnit, buff); // 目标为自己
             projectile.Activate();
             return true;

@@ -11,6 +11,11 @@ namespace Model.Skills
         private LifeBomb projectilePrefab;
 
         public LifeBomb ProjectilePrefab => projectilePrefab;
+
+        [SerializeField]
+        private GameObject temporaryTargetPrefab;
+
+        public GameObject TemporaryTargetPrefab => temporaryTargetPrefab;
     }
 
     [System.Serializable]

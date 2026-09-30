@@ -14,7 +14,6 @@ namespace Units.Skills
 
         Attributes Attributes { get; }
         Dictionary<AffinityType, int> CellCounts { get; }
-        Model.ProjectileConfig ProjectileConfig { get; }
 
         Transform transform { get; }
         string name { get; }

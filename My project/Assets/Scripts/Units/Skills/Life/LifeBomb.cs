@@ -50,7 +50,7 @@ namespace Units.Skills
             float healthCost = Owner.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
             var tempTarget = Object.Instantiate(
-                Owner.ProjectileConfig.TemporaryTargetPrefab,
+                SkillConfig.TemporaryTargetPrefab,
                 cachedTargetPos,
                 Quaternion.identity
             );

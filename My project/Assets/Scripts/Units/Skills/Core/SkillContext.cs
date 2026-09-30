@@ -28,7 +28,6 @@ namespace Units.Skills
 
         public Attributes Attributes => unit.Attributes;
         public Dictionary<AffinityType, int> CellCounts => unit.CellCounts;
-        public Model.ProjectileConfig ProjectileConfig => unit.ProjectileConfig;
         public Transform transform => unit.transform;
         public string name => unit.name;
         public Transform projectileSpawnPoint => unit.projectileSpawnPoint;

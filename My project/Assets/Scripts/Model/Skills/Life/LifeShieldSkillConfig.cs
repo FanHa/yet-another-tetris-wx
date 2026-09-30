@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Shield")]
     public class LifeShieldSkillConfig : SkillConfig<LifeShieldLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private BuffProjectile buffProjectilePrefab;
+
+        public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
     }
 
     [System.Serializable]

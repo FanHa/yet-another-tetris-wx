@@ -32,7 +32,6 @@ namespace Units
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
         private AnimationController animationController;
         private FacingController facingController;
-        public Model.ProjectileConfig ProjectileConfig;
         [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
         public Dictionary<AffinityType, int> CellCounts = new();
 

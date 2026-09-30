@@ -1,10 +1,16 @@
 using UnityEngine;
+using Units.Projectiles;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Attack Boost")]
     public class AttackBoostSkillConfig : SkillConfig<AttackBoostLevelConfig>
     {
+        [Header("资源")]
+        [SerializeField]
+        private BuffProjectile buffProjectilePrefab;
+
+        public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
     }
     [System.Serializable]
     public class AttackBoostLevelConfig : SkillLevelConfig
