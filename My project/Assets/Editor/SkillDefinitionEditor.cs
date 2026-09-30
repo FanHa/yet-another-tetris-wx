@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Editor.Validation
 {
-    [CustomEditor(typeof(SkillDefinition))]
+    [CustomEditor(typeof(Model.Skills.SkillDefinition))]
     public sealed class SkillDefinitionEditor : UnityEditor.Editor
     {
         private static readonly GUIContent IdLabel = new("Id");

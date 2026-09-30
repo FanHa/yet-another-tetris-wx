@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Model.Tetri;
+using Model.Skills;
 
 namespace Units.Skills
 {

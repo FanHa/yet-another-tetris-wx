@@ -1,0 +1,21 @@
+using UnityEngine;
+
+namespace Model.Skills
+{
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Bomb")]
+    public class LifeBombSkillConfig : SkillConfig<LifeBombLevelConfig>
+    {
+    }
+
+    [System.Serializable]
+    public class LifeBombLevelConfig : SkillLevelConfig
+    {
+        [Header("通用")]
+        public float RequiredEnergy;
+
+        [Header("属性")]
+        public float HealthCostPercent;
+
+
+    }
+}
