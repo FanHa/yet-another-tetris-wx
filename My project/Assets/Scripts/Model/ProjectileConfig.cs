@@ -11,28 +11,5 @@ namespace Model
         public GameObject RangeAttackProjectilePrefab; // 投射物预制体
         public GameObject TemporaryTargetPrefab;
 
-        [Header("技能投射物")]
-        public GameObject ShadowArrowPrefab;
-        public GameObject ChainLightningPrefab;
-        public GameObject ThunderStrikePrefab;
-
-        public GameObject FireballPrefab;
-        public GameObject SnowballPrefab;
-
-        public GameObject BlazingFieldPrefab;
-        public GameObject FlameRingPrefab;
-
-        public GameObject FrostZonePrefab;
-
-        public GameObject IceShieldPrefab;
-        public GameObject IcyCagePrefab;
-
-        public GameObject WildWindPrefab;
-        public GameObject LifeBombPrefab;
-
-        public GameObject ChargePrefab;
-
-        public GameObject VulnerabilityFieldEmitterPrefab;
-
     }
 }

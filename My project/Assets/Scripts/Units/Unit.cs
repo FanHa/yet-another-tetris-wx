@@ -33,6 +33,7 @@ namespace Units
         private AnimationController animationController;
         private FacingController facingController;
         public Model.ProjectileConfig ProjectileConfig;
+        [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
         public Dictionary<AffinityType, int> CellCounts = new();
 
         public enum Faction
@@ -621,9 +622,11 @@ namespace Units
 
         public void ExecuteAttackProjectile(Unit target)
         {
-            GameObject projectileObject;
-            projectileObject = Instantiate(ProjectileConfig.RangeAttackProjectilePrefab, projectileSpawnPoint.position, transform.rotation);
-            var projectile = projectileObject.GetComponent<Projectiles.RangeAttack>();
+            var projectile = Instantiate(
+                rangeAttackPrefab,
+                projectileSpawnPoint.position,
+                transform.rotation
+            );
             projectile.Init(this, target);
             projectile.Activate();
             
