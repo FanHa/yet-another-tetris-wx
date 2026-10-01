@@ -11,6 +11,13 @@ namespace Model.Skills
         private IcyCage projectilePrefab;
 
         public IcyCage ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
 
     [System.Serializable]

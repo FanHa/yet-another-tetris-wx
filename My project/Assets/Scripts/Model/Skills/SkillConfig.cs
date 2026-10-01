@@ -5,6 +5,20 @@ namespace Model.Skills
 {
     public abstract class SkillConfig : ScriptableObject
     {
+#if UNITY_EDITOR
+        protected void ValidateRequiredReference(Object reference, string fieldName)
+        {
+            string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
+            string configLabel = string.IsNullOrEmpty(assetPath)
+                ? $"{GetType().Name} '{name}'"
+                : $"{GetType().Name} '{name}' ({assetPath})";
+
+            if (reference == null)
+            {
+                Debug.LogError($"{configLabel}.{fieldName} is not assigned.", this);
+            }
+        }
+#endif
     }
 
     public abstract class SkillConfig<TLevelConfig> : SkillConfig where TLevelConfig : SkillLevelConfig

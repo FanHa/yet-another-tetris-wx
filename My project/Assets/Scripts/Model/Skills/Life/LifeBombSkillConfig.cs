@@ -16,6 +16,21 @@ namespace Model.Skills
         private GameObject temporaryTargetPrefab;
 
         public GameObject TemporaryTargetPrefab => temporaryTargetPrefab;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(temporaryTargetPrefab, nameof(temporaryTargetPrefab));
+
+            if (temporaryTargetPrefab == null || temporaryTargetPrefab.GetComponent<Collider2D>() != null)
+            {
+                return;
+            }
+
+            Debug.LogError($"{nameof(temporaryTargetPrefab)} must have a {nameof(Collider2D)} component.", this);
+        }
+#endif
     }
 
     [System.Serializable]

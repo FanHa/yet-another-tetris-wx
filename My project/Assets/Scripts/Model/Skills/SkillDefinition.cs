@@ -25,6 +25,13 @@ namespace Model.Skills
             {
                 id = name;
             }
+
+            if (config == null)
+            {
+                Debug.LogError($"{nameof(config)} is not assigned.", this);
+                return;
+            }
+
         }
 #endif
     }

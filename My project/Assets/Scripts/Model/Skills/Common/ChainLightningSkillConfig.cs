@@ -11,5 +11,12 @@ namespace Model.Skills
         private ChainLightning projectilePrefab;
 
         public ChainLightning ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
 }

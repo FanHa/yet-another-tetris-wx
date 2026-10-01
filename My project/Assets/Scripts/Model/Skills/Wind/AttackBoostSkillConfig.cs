@@ -11,6 +11,13 @@ namespace Model.Skills
         private BuffProjectile buffProjectilePrefab;
 
         public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(buffProjectilePrefab, nameof(buffProjectilePrefab));
+        }
+    #endif
     }
     [System.Serializable]
     public class AttackBoostLevelConfig : SkillLevelConfig

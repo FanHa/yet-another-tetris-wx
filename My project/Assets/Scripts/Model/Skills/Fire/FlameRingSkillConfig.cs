@@ -11,6 +11,13 @@ namespace Model.Skills
         private FlameRing projectilePrefab;
 
         public FlameRing ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
 
     [System.Serializable]

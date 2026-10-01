@@ -11,6 +11,13 @@ namespace Model.Skills
         private IceShield projectilePrefab;
 
         public IceShield ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
 
     [System.Serializable]

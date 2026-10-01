@@ -11,6 +11,13 @@ namespace Model.Skills
         private Charge projectilePrefab;
 
         public Charge ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
     [System.Serializable]
     public class ChargeLevelConfig : SkillLevelConfig

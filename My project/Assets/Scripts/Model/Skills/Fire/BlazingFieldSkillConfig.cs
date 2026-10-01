@@ -11,6 +11,13 @@ namespace Model.Skills
         private BlazingField projectilePrefab;
 
         public BlazingField ProjectilePrefab => projectilePrefab;
+
+    #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+        }
+    #endif
     }
 
     [System.Serializable]
