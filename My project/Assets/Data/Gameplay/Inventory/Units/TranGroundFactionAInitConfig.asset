@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: TranGroundFactionAInitConfig
   m_EditorClassIdentifier: 
   items:
-  - characterDefinition: {fileID: 11400000, guid: d5d1a51a42bb42b08c3185d4a8391c55, type: 2}
-    cellDefinitions: []
+  - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
+    cellDefinitions:
+    - definition: {fileID: 11400000, guid: aec3f383f63831249b24e923ff69eb93, type: 2}
+      level: 1
     relativePositionFromCenter: {x: 0, y: 0, z: 0}

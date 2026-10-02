@@ -16,6 +16,23 @@ namespace Model.Skills
         private void OnValidate()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+
+            if (LevelConfigs == null)
+            {
+                return;
+            }
+
+            for (int index = 0; index < LevelConfigs.Count; index++)
+            {
+                var levelConfig = LevelConfigs[index];
+                if (levelConfig != null && levelConfig.DamageIncreasePercentage < 0f)
+                {
+                    Debug.LogError(
+                        $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.DamageIncreasePercentage)} must not be negative.",
+                        this
+                    );
+                }
+            }
         }
     #endif
     }
@@ -28,6 +45,7 @@ namespace Model.Skills
 
             [Header("弹射")]
             public float BaseDamage = 20f;
+            [Tooltip("每次弹射相对上一跳伤害的递增百分比")]
             public float DamageIncreasePercentage = 20f;
             public int MaxBounces = 5;
             public float Range = 5f;
