@@ -7,23 +7,26 @@ namespace Units.Skills
 {
     public class ChainLightning : ActiveSkill
     {
-        public float baseDamage = 20f; // 初始伤害
-        public float damageIncreasePercentage = 20f; // 每次弹射伤害增加百分比
-        public int maxBounces = 5; // 最大弹射次数
-        public float range = 5f; // 闪电作用范围
+        public ChainLightningLevelConfig Config { get; }
 
         private ChainLightningSkillConfig SkillConfig => (ChainLightningSkillConfig)Definition.Config;
 
+        public ChainLightning(ChainLightningLevelConfig config)
+        {
+            Config = config;
+            RequiredEnergy = config.RequiredEnergy;
+        }
+
         public override string Description()
         {
-            return $"对最近的敌人发射一道闪电，造成 {baseDamage} 点伤害，" +
-                   $"每次弹射伤害增加 {damageIncreasePercentage}%，最多弹射 {maxBounces} 次。";
+                 return $"对最近的敌人发射一道闪电，造成 {Config.BaseDamage} 点伤害，" +
+                     $"每次弹射伤害增加 {Config.DamageIncreasePercentage}%，最多弹射 {Config.MaxBounces} 次。";
         }
 
         protected override bool ExecuteCore()
         {
             // 找到范围内最近的敌人
-            Unit initialTarget = Owner.FindClosestEnemyInRange(range);
+            Unit initialTarget = Owner.FindClosestEnemyInRange(Config.Range);
             if (initialTarget == null)
             {
                 Debug.LogWarning("No valid targets found within range for ChainLightning.");
@@ -38,14 +41,14 @@ namespace Units.Skills
         private System.Collections.IEnumerator ChainLightningRoutine(ISkillContext caster, Unit initialTarget)
         {
             Unit currentTarget = initialTarget;
-            float currentDamage = baseDamage;
+            float currentDamage = Config.BaseDamage;
             HashSet<Unit> hitTargets = new HashSet<Unit>(); // 记录已命中的敌人
             int bounces = 0;
 
             Vector3 previousPosition = caster.transform.position; // 初始起点为 caster 的位置
 
 
-            while (currentTarget != null && bounces < maxBounces)
+            while (currentTarget != null && bounces < Config.MaxBounces)
             {
                 var damage = new Units.Damages.Damage(currentDamage, Damages.DamageType.Skill);
                 damage.SetSourceLabel(Name());
@@ -67,7 +70,7 @@ namespace Units.Skills
                 hitTargets.Add(currentTarget);
 
                 // 查找下一个最近的敌人
-                Unit nextTarget = caster.FindEnemiesInRange(range)
+                Unit nextTarget = caster.FindEnemiesInRange(Config.Range)
                     .Where(enemy => !hitTargets.Contains(enemy)) // 排除已命中的敌人
                     .OrderBy(enemy => (currentTarget.transform.position - enemy.transform.position).sqrMagnitude)
                     .FirstOrDefault();
@@ -77,7 +80,7 @@ namespace Units.Skills
 
                 // 更新目标和伤害
                 currentTarget = nextTarget;
-                currentDamage += currentDamage * (damageIncreasePercentage / 100f);
+                currentDamage += currentDamage * (Config.DamageIncreasePercentage / 100f);
                 bounces++;
             }
         }

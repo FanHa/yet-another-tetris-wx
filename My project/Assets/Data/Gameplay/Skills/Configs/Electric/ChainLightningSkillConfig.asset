@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa28f8e3353523448a0d87fa445e30d, type: 3}
+  m_Name: ChainLightningSkillConfig
+  m_EditorClassIdentifier: 
+  LevelConfigs:
+  - RequiredEnergy: 90
+    BaseDamage: 20
+    DamageIncreasePercentage: 20
+    MaxBounces: 5
+    Range: 5
+  projectilePrefab: {fileID: 5312004031096747718, guid: e7745176670ab7c43ae33b91db614d30, type: 3}

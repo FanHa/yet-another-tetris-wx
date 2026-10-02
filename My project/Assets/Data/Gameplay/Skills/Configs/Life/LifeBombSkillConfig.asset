@@ -18,3 +18,4 @@ MonoBehaviour:
   - RequiredEnergy: 80
     HealthCostPercent: 20
   projectilePrefab: {fileID: 6423888850743647294, guid: 06ddad6e653bae5448a9643c0be053c8, type: 3}
+  temporaryTargetPrefab: {fileID: 7965608084623847293, guid: b1a9bfd250701cd4f8651de0587a4121, type: 3}

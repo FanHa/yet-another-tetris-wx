@@ -21,3 +21,4 @@ MonoBehaviour:
     Duration: 5
     AtkSpeedPercent: 350
     AtkSpeedAdditionPercentPerWindCell: 20
+  buffProjectilePrefab: {fileID: 2996347991824612061, guid: 86abf7817d99cc843872c0662a2c8a3c, type: 3}
