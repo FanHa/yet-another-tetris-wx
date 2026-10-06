@@ -31,10 +31,9 @@ namespace Units.Skills
             };
         }
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
+            cachedTargetPos = default;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
             if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
@@ -43,7 +42,7 @@ namespace Units.Skills
             return true;
         }
 
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
             float percent = stats.HealthCostPercent.Final / 100f;
@@ -70,7 +69,6 @@ namespace Units.Skills
                 sourceSkill: this
             );
             
-            return true;
         }
 
         public override string Description()

@@ -27,6 +27,7 @@ namespace Units.Projectiles
         private float damageIncreasePercentage;
         private int maxTargets;
         private float chainRange;
+        private Vector3 lastObservedTargetPosition;
         private readonly HashSet<Unit> hitTargets = new();
         private bool isActive;
 
@@ -116,18 +117,33 @@ namespace Units.Projectiles
             Vector3 segmentStart = caster.transform.position;
             int hitCount = 0;
 
-            while (currentTarget != null && currentTarget.IsActive && hitCount < maxTargets)
+            while (hitCount < maxTargets)
             {
+                if (currentTarget == null || !currentTarget.IsActive)
+                {
+                    currentTarget = FindNextTarget(segmentStart);
+                    if (currentTarget == null)
+                    {
+                        break;
+                    }
+                }
+
                 if (!hitTargets.Add(currentTarget))
                 {
                     currentTarget = FindNextTarget(segmentStart);
+                    if (currentTarget == null)
+                    {
+                        break;
+                    }
                     continue;
                 }
 
                 yield return AnimateSegment(segmentStart, currentTarget);
                 if (currentTarget == null || !currentTarget.IsActive)
                 {
-                    break;
+                    segmentStart = lastObservedTargetPosition;
+                    currentTarget = FindNextTarget(segmentStart);
+                    continue;
                 }
 
                 Vector3 impactPosition = currentTarget.transform.position;
@@ -151,13 +167,15 @@ namespace Units.Projectiles
 
         private IEnumerator AnimateSegment(Vector3 startPosition, Unit target)
         {
+            lastObservedTargetPosition = target.transform.position;
             float duration = Vector3.Distance(startPosition, target.transform.position) / travelSpeed;
             float elapsed = 0f;
 
             while (elapsed < duration && target != null && target.IsActive)
             {
+                lastObservedTargetPosition = target.transform.position;
                 float progress = Mathf.Clamp01(elapsed / duration);
-                Vector3 headPosition = Vector3.Lerp(startPosition, target.transform.position, progress);
+                Vector3 headPosition = Vector3.Lerp(startPosition, lastObservedTargetPosition, progress);
                 lineRenderer.SetPosition(0, startPosition);
                 lineRenderer.SetPosition(1, headPosition);
                 elapsed += Time.deltaTime;
@@ -166,8 +184,9 @@ namespace Units.Projectiles
 
             if (target != null && target.IsActive)
             {
+                lastObservedTargetPosition = target.transform.position;
                 lineRenderer.SetPosition(0, startPosition);
-                lineRenderer.SetPosition(1, target.transform.position);
+                lineRenderer.SetPosition(1, lastObservedTargetPosition);
             }
         }
 

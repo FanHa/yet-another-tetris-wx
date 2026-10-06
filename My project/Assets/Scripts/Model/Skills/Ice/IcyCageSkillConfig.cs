@@ -13,7 +13,7 @@ namespace Model.Skills
         public IcyCage ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
@@ -21,7 +21,7 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class IcyCageLevelConfig : SkillLevelConfig
+    public class IcyCageLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("冻结效果")]
         [Tooltip("基础冻结持续时间")]
@@ -32,5 +32,6 @@ namespace Model.Skills
         [Header("消耗")]
         [Tooltip("释放所需能量")]
         public float RequiredEnergy = 65f;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
     }
 }

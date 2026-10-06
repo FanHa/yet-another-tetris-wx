@@ -45,7 +45,7 @@ namespace Units.Projectiles
             var damage = new Damages.Damage(damageValue, Damages.DamageType.Skill)
                 .SetSourceUnit(caster)
                 .SetTargetUnit(target)
-                .SetSourceLabel(sourceSkill != null ? sourceSkill.Name() : "雷击");
+                .SetSourceLabel(sourceSkill.Name());
             target.TakeDamage(damage);
 
             var thunderStrikeBuff = new Units.Buffs.ThunderStrikeBuff(

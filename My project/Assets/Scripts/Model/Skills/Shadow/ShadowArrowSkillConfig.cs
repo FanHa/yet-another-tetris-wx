@@ -13,7 +13,7 @@ namespace Model.Skills
         public ShadowArrow ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
@@ -21,9 +21,10 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class ShadowArrowLevelConfig : SkillLevelConfig
+    public class ShadowArrowLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         public float RequiredEnergy ;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         public float Damage;
         public float DamagePerShadowCell;

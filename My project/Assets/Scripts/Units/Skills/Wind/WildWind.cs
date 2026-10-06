@@ -61,7 +61,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "狂风";
 
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
 
@@ -81,7 +81,6 @@ namespace Units.Skills
                 sourceSkill: this // 传递技能引用
             );
             wildWind.Activate();
-            return true;
         }
 
         

@@ -13,18 +13,20 @@ namespace Model.Skills
         public Fireball ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+
         }
     #endif
     }
 
     [System.Serializable]
-    public class FireballLevelConfig : SkillLevelConfig
+    public class FireballLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("通用")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         [Header("属性")]
         public float DotBaseDamage;

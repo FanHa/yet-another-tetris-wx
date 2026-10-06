@@ -7,26 +7,30 @@ namespace Units.Skills
 {
     public class SkillHandler
     {
-        public float energyDecayPerSkill;
+        private readonly float energyDecayPerSkill;
         private float tickTimer;
         private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
         private readonly ISkillContext context;
 
-        public event Action<Skill> OnSkillReady;
-        public event Action<SkillQueuedEvent> OnSkillQueued;
         public event Action<SkillCastStartedEvent> OnSkillCastStarted;
         public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
         public event Action<SkillCastFailedEvent> OnSkillCastFailed;
 
         private readonly List<Skill> skills = new();
+        private readonly List<ActiveSkill> activeSkills = new();
         private readonly Queue<ActiveSkill> readyQueue = new();
         private readonly HashSet<ActiveSkill> queuedSet = new();
 
         public SkillHandler(ISkillContext context, float energyDecayPerSkill = 1f)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
+            if (float.IsNaN(energyDecayPerSkill) || float.IsInfinity(energyDecayPerSkill) || energyDecayPerSkill < 0f || energyDecayPerSkill > 1f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(energyDecayPerSkill), "Must be finite and between 0 and 1.");
+            }
+
             this.energyDecayPerSkill = energyDecayPerSkill;
         }
 
@@ -40,10 +44,11 @@ namespace Units.Skills
             tickTimer += deltaTime;
             if (tickTimer >= TICK_INTERVAL)
             {
-                tickTimer -= TICK_INTERVAL;
+                float elapsedEnergyTime = Mathf.Floor(tickTimer / TICK_INTERVAL) * TICK_INTERVAL;
+                tickTimer -= elapsedEnergyTime;
 
-                float energyPerTick = context.Attributes.EnergyPerSecond.finalValue * TICK_INTERVAL;
-                DistributeEnergy(energyPerTick);
+                float energyToDistribute = context.Attributes.EnergyPerSecond.finalValue * elapsedEnergyTime;
+                DistributeEnergy(energyToDistribute);
             }
         }
 
@@ -69,6 +74,10 @@ namespace Units.Skills
                 return;
             newSkill.Owner = context;
             skills.Add(newSkill);
+            if (newSkill is ActiveSkill activeSkill)
+            {
+                activeSkills.Add(activeSkill);
+            }
         }
 
         public IReadOnlyList<Skill> GetSkills()
@@ -76,9 +85,8 @@ namespace Units.Skills
             return skills;
         }
 
-        public void DistributeEnergy(float baseEnergy)
+        internal void DistributeEnergy(float baseEnergy)
         {
-            var activeSkills = skills.OfType<ActiveSkill>().ToList();
             if (activeSkills.Count == 0) return;
 
             float decayFactor = Mathf.Pow(energyDecayPerSkill, Mathf.Max(0, activeSkills.Count - 1));
@@ -87,17 +95,12 @@ namespace Units.Skills
             foreach (var s in activeSkills)
                 s.AddEnergy(gainPerSkill);
 
-            // 入队阶段只依赖能量条件，不依赖 IsReady() 返回值。
-            // IsReady() 在部分技能里带有“缓存目标”等副作用，这里仅用于预缓存，
-            // 真正的施放判定在 TryCastNextSkill() 里做二次校验。
             foreach (var s in activeSkills)
             {
-                if (s.CurrentEnergy >= s.RequiredEnergy && queuedSet.Add(s))
+                if (!queuedSet.Contains(s) && s.IsReady())
                 {
-                    s.IsReady();
+                    queuedSet.Add(s);
                     readyQueue.Enqueue(s);
-                    OnSkillReady?.Invoke(s);
-                    OnSkillQueued?.Invoke(new SkillQueuedEvent(context.SelfUnit, s, s.CurrentEnergy, s.RequiredEnergy));
                 }
             }
         }
@@ -115,30 +118,16 @@ namespace Units.Skills
             var skill = readyQueue.Dequeue();
             queuedSet.Remove(skill);
 
-            // 二次校验：入队只代表能量达标，真正施放前需再次确认前置条件。
-            if (!skill.IsReady())
+            if (!skill.HasEnoughEnergy)
             {
                 OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.PrerequisiteNotMet));
                 return SkillCastResult.Failure(skill, SkillCastFailureReason.PrerequisiteNotMet);
             }
 
-            if (!skill.CanExecuteNow())
-            {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.InvalidTarget));
-                return SkillCastResult.Failure(skill, SkillCastFailureReason.InvalidTarget);
-            }
-
             OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(context.SelfUnit, skill));
-
-            bool result = skill.Execute();
-            if (result)
-            {
-                OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.SelfUnit, skill));
-                return SkillCastResult.Success(skill);
-            }
-
-            OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.ExecuteCoreFailed));
-            return SkillCastResult.Failure(skill, SkillCastFailureReason.ExecuteCoreFailed);
+            skill.Execute();
+            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.SelfUnit, skill));
+            return SkillCastResult.Success(skill);
         }
 
         public bool HasReadySkill => readyQueue.Count > 0;

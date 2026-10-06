@@ -32,14 +32,14 @@ namespace Units.Skills
             };
         }
 
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
 
             // 找到距离自己最远的敌人
             Unit targetEnemy = Owner.FindFurthestEnemy();
             if (targetEnemy == null)
-                return false;
+                return;
 
             var chargeProjectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
@@ -55,7 +55,6 @@ namespace Units.Skills
                 sourceSkill: this
             );
             chargeProjectile.Activate();
-            return true;
         }
 
         public override string Description()

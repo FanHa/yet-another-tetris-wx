@@ -13,15 +13,17 @@ namespace Model.Skills
         public BlazingField ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+
+            }
         }
     #endif
     }
 
     [System.Serializable]
-    public class BlazingFieldLevelConfig : SkillLevelConfig
+    public class BlazingFieldLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("基础属性")]
         public float BaseRadius = 1.5f;
@@ -37,5 +39,6 @@ namespace Model.Skills
 
         [Header("消耗")]
         public float RequiredEnergy = 120f;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
     }
 }

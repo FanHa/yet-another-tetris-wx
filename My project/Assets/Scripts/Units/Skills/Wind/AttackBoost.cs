@@ -49,7 +49,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "攻击加速";
 
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
             var buff = new Buffs.AttackBoostBuff(
@@ -66,7 +66,6 @@ namespace Units.Skills
             );
             projectile.Init(Owner.SelfUnit, Owner.SelfUnit, buff); // 目标为自己
             projectile.Activate();
-            return true;
         }
     }
 }

@@ -56,7 +56,6 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCast;
-        public event Action<SkillQueuedEvent> OnSkillQueued;
         public event Action<SkillCastStartedEvent> OnSkillCastStarted;
         public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
         public event Action<SkillCastFailedEvent> OnSkillCastFailed;
@@ -219,7 +218,6 @@ namespace Units
 
             movementController.Initialize(Attributes);
             skillHandler.Activate();
-            skillHandler.OnSkillQueued += HandleSkillQueued;
             skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded += HandleSkillCastSucceeded;
             skillHandler.OnSkillCastFailed += HandleSkillCastFailed;
@@ -236,7 +234,6 @@ namespace Units
             {
                 unitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
             }
-            skillHandler.OnSkillQueued -= HandleSkillQueued;
             skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
             skillHandler.OnSkillCastFailed -= HandleSkillCastFailed;
@@ -256,11 +253,6 @@ namespace Units
         private void HandleGlobalSkillCast(Unit caster, Skill skill)
         {
             buffHandler.DispatchGlobalSkillCast(skill);
-        }
-
-        private void HandleSkillQueued(SkillQueuedEvent skillQueuedEvent)
-        {
-            OnSkillQueued?.Invoke(skillQueuedEvent);
         }
 
         private void HandleSkillCastStarted(SkillCastStartedEvent skillCastStartedEvent)
@@ -509,7 +501,7 @@ namespace Units
         
         }
 
-        public void AddSkillEnergy(float energy)
+        internal void AddSkillEnergy(float energy)
         {
             skillHandler.DistributeEnergy(energy);
         }

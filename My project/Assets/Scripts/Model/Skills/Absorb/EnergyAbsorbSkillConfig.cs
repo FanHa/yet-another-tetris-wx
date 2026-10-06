@@ -5,6 +5,16 @@ namespace Model.Skills
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Absorb/Energy Absorb")]
     public class EnergyAbsorbSkillConfig : SkillConfig<EnergyAbsorbLevelConfig>
     {
+#if UNITY_EDITOR
+        protected override void ValidateSpecificConfig()
+        {
+            foreach (var (i, level) in GetValidLevelConfigs())
+            {
+                ValidateFiniteNonNegative(level.BaseEnergyAbsorbPerSkillCast, $"{nameof(LevelConfigs)}[{i}].{nameof(level.BaseEnergyAbsorbPerSkillCast)}");
+                ValidateFiniteNonNegative(level.EnergyAbsorbPerAbsorbCell, $"{nameof(LevelConfigs)}[{i}].{nameof(level.EnergyAbsorbPerAbsorbCell)}");
+            }
+        }
+#endif
     }
 
     [System.Serializable]

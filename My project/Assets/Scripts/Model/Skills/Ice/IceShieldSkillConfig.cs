@@ -13,7 +13,7 @@ namespace Model.Skills
         public IceShield ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }

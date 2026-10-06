@@ -13,7 +13,7 @@ namespace Model.Skills
         public FrostZone ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
@@ -21,7 +21,7 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class FrostZoneLevelConfig : SkillLevelConfig
+    public class FrostZoneLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("基础属性")]
         [Tooltip("基础半径")]
@@ -64,5 +64,6 @@ namespace Model.Skills
         [Header("消耗")]
         [Tooltip("释放所需能量")]
         public float RequiredEnergy = 120f;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
     }
 }

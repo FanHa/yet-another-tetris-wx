@@ -13,15 +13,17 @@ namespace Model.Skills
         public ThunderStrikeProjectile ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+
+            }
         }
     #endif
     }
 
     [System.Serializable]
-    public class ThunderStrikeLevelConfig : SkillLevelConfig
+    public class ThunderStrikeLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("伤害")]
         [Tooltip("基础技能伤害")]
@@ -43,5 +45,6 @@ namespace Model.Skills
         [Header("消耗")]
         [Tooltip("释放所需能量")]
         public float RequiredEnergy = 90f;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
     }
 }

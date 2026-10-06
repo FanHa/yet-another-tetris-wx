@@ -19,11 +19,9 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
-
+            targetEnemy = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
             if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
@@ -32,11 +30,7 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool CanExecuteNow() =>
-            targetEnemy != null && targetEnemy.IsActive;
-        
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
             var freezeBuff = new Buffs.Freeze(
@@ -44,10 +38,8 @@ namespace Units.Skills
                 Owner.SelfUnit,
                 this
             );
-            // todo 判断TargetEnemy 是否还活跃
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
-            return true;
         }
 
         public override string Description()

@@ -13,16 +13,17 @@ namespace Model.Skills
         public Charge ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
     #endif
     }
     [System.Serializable]
-    public class ChargeLevelConfig : SkillLevelConfig
+    public class ChargeLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         public float ChargeDamage;
 

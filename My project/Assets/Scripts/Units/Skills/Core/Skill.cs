@@ -53,10 +53,4 @@ namespace Units.Skills
     {
         void ApplyPassive();
     }
-    public interface IActiveSkill
-    {
-        void AddEnergy(float amount);
-        bool IsReady();
-        bool Execute();
-    }
 }

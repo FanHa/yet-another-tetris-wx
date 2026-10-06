@@ -31,10 +31,9 @@ namespace Units.Skills
         }
 
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
+            cachedTarget = null;
             cachedTarget = Owner.FindRandomAlly(
                 range: float.MaxValue,
                 includeSelf: true
@@ -45,13 +44,10 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool CanExecuteNow() =>
-            cachedTarget != null && cachedTarget.IsActive;
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             if (cachedTarget == null)
-                return false;
+            return;
 
             var stats = CalcStats();
             // 攻击力加成与施法者最大生命值相关
@@ -64,7 +60,6 @@ namespace Units.Skills
                 this
             ));
             cachedTarget = null;
-            return true;
         }
 
         public override string Description()

@@ -30,6 +30,21 @@ namespace Model.Tetri
         [SerializeField] private float energyPerSecondPercentModifier;
         [SerializeField] private float attackRangePercentModifier;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (energyPerSecondBase < 0f || float.IsNaN(energyPerSecondBase) || float.IsInfinity(energyPerSecondBase))
+            {
+                Debug.LogError($"{nameof(energyPerSecondBase)} must be finite and non-negative.", this);
+            }
+
+            if (float.IsNaN(energyPerSecondPercentModifier) || float.IsInfinity(energyPerSecondPercentModifier))
+            {
+                Debug.LogError($"{nameof(energyPerSecondPercentModifier)} must be finite.", this);
+            }
+        }
+#endif
+
         public float MoveSpeedBase => moveSpeedBase;
         public float AttackPowerBase => attackPowerBase;
         public float MaxHealthBase => maxHealthBase;

@@ -1,21 +1,5 @@
 namespace Units.Skills
 {
-    public readonly struct SkillQueuedEvent
-    {
-        public Unit Owner { get; }
-        public ActiveSkill Skill { get; }
-        public float CurrentEnergy { get; }
-        public float RequiredEnergy { get; }
-
-        public SkillQueuedEvent(Unit owner, ActiveSkill skill, float currentEnergy, float requiredEnergy)
-        {
-            Owner = owner;
-            Skill = skill;
-            CurrentEnergy = currentEnergy;
-            RequiredEnergy = requiredEnergy;
-        }
-    }
-
     public readonly struct SkillCastStartedEvent
     {
         public Unit Owner { get; }

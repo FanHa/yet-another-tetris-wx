@@ -22,28 +22,16 @@ namespace Units.Skills
                    $"每次弹射伤害增加 {Config.DamageIncreasePercentage}%，最多弹射 {Config.MaxBounces} 次。";
         }
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-            {
-                return false;
-            }
-
+            initialTarget = null;
             initialTarget = Owner.FindClosestEnemyInRange(Config.Range);
             return initialTarget != null;
         }
 
-        public override bool CanExecuteNow() => initialTarget != null && initialTarget.IsActive;
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
-            if (initialTarget == null || !initialTarget.IsActive)
-            {
-                initialTarget = null;
-                return false;
-            }
-
-            var projectile = Object.Instantiate(
+            Projectiles.ChainLightning projectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
                 Owner.transform.position,
                 Quaternion.identity
@@ -59,7 +47,6 @@ namespace Units.Skills
             );
             projectile.Activate();
             initialTarget = null;
-            return true;
         }
 
         public override string Name()

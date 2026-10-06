@@ -33,11 +33,9 @@ namespace Units.Skills
             };
         }
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
-
+            cachedTarget = null;
             // 找到友方目标（不包括自己）
                 cachedTarget = Owner.FindRandomAlly(
                 range: float.MaxValue,
@@ -49,13 +47,10 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool CanExecuteNow() =>
-            cachedTarget != null && cachedTarget.IsActive;
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             if (cachedTarget == null)
-                return false;
+            return;
 
             var stats = CalcStats();
             float shieldAmount = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
@@ -81,7 +76,6 @@ namespace Units.Skills
             Owner.SelfUnit.TakeDamage(damage);
 
             cachedTarget = null;
-            return true;
         }
 
         public override string Description()

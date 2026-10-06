@@ -13,17 +13,18 @@ namespace Model.Skills
         public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(buffProjectilePrefab, nameof(buffProjectilePrefab));
         }
     #endif
     }
     [System.Serializable]
-    public class AttackBoostLevelConfig : SkillLevelConfig
+    public class AttackBoostLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("通用")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
         public float Duration;
 
         [Header("属性")]

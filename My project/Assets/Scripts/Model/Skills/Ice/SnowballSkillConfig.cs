@@ -13,7 +13,7 @@ namespace Model.Skills
         public Snowball ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
@@ -21,7 +21,7 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class SnowballLevelConfig : SkillLevelConfig
+    public class SnowballLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("伤害")]
         public float BaseDamage = 10f;
@@ -41,5 +41,6 @@ namespace Model.Skills
 
         [Header("消耗")]
         public float RequiredEnergy = 40f;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
     }
 }

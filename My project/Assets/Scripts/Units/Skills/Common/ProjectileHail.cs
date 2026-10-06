@@ -8,6 +8,7 @@ namespace Units.Skills
     {
         public float damageReductionPercentage = 50f; // 重复攻击时伤害降低百分比
         public float multiplier = 2f; // 攻击频率的倍数
+        private readonly List<Unit> cachedTargets = new();
 
         public override string Name()
         {
@@ -20,24 +21,28 @@ namespace Units.Skills
                    $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";
         }
 
-        protected override bool ExecuteCore()
+        protected override bool PrepareCastCore()
         {
+            cachedTargets.Clear();
             float attackRange = Owner.Attributes.AttackRange.finalValue;
-            float attackFrequency = Owner.Attributes.AttacksPerTenSeconds.finalValue;
-            int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
+            cachedTargets.AddRange(Owner.FindEnemiesInRange(attackRange));
+            return cachedTargets.Count > 0;
+        }
 
-            List<Unit> enemiesInRange = Owner.FindEnemiesInRange(attackRange);
-            if (enemiesInRange.Count == 0)
+        protected override void ExecuteCore()
+        {
+            if (cachedTargets.Count == 0)
             {
-                Debug.LogWarning("No valid targets found within range for ProjectileHail.");
-                return false;
+                return;
             }
 
+            float attackFrequency = Owner.Attributes.AttacksPerTenSeconds.finalValue;
+            int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
             HashSet<Unit> attackedEnemies = new HashSet<Unit>();
             for (int i = 0; i < projectileCount; i++)
             {
-                Unit targetEnemy = enemiesInRange
-                    .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? enemiesInRange[Random.Range(0, enemiesInRange.Count)];
+                Unit targetEnemy = cachedTargets
+                    .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? cachedTargets[Random.Range(0, cachedTargets.Count)];
 
                 float damageValue = Owner.Attributes.AttackPower.finalValue;
                 if (attackedEnemies.Contains(targetEnemy))
@@ -48,12 +53,14 @@ namespace Units.Skills
                 damage.SetSourceLabel(Name());
                 damage.SetSourceUnit(Owner.SelfUnit);
                 damage.SetTargetUnit(targetEnemy);
-                // caster.Attack(targetEnemy, damage);
+                Owner.SelfUnit.TriggerAttackHit(targetEnemy, damage);
+                targetEnemy.TakeHit(Owner.SelfUnit, ref damage);
 
                 // 记录已攻击的敌人
                 attackedEnemies.Add(targetEnemy);
             }
-            return true;
+
+            cachedTargets.Clear();
         }
 
     }

@@ -22,7 +22,7 @@ namespace UI.UnitInfo
         {
             if (skill is Units.Skills.ActiveSkill activeSkill)
             {
-                energySlider.value = activeSkill.CurrentEnergy;
+                energySlider.value = activeSkill.EnergyProgress;
             }
         }
 
@@ -33,8 +33,9 @@ namespace UI.UnitInfo
             if (skill is Units.Skills.ActiveSkill activeSkill)
             {
                 energySlider.gameObject.SetActive(true);
-                energySlider.maxValue = activeSkill.RequiredEnergy;
-                energySlider.value = 0f; // 初始值为0
+                energySlider.minValue = 0f;
+                energySlider.maxValue = 1f;
+                energySlider.value = activeSkill.EnergyProgress;
             }
             else
             {

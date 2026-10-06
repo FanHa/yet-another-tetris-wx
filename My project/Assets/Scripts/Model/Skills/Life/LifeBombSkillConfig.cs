@@ -18,11 +18,10 @@ namespace Model.Skills
         public GameObject TemporaryTargetPrefab => temporaryTargetPrefab;
 
 #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
             ValidateRequiredReference(temporaryTargetPrefab, nameof(temporaryTargetPrefab));
-
             if (temporaryTargetPrefab == null || temporaryTargetPrefab.GetComponent<Collider2D>() != null)
             {
                 return;
@@ -34,10 +33,11 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class LifeBombLevelConfig : SkillLevelConfig
+    public class LifeBombLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("通用")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         [Header("属性")]
         public float HealthCostPercent;

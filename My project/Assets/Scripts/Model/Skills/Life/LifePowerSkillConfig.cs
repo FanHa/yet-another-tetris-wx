@@ -8,10 +8,11 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class LifePowerLevelConfig : SkillLevelConfig
+    public class LifePowerLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("通用")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         [Header("属性")]
         public float HealthToAtkPercent;

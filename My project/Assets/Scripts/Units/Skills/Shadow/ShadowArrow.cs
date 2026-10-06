@@ -33,12 +33,12 @@ namespace Units.Skills
                 VulnerabilityDuration = new StatValue("易伤持续时间", Config.VulnerabilityDuration)
             };
         }
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             // 查找最大生命值最低的敌人
             Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
             if (targetEnemy == null)
-                return false;
+                return;
 
             var stats = CalcStats();
             // 创建并发射暗影箭
@@ -56,7 +56,6 @@ namespace Units.Skills
                 sourceSkill: this
             );
             projectile.Activate();
-            return true;
         }
 
         public override string Description()

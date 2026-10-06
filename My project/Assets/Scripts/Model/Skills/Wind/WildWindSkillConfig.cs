@@ -13,7 +13,7 @@ namespace Model.Skills
         public WildWind ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
         }
@@ -21,10 +21,11 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class WildWindLevelConfig : SkillLevelConfig
+    public class WildWindLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("技能消耗")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         [Header("基础属性")]
         public float Damage;

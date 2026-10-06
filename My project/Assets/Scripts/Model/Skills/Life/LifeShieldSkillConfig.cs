@@ -13,7 +13,7 @@ namespace Model.Skills
         public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(buffProjectilePrefab, nameof(buffProjectilePrefab));
         }
@@ -21,10 +21,11 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class LifeShieldLevelConfig : SkillLevelConfig
+    public class LifeShieldLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
         [Header("通用")]
         public float RequiredEnergy;
+        float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         [Header("属性")]
         public float LifeCostPercent;

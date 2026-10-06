@@ -34,11 +34,9 @@ namespace Units.Skills
             };
         }
         
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
-
+            targetEnemy = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
             if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
@@ -47,12 +45,8 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool CanExecuteNow() =>
-            targetEnemy != null && targetEnemy.IsActive;
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
-            // todo targetEnemy 是否依然活跃
             var stats = CalcStats();
 
             Units.Projectiles.Fireball fireball = Object.Instantiate(
@@ -70,7 +64,6 @@ namespace Units.Skills
             );
             fireball.Activate();
             targetEnemy = null; // 用完清空
-            return true;
         }
 
         public override string Description()

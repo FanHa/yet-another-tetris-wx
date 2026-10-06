@@ -17,11 +17,9 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        public override bool IsReady()
+        protected override bool PrepareCastCore()
         {
-            if (!base.IsReady())
-                return false;
-
+            cachedTarget = null;
             if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
 
@@ -29,10 +27,7 @@ namespace Units.Skills
             return true;
         }
 
-        public override bool CanExecuteNow() =>
-            cachedTarget != null && cachedTarget.IsActive;
-
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
 
@@ -52,7 +47,6 @@ namespace Units.Skills
             thunderStrikeEffect.Activate();
 
             cachedTarget = null;
-            return true;
         }
 
         public override string Description()

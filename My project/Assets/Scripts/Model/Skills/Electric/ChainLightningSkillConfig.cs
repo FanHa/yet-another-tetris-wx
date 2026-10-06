@@ -13,19 +13,13 @@ namespace Model.Skills
         public ChainLightning ProjectilePrefab => projectilePrefab;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
 
-            if (LevelConfigs == null)
+            foreach (var (index, levelConfig) in GetValidLevelConfigs())
             {
-                return;
-            }
-
-            for (int index = 0; index < LevelConfigs.Count; index++)
-            {
-                var levelConfig = LevelConfigs[index];
-                if (levelConfig != null && levelConfig.DamageIncreasePercentage < 0f)
+                if (levelConfig.DamageIncreasePercentage < 0f)
                 {
                     Debug.LogError(
                         $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.DamageIncreasePercentage)} must not be negative.",
@@ -38,10 +32,11 @@ namespace Model.Skills
     }
 
         [System.Serializable]
-        public class ChainLightningLevelConfig : SkillLevelConfig
+        public class ChainLightningLevelConfig : SkillLevelConfig, IRequiresEnergy
         {
             [Header("消耗")]
             public float RequiredEnergy = 90f;
+            float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
             [Header("弹射")]
             public float BaseDamage = 20f;

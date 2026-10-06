@@ -12,7 +12,7 @@ namespace Units.Skills
         {
             Config = config;
             RequiredEnergy = config.RequiredEnergy;
-            CurrentEnergy = config.InitEnergy;
+            InitializeInitialEnergy(config.InitEnergy);
         }
 
         private struct ShadowStepStats
@@ -44,13 +44,13 @@ namespace Units.Skills
             };
         }
 
-        protected override bool ExecuteCore()
+        protected override void ExecuteCore()
         {
             var stats = CalcStats();
 
             Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
             if (targetEnemy == null)
-                return false;
+                return;
 
             Vector3 dir = (targetEnemy.transform.position - Owner.transform.position).normalized;
             Vector3 targetPos = targetEnemy.transform.position + dir * 1.2f; // 1.2f为身后距离，可调整
@@ -73,7 +73,6 @@ namespace Units.Skills
             targetEnemy.TakeDamage(damage);
             // todo 动画
 
-            return true;
         }
 
         public override string Description()
