@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,19 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private FlameRing projectilePrefab;
+        [SerializeField] private BuffDefinition flameRingBuffDefinition;
+        [SerializeField] private BuffDefinition burnBuffDefinition;
 
         public FlameRing ProjectilePrefab => projectilePrefab;
+        public BuffDefinition FlameRingBuffDefinition => flameRingBuffDefinition;
+        public BuffDefinition BurnBuffDefinition => burnBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(flameRingBuffDefinition, nameof(flameRingBuffDefinition));
+            ValidateRequiredReference(burnBuffDefinition, nameof(burnBuffDefinition));
         }
     #endif
     }

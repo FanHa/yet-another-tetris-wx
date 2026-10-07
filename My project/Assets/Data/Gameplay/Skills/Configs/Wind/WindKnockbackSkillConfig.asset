@@ -19,3 +19,4 @@ MonoBehaviour:
   - BaseKnockbackDistance: 1.5
     KnockbackDistancePerWindCell: 0.15
     MaxKnockbackDistance: 3
+  windKnockbackBuffDefinition: {fileID: 11400000, guid: c70da5dbca4c1554cac1ce99d4feb184, type: 2}

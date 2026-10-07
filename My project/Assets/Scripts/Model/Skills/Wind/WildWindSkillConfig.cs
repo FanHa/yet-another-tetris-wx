@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private WildWind projectilePrefab;
+        [SerializeField] private BuffDefinition wildWindDebuffDefinition;
 
         public WildWind ProjectilePrefab => projectilePrefab;
+        public BuffDefinition WildWindDebuffDefinition => wildWindDebuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(wildWindDebuffDefinition, nameof(wildWindDebuffDefinition));
         }
     #endif
     }

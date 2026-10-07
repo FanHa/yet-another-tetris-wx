@@ -48,3 +48,4 @@ MonoBehaviour:
     ChilledEnergySlowPercentPerIceCell: 6
     RequiredEnergy: 120
   projectilePrefab: {fileID: 9111316188251510382, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
+  chilledBuffDefinition: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}

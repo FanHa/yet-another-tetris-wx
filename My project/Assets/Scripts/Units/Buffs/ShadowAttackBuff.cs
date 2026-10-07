@@ -33,7 +33,7 @@ namespace Units.Buffs
                 extraDamagePercent: vulnerabilityPercent,
                 sourceUnit: attacker,
                 sourceSkill: sourceSkill
-            );
+                ).BindDefinition(((Model.Skills.ShadowAttackSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition);
             context.AddBuffTo(target, vulnerability);
         }
     }

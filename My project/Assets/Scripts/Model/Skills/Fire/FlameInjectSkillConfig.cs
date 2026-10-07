@@ -1,10 +1,25 @@
 using UnityEngine;
+using Model.Buffs;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Fire/Flame Inject")]
     public class FlameInjectSkillConfig : SkillConfig<FlameInjectLevelConfig>
     {
+        [Header("Buff")]
+        [SerializeField] private BuffDefinition flameInjectBuffDefinition;
+        [SerializeField] private BuffDefinition burnBuffDefinition;
+
+        public BuffDefinition FlameInjectBuffDefinition => flameInjectBuffDefinition;
+        public BuffDefinition BurnBuffDefinition => burnBuffDefinition;
+
+    #if UNITY_EDITOR
+        protected override void ValidateSpecificConfig()
+        {
+            ValidateRequiredReference(flameInjectBuffDefinition, nameof(flameInjectBuffDefinition));
+            ValidateRequiredReference(burnBuffDefinition, nameof(burnBuffDefinition));
+        }
+    #endif
     }
 
     [System.Serializable]

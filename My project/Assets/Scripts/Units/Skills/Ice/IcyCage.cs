@@ -37,7 +37,7 @@ namespace Units.Skills
                 stats.FreezeDuration.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition);
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
         }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,19 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private IceShield projectilePrefab;
+        [SerializeField] private BuffDefinition iceShieldBuffDefinition;
+        [SerializeField] private BuffDefinition chilledBuffDefinition;
 
         public IceShield ProjectilePrefab => projectilePrefab;
+        public BuffDefinition IceShieldBuffDefinition => iceShieldBuffDefinition;
+        public BuffDefinition ChilledBuffDefinition => chilledBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(iceShieldBuffDefinition, nameof(iceShieldBuffDefinition));
+            ValidateRequiredReference(chilledBuffDefinition, nameof(chilledBuffDefinition));
         }
     #endif
     }

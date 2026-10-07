@@ -22,3 +22,4 @@ MonoBehaviour:
     DotDuration: 5
     DotAddtionPerFireCell: 2
   projectilePrefab: {fileID: 7427865461942980773, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
+  burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

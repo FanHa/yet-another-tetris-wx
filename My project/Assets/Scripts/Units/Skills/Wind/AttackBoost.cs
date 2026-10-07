@@ -57,7 +57,7 @@ namespace Units.Skills
                 atkSpeedPercent: stats.AtkSpeedPercent.Final,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            );
+            ).BindDefinition(((AttackBoostSkillConfig)Definition.Config).AttackBoostBuffDefinition);
 
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,

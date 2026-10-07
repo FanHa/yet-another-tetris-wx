@@ -50,7 +50,7 @@ namespace Units.Skills
                 stats.DotDuration.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((ShadowAttackSkillConfig)Definition.Config).ShadowAttackBuffDefinition);
             Owner.AddBuff(buff);
         }
     }

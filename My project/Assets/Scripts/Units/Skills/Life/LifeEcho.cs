@@ -43,7 +43,7 @@ namespace Units.Skills
                 Owner.SelfUnit,
                 this,
                 stats.ReflectPercent.Final
-            ));
+            ).BindDefinition(((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition));
         }
     }
 }

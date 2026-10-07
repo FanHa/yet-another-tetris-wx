@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class IcyCage : MonoBehaviour
+    public class IcyCage : MonoBehaviour, global::Units.IBuffVisual
     {
         private Unit targetUnit;
         private bool initialized = false;

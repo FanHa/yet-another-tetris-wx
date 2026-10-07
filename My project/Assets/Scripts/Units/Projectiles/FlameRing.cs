@@ -66,7 +66,7 @@ namespace Units.Projectiles
                         duration: dotDuration,
                         sourceUnit: owner,
                         sourceSkill: sourceSkill
-                    );
+                    ).BindDefinition(((Model.Skills.FlameRingSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
                     enemy.AddBuff(burn);
                 }
             }

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: IceShield
   displayName: Ice Shield
   description: "\u91CA\u653E Ice Shield\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.IceShield, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
   icon: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}
+  buffA: {fileID: 11400000, guid: ce435e6fbc3669b48ae31f4a2bcd54b6, type: 2}
+  buffB: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}

@@ -59,7 +59,7 @@ namespace Units.Skills
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition);
             Owner.AddBuff(buff);
         }
 

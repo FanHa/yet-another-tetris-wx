@@ -19,3 +19,5 @@ MonoBehaviour:
   - VulnerabilityPercent: 10
     VulnerabilityPercentPerShadowCell: 2
     DotDuration: 25
+  shadowAttackBuffDefinition: {fileID: 11400000, guid: 2f38ba7e00aa4b243ac7b5cf848b8b61, type: 2}
+  vulnerabilityBuffDefinition: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: LifePower
   displayName: Life Power
   description: "\u91CA\u653E Life Power\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.LifePower, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 86009bf139b24394cb5ddcff1bcb5f38, type: 2}
   icon: {fileID: 1830523377788679087, guid: 71787473c3bcba645a18d20f3b97d484, type: 3}
+  buffA: {fileID: 11400000, guid: 12d4d71c13aebca438529ddcb1f971b8, type: 2}
+  buffB: {fileID: 0}

@@ -41,7 +41,7 @@ namespace Units.Projectiles
                 vulnerabilityPercent,
                 caster,
                 sourceSkill
-            );
+            ).BindDefinition(((Model.Skills.ShadowArrowSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition);
             target.AddBuff(vulnerabilityBuff);
 
             Destroy(gameObject);

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: EnergyAbsorb
   displayName: Energy Absorb
   description: "\u91CA\u653E Energy Absorb\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.EnergyAbsorb, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 3b7ae0941fe7b7f47a05c23b93c4dcf2, type: 2}
   icon: {fileID: 7569832779607618052, guid: 1f1653995ca9b6645a7e65ac0705e448, type: 3}
+  buffA: {fileID: 11400000, guid: d8bcbc78fe968bc418d2eead1b34260b, type: 2}
+  buffB: {fileID: 0}

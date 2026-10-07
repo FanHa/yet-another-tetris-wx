@@ -55,7 +55,7 @@ namespace Units.Skills
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition);
             Owner.AddBuff(buff);
         }
     }

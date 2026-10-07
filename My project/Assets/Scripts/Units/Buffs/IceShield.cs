@@ -50,7 +50,7 @@ namespace Units.Buffs
                 chilledEnergyRegenSlowPercent,
                 self,
                 sourceSkill
-            );
+                ).BindDefinition(((Model.Skills.IceShieldSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
             context.AddBuffTo(attacker, chilled);
         }
 

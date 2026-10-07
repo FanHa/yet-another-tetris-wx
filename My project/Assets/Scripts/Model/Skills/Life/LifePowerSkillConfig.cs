@@ -1,10 +1,22 @@
 using UnityEngine;
+using Model.Buffs;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Life/Life Power")]
     public class LifePowerSkillConfig : SkillConfig<LifePowerLevelConfig>
     {
+        [Header("Buff")]
+        [SerializeField] private BuffDefinition lifePowerBuffDefinition;
+
+        public BuffDefinition LifePowerBuffDefinition => lifePowerBuffDefinition;
+
+    #if UNITY_EDITOR
+        protected override void ValidateSpecificConfig()
+        {
+            ValidateRequiredReference(lifePowerBuffDefinition, nameof(lifePowerBuffDefinition));
+        }
+    #endif
     }
 
     [System.Serializable]

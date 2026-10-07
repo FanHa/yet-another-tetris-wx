@@ -1,13 +1,20 @@
 using UnityEngine;
+using Model.Buffs;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Shadow/Shadow Step")]
     public class ShadowStepSkillConfig : SkillConfig<ShadowStepLevelConfig>
     {
+        [Header("Buff")]
+        [SerializeField] private BuffDefinition vulnerabilityBuffDefinition;
+
+        public BuffDefinition VulnerabilityBuffDefinition => vulnerabilityBuffDefinition;
+
 #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
+            ValidateRequiredReference(vulnerabilityBuffDefinition, nameof(vulnerabilityBuffDefinition));
             foreach (var (i, level) in GetValidLevelConfigs())
             {
                 ValidateFiniteNonNegative(level.InitEnergy, $"{nameof(LevelConfigs)}[{i}].{nameof(level.InitEnergy)}");

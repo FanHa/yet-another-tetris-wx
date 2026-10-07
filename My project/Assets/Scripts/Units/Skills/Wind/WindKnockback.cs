@@ -53,7 +53,7 @@ namespace Units.Skills
                 maxKnockbackDistance: stats.MaxKnockbackDistance.Final,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            ));
+            ).BindDefinition(((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition));
         }
     }
 }

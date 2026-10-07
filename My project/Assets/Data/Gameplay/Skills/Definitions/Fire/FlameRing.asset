@@ -15,7 +15,7 @@ MonoBehaviour:
   id: FlameRing
   displayName: Flame Ring
   description: "\u91CA\u653E Flame Ring\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.FlameRing, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 639063875c5662a42900ab258b3c458b, type: 2}
   icon: {fileID: 201670095172932294, guid: 5bf9011d8601ce147a883fb4991c72e1, type: 3}
+  buffA: {fileID: 11400000, guid: 5bea28cd09b7cec4d8c0b72af9245fea, type: 2}
+  buffB: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

@@ -52,7 +52,7 @@ namespace Units.Projectiles
                 stunDuration,
                 caster,
                 sourceSkill
-            );
+            ).BindDefinition(((Model.Skills.ThunderStrikeSkillConfig)sourceSkill.Definition.Config).ThunderStrikeBuffDefinition);
             target.AddBuff(thunderStrikeBuff);
         }
 

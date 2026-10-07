@@ -44,7 +44,7 @@ namespace Units.Projectiles
                             dotDuration,
                             caster,
                             sourceSkill
-                        );
+                        ).BindDefinition(((Model.Skills.BlazingFieldSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
                         enemy.AddBuff(burn);
                     }
                 }

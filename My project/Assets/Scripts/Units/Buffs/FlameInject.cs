@@ -34,7 +34,7 @@ namespace Units.Buffs
                 duration: dotDuration,
                 sourceUnit: attacker,
                 sourceSkill: sourceSkill
-            );
+                ).BindDefinition(((Model.Skills.FlameInjectSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
             context.AddBuffTo(target, burn);
         }
     }

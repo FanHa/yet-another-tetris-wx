@@ -45,7 +45,7 @@ namespace Units.Skills
                 (int)stats.EnergySlowPercent.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition);
 
             Owner.AddBuff(buff);
         }

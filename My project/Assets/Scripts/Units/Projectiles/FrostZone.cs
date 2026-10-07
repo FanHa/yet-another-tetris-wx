@@ -97,7 +97,7 @@ namespace Units.Projectiles
                             energySlowPercent,
                             caster,
                             sourceSkill // 可传递技能引用
-                        );
+                        ).BindDefinition(((Model.Skills.FrostZoneSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
                         enemy.AddBuff(chilled);
                     }
                 }

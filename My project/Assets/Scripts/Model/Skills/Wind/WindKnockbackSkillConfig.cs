@@ -1,10 +1,22 @@
 using UnityEngine;
+using Model.Buffs;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Wind/Wind Knockback")]
     public class WindKnockbackSkillConfig : SkillConfig<WindKnockbackLevelConfig>
     {
+        [Header("Buff")]
+        [SerializeField] private BuffDefinition windKnockbackBuffDefinition;
+
+        public BuffDefinition WindKnockbackBuffDefinition => windKnockbackBuffDefinition;
+
+    #if UNITY_EDITOR
+        protected override void ValidateSpecificConfig()
+        {
+            ValidateRequiredReference(windKnockbackBuffDefinition, nameof(windKnockbackBuffDefinition));
+        }
+    #endif
     }
 
     [System.Serializable]

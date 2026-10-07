@@ -58,7 +58,7 @@ namespace Units.Skills
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            ));
+            ).BindDefinition(((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition));
             cachedTarget = null;
         }
 

@@ -19,3 +19,4 @@ MonoBehaviour:
   - RequiredEnergy: 60
     HealthToAtkPercent: 10
     BuffDuration: 10
+  lifePowerBuffDefinition: {fileID: 11400000, guid: 12d4d71c13aebca438529ddcb1f971b8, type: 2}

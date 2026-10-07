@@ -52,7 +52,7 @@ namespace Units.Skills
                 buffDuration: -1f,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            ));
+            ).BindDefinition(((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition));
         }
 
 

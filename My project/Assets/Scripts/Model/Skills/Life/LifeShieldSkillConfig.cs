@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private BuffProjectile buffProjectilePrefab;
+        [SerializeField] private BuffDefinition lifeShieldBuffDefinition;
 
         public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
+        public BuffDefinition LifeShieldBuffDefinition => lifeShieldBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(buffProjectilePrefab, nameof(buffProjectilePrefab));
+            ValidateRequiredReference(lifeShieldBuffDefinition, nameof(lifeShieldBuffDefinition));
         }
     #endif
     }

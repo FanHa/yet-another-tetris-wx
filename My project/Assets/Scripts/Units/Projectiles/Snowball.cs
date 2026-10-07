@@ -42,7 +42,7 @@ namespace Units.Projectiles
                 energySlowPercent,
                 caster,
                 sourceSkill
-            );
+            ).BindDefinition(((Model.Skills.SnowballSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
             target.AddBuff(chilledBuff);
 
             Destroy(gameObject);

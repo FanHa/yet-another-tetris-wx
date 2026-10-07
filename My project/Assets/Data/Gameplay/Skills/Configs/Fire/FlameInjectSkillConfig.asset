@@ -21,3 +21,5 @@ MonoBehaviour:
     BaseDotDps: 6
     DotDuration: 3
     DotDpsPerFireCell: 2
+  flameInjectBuffDefinition: {fileID: 11400000, guid: ed1f2739a8d89804799176dd27160da6, type: 2}
+  burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

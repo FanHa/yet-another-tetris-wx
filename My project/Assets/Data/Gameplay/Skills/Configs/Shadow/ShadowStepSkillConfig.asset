@@ -27,3 +27,4 @@ MonoBehaviour:
     Damage: 40
     DamagePerShadowCell: 4
     DebuffDuration: 10
+  vulnerabilityBuffDefinition: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}

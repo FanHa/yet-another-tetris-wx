@@ -15,3 +15,4 @@ MonoBehaviour:
   LevelConfigs:
   - DamagePercentToReflect: 15
   - DamagePercentToReflect: 30
+  lifeEchoBuffDefinition: {fileID: 11400000, guid: bcc99c08d81fbbe4ea7a40d325611be4, type: 2}

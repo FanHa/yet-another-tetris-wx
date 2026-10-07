@@ -53,7 +53,7 @@ namespace Units.Skills
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this,
                 attackRangeBonus: stats.AttackRangeBonus.Final
-            ));
+            ).BindDefinition(((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition));
         }
         
     }

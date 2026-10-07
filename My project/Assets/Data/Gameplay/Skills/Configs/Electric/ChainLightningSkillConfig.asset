@@ -16,6 +16,11 @@ MonoBehaviour:
   - RequiredEnergy: 90
     BaseDamage: 20
     DamageIncreasePercentage: 20
-    MaxBounces: 5
+    MaxBounces: 2
+    Range: 5
+  - RequiredEnergy: 90
+    BaseDamage: 30
+    DamageIncreasePercentage: 25
+    MaxBounces: 4
     Range: 5
   projectilePrefab: {fileID: 5312004031096747718, guid: e7745176670ab7c43ae33b91db614d30, type: 3}

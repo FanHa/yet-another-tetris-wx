@@ -82,7 +82,7 @@ namespace Units.Projectiles
                             atkReducePercent: atkReducePercent,
                             sourceUnit: caster,
                             sourceSkill: sourceSkill
-                        );
+                        ).BindDefinition(((Model.Skills.WildWindSkillConfig)sourceSkill.Definition.Config).WildWindDebuffDefinition);
                         unit.AddBuff(buff);
 
                         if (!damagedUnits.Contains(unit))

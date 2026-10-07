@@ -19,3 +19,4 @@ MonoBehaviour:
   - BuffDuration: -1
     BaseEnergyAbsorbPerSkillCast: 25
     EnergyAbsorbPerAbsorbCell: 3
+  energyAbsorbBuffDefinition: {fileID: 11400000, guid: d8bcbc78fe968bc418d2eead1b34260b, type: 2}

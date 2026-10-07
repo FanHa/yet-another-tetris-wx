@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,15 +10,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private ThunderStrikeProjectile projectilePrefab;
+        [SerializeField] private BuffDefinition thunderStrikeBuffDefinition;
 
         public ThunderStrikeProjectile ProjectilePrefab => projectilePrefab;
+        public BuffDefinition ThunderStrikeBuffDefinition => thunderStrikeBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
-
-            }
+            ValidateRequiredReference(thunderStrikeBuffDefinition, nameof(thunderStrikeBuffDefinition));
         }
     #endif
     }

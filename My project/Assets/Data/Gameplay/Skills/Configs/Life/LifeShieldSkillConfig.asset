@@ -22,3 +22,4 @@ MonoBehaviour:
     AbsorbPercent: 75
     BuffDuration: 15
   buffProjectilePrefab: {fileID: 2996347991824612061, guid: 86abf7817d99cc843872c0662a2c8a3c, type: 3}
+  lifeShieldBuffDefinition: {fileID: 11400000, guid: da189cd32601e6d4091573f1b6cd12de, type: 2}

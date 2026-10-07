@@ -15,7 +15,7 @@ MonoBehaviour:
   id: IceBreaker
   displayName: Ice Breaker
   description: "\u91CA\u653E Ice Breaker\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.IceBreaker, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
   icon: {fileID: -5738798183895495778, guid: b6462b6d64e9c274780607b4e9cd521e, type: 3}
+  buffA: {fileID: 11400000, guid: 5e31c5180c1ba81428152b63fb1faae9, type: 2}
+  buffB: {fileID: 0}

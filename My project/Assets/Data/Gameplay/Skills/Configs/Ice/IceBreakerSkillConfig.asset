@@ -21,3 +21,4 @@ MonoBehaviour:
     BaseExtraDamage: 10
     MultiplierByChilledLayer: 0.2
     ExtraDamagePerIceCell: 2
+  iceBreakerBuffDefinition: {fileID: 11400000, guid: 5e31c5180c1ba81428152b63fb1faae9, type: 2}

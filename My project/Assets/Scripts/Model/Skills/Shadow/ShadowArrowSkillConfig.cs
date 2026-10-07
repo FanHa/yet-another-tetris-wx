@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private ShadowArrow projectilePrefab;
+        [SerializeField] private BuffDefinition vulnerabilityBuffDefinition;
 
         public ShadowArrow ProjectilePrefab => projectilePrefab;
+        public BuffDefinition VulnerabilityBuffDefinition => vulnerabilityBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(vulnerabilityBuffDefinition, nameof(vulnerabilityBuffDefinition));
         }
     #endif
     }

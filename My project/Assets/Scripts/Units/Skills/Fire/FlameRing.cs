@@ -62,7 +62,7 @@ namespace Units.Skills
                 stats.Radius.Final,
                 Owner.SelfUnit,
                 this
-            );
+            ).BindDefinition(((FlameRingSkillConfig)Definition.Config).FlameRingBuffDefinition);
             Owner.AddBuff(buff);
         }
     }

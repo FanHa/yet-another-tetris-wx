@@ -1,8 +1,9 @@
 using UnityEngine;
+using Units;
 
 namespace Units.Projectiles
 {
-    public class IceShield : MonoBehaviour
+    public class IceShield : MonoBehaviour, global::Units.IBuffVisual
     {
         [SerializeField] private float rotateSpeed = 90f; // 每秒旋转角度
         [SerializeField] private float radius = 1f;     // 冰盾半径

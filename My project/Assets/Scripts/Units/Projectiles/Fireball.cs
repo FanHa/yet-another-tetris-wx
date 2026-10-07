@@ -28,7 +28,7 @@ namespace Units.Projectiles
                 duration: burnDuration,
                 sourceUnit: caster,
                 sourceSkill: sourceSkill
-            );
+            ).BindDefinition(((Model.Skills.FireballSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
             target.AddBuff(burn);
 
             Destroy(gameObject); // 销毁投射物

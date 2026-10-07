@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units.Projectiles;
+using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -9,13 +10,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private IcyCage projectilePrefab;
+        [SerializeField] private BuffDefinition freezeBuffDefinition;
 
         public IcyCage ProjectilePrefab => projectilePrefab;
+        public BuffDefinition FreezeBuffDefinition => freezeBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
+            ValidateRequiredReference(freezeBuffDefinition, nameof(freezeBuffDefinition));
         }
     #endif
     }

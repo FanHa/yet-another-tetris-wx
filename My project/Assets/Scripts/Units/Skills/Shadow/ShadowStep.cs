@@ -62,7 +62,7 @@ namespace Units.Skills
                 extraDamagePercent: stats.VulnerabilityPercent.Final,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            );
+            ).BindDefinition(((ShadowStepSkillConfig)Definition.Config).VulnerabilityBuffDefinition);
             targetEnemy.AddBuff(vulnerabilityBuff);
 
             // 造成伤害

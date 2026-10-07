@@ -17,3 +17,4 @@ MonoBehaviour:
     AttackRangePerWindCell: 0.5
   - AttackRangeBonus: 3
     AttackRangePerWindCell: 0.7
+  windShiftBuffDefinition: {fileID: 11400000, guid: 9e22b78e132f3d74ea7cdbb120457569, type: 2}

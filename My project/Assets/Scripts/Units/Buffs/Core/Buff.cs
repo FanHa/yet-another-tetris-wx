@@ -1,4 +1,5 @@
 using System;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -14,8 +15,11 @@ namespace Units.Buffs
 
     public abstract class Buff
     {
+        private BuffDefinition definition;
+
         protected float duration; // -1为永久
         public float TimeLeft;
+        public BuffDefinition Definition => definition;
         protected Unit sourceUnit { get; set; }
         public Unit SourceUnit => sourceUnit;
         protected IBuffContext context;
@@ -30,6 +34,12 @@ namespace Units.Buffs
             this.duration = duration;
             this.sourceUnit = sourceUnit;
             this.sourceSkill = sourceSkill;
+        }
+
+        internal Buff BindDefinition(BuffDefinition definition)
+        {
+            this.definition = definition;
+            return this;
         }
 
         public abstract string Name();

@@ -20,3 +20,4 @@ MonoBehaviour:
     FreezeDurationPerIceCell: 0.6
     RequiredEnergy: 60
   projectilePrefab: {fileID: 8931962592207463393, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
+  freezeBuffDefinition: {fileID: 11400000, guid: 9aa7aa1e97c68fa419e688e12cb042f4, type: 2}

@@ -1,10 +1,22 @@
 using UnityEngine;
+using Model.Buffs;
 
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Ice/Ice Breaker")]
     public class IceBreakerSkillConfig : SkillConfig<IceBreakerLevelConfig>
     {
+        [Header("Buff")]
+        [SerializeField] private BuffDefinition iceBreakerBuffDefinition;
+
+        public BuffDefinition IceBreakerBuffDefinition => iceBreakerBuffDefinition;
+
+    #if UNITY_EDITOR
+        protected override void ValidateSpecificConfig()
+        {
+            ValidateRequiredReference(iceBreakerBuffDefinition, nameof(iceBreakerBuffDefinition));
+        }
+    #endif
     }
 
     [System.Serializable]
