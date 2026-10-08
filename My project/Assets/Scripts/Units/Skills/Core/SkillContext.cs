@@ -81,9 +81,7 @@ namespace Units.Skills
 
         public bool TryGetClosestEnemy(out Unit target)
         {
-            return RequireUnitManager().FindClosestEnemy(unit) is { } closestEnemy
-                ? (target = closestEnemy) != null
-                : (target = null) == null;
+            return unit.TryGetClosestEnemy(out target);
         }
 
         public bool TryGetClosestAlly(out Unit target)

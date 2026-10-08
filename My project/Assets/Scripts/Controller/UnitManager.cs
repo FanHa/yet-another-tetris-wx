@@ -22,6 +22,7 @@ namespace Controller
         [SerializeField] private Transform factionBRoot;
         private List<Unit> factionA = new();
         private List<Unit> factionB = new();
+        private HashSet<Unit> ownedUnits = new();
 
         /// <summary>
         /// 批量生成单位
@@ -50,6 +51,7 @@ namespace Controller
                 unit.OnClicked += HandleUnitClicked;
                 unit.InjectUnitManager(this);
                 unit.Setup(faction);
+                ownedUnits.Add(unit);
                 if (unit.faction == Unit.Faction.FactionA)
                 {
                     factionA.Add(unit);
@@ -79,18 +81,22 @@ namespace Controller
 
         public void Reset()
         {
-            // 遍历 factionAParent 的所有子对象并销毁
-            foreach (Transform child in factionARoot)
+            foreach (Unit unit in ownedUnits)
             {
-                Destroy(child.gameObject);
+                if (unit == null)
+                {
+                    continue;
+                }
+
+                if (unit.IsActive)
+                {
+                    unit.Deactivate();
+                }
+
+                Destroy(unit.gameObject);
             }
 
-            // 遍历 factionBRoot 的所有子对象并销毁
-            foreach (Transform child in factionBRoot)
-            {
-                Destroy(child.gameObject);
-            }
-
+            ownedUnits.Clear();
             factionA.Clear();
             factionB.Clear();
         }
@@ -128,16 +134,6 @@ namespace Controller
             OnGlobalSkillCast?.Invoke(unit, skill);
         }
 
-
-        internal IReadOnlyList<Unit> GetFactionBUnits()
-        {
-            return factionB;
-        }
-
-        internal IReadOnlyList<Unit> GetFactionAUnits()
-        {
-            return factionA;
-        }
 
         public IReadOnlyList<Unit> GetUnitsByFaction(Unit.Faction faction)
         {

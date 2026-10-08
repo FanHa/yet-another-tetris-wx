@@ -66,8 +66,9 @@ namespace Units
         public event Action<Units.Unit, UnitActionType, UnitActionCommitKind> OnActionCommitted;
         public event Action<UnitBuffChangedEvent> OnBuffChanged;
 
-        public Faction faction; // 单位的阵营
+        public Faction faction { get; private set; }
         protected float lastAttackTime = 0;
+        private Unit cachedClosestEnemy;
 
         [SerializeField] private HealthBar healthBar;
 
@@ -77,8 +78,6 @@ namespace Units
         private HitEffect hitEffect;
 
         public Transform projectileSpawnPoint; // 投射物生成位置
-
-        private List<Unit> enemyUnits = new(); // todo 改成更清晰的名字sortedByDistance
 
         [Header("运行时注入")]
         private UnitManager unitManager;
@@ -116,6 +115,7 @@ namespace Units
         }
 
         private bool isActive = false; // 是否处于活动状态
+        private bool hasDied;
         private int skillMotionLockCount = 0;
         private int stunLockCount = 0;
         public bool IsActive => isActive;
@@ -175,9 +175,9 @@ namespace Units
             if (!isActive)
                 return;
 
+            RefreshClosestEnemy();
             buffHandler.Tick(Time.deltaTime);
             skillHandler.Tick(Time.deltaTime);
-            UpdateEnemiesDistance();
             UpdateFacing();
 
             actionRunner.Tick(new global::Units.Actions.ActionTickContext(
@@ -227,6 +227,7 @@ namespace Units
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
             isActive = true;
+            RefreshClosestEnemy();
             foreach (Skill skill in skillHandler.GetSkills())
             {
                 skill.OnOwnerActivated();
@@ -256,6 +257,7 @@ namespace Units
             }
             skillMotionLockCount = 0;
             isActive = false;
+            cachedClosestEnemy = null;
             foreach (Skill skill in skillHandler.GetSkills())
             {
                 skill.OnOwnerDeactivated();
@@ -548,65 +550,22 @@ namespace Units
             buffHandler.RemoveBuff(buff);
         }
 
-        private void UpdateEnemiesDistance()
+        private void RefreshClosestEnemy()
         {
-            if (unitManager == null) return;
-
-            var list = faction == Faction.FactionA
-                ? unitManager.GetFactionBUnits()
-                : unitManager.GetFactionAUnits();
-
-            Unit closest = null;
-            float bestSqr = float.MaxValue;
-            Vector2 selfPos = transform.position;
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                var u = list[i];
-                if (u == null || !u.IsActive) continue;
-
-                float d2 = ((Vector2)u.transform.position - selfPos).sqrMagnitude;
-                if (d2 < bestSqr)
-                {
-                    bestSqr = d2;
-                    closest = u;
-                }
-            }
-
-            // 只用到最近一个时，避免维护整张有序表
-            enemyUnits.Clear();
-            if (closest != null) enemyUnits.Add(closest);
+            cachedClosestEnemy = unitManager != null ? unitManager.FindClosestEnemy(this) : null;
         }
-
 
         public bool TryGetClosestEnemy(out Unit closestEnemy)
         {
-            closestEnemy = enemyUnits.Count > 0 ? enemyUnits[0] : null;
+            closestEnemy = cachedClosestEnemy != null && cachedClosestEnemy.IsActive
+                ? cachedClosestEnemy
+                : null;
             return closestEnemy != null;
         }
 
         public bool TryGetClosestAlly(out Unit closestAlly)
         {
-            closestAlly = null;
-            if (unitManager == null) return false;
-
-            var allies = unitManager.GetUnitsByFaction(faction);
-            float bestSqr = float.MaxValue;
-            Vector2 selfPos = transform.position;
-
-            for (int i = 0; i < allies.Count; i++)
-            {
-                var ally = allies[i];
-                if (ally == null || !ally.IsActive || ally == this) continue;
-
-                float d2 = ((Vector2)ally.transform.position - selfPos).sqrMagnitude;
-                if (d2 < bestSqr)
-                {
-                    bestSqr = d2;
-                    closestAlly = ally;
-                }
-            }
-
+            closestAlly = unitManager != null ? unitManager.FindClosestAlly(this) : null;
             return closestAlly != null;
         }
 
@@ -655,13 +614,24 @@ namespace Units
 
         public void TakeDamage(Units.Damages.Damage damageReceived)
         {
+            if (hasDied)
+            {
+                return;
+            }
+
             Attributes.TakeDamage(damageReceived.Value);
+            bool diedFromThisHit = Attributes.CurrentHealth <= 0;
+            if (diedFromThisHit)
+            {
+                hasDied = true;
+            }
+
             buffHandler.DispatchAfterTakeDamage(ref damageReceived);
 
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
 
-            if (Attributes.CurrentHealth <= 0)
+            if (diedFromThisHit)
             {
                 Deactivate();
                 animationController.PlayDeath();

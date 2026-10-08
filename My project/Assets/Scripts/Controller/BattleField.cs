@@ -33,6 +33,7 @@ namespace Controller {
         public Transform spawnPointB;
         [SerializeField] private float timeDelayBeforeBattle; // 战斗开始前的延迟时间
         private Coroutine spawnRoutine; // 处理战斗开始生成单位后需要延迟一小段时间再开打
+        private Coroutine statisticsRoutine;
 
         [Header("Data")]
         private UnitManager unitManager;
@@ -70,7 +71,7 @@ namespace Controller {
             factionAConfig = factionAItems;
             factionBConfig = factionBItems;
             SpawnUnits();
-            StartCoroutine(DelayActivateUnitsCoroutine());
+            StartDelayedActivation();
         }
 
         public void StartTrainGround(
@@ -80,13 +81,14 @@ namespace Controller {
             factionAConfig = factionAItems;
             factionBConfig = factionBItems;
             SpawnUnits();
-            StartCoroutine(DelayActivateUnitsCoroutine());
+            StartDelayedActivation();
         }
 
         public void PreviewBattle(
             IReadOnlyList<CharacterPlacement> factionAItems,
             IReadOnlyList<CharacterPlacement> factionBItems)
         {
+            CancelPendingActivation();
             factionAConfig = factionAItems;
             factionBConfig = factionBItems;
             SpawnUnits();
@@ -94,11 +96,44 @@ namespace Controller {
 
         public void ClearPreview()
         {
+            CancelPendingActivation();
+            CancelPendingStatistics();
             unitManager.Reset();
+        }
+
+        private void StartDelayedActivation()
+        {
+            CancelPendingActivation();
+            spawnRoutine = StartCoroutine(DelayActivateUnitsCoroutine());
+        }
+
+        private void CancelPendingActivation()
+        {
+            if (spawnRoutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(spawnRoutine);
+            spawnRoutine = null;
+        }
+
+        private void CancelPendingStatistics()
+        {
+            if (statisticsRoutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(statisticsRoutine);
+            statisticsRoutine = null;
         }
 
         private void SpawnUnits()
         {
+            CancelPendingStatistics();
+            unitManager.Reset();
+
             unitManager.SpawnUnits(
                 factionAConfig,
                 transform,
@@ -117,6 +152,7 @@ namespace Controller {
         private IEnumerator DelayActivateUnitsCoroutine()
         {
             yield return new WaitForSeconds(timeDelayBeforeBattle);
+            spawnRoutine = null;
             unitManager.ActivateAllUnits();
         }
 
@@ -155,13 +191,15 @@ namespace Controller {
                 Debug.Log("FactionA 全部死亡，生命值减少 1");
             }
 
-            StartCoroutine(ShowBattleStatisticsWithDelay(2f));
+            CancelPendingStatistics();
+            statisticsRoutine = StartCoroutine(ShowBattleStatisticsWithDelay(2f));
         }
 
         private IEnumerator ShowBattleStatisticsWithDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
 
+            statisticsRoutine = null;
             battleStatistics.gameObject.SetActive(true);
             battleStatistics.ShowChoosenFaction(Units.Unit.Faction.FactionA);
         }
@@ -169,6 +207,8 @@ namespace Controller {
         public void HandleEndStatistics()
         {
             battleStatistics.gameObject.SetActive(false);
+            CancelPendingActivation();
+            CancelPendingStatistics();
             unitManager.Reset();
             OnBattleEnd?.Invoke();
         }
