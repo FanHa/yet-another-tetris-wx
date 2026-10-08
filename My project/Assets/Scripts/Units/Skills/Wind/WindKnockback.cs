@@ -49,11 +49,12 @@ namespace Units.Skills
             var stats = CalcStats();
             float dist = Mathf.Min(stats.KnockbackDistance.Final, stats.MaxKnockbackDistance.Final);
             Owner.AddBuff(new Buffs.WindKnockbackBuff(
+                ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition,
                 knockbackDistance: dist,
                 maxKnockbackDistance: stats.MaxKnockbackDistance.Final,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            ).BindDefinition(((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition));
+            ));
         }
     }
 }

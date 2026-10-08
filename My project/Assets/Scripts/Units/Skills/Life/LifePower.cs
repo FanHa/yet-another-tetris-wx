@@ -54,11 +54,12 @@ namespace Units.Skills
             float atkBoost = Owner.Attributes.MaxHealth.finalValue * (stats.HealthToAtkPercent.Final / 100f);
 
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
+                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
                 atkBoost,
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition));
+            ));
             cachedTarget = null;
         }
 

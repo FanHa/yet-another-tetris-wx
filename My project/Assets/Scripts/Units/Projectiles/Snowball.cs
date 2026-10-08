@@ -35,6 +35,7 @@ namespace Units.Projectiles
         {
             // 施加冰霜减速Buff
             var chilledBuff = new Units.Buffs.Chilled(
+                ((Model.Skills.SnowballSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition,
                 chilledDuration,
                 moveSlowPercent,
                 atkSlowPercent,
@@ -42,7 +43,7 @@ namespace Units.Projectiles
                 energySlowPercent,
                 caster,
                 sourceSkill
-            ).BindDefinition(((Model.Skills.SnowballSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
+            );
             target.AddBuff(chilledBuff);
 
             Destroy(gameObject);

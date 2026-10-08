@@ -46,11 +46,13 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var buff = new Buffs.ShadowAttackBuff(
+                ((ShadowAttackSkillConfig)Definition.Config).ShadowAttackBuffDefinition,
+                ((ShadowAttackSkillConfig)Definition.Config).VulnerabilityBuffDefinition,
                 stats.VulnerabilityPercent.Final,
                 stats.DotDuration.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((ShadowAttackSkillConfig)Definition.Config).ShadowAttackBuffDefinition);
+            );
             Owner.AddBuff(buff);
         }
     }

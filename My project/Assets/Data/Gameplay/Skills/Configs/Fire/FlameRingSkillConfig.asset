@@ -17,16 +17,15 @@ MonoBehaviour:
     DotDpsPerFireCell: 1
     BaseDotDuration: 2
     DotDurationPerFireCell: 1
-    BuffDuration: -1
+    AreaDuration: -1
     BaseRadius: 1
     RadiusPerFireCell: 0.2
   - BaseDotDps: 4
     DotDpsPerFireCell: 2
     BaseDotDuration: 4
     DotDurationPerFireCell: 2
-    BuffDuration: -1
+    AreaDuration: -1
     BaseRadius: 1
     RadiusPerFireCell: 0.2
   projectilePrefab: {fileID: 6674140992886737915, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
-  flameRingBuffDefinition: {fileID: 11400000, guid: 5bea28cd09b7cec4d8c0b72af9245fea, type: 2}
   burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

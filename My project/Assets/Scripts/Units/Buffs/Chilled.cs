@@ -13,6 +13,7 @@ namespace Units.Buffs
         public int EnergyRegenSlowPercent { get; }
 
         public Chilled(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             int moveSlowPercent,
             int attackSlowPercent,
@@ -20,7 +21,7 @@ namespace Units.Buffs
             int energyRegenSlowPercent,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
             MoveSlowPercent = moveSlowPercent;
             AttackSlowPercent = attackSlowPercent;

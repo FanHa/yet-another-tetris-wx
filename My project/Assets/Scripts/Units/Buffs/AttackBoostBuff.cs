@@ -10,11 +10,12 @@ namespace Units.Buffs
         public float AtkSpeedPercent { get; }
 
         public AttackBoostBuff(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             float atkSpeedPercent,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
             AtkSpeedPercent = atkSpeedPercent;
         }

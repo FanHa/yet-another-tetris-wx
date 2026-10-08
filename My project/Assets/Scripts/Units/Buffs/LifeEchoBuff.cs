@@ -7,8 +7,8 @@ namespace Units.Buffs
        private readonly float reflectPercent;
 
         /// <param name="reflectPercent">反弹伤害比例（0.2f 表示20%）</param>
-        public LifeEchoBuff(Unit sourceUnit, Units.Skills.Skill sourceSkill, float reflectPercent)
-            : base(-1f, sourceUnit, sourceSkill) // -1 表示永久Buff
+        public LifeEchoBuff(Model.Buffs.BuffDefinition definition, Unit sourceUnit, Units.Skills.Skill sourceSkill, float reflectPercent)
+            : base(definition, -1f, sourceUnit, sourceSkill) // -1 表示永久Buff
         {
             this.reflectPercent = reflectPercent;
         }

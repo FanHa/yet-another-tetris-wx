@@ -8,10 +8,11 @@ namespace Units.Buffs
     public class ThunderStrikeBuff : Buff
     {
         public ThunderStrikeBuff(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
         }
 

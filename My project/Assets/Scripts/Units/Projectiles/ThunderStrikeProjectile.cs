@@ -49,10 +49,11 @@ namespace Units.Projectiles
             target.TakeDamage(damage);
 
             var thunderStrikeBuff = new Units.Buffs.ThunderStrikeBuff(
+                ((Model.Skills.ThunderStrikeSkillConfig)sourceSkill.Definition.Config).ThunderStrikeBuffDefinition,
                 stunDuration,
                 caster,
                 sourceSkill
-            ).BindDefinition(((Model.Skills.ThunderStrikeSkillConfig)sourceSkill.Definition.Config).ThunderStrikeBuffDefinition);
+            );
             target.AddBuff(thunderStrikeBuff);
         }
 

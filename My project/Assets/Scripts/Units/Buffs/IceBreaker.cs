@@ -14,12 +14,13 @@ namespace Units.Buffs
         private readonly float percentSlowMultiplier;
 
         public IceBreaker(
+            Model.Buffs.BuffDefinition definition,
             float baseExtraDamage,
             float percentSlowMultiplier,
             float buffDuration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(buffDuration, sourceUnit, sourceSkill)
+        ) : base(definition, buffDuration, sourceUnit, sourceSkill)
         {
             this.baseExtraDamage = baseExtraDamage;
             this.percentSlowMultiplier = percentSlowMultiplier;

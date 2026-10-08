@@ -12,11 +12,12 @@ namespace Units.Buffs
         private readonly float maxKnockbackDistance;
 
         public WindKnockbackBuff(
+            Model.Buffs.BuffDefinition definition,
             float knockbackDistance,
             float maxKnockbackDistance,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(-1f, sourceUnit, sourceSkill)
+        ) : base(definition, -1f, sourceUnit, sourceSkill)
         {
             this.knockbackDistance = knockbackDistance;
             this.maxKnockbackDistance = maxKnockbackDistance;

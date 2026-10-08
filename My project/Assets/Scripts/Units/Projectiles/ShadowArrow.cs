@@ -37,11 +37,12 @@ namespace Units.Projectiles
             target.TakeDamage(damage);
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
+                ((Model.Skills.ShadowArrowSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition,
                 vulnerabilityDuration,
                 vulnerabilityPercent,
                 caster,
                 sourceSkill
-            ).BindDefinition(((Model.Skills.ShadowArrowSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition);
+            );
             target.AddBuff(vulnerabilityBuff);
 
             Destroy(gameObject);

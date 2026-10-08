@@ -40,11 +40,12 @@ namespace Units.Projectiles
                     foreach (var enemy in enemies)
                     {
                         var burn = new Units.Buffs.Burn(
+                            ((Model.Skills.BlazingFieldSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
                             dotDps,
                             dotDuration,
                             caster,
                             sourceSkill
-                        ).BindDefinition(((Model.Skills.BlazingFieldSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
+                        );
                         enemy.AddBuff(burn);
                     }
                 }

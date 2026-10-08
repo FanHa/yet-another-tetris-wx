@@ -56,11 +56,12 @@ namespace Units.Skills
             float shieldAmount = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
 
             var buff = new Units.Buffs.LifeShieldBuff(
+                ((LifeShieldSkillConfig)Definition.Config).LifeShieldBuffDefinition,
                 shieldAmount,         // 护盾值
                 stats.BuffDuration.Final,  // 持续时间
                 Owner.SelfUnit,               // 来源单位
                 this                  // 来源技能
-            ).BindDefinition(((LifeShieldSkillConfig)Definition.Config).LifeShieldBuffDefinition);
+            );
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,
                 Owner.transform.position,

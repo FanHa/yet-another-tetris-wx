@@ -77,12 +77,13 @@ namespace Units.Projectiles
                         Vector3 delta = targetPos - unit.transform.position;
                         unit.MoveBy(delta);
                         var buff = new Units.Buffs.WildWindDebuff(
+                            ((Model.Skills.WildWindSkillConfig)sourceSkill.Definition.Config).WildWindDebuffDefinition,
                             duration: debuffDuration,
                             moveSlowPercent: moveSlowPercent,
                             atkReducePercent: atkReducePercent,
                             sourceUnit: caster,
                             sourceSkill: sourceSkill
-                        ).BindDefinition(((Model.Skills.WildWindSkillConfig)sourceSkill.Definition.Config).WildWindDebuffDefinition);
+                        );
                         unit.AddBuff(buff);
 
                         if (!damagedUnits.Contains(unit))

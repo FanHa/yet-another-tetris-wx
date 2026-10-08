@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class FlameRing : Skill, IPassiveSkill
+    public class FlameRing : Skill
     {
         public FlameRingLevelConfig Config { get; }
+        private Units.Projectiles.FlameRing areaEffect;
 
         public FlameRing(FlameRingLevelConfig config)
         {
@@ -19,7 +20,7 @@ namespace Units.Skills
             public StatValue DotDps;
             public StatValue DotDuration;
             public StatValue Radius;
-            public StatValue BuffDuration;
+            public StatValue AreaDuration;
         }
 
         private FlameRingStats CalcStats()
@@ -30,7 +31,7 @@ namespace Units.Skills
                 DotDps = new StatValue("每秒火焰伤害", Config.BaseDotDps, fireCellCount * Config.DotDpsPerFireCell),
                 DotDuration = new StatValue("火焰伤害持续时间", Config.BaseDotDuration, fireCellCount * Config.DotDurationPerFireCell),
                 Radius = new StatValue("作用半径", Config.BaseRadius, fireCellCount * Config.RadiusPerFireCell),
-                BuffDuration = new StatValue("效果持续时间", Config.BuffDuration)
+                AreaDuration = new StatValue("区域持续时间", Config.AreaDuration)
             };
         }
 
@@ -52,18 +53,37 @@ namespace Units.Skills
         }
         public static string NameStatic() => "火环";
 
-        public void ApplyPassive()
+        internal override void OnOwnerActivated()
         {
             var stats = CalcStats();
-            var buff = new Buffs.FlameRing(
-                stats.DotDps.Final,
-                stats.DotDuration.Final,
-                stats.BuffDuration.Final,
-                stats.Radius.Final,
-                Owner.SelfUnit,
-                this
-            ).BindDefinition(((FlameRingSkillConfig)Definition.Config).FlameRingBuffDefinition);
-            Owner.AddBuff(buff);
+            var skillConfig = (FlameRingSkillConfig)Definition.Config;
+            areaEffect = Object.Instantiate(
+                skillConfig.ProjectilePrefab,
+                Owner.transform.position,
+                Quaternion.identity,
+                Owner.transform
+            );
+            areaEffect.Initialize(
+                owner: Owner.SelfUnit,
+                radius: stats.Radius.Final,
+                sourceSkill: this,
+                burnDefinition: skillConfig.BurnBuffDefinition,
+                duration: stats.AreaDuration.Final,
+                dotDps: stats.DotDps.Final,
+                dotDuration: stats.DotDuration.Final
+            );
+            areaEffect.Activate();
+        }
+
+        internal override void OnOwnerDeactivated()
+        {
+            if (areaEffect == null)
+            {
+                return;
+            }
+
+            Object.Destroy(areaEffect.gameObject);
+            areaEffect = null;
         }
     }
 }

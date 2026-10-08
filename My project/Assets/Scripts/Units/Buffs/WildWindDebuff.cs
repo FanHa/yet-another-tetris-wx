@@ -11,12 +11,13 @@ namespace Units.Buffs
         public int AtkReducePercent { get; }
 
         public WildWindDebuff(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             int moveSlowPercent,
             int atkReducePercent,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
             MoveSlowPercent = moveSlowPercent;
             AtkReducePercent = atkReducePercent;

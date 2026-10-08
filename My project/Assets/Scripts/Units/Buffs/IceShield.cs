@@ -1,6 +1,5 @@
 using Units.Skills;
-using Model.Skills;
-using UnityEngine;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
@@ -14,9 +13,11 @@ namespace Units.Buffs
         private int chilledAttackSlowPercent;// Chilled 攻击速度减缓百分比
         private int chilledActionSlowPercent;// Chilled 动作速率减缓百分比
         private int chilledEnergyRegenSlowPercent; // Chilled 能量回复减缓百分比
-        private Units.Projectiles.IceShield vfxInstance;
+        private readonly BuffDefinition chilledDefinition;
 
         public IceShield(
+            BuffDefinition definition,
+            BuffDefinition chilledDefinition,
             float buffDuration,
             float chilledDuration,
             int chilledMoveSlowPercent,
@@ -25,8 +26,9 @@ namespace Units.Buffs
             int chilledEnergyRegenSlowPercent,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(buffDuration, sourceUnit, sourceSkill)
+        ) : base(definition, buffDuration, sourceUnit, sourceSkill)
         {
+            this.chilledDefinition = chilledDefinition;
             this.chilledDuration = chilledDuration;
             this.chilledMoveSlowPercent = chilledMoveSlowPercent;
             this.chilledAttackSlowPercent = chilledAttackSlowPercent;
@@ -43,6 +45,7 @@ namespace Units.Buffs
             if (attacker == null)
                 return;
             var chilled = new Chilled(
+                chilledDefinition,
                 chilledDuration,
                 chilledMoveSlowPercent,
                 chilledAttackSlowPercent,
@@ -50,31 +53,9 @@ namespace Units.Buffs
                 chilledEnergyRegenSlowPercent,
                 self,
                 sourceSkill
-                ).BindDefinition(((Model.Skills.IceShieldSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
+            );
             context.AddBuffTo(attacker, chilled);
         }
 
-        public override void OnApply(IBuffContext context)
-        {
-            base.OnApply(context);
-            var skillConfig = (IceShieldSkillConfig)sourceSkill.Definition.Config;
-            vfxInstance = Object.Instantiate(
-                skillConfig.ProjectilePrefab,
-                context.SelfUnit.transform.position,
-                Quaternion.identity
-            );
-            vfxInstance.Initialize(context.SelfUnit);
-            vfxInstance.Activate();
-        }
-
-        public override void OnRemove()
-        {
-            if (vfxInstance != null)
-            {
-                Object.Destroy(vfxInstance);
-                vfxInstance = null;
-            }
-            base.OnRemove();
-        }
     }
 }

@@ -53,11 +53,12 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var buff = new Buffs.AttackBoostBuff(
+                ((AttackBoostSkillConfig)Definition.Config).AttackBoostBuffDefinition,
                 duration: stats.Duration.Final,
                 atkSpeedPercent: stats.AtkSpeedPercent.Final,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this
-            ).BindDefinition(((AttackBoostSkillConfig)Definition.Config).AttackBoostBuffDefinition);
+            );
 
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,

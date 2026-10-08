@@ -54,12 +54,14 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var buff = new Buffs.FlameInject(
+                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition,
+                ((FlameInjectSkillConfig)Definition.Config).BurnBuffDefinition,
                 stats.DotDps.Final,
                 stats.DotDuration.Final,
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition);
+            );
             Owner.AddBuff(buff);
         }
 

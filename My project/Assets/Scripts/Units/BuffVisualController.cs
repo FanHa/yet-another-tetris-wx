@@ -1,22 +1,61 @@
+using System;
 using System.Collections.Generic;
-using Model.Skills;
+using Model.Buffs;
 using UnityEngine;
 using Units.Buffs;
 
 namespace Units
 {
-    [RequireComponent(typeof(Unit))]
-    public sealed class BuffVisualController : MonoBehaviour
+    public sealed class BuffVisualController
     {
         private readonly Dictionary<Buff, GameObject> visualsByBuff = new();
-        private Unit unit;
+        private readonly Unit unit;
 
-        private void Awake()
+        public BuffVisualController(Unit unit)
         {
-            unit = GetComponent<Unit>();
+            this.unit = unit ?? throw new ArgumentNullException(nameof(unit));
         }
 
-        public void AddVisual(Buff buff)
+        internal void Activate()
+        {
+            unit.OnBuffChanged += HandleBuffChanged;
+
+            var activeBuffs = unit.GetActiveBuffsReadOnly();
+            for (int index = 0; index < activeBuffs.Count; index++)
+            {
+                AddVisual(activeBuffs[index]);
+            }
+        }
+
+        internal void Deactivate()
+        {
+            unit.OnBuffChanged -= HandleBuffChanged;
+
+            var trackedBuffs = new List<Buff>(visualsByBuff.Keys);
+            for (int index = 0; index < trackedBuffs.Count; index++)
+            {
+                RemoveVisual(trackedBuffs[index]);
+            }
+        }
+
+        private void HandleBuffChanged(UnitBuffChangedEvent buffChangedEvent)
+        {
+            if (buffChangedEvent.Owner != unit)
+            {
+                return;
+            }
+
+            if (buffChangedEvent.Kind == BuffChangeKind.Added)
+            {
+                AddVisual(buffChangedEvent.Buff);
+            }
+            else
+            {
+                RemoveVisual(buffChangedEvent.Buff);
+            }
+        }
+
+        private void AddVisual(Buff buff)
         {
             if (visualsByBuff.ContainsKey(buff))
             {
@@ -30,7 +69,7 @@ namespace Units
             }
         }
 
-        public void RemoveVisual(Buff buff)
+        private void RemoveVisual(Buff buff)
         {
             if (!visualsByBuff.TryGetValue(buff, out var visual))
             {
@@ -40,25 +79,19 @@ namespace Units
             visualsByBuff.Remove(buff);
             if (visual != null)
             {
-                Destroy(visual);
+                UnityEngine.Object.Destroy(visual);
             }
         }
 
         private GameObject CreateVisual(Buff buff)
         {
-            Component prefab = buff switch
-            {
-                Freeze => ((IcyCageSkillConfig)buff.SourceSkill.Definition.Config).ProjectilePrefab,
-                IceShield => ((IceShieldSkillConfig)buff.SourceSkill.Definition.Config).ProjectilePrefab,
-                _ => null
-            };
-
+            Component prefab = buff.Definition.VisualPrefab;
             if (prefab == null)
             {
                 return null;
             }
 
-            var visual = Instantiate(prefab, unit.transform.position, Quaternion.identity);
+            var visual = UnityEngine.Object.Instantiate(prefab, unit.transform.position, Quaternion.identity);
             var buffVisual = (IBuffVisual)visual;
             buffVisual.Initialize(unit);
             buffVisual.Activate();

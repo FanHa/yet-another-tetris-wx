@@ -7,8 +7,8 @@ namespace Units.Buffs
     {
         private float atkBoost;      // 攻击力加成
 
-        public LifePowerBuff(float atkBoost, float duration, Unit sourceUnit, Skill sourceSkill)
-            : base(duration, sourceUnit, sourceSkill)
+        public LifePowerBuff(Model.Buffs.BuffDefinition definition, float atkBoost, float duration, Unit sourceUnit, Skill sourceSkill)
+            : base(definition, duration, sourceUnit, sourceSkill)
         {
             this.atkBoost = atkBoost;
         }

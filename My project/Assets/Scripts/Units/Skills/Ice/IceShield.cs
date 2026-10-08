@@ -37,6 +37,8 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var buff = new Buffs.IceShield(
+                ((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition,
+                ((IceShieldSkillConfig)Definition.Config).ChilledBuffDefinition,
                 stats.BuffDuration.Final,
                 stats.ChilledDuration.Final,
                 (int)stats.MoveSlowPercent.Final,
@@ -45,7 +47,7 @@ namespace Units.Skills
                 (int)stats.EnergySlowPercent.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition);
+            );
 
             Owner.AddBuff(buff);
         }

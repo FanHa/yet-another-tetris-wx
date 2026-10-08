@@ -24,11 +24,12 @@ namespace Units.Projectiles
         {
             // 命中后直接添加Burn Buff
             var burn = new Units.Buffs.Burn(
+                ((Model.Skills.FireballSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
                 dps: burnDps,
                 duration: burnDuration,
                 sourceUnit: caster,
                 sourceSkill: sourceSkill
-            ).BindDefinition(((Model.Skills.FireballSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
+            );
             target.AddBuff(burn);
 
             Destroy(gameObject); // 销毁投射物

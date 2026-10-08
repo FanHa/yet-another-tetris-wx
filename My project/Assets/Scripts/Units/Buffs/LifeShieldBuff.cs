@@ -7,8 +7,8 @@ namespace Units.Buffs
     {
         private float shieldValue;           // 当前护盾值
         private Shield shield;               // 护盾对象
-        public LifeShieldBuff(float shieldValue, float duration, Unit sourceUnit, Skill sourceSkill)
-            : base(duration, sourceUnit, sourceSkill)
+        public LifeShieldBuff(Model.Buffs.BuffDefinition definition, float shieldValue, float duration, Unit sourceUnit, Skill sourceSkill)
+            : base(definition, duration, sourceUnit, sourceSkill)
         {
             this.shieldValue = shieldValue;
         }

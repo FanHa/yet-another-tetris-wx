@@ -51,11 +51,12 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var buff = new Buffs.EnergyAbsorb(
+                ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition,
                 stats.EnergyAbsorbPerSkillCast.Final,
                 stats.BuffDuration.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition);
+            );
             Owner.AddBuff(buff);
         }
     }

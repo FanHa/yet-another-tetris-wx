@@ -34,10 +34,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             var freezeBuff = new Buffs.Freeze(
+                ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition,
                 stats.FreezeDuration.Final,
                 Owner.SelfUnit,
                 this
-            ).BindDefinition(((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition);
+            );
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
         }

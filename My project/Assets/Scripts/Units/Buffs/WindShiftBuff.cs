@@ -7,12 +7,13 @@ namespace Units.Buffs
         private readonly float attackRangeBonus;      // 攻击距离提升）
 
         public WindShiftBuff(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             Unit sourceUnit,
             Skill sourceSkill,
             float attackRangeBonus
         )
-            : base(duration, sourceUnit, sourceSkill)
+            : base(definition, duration, sourceUnit, sourceSkill)
         {
             this.attackRangeBonus = attackRangeBonus;
         }

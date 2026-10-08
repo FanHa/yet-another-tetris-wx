@@ -10,14 +10,18 @@ namespace Units.Buffs
     {
         private float vulnerabilityPercent;
         private float dotDuration;
+        private readonly Model.Buffs.BuffDefinition vulnerabilityDefinition;
 
         public ShadowAttackBuff(
+            Model.Buffs.BuffDefinition definition,
+            Model.Buffs.BuffDefinition vulnerabilityDefinition,
             float vulnerabilityPercent,
             float dotDuration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(-1f, sourceUnit, sourceSkill) // -1f 表示永久Buff，可根据需要调整
+        ) : base(definition, -1f, sourceUnit, sourceSkill) // -1f 表示永久Buff，可根据需要调整
         {
+            this.vulnerabilityDefinition = vulnerabilityDefinition;
             this.vulnerabilityPercent = vulnerabilityPercent;
             this.dotDuration = dotDuration;
         }
@@ -29,11 +33,12 @@ namespace Units.Buffs
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var vulnerability = new Vulnerability(
+                vulnerabilityDefinition,
                 buffDuration: dotDuration, // 可根据技能配置调整
                 extraDamagePercent: vulnerabilityPercent,
                 sourceUnit: attacker,
                 sourceSkill: sourceSkill
-                ).BindDefinition(((Model.Skills.ShadowAttackSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition);
+            );
             context.AddBuffTo(target, vulnerability);
         }
     }

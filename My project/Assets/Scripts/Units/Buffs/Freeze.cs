@@ -1,6 +1,4 @@
 using Units.Skills;
-using Model.Skills;
-using UnityEngine;
 
 namespace Units.Buffs
 {
@@ -9,12 +7,12 @@ namespace Units.Buffs
     /// </summary>
     public class Freeze : Buff
     {
-        private Units.Projectiles.IcyCage vfxInstance;
         public Freeze(
+            Model.Buffs.BuffDefinition definition,
             float duration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
         }
 
@@ -29,15 +27,6 @@ namespace Units.Buffs
             context.Attributes.MoveSpeed.AddPercentageModifier(this, -100);
             context.Attributes.ActionSpeed.AddPercentageModifier(this, -100);
             context.Attributes.EnergyPerSecond.AddPercentageModifier(this, -100);
-            var skillConfig = (IcyCageSkillConfig)sourceSkill.Definition.Config;
-            vfxInstance = Object.Instantiate(
-                skillConfig.ProjectilePrefab,
-                context.SelfUnit.transform.position,
-                Quaternion.identity
-            );
-            vfxInstance.Initialize(context.SelfUnit);
-            vfxInstance.Activate();
-
         }
 
         public override void OnRemove()
@@ -46,11 +35,6 @@ namespace Units.Buffs
             context.Attributes.MoveSpeed.RemovePercentageModifier(this);
             context.Attributes.ActionSpeed.RemovePercentageModifier(this);
             context.Attributes.EnergyPerSecond.RemovePercentageModifier(this);
-            if (vfxInstance != null)
-            {
-                Object.Destroy(vfxInstance);
-                vfxInstance = null;
-            }
             base.OnRemove();
 
         }

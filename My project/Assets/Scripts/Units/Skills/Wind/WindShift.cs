@@ -49,11 +49,12 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             Owner.AddBuff(new Buffs.WindShiftBuff(
+                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
                 duration: -1f,
                 sourceUnit: Owner.SelfUnit,
                 sourceSkill: this,
                 attackRangeBonus: stats.AttackRangeBonus.Final
-            ).BindDefinition(((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition));
+            ));
         }
         
     }

@@ -130,6 +130,7 @@ namespace Units
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
         private UnitActionRunner actionRunner;
+        private BuffVisualController buffVisualController;
 
         private void Awake()
         {
@@ -141,6 +142,7 @@ namespace Units
             buffHandler = new Units.Buffs.BuffHandler(buffContext);
             buffHandler.BuffAdded += HandleBuffAdded;
             buffHandler.BuffRemoved += HandleBuffRemoved;
+            buffVisualController = new BuffVisualController(this);
             
             movementController = GetComponent<Movement>();
             skillContext = new Units.Skills.SkillContext(this);
@@ -225,6 +227,11 @@ namespace Units
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
             isActive = true;
+            foreach (Skill skill in skillHandler.GetSkills())
+            {
+                skill.OnOwnerActivated();
+            }
+            buffVisualController.Activate();
         }
 
         public void Deactivate()
@@ -239,6 +246,7 @@ namespace Units
             skillHandler.OnSkillCastFailed -= HandleSkillCastFailed;
             skillHandler.Deactivate(); // 如有需要
             buffHandler.RemoveAllActiveBuffsImmediately();
+            buffVisualController.Deactivate();
             actionRunner.OnOwnerDeactivated();
             animationController.ResetPlaybackSpeed();
             // 若单位在技能位移中途被回收，需恢复被覆盖的避让优先级，避免残留脏状态
@@ -248,6 +256,15 @@ namespace Units
             }
             skillMotionLockCount = 0;
             isActive = false;
+            foreach (Skill skill in skillHandler.GetSkills())
+            {
+                skill.OnOwnerDeactivated();
+            }
+        }
+
+        private void OnDisable()
+        {
+            buffVisualController?.Deactivate();
         }
 
         private void HandleGlobalSkillCast(Unit caster, Skill skill)

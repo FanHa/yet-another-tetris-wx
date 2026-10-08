@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Projectiles
@@ -8,12 +7,15 @@ namespace Units.Projectiles
     public class FlameRing : MonoBehaviour
     {
         [SerializeField] private ParticleSystem ringParticle;
-        private bool initialized = false;
+        private bool isActive;
         private Unit owner;
         private const float tickInterval = 1f;
         private float tickTimer = 0f;
+        private float duration;
+        private float elapsed;
         private float radius;
         private Skills.Skill sourceSkill;
+        private BuffDefinition burnDefinition;
         private float dotDps;
         private float dotDuration;
 
@@ -21,6 +23,8 @@ namespace Units.Projectiles
             Unit owner,
             float radius,
             Skills.Skill sourceSkill,
+            BuffDefinition burnDefinition,
+            float duration,
             float dotDps,
             float dotDuration
         )
@@ -28,24 +32,43 @@ namespace Units.Projectiles
             this.owner = owner;
             this.radius = radius;
             this.sourceSkill = sourceSkill;
+            this.burnDefinition = burnDefinition;
+            this.duration = duration;
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
 
             var shape = ringParticle.shape;
             shape.radius = radius;
             tickTimer = 0f;
+            elapsed = 0f;
         }
 
         public void Activate()
         {
-            initialized = true;
+            isActive = true;
+            ringParticle.Play(true);
         }
 
         void Update()
         {
-            if (!initialized)
+            if (!isActive)
                 return;
-            // todo Unit死亡时需要Destory这个FlameRing
+
+            if (owner == null || !owner.IsActive)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (duration >= 0f)
+            {
+                elapsed += Time.deltaTime;
+                if (elapsed >= duration)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+            }
 
             // 跟随目标
             transform.position = owner.transform.position;
@@ -62,11 +85,12 @@ namespace Units.Projectiles
                 foreach (var enemy in enemies)
                 {
                     var burn = new Units.Buffs.Burn(
+                        burnDefinition,
                         dps: dotDps,
                         duration: dotDuration,
                         sourceUnit: owner,
                         sourceSkill: sourceSkill
-                    ).BindDefinition(((Model.Skills.FlameRingSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
+                    );
                     enemy.AddBuff(burn);
                 }
             }

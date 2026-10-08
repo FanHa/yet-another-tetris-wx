@@ -8,11 +8,12 @@ namespace Units.Buffs
     {
         private float energyAbsorbPerSkillCast;
         public EnergyAbsorb(
+            Model.Buffs.BuffDefinition definition,
             float energyAbsorbPerSkillCast,
             float duration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
             this.energyAbsorbPerSkillCast = energyAbsorbPerSkillCast;
         }

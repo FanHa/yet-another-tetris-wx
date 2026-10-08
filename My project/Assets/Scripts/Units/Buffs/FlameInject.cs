@@ -10,15 +10,19 @@ namespace Units.Buffs
     {
         private float dotDps;
         private float dotDuration;
+        private readonly Model.Buffs.BuffDefinition burnDefinition;
 
         public FlameInject(
+            Model.Buffs.BuffDefinition definition,
+            Model.Buffs.BuffDefinition burnDefinition,
             float dotDps,
             float dotDuration,
             float buffDuration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(buffDuration, sourceUnit, sourceSkill)
+        ) : base(definition, buffDuration, sourceUnit, sourceSkill)
         {
+            this.burnDefinition = burnDefinition;
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
         }
@@ -30,11 +34,12 @@ namespace Units.Buffs
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var burn = new Burn(
+                burnDefinition,
                 dps: dotDps,
                 duration: dotDuration,
                 sourceUnit: attacker,
                 sourceSkill: sourceSkill
-                ).BindDefinition(((Model.Skills.FlameInjectSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition);
+            );
             context.AddBuffTo(target, burn);
         }
     }

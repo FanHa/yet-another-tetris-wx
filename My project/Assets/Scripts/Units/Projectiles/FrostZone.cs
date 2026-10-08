@@ -90,6 +90,7 @@ namespace Units.Projectiles
 
                         // 施加 Chilled Buff
                         var chilled = new Units.Buffs.Chilled(
+                            ((Model.Skills.FrostZoneSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition,
                             chilledDuration,
                             moveSlowPercent,
                             atkSlowPercent,
@@ -97,7 +98,7 @@ namespace Units.Projectiles
                             energySlowPercent,
                             caster,
                             sourceSkill // 可传递技能引用
-                        ).BindDefinition(((Model.Skills.FrostZoneSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition);
+                        );
                         enemy.AddBuff(chilled);
                     }
                 }

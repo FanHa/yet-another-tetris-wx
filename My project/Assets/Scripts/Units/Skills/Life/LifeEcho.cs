@@ -40,10 +40,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
+                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
                 Owner.SelfUnit,
                 this,
                 stats.ReflectPercent.Final
-            ).BindDefinition(((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition));
+            ));
         }
     }
 }

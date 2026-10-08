@@ -45,7 +45,9 @@ namespace Units.Skills
 
         public SkillDefinition Definition { get; internal set; }
         public ISkillContext Owner { get; set; } // 技能的拥有者
-        
+
+        internal virtual void OnOwnerActivated() { }
+        internal virtual void OnOwnerDeactivated() { }
 
     }
 

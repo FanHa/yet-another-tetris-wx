@@ -11,11 +11,12 @@ namespace Units.Buffs
         private const string label = "灼烧";
 
         public Burn(
+            Model.Buffs.BuffDefinition definition,
             float dps,
             float duration,
             Unit sourceUnit,
             Skill sourceSkill
-        ) : base(duration, sourceUnit, sourceSkill)
+        ) : base(definition, duration, sourceUnit, sourceSkill)
         {
             this.dps = dps;
         }

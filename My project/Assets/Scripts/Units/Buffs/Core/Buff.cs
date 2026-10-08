@@ -15,11 +15,9 @@ namespace Units.Buffs
 
     public abstract class Buff
     {
-        private BuffDefinition definition;
-
         protected float duration; // -1为永久
         public float TimeLeft;
-        public BuffDefinition Definition => definition;
+        public BuffDefinition Definition { get; }
         protected Unit sourceUnit { get; set; }
         public Unit SourceUnit => sourceUnit;
         protected IBuffContext context;
@@ -29,17 +27,12 @@ namespace Units.Buffs
         public Units.Skills.Skill SourceSkill => sourceSkill;
         public event Action Removed;
 
-        public Buff(float duration, Unit sourceUnit, Units.Skills.Skill sourceSkill)
+        protected Buff(BuffDefinition definition, float duration, Unit sourceUnit, Units.Skills.Skill sourceSkill)
         {
+            Definition = definition;
             this.duration = duration;
             this.sourceUnit = sourceUnit;
             this.sourceSkill = sourceSkill;
-        }
-
-        internal Buff BindDefinition(BuffDefinition definition)
-        {
-            this.definition = definition;
-            return this;
         }
 
         public abstract string Name();
