@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ThunderStrikeBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.thunder_strike
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u96F7\u51FB"
+  description: "\u4F7F\u76EE\u6807\u7729\u6655\uFF0C\u671F\u95F4\u65E0\u6CD5\u884C\u52A8\u3002"
+  icon: {fileID: 3655301165296326879, guid: b149bda6577d13a4785432d07a5e925b, type: 3}
   visualPrefab: {fileID: 0}

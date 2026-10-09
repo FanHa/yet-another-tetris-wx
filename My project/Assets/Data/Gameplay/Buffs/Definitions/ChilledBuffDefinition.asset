@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChilledBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.chilled
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: Chilled
+  description: "\u964D\u4F4E\u76EE\u6807\u79FB\u52A8\u901F\u5EA6\u3001\u653B\u51FB\u901F\u5EA6\u3001\u52A8\u4F5C\u901F\u7387\u548C\u80FD\u91CF\u56DE\u590D\u3002"
+  icon: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
   visualPrefab: {fileID: 0}

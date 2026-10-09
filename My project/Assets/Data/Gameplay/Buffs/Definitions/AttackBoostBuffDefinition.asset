@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AttackBoostBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.attack_boost
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u75BE\u98CE\u52A0\u901F"
+  description: "\u63D0\u9AD8\u5355\u4F4D\u653B\u51FB\u901F\u5EA6\u3002"
+  icon: {fileID: 6614277198255979678, guid: 05b2f746cff6252489f5ed8dcd013957, type: 3}
   visualPrefab: {fileID: 0}

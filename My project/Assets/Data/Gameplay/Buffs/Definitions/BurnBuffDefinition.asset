@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BurnBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.burn
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u707C\u70E7"
+  description: "\u6301\u7EED\u5BF9\u76EE\u6807\u9020\u6210\u706B\u7130\u4F24\u5BB3\u3002"
+  icon: {fileID: -6213026167221029492, guid: c978a8e79aa116b43b9f7c5f6756dc2c, type: 3}
   visualPrefab: {fileID: 0}

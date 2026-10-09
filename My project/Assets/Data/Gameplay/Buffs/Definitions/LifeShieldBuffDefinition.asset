@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LifeShieldBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.life_shield
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u751F\u547D\u62A4\u76FE"
+  description: "\u5438\u6536\u53D7\u5230\u7684\u4F24\u5BB3\uFF0C\u62A4\u76FE\u8017\u5C3D\u65F6\u79FB\u9664\u3002"
+  icon: {fileID: 8207308503633103061, guid: a3a215d7f10e0574eab3bf3d7616ea2a, type: 3}
   visualPrefab: {fileID: 0}

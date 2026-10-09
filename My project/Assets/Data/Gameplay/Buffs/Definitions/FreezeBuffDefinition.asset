@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FreezeBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.freeze
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: Freeze
+  description: "\u51BB\u7ED3\u76EE\u6807\uFF0C\u4F7F\u5176\u65E0\u6CD5\u884C\u52A8\u5E76\u505C\u6B62\u80FD\u91CF\u56DE\u590D\u3002"
+  icon: {fileID: 450698819153296390, guid: 40f2981b399acce4b859f6ecb5ecff66, type: 3}
   visualPrefab: {fileID: 8931962592207463393, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}

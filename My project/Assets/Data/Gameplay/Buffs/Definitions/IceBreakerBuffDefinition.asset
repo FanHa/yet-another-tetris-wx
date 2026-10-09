@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IceBreakerBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.ice_breaker
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u7834\u51B0"
+  description: "\u653B\u51FB\u547D\u4E2D\u65F6\u79FB\u9664\u76EE\u6807\u7684 Chilled\uFF0C\u5E76\u6839\u636E\u5176\u51CF\u901F\u6548\u679C\u9020\u6210\u989D\u5916\u4F24\u5BB3\u3002"
+  icon: {fileID: -5738798183895495778, guid: b6462b6d64e9c274780607b4e9cd521e, type: 3}
   visualPrefab: {fileID: 0}

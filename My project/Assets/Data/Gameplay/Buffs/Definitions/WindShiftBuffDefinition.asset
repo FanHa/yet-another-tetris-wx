@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WindShiftBuffDefinition
   m_EditorClassIdentifier: 
   id: buff.wind_shift
-  displayName: 
-  description: 
-  icon: {fileID: 0}
+  displayName: "\u98CE\u5F62\u6001"
+  description: "\u63D0\u9AD8\u653B\u51FB\u8DDD\u79BB\uFF0C\u653B\u51FB\u65F6\u9020\u6210\u989D\u5916\u4F24\u5BB3\u3002"
+  icon: {fileID: 1684176045394110669, guid: aae35810fc582554e91e89cedb0bb602, type: 3}
   visualPrefab: {fileID: 0}
