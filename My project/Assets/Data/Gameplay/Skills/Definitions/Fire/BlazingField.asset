@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: BlazingField
   m_EditorClassIdentifier: 
-  id: BlazingField
+  id: skill.blazing_field
   displayName: Blazing Field
   description: "\u91CA\u653E Blazing Field\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 65f215bb04314cc4b88e85fa107975fb, type: 2}
   icon: {fileID: -7861168299662229937, guid: 581b2c7917ed4fb42870de94637db601, type: 3}
-  buffA: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}
-  buffB: {fileID: 0}

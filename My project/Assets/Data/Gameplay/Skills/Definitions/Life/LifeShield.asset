@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: LifeShield
   m_EditorClassIdentifier: 
-  id: LifeShield
+  id: skill.life_shield
   displayName: Life Shield
   description: "\u91CA\u653E Life Shield\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 7bff2687ad4c3ea4192f8de830974a85, type: 2}
   icon: {fileID: 8207308503633103061, guid: a3a215d7f10e0574eab3bf3d7616ea2a, type: 3}
-  buffA: {fileID: 11400000, guid: da189cd32601e6d4091573f1b6cd12de, type: 2}
-  buffB: {fileID: 0}

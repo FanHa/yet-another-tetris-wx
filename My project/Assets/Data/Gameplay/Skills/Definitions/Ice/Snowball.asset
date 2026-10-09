@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: Snowball
   m_EditorClassIdentifier: 
-  id: Snowball
+  id: skill.snowball
   displayName: Snowball
   description: "\u91CA\u653E Snowball\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: a77e06cb856e8d24bb479470b7e993b7, type: 2}
   icon: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
-  buffA: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}
-  buffB: {fileID: 0}

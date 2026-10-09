@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: ShadowStep
   m_EditorClassIdentifier: 
-  id: ShadowStep
+  id: skill.shadow_step
   displayName: Shadow Step
   description: "\u91CA\u653E Shadow Step\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: efda9500a0c0d5040b89dbc6828b280d, type: 2}
   icon: {fileID: -311389461584822456, guid: c377b6acedee55648b17ff1601303fa1, type: 3}
-  buffA: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}
-  buffB: {fileID: 0}

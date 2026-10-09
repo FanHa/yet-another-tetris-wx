@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: ShadowArrow
   m_EditorClassIdentifier: 
-  id: ShadowArrow
+  id: skill.shadow_arrow
   displayName: Shadow Arrow
   description: "\u91CA\u653E Shadow Arrow\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}
   icon: {fileID: 4134349262818545416, guid: 0748ec5f9b0f00e41a65a5356f08dc10, type: 3}
-  buffA: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}
-  buffB: {fileID: 0}

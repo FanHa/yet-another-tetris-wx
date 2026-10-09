@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: LifeEcho
   m_EditorClassIdentifier: 
-  id: LifeEcho
+  id: skill.life_echo
   displayName: Life Echo
   description: "\u91CA\u653E Life Echo\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 4818bd036196f41429cedcbb7330ab16, type: 2}
   icon: {fileID: -5587755329506514606, guid: 0ffef48aa8f00064696c938ff3c24b3e, type: 3}
-  buffA: {fileID: 11400000, guid: bcc99c08d81fbbe4ea7a40d325611be4, type: 2}
-  buffB: {fileID: 0}

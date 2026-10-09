@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: IceBreaker
   m_EditorClassIdentifier: 
-  id: IceBreaker
+  id: skill.ice_breaker
   displayName: Ice Breaker
   description: "\u91CA\u653E Ice Breaker\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 3c4882365fdfd9543bb4a47e99638a77, type: 2}
   icon: {fileID: -5738798183895495778, guid: b6462b6d64e9c274780607b4e9cd521e, type: 3}
-  buffA: {fileID: 11400000, guid: 5e31c5180c1ba81428152b63fb1faae9, type: 2}
-  buffB: {fileID: 0}

@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: ShadowAttack
   m_EditorClassIdentifier: 
-  id: ShadowAttack
+  id: skill.shadow_attack
   displayName: Shadow Attack
   description: "\u91CA\u653E Shadow Attack\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 8b24eb31675382c4eae9c9e11391a232, type: 2}
   icon: {fileID: 4472188088645480083, guid: bed8afd836b9a9f459a96a386010473b, type: 3}
-  buffA: {fileID: 11400000, guid: 2f38ba7e00aa4b243ac7b5cf848b8b61, type: 2}
-  buffB: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}

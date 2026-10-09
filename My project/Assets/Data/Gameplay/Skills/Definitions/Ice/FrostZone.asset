@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: FrostZone
   m_EditorClassIdentifier: 
-  id: FrostZone
+  id: skill.frost_zone
   displayName: Frost Zone
   description: "\u91CA\u653E Frost Zone\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}
   icon: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}
-  buffA: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}
-  buffB: {fileID: 0}

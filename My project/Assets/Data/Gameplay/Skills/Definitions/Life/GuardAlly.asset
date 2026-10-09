@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: GuardAlly
   m_EditorClassIdentifier: 
-  id: GuardAlly
+  id: skill.guard_ally
   displayName: Guard Ally
   description: "\u91CA\u653E Guard Ally\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  runtimeTypeName: Units.Skills.GuardAlly, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   config: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
   icon: {fileID: -8150554673462657918, guid: 85c068f82d356a04abd05fc049fcdcd2, type: 3}

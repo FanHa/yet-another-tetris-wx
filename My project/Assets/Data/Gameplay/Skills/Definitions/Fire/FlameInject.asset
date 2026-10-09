@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: FlameInject
   m_EditorClassIdentifier: 
-  id: FlameInject
+  id: skill.flame_inject
   displayName: Flame Inject
   description: "\u91CA\u653E Flame Inject\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   config: {fileID: 11400000, guid: ce0abe232f3541c4a9c1050f48a27157, type: 2}
   icon: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
-  buffA: {fileID: 11400000, guid: ed1f2739a8d89804799176dd27160da6, type: 2}
-  buffB: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

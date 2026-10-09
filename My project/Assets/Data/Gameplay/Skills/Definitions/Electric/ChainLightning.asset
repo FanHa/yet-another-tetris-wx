@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750b94a6e63e06347855b76585992982, type: 3}
   m_Name: ChainLightning
   m_EditorClassIdentifier: 
-  id: ChainLightning
+  id: skill.chain_lightning
   displayName: "\u95EA\u7535\u94FE"
   description: "\u5BF9\u8303\u56F4\u5185\u654C\u4EBA\u8FDE\u7EED\u5F39\u5C04\u95EA\u7535\uFF0C\u9020\u6210\u9012\u589E\u4F24\u5BB3\u3002"
   config: {fileID: 11400000, guid: 9c331be3588604c4da2b691897e49b5d, type: 2}
