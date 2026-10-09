@@ -2,6 +2,26 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct ChilledBuffArgs : IBuffCreationArgs
+    {
+        public float Duration { get; }
+        public int MoveSlowPercent { get; }
+        public int AttackSlowPercent { get; }
+        public int ActionSlowPercent { get; }
+        public int EnergyRegenSlowPercent { get; }
+        public BuffSource Source { get; }
+
+        public ChilledBuffArgs(float duration, int moveSlowPercent, int attackSlowPercent, int actionSlowPercent, int energyRegenSlowPercent, BuffSource source)
+        {
+            Duration = duration;
+            MoveSlowPercent = moveSlowPercent;
+            AttackSlowPercent = attackSlowPercent;
+            ActionSlowPercent = actionSlowPercent;
+            EnergyRegenSlowPercent = energyRegenSlowPercent;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// Chilled：多重减速Debuff
     /// </summary>
@@ -12,21 +32,13 @@ namespace Units.Buffs
         public int ActionSlowPercent { get; }
         public int EnergyRegenSlowPercent { get; }
 
-        public Chilled(
-            Model.Buffs.BuffDefinition definition,
-            float duration,
-            int moveSlowPercent,
-            int attackSlowPercent,
-            int actionSlowPercent,
-            int energyRegenSlowPercent,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public Chilled(Model.Buffs.BuffDefinition definition, ChilledBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            MoveSlowPercent = moveSlowPercent;
-            AttackSlowPercent = attackSlowPercent;
-            ActionSlowPercent = actionSlowPercent;
-            EnergyRegenSlowPercent = energyRegenSlowPercent;
+            MoveSlowPercent = args.MoveSlowPercent;
+            AttackSlowPercent = args.AttackSlowPercent;
+            ActionSlowPercent = args.ActionSlowPercent;
+            EnergyRegenSlowPercent = args.EnergyRegenSlowPercent;
         }
 
         public override string Name() => "Chilled";

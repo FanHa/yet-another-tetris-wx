@@ -48,11 +48,9 @@ namespace Units.Projectiles
                 .SetSourceLabel(sourceSkill.Name());
             target.TakeDamage(damage);
 
-            var thunderStrikeBuff = new Units.Buffs.ThunderStrikeBuff(
+            var thunderStrikeBuff = Units.Buffs.BuffFactory.Create(
                 ((Model.Skills.ThunderStrikeSkillConfig)sourceSkill.Definition.Config).ThunderStrikeBuffDefinition,
-                stunDuration,
-                caster,
-                sourceSkill
+                new Units.Buffs.ThunderStrikeBuffArgs(stunDuration, new Units.Buffs.BuffSource(caster, sourceSkill))
             );
             target.AddBuff(thunderStrikeBuff);
         }

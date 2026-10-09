@@ -1,3 +1,5 @@
+using Units.Buffs;
+
 namespace Units.Projectiles
 {
     public class Fireball : ProjectileToUnit
@@ -23,12 +25,9 @@ namespace Units.Projectiles
         protected override void HandleHitTarget()
         {
             // 命中后直接添加Burn Buff
-            var burn = new Units.Buffs.Burn(
+            var burn = BuffFactory.Create(
                 ((Model.Skills.FireballSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
-                dps: burnDps,
-                duration: burnDuration,
-                sourceUnit: caster,
-                sourceSkill: sourceSkill
+                new BurnBuffArgs(burnDps, burnDuration, new BuffSource(caster, sourceSkill))
             );
             target.AddBuff(burn);
 

@@ -46,13 +46,13 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            Owner.AddBuff(new Buffs.IceBreaker(
+            Owner.AddBuff(Buffs.BuffFactory.Create(
                 ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition,
-                baseExtraDamage: stats.BaseExtraDamage.Final,
-                percentSlowMultiplier: stats.MultiplierByChilledLayer.Final,
-                buffDuration: -1f,
-                sourceUnit: Owner.SelfUnit,
-                sourceSkill: this
+                new Buffs.IceBreakerBuffArgs(
+                    stats.BaseExtraDamage.Final,
+                    stats.MultiplierByChilledLayer.Final,
+                    -1f,
+                    new Buffs.BuffSource(Owner.SelfUnit, this))
             ));
         }
 

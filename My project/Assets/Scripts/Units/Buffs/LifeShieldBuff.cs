@@ -3,14 +3,28 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public readonly struct LifeShieldBuffArgs : IBuffCreationArgs
+    {
+        public float ShieldValue { get; }
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public LifeShieldBuffArgs(float shieldValue, float duration, BuffSource source)
+        {
+            ShieldValue = shieldValue;
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     public class LifeShieldBuff : Buff
     {
         private float shieldValue;           // 当前护盾值
         private Shield shield;               // 护盾对象
-        public LifeShieldBuff(Model.Buffs.BuffDefinition definition, float shieldValue, float duration, Unit sourceUnit, Skill sourceSkill)
-            : base(definition, duration, sourceUnit, sourceSkill)
+        public LifeShieldBuff(Model.Buffs.BuffDefinition definition, LifeShieldBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.shieldValue = shieldValue;
+            shieldValue = args.ShieldValue;
         }
 
         public override string Name() => "生命护盾";

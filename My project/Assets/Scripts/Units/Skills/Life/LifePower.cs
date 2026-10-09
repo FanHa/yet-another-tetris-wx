@@ -53,12 +53,9 @@ namespace Units.Skills
             // 攻击力加成与施法者最大生命值相关
             float atkBoost = Owner.Attributes.MaxHealth.finalValue * (stats.HealthToAtkPercent.Final / 100f);
 
-            cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
+            cachedTarget.AddBuff(Units.Buffs.BuffFactory.Create(
                 ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
-                atkBoost,
-                stats.BuffDuration.Final,
-                Owner.SelfUnit,
-                this
+                new Units.Buffs.LifePowerBuffArgs(atkBoost, stats.BuffDuration.Final, new Units.Buffs.BuffSource(Owner.SelfUnit, this))
             ));
             cachedTarget = null;
         }

@@ -1,4 +1,5 @@
 using System.Collections;
+using Units.Buffs;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -39,12 +40,9 @@ namespace Units.Projectiles
                 {
                     foreach (var enemy in enemies)
                     {
-                        var burn = new Units.Buffs.Burn(
+                        var burn = BuffFactory.Create(
                             ((Model.Skills.BlazingFieldSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
-                            dotDps,
-                            dotDuration,
-                            caster,
-                            sourceSkill
+                            new BurnBuffArgs(dotDps, dotDuration, new BuffSource(caster, sourceSkill))
                         );
                         enemy.AddBuff(burn);
                     }

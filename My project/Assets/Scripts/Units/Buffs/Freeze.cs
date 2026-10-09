@@ -2,17 +2,25 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct FreezeBuffArgs : IBuffCreationArgs
+    {
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public FreezeBuffArgs(float duration, BuffSource source)
+        {
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// Freeze：完全冻结目标，无法移动、攻击、释放技能，能量回复为0
     /// </summary>
     public class Freeze : Buff
     {
-        public Freeze(
-            Model.Buffs.BuffDefinition definition,
-            float duration,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public Freeze(Model.Buffs.BuffDefinition definition, FreezeBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
         }
 

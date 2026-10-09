@@ -2,20 +2,28 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct WindShiftBuffArgs : IBuffCreationArgs
+    {
+        public float Duration { get; }
+        public BuffSource Source { get; }
+        public float AttackRangeBonus { get; }
+
+        public WindShiftBuffArgs(float duration, float attackRangeBonus, BuffSource source)
+        {
+            Duration = duration;
+            Source = source;
+            AttackRangeBonus = attackRangeBonus;
+        }
+    }
+
     public class WindShiftBuff : Buff, IAttackHitTrigger
     {
         private readonly float attackRangeBonus;      // 攻击距离提升）
 
-        public WindShiftBuff(
-            Model.Buffs.BuffDefinition definition,
-            float duration,
-            Unit sourceUnit,
-            Skill sourceSkill,
-            float attackRangeBonus
-        )
-            : base(definition, duration, sourceUnit, sourceSkill)
+        public WindShiftBuff(Model.Buffs.BuffDefinition definition, WindShiftBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.attackRangeBonus = attackRangeBonus;
+            attackRangeBonus = args.AttackRangeBonus;
         }
 
         public override string Name() => "风形态";

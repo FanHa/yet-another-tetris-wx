@@ -45,13 +45,14 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            var buff = new Buffs.ShadowAttackBuff(
-                ((ShadowAttackSkillConfig)Definition.Config).ShadowAttackBuffDefinition,
-                ((ShadowAttackSkillConfig)Definition.Config).VulnerabilityBuffDefinition,
-                stats.VulnerabilityPercent.Final,
-                stats.DotDuration.Final,
-                Owner.SelfUnit,
-                this
+            var config = (ShadowAttackSkillConfig)Definition.Config;
+            var buff = Buffs.BuffFactory.Create(
+                config.ShadowAttackBuffDefinition,
+                new Buffs.ShadowAttackBuffArgs(
+                    config.VulnerabilityBuffDefinition,
+                    stats.VulnerabilityPercent.Final,
+                    stats.DotDuration.Final,
+                    new Buffs.BuffSource(Owner.SelfUnit, this))
             );
             Owner.AddBuff(buff);
         }

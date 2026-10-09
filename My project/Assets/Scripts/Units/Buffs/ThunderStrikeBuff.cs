@@ -2,17 +2,25 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct ThunderStrikeBuffArgs : IBuffCreationArgs
+    {
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public ThunderStrikeBuffArgs(float duration, BuffSource source)
+        {
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// ThunderStrike：雷击状态，期间单位进入眩晕
     /// </summary>
     public class ThunderStrikeBuff : Buff
     {
-        public ThunderStrikeBuff(
-            Model.Buffs.BuffDefinition definition,
-            float duration,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public ThunderStrikeBuff(Model.Buffs.BuffDefinition definition, ThunderStrikeBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
         }
 

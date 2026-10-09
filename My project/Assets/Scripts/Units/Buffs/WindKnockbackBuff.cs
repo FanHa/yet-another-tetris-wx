@@ -3,6 +3,20 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public readonly struct WindKnockbackBuffArgs : IBuffCreationArgs
+    {
+        public float KnockbackDistance { get; }
+        public float MaxKnockbackDistance { get; }
+        public BuffSource Source { get; }
+
+        public WindKnockbackBuffArgs(float knockbackDistance, float maxKnockbackDistance, BuffSource source)
+        {
+            KnockbackDistance = knockbackDistance;
+            MaxKnockbackDistance = maxKnockbackDistance;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// WindKnockbackBuff：普通攻击命中时，将目标沿攻击方向击退一小段距离
     /// </summary>
@@ -11,16 +25,11 @@ namespace Units.Buffs
         private readonly float knockbackDistance;
         private readonly float maxKnockbackDistance;
 
-        public WindKnockbackBuff(
-            Model.Buffs.BuffDefinition definition,
-            float knockbackDistance,
-            float maxKnockbackDistance,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, -1f, sourceUnit, sourceSkill)
+        public WindKnockbackBuff(Model.Buffs.BuffDefinition definition, WindKnockbackBuffArgs args)
+            : base(definition, -1f, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.knockbackDistance = knockbackDistance;
-            this.maxKnockbackDistance = maxKnockbackDistance;
+            knockbackDistance = args.KnockbackDistance;
+            maxKnockbackDistance = args.MaxKnockbackDistance;
         }
 
         public override string Name() => "轻风击退";

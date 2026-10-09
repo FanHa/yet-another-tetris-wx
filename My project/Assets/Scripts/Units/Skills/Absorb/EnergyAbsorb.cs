@@ -50,12 +50,12 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            var buff = new Buffs.EnergyAbsorb(
+            var buff = Buffs.BuffFactory.Create(
                 ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition,
-                stats.EnergyAbsorbPerSkillCast.Final,
-                stats.BuffDuration.Final,
-                Owner.SelfUnit,
-                this
+                new Buffs.EnergyAbsorbBuffArgs(
+                    stats.EnergyAbsorbPerSkillCast.Final,
+                    stats.BuffDuration.Final,
+                    new Buffs.BuffSource(Owner.SelfUnit, this))
             );
             Owner.AddBuff(buff);
         }

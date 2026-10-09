@@ -4,18 +4,27 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public readonly struct EnergyAbsorbBuffArgs : IBuffCreationArgs
+    {
+        public float EnergyAbsorbPerSkillCast { get; }
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public EnergyAbsorbBuffArgs(float energyAbsorbPerSkillCast, float duration, BuffSource source)
+        {
+            EnergyAbsorbPerSkillCast = energyAbsorbPerSkillCast;
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     public class EnergyAbsorb : Buff, IGlobalSkillCastTrigger
     {
         private float energyAbsorbPerSkillCast;
-        public EnergyAbsorb(
-            Model.Buffs.BuffDefinition definition,
-            float energyAbsorbPerSkillCast,
-            float duration,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public EnergyAbsorb(Model.Buffs.BuffDefinition definition, EnergyAbsorbBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.energyAbsorbPerSkillCast = energyAbsorbPerSkillCast;
+            energyAbsorbPerSkillCast = args.EnergyAbsorbPerSkillCast;
         }
         // 护盾对象
         public override string Description()

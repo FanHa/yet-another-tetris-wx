@@ -2,6 +2,20 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct BurnBuffArgs : IBuffCreationArgs
+    {
+        public float Dps { get; }
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public BurnBuffArgs(float dps, float duration, BuffSource source)
+        {
+            Dps = dps;
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// Burn：灼烧持续伤害Buff（Dot）
     /// </summary>
@@ -10,15 +24,10 @@ namespace Units.Buffs
         private readonly float dps;
         private const string label = "灼烧";
 
-        public Burn(
-            Model.Buffs.BuffDefinition definition,
-            float dps,
-            float duration,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public Burn(Model.Buffs.BuffDefinition definition, BurnBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.dps = dps;
+            dps = args.Dps;
         }
 
         public override string Name() => label;

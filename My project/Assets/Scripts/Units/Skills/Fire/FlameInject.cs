@@ -1,6 +1,7 @@
 using System.Linq;
 using Model.Tetri;
 using Model.Skills;
+using Units.Buffs;
 using UnityEngine;
 
 namespace Units.Skills
@@ -53,14 +54,15 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            var buff = new Buffs.FlameInject(
-                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition,
-                ((FlameInjectSkillConfig)Definition.Config).BurnBuffDefinition,
-                stats.DotDps.Final,
-                stats.DotDuration.Final,
-                stats.BuffDuration.Final,
-                Owner.SelfUnit,
-                this
+            var config = (FlameInjectSkillConfig)Definition.Config;
+            var buff = BuffFactory.Create(
+                config.FlameInjectBuffDefinition,
+                new FlameInjectBuffArgs(
+                    config.BurnBuffDefinition,
+                    stats.DotDps.Final,
+                    stats.DotDuration.Final,
+                    stats.BuffDuration.Final,
+                    new BuffSource(Owner.SelfUnit, this))
             );
             Owner.AddBuff(buff);
         }

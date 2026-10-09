@@ -36,17 +36,18 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            var buff = new Buffs.IceShield(
-                ((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition,
-                ((IceShieldSkillConfig)Definition.Config).ChilledBuffDefinition,
-                stats.BuffDuration.Final,
-                stats.ChilledDuration.Final,
-                (int)stats.MoveSlowPercent.Final,
-                (int)stats.AtkSlowPercent.Final,
-                (int)stats.ActionSlowPercent.Final,
-                (int)stats.EnergySlowPercent.Final,
-                Owner.SelfUnit,
-                this
+            var config = (IceShieldSkillConfig)Definition.Config;
+            var buff = Buffs.BuffFactory.Create(
+                config.IceShieldBuffDefinition,
+                new Buffs.IceShieldBuffArgs(
+                    config.ChilledBuffDefinition,
+                    stats.BuffDuration.Final,
+                    stats.ChilledDuration.Final,
+                    (int)stats.MoveSlowPercent.Final,
+                    (int)stats.AtkSlowPercent.Final,
+                    (int)stats.ActionSlowPercent.Final,
+                    (int)stats.EnergySlowPercent.Final,
+                    new Buffs.BuffSource(Owner.SelfUnit, this))
             );
 
             Owner.AddBuff(buff);

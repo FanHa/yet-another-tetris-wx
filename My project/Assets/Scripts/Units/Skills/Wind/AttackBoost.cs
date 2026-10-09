@@ -52,12 +52,12 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
-            var buff = new Buffs.AttackBoostBuff(
+            var buff = Buffs.BuffFactory.Create(
                 ((AttackBoostSkillConfig)Definition.Config).AttackBoostBuffDefinition,
-                duration: stats.Duration.Final,
-                atkSpeedPercent: stats.AtkSpeedPercent.Final,
-                sourceUnit: Owner.SelfUnit,
-                sourceSkill: this
+                new Buffs.AttackBoostBuffArgs(
+                    stats.Duration.Final,
+                    stats.AtkSpeedPercent.Final,
+                    new Buffs.BuffSource(Owner.SelfUnit, this))
             );
 
             var projectile = Object.Instantiate(

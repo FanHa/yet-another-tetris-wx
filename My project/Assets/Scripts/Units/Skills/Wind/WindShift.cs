@@ -48,12 +48,9 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            Owner.AddBuff(new Buffs.WindShiftBuff(
+            Owner.AddBuff(Buffs.BuffFactory.Create(
                 ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
-                duration: -1f,
-                sourceUnit: Owner.SelfUnit,
-                sourceSkill: this,
-                attackRangeBonus: stats.AttackRangeBonus.Final
+                new Buffs.WindShiftBuffArgs(-1f, stats.AttackRangeBonus.Final, new Buffs.BuffSource(Owner.SelfUnit, this))
             ));
         }
         

@@ -39,11 +39,11 @@ namespace Units.Skills
         public void ApplyPassive()
         {
             var stats = CalcStats();
-            Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
+            Owner.AddBuff(Units.Buffs.BuffFactory.Create(
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
-                Owner.SelfUnit,
-                this,
-                stats.ReflectPercent.Final
+                new Units.Buffs.LifeEchoBuffArgs(
+                    stats.ReflectPercent.Final,
+                    new Units.Buffs.BuffSource(Owner.SelfUnit, this))
             ));
         }
     }

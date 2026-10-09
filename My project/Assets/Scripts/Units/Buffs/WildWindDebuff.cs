@@ -2,6 +2,22 @@ using Units.Skills;
 
 namespace Units.Buffs
 {
+    public readonly struct WildWindDebuffBuffArgs : IBuffCreationArgs
+    {
+        public float Duration { get; }
+        public int MoveSlowPercent { get; }
+        public int AtkReducePercent { get; }
+        public BuffSource Source { get; }
+
+        public WildWindDebuffBuffArgs(float duration, int moveSlowPercent, int atkReducePercent, BuffSource source)
+        {
+            Duration = duration;
+            MoveSlowPercent = moveSlowPercent;
+            AtkReducePercent = atkReducePercent;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// 狂风减益：降低移动速度和攻击力
     /// </summary>
@@ -10,17 +26,11 @@ namespace Units.Buffs
         public int MoveSlowPercent { get; }
         public int AtkReducePercent { get; }
 
-        public WildWindDebuff(
-            Model.Buffs.BuffDefinition definition,
-            float duration,
-            int moveSlowPercent,
-            int atkReducePercent,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, duration, sourceUnit, sourceSkill)
+        public WildWindDebuff(Model.Buffs.BuffDefinition definition, WildWindDebuffBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            MoveSlowPercent = moveSlowPercent;
-            AtkReducePercent = atkReducePercent;
+            MoveSlowPercent = args.MoveSlowPercent;
+            AtkReducePercent = args.AtkReducePercent;
         }
 
         public override string Name() => "狂风减益";

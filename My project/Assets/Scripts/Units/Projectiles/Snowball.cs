@@ -34,15 +34,9 @@ namespace Units.Projectiles
         protected override void HandleHitTarget()
         {
             // 施加冰霜减速Buff
-            var chilledBuff = new Units.Buffs.Chilled(
+            var chilledBuff = Units.Buffs.BuffFactory.Create(
                 ((Model.Skills.SnowballSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition,
-                chilledDuration,
-                moveSlowPercent,
-                atkSlowPercent,
-                actionSlowPercent,
-                energySlowPercent,
-                caster,
-                sourceSkill
+                new Units.Buffs.ChilledBuffArgs(chilledDuration, moveSlowPercent, atkSlowPercent, actionSlowPercent, energySlowPercent, new Units.Buffs.BuffSource(caster, sourceSkill))
             );
             target.AddBuff(chilledBuff);
 

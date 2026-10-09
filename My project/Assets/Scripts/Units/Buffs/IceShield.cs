@@ -3,6 +3,30 @@ using Model.Buffs;
 
 namespace Units.Buffs
 {
+    public readonly struct IceShieldBuffArgs : IBuffCreationArgs
+    {
+        public BuffDefinition ChilledDefinition { get; }
+        public float BuffDuration { get; }
+        public float ChilledDuration { get; }
+        public int ChilledMoveSlowPercent { get; }
+        public int ChilledAttackSlowPercent { get; }
+        public int ChilledActionSlowPercent { get; }
+        public int ChilledEnergyRegenSlowPercent { get; }
+        public BuffSource Source { get; }
+
+        public IceShieldBuffArgs(BuffDefinition chilledDefinition, float buffDuration, float chilledDuration, int chilledMoveSlowPercent, int chilledAttackSlowPercent, int chilledActionSlowPercent, int chilledEnergyRegenSlowPercent, BuffSource source)
+        {
+            ChilledDefinition = chilledDefinition;
+            BuffDuration = buffDuration;
+            ChilledDuration = chilledDuration;
+            ChilledMoveSlowPercent = chilledMoveSlowPercent;
+            ChilledAttackSlowPercent = chilledAttackSlowPercent;
+            ChilledActionSlowPercent = chilledActionSlowPercent;
+            ChilledEnergyRegenSlowPercent = chilledEnergyRegenSlowPercent;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// 冰霜反击护盾：被攻击时对攻击者施加Chilled（多重减速）Debuff
     /// </summary>
@@ -15,25 +39,15 @@ namespace Units.Buffs
         private int chilledEnergyRegenSlowPercent; // Chilled 能量回复减缓百分比
         private readonly BuffDefinition chilledDefinition;
 
-        public IceShield(
-            BuffDefinition definition,
-            BuffDefinition chilledDefinition,
-            float buffDuration,
-            float chilledDuration,
-            int chilledMoveSlowPercent,
-            int chilledAttackSlowPercent,
-            int chilledActionSlowPercent,
-            int chilledEnergyRegenSlowPercent,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, buffDuration, sourceUnit, sourceSkill)
+        public IceShield(BuffDefinition definition, IceShieldBuffArgs args)
+            : base(definition, args.BuffDuration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.chilledDefinition = chilledDefinition;
-            this.chilledDuration = chilledDuration;
-            this.chilledMoveSlowPercent = chilledMoveSlowPercent;
-            this.chilledAttackSlowPercent = chilledAttackSlowPercent;
-            this.chilledActionSlowPercent = chilledActionSlowPercent;
-            this.chilledEnergyRegenSlowPercent = chilledEnergyRegenSlowPercent;
+            chilledDefinition = args.ChilledDefinition;
+            chilledDuration = args.ChilledDuration;
+            chilledMoveSlowPercent = args.ChilledMoveSlowPercent;
+            chilledAttackSlowPercent = args.ChilledAttackSlowPercent;
+            chilledActionSlowPercent = args.ChilledActionSlowPercent;
+            chilledEnergyRegenSlowPercent = args.ChilledEnergyRegenSlowPercent;
         }
 
         public override string Name() => "冰霜护盾";
@@ -44,15 +58,15 @@ namespace Units.Buffs
         {
             if (attacker == null)
                 return;
-            var chilled = new Chilled(
+            var chilled = BuffFactory.Create(
                 chilledDefinition,
-                chilledDuration,
-                chilledMoveSlowPercent,
-                chilledAttackSlowPercent,
-                chilledActionSlowPercent,
-                chilledEnergyRegenSlowPercent,
-                self,
-                sourceSkill
+                new ChilledBuffArgs(
+                    chilledDuration,
+                    chilledMoveSlowPercent,
+                    chilledAttackSlowPercent,
+                    chilledActionSlowPercent,
+                    chilledEnergyRegenSlowPercent,
+                    new BuffSource(self, sourceSkill))
             );
             context.AddBuffTo(attacker, chilled);
         }

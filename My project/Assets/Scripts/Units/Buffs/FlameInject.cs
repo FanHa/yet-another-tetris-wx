@@ -3,6 +3,24 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public readonly struct FlameInjectBuffArgs : IBuffCreationArgs
+    {
+        public Model.Buffs.BuffDefinition BurnDefinition { get; }
+        public float DotDps { get; }
+        public float DotDuration { get; }
+        public float BuffDuration { get; }
+        public BuffSource Source { get; }
+
+        public FlameInjectBuffArgs(Model.Buffs.BuffDefinition burnDefinition, float dotDps, float dotDuration, float buffDuration, BuffSource source)
+        {
+            BurnDefinition = burnDefinition;
+            DotDps = dotDps;
+            DotDuration = dotDuration;
+            BuffDuration = buffDuration;
+            Source = source;
+        }
+    }
+
     /// <summary>
     /// FlameInject Buff：攻击时对目标附加火焰伤害并施加灼烧Dot
     /// </summary>
@@ -12,19 +30,12 @@ namespace Units.Buffs
         private float dotDuration;
         private readonly Model.Buffs.BuffDefinition burnDefinition;
 
-        public FlameInject(
-            Model.Buffs.BuffDefinition definition,
-            Model.Buffs.BuffDefinition burnDefinition,
-            float dotDps,
-            float dotDuration,
-            float buffDuration,
-            Unit sourceUnit,
-            Skill sourceSkill
-        ) : base(definition, buffDuration, sourceUnit, sourceSkill)
+        public FlameInject(Model.Buffs.BuffDefinition definition, FlameInjectBuffArgs args)
+            : base(definition, args.BuffDuration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.burnDefinition = burnDefinition;
-            this.dotDps = dotDps;
-            this.dotDuration = dotDuration;
+            burnDefinition = args.BurnDefinition;
+            dotDps = args.DotDps;
+            dotDuration = args.DotDuration;
         }
 
         public override string Name() => "炎附";
@@ -33,12 +44,12 @@ namespace Units.Buffs
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
-            var burn = new Burn(
+            var burn = BuffFactory.Create(
                 burnDefinition,
-                dps: dotDps,
-                duration: dotDuration,
-                sourceUnit: attacker,
-                sourceSkill: sourceSkill
+                new BurnBuffArgs(
+                    dotDps,
+                    dotDuration,
+                    new BuffSource(attacker, sourceSkill))
             );
             context.AddBuffTo(target, burn);
         }

@@ -57,12 +57,12 @@ namespace Units.Skills
 
             Owner.Teleport(targetPos);
 
-            var vulnerabilityBuff = new Units.Buffs.Vulnerability(
+            var vulnerabilityBuff = Units.Buffs.BuffFactory.Create(
                 ((ShadowStepSkillConfig)Definition.Config).VulnerabilityBuffDefinition,
-                buffDuration: stats.DebuffDuration.Final, // 可根据需求调整持续时间
-                extraDamagePercent: stats.VulnerabilityPercent.Final,
-                sourceUnit: Owner.SelfUnit,
-                sourceSkill: this
+                new Units.Buffs.VulnerabilityBuffArgs(
+                    stats.DebuffDuration.Final,
+                    stats.VulnerabilityPercent.Final,
+                    new Units.Buffs.BuffSource(Owner.SelfUnit, this))
             );
             targetEnemy.AddBuff(vulnerabilityBuff);
 

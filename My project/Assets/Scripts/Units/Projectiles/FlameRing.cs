@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Model.Buffs;
+using Units.Buffs;
 using UnityEngine;
 
 namespace Units.Projectiles
@@ -84,12 +85,9 @@ namespace Units.Projectiles
 
                 foreach (var enemy in enemies)
                 {
-                    var burn = new Units.Buffs.Burn(
+                    var burn = BuffFactory.Create(
                         burnDefinition,
-                        dps: dotDps,
-                        duration: dotDuration,
-                        sourceUnit: owner,
-                        sourceSkill: sourceSkill
+                        new BurnBuffArgs(dotDps, dotDuration, new BuffSource(owner, sourceSkill))
                     );
                     enemy.AddBuff(burn);
                 }

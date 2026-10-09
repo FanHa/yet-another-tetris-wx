@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f32c2f363336e4db959bf72a016446, type: 3}
   m_Name: FreezeBuffDefinition
   m_EditorClassIdentifier: 
+  id: buff.freeze
+  displayName: 
+  description: 
+  icon: {fileID: 0}
   visualPrefab: {fileID: 8931962592207463393, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}

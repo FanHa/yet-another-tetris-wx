@@ -3,14 +3,28 @@ using UnityEngine;
 
 namespace Units.Buffs
 {
+    public readonly struct LifePowerBuffArgs : IBuffCreationArgs
+    {
+        public float AtkBoost { get; }
+        public float Duration { get; }
+        public BuffSource Source { get; }
+
+        public LifePowerBuffArgs(float atkBoost, float duration, BuffSource source)
+        {
+            AtkBoost = atkBoost;
+            Duration = duration;
+            Source = source;
+        }
+    }
+
     public class LifePowerBuff : Buff, IAttackHitTrigger
     {
         private float atkBoost;      // 攻击力加成
 
-        public LifePowerBuff(Model.Buffs.BuffDefinition definition, float atkBoost, float duration, Unit sourceUnit, Skill sourceSkill)
-            : base(definition, duration, sourceUnit, sourceSkill)
+        public LifePowerBuff(Model.Buffs.BuffDefinition definition, LifePowerBuffArgs args)
+            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
         {
-            this.atkBoost = atkBoost;
+            atkBoost = args.AtkBoost;
         }
 
         public override string Name() => "生命之力";

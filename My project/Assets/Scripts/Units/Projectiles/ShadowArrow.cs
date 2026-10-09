@@ -36,12 +36,9 @@ namespace Units.Projectiles
             damage.SetSourceLabel("暗影箭");
             target.TakeDamage(damage);
 
-            var vulnerabilityBuff = new Units.Buffs.Vulnerability(
+            var vulnerabilityBuff = Units.Buffs.BuffFactory.Create(
                 ((Model.Skills.ShadowArrowSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition,
-                vulnerabilityDuration,
-                vulnerabilityPercent,
-                caster,
-                sourceSkill
+                new Units.Buffs.VulnerabilityBuffArgs(vulnerabilityDuration, vulnerabilityPercent, new Units.Buffs.BuffSource(caster, sourceSkill))
             );
             target.AddBuff(vulnerabilityBuff);
 

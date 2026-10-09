@@ -76,13 +76,9 @@ namespace Units.Projectiles
                         // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
                         Vector3 delta = targetPos - unit.transform.position;
                         unit.MoveBy(delta);
-                        var buff = new Units.Buffs.WildWindDebuff(
+                        var buff = Units.Buffs.BuffFactory.Create(
                             ((Model.Skills.WildWindSkillConfig)sourceSkill.Definition.Config).WildWindDebuffDefinition,
-                            duration: debuffDuration,
-                            moveSlowPercent: moveSlowPercent,
-                            atkReducePercent: atkReducePercent,
-                            sourceUnit: caster,
-                            sourceSkill: sourceSkill
+                            new Units.Buffs.WildWindDebuffBuffArgs(debuffDuration, moveSlowPercent, atkReducePercent, new Units.Buffs.BuffSource(caster, sourceSkill))
                         );
                         unit.AddBuff(buff);
 

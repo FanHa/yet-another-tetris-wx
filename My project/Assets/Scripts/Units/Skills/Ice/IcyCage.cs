@@ -33,11 +33,10 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
-            var freezeBuff = new Buffs.Freeze(
-                ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition,
-                stats.FreezeDuration.Final,
-                Owner.SelfUnit,
-                this
+            var config = (IcyCageSkillConfig)Definition.Config;
+            var freezeBuff = Buffs.BuffFactory.Create(
+                config.FreezeBuffDefinition,
+                new Buffs.FreezeBuffArgs(stats.FreezeDuration.Final, new Buffs.BuffSource(Owner.SelfUnit, this))
             );
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;

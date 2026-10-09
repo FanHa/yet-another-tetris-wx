@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44f32c2f363336e4db959bf72a016446, type: 3}
   m_Name: WindKnockbackBuffDefinition
   m_EditorClassIdentifier: 
+  id: buff.wind_knockback
+  displayName: 
+  description: 
+  icon: {fileID: 0}
   visualPrefab: {fileID: 0}
