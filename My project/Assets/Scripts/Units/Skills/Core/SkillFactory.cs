@@ -8,6 +8,7 @@ namespace Units.Skills
     {
         private interface ISkillCreator
         {
+            Type ConfigType { get; }
             Skill Create(SkillConfig config, int level);
         }
 
@@ -21,6 +22,8 @@ namespace Units.Skills
             {
                 this.create = create;
             }
+
+            public Type ConfigType => typeof(TConfig);
 
             public Skill Create(SkillConfig config, int level)
             {
@@ -36,6 +39,8 @@ namespace Units.Skills
             {
                 this.create = create;
             }
+
+            public Type ConfigType => typeof(TConfig);
 
             public Skill Create(SkillConfig config, int level) => create();
         }
@@ -70,6 +75,20 @@ namespace Units.Skills
             ["skill.wind_knockback"] = new ConfiguredSkillCreator<WindKnockbackSkillConfig, WindKnockbackLevelConfig>(config => new WindKnockback(config)),
             ["skill.wind_shift"] = new ConfiguredSkillCreator<WindShiftSkillConfig, WindShiftLevelConfig>(config => new WindShift(config))
         };
+
+        public static bool TryGetRequiredConfigType(string skillId, out Type configType)
+        {
+            if (creators.TryGetValue(skillId, out ISkillCreator creator))
+            {
+                configType = creator.ConfigType;
+                return true;
+            }
+
+            configType = null;
+            return false;
+        }
+
+        public static IEnumerable<string> GetRegisteredSkillIds() => creators.Keys;
 
         public static Skill Create(SkillDefinition skillDefinition, int level)
         {
