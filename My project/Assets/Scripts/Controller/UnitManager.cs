@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Units;
-using Model.Tetri;
 using Model;
 using System;
-using Units.Skills;
 using System.Linq;
 
 namespace Controller
@@ -15,7 +13,7 @@ namespace Controller
         public event Action<Unit> OnUnitDeath;
         public event Action<Unit.Faction> OnFactionAllDead;
         public event Action<Units.Damages.Damage> OnUnitDamageTaken;
-        public event Action<Units.Unit, Units.Skills.Skill> OnGlobalSkillCast;
+        public event Action<Units.Unit, Units.Skills.Skill> OnAnyUnitSkillCast;
 
         [SerializeField] private UnitFactory unitFactory;
         [SerializeField] private Transform factionARoot;
@@ -23,6 +21,11 @@ namespace Controller
         private List<Unit> factionA = new();
         private List<Unit> factionB = new();
         private HashSet<Unit> ownedUnits = new();
+        private int unitBatchVersion;
+        private bool isActivatingUnits;
+        private bool isActivationCancelled;
+        private bool isDeactivatingUnits;
+        private bool isReleasingUnits;
 
         /// <summary>
         /// 批量生成单位
@@ -44,33 +47,61 @@ namespace Controller
                 Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
 
                 unit.PlaceAt(spawnPos);
-                unit.OnDeath += HandleUnitDeath;
-                unit.OnDamageTaken += HandleDamageTaken;
-
-                unit.OnSkillCast += HandleSkillCast;
-                unit.OnClicked += HandleUnitClicked;
                 unit.InjectUnitManager(this);
                 unit.Setup(faction);
-                ownedUnits.Add(unit);
-                if (unit.faction == Unit.Faction.FactionA)
-                {
-                    factionA.Add(unit);
-                }
-                if (unit.faction == Unit.Faction.FactionB)
-                {
-                    factionB.Add(unit);
-                }
+                RegisterUnit(unit);
             }
+        }
+
+        private void RegisterUnit(Unit unit)
+        {
+            ownedUnits.Add(unit);
+            GetFactionUnits(unit.faction).Add(unit);
+            unit.OnDeath += HandleUnitDeath;
+            unit.OnDamageTaken += HandleDamageTaken;
+            unit.OnSkillCast += HandleUnitSkillCast;
+            unit.OnClicked += HandleUnitClicked;
+        }
+
+        private void UnsubscribeUnit(Unit unit)
+        {
+            unit.OnDeath -= HandleUnitDeath;
+            unit.OnDamageTaken -= HandleDamageTaken;
+            unit.OnSkillCast -= HandleUnitSkillCast;
+            unit.OnClicked -= HandleUnitClicked;
+        }
+
+        private List<Unit> GetFactionUnits(Unit.Faction faction)
+        {
+            return faction == Unit.Faction.FactionA ? factionA : factionB;
         }
 
         public void ActivateAllUnits()
         {
-            foreach (var unit in factionA.Concat(factionB))
+            if (isActivatingUnits || isDeactivatingUnits || isReleasingUnits)
+                return;
+
+            int batchVersion = unitBatchVersion;
+            Unit[] unitsToActivate = factionA.Concat(factionB).ToArray();
+            isActivatingUnits = true;
+            isActivationCancelled = false;
+            try
             {
-                if (unit != null && !unit.IsActive)
+                foreach (Unit unit in unitsToActivate)
                 {
-                    unit.Activate();
+                    if (batchVersion != unitBatchVersion || isActivationCancelled)
+                        break;
+
+                    if (unit != null && ownedUnits.Contains(unit) && GetFactionUnits(unit.faction).Contains(unit) && !unit.IsActive)
+                    {
+                        unit.Activate();
+                    }
                 }
+            }
+            finally
+            {
+                isActivatingUnits = false;
+                isActivationCancelled = false;
             }
         }
 
@@ -79,26 +110,82 @@ namespace Controller
             OnUnitClicked?.Invoke(unit);
         }
 
-        public void Reset()
+        public void DeactivateAllUnits()
         {
-            foreach (Unit unit in ownedUnits)
+            if (isDeactivatingUnits || isReleasingUnits)
+                return;
+
+            if (isActivatingUnits)
+                isActivationCancelled = true;
+
+            int batchVersion = unitBatchVersion;
+            Unit[] unitsToDeactivate = ownedUnits.ToArray();
+            isDeactivatingUnits = true;
+            try
             {
-                if (unit == null)
+                foreach (Unit unit in unitsToDeactivate)
                 {
-                    continue;
-                }
+                    if (batchVersion != unitBatchVersion)
+                        break;
 
-                if (unit.IsActive)
-                {
-                    unit.Deactivate();
+                    if (unit != null && ownedUnits.Contains(unit) && unit.IsActive)
+                    {
+                        unit.Deactivate();
+                    }
                 }
-
-                Destroy(unit.gameObject);
             }
+            finally
+            {
+                isDeactivatingUnits = false;
+            }
+        }
 
-            ownedUnits.Clear();
-            factionA.Clear();
-            factionB.Clear();
+        public void ReleaseAllUnits()
+        {
+            ReleaseOwnedUnits(deactivateUnits: true);
+        }
+
+        private void ReleaseOwnedUnits(bool deactivateUnits)
+        {
+            if (isReleasingUnits)
+                return;
+
+            isReleasingUnits = true;
+            unitBatchVersion++;
+            try
+            {
+                Unit[] unitsToRelease = ownedUnits.ToArray();
+                foreach (Unit unit in unitsToRelease)
+                {
+                    if (unit != null)
+                    {
+                        UnsubscribeUnit(unit);
+                    }
+                }
+
+                ownedUnits.Clear();
+                factionA.Clear();
+                factionB.Clear();
+
+                foreach (Unit unit in unitsToRelease)
+                {
+                    if (unit == null)
+                    {
+                        continue;
+                    }
+
+                    if (deactivateUnits && unit.IsActive)
+                    {
+                        unit.Deactivate();
+                    }
+
+                    Destroy(unit.gameObject);
+                }
+            }
+            finally
+            {
+                isReleasingUnits = false;
+            }
         }
 
         private Transform GetRootByFaction(Unit.Faction faction)
@@ -109,16 +196,18 @@ namespace Controller
 
         private void HandleUnitDeath(Unit deadUnit)
         {
-            factionA.Remove(deadUnit);
-            factionB.Remove(deadUnit);
+            if (!ownedUnits.Contains(deadUnit) || !GetFactionUnits(deadUnit.faction).Remove(deadUnit))
+                return;
+
+            int batchVersion = unitBatchVersion;
+            List<Unit> faction = GetFactionUnits(deadUnit.faction);
+            bool factionBecameEmpty = faction.Count == 0;
             OnUnitDeath?.Invoke(deadUnit);
-            List<Unit> faction = deadUnit.faction == Unit.Faction.FactionA ? factionA : factionB;
-            if (faction.Count == 0)
+            if (batchVersion != unitBatchVersion)
+                return;
+
+            if (factionBecameEmpty && faction.Count == 0)
             {
-                foreach (Unit unit in factionA.Concat(factionB).ToList())
-                {
-                    unit.Deactivate();
-                }
                 OnFactionAllDead?.Invoke(deadUnit.faction);
             }
 
@@ -129,15 +218,49 @@ namespace Controller
             OnUnitDamageTaken?.Invoke(damage);
         }
 
-        private void HandleSkillCast(Units.Unit unit, Units.Skills.Skill skill)
+        private void OnDestroy()
         {
-            OnGlobalSkillCast?.Invoke(unit, skill);
+            ReleaseOwnedUnits(deactivateUnits: false);
+        }
+
+        private void HandleUnitSkillCast(Units.Unit unit, Units.Skills.Skill skill)
+        {
+            OnAnyUnitSkillCast?.Invoke(unit, skill);
         }
 
 
-        public IReadOnlyList<Unit> GetUnitsByFaction(Unit.Faction faction)
+        public IReadOnlyList<Unit> GetOwnedUnits()
         {
-            return faction == Unit.Faction.FactionA ? factionA : factionB;
+            return ownedUnits.Where(unit => unit != null).ToArray();
+        }
+
+        public IReadOnlyList<Unit> GetAliveUnits(Unit.Faction faction)
+        {
+            return GetFactionUnits(faction).Where(unit => unit != null).ToArray();
+        }
+
+        public int GetAliveUnitCount(Unit.Faction faction)
+        {
+            return GetFactionUnits(faction).Count(unit => unit != null);
+        }
+
+        public IReadOnlyList<Unit> GetActiveUnits(Unit.Faction faction)
+        {
+            return GetFactionUnits(faction).Where(unit => unit != null && unit.IsActive).ToArray();
+        }
+
+        public IReadOnlyList<Unit> GetActiveUnits()
+        {
+            return factionA.Concat(factionB).Where(unit => unit != null && unit.IsActive).ToArray();
+        }
+
+        public List<Unit> FindActiveUnitsInRange(Unit.Faction faction, Vector2 center, float range)
+        {
+            float rangeSquared = range * range;
+            return GetFactionUnits(faction)
+                .Where(unit => unit != null && unit.IsActive)
+                .Where(unit => ((Vector2)unit.transform.position - center).sqrMagnitude <= rangeSquared)
+                .ToList();
         }
 
         public List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf = false)
@@ -154,14 +277,7 @@ namespace Controller
 
         public List<Unit> FindEnemiesInRange(Unit self, float range)
         {
-            var list = self.faction == Unit.Faction.FactionA ? factionB : factionA;
-            float r2 = range * range;
-            Vector2 selfPos = self.transform.position;
-
-            return list
-                .Where(u => u != null && u.IsActive)
-                .Where(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude <= r2)
-                .ToList();
+            return FindEnemiesInRangeAtPosition(self.faction, self.transform.position, range);
         }
 
         public Unit FindRandomEnemyInRange(Unit self, float range)
@@ -231,41 +347,8 @@ namespace Controller
 
         public List<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
         {
-            var list = selfFaction == Unit.Faction.FactionA ? factionB : factionA;
-            float r2 = range * range;
-            return list
-                .Where(u => u != null && u.IsActive)
-                .Where(u => ((Vector2)u.transform.position - center).sqrMagnitude <= r2)
-                .ToList();
-        }
-
-        public Unit FindLowestMaxHealthEnemy(Unit self)
-        {
-            var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
-
-            return enemyList
-                .Where(u => u != null && u.IsActive)
-                .OrderBy(u => u.Attributes.MaxHealth.finalValue)
-                .FirstOrDefault();
-        }
-        
-        public Unit FindFurthestEnemy(Unit self)
-        {
-            var enemyList = self.faction == Unit.Faction.FactionA ? factionB : factionA;
-            Vector2 selfPos = self.transform.position;
-
-            return enemyList
-                .Where(u => u != null && u.IsActive)
-                .OrderByDescending(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude)
-                .FirstOrDefault();
-        }
-
-        public IReadOnlyList<Unit> GetAllUnits()
-        {
-            // 返回所有阵营的活动单位
-            return factionA.Concat(factionB)
-                .Where(u => u != null && u.IsActive)
-                .ToList();
+            Unit.Faction enemyFaction = selfFaction == Unit.Faction.FactionA ? Unit.Faction.FactionB : Unit.Faction.FactionA;
+            return FindActiveUnitsInRange(enemyFaction, center, range);
         }
     }
 }

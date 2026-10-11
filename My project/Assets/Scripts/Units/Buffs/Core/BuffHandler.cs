@@ -1,5 +1,4 @@
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,26 +54,19 @@ namespace Units.Buffs
 
         private void TickBuffInterval(float interval)
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = snapshot.Length - 1; i >= 0; i--)
             {
-                for (int i = count - 1; i >= 0; i--)
+                Buff buff = snapshot[i];
+                buff.UpdateTime(interval);
+                if (buff is ITick tickBuff)
                 {
-                    Buff buff = snapshot[i];
-                    buff.UpdateTime(interval);
-                    if (buff is ITick tickBuff)
-                    {
-                        tickBuff.OnTick(owner);
-                    }
-                    if (buff.IsExpired())
-                    {
-                        EnqueueRemove(buff);
-                    }
+                    tickBuff.OnTick(owner);
                 }
-            }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
+                if (buff.IsExpired())
+                {
+                    EnqueueRemove(buff);
+                }
             }
         }
 
@@ -96,117 +88,63 @@ namespace Units.Buffs
 
         public void DispatchAttackHit(Unit target, ref Damages.Damage damage)
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = 0; i < snapshot.Length; i++)
             {
-                for (int i = 0; i < count; i++)
+                Buff buff = snapshot[i];
+                if (buff is IAttackHitTrigger attackHitTrigger)
                 {
-                    Buff buff = snapshot[i];
-                    if (buff is IAttackHitTrigger attackHitTrigger)
-                    {
-                        attackHitTrigger.OnAttackHit(owner, owner.SelfUnit, target, ref damage);
-                    }
+                    attackHitTrigger.OnAttackHit(owner, owner.SelfUnit, target, ref damage);
                 }
-            }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
             }
         }
 
         public void DispatchTakeHit(Unit attacker, ref Damages.Damage damage)
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = 0; i < snapshot.Length; i++)
             {
-                for (int i = 0; i < count; i++)
+                Buff buff = snapshot[i];
+                if (buff is ITakeHitTrigger takeHitTrigger)
                 {
-                    Buff buff = snapshot[i];
-                    if (buff is ITakeHitTrigger takeHitTrigger)
-                    {
-                        takeHitTrigger.OnTakeHit(owner, owner.SelfUnit, attacker, ref damage);
-                    }
+                    takeHitTrigger.OnTakeHit(owner, owner.SelfUnit, attacker, ref damage);
                 }
-            }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
             }
         }
 
         public void DispatchAfterTakeDamage(ref Damages.Damage damage)
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = 0; i < snapshot.Length; i++)
             {
-                for (int i = 0; i < count; i++)
+                Buff buff = snapshot[i];
+                if (buff is IAfterTakeDamageTrigger afterTakeDamageTrigger)
                 {
-                    Buff buff = snapshot[i];
-                    if (buff is IAfterTakeDamageTrigger afterTakeDamageTrigger)
-                    {
-                        afterTakeDamageTrigger.OnAfterTakeDamage(owner, ref damage);
-                    }
+                    afterTakeDamageTrigger.OnAfterTakeDamage(owner, ref damage);
                 }
-            }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
             }
         }
 
-        public void DispatchGlobalSkillCast(Skills.Skill skill)
+        public void DispatchSkillCast(Unit caster, Skills.Skill skill)
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = 0; i < snapshot.Length; i++)
             {
-                for (int i = 0; i < count; i++)
+                Buff buff = snapshot[i];
+                if (buff is IAnyUnitSkillCastTrigger anyUnitSkillCastTrigger)
                 {
-                    Buff buff = snapshot[i];
-                    if (buff is IGlobalSkillCastTrigger globalSkillCastTrigger)
-                    {
-                        globalSkillCastTrigger.OnGlobalSkillCast(owner, owner.SelfUnit, skill);
-                    }
+                    anyUnitSkillCastTrigger.OnAnyUnitSkillCast(owner, caster, skill);
                 }
-            }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
             }
         }
 
         public void RequestRemoveAllActiveBuffs()
         {
-            var snapshot = RentActiveBuffSnapshot(out int count);
-            try
+            Buff[] snapshot = activeBuffs.ToArray();
+            for (int i = 0; i < snapshot.Length; i++)
             {
-                for (int i = 0; i < count; i++)
-                {
-                    EnqueueRemove(snapshot[i]);
-                }
+                EnqueueRemove(snapshot[i]);
             }
-            finally
-            {
-                ReturnActiveBuffSnapshot(snapshot, count);
-            }
-        }
-
-        private Buff[] RentActiveBuffSnapshot(out int count)
-        {
-            count = activeBuffs.Count;
-            int rentSize = count > 0 ? count : 1;
-            Buff[] snapshot = ArrayPool<Buff>.Shared.Rent(rentSize);
-            for (int i = 0; i < count; i++)
-            {
-                snapshot[i] = activeBuffs[i];
-            }
-
-            return snapshot;
-        }
-
-        private static void ReturnActiveBuffSnapshot(Buff[] snapshot, int count)
-        {
-            Array.Clear(snapshot, 0, count);
-            ArrayPool<Buff>.Shared.Return(snapshot);
         }
 
         public void RemoveAllActiveBuffsImmediately()

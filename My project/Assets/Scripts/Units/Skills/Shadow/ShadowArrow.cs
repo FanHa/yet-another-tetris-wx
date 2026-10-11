@@ -1,3 +1,4 @@
+using System.Linq;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -36,7 +37,9 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             // 查找最大生命值最低的敌人
-            Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
+            Unit targetEnemy = Owner.GetActiveEnemies()
+                .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
+                .FirstOrDefault();
             if (targetEnemy == null)
                 return;
 

@@ -37,6 +37,14 @@ namespace Units.Skills
             return unit.StartCoroutine(routine);
         }
 
+        public IReadOnlyList<Unit> GetActiveEnemies()
+        {
+            Unit.Faction enemyFaction = unit.faction == Unit.Faction.FactionA
+                ? Unit.Faction.FactionB
+                : Unit.Faction.FactionA;
+            return RequireUnitManager().GetActiveUnits(enemyFaction);
+        }
+
         public List<Unit> FindEnemiesInRange(float range)
         {
             return RequireUnitManager().FindEnemiesInRange(unit, range);
@@ -50,16 +58,6 @@ namespace Units.Skills
         public Unit FindClosestEnemyInRange(float range)
         {
             return RequireUnitManager().FindClosestEnemyInRange(unit, range);
-        }
-
-        public Unit FindLowestMaxHealthEnemy()
-        {
-            return RequireUnitManager().FindLowestMaxHealthEnemy(unit);
-        }
-
-        public Unit FindFurthestEnemy()
-        {
-            return RequireUnitManager().FindFurthestEnemy(unit);
         }
 
         public bool TryGetClosestEnemyInAttackRange(out Unit target)

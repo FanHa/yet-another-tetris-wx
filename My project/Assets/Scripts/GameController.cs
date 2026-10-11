@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
 
 
     [SerializeField] private BattleField battleField;
+    [SerializeField] private BattleProgressController battleProgressController;
+    [SerializeField] private BattleSettlementController battleSettlementController;
     [SerializeField] private Controller.RewardController rewardController;
 
     private UnitInventoryModel playerUnitInventoryData;
@@ -69,6 +71,10 @@ public class GameController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
+        if (battleProgressController == null)
+            Debug.LogError($"{nameof(battleProgressController)} is not assigned.", this);
+        if (battleSettlementController == null)
+            Debug.LogError($"{nameof(battleSettlementController)} is not assigned.", this);
         if (levelState == null)
         {
             Debug.LogError($"[{nameof(GameController)}] Level state is missing.", this);
@@ -100,7 +106,7 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         // 初始化资源面板和操作表
-        battleField.OnBattleEnd += HandleBattleEnd;
+        battleSettlementController.OnSettlementConfirmed += HandleSettlementConfirmed;
         battleField.OnUnitClicked += HandleUnitClicked;
         levelState.Reset();
 
@@ -262,7 +268,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void HandleBattleEnd()
+    private void HandleSettlementConfirmed()
     {
         ApplyUiPageState(UiPageState.Reward);
         rewardController.EnterRewardSelectionPhase();
@@ -307,10 +313,13 @@ public class GameController : MonoBehaviour
     {
         UpdateBattleInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
-        battleField.StartNewLevelBattle(
-            levelState.CurrentLevel,
+        battleField.PrepareBattle(
             playerUnitInventoryData.Items,
             enemyUnitInventoryData.Items);
+
+        battleProgressController.SetLevel(levelState.CurrentLevel);
+        battleProgressController.SetProgressEnabled(true);
+        battleField.StartBattle();
 
         Time.timeScale = 1;
         isPaused = false;
@@ -344,7 +353,7 @@ public class GameController : MonoBehaviour
         Camera.main.transform.position = new Vector3(bfPos.x, bfPos.y, Camera.main.transform.position.z);
         ApplyUiPageState(UiPageState.Preview);
         battlePreviewUI.Activate();
-        battleField.PreviewBattle(
+        battleField.PrepareBattle(
             playerUnitInventoryData.Items,
             enemyUnitInventoryData.Items);
     }
@@ -354,12 +363,14 @@ public class GameController : MonoBehaviour
         var mainPos = transform.position;
         Camera.main.transform.position = new Vector3(mainPos.x, mainPos.y, Camera.main.transform.position.z);
         battlePreviewUI.Deactivate();
-        battleField.ClearPreview();
+        battleField.ClearBattle();
         ApplyUiPageState(UiPageState.Assembly);
     }
 
     private void OnDestroy()
     {
+        if (battleSettlementController != null)
+            battleSettlementController.OnSettlementConfirmed -= HandleSettlementConfirmed;
         // 取消监听UI的事件
     }
     
@@ -374,9 +385,12 @@ public class GameController : MonoBehaviour
         }
         UpdateTrainGroundInventoryModels();
         Camera.main.transform.position = new Vector3(battleField.transform.position.x, battleField.transform.position.y, Camera.main.transform.position.z);
-        battleField.StartTrainGround(
+        battleField.PrepareBattle(
             trainGroundFactionAInventoryData.Items,
             trainGroundFactionBInventoryData.Items);
+
+        battleProgressController.SetProgressEnabled(false);
+        battleField.StartBattle();
     }
 #endif
 }

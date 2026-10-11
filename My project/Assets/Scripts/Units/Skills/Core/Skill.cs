@@ -21,12 +21,10 @@ namespace Units.Skills
 
         Coroutine StartCoroutine(System.Collections.IEnumerator routine);
 
+        IReadOnlyList<Unit> GetActiveEnemies();
         List<Unit> FindEnemiesInRange(float range);
         Unit FindRandomAlly(float range, bool includeSelf = false);
         Unit FindClosestEnemyInRange(float range);
-        Unit FindLowestMaxHealthEnemy();
-        Unit FindFurthestEnemy();
-
         bool TryGetClosestEnemyInAttackRange(out Unit target);
         bool TryGetClosestEnemy(out Unit target);
         bool TryGetClosestAlly(out Unit target);
@@ -54,5 +52,10 @@ namespace Units.Skills
     public interface IPassiveSkill
     {
         void ApplyPassive();
+    }
+
+    public interface IOwnerDeathTrigger
+    {
+        void OnOwnerDeath();
     }
 }

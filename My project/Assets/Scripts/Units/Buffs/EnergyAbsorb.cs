@@ -18,7 +18,7 @@ namespace Units.Buffs
         }
     }
 
-    public class EnergyAbsorb : Buff, IGlobalSkillCastTrigger
+    public class EnergyAbsorb : Buff, IAnyUnitSkillCastTrigger
     {
         private float energyAbsorbPerSkillCast;
         public EnergyAbsorb(Model.Buffs.BuffDefinition definition, EnergyAbsorbBuffArgs args)
@@ -37,20 +37,15 @@ namespace Units.Buffs
             return "能量汲取";
         }
 
-        public void OnGlobalSkillCast(IBuffContext context, Unit caster, Skill skill)
+        public void OnAnyUnitSkillCast(IBuffContext context, Unit caster, Skill skill)
         {
             if (caster.faction != context.faction)
             {
-                if (context.UnitManager == null)
-                {
-                    return;
-                }
-
-                // 向己方所有单位分配能量
-                IReadOnlyList<Unit> allies = context.UnitManager.GetUnitsByFaction(context.faction);
+                // 向己方所有活动单位分配能量
+                IReadOnlyList<Unit> allies = context.UnitManager.GetActiveUnits(context.faction);
                 foreach (var ally in allies)
                 {
-                    if (ally.IsActive && ally != context.SelfUnit)
+                    if (ally != context.SelfUnit)
                     {
                         ally.AddSkillEnergy(energyAbsorbPerSkillCast);
                     }

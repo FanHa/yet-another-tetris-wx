@@ -1400,6 +1400,7 @@ GameObject:
   - component: {fileID: 943837599}
   - component: {fileID: 943837600}
   - component: {fileID: 943837602}
+  - component: {fileID: 943837603}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: BattleField
@@ -1440,11 +1441,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0dff472ef4279e48bf9e74b35719a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTextPrefab: {fileID: 8658494460595726152, guid: f36c46e0d7615d64e8761c93eb6ff655, type: 3}
-  skillNameViewerPrefab: {fileID: 3087921832634182325, guid: cb74d9fbd118a8c4f970f06836f57f44, type: 3}
-  floatingViewManager: {fileID: 1588624655}
-  battleStatistics: {fileID: 634437515}
-  gameStatusHud: {fileID: 506519725}
   spawnPointB: {fileID: 131970432}
   timeDelayBeforeBattle: 1
 --- !u!114 &943837602
@@ -1462,6 +1458,20 @@ MonoBehaviour:
   unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
   factionARoot: {fileID: 28250503}
   factionBRoot: {fileID: 1842027254}
+--- !u!114 &943837603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943837598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e458b08b640a544bcf55ddc28d2f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleField: {fileID: 943837600}
+  unitManager: {fileID: 943837602}
 --- !u!1 &1011054231
 GameObject:
   m_ObjectHideFlags: 0
@@ -2461,6 +2471,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1391442593}
   - component: {fileID: 1391442595}
+  - component: {fileID: 1391442596}
+  - component: {fileID: 1391442597}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: GameController
@@ -2497,6 +2509,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleField: {fileID: 943837600}
+  battleProgressController: {fileID: 1391442597}
+  battleSettlementController: {fileID: 1391442596}
   rewardController: {fileID: 1420456109}
   trainGroundFactionAInitConfig: {fileID: 11400000, guid: 418e3318e818f7548b69854f45c75d3e, type: 2}
   trainGroundFactionBInitConfig: {fileID: 11400000, guid: 7c8d893fb762bb64c909b4d731f661d6, type: 2}
@@ -2515,6 +2529,36 @@ MonoBehaviour:
   unitFactory: {fileID: 11400000, guid: 77441f0d581b2a042aa8c2d71c9fd222, type: 2}
   battlePreviewUI: {fileID: 214949154}
   tetriFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
+--- !u!114 &1391442596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391442591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f10a43939e80bdf428aab045494c304d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleField: {fileID: 943837600}
+  damageRecorder: {fileID: 943837603}
+  battleStatistics: {fileID: 634437515}
+  displayDelay: 2
+--- !u!114 &1391442597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391442591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c6366ec22501443a8302cecb5544c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleField: {fileID: 943837600}
+  gameStatusHud: {fileID: 506519725}
 --- !u!1 &1407102698
 GameObject:
   m_ObjectHideFlags: 0

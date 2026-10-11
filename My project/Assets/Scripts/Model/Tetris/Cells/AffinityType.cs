@@ -11,6 +11,7 @@ namespace Model.Tetri
         Swift,
         Absorb,
         Electric,
+        Curse,
         End
         
     }

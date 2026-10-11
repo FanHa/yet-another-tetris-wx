@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: TranGroundFactionAInitConfig
   m_EditorClassIdentifier: 
   items:
+  - characterDefinition: {fileID: 11400000, guid: 8d3980d1dd824b8fb4ea6237a2eb7894, type: 2}
+    cellDefinitions:
+    - definition: {fileID: 11400000, guid: f30f9803711b9bd43bd524d5b305554c, type: 2}
+      level: 1
+    relativePositionFromCenter: {x: 0, y: 0, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions:
-    - definition: {fileID: 11400000, guid: aec3f383f63831249b24e923ff69eb93, type: 2}
+    - definition: {fileID: 11400000, guid: f205a5333e1d4d547a9322f39b4cee57, type: 2}
       level: 1
     relativePositionFromCenter: {x: 0, y: 0, z: 0}

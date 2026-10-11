@@ -85,9 +85,9 @@ namespace Units.Buffs
         void OnAfterTakeDamage(IBuffContext context, ref Damages.Damage damage);
     }
 
-    public interface IGlobalSkillCastTrigger
+    public interface IAnyUnitSkillCastTrigger
     {
-        void OnGlobalSkillCast(IBuffContext context, Units.Unit caster, Units.Skills.Skill skill);
+        void OnAnyUnitSkillCast(IBuffContext context, Units.Unit caster, Units.Skills.Skill skill);
     }
     
 }

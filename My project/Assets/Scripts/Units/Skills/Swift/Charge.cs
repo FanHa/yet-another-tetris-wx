@@ -1,3 +1,4 @@
+using System.Linq;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -36,8 +37,10 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            // 找到距离自己最远的敌人
-            Unit targetEnemy = Owner.FindFurthestEnemy();
+            Vector2 ownerPosition = Owner.transform.position;
+            Unit targetEnemy = Owner.GetActiveEnemies()
+                .OrderByDescending(enemy => ((Vector2)enemy.transform.position - ownerPosition).sqrMagnitude)
+                .FirstOrDefault();
             if (targetEnemy == null)
                 return;
 

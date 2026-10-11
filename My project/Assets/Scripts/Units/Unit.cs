@@ -223,7 +223,7 @@ namespace Units
             skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded += HandleSkillCastSucceeded;
             skillHandler.OnSkillCastFailed += HandleSkillCastFailed;
-            unitManager.OnGlobalSkillCast += HandleGlobalSkillCast;
+            unitManager.OnAnyUnitSkillCast += HandleAnyUnitSkillCast;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
             isActive = true;
@@ -240,7 +240,7 @@ namespace Units
             healthBar.gameObject.SetActive(false);
             if (unitManager != null)
             {
-                unitManager.OnGlobalSkillCast -= HandleGlobalSkillCast;
+                unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
             }
             skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
@@ -269,9 +269,9 @@ namespace Units
             buffVisualController?.Deactivate();
         }
 
-        private void HandleGlobalSkillCast(Unit caster, Skill skill)
+        private void HandleAnyUnitSkillCast(Unit caster, Skill skill)
         {
-            buffHandler.DispatchGlobalSkillCast(skill);
+            buffHandler.DispatchSkillCast(caster, skill);
         }
 
         private void HandleSkillCastStarted(SkillCastStartedEvent skillCastStartedEvent)
@@ -633,6 +633,7 @@ namespace Units
 
             if (diedFromThisHit)
             {
+                skillHandler.DispatchOwnerDeath();
                 Deactivate();
                 animationController.PlayDeath();
                 OnDeath?.Invoke(this);

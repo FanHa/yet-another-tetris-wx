@@ -85,6 +85,17 @@ namespace Units.Skills
             return skills;
         }
 
+        internal void DispatchOwnerDeath()
+        {
+            foreach (Skill skill in skills.ToArray())
+            {
+                if (skill is IOwnerDeathTrigger deathTrigger)
+                {
+                    deathTrigger.OnOwnerDeath();
+                }
+            }
+        }
+
         internal void DistributeEnergy(float baseEnergy)
         {
             if (activeSkills.Count == 0) return;

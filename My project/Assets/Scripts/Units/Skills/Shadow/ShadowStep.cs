@@ -1,3 +1,4 @@
+using System.Linq;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -48,7 +49,9 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Owner.FindLowestMaxHealthEnemy();
+            Unit targetEnemy = Owner.GetActiveEnemies()
+                .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
+                .FirstOrDefault();
             if (targetEnemy == null)
                 return;
 

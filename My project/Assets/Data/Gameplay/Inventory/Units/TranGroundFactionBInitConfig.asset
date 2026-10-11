@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
-    cellDefinitions: []
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
-  - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
-    cellDefinitions: []
+    cellDefinitions:
+    - definition: {fileID: 11400000, guid: 77a83fb8ef94118449c47454171f9bbb, type: 2}
+      level: 1
     relativePositionFromCenter: {x: 0, y: 0, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions: []
