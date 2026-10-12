@@ -78,31 +78,13 @@ namespace Controller
 
         public void ActivateAllUnits()
         {
-            if (isActivatingUnits || isDeactivatingUnits || isReleasingUnits)
-                return;
-
-            int batchVersion = unitBatchVersion;
             Unit[] unitsToActivate = factionA.Concat(factionB).ToArray();
-            isActivatingUnits = true;
-            isActivationCancelled = false;
-            try
-            {
-                foreach (Unit unit in unitsToActivate)
-                {
-                    if (batchVersion != unitBatchVersion || isActivationCancelled)
-                        break;
 
-                    if (unit != null && ownedUnits.Contains(unit) && GetFactionUnits(unit.faction).Contains(unit) && !unit.IsActive)
-                    {
-                        unit.Activate();
-                    }
-                }
-            }
-            finally
+            foreach (Unit unit in unitsToActivate)
             {
-                isActivatingUnits = false;
-                isActivationCancelled = false;
+                unit.Activate();
             }
+
         }
 
         private void HandleUnitClicked(Unit unit)
@@ -112,80 +94,30 @@ namespace Controller
 
         public void DeactivateAllUnits()
         {
-            if (isDeactivatingUnits || isReleasingUnits)
-                return;
-
-            if (isActivatingUnits)
-                isActivationCancelled = true;
-
-            int batchVersion = unitBatchVersion;
             Unit[] unitsToDeactivate = ownedUnits.ToArray();
-            isDeactivatingUnits = true;
-            try
-            {
-                foreach (Unit unit in unitsToDeactivate)
-                {
-                    if (batchVersion != unitBatchVersion)
-                        break;
 
-                    if (unit != null && ownedUnits.Contains(unit) && unit.IsActive)
-                    {
-                        unit.Deactivate();
-                    }
-                }
-            }
-            finally
+            foreach (Unit unit in unitsToDeactivate)
             {
-                isDeactivatingUnits = false;
+                unit.Deactivate();
             }
         }
-
+        
         public void ReleaseAllUnits()
         {
-            ReleaseOwnedUnits(deactivateUnits: true);
-        }
-
-        private void ReleaseOwnedUnits(bool deactivateUnits)
-        {
-            if (isReleasingUnits)
-                return;
-
-            isReleasingUnits = true;
-            unitBatchVersion++;
-            try
+            Unit[] unitsToRelease = ownedUnits.ToArray();
+            foreach (Unit unit in unitsToRelease)
             {
-                Unit[] unitsToRelease = ownedUnits.ToArray();
-                foreach (Unit unit in unitsToRelease)
-                {
-                    if (unit != null)
-                    {
-                        UnsubscribeUnit(unit);
-                    }
-                }
-
-                ownedUnits.Clear();
-                factionA.Clear();
-                factionB.Clear();
-
-                foreach (Unit unit in unitsToRelease)
-                {
-                    if (unit == null)
-                    {
-                        continue;
-                    }
-
-                    if (deactivateUnits && unit.IsActive)
-                    {
-                        unit.Deactivate();
-                    }
-
-                    Destroy(unit.gameObject);
-                }
+                UnsubscribeUnit(unit);
             }
-            finally
+            ownedUnits.Clear();
+            factionA.Clear();
+            factionB.Clear();
+            foreach (Unit unit in unitsToRelease)
             {
-                isReleasingUnits = false;
+                unit.Deactivate();
+                Destroy(unit.gameObject);
             }
+
         }
 
         private Transform GetRootByFaction(Unit.Faction faction)
@@ -218,10 +150,6 @@ namespace Controller
             OnUnitDamageTaken?.Invoke(damage);
         }
 
-        private void OnDestroy()
-        {
-            ReleaseOwnedUnits(deactivateUnits: false);
-        }
 
         private void HandleUnitSkillCast(Units.Unit unit, Units.Skills.Skill skill)
         {

@@ -25,7 +25,6 @@ namespace Model.Rewards
 
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
         private List<RewardTypeConfig> rewardTypeConfigs;
-        private List<string> availableCellIds;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -78,12 +77,11 @@ namespace Model.Rewards
                     isAvailable = HasUpgradeableCharacter
                 },
             };
-            availableCellIds = cellDatabase.GetRegisteredCellIds();
         }
         private bool HasUnownedCellType(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<string> ownedIds = inventory.OwnedCellDefinitionIds;
-            return availableCellIds.Any(cellId => !ownedIds.Contains(cellId));
+            IReadOnlyCollection<CellDefinition> ownedDefinitions = inventory.OwnedCellDefinitions;
+            return cellDatabase.RegisteredDefinitions.Any(definition => !ownedDefinitions.Contains(definition));
         }
 
         private bool HasEnoughUpgradeableTetri(Model.TetriInventoryModel inventory)
@@ -101,10 +99,10 @@ namespace Model.Rewards
 
         public bool HasUnownedCharacterCell(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<CharacterDefinition> ownedCharacterDefinitions = inventory.ExistCharacterDefinitions;
+            IReadOnlyCollection<CellDefinition> ownedDefinitions = inventory.OwnedCellDefinitions;
             return cellDatabase.GetRegisteredDefinitions()
                 .OfType<CharacterDefinition>()
-                .Any(definition => !ownedCharacterDefinitions.Contains(definition));
+                .Any(definition => !ownedDefinitions.Contains(definition));
         }
 
         private bool HasUpgradeableCharacter(TetriInventoryModel inventory)
@@ -213,19 +211,20 @@ namespace Model.Rewards
 
         private Reward CreateNewTetriReward()
         {
-            var ownedIds = tetriInventoryData.OwnedCellDefinitionIds;
-            var unownedIds = availableCellIds.Where(id => !ownedIds.Contains(id)).ToList();
+            IReadOnlyCollection<CellDefinition> ownedDefinitions = tetriInventoryData.OwnedCellDefinitions;
+            var unownedDefinitions = cellDatabase.RegisteredDefinitions
+                .Where(definition => !ownedDefinitions.Contains(definition))
+                .ToList();
 
-            if (unownedIds.Count == 0)
+            if (unownedDefinitions.Count == 0)
             {
                 Debug.LogError("没有可用的Cell类型，无法生成NewTetri奖励。");
                 return null;
             }
 
-            // 4. 随机选择一个Cell id
-            var selectedCellId = unownedIds[UnityEngine.Random.Range(0, unownedIds.Count)];
+            var selectedDefinition = unownedDefinitions[UnityEngine.Random.Range(0, unownedDefinitions.Count)];
 
-            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedCellId);
+            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedDefinition);
 
             // 7. 返回AddTetri奖励
             return new AddTetri(tetriInstance);
@@ -233,12 +232,12 @@ namespace Model.Rewards
 
         private Reward CreateNewCharacterReward()
         {
-            IReadOnlyCollection<CharacterDefinition> existCharacterDefinitions = tetriInventoryData.ExistCharacterDefinitions;
+            IReadOnlyCollection<CellDefinition> ownedDefinitions = tetriInventoryData.OwnedCellDefinitions;
 
             // 3. 找出未拥有的Character定义
             var unownedDefinitions = cellDatabase.GetRegisteredDefinitions()
                 .OfType<CharacterDefinition>()
-                .Where(definition => !existCharacterDefinitions.Contains(definition))
+                .Where(definition => !ownedDefinitions.Contains(definition))
                 .ToList();
 
             if (unownedDefinitions.Count == 0)

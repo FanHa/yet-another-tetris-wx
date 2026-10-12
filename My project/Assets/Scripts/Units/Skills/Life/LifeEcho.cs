@@ -3,7 +3,7 @@ using Model.Skills;
 
 namespace Units.Skills
 {
-    public class LifeEcho : Skill, IPassiveSkill
+    public class LifeEcho : Skill
     {
         public LifeEchoLevelConfig Config { get; }
 
@@ -36,7 +36,7 @@ namespace Units.Skills
         }
         public static string DescriptionStatic() => "反弹受到的伤害";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             Owner.AddBuff(Units.Buffs.BuffFactory.Create(

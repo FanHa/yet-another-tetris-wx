@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class WindKnockback : Skill, IPassiveSkill
+    public class WindKnockback : Skill
     {
         public WindKnockbackLevelConfig Config { get; }
 
@@ -44,7 +44,7 @@ namespace Units.Skills
 
         public static string NameStatic() => "轻风击退";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             float dist = Mathf.Min(stats.KnockbackDistance.Final, stats.MaxKnockbackDistance.Final);

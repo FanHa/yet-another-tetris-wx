@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class ShadowAttack : Skill, IPassiveSkill
+    public class ShadowAttack : Skill
     {
         public ShadowAttackLevelConfig Config { get; }
 
@@ -42,7 +42,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "影袭";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             var config = (ShadowAttackSkillConfig)Definition.Config;

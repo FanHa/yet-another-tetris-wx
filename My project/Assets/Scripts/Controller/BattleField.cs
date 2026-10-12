@@ -3,16 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Units;
-using System.Linq;
 using Model;
 
 namespace Controller {
-    public interface IBattleEffect
-    {
-        event Action<IBattleEffect> Deactivated;
-        void Deactivate();
-    }
-
     [RequireComponent(typeof(UnitManager))]
     public class BattleField : MonoBehaviour
     {
@@ -40,7 +33,6 @@ namespace Controller {
         }
 
         public BattleState State { get; private set; }
-        private readonly HashSet<IBattleEffect> battleEffects = new();
 
         void Awake()
         {
@@ -99,57 +91,19 @@ namespace Controller {
             spawnRoutine = null;
         }
 
-        public void RegisterEffect(IBattleEffect effect)
+        private void EndBattle(Unit.Faction defeatedFaction)
         {
-            if (State != BattleState.Running)
-                throw new InvalidOperationException("Battle effects can only be registered while the battle is running.");
-
-            if (battleEffects.Add(effect))
-                effect.Deactivated += HandleEffectDeactivated;
-        }
-
-        public void UnregisterEffect(IBattleEffect effect)
-        {
-            if (battleEffects.Remove(effect))
-                effect.Deactivated -= HandleEffectDeactivated;
-        }
-
-        private void HandleEffectDeactivated(IBattleEffect effect)
-        {
-            UnregisterEffect(effect);
-        }
-
-        private void ClearEffects()
-        {
-            IBattleEffect[] effects = battleEffects.ToArray();
-            foreach (IBattleEffect effect in effects)
-                effect.Deactivated -= HandleEffectDeactivated;
-
-            battleEffects.Clear();
-            foreach (IBattleEffect effect in effects)
-            {
-                effect.Deactivate();
-            }
-        }
-
-        private void FinishBattle(Unit.Faction defeatedFaction)
-        {
-            State = BattleState.Finished;
-            ClearEffects();
             unitManager.DeactivateAllUnits();
             OnBattleResult?.Invoke(defeatedFaction);
+            State = BattleState.Finished;
         }
 
-        public void ClearBattle()
+        public void ClearField()
         {
-            bool hadBattle = State != BattleState.Empty;
             CancelPendingActivation();
-            State = BattleState.Empty;
-            ClearEffects();
             unitManager.ReleaseAllUnits();
-
-            if (hadBattle)
-                OnBattleCleared?.Invoke();
+            OnBattleCleared?.Invoke();
+            State = BattleState.Empty;
         }
 
         private IEnumerator DelayActivateUnitsCoroutine()
@@ -180,7 +134,7 @@ namespace Controller {
             if (unitManager.GetAliveUnitCount(faction) != 0)
                 return;
 
-            FinishBattle(faction);
+            EndBattle(faction);
         }
 
         private void OnDestroy()
@@ -193,7 +147,6 @@ namespace Controller {
                 unitManager.OnFactionAllDead -= HandleFactionAllDead;
                 unitManager.OnUnitClicked -= HandleUnitClicked;
             }
-            ClearEffects();
         }
         
     }

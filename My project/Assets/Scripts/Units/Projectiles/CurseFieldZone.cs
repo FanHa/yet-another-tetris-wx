@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class CurseFieldZone : MonoBehaviour, Controller.IBattleEffect
+    public class CurseFieldZone : MonoBehaviour
     {
         [SerializeField] private ParticleSystem radiusSyncedParticle;
 
@@ -23,8 +23,6 @@ namespace Units.Projectiles
         private float elapsedTime;
         private float applyTimer;
         private bool isActive;
-
-        public event System.Action<Controller.IBattleEffect> Deactivated;
 
         public void Initialize(
             Unit caster,
@@ -88,6 +86,7 @@ namespace Units.Projectiles
             if (elapsedTime >= duration)
             {
                 Deactivate();
+                Destroy(gameObject);
                 return;
             }
 
@@ -117,21 +116,7 @@ namespace Units.Projectiles
 
         public void Deactivate()
         {
-            if (!isActive)
-                return;
-
             isActive = false;
-            Deactivated?.Invoke(this);
-            Destroy(gameObject);
-        }
-
-        private void OnDestroy()
-        {
-            if (isActive)
-            {
-                isActive = false;
-                Deactivated?.Invoke(this);
-            }
         }
     }
 }

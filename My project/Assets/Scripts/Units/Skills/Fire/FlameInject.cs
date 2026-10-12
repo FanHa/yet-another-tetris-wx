@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class FlameInject : Skill, IPassiveSkill
+    public class FlameInject : Skill
     {
         public FlameInjectLevelConfig Config { get; }
 
@@ -51,7 +51,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "炎附";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             var config = (FlameInjectSkillConfig)Definition.Config;

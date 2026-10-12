@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class DeathCurseField : Skill, IOwnerDeathTrigger
+    public class DeathCurseField : Skill
     {
         public DeathCurseFieldLevelConfig Config { get; }
 
         private DeathCurseFieldSkillConfig SkillConfig => (DeathCurseFieldSkillConfig)Definition.Config;
+        private Units.Projectiles.CurseFieldZone ownedZone;
 
         public DeathCurseField(DeathCurseFieldLevelConfig config)
         {
@@ -59,18 +60,18 @@ namespace Units.Skills
 
         public static string NameStatic() => "死亡诅咒";
 
-        public void OnOwnerDeath()
+
+        public override void OnUnitDeath()
         {
             var stats = CalcStats();
-            var battleField = Owner.SelfUnit.GetComponentInParent<Controller.BattleField>();
 
-            var zone = Object.Instantiate(
+            ownedZone = Object.Instantiate(
                 SkillConfig.ZonePrefab,
                 Owner.transform.position,
                 Quaternion.identity
             );
 
-            zone.Initialize(
+            ownedZone.Initialize(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.ZoneLifetime.Final,
@@ -81,8 +82,23 @@ namespace Units.Skills
                 sourceSkill: this,
                 curseDefinition: SkillConfig.CurseBuffDefinition
             );
-            battleField.RegisterEffect(zone);
-            zone.Activate();
+            ownedZone.Activate();
+        }
+
+        public override void OnRelease()
+        {
+            ClearOwnedZone();
+        }
+
+        private void ClearOwnedZone()
+        {
+            if (ownedZone == null)
+                return;
+
+            Units.Projectiles.CurseFieldZone zone = ownedZone;
+            ownedZone = null;
+            zone.Deactivate();
+            Object.Destroy(zone.gameObject);
         }
     }
 }

@@ -18,11 +18,8 @@ namespace Model
         public IReadOnlyList<Model.Tetri.Tetri> UsableTetriList => usableTetriList;
 
 
-        private readonly HashSet<string> ownedCellDefinitionIds = new(StringComparer.Ordinal);
-        public IReadOnlyCollection<string> OwnedCellDefinitionIds => ownedCellDefinitionIds;
-
-        private readonly HashSet<CharacterDefinition> existCharacterDefinitions = new();
-        public IReadOnlyCollection<CharacterDefinition> ExistCharacterDefinitions => existCharacterDefinitions;
+        private readonly HashSet<CellDefinition> ownedCellDefinitions = new();
+        public IReadOnlyCollection<CellDefinition> OwnedCellDefinitions => ownedCellDefinitions;
 
         [SerializeField] private TetriInventoryInitConfig initialConfig;
 
@@ -60,8 +57,7 @@ namespace Model
 
         private void RecalculateCellIds()
         {
-            ownedCellDefinitionIds.Clear();
-            existCharacterDefinitions.Clear();
+            ownedCellDefinitions.Clear();
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
                 UpdateCellIdsForTetri(tetri);
         }
@@ -101,15 +97,7 @@ namespace Model
             foreach (var position in tetri.GetOccupiedPositions())
             {
                 Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
-                if (cell is Character character)
-                {
-                    existCharacterDefinitions.Add(character.DefinitionData);
-                }
-                else
-                {
-                    // 普通方块按 CellDefinition 体系的运行时 CellId 建立索引。
-                    ownedCellDefinitionIds.Add(cell.Definition.Id);
-                }
+                ownedCellDefinitions.Add(cell.Definition);
             }
         }
 

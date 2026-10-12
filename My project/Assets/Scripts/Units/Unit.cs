@@ -82,37 +82,14 @@ namespace Units
         [Header("运行时注入")]
         private UnitManager unitManager;
         public UnitManager UnitManager => unitManager;
+
         private Units.Skills.SkillContext skillContext;
 
         public void InjectUnitManager(UnitManager manager)
         {
-            if (manager == null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (unitManager != null && unitManager != manager)
-            {
-                throw new InvalidOperationException($"Unit '{name}' already has a different UnitManager injected.");
-            }
-
-            if (unitManager == manager)
-            {
-                return;
-            }
-
             unitManager = manager;
         }
 
-        private UnitManager RequireUnitManager()
-        {
-            if (unitManager == null)
-            {
-                throw new InvalidOperationException($"Unit '{name}' requires an injected UnitManager for this operation.");
-            }
-
-            return unitManager;
-        }
 
         private bool isActive = false; // 是否处于活动状态
         private bool hasDied;
@@ -124,9 +101,6 @@ namespace Units
         public float ActionSpeed => Attributes.ActionSpeed.finalValue;
         public float AttackRange => Attributes.AttackRange.finalValue;
         public Vector3 Position => transform.position;
-        public Unit SelfUnit => this;
-        internal Movement Movement => movementController;
-        internal Units.Skills.SkillHandler SkillHandler => skillHandler;
         public MoveBehaviorMode CurrentMoveBehaviorMode => moveBehaviorMode;
 
         private UnitActionRunner actionRunner;
@@ -205,6 +179,12 @@ namespace Units
             lastAttackTime = Time.time - (10f / Attributes.AttacksPerTenSeconds.finalValue);
         }
 
+        public void CompleteAssembly()
+        {
+            skillHandler.ApplyPassiveEffects();
+            Attributes.RefillHealthToMax();
+        }
+
         public void Activate()
         {
             if (isActive)
@@ -226,26 +206,20 @@ namespace Units
             unitManager.OnAnyUnitSkillCast += HandleAnyUnitSkillCast;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
-            isActive = true;
             RefreshClosestEnemy();
-            foreach (Skill skill in skillHandler.GetSkills())
-            {
-                skill.OnOwnerActivated();
-            }
+
             buffVisualController.Activate();
+            isActive = true;
         }
 
         public void Deactivate()
         {
             healthBar.gameObject.SetActive(false);
-            if (unitManager != null)
-            {
-                unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
-            }
+            unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
             skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
             skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
             skillHandler.OnSkillCastFailed -= HandleSkillCastFailed;
-            skillHandler.Deactivate(); // 如有需要
+            skillHandler.Deactivate();
             buffHandler.RemoveAllActiveBuffsImmediately();
             buffVisualController.Deactivate();
             actionRunner.OnOwnerDeactivated();
@@ -258,16 +232,14 @@ namespace Units
             skillMotionLockCount = 0;
             isActive = false;
             cachedClosestEnemy = null;
-            foreach (Skill skill in skillHandler.GetSkills())
-            {
-                skill.OnOwnerDeactivated();
-            }
         }
 
-        private void OnDisable()
+
+        void OnDestroy()
         {
-            buffVisualController?.Deactivate();
+            skillHandler.Release();
         }
+
 
         private void HandleAnyUnitSkillCast(Unit caster, Skill skill)
         {
@@ -633,7 +605,7 @@ namespace Units
 
             if (diedFromThisHit)
             {
-                skillHandler.DispatchOwnerDeath();
+                skillHandler.NotifyUnitDeath();
                 Deactivate();
                 animationController.PlayDeath();
                 OnDeath?.Invoke(this);

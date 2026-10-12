@@ -3,7 +3,7 @@ using Model.Skills;
 
 namespace Units.Skills
 {
-    public class WindShift : Skill, IPassiveSkill
+    public class WindShift : Skill
     {
         public WindShiftLevelConfig Config { get; }
 
@@ -45,7 +45,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "风形态";
     
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             Owner.AddBuff(Buffs.BuffFactory.Create(

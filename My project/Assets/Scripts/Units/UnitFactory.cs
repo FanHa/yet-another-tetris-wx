@@ -57,16 +57,7 @@ namespace Units
                 cellCounts[cell.Affinity]++;
             }
             unit.SetCellAffinity(cellCounts);
-
-            foreach (Units.Skills.Skill skill in unit.GetSkills())
-            {
-                if (skill is Units.Skills.IPassiveSkill passive)
-                {
-                    passive.ApplyPassive();
-                }
-            }
-
-            unit.Attributes.RefillHealthToMax();
+            unit.CompleteAssembly();
 
             return unit;
         }

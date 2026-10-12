@@ -22,7 +22,6 @@ namespace Units.Skills
         private readonly List<ActiveSkill> activeSkills = new();
         private readonly Queue<ActiveSkill> readyQueue = new();
         private readonly HashSet<ActiveSkill> queuedSet = new();
-
         public SkillHandler(ISkillContext context, float energyDecayPerSkill = 1f)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
@@ -58,6 +57,10 @@ namespace Units.Skills
             tickTimer = 0f;
             readyQueue.Clear();
             queuedSet.Clear();
+            foreach (var skill in skills)
+            {
+                skill.OnActivate();
+            }
         }
 
         public void Deactivate()
@@ -66,7 +69,37 @@ namespace Units.Skills
             tickTimer = 0f;
             readyQueue.Clear();
             queuedSet.Clear();
+            foreach (var skill in skills)
+            {
+                skill.OnDeactivate();
+            }
         }
+
+        public void ApplyPassiveEffects()
+        {
+            foreach (Skill skill in skills)
+            {
+                skill.OnApplyPassive();
+            }
+        }
+
+        public void NotifyUnitDeath()
+        {
+            foreach (Skill skill in skills.ToArray())
+            {
+                skill.OnUnitDeath();
+            }
+        }
+
+        public void Release()
+        {
+            foreach (var skill in skills)
+            {
+                skill.OnRelease();
+            }
+        }
+
+
 
         public void AddSkill(Skill newSkill)
         {
@@ -83,17 +116,6 @@ namespace Units.Skills
         public IReadOnlyList<Skill> GetSkills()
         {
             return skills;
-        }
-
-        internal void DispatchOwnerDeath()
-        {
-            foreach (Skill skill in skills.ToArray())
-            {
-                if (skill is IOwnerDeathTrigger deathTrigger)
-                {
-                    deathTrigger.OnOwnerDeath();
-                }
-            }
         }
 
         internal void DistributeEnergy(float baseEnergy)

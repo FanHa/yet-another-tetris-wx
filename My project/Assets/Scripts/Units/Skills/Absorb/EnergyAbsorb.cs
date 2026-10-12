@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Units.Skills
 {
     // 仿照 FlameRing 的结构，具体公式与行为先占位
-    public class EnergyAbsorb : Skill, IPassiveSkill
+    public class EnergyAbsorb : Skill
     {
         public EnergyAbsorbLevelConfig Config { get; }
 
@@ -47,7 +47,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "能量汲取";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             var buff = Buffs.BuffFactory.Create(

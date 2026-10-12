@@ -363,16 +363,10 @@ public class GameController : MonoBehaviour
         var mainPos = transform.position;
         Camera.main.transform.position = new Vector3(mainPos.x, mainPos.y, Camera.main.transform.position.z);
         battlePreviewUI.Deactivate();
-        battleField.ClearBattle();
+        battleField.ClearField();
         ApplyUiPageState(UiPageState.Assembly);
     }
 
-    private void OnDestroy()
-    {
-        if (battleSettlementController != null)
-            battleSettlementController.OnSettlementConfirmed -= HandleSettlementConfirmed;
-        // 取消监听UI的事件
-    }
     
 #if UNITY_EDITOR
     [ContextMenu("Test Enter Train Ground")]

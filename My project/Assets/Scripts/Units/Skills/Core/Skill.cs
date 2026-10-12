@@ -44,18 +44,11 @@ namespace Units.Skills
         public SkillDefinition Definition { get; internal set; }
         public ISkillContext Owner { get; set; } // 技能的拥有者
 
-        internal virtual void OnOwnerActivated() { }
-        internal virtual void OnOwnerDeactivated() { }
-
+        public virtual void OnActivate() { }
+        public virtual void OnDeactivate() { }
+        public virtual void OnUnitDeath() {}
+        public virtual void OnApplyPassive() { } //todo 可能得改名
+        public virtual void OnRelease() {}
     }
 
-    public interface IPassiveSkill
-    {
-        void ApplyPassive();
-    }
-
-    public interface IOwnerDeathTrigger
-    {
-        void OnOwnerDeath();
-    }
 }

@@ -53,7 +53,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "火环";
 
-        internal override void OnOwnerActivated()
+        public override void OnActivate()
         {
             var stats = CalcStats();
             var skillConfig = (FlameRingSkillConfig)Definition.Config;
@@ -75,7 +75,7 @@ namespace Units.Skills
             areaEffect.Activate();
         }
 
-        internal override void OnOwnerDeactivated()
+        public override void OnDeactivate()
         {
             if (areaEffect == null)
             {

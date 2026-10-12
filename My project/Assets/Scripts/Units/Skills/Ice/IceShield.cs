@@ -3,7 +3,7 @@ using Model.Skills;
 using UnityEngine;
 namespace Units.Skills
 {
-    public class IceShield : Skill, IPassiveSkill
+    public class IceShield : Skill
     {
         public IceShieldLevelConfig Config { get; }
 
@@ -33,7 +33,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "冰霜护盾";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             var config = (IceShieldSkillConfig)Definition.Config;

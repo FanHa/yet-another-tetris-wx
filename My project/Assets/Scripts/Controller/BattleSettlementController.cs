@@ -92,7 +92,7 @@ namespace Controller
                 return;
 
             isShowing = false;
-            battleField.ClearBattle();
+            battleField.ClearField();
             OnSettlementConfirmed?.Invoke();
         }
     }

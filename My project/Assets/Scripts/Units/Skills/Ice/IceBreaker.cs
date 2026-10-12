@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Units.Skills
 {
     // 仿照 FlameInject：被动技能。命中时若目标有 Chilled Buff -> 计算层数额外伤害并移除该 Buff
-    public class IceBreaker : Skill, IPassiveSkill
+    public class IceBreaker : Skill
     {
         public IceBreakerLevelConfig Config { get; }
 
@@ -43,7 +43,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "破冰";
 
-        public void ApplyPassive()
+        public override void OnApplyPassive()
         {
             var stats = CalcStats();
             Owner.AddBuff(Buffs.BuffFactory.Create(
