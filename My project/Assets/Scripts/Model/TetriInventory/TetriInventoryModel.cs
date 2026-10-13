@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Model
 {
-    [CreateAssetMenu(fileName = "TetriInventoryModel", menuName = "Game Data/Gameplay/Inventory/Tetri/Runtime Inventory", order = 1)]
+    [CreateAssetMenu(fileName = "TetriInventoryModel", menuName = "Game Data/Gameplay/Inventory/NormalMode/Runtime Inventory", order = 1)]
 
     public class TetriInventoryModel : ScriptableObject
     {
