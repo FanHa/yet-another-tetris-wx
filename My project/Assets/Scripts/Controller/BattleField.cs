@@ -6,19 +6,29 @@ using Units;
 using Model;
 
 namespace Controller {
+    public readonly struct BattleResult
+    {
+        public Unit.Faction DefeatedFaction { get; }
+
+        public BattleResult(Unit.Faction defeatedFaction)
+        {
+            DefeatedFaction = defeatedFaction;
+        }
+    }
+
     [RequireComponent(typeof(UnitManager))]
     public class BattleField : MonoBehaviour
     {
         [Header("Spawn Points")]
-        // public Transform spawnPointA;
-        public Transform spawnPointB;
+        [SerializeField] private Transform spawnPointA;
+        [SerializeField] private Transform spawnPointB;
         [SerializeField] private float timeDelayBeforeBattle; // 战斗开始前的延迟时间
-        private Coroutine spawnRoutine; // 处理战斗开始生成单位后需要延迟一小段时间再开打
+        private Coroutine battleStartDelayCoroutine;
 
         [Header("Data")]
         private UnitManager unitManager;
         public event Action OnBattleStarted;
-        public event Action<Unit.Faction> OnBattleResult;
+        public event Action<BattleResult> OnBattleFinished;
         public event Action OnBattleCleared;
         public event Action<Unit> OnUnitClicked;
         public event Action<Unit> OnUnitDeath;
@@ -38,11 +48,32 @@ namespace Controller {
         {
             unitManager = GetComponent<UnitManager>();
         }
-        void Start()
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (spawnPointA == null)
+                Debug.LogError($"{nameof(spawnPointA)} is not assigned.", this);
+            if (spawnPointB == null)
+                Debug.LogError($"{nameof(spawnPointB)} is not assigned.", this);
+        }
+#endif
+
+        private void OnEnable()
         {
             unitManager.OnUnitDeath += HandleUnitDeath;
             unitManager.OnFactionAllDead += HandleFactionAllDead;
             unitManager.OnUnitClicked += HandleUnitClicked;
+        }
+
+        private void OnDisable()
+        {
+            if (unitManager == null)
+                return;
+
+            unitManager.OnUnitDeath -= HandleUnitDeath;
+            unitManager.OnFactionAllDead -= HandleFactionAllDead;
+            unitManager.OnUnitClicked -= HandleUnitClicked;
         }
 
         private void HandleUnitClicked(Unit unit)
@@ -50,6 +81,7 @@ namespace Controller {
             OnUnitClicked?.Invoke(unit);
         }
 
+        // Faction A uses the BattleField transform; Faction B uses a separate spawn point.
         public void PrepareBattle(
             IReadOnlyList<CharacterPlacement> factionAItems,
             IReadOnlyList<CharacterPlacement> factionBItems)
@@ -60,7 +92,7 @@ namespace Controller {
             State = BattleState.Prepared;
             unitManager.SpawnUnits(
                 factionAItems,
-                transform,
+                spawnPointA,
                 Unit.Faction.FactionA
             );
             unitManager.SpawnUnits(
@@ -77,33 +109,33 @@ namespace Controller {
 
             State = BattleState.Starting;
             CancelPendingActivation();
-            spawnRoutine = StartCoroutine(DelayActivateUnitsCoroutine());
+            battleStartDelayCoroutine = StartCoroutine(DelayActivateUnitsCoroutine());
         }
 
         private void CancelPendingActivation()
         {
-            if (spawnRoutine == null)
+            if (battleStartDelayCoroutine == null)
             {
                 return;
             }
 
-            StopCoroutine(spawnRoutine);
-            spawnRoutine = null;
+            StopCoroutine(battleStartDelayCoroutine);
+            battleStartDelayCoroutine = null;
         }
 
         private void EndBattle(Unit.Faction defeatedFaction)
         {
-            unitManager.DeactivateAllUnits();
-            OnBattleResult?.Invoke(defeatedFaction);
             State = BattleState.Finished;
+            unitManager.DeactivateAllUnits();
+            OnBattleFinished?.Invoke(new BattleResult(defeatedFaction));
         }
 
         public void ClearField()
         {
             CancelPendingActivation();
             unitManager.ReleaseAllUnits();
-            OnBattleCleared?.Invoke();
             State = BattleState.Empty;
+            OnBattleCleared?.Invoke();
         }
 
         private IEnumerator DelayActivateUnitsCoroutine()
@@ -112,10 +144,10 @@ namespace Controller {
             if (State != BattleState.Starting)
                 yield break;
 
-            spawnRoutine = null;
+            battleStartDelayCoroutine = null;
             State = BattleState.Running;
-            OnBattleStarted?.Invoke();
             unitManager.ActivateAllUnits();
+            OnBattleStarted?.Invoke();
         }
 
         private void HandleUnitDeath(Unit deadUnit)
@@ -141,12 +173,6 @@ namespace Controller {
         {
             State = BattleState.Empty;
             CancelPendingActivation();
-            if (unitManager != null)
-            {
-                unitManager.OnUnitDeath -= HandleUnitDeath;
-                unitManager.OnFactionAllDead -= HandleFactionAllDead;
-                unitManager.OnUnitClicked -= HandleUnitClicked;
-            }
         }
         
     }

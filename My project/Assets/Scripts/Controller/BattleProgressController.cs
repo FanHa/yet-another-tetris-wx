@@ -23,7 +23,7 @@ namespace Controller
         private void OnEnable()
         {
             battleField.OnUnitDeath += HandleUnitDeath;
-            battleField.OnBattleResult += HandleBattleResult;
+            battleField.OnBattleFinished += HandleBattleFinished;
             battleField.OnBattleCleared += HandleBattleCleared;
         }
 
@@ -32,7 +32,7 @@ namespace Controller
             if (battleField != null)
             {
                 battleField.OnUnitDeath -= HandleUnitDeath;
-                battleField.OnBattleResult -= HandleBattleResult;
+                battleField.OnBattleFinished -= HandleBattleFinished;
                 battleField.OnBattleCleared -= HandleBattleCleared;
             }
             progressEnabled = false;
@@ -54,11 +54,11 @@ namespace Controller
                 gameStatusHud.AddScore(1);
         }
 
-        private void HandleBattleResult(Unit.Faction defeatedFaction)
+        private void HandleBattleFinished(BattleResult result)
         {
             bool applyProgress = progressEnabled;
             progressEnabled = false;
-            if (applyProgress && defeatedFaction == Unit.Faction.FactionA)
+            if (applyProgress && result.DefeatedFaction == Unit.Faction.FactionA)
                 gameStatusHud.DecreaseLife(1);
         }
 

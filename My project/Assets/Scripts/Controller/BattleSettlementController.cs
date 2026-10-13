@@ -37,7 +37,7 @@ namespace Controller
 
         private void OnEnable()
         {
-            battleField.OnBattleResult += HandleBattleResult;
+            battleField.OnBattleFinished += HandleBattleFinished;
             battleField.OnBattleCleared += CancelDisplay;
             battleStatistics.OnEndStatistics += HandleConfirmation;
             CancelDisplay();
@@ -47,7 +47,7 @@ namespace Controller
         {
             if (battleField != null)
             {
-                battleField.OnBattleResult -= HandleBattleResult;
+                battleField.OnBattleFinished -= HandleBattleFinished;
                 battleField.OnBattleCleared -= CancelDisplay;
             }
             if (battleStatistics != null)
@@ -55,7 +55,7 @@ namespace Controller
             CancelDisplay();
         }
 
-        private void HandleBattleResult(Unit.Faction defeatedFaction)
+        private void HandleBattleFinished(BattleResult result)
         {
             CancelDisplay();
             displayRoutine = StartCoroutine(DisplayStatistics(displayVersion));
