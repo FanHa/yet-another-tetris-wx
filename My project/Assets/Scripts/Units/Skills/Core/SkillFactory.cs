@@ -69,6 +69,7 @@ namespace Units.Skills
             ["skill.shadow_step"] = new ConfiguredSkillCreator<ShadowStepSkillConfig, ShadowStepLevelConfig>(config => new ShadowStep(config)),
             ["skill.vulnerability_field"] = new ConfiguredSkillCreator<VulnerabilityFieldSkillConfig, VulnerabilityFieldLevelConfig>(config => new VulnerabilityField(config)),
             ["skill.power_curse"] = new ConfiguredSkillCreator<PowerCurseSkillConfig, PowerCurseLevelConfig>(config => new PowerCurse(config)),
+            ["skill.energy_curse"] = new ConfiguredSkillCreator<EnergyCurseSkillConfig, EnergyCurseLevelConfig>(config => new EnergyCurse(config)),
             ["skill.charge"] = new ConfiguredSkillCreator<ChargeSkillConfig, ChargeLevelConfig>(config => new Charge(config)),
             ["skill.attack_boost"] = new ConfiguredSkillCreator<AttackBoostSkillConfig, AttackBoostLevelConfig>(config => new AttackBoost(config)),
             ["skill.wild_wind"] = new ConfiguredSkillCreator<WildWindSkillConfig, WildWindLevelConfig>(config => new WildWind(config)),
