@@ -54,7 +54,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     baseColor: {r: 0.2, g: 0.81960785, b: 1, a: 1}
   - affinity: 9
-    name: "\u8BC5\u5492\u7CFB"
-    description: "\u4EE5\u5C5E\u6027\u524A\u5F31\u4E3A\u7279\u8272\uFF0C\u964D\u4F4E\u654C\u65B9\u653B\u51FB\u529B\u3001\u80FD\u91CF\u56DE\u590D\u7B49\u6218\u6597\u5C5E\u6027\u3002"
+    name: "\u6B7B\u4EA1\u8BC5\u5492\u7CFB"
+    description: "\u4EE5\u6B7B\u4EA1\u540E\u7559\u4E0B\u7684\u8BC5\u5492\u533A\u57DF\u4E3A\u7279\u8272\uFF0C\u6301\u7EED\u964D\u4F4E\u533A\u57DF\u5185\u654C\u4EBA\u7684\u653B\u51FB\u529B\u4E0E\u80FD\u91CF\u56DE\u590D\u3002"
     icon: {fileID: 0}
     baseColor: {r: 0.32156864, g: 0.39215687, b: 0.35686275, a: 1}

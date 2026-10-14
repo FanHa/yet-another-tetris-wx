@@ -4,40 +4,38 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class DeathCurseField : Skill
+    public class PowerCurse : Skill
     {
-        public DeathCurseFieldLevelConfig Config { get; }
+        public PowerCurseLevelConfig Config { get; }
 
-        private DeathCurseFieldSkillConfig SkillConfig => (DeathCurseFieldSkillConfig)Definition.Config;
-        private Units.Projectiles.CurseFieldZone ownedZone;
+        private PowerCurseSkillConfig SkillConfig => (PowerCurseSkillConfig)Definition.Config;
+        private Units.Projectiles.PowerCurseZone ownedZone;
 
-        public DeathCurseField(DeathCurseFieldLevelConfig config)
+        public PowerCurse(PowerCurseLevelConfig config)
         {
             Config = config;
         }
 
-        private struct DeathCurseFieldStats
+        private struct PowerCurseStats
         {
             public StatValue Radius;
             public StatValue ZoneLifetime;
             public StatValue ApplyInterval;
             public StatValue DebuffDuration;
             public StatValue AttackReductionPercent;
-            public StatValue EnergyRegenReductionPercent;
         }
 
-        private DeathCurseFieldStats CalcStats()
+        private PowerCurseStats CalcStats()
         {
-            int curseCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Curse, out var count) ? count : 0;
+            int deathCurseCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.DeathCurse, out var count) ? count : 0;
 
-            return new DeathCurseFieldStats
+            return new PowerCurseStats
             {
-                Radius = new StatValue("领域半径", Config.BaseRadius, curseCellCount * Config.RadiusPerCurseCell),
-                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, curseCellCount * Config.ZoneLifetimePerCurseCell),
+                Radius = new StatValue("领域半径", Config.BaseRadius, deathCurseCellCount * Config.RadiusPerDeathCurseCell),
+                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, deathCurseCellCount * Config.ZoneLifetimePerDeathCurseCell),
                 ApplyInterval = new StatValue("施加间隔", Config.ApplyInterval),
                 DebuffDuration = new StatValue("诅咒持续", Config.DebuffDuration),
-                AttackReductionPercent = new StatValue("攻击降低(%)", Config.BaseAttackReductionPercent, curseCellCount * Config.AttackReductionPerCurseCell),
-                EnergyRegenReductionPercent = new StatValue("能量回复降低(%)", Config.BaseEnergyRegenReductionPercent, curseCellCount * Config.EnergyRegenReductionPerCurseCell)
+                AttackReductionPercent = new StatValue("攻击降低(%)", Config.BaseAttackReductionPercent, deathCurseCellCount * Config.AttackReductionPerDeathCurseCell)
             };
         }
 
@@ -50,15 +48,14 @@ namespace Units.Skills
                 $"{stats.ZoneLifetime}\n" +
                 $"{stats.ApplyInterval}\n" +
                 $"{stats.DebuffDuration}\n" +
-                $"{stats.AttackReductionPercent}\n" +
-                $"{stats.EnergyRegenReductionPercent}";
+                $"{stats.AttackReductionPercent}";
         }
 
-        public static string DescriptionStatic() => "死亡时在当前位置制造诅咒领域，降低敌方攻击力与能量回复。";
+        public static string DescriptionStatic() => "死亡时在当前位置生成诅咒区域，降低区域内敌人的攻击力。";
 
         public override string Name() => NameStatic();
 
-        public static string NameStatic() => "死亡诅咒";
+        public static string NameStatic() => "力量诅咒";
 
 
         public override void OnUnitDeath()
@@ -78,9 +75,8 @@ namespace Units.Skills
                 applyInterval: stats.ApplyInterval.Final,
                 debuffDuration: stats.DebuffDuration.Final,
                 attackReductionPercent: stats.AttackReductionPercent.Final,
-                energyRegenReductionPercent: stats.EnergyRegenReductionPercent.Final,
                 sourceSkill: this,
-                curseDefinition: SkillConfig.CurseBuffDefinition
+                powerCurseBuffDefinition: SkillConfig.PowerCurseBuffDefinition
             );
             ownedZone.Activate();
         }
@@ -95,7 +91,7 @@ namespace Units.Skills
             if (ownedZone == null)
                 return;
 
-            Units.Projectiles.CurseFieldZone zone = ownedZone;
+            Units.Projectiles.PowerCurseZone zone = ownedZone;
             ownedZone = null;
             zone.Deactivate();
             Object.Destroy(zone.gameObject);

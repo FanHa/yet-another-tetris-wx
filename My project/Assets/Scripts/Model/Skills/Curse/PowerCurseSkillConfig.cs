@@ -3,24 +3,24 @@ using UnityEngine;
 
 namespace Model.Skills
 {
-    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Curse/Death Curse Field")]
-    public class DeathCurseFieldSkillConfig : SkillConfig<DeathCurseFieldLevelConfig>
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Configs/Power Curse/Power Curse")]
+    public class PowerCurseSkillConfig : SkillConfig<PowerCurseLevelConfig>
     {
         [Header("Resources")]
-        [SerializeField] private Units.Projectiles.CurseFieldZone zonePrefab;
-        [SerializeField] private BuffDefinition curseBuffDefinition;
+        [SerializeField] private Units.Projectiles.PowerCurseZone zonePrefab;
+        [SerializeField] private BuffDefinition powerCurseBuffDefinition;
 
-        public Units.Projectiles.CurseFieldZone ZonePrefab => zonePrefab;
-        public BuffDefinition CurseBuffDefinition => curseBuffDefinition;
+        public Units.Projectiles.PowerCurseZone ZonePrefab => zonePrefab;
+        public BuffDefinition PowerCurseBuffDefinition => powerCurseBuffDefinition;
 
 #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(zonePrefab, nameof(zonePrefab));
-            ValidateRequiredReference(curseBuffDefinition, nameof(curseBuffDefinition));
-            if (curseBuffDefinition != null && curseBuffDefinition.Id != "buff.curse")
+            ValidateRequiredReference(powerCurseBuffDefinition, nameof(powerCurseBuffDefinition));
+            if (powerCurseBuffDefinition != null && powerCurseBuffDefinition.Id != "buff.power_curse")
             {
-                Debug.LogError($"{nameof(curseBuffDefinition)} must reference the 'buff.curse' definition.", this);
+                Debug.LogError($"{nameof(powerCurseBuffDefinition)} must reference the 'buff.power_curse' definition.", this);
             }
 
             if (LevelConfigs != null && LevelConfigs.Count == 0)
@@ -36,20 +36,12 @@ namespace Model.Skills
                 ValidateFinitePositive(levelConfig.DebuffDuration, LevelField(index, nameof(levelConfig.DebuffDuration)));
 
                 ValidatePercent(index, nameof(levelConfig.BaseAttackReductionPercent), levelConfig.BaseAttackReductionPercent);
-                ValidateFiniteNonNegative(levelConfig.AttackReductionPerCurseCell, LevelField(index, nameof(levelConfig.AttackReductionPerCurseCell)));
+                ValidateFiniteNonNegative(levelConfig.AttackReductionPerDeathCurseCell, LevelField(index, nameof(levelConfig.AttackReductionPerDeathCurseCell)));
                 ValidatePercent(index, nameof(levelConfig.MaxAttackReductionPercent), levelConfig.MaxAttackReductionPercent);
-                ValidatePercent(index, nameof(levelConfig.BaseEnergyRegenReductionPercent), levelConfig.BaseEnergyRegenReductionPercent);
-                ValidateFiniteNonNegative(levelConfig.EnergyRegenReductionPerCurseCell, LevelField(index, nameof(levelConfig.EnergyRegenReductionPerCurseCell)));
-                ValidatePercent(index, nameof(levelConfig.MaxEnergyRegenReductionPercent), levelConfig.MaxEnergyRegenReductionPercent);
 
                 if (levelConfig.BaseAttackReductionPercent > levelConfig.MaxAttackReductionPercent)
                 {
                     Debug.LogError($"{LevelField(index, nameof(levelConfig.BaseAttackReductionPercent))} must not exceed {nameof(levelConfig.MaxAttackReductionPercent)}.", this);
-                }
-
-                if (levelConfig.BaseEnergyRegenReductionPercent > levelConfig.MaxEnergyRegenReductionPercent)
-                {
-                    Debug.LogError($"{LevelField(index, nameof(levelConfig.BaseEnergyRegenReductionPercent))} must not exceed {nameof(levelConfig.MaxEnergyRegenReductionPercent)}.", this);
                 }
 
                 if (levelConfig.ApplyInterval > levelConfig.BaseZoneLifetime)
@@ -77,24 +69,20 @@ namespace Model.Skills
     }
 
     [System.Serializable]
-    public class DeathCurseFieldLevelConfig : SkillLevelConfig
+    public class PowerCurseLevelConfig : SkillLevelConfig
     {
         [Header("Area")]
         public float BaseRadius = 5f;
-        public float RadiusPerCurseCell = 0.3f;
+        public float RadiusPerDeathCurseCell = 0.3f;
         public float BaseZoneLifetime = 15f;
-        public float ZoneLifetimePerCurseCell = 0.5f;
+        public float ZoneLifetimePerDeathCurseCell = 0.5f;
         public float ApplyInterval = 0.5f;
         public float DebuffDuration = 1.5f;
 
         [Header("Attack Power Reduction (%)")]
         public float BaseAttackReductionPercent = 20f;
-        public float AttackReductionPerCurseCell = 2f;
+        public float AttackReductionPerDeathCurseCell = 2f;
         public float MaxAttackReductionPercent = 80f;
 
-        [Header("Energy Regeneration Reduction (%)")]
-        public float BaseEnergyRegenReductionPercent = 30f;
-        public float EnergyRegenReductionPerCurseCell = 3f;
-        public float MaxEnergyRegenReductionPercent = 80f;
     }
 }

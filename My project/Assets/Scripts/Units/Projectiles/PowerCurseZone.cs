@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class CurseFieldZone : MonoBehaviour
+    public class PowerCurseZone : MonoBehaviour
     {
         [SerializeField] private ParticleSystem radiusSyncedParticle;
 
@@ -13,13 +13,12 @@ namespace Units.Projectiles
         private Unit sourceUnit;
         private Unit.Faction sourceFaction;
         private Skills.Skill sourceSkill;
-        private BuffDefinition curseDefinition;
+        private BuffDefinition powerCurseBuffDefinition;
         private float radius;
         private float duration;
         private float applyInterval;
         private float debuffDuration;
         private float attackReductionPercent;
-        private float energyRegenReductionPercent;
         private float elapsedTime;
         private float applyTimer;
         private bool isActive;
@@ -31,9 +30,8 @@ namespace Units.Projectiles
             float applyInterval,
             float debuffDuration,
             float attackReductionPercent,
-            float energyRegenReductionPercent,
             Skills.Skill sourceSkill,
-            BuffDefinition curseDefinition)
+            BuffDefinition powerCurseBuffDefinition)
         {
             sourceUnit = caster;
             sourceFaction = caster.faction;
@@ -43,9 +41,8 @@ namespace Units.Projectiles
             this.applyInterval = applyInterval;
             this.debuffDuration = debuffDuration;
             this.attackReductionPercent = attackReductionPercent;
-            this.energyRegenReductionPercent = energyRegenReductionPercent;
             this.sourceSkill = sourceSkill;
-            this.curseDefinition = curseDefinition;
+            this.powerCurseBuffDefinition = powerCurseBuffDefinition;
             elapsedTime = 0f;
             applyTimer = 0f;
             SyncParticleRadius();
@@ -69,7 +66,7 @@ namespace Units.Projectiles
                 return;
 
             isActive = true;
-            ApplyCurse();
+            ApplyPowerCurse();
         }
 
         private void Update()
@@ -94,21 +91,20 @@ namespace Units.Projectiles
             if (applyTimer >= applyInterval)
             {
                 applyTimer %= applyInterval;
-                ApplyCurse();
+                ApplyPowerCurse();
             }
         }
 
-        private void ApplyCurse()
+        private void ApplyPowerCurse()
         {
             var enemies = unitManager.FindEnemiesInRangeAtPosition(sourceFaction, (Vector2)transform.position, radius);
             foreach (var enemy in enemies)
             {
                 enemy.AddBuff(BuffFactory.Create(
-                    curseDefinition,
-                    new CurseBuffArgs(
+                    powerCurseBuffDefinition,
+                    new PowerCurseBuffArgs(
                         debuffDuration,
                         attackReductionPercent,
-                        energyRegenReductionPercent,
                         new BuffSource(sourceUnit, sourceSkill),
                         stackId)));
             }
