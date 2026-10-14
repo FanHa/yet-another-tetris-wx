@@ -11,7 +11,7 @@ namespace UI.UnitInfo
     {
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text countText;
-        [SerializeField] private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private Model.Tetri.AffinityDatabase affinityDisplayConfig;
 
         public Action<AffinityType, int> OnClicked;
 
@@ -34,7 +34,7 @@ namespace UI.UnitInfo
             currentType = type;
             currentCount = count;
 
-            Model.Tetri.AffinityDisplayConfig.AffinityDisplayEntry entry = affinityDisplayConfig.GetDisplayEntry(type);
+            Model.Tetri.AffinityDatabase.AffinityEntry entry = affinityDisplayConfig.GetEntry(type);
             countText.text = "X" + count.ToString();
             icon.color = entry.BorderColor;
         }

@@ -13,7 +13,7 @@ namespace View.OperationTable
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField] private Model.Tetri.AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private Model.Tetri.AffinityDatabase affinityDisplayConfig;
 
         private SpriteRenderer maskRenderer;
         private SpriteRenderer borderTopRenderer;
@@ -79,8 +79,8 @@ namespace View.OperationTable
 
             icon.sprite = modelCell.Icon;
 
-            var displayEntry = affinityDisplayConfig.GetDisplayEntry(modelCell.Affinity)
-                ?? throw new InvalidOperationException($"Missing affinity display config for '{modelCell.Affinity}'.");
+            var displayEntry = affinityDisplayConfig.GetEntry(modelCell.Affinity)
+                ?? throw new InvalidOperationException($"Missing affinity config for '{modelCell.Affinity}'.");
 
             SetMaskColor(displayEntry.MaskColor);
             SetBorderColor(displayEntry.BorderColor);

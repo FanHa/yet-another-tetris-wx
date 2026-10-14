@@ -5,17 +5,8 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class FlameRing : MonoBehaviour
+    public class FlameRing : PeriodicAreaEffectZoneBase
     {
-        [SerializeField] private ParticleSystem ringParticle;
-        private bool isActive;
-        private Unit owner;
-        private const float tickInterval = 1f;
-        private float tickTimer = 0f;
-        private float duration;
-        private float elapsed;
-        private float radius;
-        private Skills.Skill sourceSkill;
         private BuffDefinition burnDefinition;
         private float dotDps;
         private float dotDuration;
@@ -30,68 +21,33 @@ namespace Units.Projectiles
             float dotDuration
         )
         {
-            this.owner = owner;
-            this.radius = radius;
-            this.sourceSkill = sourceSkill;
+            InitializeBase(owner, radius, duration, 1f, sourceSkill);
             this.burnDefinition = burnDefinition;
-            this.duration = duration;
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
-
-            var shape = ringParticle.shape;
-            shape.radius = radius;
-            tickTimer = 0f;
-            elapsed = 0f;
         }
 
-        public void Activate()
+        protected override void UpdateZonePosition()
         {
-            isActive = true;
-            ringParticle.Play(true);
+            transform.position = SourceUnit.transform.position;
         }
 
-        void Update()
+        protected override IEnumerable<Unit> FindTargetsInArea()
         {
-            if (!isActive)
-                return;
+            if (UnitManager == null)
+                return System.Array.Empty<Unit>();
 
-            if (owner == null || !owner.IsActive)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            return UnitManager.FindEnemiesInRangeAtPosition(
+                SourceUnit.faction,
+                (Vector2)transform.position,
+                Radius);
+        }
 
-            if (duration >= 0f)
-            {
-                elapsed += Time.deltaTime;
-                if (elapsed >= duration)
-                {
-                    Destroy(gameObject);
-                    return;
-                }
-            }
-
-            // 跟随目标
-            transform.position = owner.transform.position;
-            tickTimer += Time.deltaTime;
-            if (tickTimer >= tickInterval)
-            {
-                tickTimer -= tickInterval;
-
-                Controller.UnitManager unitManager = owner.UnitManager;
-                if (unitManager == null)
-                    return;
-                List<Units.Unit> enemies =  unitManager.FindEnemiesInRangeAtPosition(owner.faction, transform.position, radius);
-
-                foreach (var enemy in enemies)
-                {
-                    var burn = BuffFactory.Create(
-                        burnDefinition,
-                        new BurnBuffArgs(dotDps, dotDuration, new BuffSource(owner, sourceSkill))
-                    );
-                    enemy.AddBuff(burn);
-                }
-            }
+        protected override void ApplyEffectTo(Unit target)
+        {
+            target.AddBuff(BuffFactory.Create(
+                burnDefinition,
+                new BurnBuffArgs(dotDps, dotDuration, new BuffSource(SourceUnit, SourceSkill))));
         }
     }
 }

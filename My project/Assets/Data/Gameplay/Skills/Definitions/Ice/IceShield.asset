@@ -15,5 +15,6 @@ MonoBehaviour:
   id: skill.ice_shield
   displayName: Ice Shield
   description: "\u91CA\u653E Ice Shield\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
+  affinity: 2
   config: {fileID: 11400000, guid: 27013648c8e5bdc4d921a3b1562b28f7, type: 2}
   icon: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}

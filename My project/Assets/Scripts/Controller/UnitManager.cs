@@ -21,11 +21,6 @@ namespace Controller
         private List<Unit> factionA = new();
         private List<Unit> factionB = new();
         private HashSet<Unit> ownedUnits = new();
-        private int unitBatchVersion;
-        private bool isActivatingUnits;
-        private bool isActivationCancelled;
-        private bool isDeactivatingUnits;
-        private bool isReleasingUnits;
 
         /// <summary>
         /// 批量生成单位
@@ -131,12 +126,9 @@ namespace Controller
             if (!ownedUnits.Contains(deadUnit) || !GetFactionUnits(deadUnit.faction).Remove(deadUnit))
                 return;
 
-            int batchVersion = unitBatchVersion;
             List<Unit> faction = GetFactionUnits(deadUnit.faction);
             bool factionBecameEmpty = faction.Count == 0;
             OnUnitDeath?.Invoke(deadUnit);
-            if (batchVersion != unitBatchVersion)
-                return;
 
             if (factionBecameEmpty && faction.Count == 0)
             {

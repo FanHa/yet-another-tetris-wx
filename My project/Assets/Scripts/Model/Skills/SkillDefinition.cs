@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Model.Tetri;
 using UnityEngine;
 
 namespace Model.Skills
@@ -9,6 +10,7 @@ namespace Model.Skills
         [SerializeField] private string id;
         [SerializeField] private string displayName;
         [SerializeField] private string description;
+        [SerializeField] private AffinityType affinity;
         [SerializeField] private SkillConfig config;
         [SerializeField] private Sprite icon;
 
@@ -18,12 +20,18 @@ namespace Model.Skills
         public string Id => id;
         public string DisplayName => displayName;
         public string Description => description;
+        public AffinityType Affinity => affinity;
         public SkillConfig Config => config;
         public Sprite Icon => icon;
 
     #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (!System.Enum.IsDefined(typeof(AffinityType), affinity) || affinity == AffinityType.End)
+            {
+                Debug.LogError($"{nameof(affinity)} must be a valid affinity other than '{AffinityType.End}'.", this);
+            }
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 Debug.LogError($"{nameof(id)} is not assigned. Expected the format 'skill.example_name'.", this);

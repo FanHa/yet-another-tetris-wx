@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Game Data/Shared/Affinity Display Config")]
-    public class AffinityDisplayConfig : ScriptableObject
+    [CreateAssetMenu(menuName = "Game Data/Shared/Affinity Database")]
+    public class AffinityDatabase : ScriptableObject
     {
         [System.Serializable]
-        public class AffinityDisplayEntry
+        public class AffinityEntry
         {
             public AffinityType affinity;
             public string name;
@@ -21,9 +21,9 @@ namespace Model.Tetri
 
         private const float MaskAlpha = 0.19607843f;
 
-        [SerializeField] private AffinityDisplayEntry[] affinityEntries;
+        [SerializeField] private AffinityEntry[] affinityEntries;
 
-        private Dictionary<AffinityType, AffinityDisplayEntry> entriesByAffinity;
+        private Dictionary<AffinityType, AffinityEntry> entriesByAffinity;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -52,17 +52,17 @@ namespace Model.Tetri
 
                 if (!seenAffinities.Add(entry.affinity))
                 {
-                    Debug.LogError($"Duplicate affinity display entry for '{entry.affinity}'.", this);
+                    Debug.LogError($"Duplicate affinity entry for '{entry.affinity}'.", this);
                 }
 
                 if (string.IsNullOrWhiteSpace(entry.name))
                 {
-                    Debug.LogError($"Affinity display name for '{entry.affinity}' is not assigned.", this);
+                    Debug.LogError($"Affinity name for '{entry.affinity}' is not assigned.", this);
                 }
 
                 if (string.IsNullOrWhiteSpace(entry.description))
                 {
-                    Debug.LogError($"Affinity display description for '{entry.affinity}' is not assigned.", this);
+                    Debug.LogError($"Affinity description for '{entry.affinity}' is not assigned.", this);
                 }
             }
 
@@ -70,7 +70,7 @@ namespace Model.Tetri
             {
                 if (affinity != AffinityType.None && affinity != AffinityType.End && !seenAffinities.Contains(affinity))
                 {
-                    Debug.LogError($"Missing affinity display entry for '{affinity}'.", this);
+                    Debug.LogError($"Missing affinity entry for '{affinity}'.", this);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Model.Tetri
 
         private void OnEnable()
         {
-            entriesByAffinity = new Dictionary<AffinityType, AffinityDisplayEntry>();
+            entriesByAffinity = new Dictionary<AffinityType, AffinityEntry>();
             foreach (var entry in affinityEntries)
             {
                 if (!entriesByAffinity.ContainsKey(entry.affinity))
@@ -86,7 +86,7 @@ namespace Model.Tetri
             }
         }
 
-        public AffinityDisplayEntry GetDisplayEntry(AffinityType affinity)
+        public AffinityEntry GetEntry(AffinityType affinity)
         {
             if (entriesByAffinity == null || entriesByAffinity.Count != affinityEntries.Length)
                 OnEnable();
@@ -97,17 +97,17 @@ namespace Model.Tetri
 
         public string GetName(AffinityType affinity)
         {
-            return GetDisplayEntry(affinity)?.name ?? string.Empty;
+            return GetEntry(affinity)?.name ?? string.Empty;
         }
 
         public string GetDescription(AffinityType affinity)
         {
-            return GetDisplayEntry(affinity)?.description ?? string.Empty;
+            return GetEntry(affinity)?.description ?? string.Empty;
         }
 
         public Sprite GetIcon(AffinityType affinity)
         {
-            return GetDisplayEntry(affinity)?.icon;
+            return GetEntry(affinity)?.icon;
         }
     }
 }

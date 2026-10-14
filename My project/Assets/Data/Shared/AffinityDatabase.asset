@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fdb1ba4c024b95a44ab19d6fc44c4a6f, type: 3}
-  m_Name: AffinityDisplayConfig
+  m_Name: AffinityDatabase
   m_EditorClassIdentifier: 
   affinityEntries:
   - affinity: 1

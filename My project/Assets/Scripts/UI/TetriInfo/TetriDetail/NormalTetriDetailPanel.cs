@@ -14,7 +14,7 @@ namespace UI.TetriInfo
         [SerializeField] private Image affinityIcon;
         [SerializeField] private TMPro.TextMeshProUGUI affinityDescriptionText;
 
-        [SerializeField] private AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private AffinityDatabase affinityDisplayConfig;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -40,7 +40,7 @@ namespace UI.TetriInfo
             string affinityDesc = "";
             foreach (var kvp in affinityCounts)
             {
-                var displayEntry = affinityDisplayConfig.GetDisplayEntry(kvp.Key);
+                var displayEntry = affinityDisplayConfig.GetEntry(kvp.Key);
                 affinityIcon.color = displayEntry.MaskColor;
                 var outline = affinityIcon.GetComponent<UnityEngine.UI.Outline>();
                 if (outline != null) outline.effectColor = displayEntry.BorderColor;

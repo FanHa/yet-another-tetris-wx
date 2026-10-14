@@ -15,5 +15,6 @@ MonoBehaviour:
   id: skill.shadow_arrow
   displayName: Shadow Arrow
   description: "\u91CA\u653E Shadow Arrow\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
+  affinity: 5
   config: {fileID: 11400000, guid: d9cc0e17f56e8ba43a91a7b14b588322, type: 2}
   icon: {fileID: 4134349262818545416, guid: 0748ec5f9b0f00e41a65a5356f08dc10, type: 3}

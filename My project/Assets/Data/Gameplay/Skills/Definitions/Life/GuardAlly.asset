@@ -15,5 +15,6 @@ MonoBehaviour:
   id: skill.guard_ally
   displayName: Guard Ally
   description: "\u91CA\u653E Guard Ally\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
+  affinity: 4
   config: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
   icon: {fileID: -8150554673462657918, guid: 85c068f82d356a04abd05fc049fcdcd2, type: 3}

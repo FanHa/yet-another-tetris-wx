@@ -15,5 +15,6 @@ MonoBehaviour:
   id: skill.chain_lightning
   displayName: "\u95EA\u7535\u94FE"
   description: "\u5BF9\u8303\u56F4\u5185\u654C\u4EBA\u8FDE\u7EED\u5F39\u5C04\u95EA\u7535\uFF0C\u9020\u6210\u9012\u589E\u4F24\u5BB3\u3002"
+  affinity: 8
   config: {fileID: 11400000, guid: 9c331be3588604c4da2b691897e49b5d, type: 2}
   icon: {fileID: 21300000, guid: d174cdac543844144bff0ef3a079c8db, type: 3}

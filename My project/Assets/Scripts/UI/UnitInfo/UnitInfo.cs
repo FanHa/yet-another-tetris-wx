@@ -24,7 +24,7 @@ namespace UI.UnitInfo
         [Header("Affinity")]
         [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
         [SerializeField] private Transform affinityRoot;
-        [SerializeField] private AffinityDisplayConfig affinityDisplayConfig;
+        [SerializeField] private AffinityDatabase affinityDisplayConfig;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;

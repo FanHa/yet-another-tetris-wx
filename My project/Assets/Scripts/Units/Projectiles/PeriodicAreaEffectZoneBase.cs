@@ -5,6 +5,7 @@ namespace Units.Projectiles
 {
     public abstract class PeriodicAreaEffectZoneBase : MonoBehaviour
     {
+        [SerializeField] private Model.Tetri.AffinityDatabase affinityDatabase;
         [SerializeField] private ParticleSystem zoneParticle;
         [SerializeField] private ParticleSystem ringParticle;
         [SerializeField] private ParticleSystem ringOutlineParticle;
@@ -20,11 +21,17 @@ namespace Units.Projectiles
         protected Controller.UnitManager UnitManager { get; private set; }
         protected Unit SourceUnit { get; private set; }
         protected Skills.Skill SourceSkill { get; private set; }
+        protected Model.Tetri.AffinityDatabase AffinityDatabase => affinityDatabase;
         protected float Radius => radius;
 
 #if UNITY_EDITOR
         protected virtual void OnValidate()
         {
+            if (affinityDatabase == null)
+            {
+                Debug.LogError($"{nameof(affinityDatabase)} is not assigned.", this);
+            }
+
             if (zoneParticle == null)
             {
                 Debug.LogError($"{nameof(zoneParticle)} is not assigned.", this);
@@ -57,6 +64,7 @@ namespace Units.Projectiles
             SourceSkill = sourceSkill;
             elapsedTime = 0f;
             applyTimer = 0f;
+            SyncParticleColor();
             SyncParticleRadius();
             ringParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             ringOutlineParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -64,6 +72,26 @@ namespace Units.Projectiles
             ringOutlineParticle.useAutoRandomSeed = false;
             ringParticle.randomSeed = RingParticleRandomSeed;
             ringOutlineParticle.randomSeed = RingParticleRandomSeed;
+        }
+
+        private void SyncParticleColor()
+        {
+            Model.Tetri.AffinityType affinity = SourceSkill.Definition.Affinity;
+            if (affinity == Model.Tetri.AffinityType.None)
+            {
+                return;
+            }
+
+            Color color = AffinityDatabase.GetEntry(affinity).baseColor;
+            SetParticleStartColor(zoneParticle, color);
+            SetParticleStartColor(ringParticle, color);
+            SetParticleStartColor(ringOutlineParticle, color);
+        }
+
+        private static void SetParticleStartColor(ParticleSystem particle, Color color)
+        {
+            var main = particle.main;
+            main.startColor = color;
         }
 
         private void SyncParticleRadius()
@@ -109,12 +137,14 @@ namespace Units.Projectiles
                 return;
 
             elapsedTime += deltaTime;
-            if (elapsedTime >= duration)
+            if (duration >= 0f && elapsedTime >= duration)
             {
                 Deactivate();
                 Destroy(gameObject);
                 return;
             }
+
+            UpdateZonePosition();
 
             applyTimer += deltaTime;
             if (applyTimer >= applyInterval)
@@ -136,6 +166,10 @@ namespace Units.Projectiles
         protected abstract IEnumerable<Unit> FindTargetsInArea();
 
         protected abstract void ApplyEffectTo(Unit target);
+
+        protected virtual void UpdateZonePosition()
+        {
+        }
 
         public void Deactivate()
         {

@@ -23,7 +23,7 @@ description: "Use when creating or editing art with Aseprite or Aseprite MCP, in
 - 画布：256×256，透明背景，静态单帧。
 - 风格：极简扁平，使用线条和色块；按画布实际精度绘制，不强制粗像素风格。
 - 颜色：尽量少，通常不超过三种实色；不默认使用渐变、阴影或纹理。
-- 派系颜色：从 `Assets/Data/Shared/AffinityDisplayConfig.asset` 中读取对应派系的 `baseColor`，不得凭印象选色。
+- 派系颜色：从 `Assets/Data/Shared/AffinityDatabase.asset` 中读取对应派系的 `baseColor`，不得凭印象选色。
 - 构图：突出技能核心效果，留出边距；不使用文字。
 - 保存：仅保存 `Assets/Resources/Cells/<CellId>.aseprite`；未明确要求时，不导出 PNG 或创建预览目录。
 - Unity 导入与图标绑定：属于独立步骤，遵守项目的编辑器操作约定，不随绘图擅自修改配置。
