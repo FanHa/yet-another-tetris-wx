@@ -15,11 +15,11 @@ MonoBehaviour:
   items:
   - characterDefinition: {fileID: 11400000, guid: 8d3980d1dd824b8fb4ea6237a2eb7894, type: 2}
     cellDefinitions:
-    - definition: {fileID: 11400000, guid: a017f58b62af4244f9f8ae3e3ae6d5bf, type: 2}
+    - definition: {fileID: 11400000, guid: 34d7061fd56ffe84fb6c882e61f7de8c, type: 2}
       level: 1
     relativePositionFromCenter: {x: 0, y: 0, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions:
-    - definition: {fileID: 11400000, guid: a017f58b62af4244f9f8ae3e3ae6d5bf, type: 2}
+    - definition: {fileID: 11400000, guid: 34d7061fd56ffe84fb6c882e61f7de8c, type: 2}
       level: 1
     relativePositionFromCenter: {x: 0, y: 0, z: 0}
