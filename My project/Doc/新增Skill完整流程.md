@@ -5,8 +5,9 @@
 ## A. 代码文件
 
 - [ ] `Assets/Scripts/Units/Skills/` 新增技能类
-- [ ] `Assets/Scripts/Units/Skills/` 新增 SkillConfig 和对应 LevelConfig 类
+- [ ] `Assets/Scripts/Model/Skills/` 新增 SkillConfig 和对应 LevelConfig 类
 - [ ] `Assets/Scripts/Units/Projectiles/` 新增 Projectile 类（按需）
+- [ ] `Assets/Scripts/Units/Buffs/` 新增 Buff 和对应创建参数，并在 `Assets/Scripts/Units/Buffs/Core/BuffFactory.cs` 注册 Buff ID（按需）
 - [ ] `Assets/Scripts/Units/Skills/Core/SkillFactory.cs` 注册技能 ID 到技能创建器的映射
 - [ ] 按技能触发方式实现所需生命周期接口或事件订阅
 
@@ -25,6 +26,7 @@
 - [ ] 若技能 Cell 应在开局库存中可用，将 CellDefinition 加入 TetriInventoryInitConfig.CellDefinitions
 - [ ] 创建 Projectile Prefab 并挂载脚本组件（按需）
 - [ ] 在 SkillConfig 中关联 Projectile Prefab 或其他所需资产（按需）
+- [ ] 创建 BuffDefinition 资产，填写与 BuffFactory 注册键一致的 ID，并在 SkillConfig 中关联；确认 Prefab 的必需组件引用已赋值（按需）
 - [ ] 在 SkillDefinition 的图标字段中直接关联技能图标
 - [ ] 在运行时配置/测试场景中加入该 CellDefinition，验证技能格应用流程
 
@@ -48,7 +50,7 @@
 
 ### 运行时手测
 
-1. **前置状态：** 技能配置、技能定义和技能 Cell Definition 已创建；Cell Definition 已加入 CellDatabase。将其加入 `Assets/Data/Gameplay/Inventory/Units/TranGroundFactionAInitConfig.asset` 中某个训练单位的 `cellDefinitions`。
+1. **前置状态：** 技能配置、技能定义和技能 Cell Definition 已创建；Cell Definition 已加入 CellDatabase。将其加入 `Assets/Data/Gameplay/Inventory/TrainingGround/TranGroundFactionAInitConfig.asset` 中某个训练单位的 `cellDefinitions`。
 	**操作：** 保存资产并检查 Unity Console。
 	**预期：** 没有配置校验错误；训练单位配置引用的是目标技能 Cell Definition。
 
