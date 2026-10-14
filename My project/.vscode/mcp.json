@@ -1,16 +1,4 @@
 {
   "servers": {
-    "aseprite-ai-artist": {
-      "type": "stdio",
-      "command": "C:\\Program Files\\nodejs\\npx.cmd",
-      "args": [
-        "-y",
-        "@pebbly/aseprite-ai-artist@latest",
-        "serve"
-      ],
-      "env": {
-        "ASEPRITE_PATH": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\Aseprite\\Aseprite.exe"
-      }
-    }
   }
 }
