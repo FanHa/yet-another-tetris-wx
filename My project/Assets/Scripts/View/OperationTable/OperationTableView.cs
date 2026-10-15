@@ -18,7 +18,6 @@ namespace View.OperationTable
         private int width;
         private int height;
         [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
-        [SerializeField] private Transform ScreenCenterPosition;
 
         private readonly Dictionary<Model.Tetri.Tetri, View.Tetri.TetriView> tetriObjectMap = new();
 
@@ -71,14 +70,10 @@ namespace View.OperationTable
 
         }
 
+        // World-space offset from the table center; the battlefield spawn point stands in for that center.
         public Vector3 GetRelativePositionByTetri(Model.Tetri.Tetri tetri)
         {
-            if (tetri != null && tetriObjectMap.TryGetValue(tetri, out var obj) && obj != null)
-            {
-                Vector3 worldPos = obj.transform.position;
-                return ScreenCenterPosition.InverseTransformPoint(worldPos);
-            }
-            return Vector3.zero;
+            return tetriObjectMap[tetri].transform.position - transform.position;
         }
 
     }

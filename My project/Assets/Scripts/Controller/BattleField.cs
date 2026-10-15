@@ -81,7 +81,7 @@ namespace Controller {
             OnUnitClicked?.Invoke(unit);
         }
 
-        // Faction A uses the BattleField transform; Faction B uses a separate spawn point.
+        // Faction A's spawn point maps to the operation table center.
         public void PrepareBattle(
             IReadOnlyList<CharacterPlacement> factionAItems,
             IReadOnlyList<CharacterPlacement> factionBItems)

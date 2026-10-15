@@ -12,7 +12,6 @@ namespace Controller
     public class OperationTableController : MonoBehaviour
     {
         public event Action<View.Tetri.TetriView> OnTetriBeginDrag;
-        // public event Action<List<CharacterPlacement>> OnCharacterInfluenceGroupsChanged;
         public event Action<View.Tetri.TetriView> OnTetriClick;
 
         [Header("每个格子的间距")]
