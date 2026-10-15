@@ -29,7 +29,6 @@ namespace Units.Projectiles
                 caster: caster,
                 radius: radius,
                 duration: duration,
-                applyInterval: 1f,
                 sourceSkill: sourceSkill);
             this.damage = damage;
             this.chilledDuration = chilledDuration;

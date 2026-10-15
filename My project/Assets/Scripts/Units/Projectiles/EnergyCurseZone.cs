@@ -16,13 +16,12 @@ namespace Units.Projectiles
             Unit caster,
             float radius,
             float duration,
-            float applyInterval,
             float debuffDuration,
             float energyRegenReductionPercent,
             Skills.Skill sourceSkill,
             BuffDefinition energyCurseBuffDefinition)
         {
-            InitializeBase(caster, radius, duration, applyInterval, sourceSkill);
+            InitializeBase(caster, radius, duration, sourceSkill);
             this.debuffDuration = debuffDuration;
             this.energyRegenReductionPercent = energyRegenReductionPercent;
             this.energyCurseBuffDefinition = energyCurseBuffDefinition;

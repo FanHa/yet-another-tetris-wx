@@ -21,7 +21,7 @@ namespace Units.Projectiles
             float dotDuration
         )
         {
-            InitializeBase(owner, radius, duration, 1f, sourceSkill);
+            InitializeBase(owner, radius, duration, sourceSkill);
             this.burnDefinition = burnDefinition;
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;

@@ -20,7 +20,6 @@ namespace Units.Skills
         {
             public StatValue Radius;
             public StatValue ZoneLifetime;
-            public StatValue ApplyInterval;
             public StatValue DebuffDuration;
             public StatValue AttackReductionPercent;
         }
@@ -33,7 +32,6 @@ namespace Units.Skills
             {
                 Radius = new StatValue("领域半径", Config.BaseRadius, deathCurseCellCount * Config.RadiusPerDeathCurseCell),
                 ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, deathCurseCellCount * Config.ZoneLifetimePerDeathCurseCell),
-                ApplyInterval = new StatValue("施加间隔", Config.ApplyInterval),
                 DebuffDuration = new StatValue("诅咒持续", Config.DebuffDuration),
                 AttackReductionPercent = new StatValue("攻击降低(%)", Config.BaseAttackReductionPercent, deathCurseCellCount * Config.AttackReductionPerDeathCurseCell)
             };
@@ -46,7 +44,6 @@ namespace Units.Skills
                 DescriptionStatic() + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.ZoneLifetime}\n" +
-                $"{stats.ApplyInterval}\n" +
                 $"{stats.DebuffDuration}\n" +
                 $"{stats.AttackReductionPercent}";
         }
@@ -72,7 +69,6 @@ namespace Units.Skills
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.ZoneLifetime.Final,
-                applyInterval: stats.ApplyInterval.Final,
                 debuffDuration: stats.DebuffDuration.Final,
                 attackReductionPercent: stats.AttackReductionPercent.Final,
                 sourceSkill: this,

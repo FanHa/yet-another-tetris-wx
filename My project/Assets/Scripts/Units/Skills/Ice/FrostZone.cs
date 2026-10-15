@@ -11,6 +11,7 @@ namespace Units.Skills
     {
         public FrostZoneLevelConfig Config { get; }
         private Vector3 targetPosition;
+        private readonly HashSet<Units.Projectiles.FrostZone> spawnedZones = new();
 
         private FrostZoneSkillConfig SkillConfig => (FrostZoneSkillConfig)Definition.Config;
 
@@ -32,12 +33,14 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
+            spawnedZones.RemoveWhere(zone => zone == null);
 
             var frostZone = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
                 targetPosition,
                 Quaternion.identity
             );
+            spawnedZones.Add(frostZone);
             frostZone.Initialize(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
@@ -51,6 +54,19 @@ namespace Units.Skills
                 sourceSkill: this
             );
             frostZone.Activate();
+        }
+
+        public override void OnRelease()
+        {
+            foreach (var zone in spawnedZones)
+            {
+                if (zone != null)
+                {
+                    Object.Destroy(zone.gameObject);
+                }
+            }
+
+            spawnedZones.Clear();
         }
 
 

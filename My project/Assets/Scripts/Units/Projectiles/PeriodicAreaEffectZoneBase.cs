@@ -13,7 +13,7 @@ namespace Units.Projectiles
         private const uint RingParticleRandomSeed = 1347560529;
         private float radius;
         private float duration;
-        private float applyInterval;
+        [SerializeField, Min(0.01f)] private float applyInterval = 1f;
         private float elapsedTime;
         private float applyTimer;
         private bool isActive;
@@ -46,6 +46,11 @@ namespace Units.Projectiles
             {
                 Debug.LogError($"{nameof(ringOutlineParticle)} is not assigned.", this);
             }
+
+            if (!(applyInterval > 0f) || float.IsNaN(applyInterval) || float.IsInfinity(applyInterval))
+            {
+                Debug.LogError($"{nameof(applyInterval)} must be greater than 0 and finite.", this);
+            }
         }
 #endif
 
@@ -53,14 +58,12 @@ namespace Units.Projectiles
             Unit caster,
             float radius,
             float duration,
-            float applyInterval,
             Skills.Skill sourceSkill)
         {
             SourceUnit = caster;
             UnitManager = caster.UnitManager;
             this.radius = radius;
             this.duration = duration;
-            this.applyInterval = applyInterval;
             SourceSkill = sourceSkill;
             elapsedTime = 0f;
             applyTimer = 0f;

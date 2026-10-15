@@ -8,11 +8,10 @@ namespace Units.Projectiles
     {
         private float dotDps;
         private float dotDuration;
-        private const float tickInterval = 1f;
 
         public void Init(Unit caster, float radius, float duration, float dotDps, float dotDuration, Skills.Skill sourceSkill)
         {
-            InitializeBase(caster, radius, duration, tickInterval, sourceSkill);
+            InitializeBase(caster, radius, duration, sourceSkill);
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
         }

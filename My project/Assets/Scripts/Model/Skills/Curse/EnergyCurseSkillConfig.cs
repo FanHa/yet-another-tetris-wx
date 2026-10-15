@@ -34,7 +34,6 @@ namespace Model.Skills
                 ValidateFiniteNonNegative(levelConfig.RadiusPerDeathCurseCell, LevelField(index, nameof(levelConfig.RadiusPerDeathCurseCell)));
                 ValidateFinitePositive(levelConfig.BaseZoneLifetime, LevelField(index, nameof(levelConfig.BaseZoneLifetime)));
                 ValidateFiniteNonNegative(levelConfig.ZoneLifetimePerDeathCurseCell, LevelField(index, nameof(levelConfig.ZoneLifetimePerDeathCurseCell)));
-                ValidateFinitePositive(levelConfig.ApplyInterval, LevelField(index, nameof(levelConfig.ApplyInterval)));
                 ValidateFinitePositive(levelConfig.DebuffDuration, LevelField(index, nameof(levelConfig.DebuffDuration)));
 
                 ValidatePercent(index, nameof(levelConfig.BaseEnergyRegenReductionPercent), levelConfig.BaseEnergyRegenReductionPercent);
@@ -46,15 +45,6 @@ namespace Model.Skills
                     Debug.LogError($"{LevelField(index, nameof(levelConfig.BaseEnergyRegenReductionPercent))} must not exceed {nameof(levelConfig.MaxEnergyRegenReductionPercent)}.", this);
                 }
 
-                if (levelConfig.ApplyInterval > levelConfig.BaseZoneLifetime)
-                {
-                    Debug.LogError($"{LevelField(index, nameof(levelConfig.ApplyInterval))} must not exceed {nameof(levelConfig.BaseZoneLifetime)}.", this);
-                }
-
-                if (levelConfig.DebuffDuration < levelConfig.ApplyInterval)
-                {
-                    Debug.LogError($"{LevelField(index, nameof(levelConfig.DebuffDuration))} must be at least {nameof(levelConfig.ApplyInterval)}.", this);
-                }
             }
         }
 
@@ -78,7 +68,6 @@ namespace Model.Skills
         public float RadiusPerDeathCurseCell = 0.3f;
         public float BaseZoneLifetime = 15f;
         public float ZoneLifetimePerDeathCurseCell = 0.5f;
-        public float ApplyInterval = 0.5f;
         public float DebuffDuration = 1.5f;
 
         [Header("Energy Regeneration Reduction (%)")]
