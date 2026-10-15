@@ -1,0 +1,80 @@
+---
+description: "Use when adding a gameplay skill or following the new-skill workflow, including skill code, Unity asset configuration, and validation."
+---
+
+# 新增技能任务规范
+
+仅在新增技能任务中读取和使用本规范；项目通用工作流程、Todo 执行规则、代码约束及 Unity 编辑器约束仍适用。
+
+## 开始前
+
+1. 读取相关基类和同类技能实现，了解项目约定。
+2. 检查是否已有相似技能，并在 Todo 中注明。
+3. 按下方完整清单列出可执行的 Todo，完成分析和 Todo 拆解前不得开始写代码。标注“按需”的事项也先列入 Todo；执行到该项时再核对是否适用并询问用户，用户确认不需要时将该 Todo 标记为已完成。
+4. 按正常工作流程逐项实施和验证；Unity 资产修改遵守项目的 Unity 编辑器约束。
+
+## 当前实现约束
+
+- 技能配置以 `SkillDefinition` 和 `SkillBackedCellDefinition` 为准，并通过 `CellDatabase` 注册；不再沿用已移除的集中式技能配置入口。
+- 角色原型配置以 `CharacterConfigRegistry` 为准；如果任务同时涉及角色原型，再按角色流程处理。
+- 技能 Cell 使用通用 `SkillCell`，通过 `SkillBackedCellDefinition` 关联技能定义，通常不需要新增 Cell 子类。Cell ID 和 Affinity 在对应的 `CellDefinition` 资产中配置。
+
+## 实施清单
+
+### 代码文件
+
+- [ ] 在 `Assets/Scripts/Units/Skills/` 新增技能类。
+- [ ] 在 `Assets/Scripts/Model/Skills/` 新增 SkillConfig 和对应 LevelConfig 类。
+- [ ] 按需在 `Assets/Scripts/Units/Projectiles/` 新增 Projectile 类。
+- [ ] 按需在 `Assets/Scripts/Units/Buffs/` 新增 Buff 和对应创建参数，并在 `Assets/Scripts/Units/Buffs/Core/BuffFactory.cs` 注册 Buff ID。
+- [ ] 在 `Assets/Scripts/Units/Skills/Core/SkillFactory.cs` 注册技能 ID 到技能创建器的映射。
+- [ ] 按技能触发方式实现所需生命周期接口或事件订阅。
+
+### Unity 编辑器配置
+
+- [ ] 创建对应类型的 SkillConfig 资产并填写各级数值及所需引用。
+- [ ] 创建 SkillDefinition 资产，配置显示名称、描述、SkillConfig 和图标，并确保其 ID 与 SkillFactory 注册键一致。
+- [ ] 创建 SkillBackedCellDefinition 资产，填写 Cell ID、Affinity，并关联 SkillDefinition。
+- [ ] 将 SkillBackedCellDefinition 加入 CellDatabase 的注册列表。
+- [ ] 确认 TetriCellFactory 的 cellDatabase 引用目标 CellDatabase。
+- [ ] 若技能应进入奖励池，确认 RewardFactory 引用同一个 CellDatabase。
+- [ ] 若技能 Cell 应在开局库存中可用，将 CellDefinition 加入 TetriInventoryInitConfig.CellDefinitions。
+- [ ] 按需创建 Projectile Prefab 并挂载脚本组件。
+- [ ] 按需在 SkillConfig 中关联 Projectile Prefab 或其他所需资产。
+- [ ] 按需创建 BuffDefinition 资产，填写与 BuffFactory 注册键一致的 ID 并在 SkillConfig 中关联；确认 Prefab 的必需组件引用已赋值。
+- [ ] 在 SkillDefinition 的图标字段中直接关联技能图标。
+- [ ] 在运行时配置/测试场景中加入该 CellDefinition，验证技能格应用流程。
+
+### 外部资源
+
+- [ ] 制作技能图标并作为 Sprite 资产关联到 SkillDefinition。
+- [ ] 按需制作技能特效资源。
+
+## 配置验证与手动测试
+
+当前没有覆盖完整技能资产链路的自动化测试，也没有全局 Cell 注册验证菜单。配置校验由各资产的 `OnValidate` 执行；修改或创建资产后，检查 Unity Console 中是否出现校验错误。
+
+### 编辑器配置检查
+
+- [ ] SkillConfig 的等级列表、数值范围和必需引用通过对应配置类的校验。
+- [ ] SkillDefinition 的 ID 符合 `skill.example_name` 格式并与 SkillFactory 注册键一致，且配置引用已赋值（Inspector 中 ID 为只读，需通过受支持的 Unity 资产编辑流程设置）。
+- [ ] SkillBackedCellDefinition 的 SkillDefinition 引用已赋值（当前 Inspector 不提供该引用的自动校验）。
+- [ ] CellDatabase 已注册该 SkillBackedCellDefinition，Cell ID 不重复且 Filler Definition 已赋值。
+- [ ] 训练单位配置引用的 CellDefinition 正确，等级不小于 1，且该 Cell 未在同一单位上重复配置。
+
+### 运行时手测
+
+1. **配置引用检查**
+   - 前置状态：技能配置、技能定义和技能 Cell Definition 已创建，且 Cell Definition 已加入 CellDatabase。将其加入 `Assets/Data/Gameplay/Inventory/TrainingGround/TranGroundFactionAInitConfig.asset` 中某个训练单位的 `cellDefinitions`。
+   - 操作：保存资产并检查 Unity Console。
+   - 预期：没有配置校验错误；训练单位配置引用的是目标技能 Cell Definition。
+
+2. **训练场启动**
+   - 前置状态：Unity 已打开 `Assets/Scenes/Setup.scene`，场景中的 GameController 引用了双方训练场初始化配置。
+   - 操作：进入 Play Mode，选中 GameController，在组件上下文菜单执行 `Test Enter Train Ground`。
+   - 预期：双方训练单位生成并进入战斗；训练场战斗不启用关卡进度。
+
+3. **技能触发**
+   - 前置状态：携带新技能的单位已生成。
+   - 操作：按技能触发条件操作战斗；死亡触发技能则击杀携带者，主动技能则使其满足施放条件。
+   - 预期：技能被正确创建并触发，效果与配置一致；Console 无异常。
