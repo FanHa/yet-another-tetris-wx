@@ -77,6 +77,16 @@ namespace Units.Skills
 
         public override void OnDeactivate()
         {
+            ClearAreaEffect();
+        }
+
+        public override void OnRelease()
+        {
+            ClearAreaEffect();
+        }
+
+        private void ClearAreaEffect()
+        {
             if (areaEffect == null)
             {
                 return;

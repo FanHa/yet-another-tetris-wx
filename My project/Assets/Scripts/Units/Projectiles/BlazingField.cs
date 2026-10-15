@@ -1,82 +1,36 @@
-using System.Collections;
+using System.Collections.Generic;
 using Units.Buffs;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 namespace Units.Projectiles
 {
-    public class BlazingField : MonoBehaviour
+    public class BlazingField : PeriodicAreaEffectZoneBase
     {
-        [SerializeField] private ParticleSystem edgeParticle;
-        [SerializeField] private ParticleSystem centerParticle;
-        private Unit caster;
-        private float radius;
-        private float duration;
         private float dotDps;
         private float dotDuration;
         private const float tickInterval = 1f;
-        private float timer = 0f;
-        private float tickTimer = 0f;
-        private bool initialized = false;
-        private Skills.Skill sourceSkill;
-
-        // [SerializeField] private ParticleSystem fireParticle;
-        void Update()
-        {
-            if (!initialized)
-                return;
-            timer += Time.deltaTime;
-            tickTimer += Time.deltaTime;
-
-            if (tickTimer >= tickInterval)
-            {
-                tickTimer -= tickInterval;
-
-                var enemies = caster.UnitManager != null
-                    ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius)
-                    : null;
-
-                if (enemies != null)
-                {
-                    foreach (var enemy in enemies)
-                    {
-                        var burn = BuffFactory.Create(
-                            ((Model.Skills.BlazingFieldSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
-                            new BurnBuffArgs(dotDps, dotDuration, new BuffSource(caster, sourceSkill))
-                        );
-                        enemy.AddBuff(burn);
-                    }
-                }
-            }
-
-            if (timer >= duration)
-            {
-                Destroy(gameObject);
-            }
-        }
 
         public void Init(Unit caster, float radius, float duration, float dotDps, float dotDuration, Skills.Skill sourceSkill)
         {
-            this.caster = caster;
-            this.radius = radius;
-            this.duration = duration;
+            InitializeBase(caster, radius, duration, tickInterval, sourceSkill);
             this.dotDps = dotDps;
             this.dotDuration = dotDuration;
-            this.sourceSkill = sourceSkill;
-
-            var edgeShape = edgeParticle.shape;
-            edgeShape.radius = radius;
-
-            var centerShape = centerParticle.shape;
-            centerShape.radius = radius;
-            timer = 0f;
-            tickTimer = 0f;
         }
 
-        public void Activate()
+        protected override IEnumerable<Unit> FindTargetsInArea()
         {
-            initialized = true;
+            return UnitManager.FindEnemiesInRangeAtPosition(
+                SourceUnit.faction,
+                (Vector2)transform.position,
+                Radius);
         }
 
+        protected override void ApplyEffectTo(Unit target)
+        {
+            var burn = BuffFactory.Create(
+                ((Model.Skills.BlazingFieldSkillConfig)SourceSkill.Definition.Config).BurnBuffDefinition,
+                new BurnBuffArgs(dotDps, dotDuration, new BuffSource(SourceUnit, SourceSkill)));
+            target.AddBuff(burn);
+        }
     }
 }

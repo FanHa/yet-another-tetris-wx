@@ -1,27 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class FrostZone : MonoBehaviour
+    public class FrostZone : PeriodicAreaEffectZoneBase
     {
-        [SerializeField] private ParticleSystem edgeParticle;
-        [SerializeField] private ParticleSystem centerParticle;
-
-        private Unit caster;
-        private float radius;
-        private float duration;
         private float damage;
         private float chilledDuration;
         private int moveSlowPercent;
         private int atkSlowPercent;
         private int actionSlowPercent;
         private int energySlowPercent;
-        private Units.Skills.Skill sourceSkill;
 
-        private float timer = 0f;
-        private float tickTimer = 0f;
-        private const float tickInterval = 1f;
-        private bool initialized = false;
         public void Initialize(
             Unit caster,
             float radius,
@@ -35,73 +25,46 @@ namespace Units.Projectiles
             Units.Skills.Skill sourceSkill
         )
         {
-            this.caster = caster;
-            this.radius = radius;
-            this.duration = duration;
+            InitializeBase(
+                caster: caster,
+                radius: radius,
+                duration: duration,
+                applyInterval: 1f,
+                sourceSkill: sourceSkill);
             this.damage = damage;
             this.chilledDuration = chilledDuration;
             this.moveSlowPercent = moveSlowPercent;
             this.atkSlowPercent = atkSlowPercent;
             this.actionSlowPercent = actionSlowPercent;
             this.energySlowPercent = energySlowPercent;
-            this.sourceSkill = sourceSkill;
-
-            // 设置粒子特效半径
-            var edgeShape = edgeParticle.shape;
-            edgeShape.radius = radius;
-        
-            var centerShape = centerParticle.shape;
-            centerShape.radius = radius;
-            
-            timer = 0f;
-            tickTimer = 0f;
         }
 
-        public void Activate()
+        protected override IEnumerable<Unit> FindTargetsInArea()
         {
-            initialized = true;
+            return UnitManager.FindEnemiesInRangeAtPosition(
+                SourceUnit.faction,
+                (Vector2)transform.position,
+                Radius);
         }
-        
-        void Update()
+
+        protected override void ApplyEffectTo(Unit target)
         {
-            if (!initialized)
-                return;
+            var iceDamage = new Damages.Damage(damage, Damages.DamageType.Skill);
+            iceDamage.SetSourceUnit(SourceUnit);
+            iceDamage.SetSourceLabel(SourceSkill.Name());
+            iceDamage.SetTargetUnit(target);
+            target.TakeDamage(iceDamage);
 
-            timer += Time.deltaTime;
-            tickTimer += Time.deltaTime;
-
-            if (tickTimer >= tickInterval)
-            {
-                tickTimer -= tickInterval;
-                var enemies = caster.UnitManager != null
-                    ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius)
-                    : null;
-
-                if (enemies != null)
-                {
-                    foreach (var enemy in enemies)
-                    {
-                        // 造成冰属性伤害
-                        var iceDamage = new Damages.Damage(damage, Damages.DamageType.Skill);
-                        iceDamage.SetSourceUnit(caster);
-                        iceDamage.SetSourceLabel("霜域");
-                        iceDamage.SetTargetUnit(enemy);
-                        enemy.TakeDamage(iceDamage);
-
-                        // 施加 Chilled Buff
-                        var chilled = Units.Buffs.BuffFactory.Create(
-                            ((Model.Skills.FrostZoneSkillConfig)sourceSkill.Definition.Config).ChilledBuffDefinition,
-                            new Units.Buffs.ChilledBuffArgs(chilledDuration, moveSlowPercent, atkSlowPercent, actionSlowPercent, energySlowPercent, new Units.Buffs.BuffSource(caster, sourceSkill))
-                        );
-                        enemy.AddBuff(chilled);
-                    }
-                }
-            }
-
-            if (timer >= duration)
-            {
-                Destroy(gameObject);
-            }
+            var chilled = Units.Buffs.BuffFactory.Create(
+                ((Model.Skills.FrostZoneSkillConfig)SourceSkill.Definition.Config).ChilledBuffDefinition,
+                new Units.Buffs.ChilledBuffArgs(
+                    chilledDuration,
+                    moveSlowPercent,
+                    atkSlowPercent,
+                    actionSlowPercent,
+                    energySlowPercent,
+                    new Units.Buffs.BuffSource(SourceUnit, SourceSkill)));
+            target.AddBuff(chilled);
         }
     }
 }

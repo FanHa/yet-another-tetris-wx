@@ -137,20 +137,23 @@ namespace Units.Projectiles
                 return;
 
             elapsedTime += deltaTime;
-            if (duration >= 0f && elapsedTime >= duration)
+            bool isExpired = duration >= 0f && elapsedTime >= duration;
+            if (!isExpired)
+            {
+                UpdateZonePosition();
+
+                applyTimer += deltaTime;
+                if (applyTimer >= applyInterval)
+                {
+                    applyTimer %= applyInterval;
+                    ApplyEffect();
+                }
+            }
+
+            if (isExpired)
             {
                 Deactivate();
                 Destroy(gameObject);
-                return;
-            }
-
-            UpdateZonePosition();
-
-            applyTimer += deltaTime;
-            if (applyTimer >= applyInterval)
-            {
-                applyTimer %= applyInterval;
-                ApplyEffect();
             }
         }
 

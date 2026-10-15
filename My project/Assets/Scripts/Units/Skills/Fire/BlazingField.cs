@@ -11,6 +11,7 @@ namespace Units.Skills
     {
         public BlazingFieldLevelConfig Config { get; }
         private Vector3 targetPosition;
+        private readonly HashSet<Units.Projectiles.BlazingField> spawnedFields = new();
 
         private BlazingFieldSkillConfig SkillConfig => (BlazingFieldSkillConfig)Definition.Config;
 
@@ -53,12 +54,14 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
+            spawnedFields.RemoveWhere(field => field == null);
 
             var effect = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
                 targetPosition,
                 Quaternion.identity
             );
+            spawnedFields.Add(effect);
             effect.Init(
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
@@ -68,6 +71,19 @@ namespace Units.Skills
                 sourceSkill: this
             );
             effect.Activate();
+        }
+
+        public override void OnRelease()
+        {
+            foreach (var effect in spawnedFields)
+            {
+                if (effect != null)
+                {
+                    Object.Destroy(effect.gameObject);
+                }
+            }
+
+            spawnedFields.Clear();
         }
 
 
