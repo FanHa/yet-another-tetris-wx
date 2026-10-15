@@ -60,8 +60,7 @@ namespace Units.Skills
             areaEffect = Object.Instantiate(
                 skillConfig.ProjectilePrefab,
                 Owner.transform.position,
-                Quaternion.identity,
-                Owner.transform
+                Quaternion.identity
             );
             areaEffect.Initialize(
                 owner: Owner.SelfUnit,
