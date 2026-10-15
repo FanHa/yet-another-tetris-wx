@@ -99,9 +99,9 @@ namespace Model
             OnChanged?.Invoke();
         }
 
-        public List<CharacterInfluence> GetCharacterInfluences()
+        public List<CharacterBuild> GetCharacterBuilds()
         {
-            var result = new List<CharacterInfluence>();
+            var result = new List<CharacterBuild>();
             int width = occupiedGrid.GetLength(0);
             int height = occupiedGrid.GetLength(1);
 
@@ -128,8 +128,7 @@ namespace Model
                                 }
                             }
                         }
-                        var characterInfluence = new CharacterInfluence(character, influencedCells, slot.OwnerTetri);
-                        result.Add(characterInfluence);
+                        result.Add(new CharacterBuild(character, influencedCells, slot.OwnerTetri));
                     }
                 }
             }
@@ -137,7 +136,7 @@ namespace Model
             return result;
         }
 
-        public CharacterInfluence GetCharacterInfluenceByTetri(Model.Tetri.Tetri tetri)
+        public CharacterBuild GetCharacterBuildByTetri(Model.Tetri.Tetri tetri)
         {
             if (tetri == null) return null;
             if (!placedMap.TryGetValue(tetri, out var topLeft)) return null;
@@ -171,7 +170,7 @@ namespace Model
                 }
             }
 
-            return new CharacterInfluence(main, influenced, tetri);
+            return new CharacterBuild(main, influenced, tetri);
 
         }
 

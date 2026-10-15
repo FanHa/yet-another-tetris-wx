@@ -3,15 +3,15 @@ using Model.Tetri;
 
 namespace Model
 {
-    public class CharacterInfluence
+    public class CharacterBuild
     {
         public Character Character { get; }
-        public List<Cell> InfluencedCells { get; }
+        public List<Cell> Cells { get; }
         public Model.Tetri.Tetri OwnerTetri { get; }
-        public CharacterInfluence(Character character, List<Cell> influencedCells, Model.Tetri.Tetri ownerTetri)
+        public CharacterBuild(Character character, List<Cell> cells, Model.Tetri.Tetri ownerTetri)
         {
             Character = character;
-            InfluencedCells = influencedCells ?? new List<Cell>();
+            Cells = cells ?? new List<Cell>();
             OwnerTetri = ownerTetri;
         }
     }

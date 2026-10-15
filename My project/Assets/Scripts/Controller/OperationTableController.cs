@@ -81,29 +81,28 @@ namespace Controller
         {
             // 让 View 根据 model.PlacedTetris 刷新显示
             view.Refresh(model.PlacedMap);
-            // List<CharacterInfluence> influences = model.GetCharacterInfluences();
-            // OnCharacterInfluenceGroupsChanged?.Invoke(influences);
+
         }
 
         public CharacterPlacement GetCharacterPlacementByTetri(Model.Tetri.Tetri tetri)
         {
-            CharacterInfluence influence = model.GetCharacterInfluenceByTetri(tetri);
+            CharacterBuild build = model.GetCharacterBuildByTetri(tetri);
             var position = view.GetRelativePositionByTetri(tetri);
-            return new CharacterPlacement(influence, position);
+            return new CharacterPlacement(build, position);
 
         }
 
         public List<CharacterPlacement> GetCharacterPlacements()
         {
-            List<CharacterInfluence> influences = model.GetCharacterInfluences();
+            List<CharacterBuild> builds = model.GetCharacterBuilds();
 
-            var placements = new List<CharacterPlacement>(influences.Count);
+            var placements = new List<CharacterPlacement>(builds.Count);
 
-            foreach (var influence in influences)
+            foreach (var build in builds)
             {
-                Model.Tetri.Tetri ownerTetri = influence.OwnerTetri;
+                Model.Tetri.Tetri ownerTetri = build.OwnerTetri;
                 Vector3 localPos = view.GetRelativePositionByTetri(ownerTetri);
-                var placement = new CharacterPlacement(influence, localPos);
+                var placement = new CharacterPlacement(build, localPos);
 
                 placements.Add(placement);
             }

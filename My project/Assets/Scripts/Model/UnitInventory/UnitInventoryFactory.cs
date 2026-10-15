@@ -52,8 +52,8 @@ namespace Model.UnitInventory
                 cells.Add(cell);
             }
 
-            var influence = new CharacterInfluence(character, cells, null);
-            return new CharacterPlacement(influence, entry.RelativePosition);
+            var build = new CharacterBuild(character, cells, null);
+            return new CharacterPlacement(build, entry.RelativePosition);
         }
     }
 }

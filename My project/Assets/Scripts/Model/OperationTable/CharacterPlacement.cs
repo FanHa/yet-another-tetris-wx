@@ -7,13 +7,13 @@ namespace Model
 {
     public class CharacterPlacement
     {
-        public CharacterInfluence CharacterInfluence { get; }
+        public CharacterBuild CharacterBuild { get; }
 
         public Vector3 RelativePositionFromCenter { get; }
 
-        public CharacterPlacement(CharacterInfluence characterInfluence, Vector3 relativePositionFromCenter)
+        public CharacterPlacement(CharacterBuild characterBuild, Vector3 relativePositionFromCenter)
         {
-            CharacterInfluence = characterInfluence;
+            CharacterBuild = characterBuild;
             RelativePositionFromCenter = relativePositionFromCenter;
         }
     }

@@ -36,7 +36,7 @@ namespace Controller
         {
             foreach (Model.CharacterPlacement item in items)
             {
-                Unit unit = unitFactory.CreateBattleUnit(item.CharacterInfluence);
+                Unit unit = unitFactory.CreateBattleUnit(item.CharacterBuild);
                 unit.transform.SetParent(GetRootByFaction(faction), false);
 
                 Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;

@@ -11,46 +11,46 @@ namespace Units
         [SerializeField] private Units.Unit battleUnitPrefab;
         [SerializeField] private Units.Unit previewUnitPrefab;
 
-        public Units.Unit CreateBattleUnit(CharacterInfluence influence)
+        public Units.Unit CreateBattleUnit(CharacterBuild build)
         {
-            return CreateUnitInternal(battleUnitPrefab, influence);
+            return CreateUnitInternal(battleUnitPrefab, build);
         }
 
-        public Units.Unit CreatePreviewUnit(CharacterInfluence influence)
+        public Units.Unit CreatePreviewUnit(CharacterBuild build)
         {
-            return CreateUnitInternal(previewUnitPrefab, influence);
+            return CreateUnitInternal(previewUnitPrefab, build);
         }
 
         public Units.Unit CreateBattleUnit(Model.Tetri.Character characterCell)
         {
-            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
-            return CreateBattleUnit(influence);
+            CharacterBuild build = new CharacterBuild(characterCell, new List<Model.Tetri.Cell>(), null);
+            return CreateBattleUnit(build);
         }
 
         public Units.Unit CreatePreviewUnit(Model.Tetri.Character characterCell)
         {
-            CharacterInfluence influence = new CharacterInfluence(characterCell, new List<Model.Tetri.Cell>(), null);
-            return CreatePreviewUnit(influence);
+            CharacterBuild build = new CharacterBuild(characterCell, new List<Model.Tetri.Cell>(), null);
+            return CreatePreviewUnit(build);
         }
 
-        private Units.Unit CreateUnitInternal(Units.Unit prefab, CharacterInfluence influence)
+        private Units.Unit CreateUnitInternal(Units.Unit prefab, CharacterBuild build)
         {
             Units.Unit unit = Object.Instantiate(prefab);
 
             // 基础外观和数据初始化
-            Sprite characterSprite = influence.Character.Icon;
+            Sprite characterSprite = build.Character.Icon;
             unit.BodySpriteRenderer.sprite = characterSprite;
             unit.Fist1SpriteRenderer.sprite = characterSprite;
             unit.Fist2SpriteRenderer.sprite = characterSprite;
 
-            influence.Character.Apply(unit);
-            foreach (var cell in influence.InfluencedCells)
+            build.Character.Apply(unit);
+            foreach (var cell in build.Cells)
             {
                 cell.Apply(unit);
             }
 
             var cellCounts = new Dictionary<AffinityType, int>();
-            foreach (var cell in influence.InfluencedCells)
+            foreach (var cell in build.Cells)
             {
                 if (!cellCounts.ContainsKey(cell.Affinity))
                     cellCounts[cell.Affinity] = 0;
