@@ -17,9 +17,9 @@ MonoBehaviour:
     cellDefinitions:
     - definition: {fileID: 11400000, guid: 34d7061fd56ffe84fb6c882e61f7de8c, type: 2}
       level: 1
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
+    relativePositionFromCenter: {x: 1, y: 1, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions:
     - definition: {fileID: 11400000, guid: 34d7061fd56ffe84fb6c882e61f7de8c, type: 2}
       level: 1
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
+    relativePositionFromCenter: {x: 1, y: -1, z: 0}

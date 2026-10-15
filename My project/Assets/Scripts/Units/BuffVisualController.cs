@@ -8,8 +8,9 @@ namespace Units
 {
     public sealed class BuffVisualController
     {
-        private readonly Dictionary<Buff, GameObject> visualsByBuff = new();
+        private readonly Dictionary<Buff, IBuffVisual> visualsByBuff = new();
         private readonly Unit unit;
+        private bool isActive;
 
         public BuffVisualController(Unit unit)
         {
@@ -18,6 +19,12 @@ namespace Units
 
         internal void Activate()
         {
+            if (isActive)
+            {
+                return;
+            }
+
+            isActive = true;
             unit.OnBuffChanged += HandleBuffChanged;
 
             var activeBuffs = unit.GetActiveBuffsReadOnly();
@@ -29,6 +36,7 @@ namespace Units
 
         internal void Deactivate()
         {
+            isActive = false;
             unit.OnBuffChanged -= HandleBuffChanged;
 
             var trackedBuffs = new List<Buff>(visualsByBuff.Keys);
@@ -62,7 +70,7 @@ namespace Units
                 return;
             }
 
-            GameObject visual = CreateVisual(buff);
+            IBuffVisual visual = CreateVisual(buff);
             if (visual != null)
             {
                 visualsByBuff.Add(buff, visual);
@@ -77,25 +85,21 @@ namespace Units
             }
 
             visualsByBuff.Remove(buff);
-            if (visual != null)
-            {
-                UnityEngine.Object.Destroy(visual);
-            }
+            visual.Release();
         }
 
-        private GameObject CreateVisual(Buff buff)
+        private IBuffVisual CreateVisual(Buff buff)
         {
-            Component prefab = buff.Definition.VisualPrefab;
+            BuffVisual prefab = buff.Definition.VisualPrefab;
             if (prefab == null)
             {
                 return null;
             }
 
-            var visual = UnityEngine.Object.Instantiate(prefab, unit.transform.position, Quaternion.identity);
-            var buffVisual = (IBuffVisual)visual;
-            buffVisual.Initialize(unit);
+            BuffVisual buffVisual = UnityEngine.Object.Instantiate(prefab, unit.transform.position, Quaternion.identity);
+            buffVisual.Initialize(unit, buff.Definition);
             buffVisual.Activate();
-            return visual.gameObject;
+            return buffVisual;
         }
     }
 }

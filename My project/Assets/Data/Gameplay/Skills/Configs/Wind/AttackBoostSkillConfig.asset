@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: AttackBoostSkillConfig
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - RequiredEnergy: 100
+  - RequiredEnergy: 55
     Duration: 5
-    AtkSpeedPercent: 200
-    AtkSpeedAdditionPercentPerWindCell: 15
-  - RequiredEnergy: 100
+    AtkSpeedPercent: 50
+    AtkSpeedAdditionPercentPerWindCell: 25
+  - RequiredEnergy: 55
     Duration: 5
-    AtkSpeedPercent: 350
-    AtkSpeedAdditionPercentPerWindCell: 20
+    AtkSpeedPercent: 100
+    AtkSpeedAdditionPercentPerWindCell: 40
   buffProjectilePrefab: {fileID: 2996347991824612061, guid: 86abf7817d99cc843872c0662a2c8a3c, type: 3}
   attackBoostBuffDefinition: {fileID: 11400000, guid: 8948a14b0cedf3f45a46fe815eb04b87, type: 2}

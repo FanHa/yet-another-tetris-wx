@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace Units.Projectiles
 {
-    public class IcyCage : MonoBehaviour, global::Units.IBuffVisual
+    public class IcyCage : global::Units.BuffVisual
     {
         private Unit targetUnit;
-        private bool initialized = false;
+        private bool isActive = false;
 
-        public void Initialize(Unit target)
+        public override void Initialize(Unit target, Model.Buffs.BuffDefinition definition)
         {
             targetUnit = target;
             // 可选：设置图片初始位置
@@ -15,17 +15,22 @@ namespace Units.Projectiles
                 transform.position = targetUnit.transform.position;
         }
 
-        public void Activate()
+        public override void Activate()
         {
-            initialized = true;
+            isActive = true;
+        }
+
+        public override void Release()
+        {
+            isActive = false;
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         void Update()
         {
-            if (!initialized)
+            if (!isActive)
                 return;
-
-            // todo targetUnit 死亡需要销毁
 
             // 始终跟随目标
             transform.position = targetUnit.transform.position;

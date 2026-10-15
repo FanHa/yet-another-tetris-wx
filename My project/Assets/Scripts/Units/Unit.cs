@@ -237,6 +237,7 @@ namespace Units
 
         void OnDestroy()
         {
+            buffVisualController.Deactivate();
             skillHandler.Release();
         }
 

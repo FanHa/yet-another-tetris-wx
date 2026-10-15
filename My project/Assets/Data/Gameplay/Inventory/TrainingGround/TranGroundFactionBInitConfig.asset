@@ -17,10 +17,10 @@ MonoBehaviour:
     cellDefinitions:
     - definition: {fileID: 11400000, guid: c1abc2b8ee77e8e49930001a715824a4, type: 2}
       level: 1
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
+    relativePositionFromCenter: {x: 1, y: 1, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions: []
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
+    relativePositionFromCenter: {x: 0, y: 2, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions: []
-    relativePositionFromCenter: {x: 0, y: 0, z: 0}
+    relativePositionFromCenter: {x: -1, y: 0, z: 0}

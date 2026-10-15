@@ -15,5 +15,6 @@ MonoBehaviour:
   id: buff.power_curse
   displayName: "\u529B\u91CF\u8BC5\u5492"
   description: "\u964D\u4F4E\u654C\u65B9\u653B\u51FB\u529B\u3002"
+  affinity: 9
   icon: {fileID: 0}
-  visualPrefab: {fileID: 0}
+  visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}

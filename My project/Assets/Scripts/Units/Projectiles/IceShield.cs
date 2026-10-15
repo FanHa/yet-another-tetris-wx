@@ -3,37 +3,38 @@ using Units;
 
 namespace Units.Projectiles
 {
-    public class IceShield : MonoBehaviour, global::Units.IBuffVisual
+    public class IceShield : global::Units.BuffVisual
     {
         [SerializeField] private float rotateSpeed = 90f; // 每秒旋转角度
         [SerializeField] private float radius = 1f;     // 冰盾半径
 
         private Units.Unit owner;
-        private bool initialized = false;
+        private bool isActive = false;
         private float angle = 0f;
 
-        public void Initialize(Units.Unit owner)
+        public override void Initialize(Units.Unit owner, Model.Buffs.BuffDefinition definition)
         {
             this.owner = owner;
 
         }
 
-        public void Activate()
+        public override void Activate()
         {
-            initialized = true;
+            isActive = true;
+        }
+
+        public override void Release()
+        {
+            isActive = false;
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
             
 
         void Update()
         {
-            if (!initialized)
+            if (!isActive)
                 return;
-
-            if (owner == null || !owner.IsActive)
-            {
-                Destroy(gameObject);
-                return;
-            }
 
             // 计算旋转位置
             angle += rotateSpeed * Time.deltaTime;
