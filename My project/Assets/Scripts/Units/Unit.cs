@@ -27,6 +27,7 @@ namespace Units
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
+        private Units.States.UnitStateHandler unitStateHandler;
         private UnitBuffContext buffContext;
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
@@ -111,6 +112,7 @@ namespace Units
             animationController = GetComponent<AnimationController>();
             facingController = GetComponent<FacingController>();
             hitEffect = GetComponent<HitEffect>();
+            unitStateHandler = new Units.States.UnitStateHandler(Units.States.UnitStateHandlerArgs.Default);
 
             buffContext = new UnitBuffContext(this);
             buffHandler = new Units.Buffs.BuffHandler(buffContext);
@@ -151,6 +153,7 @@ namespace Units
 
             RefreshClosestEnemy();
             buffHandler.Tick(Time.deltaTime);
+            unitStateHandler.AccumulateEnergy(Time.deltaTime, Attributes.EnergyPerSecond.finalValue);
             skillHandler.Tick(Time.deltaTime);
             UpdateFacing();
 
