@@ -22,6 +22,7 @@ namespace Model.Rewards
         [SerializeField] private Model.Tetri.TetriFactory tetriModelFactory;
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellFactory;
         [SerializeField] private Model.Tetri.CellDatabase cellDatabase;
+        [SerializeField] private CharacterDatabase characterDatabase;
 
         [SerializeField] private Model.TetriInventoryModel tetriInventoryData;
         private List<RewardTypeConfig> rewardTypeConfigs;
@@ -31,6 +32,7 @@ namespace Model.Rewards
         {
             ValidateRequiredReference(tetriModelFactory, nameof(tetriModelFactory));
             ValidateRequiredReference(cellDatabase, nameof(cellDatabase));
+            ValidateRequiredReference(characterDatabase, nameof(characterDatabase));
             ValidateRequiredReference(tetriInventoryData, nameof(tetriInventoryData));
 
             if (rewardCount < 0)
@@ -68,7 +70,7 @@ namespace Model.Rewards
                 {
                     type = RewardType.NewCharacter,
                     probability = 0.2f,
-                    isAvailable = HasUnownedCharacterCell
+                    isAvailable = HasUnownedCharacter
                 },
                 new RewardTypeConfig
                 {
@@ -90,39 +92,23 @@ namespace Model.Rewards
             int total = allTetris.Count;
             if (total == 0) return false;
 
-            int unupgradedCount = allTetris.Count(tetri =>
-                tetri.UpgradedTimes < 1
-            );
+            int unupgradedCount = allTetris.Count(tetri => tetri.CanBeUpgraded());
 
             return unupgradedCount > 4 && (unupgradedCount / (float)total) > 0.5f;
         }
 
-        public bool HasUnownedCharacterCell(TetriInventoryModel inventory)
+        public bool HasUnownedCharacter(TetriInventoryModel inventory)
         {
-            IReadOnlyCollection<CellDefinition> ownedDefinitions = inventory.OwnedCellDefinitions;
-            return cellDatabase.GetRegisteredDefinitions()
-                .OfType<CharacterDefinition>()
+            IReadOnlyCollection<CharacterDefinition> ownedDefinitions = inventory.OwnedCharacterDefinitions;
+            return characterDatabase.RegisteredDefinitions
                 .Any(definition => !ownedDefinitions.Contains(definition));
         }
 
         private bool HasUpgradeableCharacter(TetriInventoryModel inventory)
         {
-            // 检查是否有未满级的 CharacterTypeId
-            foreach (var tetri in inventory.GetAllTetris())
-            {
-                if (tetri.Type == Model.Tetri.Tetri.TetriType.Character)
-                {
-                    foreach (var pos in tetri.GetOccupiedPositions())
-                    {
-                        var cell = tetri.Shape[pos.x, pos.y] as Character;
-                        if (cell != null && cell.Level < 3)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
+            return inventory.GetAllTetris()
+                .OfType<CharacterTetri>()
+                .Any(tetri => tetri.CanBeUpgraded());
         }
 
 
@@ -195,11 +181,10 @@ namespace Model.Rewards
             switch (reward)
             {
                 case AddTetri addTetri:
-                    var mainCell = addTetri.GetTetri().GetMainCell();
+                    var mainCell = addTetri.GetTetri().MainCell;
                     return "AddTetri_" + mainCell.Definition.Id;
                 case NewCharacter newChar:
-                    var characterCell = newChar.GetTetri().GetMainCell() as Character;
-                    return "NewCharacter_" + characterCell.DefinitionData.Id;
+                    return "NewCharacter_" + newChar.GetTetri().Character.DefinitionData.Id;
                 case UpgradeCoreCell upgradeCore:
                     return "UpgradeCoreCell_" + upgradeCore.TargetTetri.GetHashCode();
                 case UpgradeCharacter upgradeChar:
@@ -224,7 +209,7 @@ namespace Model.Rewards
 
             var selectedDefinition = unownedDefinitions[UnityEngine.Random.Range(0, unownedDefinitions.Count)];
 
-            var tetriInstance = tetriModelFactory.CreateRandomShapeWithCell(selectedDefinition);
+            var tetriInstance = tetriModelFactory.CreateRandomCellBasedTetri(selectedDefinition);
 
             // 7. 返回AddTetri奖励
             return new AddTetri(tetriInstance);
@@ -232,11 +217,10 @@ namespace Model.Rewards
 
         private Reward CreateNewCharacterReward()
         {
-            IReadOnlyCollection<CellDefinition> ownedDefinitions = tetriInventoryData.OwnedCellDefinitions;
+            IReadOnlyCollection<CharacterDefinition> ownedDefinitions = tetriInventoryData.OwnedCharacterDefinitions;
 
             // 3. 找出未拥有的Character定义
-            var unownedDefinitions = cellDatabase.GetRegisteredDefinitions()
-                .OfType<CharacterDefinition>()
+            var unownedDefinitions = characterDatabase.RegisteredDefinitions
                 .Where(definition => !ownedDefinitions.Contains(definition))
                 .ToList();
 
@@ -259,17 +243,18 @@ namespace Model.Rewards
         private Reward CreateUpgradeTetriReward()
         {
             // 1. 从 inventory 中随机挑选一个可以升级的 Tetri（含有 Padding 且未升级过）
-            List<Model.Tetri.Tetri> upgradableTetris = tetriInventoryData.GetAllTetris()
-                .Where(tetri => tetri.Type is Model.Tetri.Tetri.TetriType.Normal && tetri.CanBeUpgraded())
+            List<CellBasedTetri> upgradableTetris = tetriInventoryData.GetAllTetris()
+                .OfType<CellBasedTetri>()
+                .Where(tetri => tetri.CanBeUpgraded())
                 .ToList();
             if (upgradableTetris.Count == 0)
             {
                 Debug.LogWarning("没有可升级的 Tetri，无法生成 UpgradeTetri 奖励。");
                 return null;
             }
-            Model.Tetri.Tetri targetTetri = upgradableTetris[UnityEngine.Random.Range(0, upgradableTetris.Count)];
+            var targetTetri = upgradableTetris[UnityEngine.Random.Range(0, upgradableTetris.Count)];
 
-            Func<Model.Tetri.Tetri, Reward>[] upgradeFactories = new Func<Model.Tetri.Tetri, Reward>[]
+            Func<CellBasedTetri, Reward>[] upgradeFactories = new Func<CellBasedTetri, Reward>[]
             {
                 // todo 暂时没想好升级非CoreCell的奖励
                 // tetri => new UpgradeNoneCoreCells(tetri, tetriModelFactory),
@@ -283,9 +268,8 @@ namespace Model.Rewards
 
         private Reward CreateUpgradeCharacterReward()
         {
-            // 1. 找到所有可升级的 CharacterCell
-            List<Model.Tetri.Tetri> upgradableCharacters = tetriInventoryData.GetAllTetris()
-                .Where(tetri => tetri.Type == Model.Tetri.Tetri.TetriType.Character)
+            List<CharacterTetri> upgradableCharacters = tetriInventoryData.GetAllTetris()
+                .OfType<CharacterTetri>()
                 .Where(tetri => tetri.CanBeUpgraded())
                 .ToList();
 

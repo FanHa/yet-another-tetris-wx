@@ -11,7 +11,7 @@ namespace Model
         public CharacterBuild(Character character, List<Cell> cells, Model.Tetri.Tetri ownerTetri)
         {
             Character = character;
-            Cells = cells ?? new List<Cell>();
+            Cells = cells;
             OwnerTetri = ownerTetri;
         }
     }

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Model;
 using Model.Tetri;
 using UnityEngine;
+using OperationTableModel = Model.OperationTableModel;
 
 namespace View.OperationTable
 {
@@ -10,38 +10,31 @@ namespace View.OperationTable
     {
         public event Action<View.Tetri.TetriView> OnItemCreated;
         [SerializeField] private GameObject backgroundGridPrefab;
-        [SerializeField] private GameObject TetriPrefab;
 
         [SerializeField] private Transform backgroundRoot;
         [SerializeField] private Transform placedTetrisRoot;
-        private float cellSize;
-        private int width;
-        private int height;
-        [SerializeField] private View.Tetri.TetriViewFactory tetriFactory;
+        private OperationTableGridLayout gridLayout;
+        [SerializeField] private View.Tetri.TetriViewFactory tetriViewFactory;
 
         private readonly Dictionary<Model.Tetri.Tetri, View.Tetri.TetriView> tetriObjectMap = new();
 
-        public void Initialize(int width, int height, float cellSize)
+        public void Initialize(OperationTableGridLayout gridLayout)
         {
-            this.width = width;
-            this.height = height;
-            this.cellSize = cellSize;
+            this.gridLayout = gridLayout;
 
-            Vector2 origin = new Vector2(-width / 2f + 0.5f, -height / 2f + 0.5f);
-
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < gridLayout.Height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < gridLayout.Width; x++)
                 {
-                    Vector2 pos = origin + new Vector2(x * cellSize, y * cellSize);
+                    var tableGridPosition = new Vector2Int(x, y);
                     GameObject cell = Instantiate(backgroundGridPrefab, backgroundRoot);
-                    cell.transform.localPosition = pos;
+                    cell.transform.localPosition = gridLayout.GetTableCellCenterInTableSpace(tableGridPosition);
                     cell.name = $"Cell_{x}_{y}";
                 }
             }
         }
 
-        public void Refresh(IReadOnlyDictionary<Model.Tetri.Tetri, Vector2Int> placedTetris)
+        public void Refresh(OperationTableModel operationTableModel)
         {
             tetriObjectMap.Clear();
             foreach (Transform child in placedTetrisRoot)
@@ -49,19 +42,13 @@ namespace View.OperationTable
                 Destroy(child.gameObject);
             }
 
-            Vector2 leftTopLocal = new Vector2(-width / 2f + 0.5f, height / 2f - 0.5f);
-
-            foreach (var placed in placedTetris)
+            foreach (var placed in operationTableModel.PlacedGridPositionByTetri)
             {
                 Model.Tetri.Tetri tetri = placed.Key;
-                Vector2Int position = placed.Value;
-                View.Tetri.TetriView tetriComponent = tetriFactory.CreateTetri(tetri);
+                Vector2Int topLeftGridPosition = placed.Value;
+                View.Tetri.TetriView tetriComponent = tetriViewFactory.CreateTetri(tetri);
                 tetriComponent.transform.SetParent(placedTetrisRoot, false);
-                tetriComponent.Initialize(tetri);
-
-                float x = leftTopLocal.x + (position.x + 1.5f) * cellSize;
-                float y = leftTopLocal.y - (position.y + 1.5f) * cellSize;
-                tetriComponent.transform.localPosition = new Vector3(x, y, 0);
+                tetriComponent.transform.localPosition = gridLayout.GetTetriCenterInTableSpace(topLeftGridPosition);
 
                 tetriObjectMap[tetri] = tetriComponent;
                 OnItemCreated?.Invoke(tetriComponent);
@@ -70,10 +57,9 @@ namespace View.OperationTable
 
         }
 
-        // World-space offset from the table center; the battlefield spawn point stands in for that center.
-        public Vector3 GetRelativePositionByTetri(Model.Tetri.Tetri tetri)
+        public Vector3 GetTetriWorldPosition(Model.Tetri.Tetri tetri)
         {
-            return tetriObjectMap[tetri].transform.position - transform.position;
+            return tetriObjectMap[tetri].transform.position;
         }
 
     }

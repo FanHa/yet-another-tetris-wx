@@ -1,19 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Model.Tetri;
 using UnityEngine;
 
 namespace Model
 {
-    public class EnemySquadFactory
+    [CreateAssetMenu(fileName = "EnemySquadFactory", menuName = "Game Data/Bootstrap/Factories/Enemy Squad Factory")]
+    public class EnemySquadFactory : ScriptableObject
     {
-        private readonly CellDatabase cellDatabase;
+        [SerializeField] private CellDatabase cellDatabase;
+        [SerializeField] private CharacterDatabase characterDatabase;
 
-        public EnemySquadFactory(CellDatabase cellDatabase)
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            this.cellDatabase = cellDatabase;
+            if (cellDatabase == null)
+            {
+                Debug.LogError($"[{nameof(EnemySquadFactory)}] Cell database is missing.", this);
+            }
+
+            if (characterDatabase == null)
+            {
+                Debug.LogError($"[{nameof(EnemySquadFactory)}] Character database is missing.", this);
+            }
         }
+#endif
 
         public List<EnemySquadData> Build(LevelState levelState)
         {
@@ -22,20 +33,9 @@ namespace Model
                 throw new ArgumentNullException(nameof(levelState));
             }
 
-            if (cellDatabase == null)
-            {
-                throw new InvalidOperationException("CellDatabase is missing for enemy squad generation.");
-            }
+            var availableCharacterDefinitions = characterDatabase.GetRegisteredDefinitions();
 
-            var availableCharacterDefinitions = cellDatabase
-                .GetRegisteredDefinitions()
-                .OfType<CharacterDefinition>()
-                .ToList();
-
-            var availableCellDefinitions = cellDatabase
-                .GetRegisteredDefinitions()
-                .Where(definition => definition != null && definition is not CharacterDefinition)
-                .ToList();
+            var availableCellDefinitions = cellDatabase.GetRegisteredDefinitions();
 
             var squads = new List<EnemySquadData>();
             int enemyCount = Mathf.Min(1 + (levelState.CurrentLevel - 1) / levelState.LevelsPerEnemyIncrease, levelState.MaxEnemyCount);

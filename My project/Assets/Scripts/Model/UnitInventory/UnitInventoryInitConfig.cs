@@ -50,11 +50,6 @@ namespace Model.UnitInventory
                         continue;
                     }
 
-                    if (cell.definition is CharacterDefinition)
-                    {
-                        Debug.LogError($"[{nameof(UnitInventoryInitConfig)}] Item at index {itemIndex} uses character definition '{cell.definition.name}' as an influenced cell.", this);
-                    }
-
                     if (cell.level < 1)
                     {
                         Debug.LogError($"[{nameof(UnitInventoryInitConfig)}] Cell '{cell.definition.name}' has invalid level {cell.level}.", this);

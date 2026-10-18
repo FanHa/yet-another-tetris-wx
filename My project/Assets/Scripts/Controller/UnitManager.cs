@@ -29,17 +29,17 @@ namespace Controller
         /// <param name="spawnPoint">出生点</param>
         /// <param name="faction">阵营</param>
         public void SpawnUnits(
-            IReadOnlyList<CharacterPlacement> items,
+            IReadOnlyList<UnitSpawnPlacement> items,
             Transform spawnPoint,
             Unit.Faction faction
         )
         {
-            foreach (Model.CharacterPlacement item in items)
+            foreach (Model.UnitSpawnPlacement item in items)
             {
                 Unit unit = unitFactory.CreateBattleUnit(item.CharacterBuild);
                 unit.transform.SetParent(GetRootByFaction(faction), false);
 
-                Vector3 spawnPos = spawnPoint.position + item.RelativePositionFromCenter;
+                Vector3 spawnPos = spawnPoint.position + item.SpawnOffset;
 
                 unit.PlaceAt(spawnPos);
                 unit.InjectUnitManager(this);

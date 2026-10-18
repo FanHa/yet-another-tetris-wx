@@ -83,8 +83,8 @@ namespace Controller {
 
         // Faction A's spawn point maps to the operation table center.
         public void PrepareBattle(
-            IReadOnlyList<CharacterPlacement> factionAItems,
-            IReadOnlyList<CharacterPlacement> factionBItems)
+            IReadOnlyList<UnitSpawnPlacement> factionAItems,
+            IReadOnlyList<UnitSpawnPlacement> factionBItems)
         {
             if (State != BattleState.Empty)
                 throw new InvalidOperationException("The battlefield must be empty before a battle can be prepared.");

@@ -9,6 +9,7 @@ namespace Model.Tetri
     public class TetriFactory : ScriptableObject
     {
         [SerializeField] private Model.Tetri.TetriCellFactory tetriCellModelFactory;
+        [SerializeField] private CharacterFactory characterFactory;
 
         private readonly Dictionary<string, List<(int, int)>> shapeDefinitions = new()
         {
@@ -22,20 +23,57 @@ namespace Model.Tetri
         };
 
 
-        public Tetri CreateRandomShapeWithCell(CellDefinition definition)
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            return CreateRandomShapeWithCell(tetriCellModelFactory.CreateCell(definition));
+            if (tetriCellModelFactory == null)
+            {
+                Debug.LogError($"[{nameof(TetriFactory)}] Tetri cell factory is missing.", this);
+            }
+
+            if (characterFactory == null)
+            {
+                Debug.LogError($"[{nameof(TetriFactory)}] Character factory is missing.", this);
+            }
+
+            foreach (var entry in shapeDefinitions)
+            {
+                if (entry.Value.Count != 4)
+                {
+                    Debug.LogError($"[{nameof(TetriFactory)}] Shape '{entry.Key}' must contain exactly four positions.", this);
+                }
+
+                var uniquePositions = new HashSet<(int, int)>();
+                foreach (var position in entry.Value)
+                {
+                    var (row, column) = position;
+                    if (row < 0 || row >= Tetri.TetriGridSize || column < 0 || column >= Tetri.TetriGridSize)
+                    {
+                        Debug.LogError($"[{nameof(TetriFactory)}] Shape '{entry.Key}' position {position} is outside the canvas.", this);
+                    }
+
+                    if (!uniquePositions.Add(position))
+                    {
+                        Debug.LogError($"[{nameof(TetriFactory)}] Shape '{entry.Key}' contains duplicate position {position}.", this);
+                    }
+                }
+            }
+        }
+#endif
+
+        public CellBasedTetri CreateRandomCellBasedTetri(CellDefinition definition)
+        {
+            return CreateRandomCellBasedTetri(tetriCellModelFactory.CreateCell(definition));
         }
 
-        private Tetri CreateRandomShapeWithCell(Cell specialCell)
+        private CellBasedTetri CreateRandomCellBasedTetri(Cell specialCell)
         {
             // 1. 随机选择一个形状
             var shapeKeys = new List<string> { "T", "I", "L", "J", "S", "Z" };
             var randomKey = shapeKeys[UnityEngine.Random.Range(0, shapeKeys.Count)];
             var positions = shapeDefinitions[randomKey];
 
-            // 2. 创建 Tetri
-            Tetri tetri = new Tetri(Tetri.TetriType.Normal);
+            var cells = new Dictionary<Vector2Int, Cell>();
 
             // 3. 随机选择一个格子用于填充目标 Cell
             int specialIndex = UnityEngine.Random.Range(0, positions.Count);
@@ -46,17 +84,17 @@ namespace Model.Tetri
                 var (row, col) = positions[i];
                 if (i == specialIndex)
                 {
-                    tetri.SetCell(row, col, specialCell);
+                    cells.Add(new Vector2Int(row, col), specialCell);
                 }
                 else
                 {
                     Cell fillerCell = tetriCellModelFactory.CreateFillerCell();
                     fillerCell.Affinity = targetAffinity;
-                    tetri.SetCell(row, col, fillerCell);
+                    cells.Add(new Vector2Int(row, col), fillerCell);
                 }
             }
 
-            tetri.SetMainCell(specialCell);
+            var tetri = new CellBasedTetri(cells, specialCell);
 
             // 随机旋转 0~3 次，固定初始朝向
             int rotations = UnityEngine.Random.Range(0, 4);
@@ -66,58 +104,35 @@ namespace Model.Tetri
             return tetri;
         }
 
-        public Tetri CreateCharacterTetri(CharacterDefinition definition)
+        public CharacterTetri CreateCharacterTetri(CharacterDefinition definition)
         {
-            if (definition == null)
-                throw new ArgumentNullException(nameof(definition));
-
-            var positions = shapeDefinitions["O"];
-            Tetri tetri = new Tetri(Tetri.TetriType.Character);
-
-            Cell mainCharacterCell = null;
-            for (int i = 0; i < positions.Count; i++)
-            {
-                var (row, col) = positions[i];
-                if (i == 0)
-                {
-                    mainCharacterCell = tetriCellModelFactory.CreateCharacterCell(definition);
-                    tetri.SetCell(row, col, mainCharacterCell);
-                }
-                else
-                {
-                    tetri.SetCell(row, col, tetriCellModelFactory.CreateFillerCell());
-                }
-            }
-
-            tetri.SetMainCell(mainCharacterCell);
-            return tetri;
+            return new CharacterTetri(characterFactory.CreateCharacter(definition));
         }
 
         public Tetri Clone(Tetri original)
         {
-            Tetri clone = new Tetri(original.Type);
-            var shape = original.Shape;
-            int rows = shape.GetLength(0);
-            int cols = shape.GetLength(1);
-
-            Cell clonedMainCell = null;
-            for (int i = 0; i < rows; i++)
+            return original switch
             {
-                for (int j = 0; j < cols; j++)
-                {
-                    var clonedCell = tetriCellModelFactory.Clone(shape[i, j]);
-                    clone.SetCell(i, j, clonedCell);
+                CellBasedTetri cellBased => CloneCellBasedTetri(cellBased),
+                CharacterTetri character => new CharacterTetri(
+                    characterFactory.Clone(character.Character), character.UpgradedTimes),
+                _ => throw new ArgumentException("Unsupported Tetri type.", nameof(original))
+            };
+        }
 
-                    if (ReferenceEquals(shape[i, j], original.MainCell))
-                    {
-                        clonedMainCell = clonedCell;
-                    }
-                }
+        private CellBasedTetri CloneCellBasedTetri(CellBasedTetri original)
+        {
+            var clonedCells = new Dictionary<Vector2Int, Cell>();
+            var clonedMainCell = tetriCellModelFactory.Clone(original.MainCell);
+            foreach (var entry in original.Cells)
+            {
+                var clonedCell = ReferenceEquals(entry.Value, original.MainCell)
+                    ? clonedMainCell
+                    : tetriCellModelFactory.Clone(entry.Value);
+                clonedCells.Add(entry.Key, clonedCell);
             }
 
-            clone.SetMainCell(clonedMainCell);
-            clone.UpgradedTimes = original.UpgradedTimes;
-            return clone;
+            return new CellBasedTetri(clonedCells, clonedMainCell, original.UpgradedTimes);
         }
 
     }

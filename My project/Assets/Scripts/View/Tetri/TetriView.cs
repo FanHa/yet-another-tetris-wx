@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using Model.Tetri;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TetriModel = Model.Tetri.Tetri;
 
 namespace View.Tetri
 {
@@ -14,19 +13,14 @@ namespace View.Tetri
         public event Action OnEndDragEvent;
         public event Action<TetriView> OnClickEvent;
 
-        public Model.Tetri.Tetri ModelTetri { get; private set; }
+        public abstract TetriModel ModelTetri { get; }
         private Camera mainCamera;
+        private Vector3 dragOffset;
 
         void Awake()
         {
             mainCamera = Camera.main;
         }
-        public void Initialize(Model.Tetri.Tetri modelTetri)
-        {
-            ModelTetri = modelTetri;
-            RebuildFromModel();
-        }
-
         private void OnDestroy()
         {
         }
@@ -35,15 +29,24 @@ namespace View.Tetri
     
         public void OnBeginDrag(PointerEventData eventData)
         {
+            Vector3 pointerPosition = GetPointerWorldPosition(eventData.pressPosition, eventData.pressEventCamera);
+            dragOffset = transform.position - pointerPosition;
             OnBeginDragEvent?.Invoke(this);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(eventData.position);
-            Vector3 newPosition = new Vector3(mouseWorld.x, mouseWorld.y, transform.position.z);
+            Vector3 pointerPosition = GetPointerWorldPosition(eventData.position, eventData.pressEventCamera);
+            OnDragEvent?.Invoke(pointerPosition + dragOffset);
+        }
 
-            OnDragEvent?.Invoke(newPosition);
+        private Vector3 GetPointerWorldPosition(Vector2 screenPosition, Camera eventCamera)
+        {
+            Camera pointerCamera = eventCamera != null ? eventCamera : mainCamera;
+            Ray pointerRay = pointerCamera.ScreenPointToRay(screenPosition);
+            var dragPlane = new Plane(Vector3.forward, transform.position);
+            dragPlane.Raycast(pointerRay, out float distance);
+            return pointerRay.GetPoint(distance);
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -61,6 +64,17 @@ namespace View.Tetri
             OnClickEvent?.Invoke(this);
         }
 
+    }
 
+    public abstract class TetriView<TModel> : TetriView where TModel : TetriModel
+    {
+        public TModel Model { get; private set; }
+        public sealed override TetriModel ModelTetri => Model;
+
+        public void Initialize(TModel model)
+        {
+            Model = model;
+            RebuildFromModel();
+        }
     }
 }

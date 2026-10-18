@@ -6,17 +6,32 @@ using UnityEngine;
 namespace Model.Tetri
 {
     [Serializable]
-    public class Character : Cell
+    public class Character
     {
+        private int level = 1;
         private CharacterDefinition definitionData;
+        private AffinityType affinity = AffinityType.None;
+
+        public int Level
+        {
+            get => level;
+            set => level = Mathf.Max(1, value);
+        }
 
         public CharacterDefinition DefinitionData => definitionData;
+        public virtual Sprite Icon => definitionData.Icon;
+
+        public virtual AffinityType Affinity
+        {
+            get => affinity;
+            set => affinity = value;
+        }
 
         public virtual string CharacterKey => definitionData.Id;
 
-        public override string Name()
+        public virtual string Name()
         {
-            return string.IsNullOrWhiteSpace(definitionData.DisplayName) ? base.Name() : definitionData.DisplayName;
+            return definitionData.DisplayName;
         }
 
         [SerializeField] private string characterName;
@@ -37,13 +52,32 @@ namespace Model.Tetri
             return characterName;
         }
 
-        public override void Initialize(CellDefinition cellDefinition)
+        public virtual void Initialize(CharacterDefinition characterDefinition)
         {
-            base.Initialize(cellDefinition);
-            definitionData = cellDefinition as CharacterDefinition ?? throw new ArgumentException($"Expected CharacterDefinition for {GetType().Name}.", nameof(cellDefinition));
+            definitionData = characterDefinition ?? throw new ArgumentNullException(nameof(characterDefinition));
+            affinity = definitionData.Affinity;
         }
 
-        public override void Apply(Unit unit)
+        public void ValidateConfiguration()
+        {
+            if (definitionData == null)
+            {
+                throw new InvalidOperationException("Character definition is not assigned.");
+            }
+        }
+
+        internal Character Clone()
+        {
+            return new Character
+            {
+                level = this.level,
+                definitionData = this.definitionData,
+                affinity = this.affinity,
+                characterName = this.characterName
+            };
+        }
+
+        public virtual void Apply(Unit unit)
         {
             unit.Attributes = new Units.Attributes(
                 moveSpeedBase: definitionData.MoveSpeedBase,
@@ -64,7 +98,7 @@ namespace Model.Tetri
             unit.name = EnsureCharacterName();
         }
 
-        public override string Description()
+        public virtual string Description()
         {
             return $"攻击力: {definitionData.AttackPowerBase}, 生命值: {definitionData.MaxHealthBase}, 攻击频率: {definitionData.AttacksPerTenSecondsBase}, 移动速度: {definitionData.MoveSpeedBase}";
         }

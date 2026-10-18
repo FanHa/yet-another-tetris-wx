@@ -3,22 +3,40 @@ using UnityEngine;
 
 namespace UI.TetriInfo
 {
-    public class CharacterTetriDetailPanel : MonoBehaviour, ITetriDetailPanel
+    public class CharacterTetriDetailPanel : MonoBehaviour
     {
         [SerializeField] private TMPro.TextMeshProUGUI characterNameText;
         [SerializeField] private TMPro.TextMeshProUGUI characterDescriptionText;
         [SerializeField] private TMPro.TextMeshProUGUI characterAttributeText;
 
-        public void BindData(View.Tetri.TetriView tetriComponent)
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
-            Model.Tetri.Character mainCell = tetri.GetMainCell() as Model.Tetri.Character;
+            if (characterNameText == null)
+            {
+                Debug.LogError($"{nameof(characterNameText)} is not assigned.", this);
+            }
+
+            if (characterDescriptionText == null)
+            {
+                Debug.LogError($"{nameof(characterDescriptionText)} is not assigned.", this);
+            }
+
+            if (characterAttributeText == null)
+            {
+                Debug.LogError($"{nameof(characterAttributeText)} is not assigned.", this);
+            }
+        }
+#endif
+
+        public void BindData(View.Tetri.TetriCharacterView characterView)
+        {
+            var character = characterView.Model.Character;
             
-            characterNameText.text = mainCell.CharacterName;
-            characterDescriptionText.text = mainCell.Description();
+            characterNameText.text = character.CharacterName;
+            characterDescriptionText.text = character.Description();
             
-            var character = tetriComponent as View.Tetri.TetriCharacterView;
-            characterAttributeText.text = BuildAttributesText(character.PreviewUnit.Attributes);
+            characterAttributeText.text = BuildAttributesText(characterView.PreviewUnit.Attributes);
         }
 
 

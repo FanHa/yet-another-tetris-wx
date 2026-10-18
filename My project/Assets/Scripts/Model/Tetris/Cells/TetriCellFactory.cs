@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -9,9 +8,19 @@ namespace Model.Tetri
     {
         [SerializeField] private CellDatabase cellDatabase;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (cellDatabase == null)
+            {
+                Debug.LogError($"[{nameof(TetriCellFactory)}] Cell database is missing.", this);
+            }
+        }
+#endif
+
         public Cell CreateFillerCell()
         {
-            CellDefinition definition = cellDatabase?.GetFillerDefinition();
+            CellDefinition definition = cellDatabase.GetFillerDefinition();
             return CreateCell(definition);
         }
 
@@ -22,31 +31,8 @@ namespace Model.Tetri
                 throw new ArgumentException("Cell id is null or empty.", nameof(cellId));
             }
 
-            var definition = cellDatabase != null ? cellDatabase.GetDefinition(cellId) : throw new InvalidOperationException("CellDatabase is missing.");
+            var definition = cellDatabase.GetDefinition(cellId);
             return CreateCell(definition);
-        }
-
-        public Character CreateCharacterCell(string definitionId)
-        {
-            if (string.IsNullOrWhiteSpace(definitionId))
-            {
-                throw new ArgumentException("Character definition id is null or empty.", nameof(definitionId));
-            }
-
-            var definition = cellDatabase != null ? cellDatabase.GetDefinition(definitionId) : throw new InvalidOperationException("CellDatabase is missing.");
-            return CreateCharacterCell(definition as CharacterDefinition ?? throw new ArgumentException($"Definition '{definitionId}' is not a CharacterDefinition.", nameof(definitionId)));
-        }
-
-        public Character CreateCharacterCell(CharacterDefinition definition)
-        {
-            if (definition == null)
-            {
-                throw new ArgumentNullException(nameof(definition));
-            }
-
-            var character = new Character();
-            character.Initialize(definition);
-            return character;
         }
 
         public Cell CreateCell(CellDefinition definition)
@@ -56,32 +42,15 @@ namespace Model.Tetri
                 SkillBackedCellDefinition => new SkillCell(),
                 _ => new Cell()
             };
-            if (definition != null)
-            {
-                cell.Initialize(definition);
-            }
+            cell.Initialize(definition);
             return cell;
         }
 
         public Cell Clone(Cell cell)
         {
-            if (cell == null)
-            {
-                throw new ArgumentNullException(nameof(cell));
-            }
-
-            if (cell is Character character)
-            {
-                return CreateCharacterCell(character.DefinitionData);
-            }
-
-            var clone = cell is SkillCell ? new SkillCell() : new Cell();
-            if (cell.Definition != null)
-            {
-                clone.Initialize(cell.Definition);
-            }
-
+            var clone = CreateCell(cell.Definition);
             clone.Level = cell.Level;
+            clone.Affinity = cell.Affinity;
             return clone;
         }
     }

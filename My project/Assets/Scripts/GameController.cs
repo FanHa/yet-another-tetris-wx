@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private UnitInventoryInitConfig trainGroundFactionAInitConfig;
     [SerializeField] private UnitInventoryInitConfig trainGroundFactionBInitConfig;
     [SerializeField] private UnitInventoryFactory unitInventoryFactory;
-    [SerializeField] private CellDatabase cellDatabase;
+    [SerializeField] private EnemySquadFactory enemySquadFactory;
     [SerializeField] private LevelState levelState;
     [SerializeField] private Button battleButton;
     [SerializeField] private Button pauseButton;
@@ -80,9 +80,9 @@ public class GameController : MonoBehaviour
             Debug.LogError($"[{nameof(GameController)}] Level state is missing.", this);
         }
 
-        if (cellDatabase == null)
+        if (enemySquadFactory == null)
         {
-            Debug.LogError($"[{nameof(GameController)}] Cell database is missing.", this);
+            Debug.LogError($"[{nameof(GameController)}] Enemy squad factory is missing.", this);
         }
         if (operationTableController == null)
         {
@@ -145,19 +145,20 @@ public class GameController : MonoBehaviour
 
     private void HandleOperationTableTetriClick(View.Tetri.TetriView tetri)
     {
-        var type = tetri.ModelTetri.Type;
-        if (type == Model.Tetri.Tetri.TetriType.Character)
+        switch (tetri)
         {
-            CharacterPlacement characterPlacement = operationTableController.GetCharacterPlacementByTetri(tetri.ModelTetri);
-            Units.Unit unit = unitFactory.CreatePreviewUnit(characterPlacement.CharacterBuild);
-            unit.transform.position = tetri.transform.position;
-            unitInfo.ShowUnitInfo(unit);
-            tempUnit = unit;
-            
-        }
-        else
-        {
-            tetriInfo.ShowTetriInfo(tetri);
+            case View.Tetri.TetriCharacterView characterView:
+                UnitSpawnPlacement unitSpawnPlacement = operationTableController.GetUnitSpawnPlacementForTetri(characterView.Model);
+                Units.Unit unit = unitFactory.CreatePreviewUnit(unitSpawnPlacement.CharacterBuild);
+                unit.transform.position = characterView.transform.position;
+                unitInfo.ShowUnitInfo(unit);
+                tempUnit = unit;
+                break;
+            case View.Tetri.CellBasedTetriView:
+                tetriInfo.ShowTetriInfo(tetri);
+                break;
+            default:
+                throw new ArgumentException("Unsupported Tetri view type.", nameof(tetri));
         }
     }
 
@@ -188,13 +189,13 @@ public class GameController : MonoBehaviour
         if (currentShadowTetri != null)
         {
             // 获取影子 Tetri 的当前位置
-            Vector3 tetriWorldPosition = currentShadowTetri.transform.position;
+            Vector3 tetriCenterWorldPosition = currentShadowTetri.transform.position;
 
             View.Tetri.TetriView operationTetri = currentShadowTetri.GetComponent<View.Tetri.TetriView>();
             Model.Tetri.Tetri modelTetri = operationTetri.ModelTetri;
 
             // 尝试将 Tetri 放置到 OperationTableModel
-            if (operationTableController.TryPlaceTetri(modelTetri, tetriWorldPosition))
+            if (operationTableController.TryPlaceTetri(modelTetri, tetriCenterWorldPosition))
             {
                 Debug.Log("Tetri replaced successfully!");
             }
@@ -234,12 +235,12 @@ public class GameController : MonoBehaviour
         {
 
             // 获取 Tetri 的当前位置
-            Vector3 tetriWorldPosition = currentShadowTetri.transform.position;
+            Vector3 tetriCenterWorldPosition = currentShadowTetri.transform.position;
 
             View.Tetri.TetriView operationTetri = currentShadowTetri.GetComponent<View.Tetri.TetriView>();
             Model.Tetri.Tetri modelTetri = operationTetri.ModelTetri;
             // 尝试将 Tetri 放置到 OperationTableModel
-            if (operationTableController.TryPlaceTetri(modelTetri, tetriWorldPosition))
+            if (operationTableController.TryPlaceTetri(modelTetri, tetriCenterWorldPosition))
             {
                 tetriInventoryController.MarkTetriAsUsed(modelTetri);
             }
@@ -253,18 +254,7 @@ public class GameController : MonoBehaviour
     {
         if (currentShadowTetri != null)
         {
-            Vector3 tablePosition = operationTableController.transform.position;
-            float cellSize = 1f;   // 每个格子的单位大小为 1
-            Vector3 newVector;
-
-            float snappedX = Mathf.Round((newPosition.x - tablePosition.x) / cellSize) * cellSize + tablePosition.x ;
-            float snappedY = Mathf.Round((newPosition.y - tablePosition.y) / cellSize) * cellSize + tablePosition.y ;
-
-            // 返回吸附后的坐标
-            newVector = new Vector3(snappedX, snappedY, newPosition.z);
-            newVector.y += 2 * cellSize;
-            // 更新影子物体的位置
-            currentShadowTetri.transform.position = newVector;
+            currentShadowTetri.transform.position = operationTableController.SnapTetriCenterToGrid(newPosition);
         }
     }
 
@@ -287,7 +277,7 @@ public class GameController : MonoBehaviour
     private void UpdateBattleInventoryModels()
     {
         enemyUnitInventoryData.ResetInventoryData(BuildEnemyInventoryForCurrentLevel());
-        playerUnitInventoryData.ResetInventoryData(operationTableController.GetCharacterPlacements());
+        playerUnitInventoryData.ResetInventoryData(operationTableController.GetUnitSpawnPlacements());
     }
 
     private void UpdateTrainGroundInventoryModels()
@@ -296,14 +286,14 @@ public class GameController : MonoBehaviour
         trainGroundFactionBInventoryData.ResetInventoryData(BuildTrainGroundInventory(trainGroundFactionBInitConfig));
     }
 
-    private List<CharacterPlacement> BuildEnemyInventoryForCurrentLevel()
+    private List<UnitSpawnPlacement> BuildEnemyInventoryForCurrentLevel()
     {
-        var enemySquads = new EnemySquadFactory(cellDatabase).Build(levelState);
+        var enemySquads = enemySquadFactory.Build(levelState);
         return unitInventoryFactory.Build(
             UnitInventoryBuildDataAdapter.FromEnemySquads(enemySquads));
     }
 
-    private List<CharacterPlacement> BuildTrainGroundInventory(UnitInventoryInitConfig initConfig)
+    private List<UnitSpawnPlacement> BuildTrainGroundInventory(UnitInventoryInitConfig initConfig)
     {
         return unitInventoryFactory.Build(
             UnitInventoryBuildDataAdapter.FromInitConfig(initConfig));

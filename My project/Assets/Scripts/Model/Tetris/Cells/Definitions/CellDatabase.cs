@@ -41,7 +41,7 @@ namespace Model.Tetri
         }
 
 #if UNITY_EDITOR
-        private bool ValidateConfiguration()
+        public bool ValidateConfiguration()
         {
             bool isValid = true;
 
@@ -68,7 +68,12 @@ namespace Model.Tetri
                 }
 
                 string id = definition.Id;
-                if (!string.IsNullOrWhiteSpace(id) && !seenIds.Add(id))
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    Debug.LogError($"Cell definition '{definition.name}' has an empty ID.", this);
+                    isValid = false;
+                }
+                else if (!seenIds.Add(id))
                 {
                     Debug.LogError($"Duplicate CellDefinition ID '{id}'.", this);
                     isValid = false;
@@ -139,14 +144,5 @@ namespace Model.Tetri
                 .ToList();
         }
 
-        public List<string> GetRegisteredCharacterIds()
-        {
-            return registeredCellDefinitions
-                .Where(definition => definition is CharacterDefinition)
-                .Select(definition => definition.Id)
-                .Where(id => !string.IsNullOrWhiteSpace(id))
-                .Distinct(StringComparer.Ordinal)
-                .ToList();
-        }
     }
 }

@@ -11,6 +11,21 @@ namespace Units
         [SerializeField] private Units.Unit battleUnitPrefab;
         [SerializeField] private Units.Unit previewUnitPrefab;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (battleUnitPrefab == null)
+            {
+                Debug.LogError($"[{nameof(UnitFactory)}] Battle unit prefab is missing.", this);
+            }
+
+            if (previewUnitPrefab == null)
+            {
+                Debug.LogError($"[{nameof(UnitFactory)}] Preview unit prefab is missing.", this);
+            }
+        }
+#endif
+
         public Units.Unit CreateBattleUnit(CharacterBuild build)
         {
             return CreateUnitInternal(battleUnitPrefab, build);
@@ -21,15 +36,15 @@ namespace Units
             return CreateUnitInternal(previewUnitPrefab, build);
         }
 
-        public Units.Unit CreateBattleUnit(Model.Tetri.Character characterCell)
+        public Units.Unit CreateBattleUnit(Model.Tetri.Character character)
         {
-            CharacterBuild build = new CharacterBuild(characterCell, new List<Model.Tetri.Cell>(), null);
+            CharacterBuild build = new CharacterBuild(character, new List<Model.Tetri.Cell>(), null);
             return CreateBattleUnit(build);
         }
 
-        public Units.Unit CreatePreviewUnit(Model.Tetri.Character characterCell)
+        public Units.Unit CreatePreviewUnit(Model.Tetri.Character character)
         {
-            CharacterBuild build = new CharacterBuild(characterCell, new List<Model.Tetri.Cell>(), null);
+            CharacterBuild build = new CharacterBuild(character, new List<Model.Tetri.Cell>(), null);
             return CreatePreviewUnit(build);
         }
 
@@ -52,9 +67,9 @@ namespace Units
             var cellCounts = new Dictionary<AffinityType, int>();
             foreach (var cell in build.Cells)
             {
-                if (!cellCounts.ContainsKey(cell.Affinity))
-                    cellCounts[cell.Affinity] = 0;
-                cellCounts[cell.Affinity]++;
+                var affinity = cell.Affinity;
+                cellCounts.TryGetValue(affinity, out int count);
+                cellCounts[affinity] = count + 1;
             }
             unit.SetCellAffinity(cellCounts);
             unit.CompleteAssembly();

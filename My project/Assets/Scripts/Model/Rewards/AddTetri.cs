@@ -7,15 +7,14 @@ namespace Model.Rewards
 {
     public class AddTetri: Reward
     {
-        protected Model.Tetri.Tetri tetriInstance;
+        protected Model.Tetri.CellBasedTetri tetriInstance;
         private string name;
         private string description;
 
-        public AddTetri(Model.Tetri.Tetri tetri)
+        public AddTetri(Model.Tetri.CellBasedTetri tetri)
         {
             tetriInstance = tetri;
-            // 找到 tetriInstance 中非 Padding 的 Cell
-            Model.Tetri.Cell cell = tetriInstance.GetMainCell();
+            Model.Tetri.Cell cell = tetriInstance.MainCell;
             name = $"获得新能力：{cell.Name()}";
             description = $"{cell.Description()}";
 
@@ -23,7 +22,7 @@ namespace Model.Rewards
 
 
 
-        public Model.Tetri.Tetri GetTetri()
+        public Model.Tetri.CellBasedTetri GetTetri()
         {
             return tetriInstance;
         }

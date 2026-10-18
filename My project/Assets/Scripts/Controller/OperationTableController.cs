@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Model;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using View.OperationTable;
 
 namespace Controller
 {
@@ -19,7 +16,8 @@ namespace Controller
 
         [SerializeField] private int width = 16;
         [SerializeField] private int height = 16;
-        [SerializeField] private OperationTableView view;
+        [SerializeField] private View.OperationTable.OperationTableView view;
+        private View.OperationTable.OperationTableGridLayout gridLayout;
         private OperationTableModel model;
 
 #if UNITY_EDITOR
@@ -39,19 +37,25 @@ namespace Controller
             {
                 Debug.LogError($"[{nameof(OperationTableController)}] Height must be at least 1.", this);
             }
+
+            if (cellSize <= 0f || float.IsNaN(cellSize) || float.IsInfinity(cellSize))
+            {
+                Debug.LogError($"[{nameof(OperationTableController)}] Cell size must be finite and greater than zero.", this);
+            }
         }
 #endif
 
         private void Awake()
         {
             model = new OperationTableModel(width, height);
+            gridLayout = new View.OperationTable.OperationTableGridLayout(width, height, cellSize);
         }
 
         private void Start()
         {
-            view.Initialize(model.Width, model.Height, cellSize);
+            view.Initialize(gridLayout);
             view.OnItemCreated += HandleTetriCreated;
-            model.OnChanged += HandleModelChanged;
+            model.OnTableChanged += HandleTableChanged;
             model.Clear();
         }
 
@@ -73,36 +77,38 @@ namespace Controller
 
         private void OnDestroy()
         {
-            model.OnChanged -= HandleModelChanged;
+            model.OnTableChanged -= HandleTableChanged;
             view.OnItemCreated -= HandleTetriCreated;
         }
 
-        private void HandleModelChanged()
+        private void HandleTableChanged()
         {
-            // 让 View 根据 model.PlacedTetris 刷新显示
-            view.Refresh(model.PlacedMap);
+            view.Refresh(model);
 
         }
 
-        public CharacterPlacement GetCharacterPlacementByTetri(Model.Tetri.Tetri tetri)
+        /// <summary>
+        /// Gets spawn data for a character Tetri that is currently placed on this operation table.
+        /// </summary>
+        internal UnitSpawnPlacement GetUnitSpawnPlacementForTetri(Model.Tetri.CharacterTetri tetri)
         {
-            CharacterBuild build = model.GetCharacterBuildByTetri(tetri);
-            var position = view.GetRelativePositionByTetri(tetri);
-            return new CharacterPlacement(build, position);
+            CharacterBuild build = model.GetPlacedCharacterBuild(tetri);
+            Vector3 spawnOffset = view.GetTetriWorldPosition(tetri) - view.transform.position;
+            return new UnitSpawnPlacement(build, spawnOffset);
 
         }
 
-        public List<CharacterPlacement> GetCharacterPlacements()
+        public IReadOnlyList<UnitSpawnPlacement> GetUnitSpawnPlacements()
         {
             List<CharacterBuild> builds = model.GetCharacterBuilds();
 
-            var placements = new List<CharacterPlacement>(builds.Count);
+            var placements = new List<UnitSpawnPlacement>(builds.Count);
 
             foreach (var build in builds)
             {
                 Model.Tetri.Tetri ownerTetri = build.OwnerTetri;
-                Vector3 localPos = view.GetRelativePositionByTetri(ownerTetri);
-                var placement = new CharacterPlacement(build, localPos);
+                Vector3 spawnOffset = view.GetTetriWorldPosition(ownerTetri) - view.transform.position;
+                var placement = new UnitSpawnPlacement(build, spawnOffset);
 
                 placements.Add(placement);
             }
@@ -111,29 +117,19 @@ namespace Controller
         }
 
 
-        public bool TryPlaceTetri(Model.Tetri.Tetri modelTetri, Vector3 worldPosition)
+        public bool TryPlaceTetri(Model.Tetri.Tetri tetri, Vector3 tetriCenterWorldPosition)
         {
-            // 先将世界坐标转换为操作表的本地坐标
-            Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
-            localPosition.x -= 1.5f * cellSize;
-            localPosition.y += 1.5f * cellSize;
+            Vector3 tetriCenterInTableSpace = view.transform.InverseTransformPoint(tetriCenterWorldPosition);
+            Vector2Int tetriTopLeftGridPosition = gridLayout.GetNearestTetriTopLeftGridPositionFromCenterInTableSpace(tetriCenterInTableSpace);
+            return model.TryPlaceTetri(tetri, tetriTopLeftGridPosition);
+        }
 
-            // 计算网格左上角 (0,0) 在本地坐标中的位置
-            Vector3 gridOriginLocal = new Vector3(-model.Width / 2f + 0.5f, model.Height / 2f - 0.5f, 0);
-
-            // 以左上角为基准，计算 localPosition 到 gridOriginLocal 的偏移
-            Vector3 offset = localPosition - gridOriginLocal;
-
-
-
-            // 转换为网格坐标
-            int gridX = Mathf.FloorToInt(offset.x / cellSize);
-            int gridY = Mathf.FloorToInt(-offset.y / cellSize); // Y轴向下为正
-
-            Vector2Int gridPosition = new Vector2Int(gridX, gridY);
-
-            // 调用 Model 的 TryPlaceTetri 方法
-            return model.TryPlaceTetri(modelTetri, gridPosition);
+        public Vector3 SnapTetriCenterToGrid(Vector3 tetriCenterWorldPosition)
+        {
+            Vector3 tetriCenterInTableSpace = view.transform.InverseTransformPoint(tetriCenterWorldPosition);
+            Vector2Int nearestTetriTopLeftGridPosition = gridLayout.GetNearestTetriTopLeftGridPositionFromCenterInTableSpace(tetriCenterInTableSpace);
+            Vector3 snappedTetriCenterInTableSpace = gridLayout.GetTetriCenterInTableSpace(nearestTetriTopLeftGridPosition);
+            return view.transform.TransformPoint(snappedTetriCenterInTableSpace);
         }
 
         internal void RemoveTetri(Model.Tetri.Tetri modelTetri)

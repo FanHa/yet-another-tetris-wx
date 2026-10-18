@@ -6,23 +6,23 @@ namespace Model.UnitInventory
     [Serializable]
     public class UnitInventoryModel
     {
-        private readonly List<CharacterPlacement> items = new();
+        private readonly List<UnitSpawnPlacement> items = new();
 
-        public IReadOnlyList<CharacterPlacement> Items => items;
-        public event Action<IReadOnlyList<CharacterPlacement>> OnDataChanged;
+        public IReadOnlyList<UnitSpawnPlacement> Items => items;
+        public event Action<IReadOnlyList<UnitSpawnPlacement>> OnDataChanged;
 
-        public void AddItems(IReadOnlyList<CharacterPlacement> newItems)
+        public void AddItems(IReadOnlyList<UnitSpawnPlacement> newItems)
         {
             items.AddRange(newItems);
             OnDataChanged?.Invoke(items);
         }
 
-        public CharacterPlacement GetItemAt(int itemIndex)
+        public UnitSpawnPlacement GetItemAt(int itemIndex)
         {
             return items[itemIndex];
         }
 
-        public void ResetInventoryData(IReadOnlyList<CharacterPlacement> newItems)
+        public void ResetInventoryData(IReadOnlyList<UnitSpawnPlacement> newItems)
         {
             items.Clear();
             AddItems(newItems);

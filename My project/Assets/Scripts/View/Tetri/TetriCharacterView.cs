@@ -1,18 +1,34 @@
+using Model.Tetri;
 using UnityEngine;
 
 namespace View.Tetri
 {
-    public class TetriCharacterView : TetriView
+    public class TetriCharacterView : TetriView<CharacterTetri>
     {
         [SerializeField] private Transform characterRoot;
         [SerializeField] private Units.UnitFactory unitFactory;
 
         public Units.Unit PreviewUnit { get; private set; } // 公共只读
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (characterRoot == null)
+            {
+                Debug.LogError($"[{nameof(TetriCharacterView)}] Character root is missing.", this);
+            }
+
+            if (unitFactory == null)
+            {
+                Debug.LogError($"[{nameof(TetriCharacterView)}] Unit factory is missing.", this);
+            }
+        }
+#endif
+
 
         protected override void RebuildFromModel()
         {
-            if (ModelTetri == null) return;
+            if (Model == null) return;
 
             // 清理旧
             if (PreviewUnit != null)
@@ -22,16 +38,9 @@ namespace View.Tetri
                 PreviewUnit = null;
             }
 
-            // 找到主 Character cell
-            Model.Tetri.Character mainCell = ModelTetri.GetMainCell() as Model.Tetri.Character;
-
-            if (mainCell != null)
-            {
-                PreviewUnit = unitFactory.CreatePreviewUnit(mainCell);
-                PreviewUnit.transform.SetParent(characterRoot, false);
-                PreviewUnit.OnClicked += HandlePreviewUnitClicked; // 订阅
-
-            }
+            PreviewUnit = unitFactory.CreatePreviewUnit(Model.Character);
+            PreviewUnit.transform.SetParent(characterRoot, false);
+            PreviewUnit.OnClicked += HandlePreviewUnitClicked;
         }
 
         private void HandlePreviewUnitClicked(Units.Unit _)

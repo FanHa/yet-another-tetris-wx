@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.TetriInfo
 {
-    public class NormalTetriDetailPanel : MonoBehaviour, ITetriDetailPanel
+    public class CellBasedTetriDetailPanel : MonoBehaviour
     {
         [SerializeField] private Image skillIcon;
         [SerializeField] private TMPro.TextMeshProUGUI skillNameText;
@@ -19,6 +19,31 @@ namespace UI.TetriInfo
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (skillIcon == null)
+            {
+                Debug.LogError($"{nameof(skillIcon)} is not assigned.", this);
+            }
+
+            if (skillNameText == null)
+            {
+                Debug.LogError($"{nameof(skillNameText)} is not assigned.", this);
+            }
+
+            if (skillDescriptionText == null)
+            {
+                Debug.LogError($"{nameof(skillDescriptionText)} is not assigned.", this);
+            }
+
+            if (affinityIcon == null)
+            {
+                Debug.LogError($"{nameof(affinityIcon)} is not assigned.", this);
+            }
+
+            if (affinityDescriptionText == null)
+            {
+                Debug.LogError($"{nameof(affinityDescriptionText)} is not assigned.", this);
+            }
+
             if (affinityDisplayConfig == null)
             {
                 Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
@@ -26,10 +51,10 @@ namespace UI.TetriInfo
         }
 #endif
 
-        public void BindData(View.Tetri.TetriView tetriComponent)
+        public void BindData(View.Tetri.CellBasedTetriView pieceView)
         {
-            Model.Tetri.Tetri tetri = tetriComponent.ModelTetri;
-            Model.Tetri.Cell mainCell = tetri.GetMainCell();
+            var tetri = pieceView.Model;
+            var mainCell = tetri.MainCell;
 
             skillIcon.sprite = mainCell.Icon;
 

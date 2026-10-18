@@ -4,24 +4,14 @@ namespace Model.Rewards
 {
     public class NewCharacter: Reward
     {
-        protected Model.Tetri.Tetri tetriInstance;
-        protected Model.Tetri.Character characterCellInstance;
+        protected Model.Tetri.CharacterTetri tetriInstance;
 
-        public NewCharacter(Model.Tetri.Tetri characterTetri)
+        public NewCharacter(Model.Tetri.CharacterTetri characterTetri)
         {
             tetriInstance = characterTetri;
-            foreach (var pos in tetriInstance.GetOccupiedPositions())
-            {
-                var cell = tetriInstance.Shape[pos.x, pos.y];
-                if (cell is Model.Tetri.Character character)
-                {
-                    characterCellInstance = character;
-                    break;
-                }
-            }
         }
 
-        public Model.Tetri.Tetri GetTetri()
+        public Model.Tetri.CharacterTetri GetTetri()
         {
             return tetriInstance;
         }
@@ -29,12 +19,12 @@ namespace Model.Rewards
 
         public override string Description()
         {
-            return characterCellInstance.Description();
+            return tetriInstance.Character.Description();
         }
 
         public override string Name()
         {
-            return "新角色：" + characterCellInstance.Name();
+            return "新角色：" + tetriInstance.Character.Name();
         }
 
         public override void Apply(TetriInventoryModel tetriInventoryData)

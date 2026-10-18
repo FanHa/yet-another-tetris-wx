@@ -9,6 +9,7 @@ namespace Model.UnitInventory
     public class UnitInventoryFactory : ScriptableObject
     {
         [SerializeField] private TetriCellFactory tetriCellFactory;
+        [SerializeField] private CharacterFactory characterFactory;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -17,17 +18,22 @@ namespace Model.UnitInventory
             {
                 Debug.LogError($"[{nameof(UnitInventoryFactory)}] Tetri cell factory is missing.", this);
             }
+
+            if (characterFactory == null)
+            {
+                Debug.LogError($"[{nameof(UnitInventoryFactory)}] Character factory is missing.", this);
+            }
         }
 #endif
 
-        public List<CharacterPlacement> Build(UnitInventoryBuildData buildData)
+        public List<UnitSpawnPlacement> Build(UnitInventoryBuildData buildData)
         {
             if (buildData == null)
             {
-                return new List<CharacterPlacement>();
+                return new List<UnitSpawnPlacement>();
             }
 
-            var items = new List<CharacterPlacement>();
+            var items = new List<UnitSpawnPlacement>();
             foreach (UnitInventoryBuildEntry entry in buildData.Entries)
             {
                 if (entry == null || entry.CharacterDefinition == null)
@@ -35,15 +41,15 @@ namespace Model.UnitInventory
                     continue;
                 }
 
-                items.Add(BuildCharacterPlacement(entry));
+                items.Add(BuildUnitSpawnPlacement(entry));
             }
 
             return items;
         }
 
-        private CharacterPlacement BuildCharacterPlacement(UnitInventoryBuildEntry entry)
+        private UnitSpawnPlacement BuildUnitSpawnPlacement(UnitInventoryBuildEntry entry)
         {
-            Character character = tetriCellFactory.CreateCharacterCell(entry.CharacterDefinition);
+            Character character = characterFactory.CreateCharacter(entry.CharacterDefinition);
             var cells = new List<Cell>();
             foreach (UnitInventoryCellBuildEntry cellEntry in entry.Cells)
             {
@@ -53,7 +59,7 @@ namespace Model.UnitInventory
             }
 
             var build = new CharacterBuild(character, cells, null);
-            return new CharacterPlacement(build, entry.RelativePosition);
+            return new UnitSpawnPlacement(build, entry.RelativePosition);
         }
     }
 }

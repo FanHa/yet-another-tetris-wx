@@ -21,7 +21,25 @@ namespace Model
         private readonly HashSet<CellDefinition> ownedCellDefinitions = new();
         public IReadOnlyCollection<CellDefinition> OwnedCellDefinitions => ownedCellDefinitions;
 
+        private readonly HashSet<CharacterDefinition> ownedCharacterDefinitions = new();
+        public IReadOnlyCollection<CharacterDefinition> OwnedCharacterDefinitions => ownedCharacterDefinitions;
+
         [SerializeField] private TetriInventoryInitConfig initialConfig;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (tetriModelFactory == null)
+            {
+                Debug.LogError($"[{nameof(TetriInventoryModel)}] Tetri model factory is missing.", this);
+            }
+
+            if (initialConfig == null)
+            {
+                Debug.LogError($"[{nameof(TetriInventoryModel)}] Initial inventory config is missing.", this);
+            }
+        }
+#endif
 
 
         public void Init()
@@ -37,29 +55,30 @@ namespace Model
         private void GenerateInitialTetris()
         {
             List<CellDefinition> initialCellDefinitions = initialConfig.CellDefinitions;
-            List<CharacterDefinition> initialCharacterIds = initialConfig.CharacterDefinitions;
+            List<CharacterDefinition> initialCharacterDefinitions = initialConfig.CharacterDefinitions;
 
             foreach (var cellDefinition in initialCellDefinitions)
             {
-                Tetri.Tetri tetri = tetriModelFactory.CreateRandomShapeWithCell(cellDefinition);
+                Tetri.Tetri tetri = tetriModelFactory.CreateRandomCellBasedTetri(cellDefinition);
                 AddTetri(tetri, silent: true); 
             }
 
-            foreach (var characterDefinition in initialCharacterIds)
+            foreach (var characterDefinition in initialCharacterDefinitions)
             {
                 Tetri.Tetri characterTetri = tetriModelFactory.CreateCharacterTetri(characterDefinition);
                 AddTetri(characterTetri, silent: true);
             }
 
-            RecalculateCellIds(); 
+            RecalculateOwnedDefinitions();
             OnDataChanged?.Invoke(); 
         }
 
-        private void RecalculateCellIds()
+        private void RecalculateOwnedDefinitions()
         {
             ownedCellDefinitions.Clear();
+            ownedCharacterDefinitions.Clear();
             foreach (var tetri in usableTetriList.Concat(usedTetriList))
-                UpdateCellIdsForTetri(tetri);
+                UpdateOwnedDefinitionsForTetri(tetri);
         }
 
         public void MarkTetriAsUsed(Model.Tetri.Tetri tetri)
@@ -86,18 +105,27 @@ namespace Model
             // 添加到 usableTetriList
             usableTetriList.Add(modelTetri);
             modelTetri.OnDataChanged += HandleTetriChanged;
-            UpdateCellIdsForTetri(modelTetri);
+            UpdateOwnedDefinitionsForTetri(modelTetri);
             // 触发数据变化事件
             if (!silent)
                 OnDataChanged?.Invoke();
         }
 
-        private void UpdateCellIdsForTetri(Tetri.Tetri tetri)
+        private void UpdateOwnedDefinitionsForTetri(Tetri.Tetri tetri)
         {
-            foreach (var position in tetri.GetOccupiedPositions())
+            switch (tetri)
             {
-                Model.Tetri.Cell cell = tetri.Shape[position.x, position.y];
-                ownedCellDefinitions.Add(cell.Definition);
+                case CellBasedTetri cellBasedTetri:
+                    foreach (var cell in cellBasedTetri.Cells.Values)
+                    {
+                        ownedCellDefinitions.Add(cell.Definition);
+                    }
+                    break;
+                case CharacterTetri characterTetri:
+                    ownedCharacterDefinitions.Add(characterTetri.Character.DefinitionData);
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported Tetri type.", nameof(tetri));
             }
         }
 
@@ -107,14 +135,14 @@ namespace Model
             {
                 // 解绑事件
                 tetri.OnDataChanged -= HandleTetriChanged;
-                RecalculateCellIds(); // 重新计算 CellIds
+                RecalculateOwnedDefinitions();
                 OnDataChanged?.Invoke();
             }
         }
 
         private void HandleTetriChanged()
         {
-            RecalculateCellIds(); // 重新计算 CellIds
+            RecalculateOwnedDefinitions();
             // 处理 Tetri 数据变化
             OnDataChanged?.Invoke();
         }

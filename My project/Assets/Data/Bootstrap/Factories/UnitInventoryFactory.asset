@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: UnitInventoryFactory
   m_EditorClassIdentifier: 
   tetriCellFactory: {fileID: 11400000, guid: 4c044574bed823d47a2154d1e3057d7b, type: 2}
+  characterFactory: {fileID: 11400000, guid: 836a7b8f9ae6fa64bb65184e76b13e2f, type: 2}

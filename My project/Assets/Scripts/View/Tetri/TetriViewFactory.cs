@@ -1,3 +1,5 @@
+using System;
+using Model.Tetri;
 using UnityEngine;
 
 namespace View.Tetri
@@ -5,7 +7,7 @@ namespace View.Tetri
     [CreateAssetMenu(menuName = "Game Data/Bootstrap/Factories/Operation Tetri Factory")]
     public class TetriViewFactory : ScriptableObject
     {
-        [SerializeField] private View.Tetri.TetriPieceView tetriPiecePrefab;
+        [SerializeField] private View.Tetri.CellBasedTetriView tetriPiecePrefab;
         [SerializeField] private View.Tetri.TetriCharacterView tetriCharacterPrefab;
 
 #if UNITY_EDITOR
@@ -25,14 +27,19 @@ namespace View.Tetri
 
         public View.Tetri.TetriView CreateTetri(Model.Tetri.Tetri modelTetri)
         {
-            View.Tetri.TetriView prefab =
-                modelTetri.Type == Model.Tetri.Tetri.TetriType.Character
-                ? (View.Tetri.TetriView)tetriCharacterPrefab
-                : (View.Tetri.TetriView)tetriPiecePrefab;
-
-            var comp = Object.Instantiate(prefab);
-            comp.Initialize(modelTetri);
-            return comp;
+            switch (modelTetri)
+            {
+                case CellBasedTetri normal:
+                    var pieceView = UnityEngine.Object.Instantiate(tetriPiecePrefab);
+                    pieceView.Initialize(normal);
+                    return pieceView;
+                case CharacterTetri character:
+                    var characterView = UnityEngine.Object.Instantiate(tetriCharacterPrefab);
+                    characterView.Initialize(character);
+                    return characterView;
+                default:
+                    throw new ArgumentException("Unsupported Tetri type.", nameof(modelTetri));
+            }
         }
     }
 }

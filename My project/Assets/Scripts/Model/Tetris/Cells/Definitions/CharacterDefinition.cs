@@ -1,10 +1,14 @@
+using System;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Model.Tetri
 {
-    [CreateAssetMenu(menuName = "Game Data/Gameplay/Cells/Definitions/Characters/Character Definition")]
-    public sealed class CharacterDefinition : CellDefinition
+    [CreateAssetMenu(menuName = "Game Data/Gameplay/Characters/Character Definition")]
+    public sealed class CharacterDefinition : ScriptableObject
     {
+        [SerializeField] private string id;
+        [SerializeField] private AffinityType affinity = AffinityType.None;
         [SerializeField] private Sprite icon;
 
         [Header("展示信息")]
@@ -30,20 +34,47 @@ namespace Model.Tetri
         [SerializeField] private float energyPerSecondPercentModifier;
         [SerializeField] private float attackRangePercentModifier;
 
+        private static readonly Regex IdPattern = new("^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                id = name;
+            }
+
+            ValidateConfiguration();
+        }
+#endif
+
+        public bool ValidateConfiguration()
+        {
+            bool isValid = true;
+            if (string.IsNullOrWhiteSpace(id) ||
+                !string.Equals(id, id.Trim(), StringComparison.Ordinal) || !IdPattern.IsMatch(id))
+            {
+                Debug.LogError($"CharacterDefinition ID '{id}' is invalid. Expected pattern: {IdPattern}.", this);
+                isValid = false;
+            }
+
             if (energyPerSecondBase < 0f || float.IsNaN(energyPerSecondBase) || float.IsInfinity(energyPerSecondBase))
             {
                 Debug.LogError($"{nameof(energyPerSecondBase)} must be finite and non-negative.", this);
+                isValid = false;
             }
 
             if (float.IsNaN(energyPerSecondPercentModifier) || float.IsInfinity(energyPerSecondPercentModifier))
             {
                 Debug.LogError($"{nameof(energyPerSecondPercentModifier)} must be finite.", this);
+                isValid = false;
             }
+
+            return isValid;
         }
-#endif
+
+        public string Id => id;
+        public AffinityType Affinity => affinity;
 
         public float MoveSpeedBase => moveSpeedBase;
         public float AttackPowerBase => attackPowerBase;
@@ -59,8 +90,8 @@ namespace Model.Tetri
         public float EnergyPerSecondPercentModifier => energyPerSecondPercentModifier;
         public float AttackRangePercentModifier => attackRangePercentModifier;
 
-        public override Sprite Icon => icon;
-        public override string DisplayName => string.IsNullOrWhiteSpace(displayName) ? base.DisplayName : displayName;
-        public override string Description => string.IsNullOrWhiteSpace(description) ? base.Description : description;
+        public Sprite Icon => icon;
+        public string DisplayName => string.IsNullOrWhiteSpace(displayName) ? null : displayName;
+        public string Description => string.IsNullOrWhiteSpace(description) ? null : description;
     }
 }

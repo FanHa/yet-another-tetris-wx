@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Model.Tetri;
 using UnityEngine;
 
 namespace View
@@ -16,8 +14,6 @@ namespace View
                 Destroy(child.gameObject);
             }
         }
-        
-
 
         public void ShowItems(IReadOnlyList<GameObject> items)
         {
@@ -28,25 +24,24 @@ namespace View
                 tetriObject.transform.SetParent(contentRoot, false);
                 tetriObject.transform.localPosition = CalculateGridPosition(i);
 
-                foreach (var sr in tetriObject.GetComponentsInChildren<SpriteRenderer>(true))
+                foreach (var spriteRenderer in tetriObject.GetComponentsInChildren<SpriteRenderer>(true))
                 {
-                    sr.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
                 }
-            
             }
         }
 
         private Vector3 CalculateGridPosition(int index)
         {
-            int perRow = 3;
-            float size = 5f;
-            float spacing = 0.5f;
-            float elementSize = size + spacing;
+            const int itemsPerRow = 3;
+            const float itemSize = 5f;
+            const float spacing = 0.5f;
+            float itemStride = itemSize + spacing;
 
-            int row = index / perRow;
-            int col = index % perRow;
+            int row = index / itemsPerRow;
+            int column = index % itemsPerRow;
 
-            return new Vector3(col * elementSize, -row * elementSize, 0);
+            return new Vector3(column * itemStride, -row * itemStride, 0f);
         }
     }
 }

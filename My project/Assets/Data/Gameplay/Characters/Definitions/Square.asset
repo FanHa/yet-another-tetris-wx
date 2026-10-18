@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: Square
   affinity: 0
-  icon: {fileID: 21300000, guid: 891f707ec08b410408023558b5830d03, type: 3}
+  icon: {fileID: -1415774823011457895, guid: 4e67e9eb76851d644831d7222767d81f, type: 3}
   displayName: Square
   description: "\u7A33\u624E\u7A33\u6253\u7684\u57FA\u7840\u89D2\u8272\uFF0C\u64C5\u957F\u5728\u524D\u6392\u6491\u4F4F\u5C40\u52BF\u3002"
   moveSpeedBase: 2.2
