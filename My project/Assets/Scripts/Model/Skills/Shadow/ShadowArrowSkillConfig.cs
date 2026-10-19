@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -31,10 +32,10 @@ namespace Model.Skills
         float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
 
         public float Damage;
-        public float DamagePerShadowCell;
+        public float DamagePerResonantCell;
         
         public float VulnerabilityPercent;
-        public float VulnerabilityPercentPerShadowCell;
+        public float VulnerabilityPercentPerResonantCell;
         public float VulnerabilityDuration;
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -27,7 +28,7 @@ namespace Model.Skills
     {
         public float VulnerabilityPercent;
 
-        public float VulnerabilityPercentPerShadowCell;
+        public float VulnerabilityPercentPerResonantCell;
 
         public float DotDuration;
     }

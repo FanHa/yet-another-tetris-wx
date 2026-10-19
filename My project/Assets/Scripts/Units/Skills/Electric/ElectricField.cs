@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Model.Skills;
-using Model.Tetri;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Units.Skills
@@ -79,21 +79,17 @@ namespace Units.Skills
 
         private ElectricFieldStats CalculateStats()
         {
-            int electricCellCount = 0;
-            if (Owner != null)
-            {
-                Owner.CellCounts.TryGetValue(AffinityType.Electric, out electricCellCount);
-            }
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
             return new ElectricFieldStats
             {
-                Radius = new StatValue("范围半径", Config.BaseRadius, electricCellCount * Config.RadiusPerElectricCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, electricCellCount * Config.DurationPerElectricCell),
-                Damage = new StatValue("电击伤害", Config.BaseDamage, electricCellCount * Config.DamagePerElectricCell),
+                Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
+                Damage = new StatValue("电击伤害", Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell),
                 EnergyDisruptionAmount = new StatValue(
                     "削减技能能量",
                     Config.BaseEnergyDisruptionAmount,
-                    electricCellCount * Config.EnergyDisruptionAmountPerElectricCell)
+                    resonantCellCount * Config.EnergyDisruptionAmountPerResonantCell)
             };
         }
 

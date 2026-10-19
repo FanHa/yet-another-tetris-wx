@@ -1,5 +1,5 @@
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -25,18 +25,18 @@ namespace Units.Skills
 
         private ShadowStepStats CalcStats()
         {
-            int shadowCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Shadow, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new ShadowStepStats
             {
                 VulnerabilityPercent = new StatValue(
                     "易伤百分比",
                     Config.VulnerabilityPercent,
-                    shadowCellCount * Config.VulnerabilityPercentPerShadowCell
+                    resonantCellCount * Config.VulnerabilityPercentPerResonantCell
                 ),
                 Damage = new StatValue(
                     "技能伤害",
                     Config.Damage,
-                    shadowCellCount * Config.DamagePerShadowCell
+                    resonantCellCount * Config.DamagePerResonantCell
                 ),
                 DebuffDuration = new StatValue(
                     "易伤持续时间",

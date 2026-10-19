@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ThunderStrike
   m_EditorClassIdentifier: 
   id: ThunderStrike
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 8
+  resonance: 3
   skillDefinition: {fileID: 11400000, guid: d8b21d41905e99c4f9a5e6515afe2748, type: 2}

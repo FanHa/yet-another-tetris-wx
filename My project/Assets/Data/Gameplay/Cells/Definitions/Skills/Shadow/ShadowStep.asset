@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ShadowStep
   m_EditorClassIdentifier: 
   id: ShadowStep
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 5
+  resonance: 7
   skillDefinition: {fileID: 11400000, guid: 136207362c8f06747a8736546ef3e6cf, type: 2}

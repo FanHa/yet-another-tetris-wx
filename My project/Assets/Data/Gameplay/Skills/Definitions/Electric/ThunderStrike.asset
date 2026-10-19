@@ -16,5 +16,6 @@ MonoBehaviour:
   displayName: Thunder Strike
   description: "\u91CA\u653E Thunder Strike\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   affinity: 8
+  resonance: 3
   config: {fileID: 11400000, guid: 854b82e1f822f79428ffaa8a926da091, type: 2}
   icon: {fileID: 3655301165296326879, guid: b149bda6577d13a4785432d07a5e925b, type: 3}

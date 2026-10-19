@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: ChainLightning
   affinity: 8
+  resonance: 3
   skillDefinition: {fileID: 11400000, guid: 0ef3490937c7d3b4ebe1eb043c192fc4, type: 2}

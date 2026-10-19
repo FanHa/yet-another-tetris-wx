@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -38,9 +39,9 @@ namespace Model.Skills
         public float InitEnergy;
 
         public float VulnerabilityPercent;
-        public float VulnerabilityPercentPerShadowCell;
+        public float VulnerabilityPercentPerResonantCell;
         public float Damage;
-        public float DamagePerShadowCell;
+        public float DamagePerResonantCell;
 
         public float DebuffDuration;
     }

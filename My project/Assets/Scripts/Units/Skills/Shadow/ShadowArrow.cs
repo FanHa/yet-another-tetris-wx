@@ -1,5 +1,5 @@
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -26,11 +26,11 @@ namespace Units.Skills
 
         private ShadowArrowStats CalcStats()
         {
-            int shadowCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Shadow, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new ShadowArrowStats
             {
-                Damage = new StatValue("伤害", Config.Damage, shadowCellCount * Config.DamagePerShadowCell),
-                VulnerabilityPercent = new StatValue("易伤百分比(%)", Config.VulnerabilityPercent, shadowCellCount * Config.VulnerabilityPercentPerShadowCell),
+                Damage = new StatValue("伤害", Config.Damage, resonantCellCount * Config.DamagePerResonantCell),
+                VulnerabilityPercent = new StatValue("易伤百分比(%)", Config.VulnerabilityPercent, resonantCellCount * Config.VulnerabilityPercentPerResonantCell),
                 VulnerabilityDuration = new StatValue("易伤持续时间", Config.VulnerabilityDuration)
             };
         }

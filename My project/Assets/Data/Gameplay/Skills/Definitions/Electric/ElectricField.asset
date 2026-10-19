@@ -16,5 +16,6 @@ MonoBehaviour:
   displayName: "\u7535\u573A"
   description: "\u5728\u76EE\u6807\u533A\u57DF\u5236\u9020\u7535\u573A\uFF0C\u6BCF\u9694\u4E00\u6BB5\u65F6\u95F4\u968F\u673A\u7535\u51FB\u4E00\u540D\u533A\u57DF\u5185\u654C\u4EBA\uFF0C\u9020\u6210\u4F24\u5BB3\u5E76\u968F\u673A\u524A\u51CF\u5176\u6280\u80FD\u84C4\u80FD\u3002"
   affinity: 8
+  resonance: 3
   config: {fileID: 11400000, guid: 193895f3b7960fd44a7ea1fd7d54eace, type: 2}
   icon: {fileID: -3218739774384757431, guid: 1cbc1cbe6ec38c646bcfe10373df06d7, type: 3}

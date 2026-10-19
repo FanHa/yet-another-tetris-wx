@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 
 namespace Model.Skills
@@ -23,13 +24,13 @@ namespace Model.Skills
             {
                 string levelPrefix = $"{nameof(LevelConfigs)}[{index}]";
                 ValidateFinitePositive(levelConfig.BaseRadius, $"{levelPrefix}.{nameof(levelConfig.BaseRadius)}");
-                ValidateFiniteNonNegative(levelConfig.RadiusPerElectricCell, $"{levelPrefix}.{nameof(levelConfig.RadiusPerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.RadiusPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.RadiusPerResonantCell)}");
                 ValidateFinitePositive(levelConfig.BaseDuration, $"{levelPrefix}.{nameof(levelConfig.BaseDuration)}");
-                ValidateFiniteNonNegative(levelConfig.DurationPerElectricCell, $"{levelPrefix}.{nameof(levelConfig.DurationPerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.DurationPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DurationPerResonantCell)}");
                 ValidateFiniteNonNegative(levelConfig.BaseDamage, $"{levelPrefix}.{nameof(levelConfig.BaseDamage)}");
-                ValidateFiniteNonNegative(levelConfig.DamagePerElectricCell, $"{levelPrefix}.{nameof(levelConfig.DamagePerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.DamagePerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DamagePerResonantCell)}");
                 ValidateFiniteNonNegative(levelConfig.BaseEnergyDisruptionAmount, $"{levelPrefix}.{nameof(levelConfig.BaseEnergyDisruptionAmount)}");
-                ValidateFiniteNonNegative(levelConfig.EnergyDisruptionAmountPerElectricCell, $"{levelPrefix}.{nameof(levelConfig.EnergyDisruptionAmountPerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.EnergyDisruptionAmountPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.EnergyDisruptionAmountPerResonantCell)}");
             }
         }
 #endif
@@ -40,15 +41,15 @@ namespace Model.Skills
     {
         [Header("区域")]
         public float BaseRadius = 2f;
-        public float RadiusPerElectricCell = 0.1f;
+        public float RadiusPerResonantCell = 0.1f;
         public float BaseDuration = 3f;
-        public float DurationPerElectricCell = 0.2f;
+        public float DurationPerResonantCell = 0.2f;
 
         [Header("电击")]
         public float BaseDamage = 4f;
-        public float DamagePerElectricCell = 4f;
+        public float DamagePerResonantCell = 4f;
         public float BaseEnergyDisruptionAmount = 5f;
-        public float EnergyDisruptionAmountPerElectricCell = 5f;
+        public float EnergyDisruptionAmountPerResonantCell = 5f;
 
         [Header("消耗")]
         public float RequiredEnergy = 90f;

@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -60,14 +60,14 @@ namespace Units.Skills
             return new StatValue(
                 "首跳伤害",
                 Config.BaseDamage,
-                electricCellCount * Config.DamagePerElectricCell
+                electricCellCount * Config.DamagePerResonantCell
             );
         }
 
         private float CalcEnergyDisruptionAmount()
         {
             return Config.BaseEnergyDisruptionAmount
-                   + GetElectricCellCount() * Config.EnergyDisruptionAmountPerElectricCell;
+                     + GetElectricCellCount() * Config.EnergyDisruptionAmountPerResonantCell;
         }
 
         private int GetElectricCellCount()
@@ -77,8 +77,7 @@ namespace Units.Skills
                 return 0;
             }
 
-            Owner.CellCounts.TryGetValue(AffinityType.Electric, out int count);
-            return count;
+            return Owner.GetResonanceCount(Definition.Resonance);
         }
 
         public override string Name()

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ShadowArrow
   m_EditorClassIdentifier: 
   id: ShadowArrow
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 5
+  resonance: 7
   skillDefinition: {fileID: 11400000, guid: c6db5dc027c2a9545885634b17711c4e, type: 2}

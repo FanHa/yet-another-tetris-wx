@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 
 namespace Model.Skills
@@ -20,7 +21,7 @@ namespace Model.Skills
             foreach (var (index, levelConfig) in GetValidLevelConfigs())
             {
                 ValidateFiniteNonNegative(levelConfig.BaseDamage, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.BaseDamage)}");
-                ValidateFiniteNonNegative(levelConfig.DamagePerElectricCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.DamagePerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.DamagePerResonantCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.DamagePerResonantCell)}");
 
                 if (levelConfig.DamageIncreasePercentage < 0f)
                 {
@@ -31,7 +32,7 @@ namespace Model.Skills
                 }
 
                 ValidateFiniteNonNegative(levelConfig.BaseEnergyDisruptionAmount, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.BaseEnergyDisruptionAmount)}");
-                ValidateFiniteNonNegative(levelConfig.EnergyDisruptionAmountPerElectricCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.EnergyDisruptionAmountPerElectricCell)}");
+                ValidateFiniteNonNegative(levelConfig.EnergyDisruptionAmountPerResonantCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.EnergyDisruptionAmountPerResonantCell)}");
             }
         }
     #endif
@@ -46,8 +47,8 @@ namespace Model.Skills
 
             [Header("弹射")]
             public float BaseDamage = 10f;
-            [Tooltip("每个电系格子增加的首跳伤害")]
-            public float DamagePerElectricCell = 4f;
+            [Tooltip("每个匹配共鸣 Cell 增加的首跳伤害")]
+            public float DamagePerResonantCell = 4f;
             [Tooltip("每次弹射相对上一跳伤害的递增百分比")]
             public float DamageIncreasePercentage = 20f;
             public int MaxBounces = 5;
@@ -56,7 +57,7 @@ namespace Model.Skills
             [Header("短路")]
             [Tooltip("每次命中削减的基础能量")]
             public float BaseEnergyDisruptionAmount = 5f;
-            [Tooltip("每个电系格子增加的削能量")]
-            public float EnergyDisruptionAmountPerElectricCell = 3f;
+            [Tooltip("每个匹配共鸣 Cell 增加的削能量")]
+            public float EnergyDisruptionAmountPerResonantCell = 3f;
         }
 }

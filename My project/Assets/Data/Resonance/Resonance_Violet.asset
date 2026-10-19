@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resonance_Violet
   m_EditorClassIdentifier: 
   type: 7
-  displayName: "\u7D2B\u7F57\u5170\u5171\u9E23"
+  displayName: "\u5E7D\u7D2B\u5171\u9E23"
   description: "\u7D2B\u7F57\u5170\u8272\u7684\u5171\u9E23\u914D\u7F6E\u3002"
   icon: {fileID: 0}
-  baseColor: {r: 0.4823529, g: 0.3803922, b: 0.6588235, a: 1}
+  baseColor: {r: 0.29411766, g: 0.18039216, b: 0.3882353, a: 1}

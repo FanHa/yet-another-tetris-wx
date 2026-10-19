@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -72,18 +72,18 @@ namespace Units.Skills
         {
             int electricCellCount = GetElectricCellCount();
             float energyDisruptionAmount =
-                Config.BaseEnergyDisruptionAmount + electricCellCount * Config.EnergyDisruptionAmountPerElectricCell;
+                Config.BaseEnergyDisruptionAmount + electricCellCount * Config.EnergyDisruptionAmountPerResonantCell;
 
             return new ThunderStrikeStats
             {
-                Damage = new StatValue("技能伤害", Config.BaseDamage, electricCellCount * Config.DamagePerElectricCell),
+                Damage = new StatValue("技能伤害", Config.BaseDamage, electricCellCount * Config.DamagePerResonantCell),
                 EnergyDisruptionAmount = energyDisruptionAmount
             };
         }
 
         private int GetElectricCellCount()
         {
-            return Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Electric, out var count) ? count : 0;
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
     }
 }
