@@ -36,6 +36,15 @@ namespace Units.Skills
             }
         }
 
+        internal void RemoveEnergy(float amount)
+        {
+            CurrentEnergy -= amount;
+            if (CurrentEnergy < 0f)
+            {
+                CurrentEnergy = 0f;
+            }
+        }
+
         protected abstract void ExecuteCore();
     }
 }

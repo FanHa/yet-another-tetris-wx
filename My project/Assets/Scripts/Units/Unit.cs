@@ -501,6 +501,14 @@ namespace Units
             skillHandler.DistributeEnergy(energy);
         }
 
+        internal void ReduceRandomSkillEnergy(float energyAmount)
+        {
+            if (!hasDied)
+            {
+                skillHandler.ReduceRandomSkillEnergy(energyAmount);
+            }
+        }
+
         /// <summary>
         /// 每帧更新动画播放速度。当 Unit 的 ActionSpeed 属性改变时，
         /// 需要同步到 Animator，使动画快进/减速生效。

@@ -1,6 +1,5 @@
 using UnityEngine;
 using Units.Projectiles;
-using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -10,16 +9,22 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private ThunderStrikeProjectile projectilePrefab;
-        [SerializeField] private BuffDefinition thunderStrikeBuffDefinition;
 
         public ThunderStrikeProjectile ProjectilePrefab => projectilePrefab;
-        public BuffDefinition ThunderStrikeBuffDefinition => thunderStrikeBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
-            ValidateRequiredReference(thunderStrikeBuffDefinition, nameof(thunderStrikeBuffDefinition));
+
+            foreach (var (index, levelConfig) in GetValidLevelConfigs())
+            {
+                ValidateFiniteNonNegative(levelConfig.BaseDamage, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.BaseDamage)}");
+                ValidateFiniteNonNegative(levelConfig.DamagePerElectricCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.DamagePerElectricCell)}");
+
+                ValidateFiniteNonNegative(levelConfig.BaseEnergyDisruptionAmount, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.BaseEnergyDisruptionAmount)}");
+                ValidateFiniteNonNegative(levelConfig.EnergyDisruptionAmountPerElectricCell, $"{nameof(LevelConfigs)}[{index}].{nameof(levelConfig.EnergyDisruptionAmountPerElectricCell)}");
+            }
         }
     #endif
     }
@@ -29,20 +34,16 @@ namespace Model.Skills
     {
         [Header("伤害")]
         [Tooltip("基础技能伤害")]
-        public float BaseDamage = 80f;
+        public float BaseDamage = 10f;
 
         [Tooltip("每个电系格子增加的伤害")]
-        public float DamagePerElectricCell = 18f;
+        public float DamagePerElectricCell = 8f;
 
-        [Header("眩晕")]
-        [Tooltip("基础眩晕持续时间")]
-        public float BaseStunDuration = 0.7f;
-
-        [Tooltip("每个电系格子增加的眩晕时长")]
-        public float StunDurationPerElectricCell = 0.08f;
-
-        [Tooltip("眩晕持续时间上限")]
-        public float MaxStunDuration = 1.3f;
+        [Header("短路")]
+        [Tooltip("每次命中削减的基础能量")]
+        public float BaseEnergyDisruptionAmount = 5f;
+        [Tooltip("每个电系格子增加的削能量")]
+        public float EnergyDisruptionAmountPerElectricCell = 3f;
 
         [Header("消耗")]
         [Tooltip("释放所需能量")]

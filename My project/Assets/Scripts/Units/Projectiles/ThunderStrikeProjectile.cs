@@ -10,7 +10,7 @@ namespace Units.Projectiles
         private Units.Unit caster;
         private Units.Unit target;
         private float damageValue;
-        private float stunDuration;
+        private float energyDisruptionAmount;
         private Units.Skills.Skill sourceSkill;
         private bool isActive;
         private float timer;
@@ -19,14 +19,14 @@ namespace Units.Projectiles
             Units.Unit caster,
             Units.Unit target,
             float damageValue,
-            float stunDuration,
+            float energyDisruptionAmount,
             Units.Skills.Skill sourceSkill
         )
         {
             this.caster = caster;
             this.target = target;
             this.damageValue = damageValue;
-            this.stunDuration = stunDuration;
+            this.energyDisruptionAmount = energyDisruptionAmount;
             this.sourceSkill = sourceSkill;
 
             if (this.target != null)
@@ -47,12 +47,7 @@ namespace Units.Projectiles
                 .SetTargetUnit(target)
                 .SetSourceLabel(sourceSkill.Name());
             target.TakeDamage(damage);
-
-            var thunderStrikeBuff = Units.Buffs.BuffFactory.Create(
-                ((Model.Skills.ThunderStrikeSkillConfig)sourceSkill.Definition.Config).ThunderStrikeBuffDefinition,
-                new Units.Buffs.ThunderStrikeBuffArgs(stunDuration, new Units.Buffs.BuffSource(caster, sourceSkill))
-            );
-            target.AddBuff(thunderStrikeBuff);
+            target.ReduceRandomSkillEnergy(energyDisruptionAmount);
         }
 
         private void Update()

@@ -27,6 +27,7 @@ namespace Units.Projectiles
         private float damageIncreasePercentage;
         private int maxTargets;
         private float chainRange;
+        private float energyDisruptionAmount;
         private Vector3 lastObservedTargetPosition;
         private readonly HashSet<Unit> hitTargets = new();
         private bool isActive;
@@ -84,6 +85,7 @@ namespace Units.Projectiles
             float damageIncreasePercentage,
             int maxTargets,
             float chainRange,
+            float energyDisruptionAmount,
             Skill sourceSkill
         )
         {
@@ -93,6 +95,7 @@ namespace Units.Projectiles
             this.damageIncreasePercentage = damageIncreasePercentage;
             this.maxTargets = maxTargets;
             this.chainRange = chainRange;
+            this.energyDisruptionAmount = energyDisruptionAmount;
             this.sourceSkill = sourceSkill;
         }
 
@@ -159,6 +162,7 @@ namespace Units.Projectiles
 
                 segmentStart = impactPosition;
                 currentDamage += currentDamage * (damageIncreasePercentage / 100f);
+                energyDisruptionAmount += energyDisruptionAmount * (damageIncreasePercentage / 100f);
                 currentTarget = FindNextTarget(segmentStart);
             }
 
@@ -197,6 +201,7 @@ namespace Units.Projectiles
                 .SetSourceUnit(caster)
                 .SetTargetUnit(target);
             target.TakeDamage(damage);
+            target.ReduceRandomSkillEnergy(energyDisruptionAmount);
         }
 
         private Unit FindNextTarget(Vector3 origin)

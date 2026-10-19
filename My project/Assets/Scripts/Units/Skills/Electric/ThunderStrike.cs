@@ -41,7 +41,7 @@ namespace Units.Skills
                 Owner.SelfUnit,
                 cachedTarget,
                 stats.Damage.Final,
-                stats.StunDuration,
+                stats.EnergyDisruptionAmount,
                 this
             );
             thunderStrikeEffect.Activate();
@@ -54,11 +54,10 @@ namespace Units.Skills
             var stats = CalcStats();
             return
                 DescriptionStatic() + "\n" +
-                $"{stats.Damage}\n" +
-                $"眩晕持续时间: <final>{stats.StunDuration}</final>";
+                $"{stats.Damage}";
         }
 
-        public static string DescriptionStatic() => "对攻击范围内一个敌人头顶降下雷击，造成伤害并施加眩晕";
+        public static string DescriptionStatic() => "对攻击范围内一个敌人头顶降下雷击，造成伤害并削减其随机技能蓄能";
 
         public override string Name() => NameStatic();
         public static string NameStatic() => "雷击";
@@ -66,20 +65,19 @@ namespace Units.Skills
         private struct ThunderStrikeStats
         {
             public StatValue Damage;
-            public float StunDuration;
+            public float EnergyDisruptionAmount;
         }
 
         private ThunderStrikeStats CalcStats()
         {
             int electricCellCount = GetElectricCellCount();
-
-            float rawStunDuration = Config.BaseStunDuration + electricCellCount * Config.StunDurationPerElectricCell;
-            float stunDuration = Mathf.Min(rawStunDuration, Config.MaxStunDuration);
+            float energyDisruptionAmount =
+                Config.BaseEnergyDisruptionAmount + electricCellCount * Config.EnergyDisruptionAmountPerElectricCell;
 
             return new ThunderStrikeStats
             {
                 Damage = new StatValue("技能伤害", Config.BaseDamage, electricCellCount * Config.DamagePerElectricCell),
-                StunDuration = stunDuration
+                EnergyDisruptionAmount = energyDisruptionAmount
             };
         }
 
