@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 namespace Units.Skills
@@ -65,15 +65,15 @@ namespace Units.Skills
 
         private IceShieldStats CalcStats()
         {
-            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new IceShieldStats
             {
                 BuffDuration = new StatValue("护盾持续时间", Config.BuffDuration),
-                ChilledDuration = new StatValue("反制减速持续", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationAdditionPerIceCell),
-                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseMoveSlowPercent, iceCellCount * Config.MoveSlowPercentPerIceCell),
-                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseAtkSlowPercent, iceCellCount * Config.AtkSlowPercentPerIceCell),
-                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseActionSlowPercent, iceCellCount * Config.ActionSlowPercentPerIceCell),
-                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseEnergySlowPercent, iceCellCount * Config.EnergySlowPercentPerIceCell)
+                ChilledDuration = new StatValue("反制减速持续", Config.BaseChilledDuration, resonantCellCount * Config.ChilledDurationAdditionPerResonantCell),
+                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseMoveSlowPercent, resonantCellCount * Config.MoveSlowPercentPerResonantCell),
+                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseAtkSlowPercent, resonantCellCount * Config.AtkSlowPercentPerResonantCell),
+                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseActionSlowPercent, resonantCellCount * Config.ActionSlowPercentPerResonantCell),
+                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseEnergySlowPercent, resonantCellCount * Config.EnergySlowPercentPerResonantCell)
             };
         }
     }

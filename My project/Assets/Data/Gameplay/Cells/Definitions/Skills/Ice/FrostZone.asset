@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: FrostZone
   m_EditorClassIdentifier: 
   id: FrostZone
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 2
+  resonance: 6
   skillDefinition: {fileID: 11400000, guid: b6d78b350be028e4ead069f875708880, type: 2}

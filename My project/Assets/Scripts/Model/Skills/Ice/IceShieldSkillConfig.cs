@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -32,17 +33,17 @@ namespace Model.Skills
     {
         [Header("减速效果")]
         public int BaseMoveSlowPercent = 10;
-        public int MoveSlowPercentPerIceCell = 5;
+        public int MoveSlowPercentPerResonantCell = 5;
         public int BaseAtkSlowPercent = 10;
-        public int AtkSlowPercentPerIceCell = 5;
+        public int AtkSlowPercentPerResonantCell = 5;
         public int BaseActionSlowPercent = 10;
-        public int ActionSlowPercentPerIceCell = 5;
+        public int ActionSlowPercentPerResonantCell = 5;
         public int BaseEnergySlowPercent = 15;
-        public int EnergySlowPercentPerIceCell = 5;
+        public int EnergySlowPercentPerResonantCell = 5;
 
         [Header("护盾与冰冻")]
         public float BuffDuration = -1f;
         public float BaseChilledDuration = 5f;
-        public float ChilledDurationAdditionPerIceCell = 0.5f;
+        public float ChilledDurationAdditionPerResonantCell = 0.5f;
     }
 }

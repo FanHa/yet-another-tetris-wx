@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Snowball
   m_EditorClassIdentifier: 
   id: Snowball
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 2
+  resonance: 6
   skillDefinition: {fileID: 11400000, guid: fe28ca5620d6f424baf35dbaa942464e, type: 2}

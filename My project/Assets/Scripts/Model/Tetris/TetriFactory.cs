@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -78,6 +79,7 @@ namespace Model.Tetri
             // 3. 随机选择一个格子用于填充目标 Cell
             int specialIndex = UnityEngine.Random.Range(0, positions.Count);
             AffinityType targetAffinity = specialCell.Affinity;
+            ResonanceType targetResonance = specialCell.Resonance;
 
             for (int i = 0; i < positions.Count; i++)
             {
@@ -90,6 +92,7 @@ namespace Model.Tetri
                 {
                     Cell fillerCell = tetriCellModelFactory.CreateFillerCell();
                     fillerCell.Affinity = targetAffinity;
+                    fillerCell.Resonance = targetResonance;
                     cells.Add(new Vector2Int(row, col), fillerCell);
                 }
             }

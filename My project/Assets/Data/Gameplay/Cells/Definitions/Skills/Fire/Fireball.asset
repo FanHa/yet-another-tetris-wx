@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   id: Fireball
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 1
+  resonance: 1
   skillDefinition: {fileID: 11400000, guid: 841b30b29e3420746b7559e0ad2db608, type: 2}

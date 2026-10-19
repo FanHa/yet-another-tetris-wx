@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -8,9 +9,11 @@ namespace Model.Tetri
     {
         [SerializeField] private string id;
         [SerializeField] private AffinityType affinity = AffinityType.None;
+        [SerializeField] private ResonanceType resonance = ResonanceType.None;
 
         public string Id => id;
         public AffinityType Affinity => affinity;
+        public ResonanceType Resonance => resonance;
         public abstract Sprite Icon { get; }
         public virtual string DisplayName => null;
         public virtual string Description => null;
@@ -20,6 +23,11 @@ namespace Model.Tetri
 
         private void OnValidate()
         {
+            if (!Enum.IsDefined(typeof(ResonanceType), resonance))
+            {
+                Debug.LogError($"{nameof(resonance)} '{resonance}' is invalid.", this);
+            }
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 id = name;

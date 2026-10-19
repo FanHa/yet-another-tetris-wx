@@ -1,5 +1,5 @@
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -62,10 +62,10 @@ namespace Units.Skills
 
         private IcyCageStats CalcStats()
         {
-            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new IcyCageStats
             {
-                FreezeDuration = new StatValue("冻结持续时间", Config.BaseFreezeDuration, iceCellCount * Config.FreezeDurationPerIceCell)
+                FreezeDuration = new StatValue("冻结持续时间", Config.BaseFreezeDuration, resonantCellCount * Config.FreezeDurationPerResonantCell)
             };
         }
 

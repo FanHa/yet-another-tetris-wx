@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -33,15 +34,15 @@ namespace Model.Skills
 
         [Header("Chilled效果")]
         public float BaseChilledDuration = 3f;
-        public float ChilledDurationPerIceCell = 0.5f;
+        public float ChilledDurationPerResonantCell = 0.5f;
         public int BaseChilledMoveSlowPercent = 10;
-        public int ChilledMoveSlowPercentPerIceCell = 3;
+        public int ChilledMoveSlowPercentPerResonantCell = 3;
         public int BaseChilledAtkSlowPercent = 10;
-        public int ChilledAtkSlowPercentPerIceCell = 3;
+        public int ChilledAtkSlowPercentPerResonantCell = 3;
         public int BaseChilledActionSlowPercent = 10;
-        public int ChilledActionSlowPercentPerIceCell = 3;
+        public int ChilledActionSlowPercentPerResonantCell = 3;
         public int BaseChilledEnergySlowPercent = 15;
-        public int ChilledEnergySlowPercentPerIceCell = 4;
+        public int ChilledEnergySlowPercentPerResonantCell = 4;
 
         [Header("消耗")]
         public float RequiredEnergy = 40f;

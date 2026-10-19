@@ -1,5 +1,4 @@
 using System.Linq;
-using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
 
@@ -25,12 +24,12 @@ namespace Units.Skills
 
         private FlameRingStats CalcStats()
         {
-            int fireCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new FlameRingStats
             {
-                DotDps = new StatValue("每秒火焰伤害", Config.BaseDotDps, fireCellCount * Config.DotDpsPerFireCell),
-                DotDuration = new StatValue("火焰伤害持续时间", Config.BaseDotDuration, fireCellCount * Config.DotDurationPerFireCell),
-                Radius = new StatValue("作用半径", Config.BaseRadius, fireCellCount * Config.RadiusPerFireCell),
+                DotDps = new StatValue("每秒火焰伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
+                DotDuration = new StatValue("火焰伤害持续时间", Config.BaseDotDuration, resonantCellCount * Config.DotDurationPerResonantCell),
+                Radius = new StatValue("作用半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
                 AreaDuration = new StatValue("区域持续时间", Config.AreaDuration)
             };
         }

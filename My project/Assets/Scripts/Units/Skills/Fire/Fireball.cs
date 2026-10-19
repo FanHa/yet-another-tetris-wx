@@ -1,5 +1,4 @@
 using System.Linq;
-using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
 
@@ -26,10 +25,10 @@ namespace Units.Skills
 
         private FireballStats CalcStats()
         {
-            int fireCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new FireballStats
             {
-                BurnDps = new StatValue("灼烧每秒伤害", Config.DotBaseDamage, fireCellCount * Config.DotAddtionPerFireCell),
+                BurnDps = new StatValue("灼烧每秒伤害", Config.DotBaseDamage, resonantCellCount * Config.DotDpsPerResonantCell),
                 BurnDuration = new StatValue("灼烧持续时间", Config.DotDuration)
             };
         }

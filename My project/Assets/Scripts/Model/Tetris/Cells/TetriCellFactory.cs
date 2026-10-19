@@ -51,6 +51,7 @@ namespace Model.Tetri
             var clone = CreateCell(cell.Definition);
             clone.Level = cell.Level;
             clone.Affinity = cell.Affinity;
+            clone.Resonance = cell.Resonance;
             return clone;
         }
     }

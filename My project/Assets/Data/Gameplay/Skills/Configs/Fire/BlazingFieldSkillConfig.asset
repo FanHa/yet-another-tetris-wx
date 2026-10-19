@@ -15,21 +15,21 @@ MonoBehaviour:
   LevelConfigs:
   - BaseRadius: 1.5
     BaseDuration: 5
-    BaseDotDps: 5
+    BaseDotDps: 2
     BaseDotDuration: 3
-    RadiusPerFireCell: 0.1
-    DurationPerFireCell: 0.5
-    DotDpsPerFireCell: 2
-    DotDurationPerFireCell: 0.5
+    RadiusPerResonantCell: 0.2
+    DurationPerResonantCell: 1
+    DotDpsPerResonantCell: 2
+    DotDurationPerResonantCell: 0.5
     RequiredEnergy: 120
   - BaseRadius: 1.5
     BaseDuration: 5
     BaseDotDps: 10
     BaseDotDuration: 3
-    RadiusPerFireCell: 0.1
-    DurationPerFireCell: 0.5
-    DotDpsPerFireCell: 4
-    DotDurationPerFireCell: 0.5
+    RadiusPerResonantCell: 0.2
+    DurationPerResonantCell: 1
+    DotDpsPerResonantCell: 2
+    DotDurationPerResonantCell: 0.5
     RequiredEnergy: 120
   projectilePrefab: {fileID: 4527722017122255586, guid: e2427ebad99c5ea48ba04b4b8bb12c93, type: 3}
   burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

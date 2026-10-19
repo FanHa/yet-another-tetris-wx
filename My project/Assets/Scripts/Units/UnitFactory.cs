@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Model;
+using Model.Resonance;
 using Model.Tetri;
 using UnityEngine;
 
@@ -72,6 +73,21 @@ namespace Units
                 cellCounts[affinity] = count + 1;
             }
             unit.SetCellAffinity(cellCounts);
+
+            var resonanceCounts = new Dictionary<ResonanceType, int>();
+            foreach (var cell in build.Cells)
+            {
+                var resonance = cell.Resonance;
+                if (resonance == ResonanceType.None)
+                {
+                    continue;
+                }
+
+                resonanceCounts.TryGetValue(resonance, out int count);
+                resonanceCounts[resonance] = count + 1;
+            }
+            unit.SetCellResonanceCounts(resonanceCounts);
+
             unit.CompleteAssembly();
 
             return unit;

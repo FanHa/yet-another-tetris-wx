@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -37,6 +38,6 @@ namespace Model.Skills
         public float DotDuration;
 
         [Header("加成")]
-        public float DotAddtionPerFireCell; // 每个火系方块增加的伤害
+        public float DotDpsPerResonantCell; // 每个匹配共鸣 Cell 增加的灼烧 DPS
     }
 }

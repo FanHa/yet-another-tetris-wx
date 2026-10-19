@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: FlameRing
   m_EditorClassIdentifier: 
   id: FlameRing
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 1
+  resonance: 1
   skillDefinition: {fileID: 11400000, guid: 3bfac8483a5deba4589b6059cd62d928, type: 2}

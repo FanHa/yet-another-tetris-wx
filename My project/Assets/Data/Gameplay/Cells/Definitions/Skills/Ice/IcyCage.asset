@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: IcyCage
   m_EditorClassIdentifier: 
   id: IcyCage
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 2
+  resonance: 6
   skillDefinition: {fileID: 11400000, guid: 84ea59bf39d4a3c44a0939ad397f9414, type: 2}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -33,11 +34,11 @@ namespace Model.Skills
         public float BaseDotDps = 5f;
         public float BaseDotDuration = 3f;
 
-        [Header("每个火块加成")]
-        public float RadiusPerFireCell = 0.2f;
-        public float DurationPerFireCell = 1f;
-        public float DotDpsPerFireCell = 2f;
-        public float DotDurationPerFireCell = 0.5f;
+        [Header("每个匹配共鸣 Cell 加成")]
+        public float RadiusPerResonantCell = 0.2f;
+        public float DurationPerResonantCell = 1f;
+        public float DotDpsPerResonantCell = 2f;
+        public float DotDurationPerResonantCell = 0.5f;
 
         [Header("消耗")]
         public float RequiredEnergy = 120f;

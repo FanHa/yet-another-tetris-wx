@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using Model.Resonance;
 using Model.Tetri;
 using UI;
 using Units.Actions;
@@ -35,6 +36,7 @@ namespace Units
         private FacingController facingController;
         [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
         public Dictionary<AffinityType, int> CellCounts = new();
+        private Dictionary<ResonanceType, int> cellResonanceCounts = new();
 
         public enum Faction
         {
@@ -477,6 +479,16 @@ namespace Units
             this.CellCounts.TryGetValue(AffinityType.Swift, out int swiftCount);
             float swiftBonus = 0.35f * swiftCount;
             Attributes.MoveSpeed.AddFlatModifier(this, swiftBonus);
+        }
+
+        public void SetCellResonanceCounts(Dictionary<ResonanceType, int> counts)
+        {
+            cellResonanceCounts = counts;
+        }
+
+        public int GetResonanceCount(ResonanceType type)
+        {
+            return cellResonanceCounts.TryGetValue(type, out int count) ? count : 0;
         }
 
         public void SetMoveBehaviorMode(MoveBehaviorMode mode)

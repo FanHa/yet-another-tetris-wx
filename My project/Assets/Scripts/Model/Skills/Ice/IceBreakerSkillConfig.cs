@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -30,7 +31,7 @@ namespace Model.Skills
         public float MultiplierByChilledLayer;
 
         [Header("加成")]
-        public float ExtraDamagePerIceCell;
+        public float ExtraDamagePerResonantCell;
 
     }
 }

@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelConfigs:
   - BaseDotDps: 2
-    DotDpsPerFireCell: 1
+    DotDpsPerResonantCell: 2
     BaseDotDuration: 2
-    DotDurationPerFireCell: 1
+    DotDurationPerResonantCell: 1
     AreaDuration: -1
     BaseRadius: 1
-    RadiusPerFireCell: 0.2
+    RadiusPerResonantCell: 0.2
   - BaseDotDps: 4
-    DotDpsPerFireCell: 2
+    DotDpsPerResonantCell: 4
     BaseDotDuration: 4
-    DotDurationPerFireCell: 2
+    DotDurationPerResonantCell: 1
     AreaDuration: -1
     BaseRadius: 1
-    RadiusPerFireCell: 0.2
+    RadiusPerResonantCell: 0.2
   projectilePrefab: {fileID: 6674140992886737915, guid: f1dc2ad4c43bffa4ea2c7217b574308d, type: 3}
   burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

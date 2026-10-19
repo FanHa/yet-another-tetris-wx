@@ -16,5 +16,6 @@ MonoBehaviour:
   displayName: Frost Zone
   description: "\u91CA\u653E Frost Zone\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
   affinity: 2
+  resonance: 6
   config: {fileID: 11400000, guid: 702c3566b54795f468c9115cd9e3d7fe, type: 2}
   icon: {fileID: -4670903004921466277, guid: 18b97e3e3defca847872e7a01794682b, type: 3}

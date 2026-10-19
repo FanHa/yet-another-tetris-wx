@@ -1,5 +1,5 @@
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -23,10 +23,10 @@ namespace Units.Skills
 
         private IceBreakerStats CalcStats()
         {
-            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var c) ? c : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new IceBreakerStats
             {
-                BaseExtraDamage = new StatValue("基础额外伤害", Config.BaseExtraDamage + Config.ExtraDamagePerIceCell * iceCellCount),
+                BaseExtraDamage = new StatValue("基础额外伤害", Config.BaseExtraDamage + Config.ExtraDamagePerResonantCell * resonantCellCount),
                 MultiplierByChilledLayer = new StatValue("chilled层数加成", Config.MultiplierByChilledLayer)
             };
         }

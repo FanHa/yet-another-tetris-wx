@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Controller;
+using Model.Resonance;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace Units.Skills
 
         public Attributes Attributes => unit.Attributes;
         public Dictionary<AffinityType, int> CellCounts => unit.CellCounts;
+        public int GetResonanceCount(ResonanceType type) => unit.GetResonanceCount(type);
         public Transform transform => unit.transform;
         public string name => unit.name;
         public Transform projectileSpawnPoint => unit.projectileSpawnPoint;

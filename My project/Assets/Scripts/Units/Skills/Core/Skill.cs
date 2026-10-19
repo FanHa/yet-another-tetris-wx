@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using Model.Resonance;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Units.Skills
 
         Attributes Attributes { get; }
         Dictionary<AffinityType, int> CellCounts { get; }
+        int GetResonanceCount(ResonanceType type);
 
         Transform transform { get; }
         string name { get; }

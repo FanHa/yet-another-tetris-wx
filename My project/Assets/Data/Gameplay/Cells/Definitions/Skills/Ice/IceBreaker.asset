@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: IceBreaker
   m_EditorClassIdentifier: 
   id: IceBreaker
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 2
+  resonance: 6
   skillDefinition: {fileID: 11400000, guid: d5f96687131510843b6c2cc44c0b8932, type: 2}

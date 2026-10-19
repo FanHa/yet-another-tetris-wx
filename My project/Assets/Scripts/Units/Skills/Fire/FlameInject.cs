@@ -1,5 +1,4 @@
 using System.Linq;
-using Model.Tetri;
 using Model.Skills;
 using Units.Buffs;
 using UnityEngine;
@@ -24,10 +23,10 @@ namespace Units.Skills
 
         private FlameInjectStats CalcStats()
         {
-            int fireCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new FlameInjectStats
             {
-                DotDps = new StatValue("附加每秒火焰伤害", Config.BaseDotDps, fireCellCount * Config.DotDpsPerFireCell),
+                DotDps = new StatValue("附加每秒火焰伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
                 DotDuration = new StatValue("火焰伤害持续时间", Config.DotDuration),
                 BuffDuration = new StatValue("效果持续时间", Config.BuffDuration)
             };

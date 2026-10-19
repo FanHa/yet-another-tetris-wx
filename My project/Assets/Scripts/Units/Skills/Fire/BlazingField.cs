@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
 
@@ -31,13 +30,13 @@ namespace Units.Skills
 
         private BlazingFieldStats CalcStats()
         {
-            int fireCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Fire, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new BlazingFieldStats
             {
-                Radius = new StatValue("范围半径", Config.BaseRadius, fireCellCount * Config.RadiusPerFireCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, fireCellCount * Config.DurationPerFireCell),
-                DotDps = new StatValue("每秒伤害", Config.BaseDotDps, fireCellCount * Config.DotDpsPerFireCell),
-                DotDuration = new StatValue("灼烧持续时间", Config.BaseDotDuration, fireCellCount * Config.DotDurationPerFireCell)
+                Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
+                DotDps = new StatValue("每秒伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
+                DotDuration = new StatValue("灼烧持续时间", Config.BaseDotDuration, resonantCellCount * Config.DotDurationPerResonantCell)
             };
         }
 

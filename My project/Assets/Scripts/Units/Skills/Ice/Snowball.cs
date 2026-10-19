@@ -1,5 +1,5 @@
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -85,14 +85,14 @@ namespace Units.Skills
 
         private SnowballStats CalcStats()
         {
-            int iceCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Ice, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new SnowballStats
             {
-                ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, iceCellCount * Config.ChilledDurationPerIceCell),
-                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, iceCellCount * Config.ChilledMoveSlowPercentPerIceCell),
-                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, iceCellCount * Config.ChilledAtkSlowPercentPerIceCell),
-                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseChilledActionSlowPercent, iceCellCount * Config.ChilledActionSlowPercentPerIceCell),
-                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, iceCellCount * Config.ChilledEnergySlowPercentPerIceCell)
+                ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, resonantCellCount * Config.ChilledDurationPerResonantCell),
+                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, resonantCellCount * Config.ChilledMoveSlowPercentPerResonantCell),
+                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, resonantCellCount * Config.ChilledAtkSlowPercentPerResonantCell),
+                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseChilledActionSlowPercent, resonantCellCount * Config.ChilledActionSlowPercentPerResonantCell),
+                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, resonantCellCount * Config.ChilledEnergySlowPercentPerResonantCell)
             };
         }
     }

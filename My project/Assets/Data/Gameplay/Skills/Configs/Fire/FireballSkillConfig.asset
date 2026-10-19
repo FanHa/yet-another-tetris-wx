@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelConfigs:
   - RequiredEnergy: 100
-    DotBaseDamage: 5
+    DotBaseDamage: 2
     DotDuration: 5
-    DotAddtionPerFireCell: 1
+    DotDpsPerResonantCell: 2
   - RequiredEnergy: 100
-    DotBaseDamage: 10
-    DotDuration: 5
-    DotAddtionPerFireCell: 2
+    DotBaseDamage: 4
+    DotDuration: 8
+    DotDpsPerResonantCell: 4
   projectilePrefab: {fileID: 7427865461942980773, guid: c9ece8115598f5146ac260477c0b272d, type: 3}
   burnBuffDefinition: {fileID: 11400000, guid: 8964a5d8a43d591438ae7c5618c24036, type: 2}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -33,7 +34,7 @@ namespace Model.Skills
         public float DotDuration;
 
         [Header("加成")]
-        public float DotDpsPerFireCell;
+        public float DotDpsPerResonantCell;
 
     }
 }

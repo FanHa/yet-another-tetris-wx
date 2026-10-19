@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Model.Resonance;
 using Model.Tetri;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Model.Skills
         [SerializeField] private string displayName;
         [SerializeField] private string description;
         [SerializeField] private AffinityType affinity;
+        [SerializeField] private ResonanceType resonance = ResonanceType.None;
         [SerializeField] private SkillConfig config;
         [SerializeField] private Sprite icon;
 
@@ -21,6 +23,7 @@ namespace Model.Skills
         public string DisplayName => displayName;
         public string Description => description;
         public AffinityType Affinity => affinity;
+        public ResonanceType Resonance => resonance;
         public SkillConfig Config => config;
         public Sprite Icon => icon;
 
@@ -30,6 +33,11 @@ namespace Model.Skills
             if (!System.Enum.IsDefined(typeof(AffinityType), affinity) || affinity == AffinityType.End)
             {
                 Debug.LogError($"{nameof(affinity)} must be a valid affinity other than '{AffinityType.End}'.", this);
+            }
+
+            if (!System.Enum.IsDefined(typeof(ResonanceType), resonance))
+            {
+                Debug.LogError($"{nameof(resonance)} '{resonance}' is invalid.", this);
             }
 
             if (string.IsNullOrWhiteSpace(id))

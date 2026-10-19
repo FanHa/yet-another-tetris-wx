@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -29,15 +30,15 @@ namespace Model.Skills
     {
         [Header("灼烧效果")]
         public float BaseDotDps = 2f;
-        public float DotDpsPerFireCell = 1f;
+        public float DotDpsPerResonantCell = 1f;
         public float BaseDotDuration = 2f;
-        public float DotDurationPerFireCell = 1f;
+        public float DotDurationPerResonantCell = 1f;
 
         [Header("区域效果")]
         public float AreaDuration = -1f;
 
         [Header("范围")]
         public float BaseRadius = 1f;
-        public float RadiusPerFireCell = 0.2f;
+        public float RadiusPerResonantCell = 0.2f;
     }
 }
