@@ -50,6 +50,7 @@ namespace Units.Skills
             ["skill.energy_absorb"] = new ConfiguredSkillCreator<EnergyAbsorbSkillConfig, EnergyAbsorbLevelConfig>(config => new EnergyAbsorb(config)),
             ["skill.chain_lightning"] = new ConfiguredSkillCreator<ChainLightningSkillConfig, ChainLightningLevelConfig>(config => new ChainLightning(config)),
             ["skill.thunder_strike"] = new ConfiguredSkillCreator<ThunderStrikeSkillConfig, ThunderStrikeLevelConfig>(config => new ThunderStrike(config)),
+            ["skill.electric_field"] = new ConfiguredSkillCreator<ElectricFieldSkillConfig, ElectricFieldLevelConfig>(config => new ElectricField(config)),
             ["skill.blazing_field"] = new ConfiguredSkillCreator<BlazingFieldSkillConfig, BlazingFieldLevelConfig>(config => new BlazingField(config)),
             ["skill.fireball"] = new ConfiguredSkillCreator<FireballSkillConfig, FireballLevelConfig>(config => new Fireball(config)),
             ["skill.flame_inject"] = new ConfiguredSkillCreator<FlameInjectSkillConfig, FlameInjectLevelConfig>(config => new FlameInject(config)),

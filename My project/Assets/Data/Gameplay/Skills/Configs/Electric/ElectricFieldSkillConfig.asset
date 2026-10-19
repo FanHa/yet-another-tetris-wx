@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6348a429c023896489edbd9232651955, type: 3}
+  m_Name: ElectricFieldSkillConfig
+  m_EditorClassIdentifier: 
+  LevelConfigs:
+  - BaseRadius: 2
+    RadiusPerElectricCell: 0.2
+    BaseDuration: 3
+    DurationPerElectricCell: 0.2
+    BaseDamage: 4
+    DamagePerElectricCell: 4
+    BaseEnergyDisruptionAmount: 5
+    EnergyDisruptionAmountPerElectricCell: 5
+    RequiredEnergy: 90
+  - BaseRadius: 2
+    RadiusPerElectricCell: 0.1
+    BaseDuration: 3
+    DurationPerElectricCell: 0.2
+    BaseDamage: 8
+    DamagePerElectricCell: 4
+    BaseEnergyDisruptionAmount: 5
+    EnergyDisruptionAmountPerElectricCell: 5
+    RequiredEnergy: 90
+  projectilePrefab: {fileID: 5635325094941670474, guid: 02ad67cb76509be438b4b0b9978d0f5f, type: 3}
+  hitProjectilePrefab: {fileID: 6601108763138610009, guid: 767e31535e0abfa4a8c57f28033de199, type: 3}

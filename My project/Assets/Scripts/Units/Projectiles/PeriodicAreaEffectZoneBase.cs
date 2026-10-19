@@ -23,6 +23,7 @@ namespace Units.Projectiles
         protected Skills.Skill SourceSkill { get; private set; }
         protected Model.Tetri.AffinityDatabase AffinityDatabase => affinityDatabase;
         protected float Radius => radius;
+        public float ApplyInterval => applyInterval;
 
 #if UNITY_EDITOR
         protected virtual void OnValidate()

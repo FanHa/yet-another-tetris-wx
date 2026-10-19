@@ -20,6 +20,6 @@ MonoBehaviour:
     relativePositionFromCenter: {x: 1, y: 1, z: 0}
   - characterDefinition: {fileID: 11400000, guid: 9ba0a84f4cf8475db67a1cbcad581a0f, type: 2}
     cellDefinitions:
-    - definition: {fileID: 11400000, guid: ef3ca8a1c59122a439478d0700c650e3, type: 2}
+    - definition: {fileID: 11400000, guid: bb91e2db846ad1a4a89888daa3691937, type: 2}
       level: 1
-    relativePositionFromCenter: {x: 1, y: -1, z: 0}
+    relativePositionFromCenter: {x: 1, y: 1, z: 0}
