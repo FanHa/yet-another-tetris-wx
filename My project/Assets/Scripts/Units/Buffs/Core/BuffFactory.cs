@@ -59,8 +59,6 @@ namespace Units.Buffs
                 new LifeShieldBuff(definition, args)),
             ["buff.shadow_attack"] = new FactoryEntry<ShadowAttackBuffArgs>((definition, args) =>
                 new ShadowAttackBuff(definition, args)),
-            ["buff.thunder_strike"] = new FactoryEntry<ThunderStrikeBuffArgs>((definition, args) =>
-                new ThunderStrikeBuff(definition, args)),
             ["buff.vulnerability"] = new FactoryEntry<VulnerabilityBuffArgs>((definition, args) =>
                 new Vulnerability(definition, args)),
             ["buff.wild_wind_debuff"] = new FactoryEntry<WildWindDebuffBuffArgs>((definition, args) =>
