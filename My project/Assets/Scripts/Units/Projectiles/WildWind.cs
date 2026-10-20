@@ -17,9 +17,9 @@ namespace Units.Projectiles
         private Units.Skills.Skill sourceSkill;
 
         private const float rotateSpeed = 60f; // 每秒旋转60度
-        private const float pushSpeed = 2.5f;  // 每秒远离速度
         private HashSet<Unit> damagedUnits = new HashSet<Unit>();
         [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField, Min(0f)] private float pushSpeed = 2.5f;
 
         public void Initialize(
             Unit caster,
@@ -103,5 +103,15 @@ namespace Units.Projectiles
                 Destroy(gameObject);
             }
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (float.IsNaN(pushSpeed) || float.IsInfinity(pushSpeed) || pushSpeed < 0f)
+            {
+                Debug.LogError($"{nameof(pushSpeed)} must be finite and non-negative.", this);
+            }
+        }
+#endif
     }
 }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: WindKnockbackSkillConfig
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - BaseKnockbackDistance: 1
-    KnockbackDistancePerWindCell: 0.1
+  - BaseKnockbackDistance: 0.2
+    KnockbackDistancePerResonantCell: 0.2
     MaxKnockbackDistance: 3
-  - BaseKnockbackDistance: 1.5
-    KnockbackDistancePerWindCell: 0.15
+  - BaseKnockbackDistance: 0.4
+    KnockbackDistancePerResonantCell: 0.4
     MaxKnockbackDistance: 3
   windKnockbackBuffDefinition: {fileID: 11400000, guid: c70da5dbca4c1554cac1ce99d4feb184, type: 2}

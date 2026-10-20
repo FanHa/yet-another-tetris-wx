@@ -26,15 +26,15 @@ namespace Units.Skills
 
         private EnergyCurseStats CalcStats()
         {
-            int deathCurseCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.DeathCurse, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             float energyRegenReductionBonus = Mathf.Min(
-                deathCurseCellCount * Config.EnergyRegenReductionPerDeathCurseCell,
+                resonantCellCount * Config.EnergyRegenReductionPerResonantCell,
                 Config.MaxEnergyRegenReductionPercent - Config.BaseEnergyRegenReductionPercent);
 
             return new EnergyCurseStats
             {
-                Radius = new StatValue("领域半径", Config.BaseRadius, deathCurseCellCount * Config.RadiusPerDeathCurseCell),
-                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, deathCurseCellCount * Config.ZoneLifetimePerDeathCurseCell),
+                Radius = new StatValue("领域半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell),
                 DebuffDuration = new StatValue("诅咒持续", Config.DebuffDuration),
                 EnergyRegenReductionPercent = new StatValue("能量回复降低(%)", Config.BaseEnergyRegenReductionPercent, energyRegenReductionBonus)
             };

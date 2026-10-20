@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -21,10 +21,10 @@ namespace Units.Skills
 
         private WindKnockbackStats CalcStats()
         {
-            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new WindKnockbackStats
             {
-                KnockbackDistance = new StatValue("击退距离", Config.BaseKnockbackDistance, windCellCount * Config.KnockbackDistancePerWindCell),
+                KnockbackDistance = new StatValue("击退距离", Config.BaseKnockbackDistance, resonantCellCount * Config.KnockbackDistancePerResonantCell),
                 MaxKnockbackDistance = new StatValue("最大击退距离", Config.MaxKnockbackDistance)
             };
         }

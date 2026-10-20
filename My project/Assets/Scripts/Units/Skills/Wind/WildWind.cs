@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -28,15 +28,15 @@ namespace Units.Skills
 
         private WildWindStats CalcStats()
         {
-            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new WildWindStats
             {
-                Damage = new StatValue("伤害", Config.Damage, windCellCount * Config.DamageAdditionPerWindCell),
-                Radius = new StatValue("作用半径", Config.Radius),
-                Duration = new StatValue("风场持续时间", Config.Duration),
-                DebuffDuration = new StatValue("DeBuff持续时间", Config.DebuffDuration),
-                MoveSlowPercent = new StatValue("DeBuff移动速度降低(%)", Config.MoveSlowPercent),
-                AtkReducePercent = new StatValue("DeBuff攻击力降低(%)", Config.AtkReducePercent)
+                Damage = new StatValue("伤害", Config.Damage, resonantCellCount * Config.DamageAdditionPerResonantCell),
+                Radius = new StatValue("作用半径", Config.Radius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatValue("风场持续时间", Config.Duration, resonantCellCount * Config.DurationPerResonantCell),
+                DebuffDuration = new StatValue("DeBuff持续时间", Config.DebuffDuration, resonantCellCount * Config.DebuffDurationPerResonantCell),
+                MoveSlowPercent = new StatValue("DeBuff移动速度降低(%)", Config.MoveSlowPercent, resonantCellCount * Config.MoveSlowPercentPerResonantCell),
+                AtkReducePercent = new StatValue("DeBuff攻击力降低(%)", Config.AtkReducePercent, resonantCellCount * Config.AtkReducePercentPerResonantCell)
             };
         }
 

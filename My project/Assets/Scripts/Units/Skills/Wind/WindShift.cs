@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 
 namespace Units.Skills
@@ -19,13 +19,13 @@ namespace Units.Skills
 
         private WindShiftStats CalcStats()
         {
-            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new WindShiftStats
             {
                 AttackRangeBonus = new StatValue(
                     "攻击距离提升",
                     Config.AttackRangeBonus,
-                    windCellCount * Config.AttackRangePerWindCell
+                    resonantCellCount * Config.AttackRangePerResonantCell
                 )
             };
         }

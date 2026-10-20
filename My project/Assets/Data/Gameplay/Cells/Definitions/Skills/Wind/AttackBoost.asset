@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: AttackBoost
   m_EditorClassIdentifier: 
   id: AttackBoost
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 3
+  resonance: 5
   skillDefinition: {fileID: 11400000, guid: b0352d8c7e3a3504fa8fe94f865fdef6, type: 2}

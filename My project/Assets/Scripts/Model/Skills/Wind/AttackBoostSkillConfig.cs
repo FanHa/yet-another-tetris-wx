@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -35,6 +36,6 @@ namespace Model.Skills
         public float AtkSpeedPercent;
 
         [Header("加成")]
-        public float AtkSpeedAdditionPercentPerWindCell; // 每个风系方块增加的攻击速度百分比
+        public float AtkSpeedAdditionPercentPerResonantCell; // 每个匹配共鸣 Cell 增加的攻击速度百分比
     }
 }

@@ -1,5 +1,6 @@
 using Model.Buffs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Model.Skills
 {
@@ -35,7 +36,7 @@ namespace Model.Skills
                 ValidateFinitePositive(levelConfig.DebuffDuration, LevelField(index, nameof(levelConfig.DebuffDuration)));
 
                 ValidatePercent(index, nameof(levelConfig.BaseAttackReductionPercent), levelConfig.BaseAttackReductionPercent);
-                ValidateFiniteNonNegative(levelConfig.AttackReductionPerDeathCurseCell, LevelField(index, nameof(levelConfig.AttackReductionPerDeathCurseCell)));
+                ValidateFiniteNonNegative(levelConfig.AttackReductionPerResonantCell, LevelField(index, nameof(levelConfig.AttackReductionPerResonantCell)));
                 ValidatePercent(index, nameof(levelConfig.MaxAttackReductionPercent), levelConfig.MaxAttackReductionPercent);
 
                 if (levelConfig.BaseAttackReductionPercent > levelConfig.MaxAttackReductionPercent)
@@ -63,14 +64,14 @@ namespace Model.Skills
     {
         [Header("Area")]
         public float BaseRadius = 5f;
-        public float RadiusPerDeathCurseCell = 0.3f;
+        public float RadiusPerResonantCell = 0.3f;
         public float BaseZoneLifetime = 15f;
-        public float ZoneLifetimePerDeathCurseCell = 0.5f;
+        public float ZoneLifetimePerResonantCell = 0.5f;
         public float DebuffDuration = 1.5f;
 
         [Header("Attack Power Reduction (%)")]
         public float BaseAttackReductionPercent = 20f;
-        public float AttackReductionPerDeathCurseCell = 2f;
+        public float AttackReductionPerResonantCell = 2f;
         public float MaxAttackReductionPercent = 80f;
 
     }

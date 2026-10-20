@@ -11,6 +11,7 @@ namespace Model.Resonance
         Blue,
         Violet,
         Magenta,
+        Burgundy,
         End
     }
 }

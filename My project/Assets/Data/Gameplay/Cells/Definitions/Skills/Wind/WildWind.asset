@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: WildWind
   m_EditorClassIdentifier: 
   id: WildWind
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 3
+  resonance: 5
   skillDefinition: {fileID: 11400000, guid: 4ad49ea69ed940548a5bf872eb450ac1, type: 2}

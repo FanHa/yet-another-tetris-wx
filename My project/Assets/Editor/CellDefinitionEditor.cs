@@ -8,9 +8,11 @@ namespace Editor.Validation
     {
         protected static readonly GUIContent IdLabel = new("Id");
         protected static readonly GUIContent AffinityLabel = new("Affinity");
+        protected static readonly GUIContent ResonanceLabel = new("Resonance");
 
         protected SerializedProperty idProperty;
         protected SerializedProperty affinityProperty;
+        protected SerializedProperty resonanceProperty;
         protected SerializedProperty scriptProperty;
 
         protected virtual void OnEnable()
@@ -18,6 +20,7 @@ namespace Editor.Validation
             scriptProperty = serializedObject.FindProperty("m_Script");
             idProperty = serializedObject.FindProperty("id");
             affinityProperty = serializedObject.FindProperty("affinity");
+            resonanceProperty = serializedObject.FindProperty("resonance");
         }
 
         public override void OnInspectorGUI()
@@ -26,6 +29,7 @@ namespace Editor.Validation
 
             DrawScriptField();
             DrawAffinityField();
+            DrawResonanceField();
             DrawEditableId();
             DrawDerivedFields();
 
@@ -62,6 +66,16 @@ namespace Editor.Validation
             }
 
             EditorGUILayout.PropertyField(affinityProperty, AffinityLabel);
+        }
+
+        protected void DrawResonanceField()
+        {
+            if (resonanceProperty == null)
+            {
+                return;
+            }
+
+            EditorGUILayout.PropertyField(resonanceProperty, ResonanceLabel);
         }
     }
 }

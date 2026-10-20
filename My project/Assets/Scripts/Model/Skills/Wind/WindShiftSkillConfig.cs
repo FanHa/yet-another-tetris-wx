@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -24,6 +25,6 @@ namespace Model.Skills
     {
 
         public float AttackRangeBonus;
-        public float AttackRangePerWindCell;
+        public float AttackRangePerResonantCell;
     }
 }

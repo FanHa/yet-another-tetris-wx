@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -24,10 +24,10 @@ namespace Units.Skills
 
         private AttackBoostStats CalcStats()
         {
-            int windCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Wind, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
             return new AttackBoostStats
             {
-                AtkSpeedPercent = new StatValue("攻击速度提升(%)", Config.AtkSpeedPercent, windCellCount * Config.AtkSpeedAdditionPercentPerWindCell),
+                AtkSpeedPercent = new StatValue("攻击速度提升(%)", Config.AtkSpeedPercent, resonantCellCount * Config.AtkSpeedAdditionPercentPerResonantCell),
                 Duration = new StatValue("持续时间", Config.Duration)
             };
         }

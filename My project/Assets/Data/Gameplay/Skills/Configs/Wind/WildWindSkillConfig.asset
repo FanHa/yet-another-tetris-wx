@@ -14,20 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelConfigs:
   - RequiredEnergy: 100
-    Damage: 15
+    Damage: 5
     DebuffDuration: 3
-    MoveSlowPercent: 50
-    AtkReducePercent: 50
+    MoveSlowPercent: 6
+    AtkReducePercent: 6
     Radius: 1.5
     Duration: 2
-    DamageAdditionPerWindCell: 3
+    DamageAdditionPerResonantCell: 5
+    RadiusPerResonantCell: 0.1
+    DurationPerResonantCell: 0.25
+    DebuffDurationPerResonantCell: 0.2
+    MoveSlowPercentPerResonantCell: 6
+    AtkReducePercentPerResonantCell: 6
   - RequiredEnergy: 100
-    Damage: 30
+    Damage: 10
     DebuffDuration: 3
-    MoveSlowPercent: 75
-    AtkReducePercent: 75
+    MoveSlowPercent: 10
+    AtkReducePercent: 10
     Radius: 1.5
     Duration: 2
-    DamageAdditionPerWindCell: 5
+    DamageAdditionPerResonantCell: 10
+    RadiusPerResonantCell: 0.1
+    DurationPerResonantCell: 0.25
+    DebuffDurationPerResonantCell: 0.2
+    MoveSlowPercentPerResonantCell: 10
+    AtkReducePercentPerResonantCell: 10
   projectilePrefab: {fileID: -3437638926683533559, guid: 0a417b4fc79a18846800e1363a2a09f5, type: 3}
   wildWindDebuffDefinition: {fileID: 11400000, guid: 08ab71b25450eb147bca15cf795b15e3, type: 2}

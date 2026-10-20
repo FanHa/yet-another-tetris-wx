@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Units.Projectiles;
 using Model.Buffs;
 
@@ -20,6 +21,17 @@ namespace Model.Skills
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
             ValidateRequiredReference(wildWindDebuffDefinition, nameof(wildWindDebuffDefinition));
+
+                foreach (var (index, levelConfig) in GetValidLevelConfigs())
+                {
+                    string levelPrefix = $"{nameof(LevelConfigs)}[{index}]";
+                    ValidateFiniteNonNegative(levelConfig.DamageAdditionPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DamageAdditionPerResonantCell)}");
+                    ValidateFiniteNonNegative(levelConfig.RadiusPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.RadiusPerResonantCell)}");
+                    ValidateFiniteNonNegative(levelConfig.DurationPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DurationPerResonantCell)}");
+                    ValidateFiniteNonNegative(levelConfig.DebuffDurationPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DebuffDurationPerResonantCell)}");
+                    ValidateFiniteNonNegative(levelConfig.MoveSlowPercentPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.MoveSlowPercentPerResonantCell)}");
+                    ValidateFiniteNonNegative(levelConfig.AtkReducePercentPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.AtkReducePercentPerResonantCell)}");
+                }
         }
     #endif
     }
@@ -40,6 +52,11 @@ namespace Model.Skills
         public float Duration;
 
         [Header("加成")]
-        public float DamageAdditionPerWindCell = 3f; // 每个风系方块增加的伤害
+        public float DamageAdditionPerResonantCell = 3f; // 每个匹配共鸣 Cell 增加的伤害
+        public float RadiusPerResonantCell = 0.1f;
+        public float DurationPerResonantCell = 0.25f;
+        public float DebuffDurationPerResonantCell = 0.2f;
+        public int MoveSlowPercentPerResonantCell = 3;
+        public int AtkReducePercentPerResonantCell = 3;
     }
 }

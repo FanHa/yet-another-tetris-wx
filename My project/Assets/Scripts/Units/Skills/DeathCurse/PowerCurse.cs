@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -26,14 +26,14 @@ namespace Units.Skills
 
         private PowerCurseStats CalcStats()
         {
-            int deathCurseCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.DeathCurse, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
             return new PowerCurseStats
             {
-                Radius = new StatValue("领域半径", Config.BaseRadius, deathCurseCellCount * Config.RadiusPerDeathCurseCell),
-                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, deathCurseCellCount * Config.ZoneLifetimePerDeathCurseCell),
+                Radius = new StatValue("领域半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell),
                 DebuffDuration = new StatValue("诅咒持续", Config.DebuffDuration),
-                AttackReductionPercent = new StatValue("攻击降低(%)", Config.BaseAttackReductionPercent, deathCurseCellCount * Config.AttackReductionPerDeathCurseCell)
+                AttackReductionPercent = new StatValue("攻击降低(%)", Config.BaseAttackReductionPercent, resonantCellCount * Config.AttackReductionPerResonantCell)
             };
         }
 

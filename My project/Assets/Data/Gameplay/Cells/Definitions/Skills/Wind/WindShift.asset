@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: WindShift
   m_EditorClassIdentifier: 
   id: WindShift
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 3
+  resonance: 5
   skillDefinition: {fileID: 11400000, guid: 74b27c225f9672c4cadeea9f69dbe1ad, type: 2}

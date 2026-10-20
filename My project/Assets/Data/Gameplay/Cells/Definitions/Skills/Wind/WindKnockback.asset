@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: WindKnockback
   m_EditorClassIdentifier: 
   id: WindKnockback
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 3
+  resonance: 5
   skillDefinition: {fileID: 11400000, guid: 2178451fb95d2f2498d92da0feded67a, type: 2}

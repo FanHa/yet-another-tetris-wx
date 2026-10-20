@@ -1,5 +1,6 @@
 using Model.Buffs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Model.Skills
 {
@@ -31,13 +32,13 @@ namespace Model.Skills
             foreach (var (index, levelConfig) in GetValidLevelConfigs())
             {
                 ValidateFinitePositive(levelConfig.BaseRadius, LevelField(index, nameof(levelConfig.BaseRadius)));
-                ValidateFiniteNonNegative(levelConfig.RadiusPerDeathCurseCell, LevelField(index, nameof(levelConfig.RadiusPerDeathCurseCell)));
+                ValidateFiniteNonNegative(levelConfig.RadiusPerResonantCell, LevelField(index, nameof(levelConfig.RadiusPerResonantCell)));
                 ValidateFinitePositive(levelConfig.BaseZoneLifetime, LevelField(index, nameof(levelConfig.BaseZoneLifetime)));
-                ValidateFiniteNonNegative(levelConfig.ZoneLifetimePerDeathCurseCell, LevelField(index, nameof(levelConfig.ZoneLifetimePerDeathCurseCell)));
+                ValidateFiniteNonNegative(levelConfig.ZoneLifetimePerResonantCell, LevelField(index, nameof(levelConfig.ZoneLifetimePerResonantCell)));
                 ValidateFinitePositive(levelConfig.DebuffDuration, LevelField(index, nameof(levelConfig.DebuffDuration)));
 
                 ValidatePercent(index, nameof(levelConfig.BaseEnergyRegenReductionPercent), levelConfig.BaseEnergyRegenReductionPercent);
-                ValidateFiniteNonNegative(levelConfig.EnergyRegenReductionPerDeathCurseCell, LevelField(index, nameof(levelConfig.EnergyRegenReductionPerDeathCurseCell)));
+                ValidateFiniteNonNegative(levelConfig.EnergyRegenReductionPerResonantCell, LevelField(index, nameof(levelConfig.EnergyRegenReductionPerResonantCell)));
                 ValidatePercent(index, nameof(levelConfig.MaxEnergyRegenReductionPercent), levelConfig.MaxEnergyRegenReductionPercent);
 
                 if (levelConfig.BaseEnergyRegenReductionPercent > levelConfig.MaxEnergyRegenReductionPercent)
@@ -65,14 +66,14 @@ namespace Model.Skills
     {
         [Header("Area")]
         public float BaseRadius = 5f;
-        public float RadiusPerDeathCurseCell = 0.3f;
+        public float RadiusPerResonantCell = 0.3f;
         public float BaseZoneLifetime = 15f;
-        public float ZoneLifetimePerDeathCurseCell = 0.5f;
+        public float ZoneLifetimePerResonantCell = 0.5f;
         public float DebuffDuration = 1.5f;
 
         [Header("Energy Regeneration Reduction (%)")]
         public float BaseEnergyRegenReductionPercent = 20f;
-        public float EnergyRegenReductionPerDeathCurseCell = 2f;
+        public float EnergyRegenReductionPerResonantCell = 2f;
         public float MaxEnergyRegenReductionPercent = 80f;
     }
 }
