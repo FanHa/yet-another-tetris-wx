@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using Model.Buffs;
-using Model.Tetri;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Units
 {
     public sealed class BuffOrbitVisual : BuffVisual
     {
-        [SerializeField] private AffinityDatabase affinityDatabase;
+        [SerializeField] private ResonanceDatabase resonanceDatabase;
         [SerializeField] private SpriteRenderer[] particles;
         [SerializeField] private Vector2 orbitRadius = new Vector2(0.35f, 0.12f);
         [SerializeField] private Vector2 centerOffset;
@@ -19,17 +18,22 @@ namespace Units
         private float angle;
         private bool isActive;
 
-        public override void Initialize(Unit owner, BuffDefinition definition)
+        public override void Initialize(Unit owner, ResonanceType resonance)
         {
             this.owner = owner;
             isActive = false;
             angle = Random.Range(0f, 360f);
             originalScales = new Vector3[particles.Length];
 
-            Color color = affinityDatabase.GetEntry(definition.Affinity).baseColor;
+            Color? resonanceColor = resonance == ResonanceType.None
+                ? null
+                : resonanceDatabase.GetDefinition(resonance).BaseColor;
             for (int index = 0; index < particles.Length; index++)
             {
-                particles[index].color = color;
+                if (resonanceColor.HasValue)
+                {
+                    particles[index].color = resonanceColor.Value;
+                }
                 originalScales[index] = particles[index].transform.localScale;
             }
         }
@@ -87,9 +91,9 @@ namespace Units
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (affinityDatabase == null)
+            if (resonanceDatabase == null)
             {
-                Debug.LogError($"{nameof(affinityDatabase)} is not assigned.", this);
+                Debug.LogError($"{nameof(resonanceDatabase)} is not assigned.", this);
                 return;
             }
 

@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Units.Projectiles
 {
     public abstract class PeriodicAreaEffectZoneBase : MonoBehaviour
     {
-        [SerializeField] private Model.Tetri.AffinityDatabase affinityDatabase;
+        [SerializeField] private ResonanceDatabase resonanceDatabase;
         [SerializeField] private ParticleSystem zoneParticle;
         [SerializeField] private ParticleSystem ringParticle;
         [SerializeField] private ParticleSystem ringOutlineParticle;
@@ -21,16 +22,15 @@ namespace Units.Projectiles
         protected Controller.UnitManager UnitManager { get; private set; }
         protected Unit SourceUnit { get; private set; }
         protected Skills.Skill SourceSkill { get; private set; }
-        protected Model.Tetri.AffinityDatabase AffinityDatabase => affinityDatabase;
         protected float Radius => radius;
         public float ApplyInterval => applyInterval;
 
 #if UNITY_EDITOR
         protected virtual void OnValidate()
         {
-            if (affinityDatabase == null)
+            if (resonanceDatabase == null)
             {
-                Debug.LogError($"{nameof(affinityDatabase)} is not assigned.", this);
+                Debug.LogError($"{nameof(resonanceDatabase)} is not assigned.", this);
             }
 
             if (zoneParticle == null)
@@ -80,13 +80,13 @@ namespace Units.Projectiles
 
         private void SyncParticleColor()
         {
-            Model.Tetri.AffinityType affinity = SourceSkill.Definition.Affinity;
-            if (affinity == Model.Tetri.AffinityType.None)
+            ResonanceType resonance = SourceSkill.Definition.Resonance;
+            if (resonance == ResonanceType.None)
             {
                 return;
             }
 
-            Color color = AffinityDatabase.GetEntry(affinity).baseColor;
+            Color color = resonanceDatabase.GetDefinition(resonance).BaseColor;
             SetParticleStartColor(zoneParticle, color);
             SetParticleStartColor(ringParticle, color);
             SetParticleStartColor(ringOutlineParticle, color);

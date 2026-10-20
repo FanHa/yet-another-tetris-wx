@@ -8,7 +8,6 @@ namespace Model.Tetri
     public sealed class CharacterDefinition : ScriptableObject
     {
         [SerializeField] private string id;
-        [SerializeField] private AffinityType affinity = AffinityType.None;
         [SerializeField] private Sprite icon;
 
         [Header("展示信息")]
@@ -74,7 +73,6 @@ namespace Model.Tetri
         }
 
         public string Id => id;
-        public AffinityType Affinity => affinity;
 
         public float MoveSpeedBase => moveSpeedBase;
         public float AttackPowerBase => attackPowerBase;

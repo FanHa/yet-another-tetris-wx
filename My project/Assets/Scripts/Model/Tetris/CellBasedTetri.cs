@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Model.Resonance;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -43,19 +44,19 @@ namespace Model.Tetri
             }
         }
 
-        public Dictionary<AffinityType, int> GetAffinityCounts()
+        public Dictionary<ResonanceType, int> GetResonanceCounts()
         {
-            var counts = new Dictionary<AffinityType, int>();
+            var counts = new Dictionary<ResonanceType, int>();
             foreach (var cell in cells.Values)
             {
-                var affinity = cell.Affinity;
-                if (affinity == AffinityType.None)
+                var resonance = cell.Resonance;
+                if (resonance == ResonanceType.None)
                 {
                     continue;
                 }
 
-                counts.TryGetValue(affinity, out int count);
-                counts[affinity] = count + 1;
+                counts.TryGetValue(resonance, out int count);
+                counts[resonance] = count + 1;
             }
             return counts;
         }

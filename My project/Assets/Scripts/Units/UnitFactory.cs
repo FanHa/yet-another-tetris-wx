@@ -65,15 +65,6 @@ namespace Units
                 cell.Apply(unit);
             }
 
-            var cellCounts = new Dictionary<AffinityType, int>();
-            foreach (var cell in build.Cells)
-            {
-                var affinity = cell.Affinity;
-                cellCounts.TryGetValue(affinity, out int count);
-                cellCounts[affinity] = count + 1;
-            }
-            unit.SetCellAffinity(cellCounts);
-
             var resonanceCounts = new Dictionary<ResonanceType, int>();
             foreach (var cell in build.Cells)
             {

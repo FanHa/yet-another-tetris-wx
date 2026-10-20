@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2667964180258995499}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: NomalTetriPanel
+  m_Name: CellBasedTetriDetailPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,9 +110,9 @@ MonoBehaviour:
   skillIcon: {fileID: 4989110474902016742}
   skillNameText: {fileID: 847920138936759161}
   skillDescriptionText: {fileID: 1012919542617337212}
-  affinityIcon: {fileID: 2816108005959405559}
-  affinityDescriptionText: {fileID: 6256930944305777810}
-  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  resonanceIcon: {fileID: 2816108005959405559}
+  resonanceDescriptionText: {fileID: 6256930944305777810}
+  resonanceDatabase: {fileID: 11400000, guid: ff606cb9bd098c241aebe0b48b517a5a, type: 2}
 --- !u!1 &580446386497076072
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Model.Tetri;
+using Model.Resonance;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,10 +21,10 @@ namespace UI.UnitInfo
         [SerializeField] private UI.UnitInfo.Attribute energyPerSecondAttribute;
         [SerializeField] private UI.UnitInfo.Attribute attackRangeAttribute;
 
-        [Header("Affinity")]
-        [SerializeField] private UI.UnitInfo.Affinity affinityInfoPrefab;
-        [SerializeField] private Transform affinityRoot;
-        [SerializeField] private AffinityDatabase affinityDisplayConfig;
+        [Header("Resonance")]
+        [SerializeField] private UI.UnitInfo.Resonance resonanceInfoPrefab;
+        [SerializeField] private Transform resonanceRoot;
+        [SerializeField] private ResonanceDatabase resonanceDatabase;
 
         [Header("技能")]
         [SerializeField] private UI.UnitInfo.Skill unitSkillPrefab;
@@ -54,9 +54,9 @@ namespace UI.UnitInfo
             ValidateRequiredReference(attacksPerTenSecondsAttribute, nameof(attacksPerTenSecondsAttribute));
             ValidateRequiredReference(energyPerSecondAttribute, nameof(energyPerSecondAttribute));
             ValidateRequiredReference(attackRangeAttribute, nameof(attackRangeAttribute));
-            ValidateRequiredReference(affinityInfoPrefab, nameof(affinityInfoPrefab));
-            ValidateRequiredReference(affinityRoot, nameof(affinityRoot));
-            ValidateRequiredReference(affinityDisplayConfig, nameof(affinityDisplayConfig));
+            ValidateRequiredReference(resonanceInfoPrefab, nameof(resonanceInfoPrefab));
+            ValidateRequiredReference(resonanceRoot, nameof(resonanceRoot));
+            ValidateRequiredReference(resonanceDatabase, nameof(resonanceDatabase));
             ValidateRequiredReference(unitSkillPrefab, nameof(unitSkillPrefab));
             ValidateRequiredReference(skillRoot, nameof(skillRoot));
             ValidateRequiredReference(buffInfoPrefab, nameof(buffInfoPrefab));
@@ -175,22 +175,21 @@ namespace UI.UnitInfo
             energyPerSecondAttribute.SetAttribute(attributes.EnergyPerSecond);
             attackRangeAttribute.SetAttribute(attributes.AttackRange);
         }
-        private void RefreshAffinity()
+        private void RefreshResonance()
         {
             if (currentUnit == null) return;
 
-            foreach (Transform child in affinityRoot)
+            foreach (Transform child in resonanceRoot)
                 Destroy(child.gameObject);
 
-            Dictionary<Model.Tetri.AffinityType, int> affinities = currentUnit.CellCounts;
-            foreach (var affinity in affinities
-                         .Where(pair => pair.Key != Model.Tetri.AffinityType.None && pair.Value > 0)
+            foreach (var resonance in currentUnit.ResonanceCounts
+                         .Where(pair => pair.Key != ResonanceType.None && pair.Value > 0)
                          .OrderByDescending(pair => pair.Value)
                          .ThenBy(pair => pair.Key))
             {
-                UI.UnitInfo.Affinity affinityInfo = Instantiate(affinityInfoPrefab, affinityRoot);
-                affinityInfo.SetAffinity(affinity.Key, affinity.Value);
-                affinityInfo.OnClicked += ShowAffinityDescription;
+                UI.UnitInfo.Resonance resonanceInfo = Instantiate(resonanceInfoPrefab, resonanceRoot);
+                resonanceInfo.SetResonance(resonance.Key, resonance.Value);
+                resonanceInfo.OnClicked += ShowResonanceDescription;
             }
         }
 
@@ -201,7 +200,7 @@ namespace UI.UnitInfo
             RefreshAttributes();
             RefreshBuffInfo();
             RefreshSkillInfo();
-            RefreshAffinity();
+            RefreshResonance();
         }
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)
@@ -233,23 +232,13 @@ namespace UI.UnitInfo
             ShowSourceSection(false);
         }
 
-        private void ShowAffinityDescription(AffinityType type, int count)
+        private void ShowResonanceDescription(ResonanceType type, int count)
         {
-            string affinityName = GetAffinityDisplayName(type);
-            string title = $"<b>{affinityName}加成 (X{count})</b>";
-            string description = GetAffinityDescription(type);
+            string resonanceName = resonanceDatabase.GetDefinition(type).DisplayName;
+            string title = $"<b>{resonanceName}共鸣 (X{count})</b>";
+            string description = resonanceDatabase.GetDefinition(type).Description;
             SetDetailText(title + "\n" + description);
             ShowSourceSection(false);
-        }
-
-        private string GetAffinityDisplayName(AffinityType type)
-        {
-            return affinityDisplayConfig.GetName(type);
-        }
-
-        private string GetAffinityDescription(AffinityType type)
-        {
-            return affinityDisplayConfig.GetDescription(type);
         }
 
         private void SetDetailText(string text)

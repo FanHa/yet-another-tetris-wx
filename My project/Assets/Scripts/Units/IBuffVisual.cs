@@ -1,10 +1,10 @@
-using Model.Buffs;
+using Model.Resonance;
 
 namespace Units
 {
     public interface IBuffVisual
     {
-        void Initialize(Unit owner, BuffDefinition definition);
+        void Initialize(Unit owner, ResonanceType resonance);
         void Activate();
         void Release();
     }

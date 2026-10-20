@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: EnergyAbsorb
   m_EditorClassIdentifier: 
   id: EnergyAbsorb
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
   affinity: 7
+  resonance: 4
   skillDefinition: {fileID: 11400000, guid: b864ac5a9d8871346be38e57f79d9d7e, type: 2}

@@ -46,10 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42117ea2d09841e438e9d17d438e05ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  affinityDatabase: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  resonanceDatabase: {fileID: 11400000, guid: ff606cb9bd098c241aebe0b48b517a5a, type: 2}
   zoneParticle: {fileID: 7393314760321856284}
   ringParticle: {fileID: 8768312529506098813}
   ringOutlineParticle: {fileID: 1865285653917553911}
+  applyInterval: 1
 --- !u!1001 &933642708798220186
 PrefabInstance:
   m_ObjectHideFlags: 0

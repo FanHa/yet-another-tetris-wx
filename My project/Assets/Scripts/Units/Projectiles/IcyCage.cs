@@ -1,4 +1,5 @@
 using UnityEngine;
+using Model.Resonance;
 
 namespace Units.Projectiles
 {
@@ -7,7 +8,7 @@ namespace Units.Projectiles
         private Unit targetUnit;
         private bool isActive = false;
 
-        public override void Initialize(Unit target, Model.Buffs.BuffDefinition definition)
+        public override void Initialize(Unit target, ResonanceType resonance)
         {
             targetUnit = target;
             // 可选：设置图片初始位置

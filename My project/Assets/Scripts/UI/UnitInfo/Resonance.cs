@@ -2,39 +2,38 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Model.Tetri;
+using Model.Resonance;
 using UnityEngine.EventSystems;
 
 namespace UI.UnitInfo
 {
-    public class Affinity : MonoBehaviour, IPointerClickHandler
+    public class Resonance : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text countText;
-        [SerializeField] private Model.Tetri.AffinityDatabase affinityDisplayConfig;
+        [SerializeField] private ResonanceDatabase resonanceDatabase;
 
-        public Action<AffinityType, int> OnClicked;
+        public Action<ResonanceType, int> OnClicked;
 
-        private AffinityType currentType;
+        private ResonanceType currentType;
         private int currentCount;
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (affinityDisplayConfig == null)
+            if (resonanceDatabase == null)
             {
-                Debug.LogError($"{nameof(affinityDisplayConfig)} is not assigned.", this);
+                Debug.LogError($"{nameof(resonanceDatabase)} is not assigned.", this);
             }
         }
 #endif
 
-        // 公共方法：传入亲和类型与数量，设置图标与文本
-        public void SetAffinity(Model.Tetri.AffinityType type, int count)
+        public void SetResonance(ResonanceType type, int count)
         {
             currentType = type;
             currentCount = count;
 
-            Model.Tetri.AffinityDatabase.AffinityEntry entry = affinityDisplayConfig.GetEntry(type);
+            ResonanceDefinition entry = resonanceDatabase.GetDefinition(type);
             countText.text = "X" + count.ToString();
             icon.color = entry.BorderColor;
         }

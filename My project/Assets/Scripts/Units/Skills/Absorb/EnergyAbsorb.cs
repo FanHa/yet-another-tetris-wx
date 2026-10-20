@@ -1,4 +1,4 @@
-using Model.Tetri;
+using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -22,11 +22,11 @@ namespace Units.Skills
 
         private EnergyAbsorbStats CalcStats()
         {
-            int absorbCellCount = Owner != null && Owner.CellCounts.TryGetValue(AffinityType.Absorb, out var count) ? count : 0;
+            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
             return new EnergyAbsorbStats
             {
-                EnergyAbsorbPerSkillCast = new StatValue("每次技能施放吸取能量", Config.BaseEnergyAbsorbPerSkillCast, absorbCellCount * Config.EnergyAbsorbPerAbsorbCell),
+                EnergyAbsorbPerSkillCast = new StatValue("每次技能施放吸取能量", Config.BaseEnergyAbsorbPerSkillCast, resonantCellCount * Config.EnergyAbsorbPerResonantCell),
                 BuffDuration = new StatValue("效果持续时间", Config.BuffDuration)
             };
         }

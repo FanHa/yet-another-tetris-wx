@@ -5,6 +5,8 @@ namespace Model.Resonance
     [CreateAssetMenu(menuName = "Game Data/Shared/Resonance Definition")]
     public sealed class ResonanceDefinition : ScriptableObject
     {
+        private const float MaskAlpha = 0.19607843f;
+
         [SerializeField] private ResonanceType type;
         [SerializeField] private string displayName;
         [TextArea]
@@ -17,6 +19,8 @@ namespace Model.Resonance
         public string Description => description;
         public Sprite Icon => icon;
         public Color BaseColor => baseColor;
+        public Color BorderColor => new(baseColor.r, baseColor.g, baseColor.b, 1f);
+        public Color MaskColor => new(baseColor.r, baseColor.g, baseColor.b, MaskAlpha);
 
 #if UNITY_EDITOR
         private void OnValidate()

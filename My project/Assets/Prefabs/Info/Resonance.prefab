@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 40}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &18957499541947219
 CanvasRenderer:
@@ -112,7 +112,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 40, y: 40}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5559492381656503783
 CanvasRenderer:
@@ -222,10 +222,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6287378323163461118}
   - component: {fileID: 7020027812884403105}
-  - component: {fileID: 8667045601642223198}
+  - component: {fileID: 6453316247586176305}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: Affinity
+  m_Name: Resonance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &8667045601642223198
+--- !u!114 &6453316247586176305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,9 +287,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7966470942779847905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cf4e5b07456a6248aaa9c9329d5027a, type: 3}
+  m_Script: {fileID: 11500000, guid: c99e1460e28762d42a325637ef2babd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 6954949842844291247}
   countText: {fileID: 9083014349023771566}
-  affinityDisplayConfig: {fileID: 11400000, guid: 0b7b1fb09b9791640b69c92cda9d3e63, type: 2}
+  resonanceDatabase: {fileID: 11400000, guid: ff606cb9bd098c241aebe0b48b517a5a, type: 2}

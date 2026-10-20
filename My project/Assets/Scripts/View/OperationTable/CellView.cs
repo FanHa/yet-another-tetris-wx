@@ -1,4 +1,5 @@
 using System;
+using Model.Resonance;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,7 +14,7 @@ namespace View.OperationTable
         [SerializeField] private GameObject borderBottom;
         [SerializeField] private GameObject borderLeft;
         [SerializeField] private GameObject borderRight;
-        [SerializeField] private Model.Tetri.AffinityDatabase affinityDisplayConfig;
+        [SerializeField] private ResonanceDatabase resonanceDatabase;
 
         private SpriteRenderer maskRenderer;
         private SpriteRenderer borderTopRenderer;
@@ -39,7 +40,7 @@ namespace View.OperationTable
             ValidateRenderer(borderBottom, nameof(borderBottom));
             ValidateRenderer(borderLeft, nameof(borderLeft));
             ValidateRenderer(borderRight, nameof(borderRight));
-            ValidateReference(affinityDisplayConfig, nameof(affinityDisplayConfig));
+            ValidateReference(resonanceDatabase, nameof(resonanceDatabase));
         }
 
         private void ValidateRenderer(GameObject target, string fieldName)
@@ -79,8 +80,14 @@ namespace View.OperationTable
 
             icon.sprite = modelCell.Icon;
 
-            var displayEntry = affinityDisplayConfig.GetEntry(modelCell.Affinity)
-                ?? throw new InvalidOperationException($"Missing affinity config for '{modelCell.Affinity}'.");
+            if (modelCell.Resonance == ResonanceType.None)
+            {
+                SetMaskColor(Color.gray);
+                SetBorderColor(Color.gray);
+                return;
+            }
+
+            var displayEntry = resonanceDatabase.GetDefinition(modelCell.Resonance);
 
             SetMaskColor(displayEntry.MaskColor);
             SetBorderColor(displayEntry.BorderColor);

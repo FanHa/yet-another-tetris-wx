@@ -1,5 +1,6 @@
 using UnityEngine;
 using Units;
+using Model.Resonance;
 
 namespace Units.Projectiles
 {
@@ -12,7 +13,7 @@ namespace Units.Projectiles
         private bool isActive = false;
         private float angle = 0f;
 
-        public override void Initialize(Units.Unit owner, Model.Buffs.BuffDefinition definition)
+        public override void Initialize(Units.Unit owner, ResonanceType resonance)
         {
             this.owner = owner;
 

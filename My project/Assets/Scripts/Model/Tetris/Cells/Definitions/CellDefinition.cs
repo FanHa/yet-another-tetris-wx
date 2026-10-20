@@ -8,11 +8,9 @@ namespace Model.Tetri
     public abstract class CellDefinition : ScriptableObject
     {
         [SerializeField] private string id;
-        [SerializeField] private AffinityType affinity = AffinityType.None;
         [SerializeField] private ResonanceType resonance = ResonanceType.None;
 
         public string Id => id;
-        public AffinityType Affinity => affinity;
         public ResonanceType Resonance => resonance;
         public abstract Sprite Icon { get; }
         public virtual string DisplayName => null;

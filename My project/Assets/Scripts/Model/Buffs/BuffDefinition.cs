@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Model.Tetri;
 using UnityEngine;
 using Units;
 
@@ -11,14 +10,12 @@ namespace Model.Buffs
         [SerializeField] private string id;
         [SerializeField] private string displayName;
         [TextArea, SerializeField] private string description;
-        [SerializeField] private AffinityType affinity = AffinityType.None;
         [SerializeField] private Sprite icon;
         [SerializeField] private BuffVisual visualPrefab;
 
         public string Id => id;
         public string DisplayName => displayName;
         public string Description => description;
-        public AffinityType Affinity => affinity;
         public Sprite Icon => icon;
         public BuffVisual VisualPrefab => visualPrefab;
 
@@ -27,11 +24,6 @@ namespace Model.Buffs
 
         private void OnValidate()
         {
-            if (!System.Enum.IsDefined(typeof(AffinityType), affinity) || affinity == AffinityType.End)
-            {
-                Debug.LogError($"{nameof(affinity)} must be a valid affinity other than '{AffinityType.End}'.", this);
-            }
-
             if (!string.IsNullOrWhiteSpace(id) && !IdPattern.IsMatch(id))
             {
                 Debug.LogError($"{nameof(id)} '{id}' is invalid. Expected the format 'buff.example_name'.", this);

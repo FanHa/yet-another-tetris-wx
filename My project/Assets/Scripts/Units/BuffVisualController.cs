@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Model.Buffs;
+using Model.Resonance;
 using UnityEngine;
 using Units.Buffs;
 
@@ -97,7 +98,7 @@ namespace Units
             }
 
             BuffVisual buffVisual = UnityEngine.Object.Instantiate(prefab, unit.transform.position, Quaternion.identity);
-            buffVisual.Initialize(unit, buff.Definition);
+            buffVisual.Initialize(unit, buff.SourceSkill.Definition.Resonance);
             buffVisual.Activate();
             return buffVisual;
         }

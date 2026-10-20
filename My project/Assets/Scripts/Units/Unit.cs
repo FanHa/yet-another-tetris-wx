@@ -35,8 +35,8 @@ namespace Units
         private AnimationController animationController;
         private FacingController facingController;
         [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
-        public Dictionary<AffinityType, int> CellCounts = new();
         private Dictionary<ResonanceType, int> cellResonanceCounts = new();
+        public IReadOnlyDictionary<ResonanceType, int> ResonanceCounts => cellResonanceCounts;
 
         public enum Faction
         {
@@ -462,23 +462,6 @@ namespace Units
         SkillCastResult ISkillActionContext.TryCastNextSkill()
         {
             return skillHandler.TryCastNextSkill();
-        }
-
-        public void SetCellAffinity(Dictionary<AffinityType, int> CellCounts)
-        {
-            this.CellCounts = CellCounts;
-
-            this.CellCounts.TryGetValue(AffinityType.Life, out int lifeCount);
-            float hpBonus = 20f * lifeCount;
-            Attributes.MaxHealth.AddFlatModifier(this, hpBonus);
-
-            this.CellCounts.TryGetValue(AffinityType.Wind, out int windCount);
-            float rangeBonus = 0.25f * windCount;
-            Attributes.AttackRange.AddFlatModifier(this, rangeBonus);
-
-            this.CellCounts.TryGetValue(AffinityType.Swift, out int swiftCount);
-            float swiftBonus = 0.35f * swiftCount;
-            Attributes.MoveSpeed.AddFlatModifier(this, swiftBonus);
         }
 
         public void SetCellResonanceCounts(Dictionary<ResonanceType, int> counts)

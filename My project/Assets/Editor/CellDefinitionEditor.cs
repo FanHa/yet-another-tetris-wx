@@ -1,4 +1,3 @@
-using Model.Tetri;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,11 +6,9 @@ namespace Editor.Validation
     public abstract class CellDefinitionEditorBase : UnityEditor.Editor
     {
         protected static readonly GUIContent IdLabel = new("Id");
-        protected static readonly GUIContent AffinityLabel = new("Affinity");
         protected static readonly GUIContent ResonanceLabel = new("Resonance");
 
         protected SerializedProperty idProperty;
-        protected SerializedProperty affinityProperty;
         protected SerializedProperty resonanceProperty;
         protected SerializedProperty scriptProperty;
 
@@ -19,7 +16,6 @@ namespace Editor.Validation
         {
             scriptProperty = serializedObject.FindProperty("m_Script");
             idProperty = serializedObject.FindProperty("id");
-            affinityProperty = serializedObject.FindProperty("affinity");
             resonanceProperty = serializedObject.FindProperty("resonance");
         }
 
@@ -28,7 +24,6 @@ namespace Editor.Validation
             serializedObject.Update();
 
             DrawScriptField();
-            DrawAffinityField();
             DrawResonanceField();
             DrawEditableId();
             DrawDerivedFields();
@@ -56,16 +51,6 @@ namespace Editor.Validation
         protected void DrawEditableId()
         {
             EditorGUILayout.PropertyField(idProperty, IdLabel);
-        }
-
-        protected void DrawAffinityField()
-        {
-            if (affinityProperty == null)
-            {
-                return;
-            }
-
-            EditorGUILayout.PropertyField(affinityProperty, AffinityLabel);
         }
 
         protected void DrawResonanceField()

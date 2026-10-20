@@ -10,7 +10,6 @@ namespace Model.Tetri
     {
         private int level = 1;
         private CharacterDefinition definitionData;
-        private AffinityType affinity = AffinityType.None;
 
         public int Level
         {
@@ -20,12 +19,6 @@ namespace Model.Tetri
 
         public CharacterDefinition DefinitionData => definitionData;
         public virtual Sprite Icon => definitionData.Icon;
-
-        public virtual AffinityType Affinity
-        {
-            get => affinity;
-            set => affinity = value;
-        }
 
         public virtual string CharacterKey => definitionData.Id;
 
@@ -55,7 +48,6 @@ namespace Model.Tetri
         public virtual void Initialize(CharacterDefinition characterDefinition)
         {
             definitionData = characterDefinition ?? throw new ArgumentNullException(nameof(characterDefinition));
-            affinity = definitionData.Affinity;
         }
 
         public void ValidateConfiguration()
@@ -72,7 +64,6 @@ namespace Model.Tetri
             {
                 level = this.level,
                 definitionData = this.definitionData,
-                affinity = this.affinity,
                 characterName = this.characterName
             };
         }

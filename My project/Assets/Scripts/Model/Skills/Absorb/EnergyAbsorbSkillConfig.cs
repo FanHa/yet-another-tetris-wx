@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -18,7 +19,7 @@ namespace Model.Skills
             foreach (var (i, level) in GetValidLevelConfigs())
             {
                 ValidateFiniteNonNegative(level.BaseEnergyAbsorbPerSkillCast, $"{nameof(LevelConfigs)}[{i}].{nameof(level.BaseEnergyAbsorbPerSkillCast)}");
-                ValidateFiniteNonNegative(level.EnergyAbsorbPerAbsorbCell, $"{nameof(LevelConfigs)}[{i}].{nameof(level.EnergyAbsorbPerAbsorbCell)}");
+                ValidateFiniteNonNegative(level.EnergyAbsorbPerResonantCell, $"{nameof(LevelConfigs)}[{i}].{nameof(level.EnergyAbsorbPerResonantCell)}");
             }
         }
 #endif
@@ -29,6 +30,6 @@ namespace Model.Skills
     {
         public float BuffDuration;
         public float BaseEnergyAbsorbPerSkillCast;
-        public float EnergyAbsorbPerAbsorbCell;
+        public float EnergyAbsorbPerResonantCell;
     }
 }
