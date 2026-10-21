@@ -1,5 +1,4 @@
 using System.Linq;
-using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -20,18 +19,19 @@ namespace Units.Skills
         private struct ShadowArrowStats
         {
             public StatValue Damage;
-            public StatValue VulnerabilityPercent;
-            public StatValue VulnerabilityDuration;
+        }
+
+        private int GetResonantCellCount()
+        {
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private ShadowArrowStats CalcStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = GetResonantCellCount();
             return new ShadowArrowStats
             {
-                Damage = new StatValue("伤害", Config.Damage, resonantCellCount * Config.DamagePerResonantCell),
-                VulnerabilityPercent = new StatValue("易伤百分比(%)", Config.VulnerabilityPercent, resonantCellCount * Config.VulnerabilityPercentPerResonantCell),
-                VulnerabilityDuration = new StatValue("易伤持续时间", Config.VulnerabilityDuration)
+                Damage = new StatValue("技能伤害", Config.Damage, resonantCellCount * Config.DamagePerResonantCell)
             };
         }
         protected override void ExecuteCore()
@@ -43,7 +43,6 @@ namespace Units.Skills
             if (targetEnemy == null)
                 return;
 
-            var stats = CalcStats();
             // 创建并发射暗影箭
             var projectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
@@ -54,9 +53,8 @@ namespace Units.Skills
             projectile.Init(
                 caster: Owner.SelfUnit,
                 target: targetEnemy,
-                vulnerabilityPercent: stats.VulnerabilityPercent.Final,
-                vulnerabilityDuration: stats.VulnerabilityDuration.Final,
-                sourceSkill: this
+                sourceSkill: this,
+                resonantCellCount: GetResonantCellCount()
             );
             projectile.Activate();
         }
@@ -67,8 +65,7 @@ namespace Units.Skills
             return
                 DescriptionStatic() + ":\n" +
                 $"{stats.Damage}\n" +
-                $"{stats.VulnerabilityPercent}\n" +
-                $"{stats.VulnerabilityDuration}\n";
+                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount()) + "\n";
         }
 
         public static string DescriptionStatic() => "向最大生命值最低的敌人发射暗影箭,施加易伤Debuff并造成伤害";

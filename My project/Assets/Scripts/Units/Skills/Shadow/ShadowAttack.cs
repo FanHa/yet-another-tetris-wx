@@ -1,6 +1,4 @@
-using Model.Resonance;
 using Model.Skills;
-using UnityEngine;
 
 namespace Units.Skills
 {
@@ -8,34 +6,23 @@ namespace Units.Skills
     {
         public ShadowAttackLevelConfig Config { get; }
 
+        private ShadowAttackSkillConfig SkillConfig => (ShadowAttackSkillConfig)Definition.Config;
+
         public ShadowAttack(ShadowAttackLevelConfig config)
         {
             Config = config;
         }
 
-        private struct ShadowAttackStats
+        private int GetResonantCellCount()
         {
-            public StatValue VulnerabilityPercent;
-            public StatValue DotDuration;
-        }
-
-        private ShadowAttackStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new ShadowAttackStats
-            {
-                VulnerabilityPercent = new StatValue("易伤百分比", Config.VulnerabilityPercent, resonantCellCount * Config.VulnerabilityPercentPerResonantCell),
-                DotDuration = new StatValue("易伤持续时间", Config.DotDuration)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.VulnerabilityPercent}\n" +
-                $"{stats.DotDuration}\n";
+                SkillConfig.ShadowAttackBuffDefinition.DescribeEffect(GetResonantCellCount()) + "\n";
         }
         public static string DescriptionStatic() => "攻击时附加易伤";
 
@@ -44,15 +31,10 @@ namespace Units.Skills
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
-            var config = (ShadowAttackSkillConfig)Definition.Config;
-            var buff = Buffs.BuffFactory.Create(
-                config.ShadowAttackBuffDefinition,
-                new Buffs.ShadowAttackBuffArgs(
-                    config.VulnerabilityBuffDefinition,
-                    stats.VulnerabilityPercent.Final,
-                    stats.DotDuration.Final,
-                    new Buffs.BuffSource(Owner.SelfUnit, this))
+            var buff = new Buffs.ShadowAttackBuff(
+                SkillConfig.ShadowAttackBuffDefinition,
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             );
             Owner.AddBuff(buff);
         }

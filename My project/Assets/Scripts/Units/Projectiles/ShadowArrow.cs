@@ -1,12 +1,15 @@
+using Model.Buffs;
+using Units.Buffs;
 using UnityEngine;
 
 namespace Units.Projectiles
 {
     public class ShadowArrow : ProjectileToUnit
     {
+        [SerializeField] private VulnerabilityBuffDefinition vulnerabilityDefinition;
         private float vulnerabilityPercent;
         private float vulnerabilityDuration;
-        private Units.Skills.Skill sourceSkill;
+        private BuffSource vulnerabilitySource;
 
 
         /// <summary>
@@ -15,17 +18,22 @@ namespace Units.Projectiles
         public void Init(
             Units.Unit caster,
             Units.Unit target,
-            float vulnerabilityPercent,
-            float vulnerabilityDuration,
-            Units.Skills.Skill sourceSkill
+            Units.Skills.Skill sourceSkill,
+            int resonantCellCount
         )
         {
             base.Init(caster, target);
-            this.vulnerabilityPercent = vulnerabilityPercent;
-            this.vulnerabilityDuration = vulnerabilityDuration;
-            this.sourceSkill = sourceSkill;
+            var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
+            vulnerabilityPercent = stats.ExtraDamagePercent.Final;
+            vulnerabilityDuration = stats.Duration.Final;
+            vulnerabilitySource = new BuffSource(caster, sourceSkill);
         }
 
+        public string DescribeEffect(int resonantCellCount)
+        {
+            var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
+            return $"{stats.ExtraDamagePercent}\n{stats.Duration}";
+        }
 
         protected override void HandleHitTarget()
         {
@@ -36,9 +44,11 @@ namespace Units.Projectiles
             damage.SetSourceLabel("暗影箭");
             target.TakeDamage(damage);
 
-            var vulnerabilityBuff = Units.Buffs.BuffFactory.Create(
-                ((Model.Skills.ShadowArrowSkillConfig)sourceSkill.Definition.Config).VulnerabilityBuffDefinition,
-                new Units.Buffs.VulnerabilityBuffArgs(vulnerabilityDuration, vulnerabilityPercent, new Units.Buffs.BuffSource(caster, sourceSkill))
+            var vulnerabilityBuff = new Vulnerability(
+                vulnerabilityDefinition,
+                extraDamagePercent: vulnerabilityPercent,
+                buffDuration: vulnerabilityDuration,
+                source: vulnerabilitySource
             );
             target.AddBuff(vulnerabilityBuff);
 
@@ -49,5 +59,15 @@ namespace Units.Projectiles
         {
             return "暗影箭";
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (vulnerabilityDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(vulnerabilityDefinition)} is not assigned.", this);
+            }
+        }
+#endif
     }
 }

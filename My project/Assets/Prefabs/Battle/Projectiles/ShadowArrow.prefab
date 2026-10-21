@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  vulnerabilityDefinition: {fileID: 11400000, guid: 88ab5fe8d0a1caa45a1aff62598cf586, type: 2}

@@ -25,24 +25,28 @@ namespace Units.Skills
 
         private ShadowStepStats CalcStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = GetResonantCellCount();
+            var vulnerabilityStats = GetVulnerabilityDefinition().CalculateStats(resonantCellCount);
             return new ShadowStepStats
             {
-                VulnerabilityPercent = new StatValue(
-                    "易伤百分比",
-                    Config.VulnerabilityPercent,
-                    resonantCellCount * Config.VulnerabilityPercentPerResonantCell
-                ),
+                VulnerabilityPercent = vulnerabilityStats.ExtraDamagePercent,
                 Damage = new StatValue(
                     "技能伤害",
                     Config.Damage,
                     resonantCellCount * Config.DamagePerResonantCell
                 ),
-                DebuffDuration = new StatValue(
-                    "易伤持续时间",
-                    Config.DebuffDuration
-                )
+                DebuffDuration = vulnerabilityStats.Duration
             };
+        }
+
+        private int GetResonantCellCount()
+        {
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        }
+
+        private Model.Buffs.VulnerabilityBuffDefinition GetVulnerabilityDefinition()
+        {
+            return (Model.Buffs.VulnerabilityBuffDefinition)((ShadowStepSkillConfig)Definition.Config).VulnerabilityBuffDefinition;
         }
 
         protected override void ExecuteCore()
@@ -60,12 +64,11 @@ namespace Units.Skills
 
             Owner.Teleport(targetPos);
 
-            var vulnerabilityBuff = Units.Buffs.BuffFactory.Create(
-                ((ShadowStepSkillConfig)Definition.Config).VulnerabilityBuffDefinition,
-                new Units.Buffs.VulnerabilityBuffArgs(
-                    stats.DebuffDuration.Final,
-                    stats.VulnerabilityPercent.Final,
-                    new Units.Buffs.BuffSource(Owner.SelfUnit, this))
+            var vulnerabilityBuff = new Units.Buffs.Vulnerability(
+                GetVulnerabilityDefinition(),
+                extraDamagePercent: stats.VulnerabilityPercent.Final,
+                buffDuration: stats.DebuffDuration.Final,
+                source: new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             );
             targetEnemy.AddBuff(vulnerabilityBuff);
 
@@ -89,9 +92,8 @@ namespace Units.Skills
                 $"{stats.DebuffDuration}\n";
         }
 
-        public static string DescriptionStatic() => "闪现到最大生命值最低的敌人身后,施加易伤并造成伤害";
-
-        public override string Name() => NameStatic();
+            public static string DescriptionStatic() => "闪现到最大生命值最低的敌人身后,施加易伤并造成伤害";
+            public override string Name() => NameStatic();
         public static string NameStatic() => "影步";
     }
 }

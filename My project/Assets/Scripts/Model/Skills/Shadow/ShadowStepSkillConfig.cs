@@ -8,7 +8,7 @@ namespace Model.Skills
     public class ShadowStepSkillConfig : SkillConfig<ShadowStepLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition vulnerabilityBuffDefinition;
+        [SerializeField] private VulnerabilityBuffDefinition vulnerabilityBuffDefinition;
 
         public BuffDefinition VulnerabilityBuffDefinition => vulnerabilityBuffDefinition;
 
@@ -38,11 +38,7 @@ namespace Model.Skills
         float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
         public float InitEnergy;
 
-        public float VulnerabilityPercent;
-        public float VulnerabilityPercentPerResonantCell;
         public float Damage;
         public float DamagePerResonantCell;
-
-        public float DebuffDuration;
     }
 }

@@ -15,16 +15,10 @@ MonoBehaviour:
   LevelConfigs:
   - RequiredEnergy: 100
     InitEnergy: 50
-    VulnerabilityPercent: 10
-    VulnerabilityPercentPerShadowCell: 1
     Damage: 20
-    DamagePerShadowCell: 2
-    DebuffDuration: 10
+    DamagePerResonantCell: 0
   - RequiredEnergy: 100
     InitEnergy: 50
-    VulnerabilityPercent: 20
-    VulnerabilityPercentPerShadowCell: 2
     Damage: 40
-    DamagePerShadowCell: 4
-    DebuffDuration: 10
-  vulnerabilityBuffDefinition: {fileID: 11400000, guid: 76f926e24735553478fbc62678ccc4be, type: 2}
+    DamagePerResonantCell: 0
+  vulnerabilityBuffDefinition: {fileID: 11400000, guid: 88ab5fe8d0a1caa45a1aff62598cf586, type: 2}

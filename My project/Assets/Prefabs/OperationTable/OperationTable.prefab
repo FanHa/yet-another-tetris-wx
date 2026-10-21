@@ -50,11 +50,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundGridPrefab: {fileID: 4378816075428041609, guid: 0daab5e7e5dbb1547b1ed571accd22ad, type: 3}
-  TetriPrefab: {fileID: 5619751051322031506, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
   backgroundRoot: {fileID: 4072777450823071116}
   placedTetrisRoot: {fileID: 2864247776181231747}
-  tetriFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
-  ScreenCenterPosition: {fileID: 0}
+  tetriViewFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
 --- !u!114 &3705389467913877569
 MonoBehaviour:
   m_ObjectHideFlags: 0

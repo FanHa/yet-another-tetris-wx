@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -8,17 +7,14 @@ namespace Model.Skills
     public class ShadowAttackSkillConfig : SkillConfig<ShadowAttackLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition shadowAttackBuffDefinition;
-        [SerializeField] private BuffDefinition vulnerabilityBuffDefinition;
+        [SerializeField] private ShadowAttackBuffDefinition shadowAttackBuffDefinition;
 
-        public BuffDefinition ShadowAttackBuffDefinition => shadowAttackBuffDefinition;
-        public BuffDefinition VulnerabilityBuffDefinition => vulnerabilityBuffDefinition;
+        public ShadowAttackBuffDefinition ShadowAttackBuffDefinition => shadowAttackBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(shadowAttackBuffDefinition, nameof(shadowAttackBuffDefinition));
-            ValidateRequiredReference(vulnerabilityBuffDefinition, nameof(vulnerabilityBuffDefinition));
         }
     #endif
     }
@@ -26,10 +22,5 @@ namespace Model.Skills
     [System.Serializable]
     public class ShadowAttackLevelConfig : SkillLevelConfig
     {
-        public float VulnerabilityPercent;
-
-        public float VulnerabilityPercentPerResonantCell;
-
-        public float DotDuration;
     }
 }

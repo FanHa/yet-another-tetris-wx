@@ -1,50 +1,38 @@
-using Units.Skills;
-using UnityEngine;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct ShadowAttackBuffArgs : IBuffCreationArgs
-    {
-        public Model.Buffs.BuffDefinition VulnerabilityDefinition { get; }
-        public float VulnerabilityPercent { get; }
-        public float DotDuration { get; }
-        public BuffSource Source { get; }
-
-        public ShadowAttackBuffArgs(Model.Buffs.BuffDefinition vulnerabilityDefinition, float vulnerabilityPercent, float dotDuration, BuffSource source)
-        {
-            VulnerabilityDefinition = vulnerabilityDefinition;
-            VulnerabilityPercent = vulnerabilityPercent;
-            DotDuration = dotDuration;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// ShadowAttackBuff：攻击时对目标附加易伤Debuff
     /// </summary>
     public class ShadowAttackBuff : Buff, IAttackHitTrigger
     {
-        private float vulnerabilityPercent;
-        private float dotDuration;
-        private readonly Model.Buffs.BuffDefinition vulnerabilityDefinition;
+        private readonly ShadowAttackBuffDefinition shadowAttackDefinition;
+        private readonly VulnerabilityBuffDefinition vulnerabilityDefinition;
+        private readonly float vulnerabilityPercent;
+        private readonly float vulnerabilityDuration;
 
-        public ShadowAttackBuff(Model.Buffs.BuffDefinition definition, ShadowAttackBuffArgs args)
-            : base(definition, -1f, args.Source.SourceUnit, args.Source.SourceSkill) // -1f 表示永久Buff，可根据需要调整
+        public ShadowAttackBuff(ShadowAttackBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, -1f, source.SourceUnit, source.SourceSkill)
         {
-            vulnerabilityDefinition = args.VulnerabilityDefinition;
-            vulnerabilityPercent = args.VulnerabilityPercent;
-            dotDuration = args.DotDuration;
+            shadowAttackDefinition = definition;
+            vulnerabilityDefinition = definition.VulnerabilityDefinition;
+            var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
+            vulnerabilityPercent = stats.ExtraDamagePercent.Final;
+            vulnerabilityDuration = stats.Duration.Final;
         }
 
-        public override string Name() => "影袭";
+        public override string Name() => shadowAttackDefinition.DisplayName;
         public override string Description() =>
-            $"攻击时对目标施加{vulnerabilityPercent}%易伤Debuff，持续{dotDuration}秒";
+            shadowAttackDefinition.DescribeEffect(vulnerabilityPercent, vulnerabilityDuration);
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
-            var vulnerability = BuffFactory.Create(
+            var vulnerability = new Vulnerability(
                 vulnerabilityDefinition,
-                new VulnerabilityBuffArgs(dotDuration, vulnerabilityPercent, new BuffSource(attacker, sourceSkill))
+                extraDamagePercent: vulnerabilityPercent,
+                buffDuration: vulnerabilityDuration,
+                source: new BuffSource(attacker, sourceSkill)
             );
             context.AddBuffTo(target, vulnerability);
         }
