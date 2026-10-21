@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using Units.Projectiles;
-using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -11,16 +9,13 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private FlameRing projectilePrefab;
-        [SerializeField] private BuffDefinition burnBuffDefinition;
 
         public FlameRing ProjectilePrefab => projectilePrefab;
-        public BuffDefinition BurnBuffDefinition => burnBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
-            ValidateRequiredReference(burnBuffDefinition, nameof(burnBuffDefinition));
         }
     #endif
     }
@@ -28,12 +23,6 @@ namespace Model.Skills
     [System.Serializable]
     public class FlameRingLevelConfig: SkillLevelConfig
     {
-        [Header("灼烧效果")]
-        public float BaseDotDps = 2f;
-        public float DotDpsPerResonantCell = 1f;
-        public float BaseDotDuration = 2f;
-        public float DotDurationPerResonantCell = 1f;
-
         [Header("区域效果")]
         public float AreaDuration = -1f;
 

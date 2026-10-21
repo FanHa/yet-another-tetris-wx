@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using Units.Projectiles;
-using Model.Buffs;
 
 namespace Model.Skills
 {
@@ -11,17 +9,13 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private Fireball projectilePrefab;
-        [SerializeField] private BuffDefinition burnBuffDefinition;
 
         public Fireball ProjectilePrefab => projectilePrefab;
-        public BuffDefinition BurnBuffDefinition => burnBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
-            ValidateRequiredReference(burnBuffDefinition, nameof(burnBuffDefinition));
-
         }
     #endif
     }
@@ -32,12 +26,5 @@ namespace Model.Skills
         [Header("通用")]
         public float RequiredEnergy;
         float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
-
-        [Header("属性")]
-        public float DotBaseDamage;
-        public float DotDuration;
-
-        [Header("加成")]
-        public float DotDpsPerResonantCell; // 每个匹配共鸣 Cell 增加的灼烧 DPS
     }
 }

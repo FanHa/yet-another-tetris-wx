@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model.Buffs;
 using Units.Buffs;
 using UnityEngine;
 
@@ -6,14 +7,24 @@ namespace Units.Projectiles
 {
     public class BlazingField : PeriodicAreaEffectZoneBase
     {
-        private float dotDps;
-        private float dotDuration;
+        [SerializeField] private BurnBuffDefinition burnDefinition;
+        private float burnDps;
+        private float burnDuration;
+        private BuffSource burnSource;
 
-        public void Init(Unit caster, float radius, float duration, float dotDps, float dotDuration, Skills.Skill sourceSkill)
+        public void Init(Unit caster, float radius, float duration, Skills.Skill sourceSkill, int resonantCellCount)
         {
             InitializeBase(caster, radius, duration, sourceSkill);
-            this.dotDps = dotDps;
-            this.dotDuration = dotDuration;
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            burnDps = stats.Dps.Final;
+            burnDuration = stats.Duration.Final;
+            burnSource = new BuffSource(caster, sourceSkill);
+        }
+
+        public string DescribeEffect(int resonantCellCount)
+        {
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            return $"{stats.Dps}\n{stats.Duration}";
         }
 
         protected override IEnumerable<Unit> FindTargetsInArea()
@@ -26,10 +37,19 @@ namespace Units.Projectiles
 
         protected override void ApplyEffectTo(Unit target)
         {
-            var burn = BuffFactory.Create(
-                ((Model.Skills.BlazingFieldSkillConfig)SourceSkill.Definition.Config).BurnBuffDefinition,
-                new BurnBuffArgs(dotDps, dotDuration, new BuffSource(SourceUnit, SourceSkill)));
+            var burn = new Burn(burnDefinition, burnDps, burnDuration, burnSource);
             target.AddBuff(burn);
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (burnDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(burnDefinition)} is not assigned.", this);
+            }
+        }
+#endif
     }
 }

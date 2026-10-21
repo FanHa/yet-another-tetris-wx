@@ -5,7 +5,7 @@ using Units;
 namespace Model.Buffs
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Buff Definition")]
-    public sealed class BuffDefinition : ScriptableObject
+    public class BuffDefinition : ScriptableObject
     {
         [SerializeField] private string id;
         [SerializeField] private string displayName;
@@ -22,13 +22,12 @@ namespace Model.Buffs
 #if UNITY_EDITOR
         private static readonly Regex IdPattern = new("^buff\\.[a-z][a-z0-9]*(?:_[a-z0-9]+)*$", RegexOptions.Compiled);
 
-        private void OnValidate()
+        protected virtual void OnValidate()
         {
             if (!string.IsNullOrWhiteSpace(id) && !IdPattern.IsMatch(id))
             {
                 Debug.LogError($"{nameof(id)} '{id}' is invalid. Expected the format 'buff.example_name'.", this);
             }
-
         }
 #endif
     }

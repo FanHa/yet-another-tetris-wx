@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Model.Skills;
 using UnityEngine;
 
@@ -24,19 +22,20 @@ namespace Units.Skills
         {
             public StatValue Radius;
             public StatValue Duration;
-            public StatValue DotDps;
-            public StatValue DotDuration;
+        }
+
+        private int GetResonantCellCount()
+        {
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private BlazingFieldStats CalcStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = GetResonantCellCount();
             return new BlazingFieldStats
             {
                 Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
-                DotDps = new StatValue("每秒伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
-                DotDuration = new StatValue("灼烧持续时间", Config.BaseDotDuration, resonantCellCount * Config.DotDurationPerResonantCell)
+                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell)
             };
         }
 
@@ -65,9 +64,8 @@ namespace Units.Skills
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.Duration.Final,
-                dotDps: stats.DotDps.Final,
-                dotDuration: stats.DotDuration.Final,
-                sourceSkill: this
+                sourceSkill: this,
+                resonantCellCount: GetResonantCellCount()
             );
             effect.Activate();
         }
@@ -93,8 +91,7 @@ namespace Units.Skills
                 DescriptionStatic() + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                $"{stats.DotDps}\n" +
-                $"{stats.DotDuration}";
+                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() => "制造一片燃烧区域, 对敌人造成伤害.";

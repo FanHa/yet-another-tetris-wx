@@ -31,10 +31,6 @@ namespace Units.Buffs
 
         private static readonly Dictionary<string, IFactoryEntry> factories = new(StringComparer.Ordinal)
         {
-            ["buff.flame_inject"] = new FactoryEntry<FlameInjectBuffArgs>((definition, args) =>
-                new FlameInject(definition, args)),
-            ["buff.burn"] = new FactoryEntry<BurnBuffArgs>((definition, args) =>
-                new Burn(definition, args)),
             ["buff.attack_boost"] = new FactoryEntry<AttackBoostBuffArgs>((definition, args) =>
                 new AttackBoostBuff(definition, args)),
             ["buff.chilled"] = new FactoryEntry<ChilledBuffArgs>((definition, args) =>

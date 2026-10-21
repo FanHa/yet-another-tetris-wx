@@ -34,6 +34,7 @@ namespace Model.Skills
                 Debug.LogError($"{GetType().Name} '{name}'.{fieldName} must be finite and greater than zero.", this);
             }
         }
+
 #endif
     }
 

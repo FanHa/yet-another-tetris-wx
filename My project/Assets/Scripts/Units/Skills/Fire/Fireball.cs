@@ -1,4 +1,3 @@
-using System.Linq;
 using Model.Skills;
 using UnityEngine;
 
@@ -17,20 +16,9 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private struct FireballStats
+        private int GetResonantCellCount()
         {
-            public StatValue BurnDps;
-            public StatValue BurnDuration;
-        }
-
-        private FireballStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new FireballStats
-            {
-                BurnDps = new StatValue("灼烧每秒伤害", Config.DotBaseDamage, resonantCellCount * Config.DotDpsPerResonantCell),
-                BurnDuration = new StatValue("灼烧持续时间", Config.DotDuration)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
         
         protected override bool PrepareCastCore()
@@ -46,8 +34,6 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
-
             Units.Projectiles.Fireball fireball = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
                 Owner.projectileSpawnPoint.position,
@@ -57,9 +43,8 @@ namespace Units.Skills
             fireball.Init(
                 caster: Owner.SelfUnit,
                 target: targetEnemy,
-                burnDps: stats.BurnDps.Final,
-                burnDuration: stats.BurnDuration.Final,
-                sourceSkill: this
+                sourceSkill: this,
+                resonantCellCount: GetResonantCellCount()
             );
             fireball.Activate();
             targetEnemy = null; // 用完清空
@@ -67,11 +52,9 @@ namespace Units.Skills
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.BurnDps}\n" +
-                $"{stats.BurnDuration}";
+                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射火球，造成灼烧。";

@@ -1,7 +1,5 @@
-using System.Linq;
 using Model.Skills;
 using Units.Buffs;
-using UnityEngine;
 
 namespace Units.Skills
 {
@@ -14,33 +12,18 @@ namespace Units.Skills
             Config = config;
         }
 
-        private struct FlameInjectStats
+        private int GetResonantCellCount()
         {
-            public StatValue DotDps;
-            public StatValue DotDuration;
-            public StatValue BuffDuration;
-        }
-
-        private FlameInjectStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new FlameInjectStats
-            {
-                DotDps = new StatValue("附加每秒火焰伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
-                DotDuration = new StatValue("火焰伤害持续时间", Config.DotDuration),
-                BuffDuration = new StatValue("效果持续时间", Config.BuffDuration)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.DotDps}\n" +
-                $"{stats.DotDuration}\n" +
-                $"{stats.BuffDuration}";
+                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(GetResonantCellCount()) + "\n" +
+                new StatValue("效果持续时间", Config.BuffDuration);
         }
         public static string DescriptionStatic() => "攻击时附加火焰伤害";
 
@@ -52,16 +35,12 @@ namespace Units.Skills
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
             var config = (FlameInjectSkillConfig)Definition.Config;
-            var buff = BuffFactory.Create(
+            var buff = new Units.Buffs.FlameInject(
                 config.FlameInjectBuffDefinition,
-                new FlameInjectBuffArgs(
-                    config.BurnBuffDefinition,
-                    stats.DotDps.Final,
-                    stats.DotDuration.Final,
-                    stats.BuffDuration.Final,
-                    new BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                Config.BuffDuration,
+                new BuffSource(Owner.SelfUnit, this)
             );
             Owner.AddBuff(buff);
         }

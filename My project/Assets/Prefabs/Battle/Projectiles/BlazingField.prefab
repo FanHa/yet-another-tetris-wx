@@ -51,6 +51,7 @@ MonoBehaviour:
   ringParticle: {fileID: 5506434733567633751}
   ringOutlineParticle: {fileID: 3181607964181652445}
   applyInterval: 1
+  burnDefinition: {fileID: 11400000, guid: 06ba198a78f78564db5c09fffdcb171c, type: 2}
 --- !u!1001 &4121202563904671920
 PrefabInstance:
   m_ObjectHideFlags: 0

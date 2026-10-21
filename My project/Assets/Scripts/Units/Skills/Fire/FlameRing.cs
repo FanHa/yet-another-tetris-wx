@@ -1,4 +1,3 @@
-using System.Linq;
 using Model.Skills;
 using UnityEngine;
 
@@ -16,19 +15,20 @@ namespace Units.Skills
 
         private struct FlameRingStats
         {
-            public StatValue DotDps;
-            public StatValue DotDuration;
             public StatValue Radius;
             public StatValue AreaDuration;
         }
 
+        private int GetResonantCellCount()
+        {
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        }
+
         private FlameRingStats CalcStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = GetResonantCellCount();
             return new FlameRingStats
             {
-                DotDps = new StatValue("每秒火焰伤害", Config.BaseDotDps, resonantCellCount * Config.DotDpsPerResonantCell),
-                DotDuration = new StatValue("火焰伤害持续时间", Config.BaseDotDuration, resonantCellCount * Config.DotDurationPerResonantCell),
                 Radius = new StatValue("作用半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
                 AreaDuration = new StatValue("区域持续时间", Config.AreaDuration)
             };
@@ -39,8 +39,7 @@ namespace Units.Skills
             var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.DotDps}\n" +
-                $"{stats.DotDuration}\n" +
+                ((FlameRingSkillConfig)Definition.Config).ProjectilePrefab.DescribeEffect(GetResonantCellCount()) + "\n" +
                 $"{stats.Radius}\n";
         }
 
@@ -65,10 +64,8 @@ namespace Units.Skills
                 owner: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 sourceSkill: this,
-                burnDefinition: skillConfig.BurnBuffDefinition,
                 duration: stats.AreaDuration.Final,
-                dotDps: stats.DotDps.Final,
-                dotDuration: stats.DotDuration.Final
+                resonantCellCount: GetResonantCellCount()
             );
             areaEffect.Activate();
         }

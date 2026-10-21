@@ -1,37 +1,54 @@
+using Model.Buffs;
 using Units.Buffs;
+using Units.Skills;
+using UnityEngine;
 
 namespace Units.Projectiles
 {
     public class Fireball : ProjectileToUnit
     {
+        [SerializeField] private BurnBuffDefinition burnDefinition;
         private float burnDps;
         private float burnDuration;
-        private Skills.Skill sourceSkill;
+        private BuffSource burnSource;
 
         public void Init(
             Units.Unit caster,
             Units.Unit target,
-            float burnDps,
-            float burnDuration,
-            Units.Skills.Skill sourceSkill
+            Skill sourceSkill,
+            int resonantCellCount
         )
         {
             base.Init(caster, target);
-            this.burnDps = burnDps;
-            this.burnDuration = burnDuration;
-            this.sourceSkill = sourceSkill;
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            burnDps = stats.Dps.Final;
+            burnDuration = stats.Duration.Final;
+            burnSource = new BuffSource(caster, sourceSkill);
+        }
+
+        public string DescribeEffect(int resonantCellCount)
+        {
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            return $"{stats.Dps}\n{stats.Duration}";
         }
 
         protected override void HandleHitTarget()
         {
             // 命中后直接添加Burn Buff
-            var burn = BuffFactory.Create(
-                ((Model.Skills.FireballSkillConfig)sourceSkill.Definition.Config).BurnBuffDefinition,
-                new BurnBuffArgs(burnDps, burnDuration, new BuffSource(caster, sourceSkill))
-            );
+            var burn = new Burn(burnDefinition, burnDps, burnDuration, burnSource);
             target.AddBuff(burn);
 
             Destroy(gameObject); // 销毁投射物
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (burnDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(burnDefinition)} is not assigned.", this);
+            }
+        }
+#endif
     }
 }

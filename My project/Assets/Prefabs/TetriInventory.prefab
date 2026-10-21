@@ -51,7 +51,7 @@ MonoBehaviour:
   content: {fileID: 1152919690617221279}
   operationTableTransform: {fileID: 0}
   model: {fileID: 11400000, guid: 0ec7254a647b3ed4f974283cbd9bc1fb, type: 2}
-  tetriPrefab: {fileID: 5619751051322031506, guid: 4ebf81ec0217d3c43913b41beb462ed4, type: 3}
+  tetriFactory: {fileID: 11400000, guid: 5794cdd2a3a49634f9dfca4ec715ec9b, type: 2}
 --- !u!114 &9076574229672172548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,6 +120,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -299,6 +301,8 @@ SpriteMask:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using Model.Buffs;
 
 namespace Model.Skills
@@ -8,17 +7,14 @@ namespace Model.Skills
     public class FlameInjectSkillConfig : SkillConfig<FlameInjectLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition flameInjectBuffDefinition;
-        [SerializeField] private BuffDefinition burnBuffDefinition;
+        [SerializeField] private FlameInjectBuffDefinition flameInjectBuffDefinition;
 
-        public BuffDefinition FlameInjectBuffDefinition => flameInjectBuffDefinition;
-        public BuffDefinition BurnBuffDefinition => burnBuffDefinition;
+        public FlameInjectBuffDefinition FlameInjectBuffDefinition => flameInjectBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(flameInjectBuffDefinition, nameof(flameInjectBuffDefinition));
-            ValidateRequiredReference(burnBuffDefinition, nameof(burnBuffDefinition));
         }
     #endif
     }
@@ -28,13 +24,5 @@ namespace Model.Skills
     {
         [Header("通用")]
         public float BuffDuration;
-
-        [Header("属性")]
-        public float BaseDotDps;
-        public float DotDuration;
-
-        [Header("加成")]
-        public float DotDpsPerResonantCell;
-
     }
 }

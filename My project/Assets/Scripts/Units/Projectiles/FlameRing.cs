@@ -7,24 +7,30 @@ namespace Units.Projectiles
 {
     public class FlameRing : PeriodicAreaEffectZoneBase
     {
-        private BuffDefinition burnDefinition;
-        private float dotDps;
-        private float dotDuration;
+        [SerializeField] private BurnBuffDefinition burnDefinition;
+        private float burnDps;
+        private float burnDuration;
+        private BuffSource burnSource;
 
         public void Initialize(
             Unit owner,
             float radius,
             Skills.Skill sourceSkill,
-            BuffDefinition burnDefinition,
             float duration,
-            float dotDps,
-            float dotDuration
+            int resonantCellCount
         )
         {
             InitializeBase(owner, radius, duration, sourceSkill);
-            this.burnDefinition = burnDefinition;
-            this.dotDps = dotDps;
-            this.dotDuration = dotDuration;
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            burnDps = stats.Dps.Final;
+            burnDuration = stats.Duration.Final;
+            burnSource = new BuffSource(owner, sourceSkill);
+        }
+
+        public string DescribeEffect(int resonantCellCount)
+        {
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            return $"{stats.Dps}\n{stats.Duration}";
         }
 
         protected override void UpdateZonePosition()
@@ -45,9 +51,18 @@ namespace Units.Projectiles
 
         protected override void ApplyEffectTo(Unit target)
         {
-            target.AddBuff(BuffFactory.Create(
-                burnDefinition,
-                new BurnBuffArgs(dotDps, dotDuration, new BuffSource(SourceUnit, SourceSkill))));
+            target.AddBuff(new Burn(burnDefinition, burnDps, burnDuration, burnSource));
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (burnDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(burnDefinition)} is not assigned.", this);
+            }
+        }
+#endif
     }
 }

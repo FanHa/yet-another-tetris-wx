@@ -1,41 +1,23 @@
-using Units.Skills;
-using UnityEngine;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct FlameInjectBuffArgs : IBuffCreationArgs
-    {
-        public Model.Buffs.BuffDefinition BurnDefinition { get; }
-        public float DotDps { get; }
-        public float DotDuration { get; }
-        public float BuffDuration { get; }
-        public BuffSource Source { get; }
-
-        public FlameInjectBuffArgs(Model.Buffs.BuffDefinition burnDefinition, float dotDps, float dotDuration, float buffDuration, BuffSource source)
-        {
-            BurnDefinition = burnDefinition;
-            DotDps = dotDps;
-            DotDuration = dotDuration;
-            BuffDuration = buffDuration;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// FlameInject Buff：攻击时对目标附加火焰伤害并施加灼烧Dot
     /// </summary>
     public class FlameInject : Buff, IAttackHitTrigger
     {
-        private float dotDps;
-        private float dotDuration;
-        private readonly Model.Buffs.BuffDefinition burnDefinition;
+        private readonly float dotDps;
+        private readonly float dotDuration;
+        private readonly BurnBuffDefinition burnDefinition;
 
-        public FlameInject(Model.Buffs.BuffDefinition definition, FlameInjectBuffArgs args)
-            : base(definition, args.BuffDuration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public FlameInject(FlameInjectBuffDefinition definition, int resonantCellCount, float buffDuration, BuffSource source)
+            : base(definition, buffDuration, source.SourceUnit, source.SourceSkill)
         {
-            burnDefinition = args.BurnDefinition;
-            dotDps = args.DotDps;
-            dotDuration = args.DotDuration;
+            burnDefinition = definition.BurnDefinition;
+            var stats = burnDefinition.CalculateStats(resonantCellCount);
+            dotDps = stats.Dps.Final;
+            dotDuration = stats.Duration.Final;
         }
 
         public override string Name() => "炎附";
@@ -44,12 +26,11 @@ namespace Units.Buffs
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
-            var burn = BuffFactory.Create(
+            var burn = new Burn(
                 burnDefinition,
-                new BurnBuffArgs(
-                    dotDps,
-                    dotDuration,
-                    new BuffSource(attacker, sourceSkill))
+                dotDps,
+                dotDuration,
+                new BuffSource(attacker, sourceSkill)
             );
             context.AddBuffTo(target, burn);
         }
