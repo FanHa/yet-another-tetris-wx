@@ -6,8 +6,7 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Wild Wind Debuff")]
     public sealed class WildWindDebuffDefinition : BuffDefinition
     {
-        [SerializeField] private float baseDuration;
-        [SerializeField] private float durationPerResonantCell;
+        [SerializeField] private float durationPerResonance;
         [SerializeField] private int baseMoveSlowPercent;
         [SerializeField] private int moveSlowPercentPerResonantCell;
         [SerializeField] private int baseAtkReducePercent;
@@ -15,7 +14,7 @@ namespace Model.Buffs
 
         public (StatValue Duration, StatValue MoveSlowPercent, StatValue AtkReducePercent) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("DeBuff持续时间", baseDuration, resonantCellCount * durationPerResonantCell),
+                new StatValue("DeBuff持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance),
                 new StatValue("DeBuff移动速度降低(%)", baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
                 new StatValue("DeBuff攻击力降低(%)", baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
             );
@@ -30,14 +29,11 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (baseDuration <= 0f || float.IsNaN(baseDuration) || float.IsInfinity(baseDuration))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(baseDuration)} must be finite and greater than zero.", this);
-            }
+            ValidateTimedBaseDuration();
 
-            if (durationPerResonantCell < 0f || float.IsNaN(durationPerResonantCell) || float.IsInfinity(durationPerResonantCell))
+            if (durationPerResonance < 0f || float.IsNaN(durationPerResonance) || float.IsInfinity(durationPerResonance))
             {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(durationPerResonantCell)} must be finite and non-negative.", this);
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(durationPerResonance)} must be finite and non-negative.", this);
             }
 
             ValidateNonNegative(baseMoveSlowPercent, nameof(baseMoveSlowPercent));

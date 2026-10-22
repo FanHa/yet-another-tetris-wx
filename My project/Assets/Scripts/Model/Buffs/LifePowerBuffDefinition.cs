@@ -6,16 +6,13 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Life Power")]
     public sealed class LifePowerBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration;
         [SerializeField] private float healthToAtkPercent;
         [SerializeField] private float healthToAtkPercentPerResonantCell;
 
-        public float Duration => duration;
-
-        public (StatValue HealthToAtkPercent, StatValue Duration) CalculateStats(int resonantCellCount) =>
+        public (StatValue HealthToAtkPercent, string Duration) CalculateStats(int resonantCellCount) =>
             (
             new StatValue("最大生命转换率(%)", healthToAtkPercent, resonantCellCount * healthToAtkPercentPerResonantCell),
-                new StatValue("效果持续时间", duration)
+                BaseDuration.ToDisplayString("效果持续时间")
             );
 
         public float CalculateExtraDamage(float casterMaxHealth, int resonantCellCount) =>
@@ -34,11 +31,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);
-            }
-
             if (healthToAtkPercent < 0f || float.IsNaN(healthToAtkPercent) || float.IsInfinity(healthToAtkPercent))
             {
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(healthToAtkPercent)} must be finite and non-negative.", this);

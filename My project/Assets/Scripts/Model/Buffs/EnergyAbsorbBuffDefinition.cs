@@ -6,16 +6,13 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Energy Absorb")]
     public sealed class EnergyAbsorbBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration = -1f;
         [SerializeField] private float baseEnergyAbsorbPerSkillCast;
         [SerializeField] private float energyAbsorbPerResonantCell;
 
-        public float Duration => duration;
-
-        public (StatValue EnergyAbsorbPerSkillCast, StatValue Duration) CalculateStats(int resonantCellCount) =>
+        public (StatValue EnergyAbsorbPerSkillCast, string Duration) CalculateStats(int resonantCellCount) =>
             (
                 new StatValue("每次敌方施法为每个友军补充能量", baseEnergyAbsorbPerSkillCast, resonantCellCount * energyAbsorbPerResonantCell),
-                new StatValue("效果持续时间", duration)
+                BaseDuration.ToDisplayString("效果持续时间")
             );
 
         public string DescribeEffect(int resonantCellCount)
@@ -28,11 +25,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);
-            }
-
             ValidateFiniteNonNegative(baseEnergyAbsorbPerSkillCast, nameof(baseEnergyAbsorbPerSkillCast));
             ValidateFiniteNonNegative(energyAbsorbPerResonantCell, nameof(energyAbsorbPerResonantCell));
         }

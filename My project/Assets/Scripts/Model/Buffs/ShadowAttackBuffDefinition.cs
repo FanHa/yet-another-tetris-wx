@@ -6,15 +6,13 @@ namespace Model.Buffs
     public sealed class ShadowAttackBuffDefinition : BuffDefinition
     {
         [SerializeField] private VulnerabilityBuffDefinition vulnerabilityDefinition;
-        [SerializeField] private float duration = -1f;
 
         public VulnerabilityBuffDefinition VulnerabilityDefinition => vulnerabilityDefinition;
-        public float Duration => duration;
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
-            return $"{stats.ExtraDamagePercent}\n{stats.Duration}\n{new Units.Skills.StatValue("效果持续时间", duration)}";
+            return $"{stats.ExtraDamagePercent}\n{stats.Duration}\n{BaseDuration.ToDisplayString("效果持续时间")}";
         }
 
         public string DescribeEffect(float extraDamagePercent, float duration) =>
@@ -29,10 +27,6 @@ namespace Model.Buffs
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(vulnerabilityDefinition)} is not assigned.", this);
             }
 
-            if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);
-            }
         }
 #endif
     }

@@ -17,4 +17,7 @@ MonoBehaviour:
   description: "\u653B\u51FB\u547D\u4E2D\u65F6\u9644\u52A0\u706B\u7130\u4F24\u5BB3\u5E76\u65BD\u52A0\u707C\u70E7\u3002"
   icon: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
   visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}
+  baseDuration:
+    mode: 1
+    seconds: 0
   burnDefinition: {fileID: 11400000, guid: 06ba198a78f78564db5c09fffdcb171c, type: 2}

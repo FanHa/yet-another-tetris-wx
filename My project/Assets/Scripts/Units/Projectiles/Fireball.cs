@@ -35,7 +35,7 @@ namespace Units.Projectiles
         protected override void HandleHitTarget()
         {
             // 命中后直接添加Burn Buff
-            var burn = new Burn(burnDefinition, burnDps, burnDuration, burnSource);
+            var burn = new Burn(burnDefinition, burnDps, BuffDuration.ForSeconds(burnDuration), burnSource);
             target.AddBuff(burn);
 
             Destroy(gameObject); // 销毁投射物

@@ -39,7 +39,7 @@ namespace Units.Projectiles
             // 施加冰霜减速Buff
             var chilledBuff = new Chilled(
                 chilledDefinition,
-                chilledDuration,
+                BuffDuration.ForSeconds(chilledDuration),
                 moveSlowPercent,
                 atkSlowPercent,
                 actionSlowPercent,

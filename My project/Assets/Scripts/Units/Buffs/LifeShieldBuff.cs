@@ -7,14 +7,15 @@ namespace Units.Buffs
     {
         private readonly float shieldValue;
         private Shield shield;               // 护盾对象
-        public LifeShieldBuff(BuffDefinition definition, float shieldValue, float duration, BuffSource source)
+        public LifeShieldBuff(BuffDefinition definition, float shieldValue, BuffDuration duration, BuffSource source)
             : base(definition, duration, source.SourceUnit, source.SourceSkill)
         {
             this.shieldValue = shieldValue;
         }
 
         public override string Name() => Definition.DisplayName;
-        public override string Description() => $"受到伤害时吸收伤害，护盾总吸收量{shieldValue}，持续{duration}秒";
+        public override string Description() =>
+            $"受到伤害时吸收伤害，护盾总吸收量{shieldValue}，{(Duration.IsPermanent ? "永久" : $"持续{Duration.Seconds}秒")}";
 
         public override void OnApply(IBuffContext context)
         {

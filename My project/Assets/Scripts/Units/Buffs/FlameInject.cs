@@ -12,7 +12,7 @@ namespace Units.Buffs
         private readonly BurnBuffDefinition burnDefinition;
 
         public FlameInject(FlameInjectBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             burnDefinition = definition.BurnDefinition;
             var stats = burnDefinition.CalculateStats(resonantCellCount);
@@ -29,7 +29,7 @@ namespace Units.Buffs
             var burn = new Burn(
                 burnDefinition,
                 dotDps,
-                dotDuration,
+                BuffDuration.ForSeconds(dotDuration),
                 new BuffSource(attacker, sourceSkill)
             );
             context.AddBuffTo(target, burn);

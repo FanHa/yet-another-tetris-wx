@@ -7,14 +7,12 @@ namespace Model.Buffs
     public sealed class BurnBuffDefinition : BuffDefinition
     {
         [SerializeField] private float baseDps;
-        [SerializeField] private float baseDuration;
         [SerializeField] private float dpsPerResonantCell;
-        [SerializeField] private float durationPerResonantCell;
+        [SerializeField] private float durationPerResonance;
 
         public float BaseDps => baseDps;
-        public float BaseDuration => baseDuration;
         public float DpsPerResonantCell => dpsPerResonantCell;
-        public float DurationPerResonantCell => durationPerResonantCell;
+        public float DurationPerResonance => durationPerResonance;
 
         public string DescribeEffect(float dps) => $"每秒受到{dps}点伤害";
 
@@ -22,7 +20,7 @@ namespace Model.Buffs
         {
             return (
                 new StatValue("灼烧每秒伤害", baseDps, resonantCellCount * dpsPerResonantCell),
-                new StatValue("灼烧持续时间", baseDuration, resonantCellCount * durationPerResonantCell)
+                new StatValue("灼烧持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance)
             );
         }
 
@@ -31,9 +29,9 @@ namespace Model.Buffs
         {
             base.OnValidate();
             ValidateFiniteNonNegative(baseDps, nameof(baseDps));
-            ValidateFinitePositive(baseDuration, nameof(baseDuration));
+            ValidateTimedBaseDuration();
             ValidateFiniteNonNegative(dpsPerResonantCell, nameof(dpsPerResonantCell));
-            ValidateFiniteNonNegative(durationPerResonantCell, nameof(durationPerResonantCell));
+            ValidateFiniteNonNegative(durationPerResonance, nameof(durationPerResonance));
         }
 
         private void ValidateFiniteNonNegative(float value, string fieldName)
@@ -44,13 +42,6 @@ namespace Model.Buffs
             }
         }
 
-        private void ValidateFinitePositive(float value, string fieldName)
-        {
-            if (value <= 0f || float.IsNaN(value) || float.IsInfinity(value))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{fieldName} must be finite and greater than zero.", this);
-            }
-        }
 #endif
     }
 }

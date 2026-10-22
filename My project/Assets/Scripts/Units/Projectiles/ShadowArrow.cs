@@ -47,7 +47,7 @@ namespace Units.Projectiles
             var vulnerabilityBuff = new Vulnerability(
                 vulnerabilityDefinition,
                 extraDamagePercent: vulnerabilityPercent,
-                buffDuration: vulnerabilityDuration,
+                buffDuration: BuffDuration.ForSeconds(vulnerabilityDuration),
                 source: vulnerabilitySource
             );
             target.AddBuff(vulnerabilityBuff);

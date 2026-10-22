@@ -61,7 +61,7 @@ namespace Units.Projectiles
 
             var chilled = new Chilled(
                 chilledDefinition,
-                chilledDuration,
+                BuffDuration.ForSeconds(chilledDuration),
                 moveSlowPercent,
                 atkSlowPercent,
                 actionSlowPercent,

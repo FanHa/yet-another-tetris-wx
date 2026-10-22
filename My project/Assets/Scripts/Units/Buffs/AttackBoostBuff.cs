@@ -12,7 +12,7 @@ namespace Units.Buffs
         public float AtkSpeedPercent { get; }
 
         public AttackBoostBuff(AttackBoostBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             attackBoostDefinition = definition;
             this.resonantCellCount = resonantCellCount;

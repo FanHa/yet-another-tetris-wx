@@ -23,8 +23,7 @@ namespace UI.UnitInfo
             if (buff == null)
                 return;
 
-            // -1为永久Buff，显示∞
-            if (buff.TimeLeft < 0)
+            if (buff.IsPermanent)
             {
                 remainTimeDurationText.text = "∞";
             }

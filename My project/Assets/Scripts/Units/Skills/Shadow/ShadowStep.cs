@@ -1,4 +1,5 @@
 using System.Linq;
+using Model.Buffs;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -67,7 +68,7 @@ namespace Units.Skills
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 GetVulnerabilityDefinition(),
                 extraDamagePercent: stats.VulnerabilityPercent.Final,
-                buffDuration: stats.DebuffDuration.Final,
+                buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.Final),
                 source: new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             );
             targetEnemy.AddBuff(vulnerabilityBuff);

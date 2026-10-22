@@ -9,7 +9,7 @@ namespace Units.Buffs
         private readonly float reflectPercent;
 
         public LifeEchoBuff(LifeEchoBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             lifeEchoDefinition = definition;
             this.resonantCellCount = resonantCellCount;

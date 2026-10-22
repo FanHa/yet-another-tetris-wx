@@ -18,12 +18,12 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private (StatValue LifeCostPercent, StatValue ShieldMultiplierPercent, StatValue Duration) CalcStats(int resonantCellCount) =>
+        private (StatValue LifeCostPercent, StatValue ShieldMultiplierPercent, string Duration) CalcStats(int resonantCellCount) =>
             (
                 new StatValue("生命值消耗比例(%)", Config.LifeCostPercent),
                 new StatValue("原始生命消耗转护盾倍率(%)", SkillConfig.BaseShieldMultiplierPercent,
                     resonantCellCount * SkillConfig.ShieldMultiplierPercentPerResonantCell),
-                new StatValue("护盾持续时间", SkillConfig.BuffDuration)
+                SkillConfig.LifeShieldBuffDefinition.BaseDuration.ToDisplayString("护盾持续时间")
             );
 
         private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
@@ -54,7 +54,7 @@ namespace Units.Skills
             var buff = new Units.Buffs.LifeShieldBuff(
                 SkillConfig.LifeShieldBuffDefinition,
                 shieldValue,
-                stats.Duration.Final,
+                SkillConfig.LifeShieldBuffDefinition.BaseDuration,
                 new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             );
             var projectile = Object.Instantiate(

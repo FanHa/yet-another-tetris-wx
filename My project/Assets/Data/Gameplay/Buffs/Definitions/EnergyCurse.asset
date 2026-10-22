@@ -17,7 +17,9 @@ MonoBehaviour:
   description: "\u964D\u4F4E\u654C\u65B9\u80FD\u91CF\u56DE\u590D\u901F\u5EA6\u3002"
   icon: {fileID: 21300000, guid: c88a027aa4233d6409c5f9117b808100, type: 3}
   visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}
-  duration: 1.5
+  baseDuration:
+    mode: 0
+    seconds: 1.5
   baseEnergyRegenReductionPercent: 5
   energyRegenReductionPerResonantCell: 5
   maxEnergyRegenReductionPercent: 80

@@ -14,7 +14,7 @@ namespace Units.Buffs
         private readonly float maxKnockbackDistance;
 
         public WindKnockbackBuff(WindKnockbackBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             windKnockbackDefinition = definition;
             this.resonantCellCount = resonantCellCount;

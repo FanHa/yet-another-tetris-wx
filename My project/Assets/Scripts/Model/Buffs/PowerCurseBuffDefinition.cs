@@ -6,14 +6,13 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Power Curse")]
     public sealed class PowerCurseBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration;
         [SerializeField] private float baseAttackReductionPercent;
         [SerializeField] private float attackReductionPerResonantCell;
         [SerializeField] private float maxAttackReductionPercent;
 
-        public (StatValue Duration, StatValue AttackReductionPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, StatValue AttackReductionPercent) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("诅咒持续", duration),
+                BaseDuration.ToDisplayString("诅咒持续"),
                 new StatValue("攻击降低(%)", baseAttackReductionPercent, resonantCellCount * attackReductionPerResonantCell)
             );
 
@@ -27,10 +26,7 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (duration <= 0f || float.IsNaN(duration) || float.IsInfinity(duration))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be finite and greater than zero.", this);
-            }
+            ValidateTimedBaseDuration();
 
             ValidatePercent(baseAttackReductionPercent, nameof(baseAttackReductionPercent));
             ValidatePercent(maxAttackReductionPercent, nameof(maxAttackReductionPercent));

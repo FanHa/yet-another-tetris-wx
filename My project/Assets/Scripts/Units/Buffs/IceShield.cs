@@ -16,7 +16,7 @@ namespace Units.Buffs
         private readonly int chilledActionSlowPercent;
 
         public IceShield(IceShieldBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             iceShieldDefinition = definition;
             this.resonantCellCount = resonantCellCount;
@@ -38,7 +38,7 @@ namespace Units.Buffs
                 return;
             var chilled = new Chilled(
                 chilledDefinition,
-                chilledDuration,
+                BuffDuration.ForSeconds(chilledDuration),
                 chilledMoveSlowPercent,
                 chilledAttackSlowPercent,
                 chilledActionSlowPercent,

@@ -6,15 +6,12 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Attack Boost")]
     public sealed class AttackBoostBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration;
         [SerializeField] private float baseAtkSpeedPercent;
         [SerializeField] private float atkSpeedPercentPerResonantCell;
 
-        public float Duration => duration;
-
-        public (StatValue Duration, StatValue AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, StatValue AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("持续时间", duration),
+                BaseDuration.ToDisplayString("持续时间"),
                 new StatValue("攻击速度提升(%)", baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
             );
 
@@ -28,10 +25,7 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (duration <= 0f || float.IsNaN(duration) || float.IsInfinity(duration))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be finite and greater than zero.", this);
-            }
+            ValidateTimedBaseDuration();
 
             ValidateFiniteNonNegative(baseAtkSpeedPercent, nameof(baseAtkSpeedPercent));
             ValidateFiniteNonNegative(atkSpeedPercentPerResonantCell, nameof(atkSpeedPercentPerResonantCell));

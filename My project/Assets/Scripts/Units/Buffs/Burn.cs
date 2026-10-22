@@ -10,7 +10,7 @@ namespace Units.Buffs
         private readonly BurnBuffDefinition burnDefinition;
         private readonly float dps;
 
-        public Burn(BurnBuffDefinition definition, float dps, float duration, BuffSource source)
+        public Burn(BurnBuffDefinition definition, float dps, BuffDuration duration, BuffSource source)
             : base(definition, duration, source.SourceUnit, source.SourceSkill)
         {
             burnDefinition = definition;

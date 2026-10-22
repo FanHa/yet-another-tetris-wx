@@ -13,11 +13,11 @@ namespace Units.Buffs
         public int AttackSlowPercent { get; }
         public int ActionSlowPercent { get; }
 
-        public Chilled(ChilledBuffDefinition definition, float duration, int moveSlowPercent, int attackSlowPercent, int actionSlowPercent, BuffSource source)
+        public Chilled(ChilledBuffDefinition definition, BuffDuration duration, int moveSlowPercent, int attackSlowPercent, int actionSlowPercent, BuffSource source)
             : base(definition, duration, source.SourceUnit, source.SourceSkill)
         {
             chilledDefinition = definition;
-            chilledDuration = duration;
+            chilledDuration = duration.Seconds;
             MoveSlowPercent = moveSlowPercent;
             AttackSlowPercent = attackSlowPercent;
             ActionSlowPercent = actionSlowPercent;

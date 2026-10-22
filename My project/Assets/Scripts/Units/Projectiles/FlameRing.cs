@@ -51,7 +51,7 @@ namespace Units.Projectiles
 
         protected override void ApplyEffectTo(Unit target)
         {
-            target.AddBuff(new Burn(burnDefinition, burnDps, burnDuration, burnSource));
+            target.AddBuff(new Burn(burnDefinition, burnDps, BuffDuration.ForSeconds(burnDuration), burnSource));
         }
 
 #if UNITY_EDITOR

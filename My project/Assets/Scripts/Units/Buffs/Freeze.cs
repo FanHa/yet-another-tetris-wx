@@ -11,7 +11,7 @@ namespace Units.Buffs
         private readonly int resonantCellCount;
 
         public Freeze(FreezeBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.CalculateStats(resonantCellCount).Final, source.SourceUnit, source.SourceSkill)
+            : base(definition, BuffDuration.ForSeconds(definition.CalculateStats(resonantCellCount).Final), source.SourceUnit, source.SourceSkill)
         {
             freezeDefinition = definition;
             this.resonantCellCount = resonantCellCount;

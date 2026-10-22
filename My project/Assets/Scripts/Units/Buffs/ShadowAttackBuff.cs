@@ -13,7 +13,7 @@ namespace Units.Buffs
         private readonly float vulnerabilityDuration;
 
         public ShadowAttackBuff(ShadowAttackBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             shadowAttackDefinition = definition;
             vulnerabilityDefinition = definition.VulnerabilityDefinition;
@@ -31,7 +31,7 @@ namespace Units.Buffs
             var vulnerability = new Vulnerability(
                 vulnerabilityDefinition,
                 extraDamagePercent: vulnerabilityPercent,
-                buffDuration: vulnerabilityDuration,
+                buffDuration: BuffDuration.ForSeconds(vulnerabilityDuration),
                 source: new BuffSource(attacker, sourceSkill)
             );
             context.AddBuffTo(target, vulnerability);

@@ -16,8 +16,8 @@ namespace Units.Buffs
         }
 
         private PowerCurseBuff(PowerCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId,
-            (StatValue Duration, StatValue AttackReductionPercent) stats)
-            : base(definition, stats.Duration.Final, source.SourceUnit, source.SourceSkill)
+            (string Duration, StatValue AttackReductionPercent) stats)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             powerCurseDefinition = definition;
             this.resonantCellCount = resonantCellCount;

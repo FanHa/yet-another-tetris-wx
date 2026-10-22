@@ -6,18 +6,15 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Wind Knockback")]
     public sealed class WindKnockbackBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration = -1f;
         [SerializeField] private float baseKnockbackDistance;
         [SerializeField] private float knockbackDistancePerResonantCell;
         [SerializeField] private float maxKnockbackDistance;
 
-        public float Duration => duration;
-
-        public (StatValue KnockbackDistance, StatValue MaxKnockbackDistance, StatValue Duration) CalculateStats(int resonantCellCount) =>
+        public (StatValue KnockbackDistance, StatValue MaxKnockbackDistance, string Duration) CalculateStats(int resonantCellCount) =>
             (
                 new StatValue("击退距离", baseKnockbackDistance, resonantCellCount * knockbackDistancePerResonantCell),
                 new StatValue("最大击退距离", maxKnockbackDistance),
-                new StatValue("轻风击退持续时间", duration)
+                BaseDuration.ToDisplayString("轻风击退持续时间")
             );
 
         public string DescribeEffect(int resonantCellCount)
@@ -31,11 +28,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);
-            }
-
             ValidateFiniteNonNegative(baseKnockbackDistance, nameof(baseKnockbackDistance));
             ValidateFiniteNonNegative(knockbackDistancePerResonantCell, nameof(knockbackDistancePerResonantCell));
             ValidateFiniteNonNegative(maxKnockbackDistance, nameof(maxKnockbackDistance));

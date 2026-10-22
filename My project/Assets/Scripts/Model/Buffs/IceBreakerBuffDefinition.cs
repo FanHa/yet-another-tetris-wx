@@ -6,18 +6,15 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Ice Breaker")]
     public sealed class IceBreakerBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration = -1f;
         [SerializeField] private float baseExtraDamage;
         [SerializeField] private float extraDamagePerResonantCell;
         [SerializeField] private float percentSlowMultiplier;
 
-        public float Duration => duration;
-
-        public (StatValue BaseExtraDamage, StatValue PercentSlowMultiplier, StatValue Duration) CalculateStats(int resonantCellCount) =>
+        public (StatValue BaseExtraDamage, StatValue PercentSlowMultiplier, string Duration) CalculateStats(int resonantCellCount) =>
             (
                 new StatValue("基础额外伤害", baseExtraDamage, resonantCellCount * extraDamagePerResonantCell),
                 new StatValue("减速百分比伤害倍率", percentSlowMultiplier),
-                new StatValue("破冰持续时间", duration)
+                BaseDuration.ToDisplayString("破冰持续时间")
             );
 
         public string DescribeEffect(int resonantCellCount)
@@ -30,11 +27,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);
-            }
-
             ValidateFiniteNonNegative(baseExtraDamage, nameof(baseExtraDamage));
             ValidateFiniteNonNegative(extraDamagePerResonantCell, nameof(extraDamagePerResonantCell));
             ValidateFiniteNonNegative(percentSlowMultiplier, nameof(percentSlowMultiplier));

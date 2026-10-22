@@ -17,3 +17,6 @@ MonoBehaviour:
   description: "\u5438\u6536\u53D7\u5230\u7684\u4F24\u5BB3\uFF0C\u62A4\u76FE\u8017\u5C3D\u65F6\u79FB\u9664\u3002\u5171\u9E23\u589E\u52A0\u62A4\u76FE\u91CF\uFF0C\u4E0D\u589E\u52A0\u751F\u547D\u6D88\u8017\u3002"
   icon: {fileID: 8207308503633103061, guid: a3a215d7f10e0574eab3bf3d7616ea2a, type: 3}
   visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}
+  baseDuration:
+    mode: 0
+    seconds: 15

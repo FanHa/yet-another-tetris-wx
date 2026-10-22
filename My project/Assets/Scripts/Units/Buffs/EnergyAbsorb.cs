@@ -11,7 +11,7 @@ namespace Units.Buffs
         private readonly int resonantCellCount;
         private readonly float energyAbsorbPerSkillCast;
         public EnergyAbsorb(EnergyAbsorbBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             energyAbsorbDefinition = definition;
             this.resonantCellCount = resonantCellCount;

@@ -20,7 +20,7 @@ namespace Units.Buffs
 
         private WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source,
             (StatValue Duration, StatValue MoveSlowPercent, StatValue AtkReducePercent) stats)
-            : base(definition, stats.Duration.Final, source.SourceUnit, source.SourceSkill)
+            : base(definition, BuffDuration.ForSeconds(stats.Duration.Final), source.SourceUnit, source.SourceSkill)
         {
             wildWindDefinition = definition;
             this.resonantCellCount = resonantCellCount;

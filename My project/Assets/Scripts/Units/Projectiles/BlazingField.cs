@@ -37,7 +37,7 @@ namespace Units.Projectiles
 
         protected override void ApplyEffectTo(Unit target)
         {
-            var burn = new Burn(burnDefinition, burnDps, burnDuration, burnSource);
+            var burn = new Burn(burnDefinition, burnDps, BuffDuration.ForSeconds(burnDuration), burnSource);
             target.AddBuff(burn);
         }
 

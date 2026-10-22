@@ -6,8 +6,7 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Chilled")]
     public sealed class ChilledBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float baseDuration;
-        [SerializeField] private float durationPerResonantCell;
+        [SerializeField] private float durationPerResonance;
         [SerializeField] private int baseMoveSlowPercent;
         [SerializeField] private int moveSlowPercentPerResonantCell;
         [SerializeField] private int baseAttackSlowPercent;
@@ -18,7 +17,7 @@ namespace Model.Buffs
         public (StatValue Duration, StatValue MoveSlowPercent, StatValue AttackSlowPercent, StatValue ActionSlowPercent) CalculateStats(int resonantCellCount)
         {
             return (
-                new StatValue("减速效果持续时间", baseDuration, resonantCellCount * durationPerResonantCell),
+                new StatValue("减速效果持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance),
                 new StatValue("移动速度降低(%)", baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
                 new StatValue("攻击速度降低(%)", baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
                 new StatValue("动作速率降低(%)", baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
@@ -40,22 +39,14 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            ValidateFinitePositive(baseDuration, nameof(baseDuration));
-            ValidateFiniteNonNegative(durationPerResonantCell, nameof(durationPerResonantCell));
+            ValidateTimedBaseDuration();
+            ValidateFiniteNonNegative(durationPerResonance, nameof(durationPerResonance));
             ValidateNonNegative(baseMoveSlowPercent, nameof(baseMoveSlowPercent));
             ValidateNonNegative(moveSlowPercentPerResonantCell, nameof(moveSlowPercentPerResonantCell));
             ValidateNonNegative(baseAttackSlowPercent, nameof(baseAttackSlowPercent));
             ValidateNonNegative(attackSlowPercentPerResonantCell, nameof(attackSlowPercentPerResonantCell));
             ValidateNonNegative(baseActionSlowPercent, nameof(baseActionSlowPercent));
             ValidateNonNegative(actionSlowPercentPerResonantCell, nameof(actionSlowPercentPerResonantCell));
-        }
-
-        private void ValidateFinitePositive(float value, string fieldName)
-        {
-            if (value <= 0f || float.IsNaN(value) || float.IsInfinity(value))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{fieldName} must be finite and greater than zero.", this);
-            }
         }
 
         private void ValidateFiniteNonNegative(float value, string fieldName)

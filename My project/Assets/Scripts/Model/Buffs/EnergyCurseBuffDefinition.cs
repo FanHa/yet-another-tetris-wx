@@ -6,19 +6,18 @@ namespace Model.Buffs
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Energy Curse")]
     public sealed class EnergyCurseBuffDefinition : BuffDefinition
     {
-        [SerializeField] private float duration;
         [SerializeField] private float baseEnergyRegenReductionPercent;
         [SerializeField] private float energyRegenReductionPerResonantCell;
         [SerializeField] private float maxEnergyRegenReductionPercent;
 
-        public (StatValue Duration, StatValue EnergyRegenReductionPercent) CalculateStats(int resonantCellCount)
+        public (string Duration, StatValue EnergyRegenReductionPercent) CalculateStats(int resonantCellCount)
         {
             float bonus = Mathf.Min(
                 resonantCellCount * energyRegenReductionPerResonantCell,
                 maxEnergyRegenReductionPercent - baseEnergyRegenReductionPercent);
 
             return (
-                new StatValue("诅咒持续", duration),
+                BaseDuration.ToDisplayString("诅咒持续"),
                 new StatValue("能量回复降低(%)", baseEnergyRegenReductionPercent, bonus)
             );
         }
@@ -33,10 +32,7 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (duration <= 0f || float.IsNaN(duration) || float.IsInfinity(duration))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be finite and greater than zero.", this);
-            }
+            ValidateTimedBaseDuration();
 
             ValidatePercent(baseEnergyRegenReductionPercent, nameof(baseEnergyRegenReductionPercent));
             ValidatePercent(maxEnergyRegenReductionPercent, nameof(maxEnergyRegenReductionPercent));

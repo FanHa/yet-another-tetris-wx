@@ -17,13 +17,13 @@ MonoBehaviour:
   description: "\u964D\u4F4E\u76EE\u6807\u79FB\u52A8\u901F\u5EA6\u3001\u653B\u51FB\u901F\u5EA6\u548C\u52A8\u4F5C\u901F\u7387\u3002"
   icon: {fileID: -5694095582323934413, guid: cc1452885a4e7f943a0f22480fd0c8f9, type: 3}
   visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}
-  baseDuration: 5
-  durationPerResonantCell: 0
+  baseDuration:
+    mode: 0
+    seconds: 5
+  durationPerResonance: 0
   baseMoveSlowPercent: 5
   moveSlowPercentPerResonantCell: 5
   baseAttackSlowPercent: 5
   attackSlowPercentPerResonantCell: 5
   baseActionSlowPercent: 5
   actionSlowPercentPerResonantCell: 5
-  baseEnergyRegenSlowPercent: 0
-  energyRegenSlowPercentPerResonantCell: 0

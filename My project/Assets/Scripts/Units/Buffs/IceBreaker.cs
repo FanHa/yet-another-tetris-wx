@@ -16,7 +16,7 @@ namespace Units.Buffs
         private readonly float percentSlowMultiplier;
 
         public IceBreaker(IceBreakerBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             iceBreakerDefinition = definition;
             this.resonantCellCount = resonantCellCount;

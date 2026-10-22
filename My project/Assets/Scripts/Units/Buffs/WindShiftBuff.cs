@@ -9,7 +9,7 @@ namespace Units.Buffs
         private readonly float attackRangeBonus;      // 攻击距离提升）
 
         public WindShiftBuff(WindShiftBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             windShiftDefinition = definition;
             this.resonantCellCount = resonantCellCount;

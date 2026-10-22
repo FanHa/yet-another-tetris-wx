@@ -15,8 +15,10 @@ namespace Units.Buffs
 
     public abstract class Buff
     {
-        protected float duration; // -1为永久
-        public float TimeLeft;
+        private readonly BuffDuration duration;
+        public float TimeLeft { get; private set; }
+        public bool IsPermanent => duration.IsPermanent;
+        protected BuffDuration Duration => duration;
         public BuffDefinition Definition { get; }
         protected Unit sourceUnit { get; set; }
         public Unit SourceUnit => sourceUnit;
@@ -27,7 +29,7 @@ namespace Units.Buffs
         public Units.Skills.Skill SourceSkill => sourceSkill;
         public event Action Removed;
 
-        protected Buff(BuffDefinition definition, float duration, Unit sourceUnit, Units.Skills.Skill sourceSkill)
+        protected Buff(BuffDefinition definition, BuffDuration duration, Unit sourceUnit, Units.Skills.Skill sourceSkill)
         {
             Definition = definition;
             this.duration = duration;
@@ -41,7 +43,7 @@ namespace Units.Buffs
 
         public virtual void OnApply(IBuffContext context)
         {
-            TimeLeft = duration;
+            ResetTimeLeft();
             this.context = context;
         }
         public virtual void OnRemove()
@@ -54,16 +56,21 @@ namespace Units.Buffs
             // 使用Buff的类型和名称作为唯一标识
             return $"{BuffType.FullName}:{Name()}";
         }
-        public void RefreshDuration() => TimeLeft = duration;
+        public void RefreshDuration() => ResetTimeLeft();
 
         public bool IsExpired()
         {
-            return duration >= 0f && TimeLeft <= 0f;
+            return duration.IsTimed && TimeLeft <= 0f;
         }
         public virtual void UpdateTime(float interval)
         {
-            if (duration > 0)
+            if (duration.IsTimed)
                 TimeLeft -= interval;
+        }
+
+        private void ResetTimeLeft()
+        {
+            TimeLeft = duration.IsTimed ? duration.Seconds : 0f;
         }
     }
 

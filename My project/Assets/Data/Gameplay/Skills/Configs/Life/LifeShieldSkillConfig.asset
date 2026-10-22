@@ -21,4 +21,3 @@ MonoBehaviour:
   lifeShieldBuffDefinition: {fileID: 11400000, guid: 44f046d07e072c84aa90e0415ef9b3b0, type: 2}
   baseShieldMultiplierPercent: 100
   shieldMultiplierPercentPerResonantCell: 5
-  buffDuration: 15

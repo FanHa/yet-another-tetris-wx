@@ -10,7 +10,7 @@ namespace Units.Buffs
         private readonly float atkBoost;
 
         public LifePowerBuff(LifePowerBuffDefinition definition, float casterMaxHealth, int resonantCellCount, BuffSource source)
-            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
+            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             lifePowerDefinition = definition;
             this.resonantCellCount = resonantCellCount;
