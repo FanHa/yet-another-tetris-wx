@@ -15,12 +15,9 @@ namespace Units.Skills
 
         public override string Description()
         {
-            var stats = CalcStats();
-            var chilledDefinition = ((IceShieldSkillConfig)Definition.Config).ChilledBuffDefinition;
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.BuffDuration}\n" +
-                chilledDefinition.DescribeEffect(GetResonantCellCount());
+                ((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() => "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和动作速率.";
@@ -33,31 +30,14 @@ namespace Units.Skills
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
             var config = (IceShieldSkillConfig)Definition.Config;
-            var buff = Buffs.BuffFactory.Create(
+            var buff = new Buffs.IceShield(
                 config.IceShieldBuffDefinition,
-                new Buffs.IceShieldBuffArgs(
-                    config.ChilledBuffDefinition,
-                    stats.BuffDuration.Final,
-                    GetResonantCellCount(),
-                    new Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             );
 
             Owner.AddBuff(buff);
-        }
-
-        private struct IceShieldStats
-        {
-            public StatValue BuffDuration;
-        }
-
-        private IceShieldStats CalcStats()
-        {
-            return new IceShieldStats
-            {
-                BuffDuration = new StatValue("护盾持续时间", Config.BuffDuration)
-            };
         }
 
         private int GetResonantCellCount()

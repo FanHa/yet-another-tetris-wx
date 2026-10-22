@@ -22,7 +22,5 @@ namespace Model.Skills
     [System.Serializable]
     public class FlameInjectLevelConfig : SkillLevelConfig
     {
-        [Header("通用")]
-        public float BuffDuration;
     }
 }

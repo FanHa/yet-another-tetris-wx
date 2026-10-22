@@ -39,12 +39,8 @@ namespace Units.Buffs
                 new EnergyCurseBuff(definition, args)),
             ["buff.energy_absorb"] = new FactoryEntry<EnergyAbsorbBuffArgs>((definition, args) =>
                 new EnergyAbsorb(definition, args)),
-            ["buff.freeze"] = new FactoryEntry<FreezeBuffArgs>((definition, args) =>
-                new Freeze(definition, args)),
             ["buff.ice_breaker"] = new FactoryEntry<IceBreakerBuffArgs>((definition, args) =>
                 new IceBreaker(definition, args)),
-            ["buff.ice_shield"] = new FactoryEntry<IceShieldBuffArgs>((definition, args) =>
-                new IceShield(definition, args)),
             ["buff.life_echo"] = new FactoryEntry<LifeEchoBuffArgs>((definition, args) =>
                 new LifeEchoBuff(definition, args)),
             ["buff.life_power"] = new FactoryEntry<LifePowerBuffArgs>((definition, args) =>

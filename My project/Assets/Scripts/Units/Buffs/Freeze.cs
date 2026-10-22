@@ -1,31 +1,24 @@
-using Units.Skills;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct FreezeBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public BuffSource Source { get; }
-
-        public FreezeBuffArgs(float duration, BuffSource source)
-        {
-            Duration = duration;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// Freeze：完全冻结目标，无法移动、攻击、释放技能，能量回复为0
     /// </summary>
     public class Freeze : Buff
     {
-        public Freeze(Model.Buffs.BuffDefinition definition, FreezeBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        private readonly FreezeBuffDefinition freezeDefinition;
+        private readonly int resonantCellCount;
+
+        public Freeze(FreezeBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.CalculateStats(resonantCellCount).Final, source.SourceUnit, source.SourceSkill)
         {
+            freezeDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
         }
 
-        public override string Name() => "Freeze";
-        public override string Description() => "完全冻结,无法行动,能量回复为0";
+        public override string Name() => freezeDefinition.DisplayName;
+        public override string Description() => freezeDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

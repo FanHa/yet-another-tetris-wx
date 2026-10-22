@@ -22,8 +22,7 @@ namespace Units.Skills
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(GetResonantCellCount()) + "\n" +
-                new StatValue("效果持续时间", Config.BuffDuration);
+                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
         public static string DescriptionStatic() => "攻击时附加火焰伤害";
 
@@ -39,7 +38,6 @@ namespace Units.Skills
             var buff = new Units.Buffs.FlameInject(
                 config.FlameInjectBuffDefinition,
                 GetResonantCellCount(),
-                Config.BuffDuration,
                 new BuffSource(Owner.SelfUnit, this)
             );
             Owner.AddBuff(buff);

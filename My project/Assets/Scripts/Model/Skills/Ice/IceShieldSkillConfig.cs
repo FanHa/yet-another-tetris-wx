@@ -11,19 +11,16 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private IceShield projectilePrefab;
-        [SerializeField] private BuffDefinition iceShieldBuffDefinition;
-        [SerializeField] private ChilledBuffDefinition chilledBuffDefinition;
+        [SerializeField] private IceShieldBuffDefinition iceShieldBuffDefinition;
 
         public IceShield ProjectilePrefab => projectilePrefab;
-        public BuffDefinition IceShieldBuffDefinition => iceShieldBuffDefinition;
-        public ChilledBuffDefinition ChilledBuffDefinition => chilledBuffDefinition;
+        public IceShieldBuffDefinition IceShieldBuffDefinition => iceShieldBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(projectilePrefab, nameof(projectilePrefab));
             ValidateRequiredReference(iceShieldBuffDefinition, nameof(iceShieldBuffDefinition));
-            ValidateRequiredReference(chilledBuffDefinition, nameof(chilledBuffDefinition));
         }
     #endif
     }
@@ -31,7 +28,5 @@ namespace Model.Skills
     [System.Serializable]
     public class IceShieldLevelConfig : SkillLevelConfig
     {
-        [Header("护盾与冰冻")]
-        public float BuffDuration = -1f;
     }
 }

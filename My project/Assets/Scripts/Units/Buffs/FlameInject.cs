@@ -11,8 +11,8 @@ namespace Units.Buffs
         private readonly float dotDuration;
         private readonly BurnBuffDefinition burnDefinition;
 
-        public FlameInject(FlameInjectBuffDefinition definition, int resonantCellCount, float buffDuration, BuffSource source)
-            : base(definition, buffDuration, source.SourceUnit, source.SourceSkill)
+        public FlameInject(FlameInjectBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
             burnDefinition = definition.BurnDefinition;
             var stats = burnDefinition.CalculateStats(resonantCellCount);

@@ -32,11 +32,11 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
             var config = (IcyCageSkillConfig)Definition.Config;
-            var freezeBuff = Buffs.BuffFactory.Create(
+            var freezeBuff = new Buffs.Freeze(
                 config.FreezeBuffDefinition,
-                new Buffs.FreezeBuffArgs(stats.FreezeDuration.Final, new Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             );
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
@@ -45,7 +45,7 @@ namespace Units.Skills
         public override string Description()
         {
             var stats = CalcStats();
-            return $"对攻击范围内一个敌人施加冻结效果：\n{stats.FreezeDuration}";
+            return $"对攻击范围内一个敌人施加冻结效果：\n{stats}";
         }
 
         public static string DescriptionStatic() => "对攻击范围内一个敌人施加冻结效果";
@@ -55,19 +55,12 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "冰牢";
-        private struct IcyCageStats
+        private StatValue CalcStats()
         {
-            public StatValue FreezeDuration;
+            return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(GetResonantCellCount());
         }
 
-        private IcyCageStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new IcyCageStats
-            {
-                FreezeDuration = new StatValue("冻结持续时间", Config.BaseFreezeDuration, resonantCellCount * Config.FreezeDurationPerResonantCell)
-            };
-        }
+        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
     }
 }

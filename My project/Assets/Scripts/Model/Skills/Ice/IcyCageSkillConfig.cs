@@ -11,10 +11,10 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private IcyCage projectilePrefab;
-        [SerializeField] private BuffDefinition freezeBuffDefinition;
+        [SerializeField] private FreezeBuffDefinition freezeBuffDefinition;
 
         public IcyCage ProjectilePrefab => projectilePrefab;
-        public BuffDefinition FreezeBuffDefinition => freezeBuffDefinition;
+        public FreezeBuffDefinition FreezeBuffDefinition => freezeBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -28,12 +28,6 @@ namespace Model.Skills
     [System.Serializable]
     public class IcyCageLevelConfig : SkillLevelConfig, IRequiresEnergy
     {
-        [Header("冻结效果")]
-        [Tooltip("基础冻结持续时间")]
-        public float BaseFreezeDuration = 2f;
-        [Tooltip("匹配共鸣 Cell 增加的冻结持续时间")]
-        public float FreezeDurationPerResonantCell = 0.5f;
-
         [Header("消耗")]
         [Tooltip("释放所需能量")]
         public float RequiredEnergy = 65f;

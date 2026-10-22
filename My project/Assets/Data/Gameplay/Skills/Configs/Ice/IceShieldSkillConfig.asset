@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f466e354c08bae49830f85244c63721, type: 3}
   m_Name: IceShieldSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - BuffDuration: -1
-  - BuffDuration: -1
+  LevelConfigs: []
   projectilePrefab: {fileID: 8363342164250943101, guid: f25552e189446a041af81469fcfa1836, type: 3}
-  iceShieldBuffDefinition: {fileID: 11400000, guid: ce435e6fbc3669b48ae31f4a2bcd54b6, type: 2}
-  chilledBuffDefinition: {fileID: 11400000, guid: f1a21bafa27e07c4299f3744ffca5175, type: 2}
+  iceShieldBuffDefinition: {fileID: 11400000, guid: e43f400528953be4f8cebcab3d7d18e0, type: 2}

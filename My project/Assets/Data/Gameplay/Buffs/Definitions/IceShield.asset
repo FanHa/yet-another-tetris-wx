@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ec23bf2220fdd3469175da80d23d4f8, type: 3}
+  m_Name: IceShield
+  m_EditorClassIdentifier: 
+  id: buff.ice_shield
+  displayName: "\u51B0\u971C\u62A4\u76FE"
+  description: "\u53D7\u5230\u653B\u51FB\u65F6\u4F7F\u653B\u51FB\u8005\u83B7\u5F97
+    Chilled \u51CF\u901F\u6548\u679C\u3002"
+  icon: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}
+  visualPrefab: {fileID: 8363342164250943101, guid: f25552e189446a041af81469fcfa1836, type: 3}
+  duration: -1
+  chilledDefinition: {fileID: 11400000, guid: f1a21bafa27e07c4299f3744ffca5175, type: 2}
