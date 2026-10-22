@@ -35,20 +35,6 @@ namespace Units.Buffs
                 new PowerCurseBuff(definition, args)),
             ["buff.energy_curse"] = new FactoryEntry<EnergyCurseBuffArgs>((definition, args) =>
                 new EnergyCurseBuff(definition, args)),
-            ["buff.energy_absorb"] = new FactoryEntry<EnergyAbsorbBuffArgs>((definition, args) =>
-                new EnergyAbsorb(definition, args)),
-            ["buff.life_echo"] = new FactoryEntry<LifeEchoBuffArgs>((definition, args) =>
-                new LifeEchoBuff(definition, args)),
-            ["buff.life_power"] = new FactoryEntry<LifePowerBuffArgs>((definition, args) =>
-                new LifePowerBuff(definition, args)),
-            ["buff.life_shield"] = new FactoryEntry<LifeShieldBuffArgs>((definition, args) =>
-                new LifeShieldBuff(definition, args)),
-            ["buff.wild_wind_debuff"] = new FactoryEntry<WildWindDebuffBuffArgs>((definition, args) =>
-                new WildWindDebuff(definition, args)),
-            ["buff.wind_knockback"] = new FactoryEntry<WindKnockbackBuffArgs>((definition, args) =>
-                new WindKnockbackBuff(definition, args)),
-            ["buff.wind_shift"] = new FactoryEntry<WindShiftBuffArgs>((definition, args) =>
-                new WindShiftBuff(definition, args))
         };
 
         public static Buff Create<TArgs>(BuffDefinition definition, TArgs args) where TArgs : struct, IBuffCreationArgs

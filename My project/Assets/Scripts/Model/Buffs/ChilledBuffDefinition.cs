@@ -40,11 +40,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (string.IsNullOrWhiteSpace(DisplayName))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(DisplayName)} is not assigned.", this);
-            }
-
             ValidateFinitePositive(baseDuration, nameof(baseDuration));
             ValidateFiniteNonNegative(durationPerResonantCell, nameof(durationPerResonantCell));
             ValidateNonNegative(baseMoveSlowPercent, nameof(baseMoveSlowPercent));

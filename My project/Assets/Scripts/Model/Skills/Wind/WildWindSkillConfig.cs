@@ -11,10 +11,10 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private WildWind projectilePrefab;
-        [SerializeField] private BuffDefinition wildWindDebuffDefinition;
+        [SerializeField] private WildWindDebuffDefinition wildWindDebuffDefinition;
 
         public WildWind ProjectilePrefab => projectilePrefab;
-        public BuffDefinition WildWindDebuffDefinition => wildWindDebuffDefinition;
+        public WildWindDebuffDefinition WildWindDebuffDefinition => wildWindDebuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -28,9 +28,6 @@ namespace Model.Skills
                     ValidateFiniteNonNegative(levelConfig.DamageAdditionPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DamageAdditionPerResonantCell)}");
                     ValidateFiniteNonNegative(levelConfig.RadiusPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.RadiusPerResonantCell)}");
                     ValidateFiniteNonNegative(levelConfig.DurationPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DurationPerResonantCell)}");
-                    ValidateFiniteNonNegative(levelConfig.DebuffDurationPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.DebuffDurationPerResonantCell)}");
-                    ValidateFiniteNonNegative(levelConfig.MoveSlowPercentPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.MoveSlowPercentPerResonantCell)}");
-                    ValidateFiniteNonNegative(levelConfig.AtkReducePercentPerResonantCell, $"{levelPrefix}.{nameof(levelConfig.AtkReducePercentPerResonantCell)}");
                 }
         }
     #endif
@@ -45,9 +42,6 @@ namespace Model.Skills
 
         [Header("基础属性")]
         public float Damage;
-        public float DebuffDuration;
-        public int MoveSlowPercent;
-        public int AtkReducePercent;
         public float Radius;
         public float Duration;
 
@@ -55,8 +49,5 @@ namespace Model.Skills
         public float DamageAdditionPerResonantCell = 3f; // 每个匹配共鸣 Cell 增加的伤害
         public float RadiusPerResonantCell = 0.1f;
         public float DurationPerResonantCell = 0.25f;
-        public float DebuffDurationPerResonantCell = 0.2f;
-        public int MoveSlowPercentPerResonantCell = 3;
-        public int AtkReducePercentPerResonantCell = 3;
     }
 }

@@ -7,9 +7,9 @@ namespace Model.Skills
     public class LifeEchoSkillConfig : SkillConfig<LifeEchoLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition lifeEchoBuffDefinition;
+        [SerializeField] private LifeEchoBuffDefinition lifeEchoBuffDefinition;
 
-        public BuffDefinition LifeEchoBuffDefinition => lifeEchoBuffDefinition;
+        public LifeEchoBuffDefinition LifeEchoBuffDefinition => lifeEchoBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -22,8 +22,5 @@ namespace Model.Skills
     [System.Serializable]
     public class LifeEchoLevelConfig : SkillLevelConfig
     {
-        [Header("属性")]
-        public float DamagePercentToReflect; // 反射伤害百分比
-
     }
 }

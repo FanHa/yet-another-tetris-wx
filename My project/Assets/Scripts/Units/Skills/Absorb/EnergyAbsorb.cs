@@ -14,34 +14,20 @@ namespace Units.Skills
             Config = config;
         }
 
-        private struct EnergyAbsorbStats
+        private int GetResonantCellCount()
         {
-            public StatValue EnergyAbsorbPerSkillCast;
-            public StatValue BuffDuration;
-        }
-
-        private EnergyAbsorbStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-
-            return new EnergyAbsorbStats
-            {
-                EnergyAbsorbPerSkillCast = new StatValue("每次技能施放吸取能量", Config.BaseEnergyAbsorbPerSkillCast, resonantCellCount * Config.EnergyAbsorbPerResonantCell),
-                BuffDuration = new StatValue("效果持续时间", Config.BuffDuration)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         public override string Description()
         {
-            var s = CalcStats();
             return
-                DescriptionStatic() + ":\n"
-                + $"{s.EnergyAbsorbPerSkillCast}\n"
-                ;
+                DescriptionStatic() + ":\n" +
+                ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() =>
-            "被动：每当敌对单位施放技能时，汲取能量并分配到己方所有单位";
+            "被动：敌对单位施放技能时，为己方其他活动单位补充能量";
 
 
         public override string Name() => NameStatic();
@@ -49,13 +35,10 @@ namespace Units.Skills
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
-            var buff = Buffs.BuffFactory.Create(
+            var buff = new Buffs.EnergyAbsorb(
                 ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition,
-                new Buffs.EnergyAbsorbBuffArgs(
-                    stats.EnergyAbsorbPerSkillCast.Final,
-                    stats.BuffDuration.Final,
-                    new Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             );
             Owner.AddBuff(buff);
         }

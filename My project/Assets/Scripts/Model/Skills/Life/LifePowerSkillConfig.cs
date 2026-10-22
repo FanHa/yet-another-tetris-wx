@@ -7,9 +7,9 @@ namespace Model.Skills
     public class LifePowerSkillConfig : SkillConfig<LifePowerLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition lifePowerBuffDefinition;
+        [SerializeField] private LifePowerBuffDefinition lifePowerBuffDefinition;
 
-        public BuffDefinition LifePowerBuffDefinition => lifePowerBuffDefinition;
+        public LifePowerBuffDefinition LifePowerBuffDefinition => lifePowerBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -25,10 +25,5 @@ namespace Model.Skills
         [Header("通用")]
         public float RequiredEnergy;
         float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
-
-        [Header("属性")]
-        public float HealthToAtkPercent;
-        public float BuffDuration;
-
     }
 }

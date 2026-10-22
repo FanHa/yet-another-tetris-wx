@@ -12,38 +12,24 @@ namespace Units.Skills
             Config = config;
         }
 
-        private struct LifeEchoStats
-        {
-            public StatValue ReflectPercent;
-        }
-
-        private LifeEchoStats CalcStats()
-        {
-            return new LifeEchoStats
-            {
-                ReflectPercent = new StatValue("反弹伤害比例(%)", Config.DamagePercentToReflect)
-            };
-        }
-
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命回响";
 
+        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+
         public override string Description()
         {
-            var stats = CalcStats();
             return DescriptionStatic() + ":\n" +
-                $"{stats.ReflectPercent}";
+                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
         public static string DescriptionStatic() => "反弹受到的伤害";
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
-            Owner.AddBuff(Units.Buffs.BuffFactory.Create(
+            Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
-                new Units.Buffs.LifeEchoBuffArgs(
-                    stats.ReflectPercent.Final,
-                    new Units.Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             ));
         }
     }

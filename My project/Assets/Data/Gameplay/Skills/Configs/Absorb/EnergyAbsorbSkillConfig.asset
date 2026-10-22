@@ -12,11 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c543046d9f8ca7d4f82f2388057475f9, type: 3}
   m_Name: EnergyAbsorbSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - BuffDuration: -1
-    BaseEnergyAbsorbPerSkillCast: 8
-    EnergyAbsorbPerResonantCell: 8
-  - BuffDuration: -1
-    BaseEnergyAbsorbPerSkillCast: 15
-    EnergyAbsorbPerResonantCell: 15
-  energyAbsorbBuffDefinition: {fileID: 11400000, guid: d8bcbc78fe968bc418d2eead1b34260b, type: 2}
+  LevelConfigs: []
+  energyAbsorbBuffDefinition: {fileID: 11400000, guid: ff2b34fa6a3632f4381e8c433be09c3b, type: 2}

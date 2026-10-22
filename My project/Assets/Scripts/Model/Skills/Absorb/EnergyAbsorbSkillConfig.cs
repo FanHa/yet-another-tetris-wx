@@ -8,19 +8,14 @@ namespace Model.Skills
     public class EnergyAbsorbSkillConfig : SkillConfig<EnergyAbsorbLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition energyAbsorbBuffDefinition;
+        [SerializeField] private EnergyAbsorbBuffDefinition energyAbsorbBuffDefinition;
 
-        public BuffDefinition EnergyAbsorbBuffDefinition => energyAbsorbBuffDefinition;
+        public EnergyAbsorbBuffDefinition EnergyAbsorbBuffDefinition => energyAbsorbBuffDefinition;
 
 #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
         {
             ValidateRequiredReference(energyAbsorbBuffDefinition, nameof(energyAbsorbBuffDefinition));
-            foreach (var (i, level) in GetValidLevelConfigs())
-            {
-                ValidateFiniteNonNegative(level.BaseEnergyAbsorbPerSkillCast, $"{nameof(LevelConfigs)}[{i}].{nameof(level.BaseEnergyAbsorbPerSkillCast)}");
-                ValidateFiniteNonNegative(level.EnergyAbsorbPerResonantCell, $"{nameof(LevelConfigs)}[{i}].{nameof(level.EnergyAbsorbPerResonantCell)}");
-            }
         }
 #endif
     }
@@ -28,8 +23,5 @@ namespace Model.Skills
     [System.Serializable]
     public class EnergyAbsorbLevelConfig : SkillLevelConfig
     {
-        public float BuffDuration;
-        public float BaseEnergyAbsorbPerSkillCast;
-        public float EnergyAbsorbPerResonantCell;
     }
 }

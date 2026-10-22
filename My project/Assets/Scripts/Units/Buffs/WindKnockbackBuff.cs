@@ -1,40 +1,31 @@
-using Units.Skills;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public readonly struct WindKnockbackBuffArgs : IBuffCreationArgs
-    {
-        public float KnockbackDistance { get; }
-        public float MaxKnockbackDistance { get; }
-        public BuffSource Source { get; }
-
-        public WindKnockbackBuffArgs(float knockbackDistance, float maxKnockbackDistance, BuffSource source)
-        {
-            KnockbackDistance = knockbackDistance;
-            MaxKnockbackDistance = maxKnockbackDistance;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// WindKnockbackBuff：普通攻击命中时，将目标沿攻击方向击退一小段距离
     /// </summary>
     public class WindKnockbackBuff : Buff, IAttackHitTrigger
     {
+        private readonly WindKnockbackBuffDefinition windKnockbackDefinition;
+        private readonly int resonantCellCount;
         private readonly float knockbackDistance;
         private readonly float maxKnockbackDistance;
 
-        public WindKnockbackBuff(Model.Buffs.BuffDefinition definition, WindKnockbackBuffArgs args)
-            : base(definition, -1f, args.Source.SourceUnit, args.Source.SourceSkill)
+        public WindKnockbackBuff(WindKnockbackBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            knockbackDistance = args.KnockbackDistance;
-            maxKnockbackDistance = args.MaxKnockbackDistance;
+            windKnockbackDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            var stats = definition.CalculateStats(resonantCellCount);
+            knockbackDistance = Mathf.Min(stats.KnockbackDistance.Final, stats.MaxKnockbackDistance.Final);
+            maxKnockbackDistance = stats.MaxKnockbackDistance.Final;
         }
 
-        public override string Name() => "轻风击退";
+        public override string Name() => windKnockbackDefinition.DisplayName;
         public override string Description() =>
-            $"普攻命中时将目标击退{knockbackDistance:F2}（最多{maxKnockbackDistance:F2}）";
+            windKnockbackDefinition.DescribeEffect(resonantCellCount);
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {

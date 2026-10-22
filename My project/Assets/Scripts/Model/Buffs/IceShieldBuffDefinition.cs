@@ -19,11 +19,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (string.IsNullOrWhiteSpace(DisplayName))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(DisplayName)} is not assigned.", this);
-            }
-
             if (chilledDefinition == null)
             {
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(chilledDefinition)} is not assigned.", this);

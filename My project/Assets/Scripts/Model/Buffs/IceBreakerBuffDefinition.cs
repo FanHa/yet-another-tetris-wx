@@ -30,11 +30,6 @@ namespace Model.Buffs
         protected override void OnValidate()
         {
             base.OnValidate();
-            if (string.IsNullOrWhiteSpace(DisplayName))
-            {
-                Debug.LogError($"{GetType().Name} '{name}'.{nameof(DisplayName)} is not assigned.", this);
-            }
-
             if (float.IsNaN(duration) || float.IsInfinity(duration) || (duration != -1f && duration <= 0f))
             {
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(duration)} must be -1 (permanent) or finite and greater than zero.", this);

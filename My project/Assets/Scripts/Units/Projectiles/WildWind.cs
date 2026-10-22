@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Projectiles
@@ -9,9 +10,8 @@ namespace Units.Projectiles
         private float radius;
         private float duration;
         private float damage;
-        private float debuffDuration;
-        private int moveSlowPercent;
-        private int atkReducePercent;
+        private WildWindDebuffDefinition debuffDefinition;
+        private int resonantCellCount;
         private float timer = 0f;
         private bool initialized = false;
         private Units.Skills.Skill sourceSkill;
@@ -26,9 +26,8 @@ namespace Units.Projectiles
             float radius,
             float duration,
             float damage,
-            float debuffDuration,
-            int moveSlowPercent,
-            int atkReducePercent,
+            WildWindDebuffDefinition debuffDefinition,
+            int resonantCellCount,
             Units.Skills.Skill sourceSkill
         )
         {
@@ -36,9 +35,8 @@ namespace Units.Projectiles
             this.radius = radius;
             this.duration = duration;
             this.damage = damage;
-            this.debuffDuration = debuffDuration;
-            this.moveSlowPercent = moveSlowPercent;
-            this.atkReducePercent = atkReducePercent;
+            this.debuffDefinition = debuffDefinition;
+            this.resonantCellCount = resonantCellCount;
             this.sourceSkill = sourceSkill;
 
             timer = 0f;
@@ -76,9 +74,10 @@ namespace Units.Projectiles
                         // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
                         Vector3 delta = targetPos - unit.transform.position;
                         unit.MoveBy(delta);
-                        var buff = Units.Buffs.BuffFactory.Create(
-                            ((Model.Skills.WildWindSkillConfig)sourceSkill.Definition.Config).WildWindDebuffDefinition,
-                            new Units.Buffs.WildWindDebuffBuffArgs(debuffDuration, moveSlowPercent, atkReducePercent, new Units.Buffs.BuffSource(caster, sourceSkill))
+                        var buff = new Units.Buffs.WildWindDebuff(
+                            debuffDefinition,
+                            resonantCellCount,
+                            new Units.Buffs.BuffSource(caster, sourceSkill)
                         );
                         unit.AddBuff(buff);
 

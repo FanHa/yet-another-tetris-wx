@@ -1,34 +1,20 @@
-using Units.Skills;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public readonly struct LifeShieldBuffArgs : IBuffCreationArgs
-    {
-        public float ShieldValue { get; }
-        public float Duration { get; }
-        public BuffSource Source { get; }
-
-        public LifeShieldBuffArgs(float shieldValue, float duration, BuffSource source)
-        {
-            ShieldValue = shieldValue;
-            Duration = duration;
-            Source = source;
-        }
-    }
-
     public class LifeShieldBuff : Buff
     {
-        private float shieldValue;           // 当前护盾值
+        private readonly float shieldValue;
         private Shield shield;               // 护盾对象
-        public LifeShieldBuff(Model.Buffs.BuffDefinition definition, LifeShieldBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public LifeShieldBuff(BuffDefinition definition, float shieldValue, float duration, BuffSource source)
+            : base(definition, duration, source.SourceUnit, source.SourceSkill)
         {
-            shieldValue = args.ShieldValue;
+            this.shieldValue = shieldValue;
         }
 
-        public override string Name() => "生命护盾";
-        public override string Description() => $"受到伤害时吸收伤害，最多吸收{shieldValue}点，持续{duration}秒";
+        public override string Name() => Definition.DisplayName;
+        public override string Description() => $"受到伤害时吸收伤害，护盾总吸收量{shieldValue}，持续{duration}秒";
 
         public override void OnApply(IBuffContext context)
         {

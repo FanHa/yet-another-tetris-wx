@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c135823367b6d6429b7dc3efc43d454, type: 3}
+  m_Name: WindKnockback
+  m_EditorClassIdentifier: 
+  id: buff.wind_knockback
+  displayName: "\u8F7B\u98CE\u51FB\u9000"
+  description: "\u666E\u901A\u653B\u51FB\u547D\u4E2D\u65F6\u5C06\u76EE\u6807\u51FB\u9000\u3002"
+  icon: {fileID: -6377495307504447203, guid: 6d602c25858f6704391736937dc0ef1a, type: 3}
+  visualPrefab: {fileID: 5991626588119950211, guid: 99a640f0e41a71e4d9bd5251b85c60f6, type: 3}
+  duration: -1
+  baseKnockbackDistance: 0.2
+  knockbackDistancePerResonantCell: 0.2
+  maxKnockbackDistance: 3

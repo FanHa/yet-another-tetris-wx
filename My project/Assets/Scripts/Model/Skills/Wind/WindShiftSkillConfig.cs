@@ -8,9 +8,9 @@ namespace Model.Skills
     public class WindShiftSkillConfig : SkillConfig<WindShiftLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition windShiftBuffDefinition;
+        [SerializeField] private WindShiftBuffDefinition windShiftBuffDefinition;
 
-        public BuffDefinition WindShiftBuffDefinition => windShiftBuffDefinition;
+        public WindShiftBuffDefinition WindShiftBuffDefinition => windShiftBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -23,8 +23,5 @@ namespace Model.Skills
     [System.Serializable]
     public class WindShiftLevelConfig : SkillLevelConfig
     {
-
-        public float AttackRangeBonus;
-        public float AttackRangePerResonantCell;
     }
 }

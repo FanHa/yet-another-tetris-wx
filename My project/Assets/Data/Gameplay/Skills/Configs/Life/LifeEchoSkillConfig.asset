@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00707ee8f2fcd7048887373ac92e35ce, type: 3}
   m_Name: LifeEchoSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - DamagePercentToReflect: 15
-  - DamagePercentToReflect: 30
-  lifeEchoBuffDefinition: {fileID: 11400000, guid: bcc99c08d81fbbe4ea7a40d325611be4, type: 2}
+  LevelConfigs: []
+  lifeEchoBuffDefinition: {fileID: 11400000, guid: b8c0248a973ad064f874d507e3159ee7, type: 2}

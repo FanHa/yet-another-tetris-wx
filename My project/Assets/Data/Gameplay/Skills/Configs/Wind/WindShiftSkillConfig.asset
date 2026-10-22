@@ -12,9 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ad87d2d99bfda4d942e6a49301d7e8, type: 3}
   m_Name: WindShiftSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - AttackRangeBonus: 0.5
-    AttackRangePerResonantCell: 0.5
-  - AttackRangeBonus: 1
-    AttackRangePerResonantCell: 1
-  windShiftBuffDefinition: {fileID: 11400000, guid: 9e22b78e132f3d74ea7cdbb120457569, type: 2}
+  LevelConfigs: []
+  windShiftBuffDefinition: {fileID: 11400000, guid: 57277f3a92541704ca08f72f78539adf, type: 2}

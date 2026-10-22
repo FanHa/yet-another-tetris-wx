@@ -12,11 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab57ad004d896f42b91c6793b7a7cfc, type: 3}
   m_Name: WindKnockbackSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - BaseKnockbackDistance: 0.2
-    KnockbackDistancePerResonantCell: 0.2
-    MaxKnockbackDistance: 3
-  - BaseKnockbackDistance: 0.4
-    KnockbackDistancePerResonantCell: 0.4
-    MaxKnockbackDistance: 3
-  windKnockbackBuffDefinition: {fileID: 11400000, guid: c70da5dbca4c1554cac1ce99d4feb184, type: 2}
+  LevelConfigs: []
+  windKnockbackBuffDefinition: {fileID: 11400000, guid: a4ff4433d052f154f99191baef13bee2, type: 2}

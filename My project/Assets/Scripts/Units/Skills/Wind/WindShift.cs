@@ -12,29 +12,15 @@ namespace Units.Skills
             Config = config;
         }
 
-        private struct WindShiftStats
+        private int GetResonantCellCount()
         {
-            public StatValue AttackRangeBonus;
-        }
-
-        private WindShiftStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new WindShiftStats
-            {
-                AttackRangeBonus = new StatValue(
-                    "攻击距离提升",
-                    Config.AttackRangeBonus,
-                    resonantCellCount * Config.AttackRangePerResonantCell
-                )
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.AttackRangeBonus}";
+                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
  
         public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离,获得攻击距离伤害加成";
@@ -47,10 +33,10 @@ namespace Units.Skills
     
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
-            Owner.AddBuff(Buffs.BuffFactory.Create(
+            Owner.AddBuff(new Buffs.WindShiftBuff(
                 ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
-                new Buffs.WindShiftBuffArgs(-1f, stats.AttackRangeBonus.Final, new Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             ));
         }
         

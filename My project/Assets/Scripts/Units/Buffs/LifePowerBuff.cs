@@ -1,34 +1,24 @@
-using Units.Skills;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public readonly struct LifePowerBuffArgs : IBuffCreationArgs
-    {
-        public float AtkBoost { get; }
-        public float Duration { get; }
-        public BuffSource Source { get; }
-
-        public LifePowerBuffArgs(float atkBoost, float duration, BuffSource source)
-        {
-            AtkBoost = atkBoost;
-            Duration = duration;
-            Source = source;
-        }
-    }
-
     public class LifePowerBuff : Buff, IAttackHitTrigger
     {
-        private float atkBoost;      // 攻击力加成
+        private readonly LifePowerBuffDefinition lifePowerDefinition;
+        private readonly int resonantCellCount;
+        private readonly float atkBoost;
 
-        public LifePowerBuff(Model.Buffs.BuffDefinition definition, LifePowerBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public LifePowerBuff(LifePowerBuffDefinition definition, float casterMaxHealth, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            atkBoost = args.AtkBoost;
+            lifePowerDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            atkBoost = definition.CalculateExtraDamage(casterMaxHealth, resonantCellCount);
         }
 
-        public override string Name() => "生命之力";
-        public override string Description() => $"攻击时额外造成{atkBoost}伤害";
+        public override string Name() => lifePowerDefinition.DisplayName;
+        public override string Description() => lifePowerDefinition.DescribeEffect(atkBoost, resonantCellCount);
 
         // 攻击时触发，增加伤害
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

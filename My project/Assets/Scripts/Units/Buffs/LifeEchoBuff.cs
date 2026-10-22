@@ -1,33 +1,24 @@
-using Units.Buffs;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct LifeEchoBuffArgs : IBuffCreationArgs
-    {
-        public BuffSource Source { get; }
-        public float ReflectPercent { get; }
-
-        public LifeEchoBuffArgs(float reflectPercent, BuffSource source)
-        {
-            Source = source;
-            ReflectPercent = reflectPercent;
-        }
-    }
-
     public class LifeEchoBuff : Buff, IAfterTakeDamageTrigger
     {
-       private readonly float reflectPercent;
+        private readonly LifeEchoBuffDefinition lifeEchoDefinition;
+        private readonly int resonantCellCount;
+        private readonly float reflectPercent;
 
-        /// <param name="reflectPercent">反弹伤害比例（0.2f 表示20%）</param>
-        public LifeEchoBuff(Model.Buffs.BuffDefinition definition, LifeEchoBuffArgs args)
-            : base(definition, -1f, args.Source.SourceUnit, args.Source.SourceSkill) // -1 表示永久Buff
+        public LifeEchoBuff(LifeEchoBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            reflectPercent = args.ReflectPercent;
+            lifeEchoDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            reflectPercent = definition.CalculateStats(resonantCellCount).ReflectPercent.Final;
         }
 
-        public override string Name() => "生命回响";
+        public override string Name() => lifeEchoDefinition.DisplayName;
 
-        public override string Description() => $"受到伤害后反弹{reflectPercent}%伤害给来源单位.";
+        public override string Description() => lifeEchoDefinition.DescribeEffect(resonantCellCount);
 
         public void OnAfterTakeDamage(IBuffContext context, ref Damages.Damage damage)
         {

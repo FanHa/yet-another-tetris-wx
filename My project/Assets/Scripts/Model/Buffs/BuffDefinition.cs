@@ -24,6 +24,11 @@ namespace Model.Buffs
 
         protected virtual void OnValidate()
         {
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(DisplayName)} is not assigned.", this);
+            }
+
             if (!string.IsNullOrWhiteSpace(id) && !IdPattern.IsMatch(id))
             {
                 Debug.LogError($"{nameof(id)} '{id}' is invalid. Expected the format 'buff.example_name'.", this);

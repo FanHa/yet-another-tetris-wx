@@ -1,40 +1,31 @@
 using System.Collections.Generic;
+using Model.Buffs;
 using Units.Skills;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public readonly struct EnergyAbsorbBuffArgs : IBuffCreationArgs
-    {
-        public float EnergyAbsorbPerSkillCast { get; }
-        public float Duration { get; }
-        public BuffSource Source { get; }
-
-        public EnergyAbsorbBuffArgs(float energyAbsorbPerSkillCast, float duration, BuffSource source)
-        {
-            EnergyAbsorbPerSkillCast = energyAbsorbPerSkillCast;
-            Duration = duration;
-            Source = source;
-        }
-    }
-
     public class EnergyAbsorb : Buff, IAnyUnitSkillCastTrigger
     {
-        private float energyAbsorbPerSkillCast;
-        public EnergyAbsorb(Model.Buffs.BuffDefinition definition, EnergyAbsorbBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        private readonly EnergyAbsorbBuffDefinition energyAbsorbDefinition;
+        private readonly int resonantCellCount;
+        private readonly float energyAbsorbPerSkillCast;
+        public EnergyAbsorb(EnergyAbsorbBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            energyAbsorbPerSkillCast = args.EnergyAbsorbPerSkillCast;
+            energyAbsorbDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            energyAbsorbPerSkillCast = definition.CalculateStats(resonantCellCount).EnergyAbsorbPerSkillCast.Final;
         }
         // 护盾对象
         public override string Description()
         {
-            return $"被动：每当敌对单位施放技能时，汲取{energyAbsorbPerSkillCast}点能量分配到己方所有单位";
+            return energyAbsorbDefinition.DescribeEffect(resonantCellCount);
         }
 
         public override string Name()
         {
-            return "能量汲取";
+            return energyAbsorbDefinition.DisplayName;
         }
 
         public void OnAnyUnitSkillCast(IBuffContext context, Unit caster, Skill skill)

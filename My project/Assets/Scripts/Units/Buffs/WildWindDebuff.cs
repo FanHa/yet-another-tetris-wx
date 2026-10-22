@@ -1,41 +1,36 @@
 using Units.Skills;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct WildWindDebuffBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public int MoveSlowPercent { get; }
-        public int AtkReducePercent { get; }
-        public BuffSource Source { get; }
-
-        public WildWindDebuffBuffArgs(float duration, int moveSlowPercent, int atkReducePercent, BuffSource source)
-        {
-            Duration = duration;
-            MoveSlowPercent = moveSlowPercent;
-            AtkReducePercent = atkReducePercent;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// 狂风减益：降低移动速度和攻击力
     /// </summary>
     public class WildWindDebuff : Buff
     {
+        private readonly WildWindDebuffDefinition wildWindDefinition;
+        private readonly int resonantCellCount;
         public int MoveSlowPercent { get; }
         public int AtkReducePercent { get; }
 
-        public WildWindDebuff(Model.Buffs.BuffDefinition definition, WildWindDebuffBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source)
+            : this(definition, resonantCellCount, source, definition.CalculateStats(resonantCellCount))
         {
-            MoveSlowPercent = args.MoveSlowPercent;
-            AtkReducePercent = args.AtkReducePercent;
         }
 
-        public override string Name() => "狂风减益";
+        private WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source,
+            (StatValue Duration, StatValue MoveSlowPercent, StatValue AtkReducePercent) stats)
+            : base(definition, stats.Duration.Final, source.SourceUnit, source.SourceSkill)
+        {
+            wildWindDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            MoveSlowPercent = (int)stats.MoveSlowPercent.Final;
+            AtkReducePercent = (int)stats.AtkReducePercent.Final;
+        }
+
+        public override string Name() => wildWindDefinition.DisplayName;
         public override string Description() =>
-            $"移速-{MoveSlowPercent}%，攻击力-{AtkReducePercent}%";
+            wildWindDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

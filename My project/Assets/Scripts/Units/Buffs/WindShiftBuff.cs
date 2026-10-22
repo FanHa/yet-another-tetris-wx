@@ -1,34 +1,24 @@
-using Units.Skills;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct WindShiftBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public BuffSource Source { get; }
-        public float AttackRangeBonus { get; }
-
-        public WindShiftBuffArgs(float duration, float attackRangeBonus, BuffSource source)
-        {
-            Duration = duration;
-            Source = source;
-            AttackRangeBonus = attackRangeBonus;
-        }
-    }
-
     public class WindShiftBuff : Buff, IAttackHitTrigger
     {
+        private readonly WindShiftBuffDefinition windShiftDefinition;
+        private readonly int resonantCellCount;
         private readonly float attackRangeBonus;      // 攻击距离提升）
 
-        public WindShiftBuff(Model.Buffs.BuffDefinition definition, WindShiftBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public WindShiftBuff(WindShiftBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            attackRangeBonus = args.AttackRangeBonus;
+            windShiftDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            attackRangeBonus = definition.CalculateStats(resonantCellCount).AttackRangeBonus.Final;
         }
 
-        public override string Name() => "风形态";
+        public override string Name() => windShiftDefinition.DisplayName;
         public override string Description() =>
-            $"攻击距离+{attackRangeBonus}，攻击时获得额外的与攻击距离相关的伤害加成";
+            windShiftDefinition.DescribeEffect(resonantCellCount);
 
 
         public override void OnApply(IBuffContext context)

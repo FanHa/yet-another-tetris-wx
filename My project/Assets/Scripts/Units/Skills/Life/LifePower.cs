@@ -15,21 +15,7 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private struct LifePowerStats
-        {
-            public StatValue HealthToAtkPercent;
-            public StatValue BuffDuration;
-        }
-
-        private LifePowerStats CalcStats()
-        {
-            return new LifePowerStats
-            {
-                HealthToAtkPercent = new StatValue("生命转换率(%)", Config.HealthToAtkPercent),
-                BuffDuration = new StatValue("Buff时间", Config.BuffDuration)
-            };
-        }
-
+        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
         protected override bool PrepareCastCore()
         {
@@ -49,27 +35,23 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            var stats = CalcStats();
-            // 攻击力加成与施法者最大生命值相关
-            float atkBoost = Owner.Attributes.MaxHealth.finalValue * (stats.HealthToAtkPercent.Final / 100f);
-
-            cachedTarget.AddBuff(Units.Buffs.BuffFactory.Create(
+            cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
-                new Units.Buffs.LifePowerBuffArgs(atkBoost, stats.BuffDuration.Final, new Units.Buffs.BuffSource(Owner.SelfUnit, this))
+                Owner.Attributes.MaxHealth.finalValue,
+                GetResonantCellCount(),
+                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             ));
             cachedTarget = null;
         }
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + "\n" +
-                $"{stats.HealthToAtkPercent}" +
-                $"{stats.BuffDuration}";
+                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
-        public static string DescriptionStatic() => "转换自身生命值为一个友方单位添加攻击力Buff";
+        public static string DescriptionStatic() => "根据自身最大生命值，为一个友方单位附加攻击命中伤害";
 
         public override string Name()
         {

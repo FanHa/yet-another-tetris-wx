@@ -8,9 +8,9 @@ namespace Model.Skills
     public class WindKnockbackSkillConfig : SkillConfig<WindKnockbackLevelConfig>
     {
         [Header("Buff")]
-        [SerializeField] private BuffDefinition windKnockbackBuffDefinition;
+        [SerializeField] private WindKnockbackBuffDefinition windKnockbackBuffDefinition;
 
-        public BuffDefinition WindKnockbackBuffDefinition => windKnockbackBuffDefinition;
+        public WindKnockbackBuffDefinition WindKnockbackBuffDefinition => windKnockbackBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -23,9 +23,5 @@ namespace Model.Skills
     [System.Serializable]
     public class WindKnockbackLevelConfig : SkillLevelConfig
     {
-        [Header("属性")]
-        public float BaseKnockbackDistance = 0.12f;
-        public float KnockbackDistancePerResonantCell = 0.01f;
-        public float MaxKnockbackDistance = 0.18f;
     }
 }

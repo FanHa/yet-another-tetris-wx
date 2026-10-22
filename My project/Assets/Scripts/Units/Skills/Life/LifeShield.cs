@@ -18,20 +18,15 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private struct LifeShieldStats
-        {
-            public StatValue LifeCostPercent;
-            public StatValue BuffDuration;
-        }
+        private (StatValue LifeCostPercent, StatValue ShieldMultiplierPercent, StatValue Duration) CalcStats(int resonantCellCount) =>
+            (
+                new StatValue("生命值消耗比例(%)", Config.LifeCostPercent),
+                new StatValue("原始生命消耗转护盾倍率(%)", SkillConfig.BaseShieldMultiplierPercent,
+                    resonantCellCount * SkillConfig.ShieldMultiplierPercentPerResonantCell),
+                new StatValue("护盾持续时间", SkillConfig.BuffDuration)
+            );
 
-        private LifeShieldStats CalcStats()
-        {
-            return new LifeShieldStats
-            {
-                LifeCostPercent = new StatValue("生命值消耗比例(%)", Config.LifeCostPercent),
-                BuffDuration = new StatValue("持续时间", Config.BuffDuration)
-            };
-        }
+        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
         protected override bool PrepareCastCore()
         {
@@ -52,12 +47,15 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            var stats = CalcStats();
-            float shieldAmount = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
+            var stats = CalcStats(GetResonantCellCount());
+            float lifeCost = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
+            float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.Final / 100f);
 
-            var buff = Units.Buffs.BuffFactory.Create(
-                ((LifeShieldSkillConfig)Definition.Config).LifeShieldBuffDefinition,
-                new Units.Buffs.LifeShieldBuffArgs(shieldAmount, stats.BuffDuration.Final, new Units.Buffs.BuffSource(Owner.SelfUnit, this))
+            var buff = new Units.Buffs.LifeShieldBuff(
+                SkillConfig.LifeShieldBuffDefinition,
+                shieldValue,
+                stats.Duration.Final,
+                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             );
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,
@@ -67,7 +65,7 @@ namespace Units.Skills
             projectile.Init(Owner.SelfUnit, cachedTarget, buff);
             projectile.Activate();
 
-            var damage = new Damages.Damage(shieldAmount, Damages.DamageType.Skill);
+            var damage = new Damages.Damage(lifeCost, Damages.DamageType.Skill);
             damage.SetSourceUnit(Owner.SelfUnit);
             damage.SetTargetUnit(Owner.SelfUnit);
             damage.SetSourceLabel(Name());
@@ -78,11 +76,10 @@ namespace Units.Skills
 
         public override string Description()
         {
-            var stats = CalcStats();
+            var stats = CalcStats(GetResonantCellCount());
             return
                 DescriptionStatic() + "\n" +
-                $"{stats.LifeCostPercent}\n" +
-                $"{stats.BuffDuration}\n";
+                $"{stats.LifeCostPercent}\n{stats.ShieldMultiplierPercent}\n{stats.Duration}";
         }
 
         public static string DescriptionStatic() => "消耗自身血量,为一个友方单位添加生命护盾，抵挡伤害。";
