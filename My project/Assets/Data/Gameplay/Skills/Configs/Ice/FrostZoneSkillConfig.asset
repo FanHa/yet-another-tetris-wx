@@ -16,36 +16,15 @@ MonoBehaviour:
   - BaseRadius: 1.5
     BaseDuration: 5
     BaseDamage: 8
-    BaseChilledDuration: 2
-    BaseChilledMoveSlowPercent: 3
     RadiusPerResonantCell: 0.2
     DurationPerResonantCell: 1
     DamagePerResonantCell: 3
-    ChilledDurationPerResonantCell: 0.5
-    ChilledMoveSlowPercentPerResonantCell: 3
-    BaseChilledAtkSlowPercent: 3
-    ChilledAtkSlowPercentPerResonantCell: 3
-    BaseChilledActionSlowPercent: 3
-    ChilledActionSlowPercentPerResonantCell: 3
-    BaseChilledEnergySlowPercent: 3
-    ChilledEnergySlowPercentPerResonantCell: 3
     RequiredEnergy: 120
   - BaseRadius: 1.5
     BaseDuration: 5
     BaseDamage: 16
-    BaseChilledDuration: 2
-    BaseChilledMoveSlowPercent: 15
     RadiusPerResonantCell: 0.2
     DurationPerResonantCell: 1
     DamagePerResonantCell: 3
-    ChilledDurationPerResonantCell: 0.5
-    ChilledMoveSlowPercentPerResonantCell: 3
-    BaseChilledAtkSlowPercent: 15
-    ChilledAtkSlowPercentPerResonantCell: 3
-    BaseChilledActionSlowPercent: 10
-    ChilledActionSlowPercentPerResonantCell: 3
-    BaseChilledEnergySlowPercent: 25
-    ChilledEnergySlowPercentPerResonantCell: 4
     RequiredEnergy: 120
   projectilePrefab: {fileID: 9111316188251510382, guid: 01e458bfd2b6cd34bad6678f61303d49, type: 3}
-  chilledBuffDefinition: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}

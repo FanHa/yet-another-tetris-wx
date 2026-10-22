@@ -1,5 +1,4 @@
 using System.Linq;
-using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
 
@@ -32,8 +31,6 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
-
             // 实例化雪球投射物
             Units.Projectiles.Snowball snowBall = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
@@ -43,12 +40,8 @@ namespace Units.Skills
             snowBall.Init(
                 Owner.SelfUnit,
                 cachedTarget,
-                stats.ChilledDuration.Final,
-                (int)stats.MoveSlowPercent.Final,
-                (int)stats.AtkSlowPercent.Final,
-                (int)stats.ActionSlowPercent.Final,
-                (int)stats.EnergySlowPercent.Final,
-                this
+                this,
+                GetResonantCellCount()
             );
             snowBall.Activate();
             // 清空目标
@@ -57,14 +50,9 @@ namespace Units.Skills
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + "\n" +
-                $"{stats.ChilledDuration}\n" +
-                $"{stats.MoveSlowPercent}\n" +
-                $"{stats.AtkSlowPercent}\n" +
-                $"{stats.ActionSlowPercent}\n" +
-                $"{stats.EnergySlowPercent}";
+                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
         }
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,施加减速Debuff.";
 
@@ -74,26 +62,9 @@ namespace Units.Skills
         }
         public static string NameStatic() => "雪球";
         
-        private struct SnowballStats
+        private int GetResonantCellCount()
         {
-            public StatValue ChilledDuration;
-            public StatValue MoveSlowPercent;
-            public StatValue AtkSlowPercent;
-            public StatValue ActionSlowPercent;
-            public StatValue EnergySlowPercent;
-        }
-
-        private SnowballStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new SnowballStats
-            {
-                ChilledDuration = new StatValue("减速效果持续时间", Config.BaseChilledDuration, resonantCellCount * Config.ChilledDurationPerResonantCell),
-                MoveSlowPercent = new StatValue("移动速度降低(%)", Config.BaseChilledMoveSlowPercent, resonantCellCount * Config.ChilledMoveSlowPercentPerResonantCell),
-                AtkSlowPercent = new StatValue("攻击速度降低(%)", Config.BaseChilledAtkSlowPercent, resonantCellCount * Config.ChilledAtkSlowPercentPerResonantCell),
-                ActionSlowPercent = new StatValue("动作速率降低(%)", Config.BaseChilledActionSlowPercent, resonantCellCount * Config.ChilledActionSlowPercentPerResonantCell),
-                EnergySlowPercent = new StatValue("能量回复降低(%)", Config.BaseChilledEnergySlowPercent, resonantCellCount * Config.ChilledEnergySlowPercentPerResonantCell)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
     }
 }

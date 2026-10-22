@@ -33,8 +33,6 @@ namespace Units.Buffs
         {
             ["buff.attack_boost"] = new FactoryEntry<AttackBoostBuffArgs>((definition, args) =>
                 new AttackBoostBuff(definition, args)),
-            ["buff.chilled"] = new FactoryEntry<ChilledBuffArgs>((definition, args) =>
-                new Chilled(definition, args)),
             ["buff.power_curse"] = new FactoryEntry<PowerCurseBuffArgs>((definition, args) =>
                 new PowerCurseBuff(definition, args)),
             ["buff.energy_curse"] = new FactoryEntry<EnergyCurseBuffArgs>((definition, args) =>

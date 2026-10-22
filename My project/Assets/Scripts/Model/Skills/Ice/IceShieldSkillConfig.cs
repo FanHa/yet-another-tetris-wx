@@ -12,11 +12,11 @@ namespace Model.Skills
         [SerializeField]
         private IceShield projectilePrefab;
         [SerializeField] private BuffDefinition iceShieldBuffDefinition;
-        [SerializeField] private BuffDefinition chilledBuffDefinition;
+        [SerializeField] private ChilledBuffDefinition chilledBuffDefinition;
 
         public IceShield ProjectilePrefab => projectilePrefab;
         public BuffDefinition IceShieldBuffDefinition => iceShieldBuffDefinition;
-        public BuffDefinition ChilledBuffDefinition => chilledBuffDefinition;
+        public ChilledBuffDefinition ChilledBuffDefinition => chilledBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -31,19 +31,7 @@ namespace Model.Skills
     [System.Serializable]
     public class IceShieldLevelConfig : SkillLevelConfig
     {
-        [Header("减速效果")]
-        public int BaseMoveSlowPercent = 10;
-        public int MoveSlowPercentPerResonantCell = 5;
-        public int BaseAtkSlowPercent = 10;
-        public int AtkSlowPercentPerResonantCell = 5;
-        public int BaseActionSlowPercent = 10;
-        public int ActionSlowPercentPerResonantCell = 5;
-        public int BaseEnergySlowPercent = 15;
-        public int EnergySlowPercentPerResonantCell = 5;
-
         [Header("护盾与冰冻")]
         public float BuffDuration = -1f;
-        public float BaseChilledDuration = 5f;
-        public float ChilledDurationAdditionPerResonantCell = 0.5f;
     }
 }

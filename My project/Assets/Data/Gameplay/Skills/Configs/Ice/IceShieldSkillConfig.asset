@@ -13,28 +13,8 @@ MonoBehaviour:
   m_Name: IceShieldSkillConfig
   m_EditorClassIdentifier: 
   LevelConfigs:
-  - BaseMoveSlowPercent: 3
-    MoveSlowPercentPerResonantCell: 3
-    BaseAtkSlowPercent: 3
-    AtkSlowPercentPerResonantCell: 3
-    BaseActionSlowPercent: 3
-    ActionSlowPercentPerResonantCell: 3
-    BaseEnergySlowPercent: 3
-    EnergySlowPercentPerResonantCell: 3
-    BuffDuration: -1
-    BaseChilledDuration: 3
-    ChilledDurationAdditionPerResonantCell: 0.5
-  - BaseMoveSlowPercent: 20
-    MoveSlowPercentPerResonantCell: 5
-    BaseAtkSlowPercent: 20
-    AtkSlowPercentPerResonantCell: 5
-    BaseActionSlowPercent: 10
-    ActionSlowPercentPerResonantCell: 5
-    BaseEnergySlowPercent: 20
-    EnergySlowPercentPerResonantCell: 5
-    BuffDuration: -1
-    BaseChilledDuration: 3
-    ChilledDurationAdditionPerResonantCell: 0.5
+  - BuffDuration: -1
+  - BuffDuration: -1
   projectilePrefab: {fileID: 8363342164250943101, guid: f25552e189446a041af81469fcfa1836, type: 3}
   iceShieldBuffDefinition: {fileID: 11400000, guid: ce435e6fbc3669b48ae31f4a2bcd54b6, type: 2}
-  chilledBuffDefinition: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}
+  chilledBuffDefinition: {fileID: 11400000, guid: f1a21bafa27e07c4299f3744ffca5175, type: 2}

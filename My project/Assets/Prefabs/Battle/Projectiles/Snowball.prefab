@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  chilledDefinition: {fileID: 11400000, guid: f1a21bafa27e07c4299f3744ffca5175, type: 2}

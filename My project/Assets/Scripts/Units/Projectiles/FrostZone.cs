@@ -1,28 +1,27 @@
 using System.Collections.Generic;
+using Model.Buffs;
+using Units.Buffs;
 using UnityEngine;
 
 namespace Units.Projectiles
 {
     public class FrostZone : PeriodicAreaEffectZoneBase
     {
+        [SerializeField] private ChilledBuffDefinition chilledDefinition;
         private float damage;
         private float chilledDuration;
         private int moveSlowPercent;
         private int atkSlowPercent;
         private int actionSlowPercent;
-        private int energySlowPercent;
+        private BuffSource chilledSource;
 
         public void Initialize(
             Unit caster,
             float radius,
             float duration,
             float damage,
-            float chilledDuration,
-            int moveSlowPercent,
-            int atkSlowPercent,
-            int actionSlowPercent,
-            int energySlowPercent,
-            Units.Skills.Skill sourceSkill
+            Units.Skills.Skill sourceSkill,
+            int resonantCellCount
         )
         {
             InitializeBase(
@@ -31,11 +30,17 @@ namespace Units.Projectiles
                 duration: duration,
                 sourceSkill: sourceSkill);
             this.damage = damage;
-            this.chilledDuration = chilledDuration;
-            this.moveSlowPercent = moveSlowPercent;
-            this.atkSlowPercent = atkSlowPercent;
-            this.actionSlowPercent = actionSlowPercent;
-            this.energySlowPercent = energySlowPercent;
+            var stats = chilledDefinition.CalculateStats(resonantCellCount);
+            chilledDuration = stats.Duration.Final;
+            moveSlowPercent = Mathf.RoundToInt(stats.MoveSlowPercent.Final);
+            atkSlowPercent = Mathf.RoundToInt(stats.AttackSlowPercent.Final);
+            actionSlowPercent = Mathf.RoundToInt(stats.ActionSlowPercent.Final);
+            chilledSource = new BuffSource(caster, sourceSkill);
+        }
+
+        public string DescribeEffect(int resonantCellCount)
+        {
+            return chilledDefinition.DescribeEffect(resonantCellCount);
         }
 
         protected override IEnumerable<Unit> FindTargetsInArea()
@@ -54,16 +59,26 @@ namespace Units.Projectiles
             iceDamage.SetTargetUnit(target);
             target.TakeDamage(iceDamage);
 
-            var chilled = Units.Buffs.BuffFactory.Create(
-                ((Model.Skills.FrostZoneSkillConfig)SourceSkill.Definition.Config).ChilledBuffDefinition,
-                new Units.Buffs.ChilledBuffArgs(
-                    chilledDuration,
-                    moveSlowPercent,
-                    atkSlowPercent,
-                    actionSlowPercent,
-                    energySlowPercent,
-                    new Units.Buffs.BuffSource(SourceUnit, SourceSkill)));
+            var chilled = new Chilled(
+                chilledDefinition,
+                chilledDuration,
+                moveSlowPercent,
+                atkSlowPercent,
+                actionSlowPercent,
+                chilledSource);
             target.AddBuff(chilled);
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (chilledDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(chilledDefinition)} is not assigned.", this);
+            }
+        }
+#endif
+
     }
 }

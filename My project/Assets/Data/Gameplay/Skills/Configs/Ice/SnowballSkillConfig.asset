@@ -15,29 +15,8 @@ MonoBehaviour:
   LevelConfigs:
   - BaseDamage: 10
     IceCellDamageBonus: 4
-    BaseChilledDuration: 3
-    ChilledDurationPerResonantCell: 0.5
-    BaseChilledMoveSlowPercent: 3
-    ChilledMoveSlowPercentPerResonantCell: 3
-    BaseChilledAtkSlowPercent: 3
-    ChilledAtkSlowPercentPerResonantCell: 3
-    BaseChilledActionSlowPercent: 3
-    ChilledActionSlowPercentPerResonantCell: 3
-    BaseChilledEnergySlowPercent: 3
-    ChilledEnergySlowPercentPerResonantCell: 3
     RequiredEnergy: 40
   - BaseDamage: 25
     IceCellDamageBonus: 6
-    BaseChilledDuration: 3
-    ChilledDurationPerResonantCell: 0.5
-    BaseChilledMoveSlowPercent: 10
-    ChilledMoveSlowPercentPerResonantCell: 3
-    BaseChilledAtkSlowPercent: 10
-    ChilledAtkSlowPercentPerResonantCell: 3
-    BaseChilledActionSlowPercent: 10
-    ChilledActionSlowPercentPerResonantCell: 3
-    BaseChilledEnergySlowPercent: 10
-    ChilledEnergySlowPercentPerResonantCell: 4
     RequiredEnergy: 40
   projectilePrefab: {fileID: -7205538367667389939, guid: 76f0c4ad7b9930f4b9da9cb995db3506, type: 3}
-  chilledBuffDefinition: {fileID: 11400000, guid: f24892fac6ce4b54e8c194205cb8cc44, type: 2}

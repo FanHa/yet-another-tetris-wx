@@ -52,7 +52,7 @@ namespace Units.Buffs
             int totalPercentSlow = 0;
             foreach (Chilled buff in chilledBuffs)
             {
-                totalPercentSlow += (buff.MoveSlowPercent + buff.AttackSlowPercent + buff.EnergyRegenSlowPercent) / 3;
+                totalPercentSlow += (buff.MoveSlowPercent + buff.AttackSlowPercent + buff.ActionSlowPercent) / 3;
                 context.RemoveBuffFrom(target, buff);
             }
 
