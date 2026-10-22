@@ -28,7 +28,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "冰霜护盾";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             var config = (IceShieldSkillConfig)Definition.Config;
             var buff = new Buffs.IceShield(

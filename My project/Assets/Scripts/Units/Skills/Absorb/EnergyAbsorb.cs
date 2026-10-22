@@ -33,7 +33,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "能量汲取";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             var buff = new Buffs.EnergyAbsorb(
                 ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition,

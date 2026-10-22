@@ -31,7 +31,7 @@ namespace Units.Skills
 
         public static string NameStatic() => "轻风击退";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             Owner.AddBuff(new Buffs.WindKnockbackBuff(
                 ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition,

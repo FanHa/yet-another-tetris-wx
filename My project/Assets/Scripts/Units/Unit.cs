@@ -186,7 +186,7 @@ namespace Units
 
         public void CompleteAssembly()
         {
-            skillHandler.ApplyPassiveEffects();
+            skillHandler.OnAssemblyCompleted();
             Attributes.RefillHealthToMax();
         }
 

@@ -24,7 +24,7 @@ namespace Units.Skills
         }
         public static string DescriptionStatic() => "反弹受到的伤害";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,

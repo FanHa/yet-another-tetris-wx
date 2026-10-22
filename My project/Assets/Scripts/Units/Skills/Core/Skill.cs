@@ -47,7 +47,7 @@ namespace Units.Skills
         public virtual void OnActivate() { }
         public virtual void OnDeactivate() { }
         public virtual void OnUnitDeath() {}
-        public virtual void OnApplyPassive() { } //todo 可能得改名
+        public virtual void OnPassiveEffectsApplication() { }
         public virtual void OnRelease() {}
     }
 

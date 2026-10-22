@@ -32,7 +32,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "炎附";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             var config = (FlameInjectSkillConfig)Definition.Config;
             var buff = new Units.Buffs.FlameInject(

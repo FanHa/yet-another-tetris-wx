@@ -75,11 +75,11 @@ namespace Units.Skills
             }
         }
 
-        public void ApplyPassiveEffects()
+        public void OnAssemblyCompleted()
         {
             foreach (Skill skill in skills)
             {
-                skill.OnApplyPassive();
+                skill.OnPassiveEffectsApplication();
             }
         }
 

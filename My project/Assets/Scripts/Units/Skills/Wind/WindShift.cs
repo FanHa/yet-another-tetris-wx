@@ -31,7 +31,7 @@ namespace Units.Skills
         }
         public static string NameStatic() => "风形态";
     
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             Owner.AddBuff(new Buffs.WindShiftBuff(
                 ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,

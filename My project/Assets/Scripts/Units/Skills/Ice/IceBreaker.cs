@@ -30,7 +30,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "破冰";
 
-        public override void OnApplyPassive()
+        public override void OnPassiveEffectsApplication()
         {
             Owner.AddBuff(new Buffs.IceBreaker(
                 ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition,
