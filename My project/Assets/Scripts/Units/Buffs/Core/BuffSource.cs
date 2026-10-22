@@ -1,10 +1,5 @@
 namespace Units.Buffs
 {
-    public interface IBuffCreationArgs
-    {
-        BuffSource Source { get; }
-    }
-
     public readonly struct BuffSource
     {
         public Unit SourceUnit { get; }

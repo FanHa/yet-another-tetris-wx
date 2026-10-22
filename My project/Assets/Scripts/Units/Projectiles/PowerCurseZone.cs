@@ -8,22 +8,19 @@ namespace Units.Projectiles
     public class PowerCurseZone : PeriodicAreaEffectZoneBase
     {
         private readonly string stackId = System.Guid.NewGuid().ToString("N");
-        private BuffDefinition powerCurseBuffDefinition;
-        private float debuffDuration;
-        private float attackReductionPercent;
+        private PowerCurseBuffDefinition powerCurseBuffDefinition;
+        private int resonantCellCount;
 
         public void Initialize(
             Unit caster,
             float radius,
             float duration,
-            float debuffDuration,
-            float attackReductionPercent,
+            int resonantCellCount,
             Skills.Skill sourceSkill,
-            BuffDefinition powerCurseBuffDefinition)
+            PowerCurseBuffDefinition powerCurseBuffDefinition)
         {
             InitializeBase(caster, radius, duration, sourceSkill);
-            this.debuffDuration = debuffDuration;
-            this.attackReductionPercent = attackReductionPercent;
+            this.resonantCellCount = resonantCellCount;
             this.powerCurseBuffDefinition = powerCurseBuffDefinition;
         }
 
@@ -37,13 +34,11 @@ namespace Units.Projectiles
 
         protected override void ApplyEffectTo(Unit target)
         {
-            target.AddBuff(BuffFactory.Create(
+            target.AddBuff(new PowerCurseBuff(
                 powerCurseBuffDefinition,
-                new PowerCurseBuffArgs(
-                    debuffDuration,
-                    attackReductionPercent,
-                    new BuffSource(SourceUnit, SourceSkill),
-                    stackId)));
+                resonantCellCount,
+                new BuffSource(SourceUnit, SourceSkill),
+                stackId));
         }
     }
 }

@@ -9,10 +9,10 @@ namespace Model.Skills
     {
         [Header("Resources")]
         [SerializeField] private Units.Projectiles.PowerCurseZone zonePrefab;
-        [SerializeField] private BuffDefinition powerCurseBuffDefinition;
+        [SerializeField] private PowerCurseBuffDefinition powerCurseBuffDefinition;
 
         public Units.Projectiles.PowerCurseZone ZonePrefab => zonePrefab;
-        public BuffDefinition PowerCurseBuffDefinition => powerCurseBuffDefinition;
+        public PowerCurseBuffDefinition PowerCurseBuffDefinition => powerCurseBuffDefinition;
 
 #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -33,25 +33,6 @@ namespace Model.Skills
             {
                 ValidateFinitePositive(levelConfig.BaseRadius, LevelField(index, nameof(levelConfig.BaseRadius)));
                 ValidateFinitePositive(levelConfig.BaseZoneLifetime, LevelField(index, nameof(levelConfig.BaseZoneLifetime)));
-                ValidateFinitePositive(levelConfig.DebuffDuration, LevelField(index, nameof(levelConfig.DebuffDuration)));
-
-                ValidatePercent(index, nameof(levelConfig.BaseAttackReductionPercent), levelConfig.BaseAttackReductionPercent);
-                ValidateFiniteNonNegative(levelConfig.AttackReductionPerResonantCell, LevelField(index, nameof(levelConfig.AttackReductionPerResonantCell)));
-                ValidatePercent(index, nameof(levelConfig.MaxAttackReductionPercent), levelConfig.MaxAttackReductionPercent);
-
-                if (levelConfig.BaseAttackReductionPercent > levelConfig.MaxAttackReductionPercent)
-                {
-                    Debug.LogError($"{LevelField(index, nameof(levelConfig.BaseAttackReductionPercent))} must not exceed {nameof(levelConfig.MaxAttackReductionPercent)}.", this);
-                }
-
-            }
-        }
-
-        private void ValidatePercent(int index, string fieldName, float value)
-        {
-            if (float.IsNaN(value) || float.IsInfinity(value) || value < 0f || value > 100f)
-            {
-                Debug.LogError($"{LevelField(index, fieldName)} must be finite and between 0 and 100.", this);
             }
         }
 
@@ -67,12 +48,6 @@ namespace Model.Skills
         public float RadiusPerResonantCell = 0.3f;
         public float BaseZoneLifetime = 15f;
         public float ZoneLifetimePerResonantCell = 0.5f;
-        public float DebuffDuration = 1.5f;
-
-        [Header("Attack Power Reduction (%)")]
-        public float BaseAttackReductionPercent = 20f;
-        public float AttackReductionPerResonantCell = 2f;
-        public float MaxAttackReductionPercent = 80f;
 
     }
 }

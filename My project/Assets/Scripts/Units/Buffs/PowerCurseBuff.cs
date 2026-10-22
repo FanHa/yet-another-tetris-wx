@@ -1,41 +1,33 @@
+using Model.Buffs;
+using Units.Skills;
+
 namespace Units.Buffs
 {
-    public readonly struct PowerCurseBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public float AttackReductionPercent { get; }
-        public BuffSource Source { get; }
-        public string StackId { get; }
-
-        public PowerCurseBuffArgs(float duration, float attackReductionPercent, BuffSource source)
-            : this(duration, attackReductionPercent, source, string.Empty)
-        {
-        }
-
-        public PowerCurseBuffArgs(float duration, float attackReductionPercent, BuffSource source, string stackId)
-        {
-            Duration = duration;
-            AttackReductionPercent = attackReductionPercent;
-            Source = source;
-            StackId = stackId;
-        }
-    }
-
     public class PowerCurseBuff : Buff
     {
+        private readonly PowerCurseBuffDefinition powerCurseDefinition;
+        private readonly int resonantCellCount;
         public float AttackReductionPercent { get; }
         private readonly string stackId;
 
-        public PowerCurseBuff(Model.Buffs.BuffDefinition definition, PowerCurseBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public PowerCurseBuff(PowerCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId = "")
+            : this(definition, resonantCellCount, source, stackId, definition.CalculateStats(resonantCellCount))
         {
-            AttackReductionPercent = args.AttackReductionPercent;
-            stackId = args.StackId;
+        }
+
+        private PowerCurseBuff(PowerCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId,
+            (StatValue Duration, StatValue AttackReductionPercent) stats)
+            : base(definition, stats.Duration.Final, source.SourceUnit, source.SourceSkill)
+        {
+            powerCurseDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            AttackReductionPercent = stats.AttackReductionPercent.Final;
+            this.stackId = stackId;
         }
 
         public override string Name() => Definition.DisplayName;
         public override string GetKey() => $"{base.GetKey()}:{stackId}";
-        public override string Description() => $"{Definition.Description}\n攻击力降低 {AttackReductionPercent}%";
+        public override string Description() => powerCurseDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

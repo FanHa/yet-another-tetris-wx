@@ -17,17 +17,9 @@ MonoBehaviour:
     RadiusPerResonantCell: 0.3
     BaseZoneLifetime: 15
     ZoneLifetimePerResonantCell: 0.5
-    DebuffDuration: 1.5
-    BaseEnergyRegenReductionPercent: 5
-    EnergyRegenReductionPerResonantCell: 5
-    MaxEnergyRegenReductionPercent: 80
   - BaseRadius: 5
     RadiusPerResonantCell: 0.3
     BaseZoneLifetime: 15
     ZoneLifetimePerResonantCell: 0.5
-    DebuffDuration: 1.5
-    BaseEnergyRegenReductionPercent: 10
-    EnergyRegenReductionPerResonantCell: 10
-    MaxEnergyRegenReductionPercent: 80
   zonePrefab: {fileID: 4290756043085933767, guid: 4593cb36d793a4648929e6d6912b31db, type: 3}
-  energyCurseBuffDefinition: {fileID: 11400000, guid: 5b2f5bcf5b78ccb4cbca9b6d3d13c027, type: 2}
+  energyCurseBuffDefinition: {fileID: 11400000, guid: 7795746a5ac33a847aa14f883a76ecbe, type: 2}

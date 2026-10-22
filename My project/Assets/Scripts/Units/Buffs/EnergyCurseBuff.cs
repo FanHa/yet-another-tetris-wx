@@ -1,41 +1,33 @@
+using Model.Buffs;
+using Units.Skills;
+
 namespace Units.Buffs
 {
-    public readonly struct EnergyCurseBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public float EnergyRegenReductionPercent { get; }
-        public BuffSource Source { get; }
-        public string StackId { get; }
-
-        public EnergyCurseBuffArgs(float duration, float energyRegenReductionPercent, BuffSource source)
-            : this(duration, energyRegenReductionPercent, source, string.Empty)
-        {
-        }
-
-        public EnergyCurseBuffArgs(float duration, float energyRegenReductionPercent, BuffSource source, string stackId)
-        {
-            Duration = duration;
-            EnergyRegenReductionPercent = energyRegenReductionPercent;
-            Source = source;
-            StackId = stackId;
-        }
-    }
-
     public class EnergyCurseBuff : Buff
     {
+        private readonly EnergyCurseBuffDefinition energyCurseDefinition;
+        private readonly int resonantCellCount;
         public float EnergyRegenReductionPercent { get; }
         private readonly string stackId;
 
-        public EnergyCurseBuff(Model.Buffs.BuffDefinition definition, EnergyCurseBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public EnergyCurseBuff(EnergyCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId = "")
+            : this(definition, resonantCellCount, source, stackId, definition.CalculateStats(resonantCellCount))
         {
-            EnergyRegenReductionPercent = args.EnergyRegenReductionPercent;
-            stackId = args.StackId;
+        }
+
+        private EnergyCurseBuff(EnergyCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId,
+            (StatValue Duration, StatValue EnergyRegenReductionPercent) stats)
+            : base(definition, stats.Duration.Final, source.SourceUnit, source.SourceSkill)
+        {
+            energyCurseDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            EnergyRegenReductionPercent = stats.EnergyRegenReductionPercent.Final;
+            this.stackId = stackId;
         }
 
         public override string Name() => Definition.DisplayName;
         public override string GetKey() => $"{base.GetKey()}:{stackId}";
-        public override string Description() => $"{Definition.Description}\n能量回复速度降低 {EnergyRegenReductionPercent}%";
+        public override string Description() => energyCurseDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

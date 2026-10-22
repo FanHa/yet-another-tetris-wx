@@ -20,23 +20,16 @@ namespace Units.Skills
         {
             public StatValue Radius;
             public StatValue ZoneLifetime;
-            public StatValue DebuffDuration;
-            public StatValue EnergyRegenReductionPercent;
         }
 
         private EnergyCurseStats CalcStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            float energyRegenReductionBonus = Mathf.Min(
-                resonantCellCount * Config.EnergyRegenReductionPerResonantCell,
-                Config.MaxEnergyRegenReductionPercent - Config.BaseEnergyRegenReductionPercent);
+            int resonantCellCount = GetResonantCellCount();
 
             return new EnergyCurseStats
             {
                 Radius = new StatValue("领域半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell),
-                DebuffDuration = new StatValue("诅咒持续", Config.DebuffDuration),
-                EnergyRegenReductionPercent = new StatValue("能量回复降低(%)", Config.BaseEnergyRegenReductionPercent, energyRegenReductionBonus)
+                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell)
             };
         }
 
@@ -47,8 +40,7 @@ namespace Units.Skills
                 DescriptionStatic() + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.ZoneLifetime}\n" +
-                $"{stats.DebuffDuration}\n" +
-                $"{stats.EnergyRegenReductionPercent}";
+                SkillConfig.EnergyCurseBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() => "死亡时在当前位置生成诅咒区域，降低区域内敌人的能量回复速度。";
@@ -71,8 +63,7 @@ namespace Units.Skills
                 caster: Owner.SelfUnit,
                 radius: stats.Radius.Final,
                 duration: stats.ZoneLifetime.Final,
-                debuffDuration: stats.DebuffDuration.Final,
-                energyRegenReductionPercent: stats.EnergyRegenReductionPercent.Final,
+                resonantCellCount: GetResonantCellCount(),
                 sourceSkill: this,
                 energyCurseBuffDefinition: SkillConfig.EnergyCurseBuffDefinition
             );
@@ -83,6 +74,8 @@ namespace Units.Skills
         {
             ClearOwnedZone();
         }
+
+        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
 
         private void ClearOwnedZone()
         {

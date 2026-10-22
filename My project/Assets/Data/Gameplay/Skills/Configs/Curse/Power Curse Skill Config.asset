@@ -17,17 +17,9 @@ MonoBehaviour:
     RadiusPerResonantCell: 0.3
     BaseZoneLifetime: 15
     ZoneLifetimePerResonantCell: 0.5
-    DebuffDuration: 1.5
-    BaseAttackReductionPercent: 5
-    AttackReductionPerResonantCell: 5
-    MaxAttackReductionPercent: 80
   - BaseRadius: 5
     RadiusPerResonantCell: 0.3
     BaseZoneLifetime: 15
     ZoneLifetimePerResonantCell: 0.5
-    DebuffDuration: 1.5
-    BaseAttackReductionPercent: 10
-    AttackReductionPerResonantCell: 10
-    MaxAttackReductionPercent: 80
   zonePrefab: {fileID: -219139787206120058, guid: 589e4155b71528b40a72934f7389df6c, type: 3}
-  powerCurseBuffDefinition: {fileID: 11400000, guid: f3865653a53892649a6ba30bafdb86dc, type: 2}
+  powerCurseBuffDefinition: {fileID: 11400000, guid: 969f95c1d42047544b820dd0dfba32a5, type: 2}
