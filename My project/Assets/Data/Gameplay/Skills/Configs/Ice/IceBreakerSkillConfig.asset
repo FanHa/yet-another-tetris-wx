@@ -12,13 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c381faefdd5c4a8e7ff1a89e5725d, type: 3}
   m_Name: IceBreakerSkillConfig
   m_EditorClassIdentifier: 
-  LevelConfigs:
-  - BuffDuration: -1
-    BaseExtraDamage: 5
-    MultiplierByChilledLayer: 0.1
-    ExtraDamagePerResonantCell: 5
-  - BuffDuration: -1
-    BaseExtraDamage: 10
-    MultiplierByChilledLayer: 0.2
-    ExtraDamagePerResonantCell: 0
-  iceBreakerBuffDefinition: {fileID: 11400000, guid: 5e31c5180c1ba81428152b63fb1faae9, type: 2}
+  LevelConfigs: []
+  iceBreakerBuffDefinition: {fileID: 11400000, guid: ffa710b7fa36f9b4faca9285cb79a27f, type: 2}

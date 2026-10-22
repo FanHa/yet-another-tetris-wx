@@ -1,36 +1,26 @@
-using Units.Skills;
+using Model.Buffs;
 
 namespace Units.Buffs
 {
-    public readonly struct AttackBoostBuffArgs : IBuffCreationArgs
-    {
-        public float Duration { get; }
-        public float AtkSpeedPercent { get; }
-        public BuffSource Source { get; }
-
-        public AttackBoostBuffArgs(float duration, float atkSpeedPercent, BuffSource source)
-        {
-            Duration = duration;
-            AtkSpeedPercent = atkSpeedPercent;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// 疾风加速Buff：短时间提升攻击速度
     /// </summary>
     public class AttackBoostBuff : Buff
     {
+        private readonly AttackBoostBuffDefinition attackBoostDefinition;
+        private readonly int resonantCellCount;
         public float AtkSpeedPercent { get; }
 
-        public AttackBoostBuff(Model.Buffs.BuffDefinition definition, AttackBoostBuffArgs args)
-            : base(definition, args.Duration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public AttackBoostBuff(AttackBoostBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            AtkSpeedPercent = args.AtkSpeedPercent;
+            attackBoostDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            AtkSpeedPercent = definition.CalculateStats(resonantCellCount).AtkSpeedPercent.Final;
         }
 
-        public override string Name() => "疾风加速";
-        public override string Description() => $"攻击速度提升{AtkSpeedPercent}%";
+        public override string Name() => attackBoostDefinition.DisplayName;
+        public override string Description() => attackBoostDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

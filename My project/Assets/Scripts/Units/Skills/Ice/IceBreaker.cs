@@ -15,44 +15,27 @@ namespace Units.Skills
             Config = config;
         }
 
-        private struct IceBreakerStats
+        private int GetResonantCellCount()
         {
-            public StatValue BaseExtraDamage;
-            public StatValue MultiplierByChilledLayer;
-        }
-
-        private IceBreakerStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new IceBreakerStats
-            {
-                BaseExtraDamage = new StatValue("基础额外伤害", Config.BaseExtraDamage + Config.ExtraDamagePerResonantCell * resonantCellCount),
-                MultiplierByChilledLayer = new StatValue("chilled层数加成", Config.MultiplierByChilledLayer)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         public override string Description()
         {
-            var s = CalcStats();
             return DescriptionStatic() + ":\n" +
-                   $"{s.BaseExtraDamage}\n" +
-                   $"{s.MultiplierByChilledLayer}\n";
+                   ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
-        public static string DescriptionStatic() => "攻击时若目标带有Chilled则引爆并清除该效果，按层数造成额外伤害";
+        public static string DescriptionStatic() => "攻击时若目标带有Chilled则引爆并清除该效果，按减速效果造成额外伤害";
         public override string Name() => NameStatic();
         public static string NameStatic() => "破冰";
 
         public override void OnApplyPassive()
         {
-            var stats = CalcStats();
-            Owner.AddBuff(Buffs.BuffFactory.Create(
+            Owner.AddBuff(new Buffs.IceBreaker(
                 ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition,
-                new Buffs.IceBreakerBuffArgs(
-                    stats.BaseExtraDamage.Final,
-                    stats.MultiplierByChilledLayer.Final,
-                    -1f,
-                    new Buffs.BuffSource(Owner.SelfUnit, this))
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             ));
         }
 

@@ -31,16 +31,12 @@ namespace Units.Buffs
 
         private static readonly Dictionary<string, IFactoryEntry> factories = new(StringComparer.Ordinal)
         {
-            ["buff.attack_boost"] = new FactoryEntry<AttackBoostBuffArgs>((definition, args) =>
-                new AttackBoostBuff(definition, args)),
             ["buff.power_curse"] = new FactoryEntry<PowerCurseBuffArgs>((definition, args) =>
                 new PowerCurseBuff(definition, args)),
             ["buff.energy_curse"] = new FactoryEntry<EnergyCurseBuffArgs>((definition, args) =>
                 new EnergyCurseBuff(definition, args)),
             ["buff.energy_absorb"] = new FactoryEntry<EnergyAbsorbBuffArgs>((definition, args) =>
                 new EnergyAbsorb(definition, args)),
-            ["buff.ice_breaker"] = new FactoryEntry<IceBreakerBuffArgs>((definition, args) =>
-                new IceBreaker(definition, args)),
             ["buff.life_echo"] = new FactoryEntry<LifeEchoBuffArgs>((definition, args) =>
                 new LifeEchoBuff(definition, args)),
             ["buff.life_power"] = new FactoryEntry<LifePowerBuffArgs>((definition, args) =>

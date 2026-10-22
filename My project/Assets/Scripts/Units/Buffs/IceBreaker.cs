@@ -1,43 +1,32 @@
 using System.Linq;
-using Units.Skills;
+using Model.Buffs;
 using UnityEngine;
 
 namespace Units.Buffs
 {
-    public readonly struct IceBreakerBuffArgs : IBuffCreationArgs
-    {
-        public float BaseExtraDamage { get; }
-        public float PercentSlowMultiplier { get; }
-        public float BuffDuration { get; }
-        public BuffSource Source { get; }
-
-        public IceBreakerBuffArgs(float baseExtraDamage, float percentSlowMultiplier, float buffDuration, BuffSource source)
-        {
-            BaseExtraDamage = baseExtraDamage;
-            PercentSlowMultiplier = percentSlowMultiplier;
-            BuffDuration = buffDuration;
-            Source = source;
-        }
-    }
-
     /// <summary>
     /// IceBreaker：攻击命中时，若目标带有 Chilled，清除该效果并按层数造成额外伤害
     /// 额外伤害 = stacks * extraPerStack
     /// </summary>
     public class IceBreaker : Buff, IAttackHitTrigger
     {
+        private readonly IceBreakerBuffDefinition iceBreakerDefinition;
+        private readonly int resonantCellCount;
         private readonly float baseExtraDamage;
         private readonly float percentSlowMultiplier;
 
-        public IceBreaker(Model.Buffs.BuffDefinition definition, IceBreakerBuffArgs args)
-            : base(definition, args.BuffDuration, args.Source.SourceUnit, args.Source.SourceSkill)
+        public IceBreaker(IceBreakerBuffDefinition definition, int resonantCellCount, BuffSource source)
+            : base(definition, definition.Duration, source.SourceUnit, source.SourceSkill)
         {
-            baseExtraDamage = args.BaseExtraDamage;
-            percentSlowMultiplier = args.PercentSlowMultiplier;
+            iceBreakerDefinition = definition;
+            this.resonantCellCount = resonantCellCount;
+            var stats = definition.CalculateStats(resonantCellCount);
+            baseExtraDamage = stats.BaseExtraDamage.Final;
+            percentSlowMultiplier = stats.PercentSlowMultiplier.Final;
         }
-        public override string Name() => "破冰";
+        public override string Name() => iceBreakerDefinition.DisplayName;
         public override string Description() =>
-            $"命中时移除目标全部 Chilled。额外伤害 = {baseExtraDamage} + {percentSlowMultiplier} * (减速百分比)";
+            iceBreakerDefinition.DescribeEffect(resonantCellCount);
 
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

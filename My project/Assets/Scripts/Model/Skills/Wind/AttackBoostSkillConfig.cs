@@ -11,10 +11,10 @@ namespace Model.Skills
         [Header("资源")]
         [SerializeField]
         private BuffProjectile buffProjectilePrefab;
-        [SerializeField] private BuffDefinition attackBoostBuffDefinition;
+        [SerializeField] private AttackBoostBuffDefinition attackBoostBuffDefinition;
 
         public BuffProjectile BuffProjectilePrefab => buffProjectilePrefab;
-        public BuffDefinition AttackBoostBuffDefinition => attackBoostBuffDefinition;
+        public AttackBoostBuffDefinition AttackBoostBuffDefinition => attackBoostBuffDefinition;
 
     #if UNITY_EDITOR
         protected override void ValidateSpecificConfig()
@@ -30,12 +30,5 @@ namespace Model.Skills
         [Header("通用")]
         public float RequiredEnergy;
         float IRequiresEnergy.RequiredEnergy => RequiredEnergy;
-        public float Duration;
-
-        [Header("属性")]
-        public float AtkSpeedPercent;
-
-        [Header("加成")]
-        public float AtkSpeedAdditionPercentPerResonantCell; // 每个匹配共鸣 Cell 增加的攻击速度百分比
     }
 }

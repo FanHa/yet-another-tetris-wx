@@ -16,29 +16,16 @@ namespace Units.Skills
             this.RequiredEnergy = config.RequiredEnergy;
         }
 
-        private struct AttackBoostStats
+        private int GetResonantCellCount()
         {
-            public StatValue AtkSpeedPercent;
-            public StatValue Duration;
-        }
-
-        private AttackBoostStats CalcStats()
-        {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
-            return new AttackBoostStats
-            {
-                AtkSpeedPercent = new StatValue("攻击速度提升(%)", Config.AtkSpeedPercent, resonantCellCount * Config.AtkSpeedAdditionPercentPerResonantCell),
-                Duration = new StatValue("持续时间", Config.Duration)
-            };
+            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         public override string Description()
         {
-            var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.Duration}\n" +
-                $"{stats.AtkSpeedPercent}";
+                SkillConfig.AttackBoostBuffDefinition.DescribeEffect(GetResonantCellCount());
         }
 
         public static string DescriptionStatic() => "提升攻击速度";
@@ -51,13 +38,10 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
-            var buff = Buffs.BuffFactory.Create(
-                ((AttackBoostSkillConfig)Definition.Config).AttackBoostBuffDefinition,
-                new Buffs.AttackBoostBuffArgs(
-                    stats.Duration.Final,
-                    stats.AtkSpeedPercent.Final,
-                    new Buffs.BuffSource(Owner.SelfUnit, this))
+            var buff = new Buffs.AttackBoostBuff(
+                SkillConfig.AttackBoostBuffDefinition,
+                GetResonantCellCount(),
+                new Buffs.BuffSource(Owner.SelfUnit, this)
             );
 
             var projectile = Object.Instantiate(
