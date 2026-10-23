@@ -65,6 +65,7 @@ namespace Units.Skills
             ["skill.life_echo"] = new ConfiguredSkillCreator<LifeEchoSkillConfig, LifeEchoLevelConfig>(config => new LifeEcho(config)),
             ["skill.life_power"] = new ConfiguredSkillCreator<LifePowerSkillConfig, LifePowerLevelConfig>(config => new LifePower(config)),
             ["skill.life_shield"] = new ConfiguredSkillCreator<LifeShieldSkillConfig, LifeShieldLevelConfig>(config => new LifeShield(config)),
+            ["skill.life_fortitude"] = new ConfiguredSkillCreator<LifeFortitudeSkillConfig, LifeFortitudeLevelConfig>(config => new LifeFortitude(config)),
             ["skill.shadow_arrow"] = new ConfiguredSkillCreator<ShadowArrowSkillConfig, ShadowArrowLevelConfig>(config => new ShadowArrow(config)),
             ["skill.shadow_attack"] = new ConfiguredSkillCreator<ShadowAttackSkillConfig, ShadowAttackLevelConfig>(config => new ShadowAttack(config)),
             ["skill.shadow_step"] = new ConfiguredSkillCreator<ShadowStepSkillConfig, ShadowStepLevelConfig>(config => new ShadowStep(config)),

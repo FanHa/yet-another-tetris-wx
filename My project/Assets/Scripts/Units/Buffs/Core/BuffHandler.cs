@@ -81,6 +81,11 @@ namespace Units.Buffs
             EnqueueRemove(buff);
         }
 
+        public void CommitPendingChanges()
+        {
+            FlushPendingRequests();
+        }
+
         public IReadOnlyList<Buff> GetActiveBuffsReadOnly()
         {
             return activeBuffsReadOnly;

@@ -187,6 +187,7 @@ namespace Units
         public void CompleteAssembly()
         {
             skillHandler.OnAssemblyCompleted();
+            buffHandler.CommitPendingChanges();
             Attributes.RefillHealthToMax();
         }
 

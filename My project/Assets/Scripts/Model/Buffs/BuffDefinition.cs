@@ -4,8 +4,7 @@ using Units;
 
 namespace Model.Buffs
 {
-    [CreateAssetMenu(menuName = "Game Data/Gameplay/Buffs/Definitions/Buff Definition")]
-    public class BuffDefinition : ScriptableObject
+    public abstract class BuffDefinition : ScriptableObject
     {
         [SerializeField] private string id;
         [SerializeField] private string displayName;
