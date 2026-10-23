@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Buffs;
 using Model.Resonance;
 using Model.Skills;
@@ -19,9 +20,9 @@ namespace Units.Skills
 
         private struct ShadowStepStats
         {
-            public StatValue VulnerabilityPercent;
-            public StatValue Damage;
-            public StatValue DebuffDuration;
+            public StatBreakdownDisplay VulnerabilityPercent;
+            public StatBreakdownDisplay Damage;
+            public StatBreakdownDisplay DebuffDuration;
         }
 
         private ShadowStepStats CalcStats()
@@ -31,8 +32,8 @@ namespace Units.Skills
             return new ShadowStepStats
             {
                 VulnerabilityPercent = vulnerabilityStats.ExtraDamagePercent,
-                Damage = new StatValue(
-                    "技能伤害",
+                Damage = new StatBreakdownDisplay(
+                    StatLabel.SkillDamage,
                     Config.Damage,
                     resonantCellCount * Config.DamagePerResonantCell
                 ),
@@ -67,8 +68,8 @@ namespace Units.Skills
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 GetVulnerabilityDefinition(),
-                extraDamagePercent: stats.VulnerabilityPercent.Final,
-                buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.Final),
+                extraDamagePercent: stats.VulnerabilityPercent.FinalValue,
+                buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.FinalValue),
                 source: new Units.Buffs.BuffSource(Owner.SelfUnit, this)
             );
             targetEnemy.AddBuff(vulnerabilityBuff);

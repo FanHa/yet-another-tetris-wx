@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Units.Skills
 
         private struct ChargeStats
         {
-            public StatValue ChargeDamage;
+            public StatBreakdownDisplay ChargeDamage;
         }
 
 
@@ -29,7 +30,7 @@ namespace Units.Skills
             float chargeDamage = Config.ChargeDamage + moveSpeed * Config.DamageBonusPerSpeed;
             return new ChargeStats
             {
-                ChargeDamage = new StatValue("冲刺伤害", chargeDamage),
+                ChargeDamage = new StatBreakdownDisplay(StatLabel.DashDamage, chargeDamage),
             };
         }
 
@@ -53,7 +54,7 @@ namespace Units.Skills
                 owner: Owner.SelfUnit,
                 target: targetEnemy,
                 speed: 2f * Owner.Attributes.MoveSpeed.finalValue,
-                chargeDamage: stats.ChargeDamage.Final,
+                chargeDamage: stats.ChargeDamage.FinalValue,
                 avoidancePriority: Config.AvoidancePriority,
                 sourceSkill: this
             );

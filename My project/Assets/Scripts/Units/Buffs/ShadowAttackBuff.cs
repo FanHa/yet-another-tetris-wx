@@ -18,8 +18,8 @@ namespace Units.Buffs
             shadowAttackDefinition = definition;
             vulnerabilityDefinition = definition.VulnerabilityDefinition;
             var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
-            vulnerabilityPercent = stats.ExtraDamagePercent.Final;
-            vulnerabilityDuration = stats.Duration.Final;
+            vulnerabilityPercent = stats.ExtraDamagePercent.FinalValue;
+            vulnerabilityDuration = stats.Duration.FinalValue;
         }
 
         public override string Name() => shadowAttackDefinition.DisplayName;

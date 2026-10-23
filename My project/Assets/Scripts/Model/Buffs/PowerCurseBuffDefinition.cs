@@ -10,10 +10,10 @@ namespace Model.Buffs
         [SerializeField] private float attackReductionPerResonantCell;
         [SerializeField] private float maxAttackReductionPercent;
 
-        public (string Duration, StatValue AttackReductionPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, StatBreakdownDisplay AttackReductionPercent) CalculateStats(int resonantCellCount) =>
             (
                 BaseDuration.ToDisplayString("诅咒持续"),
-                new StatValue("攻击降低(%)", baseAttackReductionPercent, resonantCellCount * attackReductionPerResonantCell)
+                new StatBreakdownDisplay(StatLabel.AttackReductionPercent, baseAttackReductionPercent, resonantCellCount * attackReductionPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)

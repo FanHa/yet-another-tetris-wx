@@ -15,7 +15,7 @@ namespace Units.Buffs
         {
             energyAbsorbDefinition = definition;
             this.resonantCellCount = resonantCellCount;
-            energyAbsorbPerSkillCast = definition.CalculateStats(resonantCellCount).EnergyAbsorbPerSkillCast.Final;
+            energyAbsorbPerSkillCast = definition.CalculateStats(resonantCellCount).EnergyAbsorbPerSkillCast.FinalValue;
         }
         // 护盾对象
         public override string Description()

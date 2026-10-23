@@ -1,3 +1,4 @@
+using Model;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -18,9 +19,9 @@ namespace Units.Skills
 
         private struct WildWindStats
         {
-            public StatValue Damage;
-            public StatValue Radius;
-            public StatValue Duration;
+            public StatBreakdownDisplay Damage;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay Duration;
         }
 
         private WildWindStats CalcStats()
@@ -28,9 +29,9 @@ namespace Units.Skills
             int resonantCellCount = GetResonantCellCount();
             return new WildWindStats
             {
-                Damage = new StatValue("伤害", Config.Damage, resonantCellCount * Config.DamageAdditionPerResonantCell),
-                Radius = new StatValue("作用半径", Config.Radius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatValue("风场持续时间", Config.Duration, resonantCellCount * Config.DurationPerResonantCell)
+                Damage = new StatBreakdownDisplay(StatLabel.Damage, Config.Damage, resonantCellCount * Config.DamageAdditionPerResonantCell),
+                Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, Config.Radius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatBreakdownDisplay(StatLabel.WindFieldDuration, Config.Duration, resonantCellCount * Config.DurationPerResonantCell)
             };
         }
 
@@ -64,9 +65,9 @@ namespace Units.Skills
             );
             wildWind.Initialize(
                 caster: Owner.SelfUnit,
-                radius: stats.Radius.Final,
-                duration: stats.Duration.Final,
-                damage: stats.Damage.Final,
+                radius: stats.Radius.FinalValue,
+                duration: stats.Duration.FinalValue,
+                damage: stats.Damage.FinalValue,
                 debuffDefinition: SkillConfig.WildWindDebuffDefinition,
                 resonantCellCount: GetResonantCellCount(),
                 sourceSkill: this // 传递技能引用

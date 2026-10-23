@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -20,14 +21,14 @@ namespace Units.Skills
 
         private struct LifeBombStats
         {
-            public StatValue HealthCostPercent;
+            public StatBreakdownDisplay HealthCostPercent;
         }
 
         private LifeBombStats CalcStats()
         {
             return new LifeBombStats
             {
-                HealthCostPercent = new StatValue("消耗生命值百分比", Config.HealthCostPercent)
+                HealthCostPercent = new StatBreakdownDisplay(StatLabel.HealthCostPercent, Config.HealthCostPercent)
             };
         }
 
@@ -45,7 +46,7 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
-            float percent = stats.HealthCostPercent.Final / 100f;
+            float percent = stats.HealthCostPercent.FinalValue / 100f;
             float healthCost = Owner.Attributes.CurrentHealth * percent;
             healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
             var tempTarget = Object.Instantiate(

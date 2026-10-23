@@ -10,7 +10,7 @@ namespace Model.Buffs
         [SerializeField] private float energyRegenReductionPerResonantCell;
         [SerializeField] private float maxEnergyRegenReductionPercent;
 
-        public (string Duration, StatValue EnergyRegenReductionPercent) CalculateStats(int resonantCellCount)
+        public (string Duration, StatBreakdownDisplay EnergyRegenReductionPercent) CalculateStats(int resonantCellCount)
         {
             float bonus = Mathf.Min(
                 resonantCellCount * energyRegenReductionPerResonantCell,
@@ -18,7 +18,7 @@ namespace Model.Buffs
 
             return (
                 BaseDuration.ToDisplayString("诅咒持续"),
-                new StatValue("能量回复降低(%)", baseEnergyRegenReductionPercent, bonus)
+                new StatBreakdownDisplay(StatLabel.EnergyRegenerationReductionPercent, baseEnergyRegenReductionPercent, bonus)
             );
         }
 

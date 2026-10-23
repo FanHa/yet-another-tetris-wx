@@ -16,11 +16,11 @@ namespace Model.Buffs
 
         public string DescribeEffect(float dps) => $"每秒受到{dps}点伤害";
 
-        public (StatValue Dps, StatValue Duration) CalculateStats(int resonantCellCount)
+        public (StatBreakdownDisplay Dps, StatBreakdownDisplay Duration) CalculateStats(int resonantCellCount)
         {
             return (
-                new StatValue("灼烧每秒伤害", baseDps, resonantCellCount * dpsPerResonantCell),
-                new StatValue("灼烧持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance)
+                new StatBreakdownDisplay(StatLabel.BurnDamagePerSecond, baseDps, resonantCellCount * dpsPerResonantCell),
+                new StatBreakdownDisplay(StatLabel.BurnDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance)
             );
         }
 

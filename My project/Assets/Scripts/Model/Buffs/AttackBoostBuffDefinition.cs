@@ -9,10 +9,10 @@ namespace Model.Buffs
         [SerializeField] private float baseAtkSpeedPercent;
         [SerializeField] private float atkSpeedPercentPerResonantCell;
 
-        public (string Duration, StatValue AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, StatBreakdownDisplay AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
             (
                 BaseDuration.ToDisplayString("持续时间"),
-                new StatValue("攻击速度提升(%)", baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
+                new StatBreakdownDisplay(StatLabel.AttackSpeedIncreasePercent, baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)

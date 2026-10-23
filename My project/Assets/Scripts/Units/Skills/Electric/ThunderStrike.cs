@@ -1,3 +1,4 @@
+using Model;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace Units.Skills
             thunderStrikeEffect.Init(
                 Owner.SelfUnit,
                 cachedTarget,
-                stats.Damage.Final,
+                stats.Damage.FinalValue,
                 stats.EnergyDisruptionAmount,
                 this
             );
@@ -64,7 +65,7 @@ namespace Units.Skills
 
         private struct ThunderStrikeStats
         {
-            public StatValue Damage;
+            public StatBreakdownDisplay Damage;
             public float EnergyDisruptionAmount;
         }
 
@@ -76,7 +77,7 @@ namespace Units.Skills
 
             return new ThunderStrikeStats
             {
-                Damage = new StatValue("技能伤害", Config.BaseDamage, electricCellCount * Config.DamagePerResonantCell),
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.BaseDamage, electricCellCount * Config.DamagePerResonantCell),
                 EnergyDisruptionAmount = energyDisruptionAmount
             };
         }

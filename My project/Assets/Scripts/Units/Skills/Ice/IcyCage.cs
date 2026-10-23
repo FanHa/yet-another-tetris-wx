@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "冰牢";
-        private StatValue CalcStats()
+        private StatBreakdownDisplay CalcStats()
         {
             return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(GetResonantCellCount());
         }

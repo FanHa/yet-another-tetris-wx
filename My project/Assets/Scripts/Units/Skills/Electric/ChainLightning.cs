@@ -1,3 +1,4 @@
+using Model;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -37,12 +38,12 @@ namespace Units.Skills
                 Owner.transform.position,
                 Quaternion.identity
             );
-            StatValue initialDamage = CalcInitialDamage();
+            StatBreakdownDisplay initialDamage = CalcInitialDamage();
             float energyDisruptionAmount = CalcEnergyDisruptionAmount();
             projectile.Initialize(
                 caster: Owner.SelfUnit,
                 initialTarget: initialTarget,
-                baseDamage: initialDamage.Final,
+                baseDamage: initialDamage.FinalValue,
                 damageIncreasePercentage: Config.DamageIncreasePercentage,
                 maxTargets: Config.MaxBounces + 1,
                 chainRange: Config.Range,
@@ -53,12 +54,12 @@ namespace Units.Skills
             initialTarget = null;
         }
 
-        private StatValue CalcInitialDamage()
+        private StatBreakdownDisplay CalcInitialDamage()
         {
             int electricCellCount = GetElectricCellCount();
 
-            return new StatValue(
-                "首跳伤害",
+            return new StatBreakdownDisplay(
+                StatLabel.FirstChainDamage,
                 Config.BaseDamage,
                 electricCellCount * Config.DamagePerResonantCell
             );

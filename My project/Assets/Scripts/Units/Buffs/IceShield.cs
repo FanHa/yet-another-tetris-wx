@@ -22,10 +22,10 @@ namespace Units.Buffs
             this.resonantCellCount = resonantCellCount;
             chilledDefinition = definition.ChilledDefinition;
             var stats = chilledDefinition.CalculateStats(resonantCellCount);
-            chilledDuration = stats.Duration.Final;
-            chilledMoveSlowPercent = (int)stats.MoveSlowPercent.Final;
-            chilledAttackSlowPercent = (int)stats.AttackSlowPercent.Final;
-            chilledActionSlowPercent = (int)stats.ActionSlowPercent.Final;
+            chilledDuration = stats.Duration.FinalValue;
+            chilledMoveSlowPercent = (int)stats.MoveSlowPercent.FinalValue;
+            chilledAttackSlowPercent = (int)stats.AttackSlowPercent.FinalValue;
+            chilledActionSlowPercent = (int)stats.ActionSlowPercent.FinalValue;
         }
 
         public override string Name() => iceShieldDefinition.DisplayName;

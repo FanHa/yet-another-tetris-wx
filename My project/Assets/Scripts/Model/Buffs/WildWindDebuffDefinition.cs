@@ -12,11 +12,11 @@ namespace Model.Buffs
         [SerializeField] private int baseAtkReducePercent;
         [SerializeField] private int atkReducePercentPerResonantCell;
 
-        public (StatValue Duration, StatValue MoveSlowPercent, StatValue AtkReducePercent) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AtkReducePercent) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("DeBuff持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance),
-                new StatValue("DeBuff移动速度降低(%)", baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
-                new StatValue("DeBuff攻击力降低(%)", baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
+                new StatBreakdownDisplay(StatLabel.WildWindDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance),
+                new StatBreakdownDisplay(StatLabel.WildWindMovementSpeedReductionPercent, baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
+                new StatBreakdownDisplay(StatLabel.WildWindAttackReductionPercent, baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)

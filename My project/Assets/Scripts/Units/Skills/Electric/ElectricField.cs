@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model;
 using Model.Skills;
 using Model.Resonance;
 using UnityEngine;
@@ -42,11 +43,11 @@ namespace Units.Skills
             spawnedZones.Add(zone);
             zone.Initialize(
                 caster: Owner.SelfUnit,
-                radius: stats.Radius.Final,
-                duration: stats.Duration.Final,
+                radius: stats.Radius.FinalValue,
+                duration: stats.Duration.FinalValue,
                 hitProjectilePrefab: SkillConfig.HitProjectilePrefab,
-                damage: stats.Damage.Final,
-                energyDisruptionAmount: stats.EnergyDisruptionAmount.Final,
+                damage: stats.Damage.FinalValue,
+                energyDisruptionAmount: stats.EnergyDisruptionAmount.FinalValue,
                 sourceSkill: this);
             zone.Activate();
         }
@@ -83,11 +84,11 @@ namespace Units.Skills
 
             return new ElectricFieldStats
             {
-                Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
-                Damage = new StatValue("电击伤害", Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell),
-                EnergyDisruptionAmount = new StatValue(
-                    "削减技能能量",
+                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
+                Damage = new StatBreakdownDisplay(StatLabel.ElectricDamage, Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell),
+                EnergyDisruptionAmount = new StatBreakdownDisplay(
+                    StatLabel.SkillEnergyReduction,
                     Config.BaseEnergyDisruptionAmount,
                     resonantCellCount * Config.EnergyDisruptionAmountPerResonantCell)
             };
@@ -95,10 +96,10 @@ namespace Units.Skills
 
         private struct ElectricFieldStats
         {
-            public StatValue Radius;
-            public StatValue Duration;
-            public StatValue Damage;
-            public StatValue EnergyDisruptionAmount;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay Duration;
+            public StatBreakdownDisplay Damage;
+            public StatBreakdownDisplay EnergyDisruptionAmount;
         }
     }
 }

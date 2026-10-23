@@ -19,8 +19,8 @@ namespace Units.Buffs
             windKnockbackDefinition = definition;
             this.resonantCellCount = resonantCellCount;
             var stats = definition.CalculateStats(resonantCellCount);
-            knockbackDistance = Mathf.Min(stats.KnockbackDistance.Final, stats.MaxKnockbackDistance.Final);
-            maxKnockbackDistance = stats.MaxKnockbackDistance.Final;
+            knockbackDistance = Mathf.Min(stats.KnockbackDistance.FinalValue, stats.MaxKnockbackDistance.FinalValue);
+            maxKnockbackDistance = stats.MaxKnockbackDistance.FinalValue;
         }
 
         public override string Name() => windKnockbackDefinition.DisplayName;

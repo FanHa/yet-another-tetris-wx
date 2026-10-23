@@ -10,10 +10,10 @@ namespace Model.Buffs
         [SerializeField] private float extraDamagePerResonantCell;
         [SerializeField] private float percentSlowMultiplier;
 
-        public (StatValue BaseExtraDamage, StatValue PercentSlowMultiplier, string Duration) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay BaseExtraDamage, StatBreakdownDisplay PercentSlowMultiplier, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("基础额外伤害", baseExtraDamage, resonantCellCount * extraDamagePerResonantCell),
-                new StatValue("减速百分比伤害倍率", percentSlowMultiplier),
+                new StatBreakdownDisplay(StatLabel.BaseExtraDamage, baseExtraDamage, resonantCellCount * extraDamagePerResonantCell),
+                new StatBreakdownDisplay(StatLabel.SlowBasedDamageMultiplier, percentSlowMultiplier),
                 BaseDuration.ToDisplayString("破冰持续时间")
             );
 

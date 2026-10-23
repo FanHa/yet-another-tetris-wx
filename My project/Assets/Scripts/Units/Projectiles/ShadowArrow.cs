@@ -24,8 +24,8 @@ namespace Units.Projectiles
         {
             base.Init(caster, target);
             var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
-            vulnerabilityPercent = stats.ExtraDamagePercent.Final;
-            vulnerabilityDuration = stats.Duration.Final;
+            vulnerabilityPercent = stats.ExtraDamagePercent.FinalValue;
+            vulnerabilityDuration = stats.Duration.FinalValue;
             vulnerabilitySource = new BuffSource(caster, sourceSkill);
         }
 

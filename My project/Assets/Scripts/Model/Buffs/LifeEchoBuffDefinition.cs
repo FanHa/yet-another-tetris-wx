@@ -11,9 +11,9 @@ namespace Model.Buffs
 
         public float ReflectPercent => reflectPercent;
 
-        public (StatValue ReflectPercent, string Duration) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay ReflectPercent, string Duration) CalculateStats(int resonantCellCount) =>
             (
-            new StatValue("反弹伤害比例(%)", reflectPercent, resonantCellCount * reflectPercentPerResonantCell),
+            new StatBreakdownDisplay(StatLabel.ReflectedDamagePercent, reflectPercent, resonantCellCount * reflectPercentPerResonantCell),
                 BaseDuration.ToDisplayString("效果持续时间")
             );
 

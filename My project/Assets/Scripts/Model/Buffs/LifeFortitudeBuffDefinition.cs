@@ -12,7 +12,7 @@ namespace Model.Buffs
             baseIncrease + resonantCellCount * maxHealthIncreasePerResonantCell;
 
         public string DescribeEffect(float baseIncrease, int resonantCellCount) =>
-            new StatValue("最大生命", baseIncrease, resonantCellCount * maxHealthIncreasePerResonantCell).ToString();
+            new StatBreakdownDisplay(StatLabel.MaximumHealth, baseIncrease, resonantCellCount * maxHealthIncreasePerResonantCell).ToString();
 
 #if UNITY_EDITOR
         protected override void OnValidate()

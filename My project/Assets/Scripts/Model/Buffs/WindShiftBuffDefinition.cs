@@ -9,9 +9,9 @@ namespace Model.Buffs
         [SerializeField] private float baseAttackRangeBonus;
         [SerializeField] private float attackRangePerResonantCell;
 
-        public (StatValue AttackRangeBonus, string Duration) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay AttackRangeBonus, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("攻击距离提升", baseAttackRangeBonus, resonantCellCount * attackRangePerResonantCell),
+                new StatBreakdownDisplay(StatLabel.AttackRangeIncrease, baseAttackRangeBonus, resonantCellCount * attackRangePerResonantCell),
                 BaseDuration.ToDisplayString("风形态持续时间")
             );
 

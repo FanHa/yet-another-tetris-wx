@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Skills;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace Units.Skills
         
         private struct ShadowArrowStats
         {
-            public StatValue Damage;
+            public StatBreakdownDisplay Damage;
         }
 
         private int GetResonantCellCount()
@@ -31,7 +32,7 @@ namespace Units.Skills
             int resonantCellCount = GetResonantCellCount();
             return new ShadowArrowStats
             {
-                Damage = new StatValue("技能伤害", Config.Damage, resonantCellCount * Config.DamagePerResonantCell)
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.Damage, resonantCellCount * Config.DamagePerResonantCell)
             };
         }
         protected override void ExecuteCore()

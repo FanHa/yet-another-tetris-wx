@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Model;
 using Model.Skills;
 using UnityEngine;
 
@@ -20,8 +21,8 @@ namespace Units.Skills
 
         private struct BlazingFieldStats
         {
-            public StatValue Radius;
-            public StatValue Duration;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay Duration;
         }
 
         private int GetResonantCellCount()
@@ -34,8 +35,8 @@ namespace Units.Skills
             int resonantCellCount = GetResonantCellCount();
             return new BlazingFieldStats
             {
-                Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell)
+                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell)
             };
         }
 
@@ -62,8 +63,8 @@ namespace Units.Skills
             spawnedFields.Add(effect);
             effect.Init(
                 caster: Owner.SelfUnit,
-                radius: stats.Radius.Final,
-                duration: stats.Duration.Final,
+                radius: stats.Radius.FinalValue,
+                duration: stats.Duration.FinalValue,
                 sourceSkill: this,
                 resonantCellCount: GetResonantCellCount()
             );

@@ -21,8 +21,8 @@ namespace Units.Buffs
             iceBreakerDefinition = definition;
             this.resonantCellCount = resonantCellCount;
             var stats = definition.CalculateStats(resonantCellCount);
-            baseExtraDamage = stats.BaseExtraDamage.Final;
-            percentSlowMultiplier = stats.PercentSlowMultiplier.Final;
+            baseExtraDamage = stats.BaseExtraDamage.FinalValue;
+            percentSlowMultiplier = stats.PercentSlowMultiplier.FinalValue;
         }
         public override string Name() => iceBreakerDefinition.DisplayName;
         public override string Description() =>

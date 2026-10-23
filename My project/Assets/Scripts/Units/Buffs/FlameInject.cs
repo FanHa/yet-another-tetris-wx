@@ -16,8 +16,8 @@ namespace Units.Buffs
         {
             burnDefinition = definition.BurnDefinition;
             var stats = burnDefinition.CalculateStats(resonantCellCount);
-            dotDps = stats.Dps.Final;
-            dotDuration = stats.Duration.Final;
+            dotDps = stats.Dps.FinalValue;
+            dotDuration = stats.Duration.FinalValue;
         }
 
         public override string Name() => "炎附";

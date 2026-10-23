@@ -13,7 +13,7 @@ namespace Units.Buffs
         {
             windShiftDefinition = definition;
             this.resonantCellCount = resonantCellCount;
-            attackRangeBonus = definition.CalculateStats(resonantCellCount).AttackRangeBonus.Final;
+            attackRangeBonus = definition.CalculateStats(resonantCellCount).AttackRangeBonus.FinalValue;
         }
 
         public override string Name() => windShiftDefinition.DisplayName;

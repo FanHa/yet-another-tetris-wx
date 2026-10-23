@@ -21,8 +21,8 @@ namespace Units.Projectiles
         {
             base.Init(caster, target);
             var stats = burnDefinition.CalculateStats(resonantCellCount);
-            burnDps = stats.Dps.Final;
-            burnDuration = stats.Duration.Final;
+            burnDps = stats.Dps.FinalValue;
+            burnDuration = stats.Duration.FinalValue;
             burnSource = new BuffSource(caster, sourceSkill);
         }
 

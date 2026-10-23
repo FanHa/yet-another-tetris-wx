@@ -14,13 +14,13 @@ namespace Model.Buffs
         [SerializeField] private int baseActionSlowPercent;
         [SerializeField] private int actionSlowPercentPerResonantCell;
 
-        public (StatValue Duration, StatValue MoveSlowPercent, StatValue AttackSlowPercent, StatValue ActionSlowPercent) CalculateStats(int resonantCellCount)
+        public (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AttackSlowPercent, StatBreakdownDisplay ActionSlowPercent) CalculateStats(int resonantCellCount)
         {
             return (
-                new StatValue("减速效果持续时间", BaseDuration.Seconds, resonantCellCount * durationPerResonance),
-                new StatValue("移动速度降低(%)", baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
-                new StatValue("攻击速度降低(%)", baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
-                new StatValue("动作速率降低(%)", baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
+                new StatBreakdownDisplay(StatLabel.ChillDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance),
+                new StatBreakdownDisplay(StatLabel.MovementSpeedReductionPercent, baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
+                new StatBreakdownDisplay(StatLabel.AttackSpeedReductionPercent, baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
+                new StatBreakdownDisplay(StatLabel.ActionRateReductionPercent, baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
             );
         }
 

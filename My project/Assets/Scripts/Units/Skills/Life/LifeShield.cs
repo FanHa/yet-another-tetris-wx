@@ -1,4 +1,5 @@
 using System.Linq;
+using Model;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -18,10 +19,10 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private (StatValue LifeCostPercent, StatValue ShieldMultiplierPercent, string Duration) CalcStats(int resonantCellCount) =>
+        private (StatBreakdownDisplay LifeCostPercent, StatBreakdownDisplay ShieldMultiplierPercent, string Duration) CalcStats(int resonantCellCount) =>
             (
-                new StatValue("生命值消耗比例(%)", Config.LifeCostPercent),
-                new StatValue("原始生命消耗转护盾倍率(%)", SkillConfig.BaseShieldMultiplierPercent,
+                new StatBreakdownDisplay(StatLabel.LifeCostPercent, Config.LifeCostPercent),
+                new StatBreakdownDisplay(StatLabel.ShieldMultiplierPercent, SkillConfig.BaseShieldMultiplierPercent,
                     resonantCellCount * SkillConfig.ShieldMultiplierPercentPerResonantCell),
                 SkillConfig.LifeShieldBuffDefinition.BaseDuration.ToDisplayString("护盾持续时间")
             );
@@ -48,8 +49,8 @@ namespace Units.Skills
             return;
 
             var stats = CalcStats(GetResonantCellCount());
-            float lifeCost = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.Final / 100f);
-            float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.Final / 100f);
+            float lifeCost = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.FinalValue / 100f);
+            float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.FinalValue / 100f);
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 SkillConfig.LifeShieldBuffDefinition,

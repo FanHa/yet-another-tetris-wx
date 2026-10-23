@@ -1,3 +1,4 @@
+using Model;
 using Units.Skills;
 using Model.Buffs;
 
@@ -19,13 +20,13 @@ namespace Units.Buffs
         }
 
         private WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source,
-            (StatValue Duration, StatValue MoveSlowPercent, StatValue AtkReducePercent) stats)
-            : base(definition, BuffDuration.ForSeconds(stats.Duration.Final), source.SourceUnit, source.SourceSkill)
+            (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AtkReducePercent) stats)
+            : base(definition, BuffDuration.ForSeconds(stats.Duration.FinalValue), source.SourceUnit, source.SourceSkill)
         {
             wildWindDefinition = definition;
             this.resonantCellCount = resonantCellCount;
-            MoveSlowPercent = (int)stats.MoveSlowPercent.Final;
-            AtkReducePercent = (int)stats.AtkReducePercent.Final;
+            MoveSlowPercent = (int)stats.MoveSlowPercent.FinalValue;
+            AtkReducePercent = (int)stats.AtkReducePercent.FinalValue;
         }
 
         public override string Name() => wildWindDefinition.DisplayName;

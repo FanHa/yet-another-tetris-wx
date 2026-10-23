@@ -1,3 +1,4 @@
+using Model;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -18,8 +19,8 @@ namespace Units.Skills
 
         private struct EnergyCurseStats
         {
-            public StatValue Radius;
-            public StatValue ZoneLifetime;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay ZoneLifetime;
         }
 
         private EnergyCurseStats CalcStats()
@@ -28,8 +29,8 @@ namespace Units.Skills
 
             return new EnergyCurseStats
             {
-                Radius = new StatValue("领域半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                ZoneLifetime = new StatValue("领域持续", Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell)
+                Radius = new StatBreakdownDisplay(StatLabel.DomainRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                ZoneLifetime = new StatBreakdownDisplay(StatLabel.DomainDuration, Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell)
             };
         }
 
@@ -61,8 +62,8 @@ namespace Units.Skills
 
             ownedZone.Initialize(
                 caster: Owner.SelfUnit,
-                radius: stats.Radius.Final,
-                duration: stats.ZoneLifetime.Final,
+                radius: stats.Radius.FinalValue,
+                duration: stats.ZoneLifetime.FinalValue,
                 resonantCellCount: GetResonantCellCount(),
                 sourceSkill: this,
                 energyCurseBuffDefinition: SkillConfig.EnergyCurseBuffDefinition

@@ -9,14 +9,14 @@ namespace Model.Buffs
         [SerializeField] private float healthToAtkPercent;
         [SerializeField] private float healthToAtkPercentPerResonantCell;
 
-        public (StatValue HealthToAtkPercent, string Duration) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay HealthToAtkPercent, string Duration) CalculateStats(int resonantCellCount) =>
             (
-            new StatValue("最大生命转换率(%)", healthToAtkPercent, resonantCellCount * healthToAtkPercentPerResonantCell),
+            new StatBreakdownDisplay(StatLabel.MaxHealthConversionPercent, healthToAtkPercent, resonantCellCount * healthToAtkPercentPerResonantCell),
                 BaseDuration.ToDisplayString("效果持续时间")
             );
 
         public float CalculateExtraDamage(float casterMaxHealth, int resonantCellCount) =>
-            casterMaxHealth * (CalculateStats(resonantCellCount).HealthToAtkPercent.Final / 100f);
+            casterMaxHealth * (CalculateStats(resonantCellCount).HealthToAtkPercent.FinalValue / 100f);
 
         public string DescribeEffect(int resonantCellCount)
         {
@@ -25,7 +25,7 @@ namespace Model.Buffs
         }
 
         public string DescribeEffect(float extraDamage, int resonantCellCount) =>
-            $"{DescribeEffect(resonantCellCount)}\n{new StatValue("攻击命中额外伤害", extraDamage)}";
+            $"{DescribeEffect(resonantCellCount)}\n{new StatBreakdownDisplay(StatLabel.AttackHitExtraDamage, extraDamage)}";
 
 #if UNITY_EDITOR
         protected override void OnValidate()

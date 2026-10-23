@@ -1,3 +1,4 @@
+using Model;
 using Model.Skills;
 using UnityEngine;
 
@@ -15,8 +16,8 @@ namespace Units.Skills
 
         private struct FlameRingStats
         {
-            public StatValue Radius;
-            public StatValue AreaDuration;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay AreaDuration;
         }
 
         private int GetResonantCellCount()
@@ -29,8 +30,8 @@ namespace Units.Skills
             int resonantCellCount = GetResonantCellCount();
             return new FlameRingStats
             {
-                Radius = new StatValue("作用半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                AreaDuration = new StatValue("区域持续时间", Config.AreaDuration)
+                Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                AreaDuration = new StatBreakdownDisplay(StatLabel.AreaDuration, Config.AreaDuration)
             };
         }
 
@@ -62,9 +63,9 @@ namespace Units.Skills
             );
             areaEffect.Initialize(
                 owner: Owner.SelfUnit,
-                radius: stats.Radius.Final,
+                radius: stats.Radius.FinalValue,
                 sourceSkill: this,
-                duration: stats.AreaDuration.Final,
+                duration: stats.AreaDuration.FinalValue,
                 resonantCellCount: GetResonantCellCount()
             );
             areaEffect.Activate();

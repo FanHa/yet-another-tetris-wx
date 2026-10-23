@@ -16,7 +16,7 @@ namespace Units.Buffs
         {
             attackBoostDefinition = definition;
             this.resonantCellCount = resonantCellCount;
-            AtkSpeedPercent = definition.CalculateStats(resonantCellCount).AtkSpeedPercent.Final;
+            AtkSpeedPercent = definition.CalculateStats(resonantCellCount).AtkSpeedPercent.FinalValue;
         }
 
         public override string Name() => attackBoostDefinition.DisplayName;

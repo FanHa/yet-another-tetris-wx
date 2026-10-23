@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Model;
 using Model.Skills;
 using UnityEngine;
 
@@ -42,9 +43,9 @@ namespace Units.Skills
             spawnedZones.Add(frostZone);
             frostZone.Initialize(
                 caster: Owner.SelfUnit,
-                radius: stats.Radius.Final,
-                duration: stats.Duration.Final,
-                damage: stats.Damage.Final,
+                radius: stats.Radius.FinalValue,
+                duration: stats.Duration.FinalValue,
+                damage: stats.Damage.FinalValue,
                 sourceSkill: this,
                 resonantCellCount: GetResonantCellCount()
             );
@@ -91,9 +92,9 @@ namespace Units.Skills
 
         private struct FrostZoneStats
         {
-            public StatValue Radius;
-            public StatValue Duration;
-            public StatValue Damage;
+            public StatBreakdownDisplay Radius;
+            public StatBreakdownDisplay Duration;
+            public StatBreakdownDisplay Damage;
         }
 
         private FrostZoneStats CalcStats()
@@ -101,9 +102,9 @@ namespace Units.Skills
             int resonantCellCount = GetResonantCellCount();
             return new FrostZoneStats
             {
-                Radius = new StatValue("范围半径", Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatValue("持续时间", Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
-                Damage = new StatValue("冰属性伤害", Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell)
+                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
+                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell)
             };
         }
     }

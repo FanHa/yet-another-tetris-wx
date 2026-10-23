@@ -31,10 +31,10 @@ namespace Units.Projectiles
                 sourceSkill: sourceSkill);
             this.damage = damage;
             var stats = chilledDefinition.CalculateStats(resonantCellCount);
-            chilledDuration = stats.Duration.Final;
-            moveSlowPercent = Mathf.RoundToInt(stats.MoveSlowPercent.Final);
-            atkSlowPercent = Mathf.RoundToInt(stats.AttackSlowPercent.Final);
-            actionSlowPercent = Mathf.RoundToInt(stats.ActionSlowPercent.Final);
+            chilledDuration = stats.Duration.FinalValue;
+            moveSlowPercent = Mathf.RoundToInt(stats.MoveSlowPercent.FinalValue);
+            atkSlowPercent = Mathf.RoundToInt(stats.AttackSlowPercent.FinalValue);
+            actionSlowPercent = Mathf.RoundToInt(stats.ActionSlowPercent.FinalValue);
             chilledSource = new BuffSource(caster, sourceSkill);
         }
 

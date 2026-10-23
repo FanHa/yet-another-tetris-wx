@@ -9,9 +9,9 @@ namespace Model.Buffs
         [SerializeField] private float baseEnergyAbsorbPerSkillCast;
         [SerializeField] private float energyAbsorbPerResonantCell;
 
-        public (StatValue EnergyAbsorbPerSkillCast, string Duration) CalculateStats(int resonantCellCount) =>
+        public (StatBreakdownDisplay EnergyAbsorbPerSkillCast, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatValue("每次敌方施法为每个友军补充能量", baseEnergyAbsorbPerSkillCast, resonantCellCount * energyAbsorbPerResonantCell),
+                new StatBreakdownDisplay(StatLabel.EnergyPerEnemySkillCast, baseEnergyAbsorbPerSkillCast, resonantCellCount * energyAbsorbPerResonantCell),
                 BaseDuration.ToDisplayString("效果持续时间")
             );
 
