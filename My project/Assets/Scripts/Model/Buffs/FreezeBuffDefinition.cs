@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -8,11 +8,11 @@ namespace Model.Buffs
     {
         [SerializeField] private float durationPerResonance = 0.5f;
 
-        public StatBreakdownDisplay CalculateStats(int resonantCellCount) =>
-            new StatBreakdownDisplay(StatLabel.FreezeDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance);
+        public AdditiveValueBreakdown CalculateStats(int resonantCellCount) =>
+            new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance);
 
         public string DescribeEffect(int resonantCellCount) =>
-            $"完全冻结,无法行动,能量回复为0\n{CalculateStats(resonantCellCount)}";
+            $"完全冻结,无法行动,能量回复为0\n{StatBreakdownFormatter.Format(StatLabel.FreezeDuration, CalculateStats(resonantCellCount))}";
 
 #if UNITY_EDITOR
         protected override void OnValidate()

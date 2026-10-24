@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Model;
+using Presentation;
 using Model.Skills;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace Units.Skills
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
                 sourceSkill: this,
-                resonantCellCount: GetResonantCellCount()
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             frostZone.Activate();
         }
@@ -74,7 +75,7 @@ namespace Units.Skills
                 $"{stats.Duration}\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Damage}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
+                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
@@ -85,11 +86,6 @@ namespace Units.Skills
         }
         public static string NameStatic() => "霜域";
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         private struct FrostZoneStats
         {
             public StatBreakdownDisplay Radius;
@@ -99,7 +95,7 @@ namespace Units.Skills
 
         private FrostZoneStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             return new FrostZoneStats
             {
                 Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),

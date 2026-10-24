@@ -41,7 +41,7 @@ namespace Units.Skills
                 Context.Unit,
                 cachedTarget,
                 this,
-                GetResonantCellCount()
+                Context.GetResonanceCount(Definition.Resonance)
             );
             snowBall.Activate();
             // 清空目标
@@ -52,7 +52,7 @@ namespace Units.Skills
         {
             return
                 DescriptionStatic() + "\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
+                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,施加减速Debuff.";
 
@@ -62,9 +62,5 @@ namespace Units.Skills
         }
         public static string NameStatic() => "雪球";
         
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
     }
 }

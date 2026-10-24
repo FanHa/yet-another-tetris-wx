@@ -14,16 +14,11 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() =>
@@ -37,7 +32,7 @@ namespace Units.Skills
         {
             var buff = new Buffs.EnergyAbsorb(
                 ((EnergyAbsorbSkillConfig)Definition.Config).EnergyAbsorbBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
             Context.AddBuff(buff);

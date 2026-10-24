@@ -1,5 +1,4 @@
 using UnityEngine;
-using Units.Skills;
 
 namespace Model.Buffs
 {
@@ -16,11 +15,11 @@ namespace Model.Buffs
 
         public string DescribeEffect(float dps) => $"每秒受到{dps}点伤害";
 
-        public (StatBreakdownDisplay Dps, StatBreakdownDisplay Duration) CalculateStats(int resonantCellCount)
+        public (AdditiveValueBreakdown Dps, AdditiveValueBreakdown Duration) CalculateStats(int resonantCellCount)
         {
             return (
-                new StatBreakdownDisplay(StatLabel.BurnDamagePerSecond, baseDps, resonantCellCount * dpsPerResonantCell),
-                new StatBreakdownDisplay(StatLabel.BurnDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance)
+                new AdditiveValueBreakdown(baseDps, resonantCellCount * dpsPerResonantCell),
+                new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance)
             );
         }
 

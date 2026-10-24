@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -14,20 +14,20 @@ namespace Model.Buffs
         [SerializeField] private int baseActionSlowPercent;
         [SerializeField] private int actionSlowPercentPerResonantCell;
 
-        public (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AttackSlowPercent, StatBreakdownDisplay ActionSlowPercent) CalculateStats(int resonantCellCount)
+        public (AdditiveValueBreakdown Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AttackSlowPercent, AdditiveValueBreakdown ActionSlowPercent) CalculateStats(int resonantCellCount)
         {
             return (
-                new StatBreakdownDisplay(StatLabel.ChillDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance),
-                new StatBreakdownDisplay(StatLabel.MovementSpeedReductionPercent, baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
-                new StatBreakdownDisplay(StatLabel.AttackSpeedReductionPercent, baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
-                new StatBreakdownDisplay(StatLabel.ActionRateReductionPercent, baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
+                new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance),
+                new AdditiveValueBreakdown(baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
+                new AdditiveValueBreakdown(baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
+                new AdditiveValueBreakdown(baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
             );
         }
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"{stats.Duration}\n{stats.MoveSlowPercent}\n{stats.AttackSlowPercent}\n{stats.ActionSlowPercent}";
+            return $"{StatBreakdownFormatter.Format(StatLabel.ChillDuration, stats.Duration)}\n{StatBreakdownFormatter.Format(StatLabel.MovementSpeedReductionPercent, stats.MoveSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.AttackSpeedReductionPercent, stats.AttackSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.ActionRateReductionPercent, stats.ActionSlowPercent)}";
         }
 
         public string DescribeEffect(float duration, int moveSlowPercent, int attackSlowPercent, int actionSlowPercent)

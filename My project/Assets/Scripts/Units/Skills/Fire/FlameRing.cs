@@ -1,4 +1,5 @@
 using Model;
+using Presentation;
 using Model.Skills;
 using UnityEngine;
 
@@ -20,14 +21,9 @@ namespace Units.Skills
             public StatBreakdownDisplay AreaDuration;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         private FlameRingStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             return new FlameRingStats
             {
                 Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
@@ -40,7 +36,7 @@ namespace Units.Skills
             var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                ((FlameRingSkillConfig)Definition.Config).ProjectilePrefab.DescribeEffect(GetResonantCellCount()) + "\n" +
+                ((FlameRingSkillConfig)Definition.Config).ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n" +
                 $"{stats.Radius}\n";
         }
 
@@ -66,7 +62,7 @@ namespace Units.Skills
                 radius: stats.Radius.FinalValue,
                 sourceSkill: this,
                 duration: stats.AreaDuration.FinalValue,
-                resonantCellCount: GetResonantCellCount()
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             areaEffect.Activate();
         }

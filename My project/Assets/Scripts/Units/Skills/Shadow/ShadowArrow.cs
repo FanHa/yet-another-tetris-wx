@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Presentation;
 using Model.Skills;
 using UnityEngine;
 
@@ -22,14 +23,9 @@ namespace Units.Skills
             public StatBreakdownDisplay Damage;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         private ShadowArrowStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             return new ShadowArrowStats
             {
                 Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.Damage, resonantCellCount * Config.DamagePerResonantCell)
@@ -55,7 +51,7 @@ namespace Units.Skills
                 caster: Context.Unit,
                 target: targetEnemy,
                 sourceSkill: this,
-                resonantCellCount: GetResonantCellCount()
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             projectile.Activate();
         }
@@ -66,7 +62,7 @@ namespace Units.Skills
             return
                 DescriptionStatic() + ":\n" +
                 $"{stats.Damage}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount()) + "\n";
+                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
         }
 
         public static string DescriptionStatic() => "向最大生命值最低的敌人发射暗影箭,施加易伤Debuff并造成伤害";

@@ -1,4 +1,5 @@
 using Model;
+using Presentation;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -71,7 +72,7 @@ namespace Units.Skills
 
         private ThunderStrikeStats CalcStats()
         {
-            int electricCellCount = GetElectricCellCount();
+            int electricCellCount = Context.GetResonanceCount(Definition.Resonance);
             float energyDisruptionAmount =
                 Config.BaseEnergyDisruptionAmount + electricCellCount * Config.EnergyDisruptionAmountPerResonantCell;
 
@@ -82,9 +83,5 @@ namespace Units.Skills
             };
         }
 
-        private int GetElectricCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
     }
 }

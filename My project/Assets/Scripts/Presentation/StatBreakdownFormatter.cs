@@ -1,6 +1,7 @@
 using System;
+using Model;
 
-namespace Model
+namespace Presentation
 {
     public enum StatLabel
     {
@@ -112,6 +113,7 @@ namespace Model
                 case StatLabel.ActionRadius: return "作用半径";
                 case StatLabel.DashDamage: return "冲刺伤害";
                 case StatLabel.Damage: return "伤害";
+                case StatLabel.WindFieldDuration: return "风场持续时间";
                 default: throw new ArgumentOutOfRangeException(nameof(label), label, null);
             }
         }

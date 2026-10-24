@@ -1,4 +1,5 @@
 using Model;
+using Presentation;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Units.Skills
 
         private WildWindStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             return new WildWindStats
             {
                 Damage = new StatBreakdownDisplay(StatLabel.Damage, Config.Damage, resonantCellCount * Config.DamageAdditionPerResonantCell),
@@ -43,7 +44,7 @@ namespace Units.Skills
                 $"{stats.Damage}\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                SkillConfig.WildWindDebuffDefinition.DescribeEffect(GetResonantCellCount());
+                SkillConfig.WildWindDebuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "在自身周围制造一阵狂风, 击退敌人并造成伤害和减速Debuff.";
@@ -69,13 +70,10 @@ namespace Units.Skills
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
                 debuffDefinition: SkillConfig.WildWindDebuffDefinition,
-                resonantCellCount: GetResonantCellCount(),
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance),
                 sourceSkill: this // 传递技能引用
             );
             wildWind.Activate();
         }
-    private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-
-        
     }
 }

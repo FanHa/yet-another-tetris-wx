@@ -13,16 +13,11 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                SkillConfig.ShadowAttackBuffDefinition.DescribeEffect(GetResonantCellCount()) + "\n";
+                SkillConfig.ShadowAttackBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
         }
         public static string DescriptionStatic() => "攻击时附加易伤";
 
@@ -33,7 +28,7 @@ namespace Units.Skills
         {
             var buff = new Buffs.ShadowAttackBuff(
                 SkillConfig.ShadowAttackBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
             Context.AddBuff(buff);

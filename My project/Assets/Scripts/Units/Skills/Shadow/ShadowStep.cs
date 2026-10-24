@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Presentation;
 using Model.Buffs;
 using Model.Resonance;
 using Model.Skills;
@@ -20,14 +21,14 @@ namespace Units.Skills
 
         private struct ShadowStepStats
         {
-            public StatBreakdownDisplay VulnerabilityPercent;
+            public AdditiveValueBreakdown VulnerabilityPercent;
             public StatBreakdownDisplay Damage;
-            public StatBreakdownDisplay DebuffDuration;
+            public AdditiveValueBreakdown DebuffDuration;
         }
 
         private ShadowStepStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             var vulnerabilityStats = GetVulnerabilityDefinition().CalculateStats(resonantCellCount);
             return new ShadowStepStats
             {
@@ -39,11 +40,6 @@ namespace Units.Skills
                 ),
                 DebuffDuration = vulnerabilityStats.Duration
             };
-        }
-
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private Model.Buffs.VulnerabilityBuffDefinition GetVulnerabilityDefinition()
@@ -89,9 +85,9 @@ namespace Units.Skills
             var stats = CalcStats();
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.VulnerabilityPercent}\n" +
+                $"{StatBreakdownFormatter.Format(StatLabel.VulnerabilityPercent, stats.VulnerabilityPercent)}\n" +
                 $"{stats.Damage}\n" +
-                $"{stats.DebuffDuration}\n";
+                $"{StatBreakdownFormatter.Format(StatLabel.VulnerabilityDuration, stats.DebuffDuration)}\n";
         }
 
             public static string DescriptionStatic() => "闪现到最大生命值最低的敌人身后,施加易伤并造成伤害";

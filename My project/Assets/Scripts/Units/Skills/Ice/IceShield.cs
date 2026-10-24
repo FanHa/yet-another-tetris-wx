@@ -17,7 +17,7 @@ namespace Units.Skills
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((IceShieldSkillConfig)Definition.Config).IceShieldBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "获得一次性冰霜护盾，被攻击时反制攻击者，降低其移速、攻速和动作速率.";
@@ -33,16 +33,12 @@ namespace Units.Skills
             var config = (IceShieldSkillConfig)Definition.Config;
             var buff = new Buffs.IceShield(
                 config.IceShieldBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
 
             Context.AddBuff(buff);
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
     }
 }

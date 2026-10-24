@@ -1,4 +1,5 @@
 using Model;
+using Presentation;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Units.Skills
 
         private EnergyCurseStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
 
             return new EnergyCurseStats
             {
@@ -41,7 +42,7 @@ namespace Units.Skills
                 DescriptionStatic() + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.ZoneLifetime}\n" +
-                SkillConfig.EnergyCurseBuffDefinition.DescribeEffect(GetResonantCellCount());
+                SkillConfig.EnergyCurseBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "死亡时在当前位置生成诅咒区域，降低区域内敌人的能量回复速度。";
@@ -64,7 +65,7 @@ namespace Units.Skills
                 caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.ZoneLifetime.FinalValue,
-                resonantCellCount: GetResonantCellCount(),
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance),
                 sourceSkill: this,
                 energyCurseBuffDefinition: SkillConfig.EnergyCurseBuffDefinition
             );
@@ -75,8 +76,6 @@ namespace Units.Skills
         {
             ClearOwnedZone();
         }
-
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         private void ClearOwnedZone()
         {

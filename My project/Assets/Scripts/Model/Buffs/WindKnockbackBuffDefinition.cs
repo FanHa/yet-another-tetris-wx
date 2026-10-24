@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -10,10 +10,10 @@ namespace Model.Buffs
         [SerializeField] private float knockbackDistancePerResonantCell;
         [SerializeField] private float maxKnockbackDistance;
 
-        public (StatBreakdownDisplay KnockbackDistance, StatBreakdownDisplay MaxKnockbackDistance, string Duration) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown KnockbackDistance, AdditiveValueBreakdown MaxKnockbackDistance, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatBreakdownDisplay(StatLabel.KnockbackDistance, baseKnockbackDistance, resonantCellCount * knockbackDistancePerResonantCell),
-                new StatBreakdownDisplay(StatLabel.MaxKnockbackDistance, maxKnockbackDistance),
+                new AdditiveValueBreakdown(baseKnockbackDistance, resonantCellCount * knockbackDistancePerResonantCell),
+                new AdditiveValueBreakdown(maxKnockbackDistance),
                 BaseDuration.ToDisplayString("轻风击退持续时间")
             );
 
@@ -21,7 +21,7 @@ namespace Model.Buffs
         {
             var stats = CalculateStats(resonantCellCount);
             float distance = Mathf.Min(stats.KnockbackDistance.FinalValue, stats.MaxKnockbackDistance.FinalValue);
-            return $"普攻命中时将目标击退{distance:F2}（最多{stats.MaxKnockbackDistance.FinalValue:F2}）\n{stats.KnockbackDistance}\n{stats.MaxKnockbackDistance}\n{stats.Duration}";
+            return $"普攻命中时将目标击退{distance:F2}（最多{stats.MaxKnockbackDistance.FinalValue:F2}）\n{StatBreakdownFormatter.Format(StatLabel.KnockbackDistance, stats.KnockbackDistance)}\n{StatBreakdownFormatter.Format(StatLabel.MaxKnockbackDistance, stats.MaxKnockbackDistance)}\n{stats.Duration}";
         }
 
 #if UNITY_EDITOR

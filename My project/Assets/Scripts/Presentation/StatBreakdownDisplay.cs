@@ -1,4 +1,6 @@
-namespace Model
+using Model;
+
+namespace Presentation
 {
     public sealed class StatBreakdownDisplay
     {

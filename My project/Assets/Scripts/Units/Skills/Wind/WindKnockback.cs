@@ -13,16 +13,11 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "普通攻击命中时对目标造成小幅击退";
@@ -35,7 +30,7 @@ namespace Units.Skills
         {
             Context.AddBuff(new Buffs.WindKnockbackBuff(
                 ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }

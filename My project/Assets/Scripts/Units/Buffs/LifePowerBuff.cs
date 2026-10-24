@@ -18,7 +18,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => lifePowerDefinition.DisplayName;
-        public override string Description() => lifePowerDefinition.DescribeEffect(atkBoost, resonantCellCount);
+        public override string Description() => lifePowerDefinition.DescribeAppliedEffect(atkBoost, resonantCellCount);
 
         // 攻击时触发，增加伤害
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

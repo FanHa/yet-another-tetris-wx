@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -10,16 +10,16 @@ namespace Model.Buffs
         [SerializeField] private float attackReductionPerResonantCell;
         [SerializeField] private float maxAttackReductionPercent;
 
-        public (string Duration, StatBreakdownDisplay AttackReductionPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, AdditiveValueBreakdown AttackReductionPercent) CalculateStats(int resonantCellCount) =>
             (
                 BaseDuration.ToDisplayString("诅咒持续"),
-                new StatBreakdownDisplay(StatLabel.AttackReductionPercent, baseAttackReductionPercent, resonantCellCount * attackReductionPerResonantCell)
+                new AdditiveValueBreakdown(baseAttackReductionPercent, resonantCellCount * attackReductionPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"{Description}\n{stats.Duration}\n{stats.AttackReductionPercent}";
+            return $"{Description}\n{stats.Duration}\n{StatBreakdownFormatter.Format(StatLabel.AttackReductionPercent, stats.AttackReductionPercent)}";
         }
 
 #if UNITY_EDITOR

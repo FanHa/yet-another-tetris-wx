@@ -12,17 +12,11 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
-
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
         public static string DescriptionStatic() => "攻击时附加火焰伤害";
 
@@ -37,7 +31,7 @@ namespace Units.Skills
             var config = (FlameInjectSkillConfig)Definition.Config;
             var buff = new Units.Buffs.FlameInject(
                 config.FlameInjectBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new BuffSource(Context.Unit, this)
             );
             Context.AddBuff(buff);

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -9,16 +9,16 @@ namespace Model.Buffs
         [SerializeField] private float baseAttackRangeBonus;
         [SerializeField] private float attackRangePerResonantCell;
 
-        public (StatBreakdownDisplay AttackRangeBonus, string Duration) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown AttackRangeBonus, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatBreakdownDisplay(StatLabel.AttackRangeIncrease, baseAttackRangeBonus, resonantCellCount * attackRangePerResonantCell),
+                new AdditiveValueBreakdown(baseAttackRangeBonus, resonantCellCount * attackRangePerResonantCell),
                 BaseDuration.ToDisplayString("风形态持续时间")
             );
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"攻击时额外造成等于当前最终攻击距离的伤害。\n{stats.AttackRangeBonus}\n{stats.Duration}";
+            return $"攻击时额外造成等于当前最终攻击距离的伤害。\n{StatBreakdownFormatter.Format(StatLabel.AttackRangeIncrease, stats.AttackRangeBonus)}\n{stats.Duration}";
         }
 
 #if UNITY_EDITOR

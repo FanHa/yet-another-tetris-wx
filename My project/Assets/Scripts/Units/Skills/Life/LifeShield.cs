@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Presentation;
 using Model.Tetri;
 using Model.Skills;
 using UnityEngine;
@@ -27,8 +28,6 @@ namespace Units.Skills
                 SkillConfig.LifeShieldBuffDefinition.BaseDuration.ToDisplayString("护盾持续时间")
             );
 
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-
         protected override bool PrepareCastCore()
         {
             cachedTarget = null;
@@ -45,7 +44,7 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            var stats = CalcStats(GetResonantCellCount());
+            var stats = CalcStats(Context.GetResonanceCount(Definition.Resonance));
             float lifeCost = Context.Attributes.CurrentHealth * (stats.LifeCostPercent.FinalValue / 100f);
             float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.FinalValue / 100f);
 
@@ -74,7 +73,7 @@ namespace Units.Skills
 
         public override string Description()
         {
-            var stats = CalcStats(GetResonantCellCount());
+            var stats = CalcStats(Context.GetResonanceCount(Definition.Resonance));
             return
                 DescriptionStatic() + "\n" +
                 $"{stats.LifeCostPercent}\n{stats.ShieldMultiplierPercent}\n{stats.Duration}";

@@ -20,7 +20,7 @@ namespace Units.Buffs
         }
 
         private WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source,
-            (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AtkReducePercent) stats)
+            (AdditiveValueBreakdown Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) stats)
             : base(definition, BuffDuration.ForSeconds(stats.Duration.FinalValue), source.SourceUnit, source.SourceSkill)
         {
             wildWindDefinition = definition;

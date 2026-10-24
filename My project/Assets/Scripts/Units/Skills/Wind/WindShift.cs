@@ -12,15 +12,11 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
  
         public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离,获得攻击距离伤害加成";
@@ -35,7 +31,7 @@ namespace Units.Skills
         {
             Context.AddBuff(new Buffs.WindShiftBuff(
                 ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }

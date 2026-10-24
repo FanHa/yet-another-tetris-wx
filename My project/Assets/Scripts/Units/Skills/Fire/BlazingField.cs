@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Model;
+using Presentation;
 using Model.Skills;
 using UnityEngine;
 
@@ -25,14 +26,9 @@ namespace Units.Skills
             public StatBreakdownDisplay Duration;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         private BlazingFieldStats CalcStats()
         {
-            int resonantCellCount = GetResonantCellCount();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             return new BlazingFieldStats
             {
                 Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
@@ -66,7 +62,7 @@ namespace Units.Skills
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 sourceSkill: this,
-                resonantCellCount: GetResonantCellCount()
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             effect.Activate();
         }
@@ -92,7 +88,7 @@ namespace Units.Skills
                 DescriptionStatic() + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
+                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "制造一片燃烧区域, 对敌人造成伤害.";

@@ -1,5 +1,6 @@
 using System.Linq;
 using Model;
+using Presentation;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace Units.Skills
             var config = (IcyCageSkillConfig)Definition.Config;
             var freezeBuff = new Buffs.Freeze(
                 config.FreezeBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
             targetEnemy.AddBuff(freezeBuff);
@@ -46,7 +47,7 @@ namespace Units.Skills
         public override string Description()
         {
             var stats = CalcStats();
-            return $"对攻击范围内一个敌人施加冻结效果：\n{stats}";
+            return $"对攻击范围内一个敌人施加冻结效果：\n{StatBreakdownFormatter.Format(StatLabel.FreezeDuration, stats)}";
         }
 
         public static string DescriptionStatic() => "对攻击范围内一个敌人施加冻结效果";
@@ -56,12 +57,10 @@ namespace Units.Skills
             return NameStatic();
         }
         public static string NameStatic() => "冰牢";
-        private StatBreakdownDisplay CalcStats()
+        private AdditiveValueBreakdown CalcStats()
         {
-            return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(GetResonantCellCount());
+            return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
         }
-
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
     }
 }

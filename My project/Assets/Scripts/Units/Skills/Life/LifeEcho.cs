@@ -15,12 +15,10 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命回响";
 
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-
         public override string Description()
         {
             return DescriptionStatic() + ":\n" +
-                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
         public static string DescriptionStatic() => "反弹受到的伤害";
 
@@ -28,7 +26,7 @@ namespace Units.Skills
         {
             Context.AddBuff(new Units.Buffs.LifeEchoBuff(
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Units.Buffs.BuffSource(Context.Unit, this)
             ));
         }

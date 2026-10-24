@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Model;
+using Presentation;
 using Model.Skills;
 using Model.Resonance;
 using UnityEngine;
@@ -80,7 +81,7 @@ namespace Units.Skills
 
         private ElectricFieldStats CalculateStats()
         {
-            int resonantCellCount = Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
 
             return new ElectricFieldStats
             {

@@ -1,4 +1,5 @@
 using Model;
+using Presentation;
 using Model.Resonance;
 using Model.Skills;
 using UnityEngine;
@@ -56,7 +57,7 @@ namespace Units.Skills
 
         private StatBreakdownDisplay CalcInitialDamage()
         {
-            int electricCellCount = GetElectricCellCount();
+            int electricCellCount = Context.GetResonanceCount(Definition.Resonance);
 
             return new StatBreakdownDisplay(
                 StatLabel.FirstChainDamage,
@@ -68,17 +69,7 @@ namespace Units.Skills
         private float CalcEnergyDisruptionAmount()
         {
             return Config.BaseEnergyDisruptionAmount
-                     + GetElectricCellCount() * Config.EnergyDisruptionAmountPerResonantCell;
-        }
-
-        private int GetElectricCellCount()
-        {
-            if (Context == null)
-            {
-                return 0;
-            }
-
-            return Context.GetResonanceCount(Definition.Resonance);
+                     + Context.GetResonanceCount(Definition.Resonance) * Config.EnergyDisruptionAmountPerResonantCell;
         }
 
         public override string Name()

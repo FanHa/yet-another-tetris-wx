@@ -16,11 +16,6 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-        
         protected override bool PrepareCastCore()
         {
             targetEnemy = null;
@@ -44,7 +39,7 @@ namespace Units.Skills
                 caster: Context.Unit,
                 target: targetEnemy,
                 sourceSkill: this,
-                resonantCellCount: GetResonantCellCount()
+                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             fireball.Activate();
             targetEnemy = null; // 用完清空
@@ -54,7 +49,7 @@ namespace Units.Skills
         {
             return
                 DescriptionStatic() + ":\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(GetResonantCellCount());
+                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "向攻击范围内一个敌人发射火球，造成灼烧。";

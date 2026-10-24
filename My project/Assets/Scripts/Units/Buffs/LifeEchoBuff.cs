@@ -13,7 +13,7 @@ namespace Units.Buffs
         {
             lifeEchoDefinition = definition;
             this.resonantCellCount = resonantCellCount;
-            reflectPercent = definition.CalculateStats(resonantCellCount).ReflectPercent.FinalValue;
+            reflectPercent = definition.CalculateReflectPercent(resonantCellCount).FinalValue;
         }
 
         public override string Name() => lifeEchoDefinition.DisplayName;

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -9,23 +9,24 @@ namespace Model.Buffs
         [SerializeField] private float healthToAtkPercent;
         [SerializeField] private float healthToAtkPercentPerResonantCell;
 
-        public (StatBreakdownDisplay HealthToAtkPercent, string Duration) CalculateStats(int resonantCellCount) =>
-            (
-            new StatBreakdownDisplay(StatLabel.MaxHealthConversionPercent, healthToAtkPercent, resonantCellCount * healthToAtkPercentPerResonantCell),
-                BaseDuration.ToDisplayString("效果持续时间")
-            );
+        public AdditiveValueBreakdown CalculateHealthToAttackPercent(int resonantCellCount) =>
+            new(healthToAtkPercent, resonantCellCount * healthToAtkPercentPerResonantCell);
 
         public float CalculateExtraDamage(float casterMaxHealth, int resonantCellCount) =>
-            casterMaxHealth * (CalculateStats(resonantCellCount).HealthToAtkPercent.FinalValue / 100f);
+            casterMaxHealth * (CalculateHealthToAttackPercent(resonantCellCount).FinalValue / 100f);
 
         public string DescribeEffect(int resonantCellCount)
         {
-            var stats = CalculateStats(resonantCellCount);
-            return $"按施法时施法者的最大生命值计算攻击命中附加伤害，不消耗生命值。\n{stats.HealthToAtkPercent}\n{stats.Duration}";
+            var healthConversionPercent = CalculateHealthToAttackPercent(resonantCellCount);
+            return
+                "按施法时施法者的最大生命值计算攻击命中附加伤害，不消耗生命值。\n" +
+                StatBreakdownFormatter.Format(StatLabel.MaxHealthConversionPercent, healthConversionPercent) + "\n" +
+                BaseDuration.ToDisplayString("效果持续时间");
         }
 
-        public string DescribeEffect(float extraDamage, int resonantCellCount) =>
-            $"{DescribeEffect(resonantCellCount)}\n{new StatBreakdownDisplay(StatLabel.AttackHitExtraDamage, extraDamage)}";
+        public string DescribeAppliedEffect(float extraDamage, int resonantCellCount) =>
+            DescribeEffect(resonantCellCount) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.AttackHitExtraDamage, new AdditiveValueBreakdown(extraDamage));
 
 #if UNITY_EDITOR
         protected override void OnValidate()

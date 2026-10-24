@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -10,17 +10,17 @@ namespace Model.Buffs
         [SerializeField] private float extraDamagePerResonantCell;
         [SerializeField] private float percentSlowMultiplier;
 
-        public (StatBreakdownDisplay BaseExtraDamage, StatBreakdownDisplay PercentSlowMultiplier, string Duration) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown BaseExtraDamage, AdditiveValueBreakdown PercentSlowMultiplier, string Duration) CalculateStats(int resonantCellCount) =>
             (
-                new StatBreakdownDisplay(StatLabel.BaseExtraDamage, baseExtraDamage, resonantCellCount * extraDamagePerResonantCell),
-                new StatBreakdownDisplay(StatLabel.SlowBasedDamageMultiplier, percentSlowMultiplier),
+                new AdditiveValueBreakdown(baseExtraDamage, resonantCellCount * extraDamagePerResonantCell),
+                new AdditiveValueBreakdown(percentSlowMultiplier),
                 BaseDuration.ToDisplayString("破冰持续时间")
             );
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"命中时移除目标全部 Chilled。额外伤害 = 基础额外伤害 + 减速百分比伤害倍率 * 减速百分比\n{stats.BaseExtraDamage}\n{stats.PercentSlowMultiplier}\n{stats.Duration}";
+            return $"命中时移除目标全部 Chilled。额外伤害 = 基础额外伤害 + 减速百分比伤害倍率 * 减速百分比\n{StatBreakdownFormatter.Format(StatLabel.BaseExtraDamage, stats.BaseExtraDamage)}\n{StatBreakdownFormatter.Format(StatLabel.SlowBasedDamageMultiplier, stats.PercentSlowMultiplier)}\n{stats.Duration}";
         }
 
 #if UNITY_EDITOR

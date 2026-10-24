@@ -15,15 +15,9 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-
         protected override bool PrepareCastCore()
         {
-            cachedTarget = null;
-            cachedTarget = Context.FindRandomAllyIncludingSelf();
-            if (cachedTarget == null)
-                return false;
-
+            cachedTarget = Context.FindRandomAlly() ?? Context.Unit;
             return true;
         }
 
@@ -35,7 +29,7 @@ namespace Units.Skills
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
                 Context.Attributes.MaxHealth.finalValue,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Units.Buffs.BuffSource(Context.Unit, this)
             ));
             cachedTarget = null;
@@ -45,7 +39,7 @@ namespace Units.Skills
         {
             return
                 DescriptionStatic() + "\n" +
-                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition.DescribeEffect(GetResonantCellCount());
+                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "根据自身最大生命值，为一个友方单位附加攻击命中伤害";

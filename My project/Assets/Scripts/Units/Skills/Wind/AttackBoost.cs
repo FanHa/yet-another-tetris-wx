@@ -16,16 +16,11 @@ namespace Units.Skills
             this.RequiredEnergy = config.RequiredEnergy;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         public override string Description()
         {
             return
                 DescriptionStatic() + ":\n" +
-                SkillConfig.AttackBoostBuffDefinition.DescribeEffect(GetResonantCellCount());
+                SkillConfig.AttackBoostBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "提升攻击速度";
@@ -40,7 +35,7 @@ namespace Units.Skills
         {
             var buff = new Buffs.AttackBoostBuff(
                 SkillConfig.AttackBoostBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
 

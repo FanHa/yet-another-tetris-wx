@@ -14,13 +14,11 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命强化";
 
-        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-
         public override string Description() =>
             DescriptionStatic() + "\n" +
             ((LifeFortitudeSkillConfig)Definition.Config).BuffDefinition.DescribeEffect(
                 Config.MaxHealthIncrease,
-                GetResonantCellCount()
+                Context.GetResonanceCount(Definition.Resonance)
             );
 
         public static string DescriptionStatic() => "被动：提升自身最大生命值";
@@ -31,7 +29,7 @@ namespace Units.Skills
             Context.AddBuff(new Buffs.LifeFortitudeBuff(
                 buffDefinition,
                 Config.MaxHealthIncrease,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }

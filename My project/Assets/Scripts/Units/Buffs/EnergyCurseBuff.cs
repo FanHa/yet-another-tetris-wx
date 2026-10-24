@@ -17,7 +17,7 @@ namespace Units.Buffs
         }
 
         private EnergyCurseBuff(EnergyCurseBuffDefinition definition, int resonantCellCount, BuffSource source, string stackId,
-            (string Duration, StatBreakdownDisplay EnergyRegenReductionPercent) stats)
+            (string Duration, AdditiveValueBreakdown EnergyRegenReductionPercent) stats)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             energyCurseDefinition = definition;

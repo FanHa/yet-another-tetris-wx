@@ -15,15 +15,10 @@ namespace Units.Skills
             Config = config;
         }
 
-        private int GetResonantCellCount()
-        {
-            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
-        }
-
         public override string Description()
         {
             return DescriptionStatic() + ":\n" +
-                   ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition.DescribeEffect(GetResonantCellCount());
+                   ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
         public static string DescriptionStatic() => "攻击时若目标带有Chilled则引爆并清除该效果，按减速效果造成额外伤害";
@@ -34,7 +29,7 @@ namespace Units.Skills
         {
             Context.AddBuff(new Buffs.IceBreaker(
                 ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition,
-                GetResonantCellCount(),
+                Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }

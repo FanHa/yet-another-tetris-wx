@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -12,17 +12,17 @@ namespace Model.Buffs
         [SerializeField] private int baseAtkReducePercent;
         [SerializeField] private int atkReducePercentPerResonantCell;
 
-        public (StatBreakdownDisplay Duration, StatBreakdownDisplay MoveSlowPercent, StatBreakdownDisplay AtkReducePercent) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) CalculateStats(int resonantCellCount) =>
             (
-                new StatBreakdownDisplay(StatLabel.WildWindDuration, BaseDuration.Seconds, resonantCellCount * durationPerResonance),
-                new StatBreakdownDisplay(StatLabel.WildWindMovementSpeedReductionPercent, baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
-                new StatBreakdownDisplay(StatLabel.WildWindAttackReductionPercent, baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
+                new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance),
+                new AdditiveValueBreakdown(baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
+                new AdditiveValueBreakdown(baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"{stats.Duration}\n{stats.MoveSlowPercent}\n{stats.AtkReducePercent}";
+            return $"{StatBreakdownFormatter.Format(StatLabel.WildWindDuration, stats.Duration)}\n{StatBreakdownFormatter.Format(StatLabel.WildWindMovementSpeedReductionPercent, stats.MoveSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.WildWindAttackReductionPercent, stats.AtkReducePercent)}";
         }
 
 #if UNITY_EDITOR

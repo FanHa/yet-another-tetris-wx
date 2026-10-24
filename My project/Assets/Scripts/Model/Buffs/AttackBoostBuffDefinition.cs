@@ -1,5 +1,5 @@
 using UnityEngine;
-using Units.Skills;
+using Presentation;
 
 namespace Model.Buffs
 {
@@ -9,16 +9,16 @@ namespace Model.Buffs
         [SerializeField] private float baseAtkSpeedPercent;
         [SerializeField] private float atkSpeedPercentPerResonantCell;
 
-        public (string Duration, StatBreakdownDisplay AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
+        public (string Duration, AdditiveValueBreakdown AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
             (
                 BaseDuration.ToDisplayString("持续时间"),
-                new StatBreakdownDisplay(StatLabel.AttackSpeedIncreasePercent, baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
+                new AdditiveValueBreakdown(baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
             );
 
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = CalculateStats(resonantCellCount);
-            return $"{stats.Duration}\n{stats.AtkSpeedPercent}";
+            return $"{stats.Duration}\n{StatBreakdownFormatter.Format(StatLabel.AttackSpeedIncreasePercent, stats.AtkSpeedPercent)}";
         }
 
 #if UNITY_EDITOR
