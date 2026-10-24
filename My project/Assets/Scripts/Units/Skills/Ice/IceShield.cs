@@ -34,15 +34,15 @@ namespace Units.Skills
             var buff = new Buffs.IceShield(
                 config.IceShieldBuffDefinition,
                 GetResonantCellCount(),
-                new Buffs.BuffSource(Owner.SelfUnit, this)
+                new Buffs.BuffSource(Context.Unit, this)
             );
 
-            Owner.AddBuff(buff);
+            Context.AddBuff(buff);
         }
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
     }
 }

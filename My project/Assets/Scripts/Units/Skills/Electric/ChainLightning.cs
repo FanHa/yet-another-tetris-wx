@@ -27,7 +27,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             initialTarget = null;
-            initialTarget = Owner.FindClosestEnemyInRange(Config.Range);
+            initialTarget = Context.FindClosestEnemyInRange(Config.Range);
             return initialTarget != null;
         }
 
@@ -35,13 +35,13 @@ namespace Units.Skills
         {
             Projectiles.ChainLightning projectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
             StatBreakdownDisplay initialDamage = CalcInitialDamage();
             float energyDisruptionAmount = CalcEnergyDisruptionAmount();
             projectile.Initialize(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 initialTarget: initialTarget,
                 baseDamage: initialDamage.FinalValue,
                 damageIncreasePercentage: Config.DamageIncreasePercentage,
@@ -73,12 +73,12 @@ namespace Units.Skills
 
         private int GetElectricCellCount()
         {
-            if (Owner == null)
+            if (Context == null)
             {
                 return 0;
             }
 
-            return Owner.GetResonanceCount(Definition.Resonance);
+            return Context.GetResonanceCount(Definition.Resonance);
         }
 
         public override string Name()

@@ -21,7 +21,7 @@ namespace Units.Skills
         {
             cachedTarget = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Context.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
             cachedTarget = found;
 
@@ -34,11 +34,11 @@ namespace Units.Skills
             // 实例化雪球投射物
             Units.Projectiles.Snowball snowBall = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
-                Owner.projectileSpawnPoint.position,
+                Context.ProjectileSpawnPoint.position,
                 Quaternion.identity
             );
             snowBall.Init(
-                Owner.SelfUnit,
+                Context.Unit,
                 cachedTarget,
                 this,
                 GetResonantCellCount()
@@ -64,7 +64,7 @@ namespace Units.Skills
         
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
     }
 }

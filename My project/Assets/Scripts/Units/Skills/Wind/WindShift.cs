@@ -14,7 +14,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
         public override string Description()
         {
@@ -33,10 +33,10 @@ namespace Units.Skills
     
         public override void OnPassiveEffectsApplication()
         {
-            Owner.AddBuff(new Buffs.WindShiftBuff(
+            Context.AddBuff(new Buffs.WindShiftBuff(
                 ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
                 GetResonantCellCount(),
-                new Buffs.BuffSource(Owner.SelfUnit, this)
+                new Buffs.BuffSource(Context.Unit, this)
             ));
         }
         

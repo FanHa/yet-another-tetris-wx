@@ -105,7 +105,7 @@ namespace Units.Skills
         {
             if (skills.Any(skill => skill.GetType() == newSkill.GetType()))
                 return;
-            newSkill.Owner = context;
+            newSkill.Context = context;
             skills.Add(newSkill);
             if (newSkill is ActiveSkill activeSkill)
             {
@@ -206,7 +206,7 @@ namespace Units.Skills
         {
             if (readyQueue.Count == 0)
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, null, SkillCastFailureReason.NoPendingSkill));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.Unit, null, SkillCastFailureReason.NoPendingSkill));
                 return SkillCastResult.Failure(null, SkillCastFailureReason.NoPendingSkill);
             }
 
@@ -216,13 +216,13 @@ namespace Units.Skills
 
             if (!skill.HasEnoughEnergy)
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.SelfUnit, skill, SkillCastFailureReason.PrerequisiteNotMet));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.Unit, skill, SkillCastFailureReason.PrerequisiteNotMet));
                 return SkillCastResult.Failure(skill, SkillCastFailureReason.PrerequisiteNotMet);
             }
 
-            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(context.SelfUnit, skill));
+            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(context.Unit, skill));
             skill.Execute();
-            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.SelfUnit, skill));
+            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.Unit, skill));
             return SkillCastResult.Success(skill);
         }
 

@@ -10,24 +10,23 @@ namespace Units.Skills
 {
     public interface ISkillContext
     {
-        Unit SelfUnit { get; }
+        Unit Unit { get; }
 
         Attributes Attributes { get; }
         int GetResonanceCount(ResonanceType type);
 
-        Transform transform { get; }
-        string name { get; }
-        Transform projectileSpawnPoint { get; }
-
-        Coroutine StartCoroutine(System.Collections.IEnumerator routine);
+        Transform Transform { get; }
+        string Name { get; }
+        Transform ProjectileSpawnPoint { get; }
 
         IReadOnlyList<Unit> GetActiveEnemies();
-        List<Unit> FindEnemiesInRange(float range);
-        Unit FindRandomAlly(float range, bool includeSelf = false);
+        IReadOnlyList<Unit> FindEnemiesInRange(float range);
+        Unit FindRandomAlly();
+        Unit FindRandomAllyIncludingSelf();
+        Unit FindRandomAllyInRange(float range);
+        Unit FindRandomAllyInRangeIncludingSelf(float range);
         Unit FindClosestEnemyInRange(float range);
         bool TryGetClosestEnemyInAttackRange(out Unit target);
-        bool TryGetClosestEnemy(out Unit target);
-        bool TryGetClosestAlly(out Unit target);
 
         void SetMoveBehaviorMode(Unit.MoveBehaviorMode mode);
         void Teleport(Vector3 position);
@@ -42,7 +41,7 @@ namespace Units.Skills
         public abstract string Description();
 
         public SkillDefinition Definition { get; internal set; }
-        public ISkillContext Owner { get; set; } // 技能的拥有者
+        public ISkillContext Context { get; set; } // 技能的拥有者
 
         public virtual void OnActivate() { }
         public virtual void OnDeactivate() { }

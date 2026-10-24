@@ -14,7 +14,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命强化";
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         public override string Description() =>
             DescriptionStatic() + "\n" +
@@ -28,11 +28,11 @@ namespace Units.Skills
         public override void OnPassiveEffectsApplication()
         {
             var buffDefinition = ((LifeFortitudeSkillConfig)Definition.Config).BuffDefinition;
-            Owner.AddBuff(new Buffs.LifeFortitudeBuff(
+            Context.AddBuff(new Buffs.LifeFortitudeBuff(
                 buffDefinition,
                 Config.MaxHealthIncrease,
                 GetResonantCellCount(),
-                new Buffs.BuffSource(Owner.SelfUnit, this)
+                new Buffs.BuffSource(Context.Unit, this)
             ));
         }
     }

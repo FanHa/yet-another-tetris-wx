@@ -26,7 +26,7 @@ namespace Units.Projectiles
 
         protected override IEnumerable<Unit> FindTargetsInArea()
         {
-            List<Unit> enemies = UnitManager.FindEnemiesInRangeAtPosition(
+            IReadOnlyList<Unit> enemies = UnitManager.FindEnemiesInRangeAtPosition(
                 SourceUnit.faction,
                 (Vector2)transform.position,
                 Radius);

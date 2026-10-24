@@ -174,7 +174,7 @@ namespace Controller
             return factionA.Concat(factionB).Where(unit => unit != null && unit.IsActive).ToArray();
         }
 
-        public List<Unit> FindActiveUnitsInRange(Unit.Faction faction, Vector2 center, float range)
+        public IReadOnlyList<Unit> FindActiveUnitsInRange(Unit.Faction faction, Vector2 center, float range)
         {
             float rangeSquared = range * range;
             return GetFactionUnits(faction)
@@ -183,19 +183,49 @@ namespace Controller
                 .ToList();
         }
 
-        public List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf = false)
+        private IEnumerable<Unit> GetEligibleAllies(Unit self, bool includeSelf)
         {
             var list = self.faction == Unit.Faction.FactionA ? factionA : factionB;
-            float r2 = range * range;
-            Vector2 selfPos = self.transform.position;
-
             return list
-                .Where(u => u != null && u.IsActive && (includeSelf || u != self))
-                .Where(u => ((Vector2)u.transform.position - selfPos).sqrMagnitude <= r2)
+                .Where(u => u != null && u.IsActive && (includeSelf || u != self));
+        }
+
+        private List<Unit> FindAlliesInRange(Unit self, float range, bool includeSelf)
+        {
+            float rangeSquared = range * range;
+            Vector2 selfPosition = self.transform.position;
+            return GetEligibleAllies(self, includeSelf)
+                .Where(unit => ((Vector2)unit.transform.position - selfPosition).sqrMagnitude <= rangeSquared)
                 .ToList();
         }
 
-        public List<Unit> FindEnemiesInRange(Unit self, float range)
+        private static Unit FindRandomUnit(IReadOnlyList<Unit> candidates)
+        {
+            if (candidates.Count == 0) return null;
+            return candidates[UnityEngine.Random.Range(0, candidates.Count)];
+        }
+
+        public Unit FindRandomAlly(Unit self)
+        {
+            return FindRandomUnit(GetEligibleAllies(self, includeSelf: false).ToList());
+        }
+
+        public Unit FindRandomAllyIncludingSelf(Unit self)
+        {
+            return FindRandomUnit(GetEligibleAllies(self, includeSelf: true).ToList());
+        }
+
+        public Unit FindRandomAllyInRange(Unit self, float range)
+        {
+            return FindRandomUnit(FindAlliesInRange(self, range, includeSelf: false));
+        }
+
+        public Unit FindRandomAllyInRangeIncludingSelf(Unit self, float range)
+        {
+            return FindRandomUnit(FindAlliesInRange(self, range, includeSelf: true));
+        }
+
+        public IReadOnlyList<Unit> FindEnemiesInRange(Unit self, float range)
         {
             return FindEnemiesInRangeAtPosition(self.faction, self.transform.position, range);
         }
@@ -220,13 +250,6 @@ namespace Controller
                 .FirstOrDefault();
         }
 
-
-        public Unit FindRandomAlly(Unit self, float range, bool includeSelf = false)
-        {
-            var allies = FindAlliesInRange(self, range, includeSelf);
-            if (allies.Count == 0) return null;
-            return allies[UnityEngine.Random.Range(0, allies.Count)];
-        }
 
         public Unit FindClosestEnemy(Unit self)
         {
@@ -265,7 +288,7 @@ namespace Controller
             return closestUnit;
         }
 
-        public List<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
+        public IReadOnlyList<Unit> FindEnemiesInRangeAtPosition(Unit.Faction selfFaction, Vector2 center, float range)
         {
             Unit.Faction enemyFaction = selfFaction == Unit.Faction.FactionA ? Unit.Faction.FactionB : Unit.Faction.FactionA;
             return FindActiveUnitsInRange(enemyFaction, center, range);

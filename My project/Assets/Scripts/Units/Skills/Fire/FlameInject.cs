@@ -14,7 +14,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
 
@@ -38,9 +38,9 @@ namespace Units.Skills
             var buff = new Units.Buffs.FlameInject(
                 config.FlameInjectBuffDefinition,
                 GetResonantCellCount(),
-                new BuffSource(Owner.SelfUnit, this)
+                new BuffSource(Context.Unit, this)
             );
-            Owner.AddBuff(buff);
+            Context.AddBuff(buff);
         }
 
     }

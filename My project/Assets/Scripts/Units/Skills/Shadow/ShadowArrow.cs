@@ -24,7 +24,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private ShadowArrowStats CalcStats()
@@ -38,7 +38,7 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             // 查找最大生命值最低的敌人
-            Unit targetEnemy = Owner.GetActiveEnemies()
+            Unit targetEnemy = Context.GetActiveEnemies()
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)
@@ -47,12 +47,12 @@ namespace Units.Skills
             // 创建并发射暗影箭
             var projectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
 
             projectile.Init(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 target: targetEnemy,
                 sourceSkill: this,
                 resonantCellCount: GetResonantCellCount()

@@ -27,16 +27,13 @@ namespace Units.Skills
                 SkillConfig.LifeShieldBuffDefinition.BaseDuration.ToDisplayString("护盾持续时间")
             );
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         protected override bool PrepareCastCore()
         {
             cachedTarget = null;
             // 找到友方目标（不包括自己）
-                cachedTarget = Owner.FindRandomAlly(
-                range: float.MaxValue,
-                includeSelf: false
-            );
+            cachedTarget = Context.FindRandomAlly();
             if (cachedTarget == null)
                 return false;
 
@@ -49,28 +46,28 @@ namespace Units.Skills
             return;
 
             var stats = CalcStats(GetResonantCellCount());
-            float lifeCost = Owner.Attributes.CurrentHealth * (stats.LifeCostPercent.FinalValue / 100f);
+            float lifeCost = Context.Attributes.CurrentHealth * (stats.LifeCostPercent.FinalValue / 100f);
             float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.FinalValue / 100f);
 
             var buff = new Units.Buffs.LifeShieldBuff(
                 SkillConfig.LifeShieldBuffDefinition,
                 shieldValue,
                 SkillConfig.LifeShieldBuffDefinition.BaseDuration,
-                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
+                new Units.Buffs.BuffSource(Context.Unit, this)
             );
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
-            projectile.Init(Owner.SelfUnit, cachedTarget, buff);
+            projectile.Init(Context.Unit, cachedTarget, buff);
             projectile.Activate();
 
             var damage = new Damages.Damage(lifeCost, Damages.DamageType.Skill);
-            damage.SetSourceUnit(Owner.SelfUnit);
-            damage.SetTargetUnit(Owner.SelfUnit);
+            damage.SetSourceUnit(Context.Unit);
+            damage.SetTargetUnit(Context.Unit);
             damage.SetSourceLabel(Name());
-            Owner.SelfUnit.TakeDamage(damage);
+            Context.Unit.TakeDamage(damage);
 
             cachedTarget = null;
         }

@@ -18,7 +18,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         public override string Description()
@@ -41,15 +41,15 @@ namespace Units.Skills
             var buff = new Buffs.AttackBoostBuff(
                 SkillConfig.AttackBoostBuffDefinition,
                 GetResonantCellCount(),
-                new Buffs.BuffSource(Owner.SelfUnit, this)
+                new Buffs.BuffSource(Context.Unit, this)
             );
 
             var projectile = Object.Instantiate(
                 SkillConfig.BuffProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
-            projectile.Init(Owner.SelfUnit, Owner.SelfUnit, buff); // 目标为自己
+            projectile.Init(Context.Unit, Context.Unit, buff); // 目标为自己
             projectile.Activate();
         }
     }

@@ -60,11 +60,11 @@ namespace Units.Skills
 
             var wildWind = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
             wildWind.Initialize(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
@@ -74,7 +74,7 @@ namespace Units.Skills
             );
             wildWind.Activate();
         }
-    private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+    private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         
     }

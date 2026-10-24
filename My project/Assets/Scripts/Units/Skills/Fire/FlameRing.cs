@@ -22,7 +22,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private FlameRingStats CalcStats()
@@ -58,11 +58,11 @@ namespace Units.Skills
             var skillConfig = (FlameRingSkillConfig)Definition.Config;
             areaEffect = Object.Instantiate(
                 skillConfig.ProjectilePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
             areaEffect.Initialize(
-                owner: Owner.SelfUnit,
+                owner: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 sourceSkill: this,
                 duration: stats.AreaDuration.FinalValue,

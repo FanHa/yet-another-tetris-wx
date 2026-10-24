@@ -15,15 +15,12 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         protected override bool PrepareCastCore()
         {
             cachedTarget = null;
-            cachedTarget = Owner.FindRandomAlly(
-                range: float.MaxValue,
-                includeSelf: true
-            );
+            cachedTarget = Context.FindRandomAllyIncludingSelf();
             if (cachedTarget == null)
                 return false;
 
@@ -37,9 +34,9 @@ namespace Units.Skills
 
             cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
                 ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
-                Owner.Attributes.MaxHealth.finalValue,
+                Context.Attributes.MaxHealth.finalValue,
                 GetResonantCellCount(),
-                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
+                new Units.Buffs.BuffSource(Context.Unit, this)
             ));
             cachedTarget = null;
         }

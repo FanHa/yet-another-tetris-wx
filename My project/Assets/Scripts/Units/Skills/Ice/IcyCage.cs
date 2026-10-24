@@ -24,7 +24,7 @@ namespace Units.Skills
         {
             targetEnemy = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Context.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
             targetEnemy = found;
 
@@ -37,7 +37,7 @@ namespace Units.Skills
             var freezeBuff = new Buffs.Freeze(
                 config.FreezeBuffDefinition,
                 GetResonantCellCount(),
-                new Buffs.BuffSource(Owner.SelfUnit, this)
+                new Buffs.BuffSource(Context.Unit, this)
             );
             targetEnemy.AddBuff(freezeBuff);
             targetEnemy = null;
@@ -61,7 +61,7 @@ namespace Units.Skills
             return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(GetResonantCellCount());
         }
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
     }
 }

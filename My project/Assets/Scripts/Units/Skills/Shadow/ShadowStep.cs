@@ -43,7 +43,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private Model.Buffs.VulnerabilityBuffDefinition GetVulnerabilityDefinition()
@@ -55,28 +55,28 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Owner.GetActiveEnemies()
+            Unit targetEnemy = Context.GetActiveEnemies()
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)
                 return;
 
-            Vector3 dir = (targetEnemy.transform.position - Owner.transform.position).normalized;
+            Vector3 dir = (targetEnemy.transform.position - Context.Transform.position).normalized;
             Vector3 targetPos = targetEnemy.transform.position + dir * 1.2f; // 1.2f为身后距离，可调整
 
-            Owner.Teleport(targetPos);
+            Context.Teleport(targetPos);
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 GetVulnerabilityDefinition(),
                 extraDamagePercent: stats.VulnerabilityPercent.FinalValue,
                 buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.FinalValue),
-                source: new Units.Buffs.BuffSource(Owner.SelfUnit, this)
+                source: new Units.Buffs.BuffSource(Context.Unit, this)
             );
             targetEnemy.AddBuff(vulnerabilityBuff);
 
             // 造成伤害
             var damage = new Damages.Damage(Config.Damage, Damages.DamageType.Hit);
-            damage.SetSourceUnit(Owner.SelfUnit);
+            damage.SetSourceUnit(Context.Unit);
             damage.SetTargetUnit(targetEnemy);
             damage.SetSourceLabel(Name());
             targetEnemy.TakeDamage(damage);

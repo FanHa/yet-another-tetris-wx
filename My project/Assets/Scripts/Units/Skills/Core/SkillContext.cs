@@ -20,22 +20,14 @@ namespace Units.Skills
             this.unit = unit ?? throw new ArgumentNullException(nameof(unit));
         }
 
-        public Unit SelfUnit => unit;
-        public bool IsActive => unit.IsActive;
-        public bool IsStunned => unit.IsStunned;
-        public bool IsSkillMotionActive => unit.IsSkillMotionActive;
-        public float ActionSpeed => unit.ActionSpeed;
+        public Unit Unit => unit;
 
         public Attributes Attributes => unit.Attributes;
         public int GetResonanceCount(ResonanceType type) => unit.GetResonanceCount(type);
-        public Transform transform => unit.transform;
-        public string name => unit.name;
-        public Transform projectileSpawnPoint => unit.projectileSpawnPoint;
+        public Transform Transform => unit.transform;
+        public string Name => unit.name;
+        public Transform ProjectileSpawnPoint => unit.projectileSpawnPoint;
 
-        public Coroutine StartCoroutine(System.Collections.IEnumerator routine)
-        {
-            return unit.StartCoroutine(routine);
-        }
 
         public IReadOnlyList<Unit> GetActiveEnemies()
         {
@@ -45,15 +37,15 @@ namespace Units.Skills
             return RequireUnitManager().GetActiveUnits(enemyFaction);
         }
 
-        public List<Unit> FindEnemiesInRange(float range)
+        public IReadOnlyList<Unit> FindEnemiesInRange(float range)
         {
             return RequireUnitManager().FindEnemiesInRange(unit, range);
         }
 
-        public Unit FindRandomAlly(float range, bool includeSelf = false)
-        {
-            return RequireUnitManager().FindRandomAlly(unit, range, includeSelf);
-        }
+        public Unit FindRandomAlly() => RequireUnitManager().FindRandomAlly(unit);
+        public Unit FindRandomAllyIncludingSelf() => RequireUnitManager().FindRandomAllyIncludingSelf(unit);
+        public Unit FindRandomAllyInRange(float range) => RequireUnitManager().FindRandomAllyInRange(unit, range);
+        public Unit FindRandomAllyInRangeIncludingSelf(float range) => RequireUnitManager().FindRandomAllyInRangeIncludingSelf(unit, range);
 
         public Unit FindClosestEnemyInRange(float range)
         {
@@ -68,30 +60,13 @@ namespace Units.Skills
                 return false;
             }
 
-            if (GetEffectiveAttackRangeTo(candidate) < Vector2.Distance(unit.transform.position, candidate.transform.position))
+            if (unit.GetEffectiveAttackRangeTo(candidate) < Vector2.Distance(unit.transform.position, candidate.transform.position))
             {
                 return false;
             }
 
             target = candidate;
             return true;
-        }
-
-        public bool TryGetClosestEnemy(out Unit target)
-        {
-            return unit.TryGetClosestEnemy(out target);
-        }
-
-        public bool TryGetClosestAlly(out Unit target)
-        {
-            return RequireUnitManager().FindClosestAlly(unit) is { } closestAlly
-                ? (target = closestAlly) != null
-                : (target = null) == null;
-        }
-
-        private float GetEffectiveAttackRangeTo(Unit target)
-        {
-            return unit.Attributes.AttackRange.finalValue + unit.BodyRadius + target.BodyRadius;
         }
 
         public void SetMoveBehaviorMode(Unit.MoveBehaviorMode mode)

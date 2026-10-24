@@ -15,7 +15,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命回响";
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         public override string Description()
         {
@@ -26,10 +26,10 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Owner.AddBuff(new Units.Buffs.LifeEchoBuff(
+            Context.AddBuff(new Units.Buffs.LifeEchoBuff(
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
                 GetResonantCellCount(),
-                new Units.Buffs.BuffSource(Owner.SelfUnit, this)
+                new Units.Buffs.BuffSource(Context.Unit, this)
             ));
         }
     }

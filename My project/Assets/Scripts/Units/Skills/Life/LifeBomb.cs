@@ -36,7 +36,7 @@ namespace Units.Skills
         {
             cachedTargetPos = default;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
+            if (!Context.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
 
             cachedTargetPos = targetEnemy.transform.position;
@@ -47,24 +47,24 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             float percent = stats.HealthCostPercent.FinalValue / 100f;
-            float healthCost = Owner.Attributes.CurrentHealth * percent;
-            healthCost = Mathf.Clamp(healthCost, 1f, Owner.Attributes.CurrentHealth); // 至少消耗1点
+            float healthCost = Context.Attributes.CurrentHealth * percent;
+            healthCost = Mathf.Clamp(healthCost, 1f, Context.Attributes.CurrentHealth); // 至少消耗1点
             var tempTarget = Object.Instantiate(
                 SkillConfig.TemporaryTargetPrefab,
                 cachedTargetPos,
                 Quaternion.identity
             );
-            tempTarget.name = "临时目标 By " + Owner.name + " " + Name();
+            tempTarget.name = "临时目标 By " + Context.Name + " " + Name();
 
             // 投射炸弹
             Units.Projectiles.LifeBomb lifeBomb = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
-                Owner.projectileSpawnPoint.position,
+                Context.ProjectileSpawnPoint.position,
                 Quaternion.identity
             );
 
             lifeBomb.Init(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 temporaryTarget: tempTarget,
                 healthAmount: healthCost, // 伤害为消耗的生命值
                 sourceSkill: this

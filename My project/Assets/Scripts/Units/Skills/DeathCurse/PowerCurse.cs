@@ -57,12 +57,12 @@ namespace Units.Skills
 
             ownedZone = Object.Instantiate(
                 SkillConfig.ZonePrefab,
-                Owner.transform.position,
+                Context.Transform.position,
                 Quaternion.identity
             );
 
             ownedZone.Initialize(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.ZoneLifetime.FinalValue,
                 resonantCellCount: GetResonantCellCount(),
@@ -77,7 +77,7 @@ namespace Units.Skills
             ClearOwnedZone();
         }
 
-        private int GetResonantCellCount() => Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+        private int GetResonantCellCount() => Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
         private void ClearOwnedZone()
         {

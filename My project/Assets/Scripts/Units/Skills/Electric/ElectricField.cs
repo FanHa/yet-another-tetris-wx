@@ -22,7 +22,7 @@ namespace Units.Skills
 
         protected override bool PrepareCastCore()
         {
-            if (!Owner.TryGetClosestEnemyInAttackRange(out Unit target))
+            if (!Context.TryGetClosestEnemyInAttackRange(out Unit target))
             {
                 return false;
             }
@@ -42,7 +42,7 @@ namespace Units.Skills
                 Quaternion.identity);
             spawnedZones.Add(zone);
             zone.Initialize(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 hitProjectilePrefab: SkillConfig.HitProjectilePrefab,
@@ -80,7 +80,7 @@ namespace Units.Skills
 
         private ElectricFieldStats CalculateStats()
         {
-            int resonantCellCount = Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            int resonantCellCount = Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
 
             return new ElectricFieldStats
             {

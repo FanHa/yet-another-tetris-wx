@@ -21,7 +21,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             cachedTarget = null;
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Context.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
 
             cachedTarget = found;
@@ -39,7 +39,7 @@ namespace Units.Skills
             );
 
             thunderStrikeEffect.Init(
-                Owner.SelfUnit,
+                Context.Unit,
                 cachedTarget,
                 stats.Damage.FinalValue,
                 stats.EnergyDisruptionAmount,
@@ -84,7 +84,7 @@ namespace Units.Skills
 
         private int GetElectricCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
     }
 }

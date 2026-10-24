@@ -27,7 +27,7 @@ namespace Units.Skills
 
         private int GetResonantCellCount()
         {
-            return Owner != null ? Owner.GetResonanceCount(Definition.Resonance) : 0;
+            return Context != null ? Context.GetResonanceCount(Definition.Resonance) : 0;
         }
 
         private BlazingFieldStats CalcStats()
@@ -43,7 +43,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
+            if (!Context.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
             targetPosition = targetEnemy.transform.position;
             return true;
@@ -62,7 +62,7 @@ namespace Units.Skills
             );
             spawnedFields.Add(effect);
             effect.Init(
-                caster: Owner.SelfUnit,
+                caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 sourceSkill: this,
