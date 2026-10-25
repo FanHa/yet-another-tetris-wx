@@ -1,6 +1,4 @@
-using Model;
 using Model.Buffs;
-using Presentation;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -8,41 +6,29 @@ namespace Units.Buffs
     public class LifePowerBuff : Buff, IAttackHitTrigger
     {
         private readonly LifePowerBuffDefinition lifePowerDefinition;
-        private readonly AdditiveValueBreakdown maxHealthConversionPercent;
         private readonly float attackHitBonusDamage;
 
         public LifePowerBuff(
             LifePowerBuffDefinition definition,
-            float casterMaxHealthAtCast,
-            int lifeResonanceCount,
+            float attackHitBonusDamage,
             BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             lifePowerDefinition = definition;
-            maxHealthConversionPercent = definition.CalculateCasterMaxHealthConversionPercent(lifeResonanceCount);
-            attackHitBonusDamage = definition.CalculateAttackHitBonusDamage(
-                casterMaxHealthAtCast,
-                maxHealthConversionPercent.FinalValue
-            );
+            this.attackHitBonusDamage = attackHitBonusDamage;
         }
 
         public override string Name() => lifePowerDefinition.DisplayName;
-        public override string DescribeAppliedEffect() => BuffDescriptionFormatter.Format(
-            lifePowerDefinition.Description,
-            DescribeEffect()
-        );
-
-        public string DescribeEffect() {
-            return BuffDescriptionFormatter.Format(
-                StatBreakdownFormatter.Format(
-                    StatLabel.MaxHealthConversionPercent,
-                    maxHealthConversionPercent),
-                lifePowerDefinition.BaseDuration.ToDisplayString("效果持续时间"),
-                StatBreakdownFormatter.Format(
-                    StatLabel.AttackHitExtraDamage,
-                    new AdditiveValueBreakdown(attackHitBonusDamage))
-            );
+        public override string DescribeAppliedEffect() {
+            return $"{lifePowerDefinition.Description}\n" + 
+            $"{lifePowerDefinition.BaseDuration.ToDisplayString("效果持续时间")}\n" +
+            $"攻击命中额外伤害: <final>{attackHitBonusDamage}</final>";
         }
+
+        private string DescribeEffectDetails() =>
+            $"{lifePowerDefinition.BaseDuration.ToDisplayString("效果持续时间")}\n" +
+            $"攻击命中额外伤害: <final>{attackHitBonusDamage}</final>";
+
         // 攻击时触发，增加伤害
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {

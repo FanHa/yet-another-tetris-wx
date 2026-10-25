@@ -1,4 +1,3 @@
-using Model;
 using UnityEngine;
 
 namespace Model.Buffs
@@ -9,11 +8,12 @@ namespace Model.Buffs
         [SerializeField] private float healthToAtkPercent;
         [SerializeField] private float healthToAtkPercentPerResonantCell;
 
-        public AdditiveValueBreakdown CalculateCasterMaxHealthConversionPercent(int lifeResonanceCount) =>
-            new(healthToAtkPercent, lifeResonanceCount * healthToAtkPercentPerResonantCell);
-
-        public float CalculateAttackHitBonusDamage(float casterMaxHealthAtCast, float maxHealthConversionPercent) =>
-            casterMaxHealthAtCast * (maxHealthConversionPercent / 100f);
+        public float CalculateAttackHitBonusDamage(float casterMaxHealthAtCast, int resonanceCount)
+        {
+            float conversionPercent = healthToAtkPercent
+                + resonanceCount * healthToAtkPercentPerResonantCell;
+            return casterMaxHealthAtCast * (conversionPercent / 100f);
+        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

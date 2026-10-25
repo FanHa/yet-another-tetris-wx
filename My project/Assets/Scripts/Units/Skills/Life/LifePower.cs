@@ -27,12 +27,16 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
+            var definition = ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition;
+            float attackHitBonusDamage = definition.CalculateAttackHitBonusDamage(
+                Context.Attributes.MaxHealth.finalValue,
+                Context.GetResonanceCount(Definition.Resonance)
+            );
             cachedTarget.AddBuff(
                 new Units.Buffs.LifePowerBuff
                 (
-                    ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
-                    Context.Attributes.MaxHealth.finalValue,
-                    Context.GetResonanceCount(Definition.Resonance),
+                    definition,
+                    attackHitBonusDamage,
                     new Units.Buffs.BuffSource(Context.Unit, this)
                 )
             );
@@ -42,13 +46,16 @@ namespace Units.Skills
         public override string DescribeEffect()
         {
             var definition = ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition;
-            var previewBuff = new Units.Buffs.LifePowerBuff(
-                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
+            float attackHitBonusDamage = definition.CalculateAttackHitBonusDamage(
                 Context.Attributes.MaxHealth.finalValue,
-                Context.GetResonanceCount(Definition.Resonance),
+                Context.GetResonanceCount(Definition.Resonance)
+            );
+            var previewBuff = new Units.Buffs.LifePowerBuff(
+                definition,
+                attackHitBonusDamage,
                 new Units.Buffs.BuffSource(Context.Unit, this)
             );
-            return BuffDescriptionFormatter.Format(Definition.Description, previewBuff.DescribeEffect());
+            return BuffDescriptionFormatter.Format(Definition.Description, previewBuff.DescribeAppliedEffect());
         }
 
         public override string Name()
