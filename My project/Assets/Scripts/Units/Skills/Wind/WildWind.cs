@@ -36,7 +36,7 @@ namespace Units.Skills
             };
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             var stats = CalcStats();
             return

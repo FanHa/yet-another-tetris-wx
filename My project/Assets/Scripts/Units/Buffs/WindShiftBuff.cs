@@ -17,7 +17,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => windShiftDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             windShiftDefinition.DescribeEffect(resonantCellCount);
 
 

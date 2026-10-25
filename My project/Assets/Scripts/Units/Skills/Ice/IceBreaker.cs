@@ -15,7 +15,7 @@ namespace Units.Skills
             Config = config;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return DescriptionStatic() + ":\n" +
                    ((IceBreakerSkillConfig)Definition.Config).IceBreakerBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));

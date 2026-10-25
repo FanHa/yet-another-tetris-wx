@@ -20,7 +20,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => attackBoostDefinition.DisplayName;
-        public override string Description() => attackBoostDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() => attackBoostDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

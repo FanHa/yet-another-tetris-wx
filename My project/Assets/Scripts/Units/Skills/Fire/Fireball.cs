@@ -45,7 +45,7 @@ namespace Units.Skills
             targetEnemy = null; // 用完清空
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return
                 DescriptionStatic() + ":\n" +

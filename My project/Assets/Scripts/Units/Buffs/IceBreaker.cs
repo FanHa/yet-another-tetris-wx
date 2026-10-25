@@ -25,7 +25,7 @@ namespace Units.Buffs
             percentSlowMultiplier = stats.PercentSlowMultiplier.FinalValue;
         }
         public override string Name() => iceBreakerDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             iceBreakerDefinition.DescribeEffect(resonantCellCount);
 
 

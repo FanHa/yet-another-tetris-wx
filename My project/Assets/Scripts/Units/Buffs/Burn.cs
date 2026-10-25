@@ -22,7 +22,7 @@ namespace Units.Buffs
         {
             return Name() + sourceSkill.Name() + sourceUnit;
         }
-        public override string Description() => burnDefinition.DescribeEffect(dps);
+        public override string DescribeAppliedEffect() => burnDefinition.DescribeEffect(dps);
 
         public void OnTick(IBuffContext context)
         {

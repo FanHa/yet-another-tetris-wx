@@ -12,7 +12,7 @@ namespace Units.Skills
             Config = config;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return
                 DescriptionStatic() + ":\n" +

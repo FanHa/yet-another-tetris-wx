@@ -16,7 +16,7 @@ namespace Units.Skills
             this.RequiredEnergy = config.RequiredEnergy;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return
                 DescriptionStatic() + ":\n" +

@@ -15,7 +15,7 @@ namespace Units.Skills
             return "弹幕";
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return $"向攻击范围内的敌人射出攻击频率 * {multiplier} 的投射物。" +
                    $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";

@@ -57,6 +57,7 @@
 ### Unity 编辑器与 MCP 操作
 
 - 默认提供 Unity 编辑器操作步骤，不通过 MCP 修改 Unity 工程状态。用户可针对当前任务明确授权使用 Unity MCP，并说明目标对象和允许修改的范围；在授权范围内执行和验证，无需重复询问。授权范围不清、超出范围或涉及破坏性操作时，先说明拟执行的操作并取得确认。
+- 使用 Unity MCP 前，先检查会话中已附加的 MCP 资源：根据 `mcpforunity://instances` 确认目标实例；任务涉及项目自定义工具时，根据 `mcpforunity://custom-tools` 核对工具名称、参数和用途。区分资源附加内容与实际调用结果，不得声称通过 MCP Resources 接口读取过未实际读取的资源；是否能执行工具，以当前会话实际暴露的工具定义为准。若所需资源无法读取或未附加，明确说明当前缺少什么，并提醒用户这可能是暂时性问题,需等待vscode官方更新，目前可通过 VS Code 的 Add Context 手动附加对应资源后继续；附加后依据实际可见内容和可用工具继续，不猜测实例、工具名称或参数。执行任何资产修改前，先确认目标对象和修改范围，并遵循上一条的授权要求。
 - Unity/MCP 资产创建遇到 unsupported、invalid、failed 等错误时，先说明限制，不绕过错误。ScriptableObject、`.asset`、scene、prefab 不得裸写 YAML；使用受支持的 Unity Editor API、AssetDatabase 或编辑器流程创建，并核实目标目录和落盘结果。
 
 ### Aseprite 作图任务约束

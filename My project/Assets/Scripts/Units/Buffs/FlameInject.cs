@@ -21,7 +21,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => "炎附";
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             $"攻击时对目标附加{dotDps}/s灼烧({dotDuration}秒)";
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

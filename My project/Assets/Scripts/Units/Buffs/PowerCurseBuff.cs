@@ -28,7 +28,7 @@ namespace Units.Buffs
 
         public override string Name() => Definition.DisplayName;
         public override string GetKey() => $"{base.GetKey()}:{stackId}";
-        public override string Description() => powerCurseDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() => powerCurseDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

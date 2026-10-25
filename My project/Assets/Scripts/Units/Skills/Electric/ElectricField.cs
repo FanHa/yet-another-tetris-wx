@@ -68,7 +68,7 @@ namespace Units.Skills
 
         public override string Name() => "电场";
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             ElectricFieldStats stats = CalculateStats();
             return "在敌人所在区域制造电场，每隔一段时间随机电击一名区域内敌人，并削减其随机技能蓄能：\n"

@@ -24,7 +24,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => windKnockbackDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             windKnockbackDefinition.DescribeEffect(resonantCellCount);
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

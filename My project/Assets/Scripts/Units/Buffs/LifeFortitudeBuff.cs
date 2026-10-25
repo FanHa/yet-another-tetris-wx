@@ -24,7 +24,7 @@ namespace Units.Buffs
 
         public override string Name() => buffDefinition.DisplayName;
 
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             buffDefinition.DescribeEffect(baseMaxHealthIncrease, resonantCellCount);
 
         public override void OnApply(IBuffContext context)

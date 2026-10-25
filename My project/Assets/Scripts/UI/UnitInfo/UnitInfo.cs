@@ -205,7 +205,7 @@ namespace UI.UnitInfo
 
         public void ShowBuffDescription(Units.Buffs.Buff buff)
         {
-            SetDetailText("<b>" + buff.Name() + "</b>\n" + buff.Description());
+            SetDetailText("<b>" + buff.Name() + "</b>\n" + buff.DescribeAppliedEffect());
             ShowSourceSection(true);
 
             // 部分 Buff 没有来源单位或未配置来源相机，描述展示不应因此失败。
@@ -216,7 +216,7 @@ namespace UI.UnitInfo
         }
         public void ShowSkillDescription(Units.Skills.Skill skill)
         {
-            string desc = skill.Description();
+            string desc = skill.DescribeEffect();
 
             // 替换自定义标签为富文本颜色
             desc = desc.Replace("<base>", "<color=#FFFFFF>")

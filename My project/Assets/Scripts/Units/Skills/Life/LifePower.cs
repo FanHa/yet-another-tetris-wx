@@ -1,5 +1,6 @@
 using Model.Tetri;
 using Model.Skills;
+using Presentation;
 using UnityEngine;
 
 namespace Units.Skills
@@ -26,23 +27,29 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            cachedTarget.AddBuff(new Units.Buffs.LifePowerBuff(
+            cachedTarget.AddBuff(
+                new Units.Buffs.LifePowerBuff
+                (
+                    ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
+                    Context.Attributes.MaxHealth.finalValue,
+                    Context.GetResonanceCount(Definition.Resonance),
+                    new Units.Buffs.BuffSource(Context.Unit, this)
+                )
+            );
+            cachedTarget = null;
+        }
+
+        public override string DescribeEffect()
+        {
+            var definition = ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition;
+            var previewBuff = new Units.Buffs.LifePowerBuff(
                 ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition,
                 Context.Attributes.MaxHealth.finalValue,
                 Context.GetResonanceCount(Definition.Resonance),
                 new Units.Buffs.BuffSource(Context.Unit, this)
-            ));
-            cachedTarget = null;
+            );
+            return BuffDescriptionFormatter.Format(Definition.Description, previewBuff.DescribeEffect());
         }
-
-        public override string Description()
-        {
-            return
-                DescriptionStatic() + "\n" +
-                ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
-        }
-
-        public static string DescriptionStatic() => "根据自身最大生命值，为一个友方单位附加攻击命中伤害";
 
         public override string Name()
         {

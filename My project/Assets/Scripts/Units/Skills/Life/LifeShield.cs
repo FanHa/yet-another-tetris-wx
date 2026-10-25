@@ -71,7 +71,7 @@ namespace Units.Skills
             cachedTarget = null;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             var stats = CalcStats(Context.GetResonanceCount(Definition.Resonance));
             return

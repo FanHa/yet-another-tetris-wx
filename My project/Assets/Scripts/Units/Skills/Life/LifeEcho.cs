@@ -15,7 +15,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命回响";
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return DescriptionStatic() + ":\n" +
                 ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));

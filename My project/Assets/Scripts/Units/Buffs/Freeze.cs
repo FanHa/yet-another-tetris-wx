@@ -18,7 +18,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => freezeDefinition.DisplayName;
-        public override string Description() => freezeDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() => freezeDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)
         {

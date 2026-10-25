@@ -23,7 +23,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => shadowAttackDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             shadowAttackDefinition.DescribeEffect(vulnerabilityPercent, vulnerabilityDuration);
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)

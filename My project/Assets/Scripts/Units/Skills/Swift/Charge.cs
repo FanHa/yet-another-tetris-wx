@@ -62,7 +62,7 @@ namespace Units.Skills
             chargeProjectile.Activate();
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             var stats = CalcStats();
             return

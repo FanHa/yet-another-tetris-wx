@@ -48,7 +48,7 @@ namespace Units.Skills
             cachedTarget = null;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return
                 DescriptionStatic() + "\n" +

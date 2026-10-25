@@ -38,7 +38,7 @@ namespace Units.Skills
     {
 
         public abstract string Name();
-        public abstract string Description();
+        public abstract string DescribeEffect();
 
         public SkillDefinition Definition { get; internal set; }
         public ISkillContext Context { get; set; } // 技能的拥有者

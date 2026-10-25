@@ -14,7 +14,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => Definition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             $"受到伤害时吸收伤害，护盾总吸收量{shieldValue}，{(Duration.IsPermanent ? "永久" : $"持续{Duration.Seconds}秒")}";
 
         public override void OnApply(IBuffContext context)

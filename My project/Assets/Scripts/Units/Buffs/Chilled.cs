@@ -24,7 +24,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => chilledDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             chilledDefinition.DescribeEffect(chilledDuration, MoveSlowPercent, AttackSlowPercent, ActionSlowPercent);
 
 

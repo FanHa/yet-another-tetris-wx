@@ -29,7 +29,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => iceShieldDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             iceShieldDefinition.DescribeEffect(resonantCellCount);
 
         public void OnTakeHit(IBuffContext context, Unit self, Unit attacker, ref Damages.Damage damage)

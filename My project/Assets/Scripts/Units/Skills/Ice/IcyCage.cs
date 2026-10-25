@@ -44,7 +44,7 @@ namespace Units.Skills
             targetEnemy = null;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             var stats = CalcStats();
             return $"对攻击范围内一个敌人施加冻结效果：\n{StatBreakdownFormatter.Format(StatLabel.FreezeDuration, stats)}";

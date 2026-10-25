@@ -30,7 +30,7 @@ namespace Units.Buffs
         }
 
         public override string Name() => wildWindDefinition.DisplayName;
-        public override string Description() =>
+        public override string DescribeAppliedEffect() =>
             wildWindDefinition.DescribeEffect(resonantCellCount);
 
         public override void OnApply(IBuffContext context)

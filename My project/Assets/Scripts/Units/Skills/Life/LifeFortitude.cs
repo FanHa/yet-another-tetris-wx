@@ -14,7 +14,7 @@ namespace Units.Skills
         public override string Name() => NameStatic();
         public static string NameStatic() => "生命强化";
 
-        public override string Description() =>
+        public override string DescribeEffect() =>
             DescriptionStatic() + "\n" +
             ((LifeFortitudeSkillConfig)Definition.Config).BuffDefinition.DescribeEffect(
                 Config.MaxHealthIncrease,

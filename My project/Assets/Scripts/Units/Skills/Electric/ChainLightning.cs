@@ -19,7 +19,7 @@ namespace Units.Skills
             RequiredEnergy = config.RequiredEnergy;
         }
 
-        public override string Description()
+        public override string DescribeEffect()
         {
             return $"对最近的敌人发射一道闪电，{CalcInitialDamage()}，" +
                    $"每次弹射伤害增加 {Config.DamageIncreasePercentage}%，最多弹射 {Config.MaxBounces} 次。";

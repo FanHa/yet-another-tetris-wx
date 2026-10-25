@@ -18,7 +18,7 @@ namespace Units.Buffs
 
         public override string Name() => lifeEchoDefinition.DisplayName;
 
-        public override string Description() => lifeEchoDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() => lifeEchoDefinition.DescribeEffect(resonantCellCount);
 
         public void OnAfterTakeDamage(IBuffContext context, ref Damages.Damage damage)
         {
