@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: BlazingField
   m_EditorClassIdentifier: 
   id: skill.blazing_field
-  displayName: Blazing Field
-  description: "\u91CA\u653E Blazing Field\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  affinity: 1
+  displayName: "\u706B\u7130\u9886\u57DF"
+  description: "\u5236\u9020\u4E00\u7247\u533A\u57DF, \u5BF9\u533A\u57DF\u5185\u654C\u4EBA\u6301\u7EED\u65BD\u52A0\u711A\u70E7debuff"
   resonance: 1
   config: {fileID: 11400000, guid: 65f215bb04314cc4b88e85fa107975fb, type: 2}
   icon: {fileID: -7861168299662229937, guid: 581b2c7917ed4fb42870de94637db601, type: 3}

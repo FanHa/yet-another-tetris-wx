@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: FlameInject
   m_EditorClassIdentifier: 
   id: skill.flame_inject
-  displayName: Flame Inject
-  description: "\u91CA\u653E Flame Inject\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  affinity: 1
+  displayName: "\u706B\u7130\u6CE8\u5165"
+  description: "\u653B\u51FB\u76EE\u6807\u65F6\u65BD\u52A0\u711A\u70E7debuff"
   resonance: 1
   config: {fileID: 11400000, guid: ce0abe232f3541c4a9c1050f48a27157, type: 2}
   icon: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
