@@ -8,6 +8,8 @@ namespace Units.Buffs
     {
         private float buffTickTimer = 0f;
         private const float BUFF_TICK_INTERVAL = 1f;
+        private readonly float tickInterval;
+        private readonly Dictionary<Buff, float> elapsedSinceTick = new Dictionary<Buff, float>();
         private global::Units.Buffs.IBuffContext owner;
 
         // Active Buff storage.
@@ -26,9 +28,13 @@ namespace Units.Buffs
         internal event Action<Buff> BuffAdded;
         internal event Action<Buff> BuffRemoved;
 
-        public BuffHandler(global::Units.Buffs.IBuffContext owner)
+        public BuffHandler(global::Units.Buffs.IBuffContext owner, float tickInterval = BUFF_TICK_INTERVAL)
         {
+            if (tickInterval <= 0f || float.IsNaN(tickInterval) || float.IsInfinity(tickInterval))
+                throw new ArgumentOutOfRangeException(nameof(tickInterval));
+
             this.owner = owner;
+            this.tickInterval = tickInterval;
             activeBuffsReadOnly = activeBuffs.AsReadOnly();
         }
 
@@ -42,32 +48,59 @@ namespace Units.Buffs
             if (activeBuffs.Count == 0)
                 return;
 
-            buffTickTimer += deltaTime;
-            if (buffTickTimer >= BUFF_TICK_INTERVAL)
+            float remainingTime = deltaTime;
+            while (remainingTime > 0f && activeBuffs.Count > 0)
             {
-                buffTickTimer -= BUFF_TICK_INTERVAL;
-                TickBuffInterval(BUFF_TICK_INTERVAL);
-            }
+                Buff[] snapshot = activeBuffs.ToArray();
+                float interval = Math.Min(remainingTime, tickInterval - buffTickTimer);
+                foreach (Buff buff in snapshot)
+                {
+                    if (!buff.IsPermanent)
+                        interval = Math.Min(interval, buff.TimeLeft);
+                }
 
-            FlushPendingRequests();
+                foreach (Buff buff in snapshot)
+                {
+                    buff.UpdateTime(interval);
+                    if (buff is ITick)
+                        elapsedSinceTick[buff] += interval;
+                }
+
+                remainingTime -= interval;
+                buffTickTimer += interval;
+                if (buffTickTimer >= tickInterval)
+                {
+                    buffTickTimer -= tickInterval;
+                    for (int index = snapshot.Length - 1; index >= 0; index--)
+                    {
+                        SettleTick(snapshot[index]);
+                    }
+                }
+
+                for (int index = snapshot.Length - 1; index >= 0; index--)
+                {
+                    Buff buff = snapshot[index];
+                    if (IsTrackedAsActive(buff) && buff.IsExpired())
+                    {
+                        EnqueueRemove(buff);
+                    }
+                }
+
+                FlushPendingRequests();
+            }
         }
 
-        private void TickBuffInterval(float interval)
+        private void SettleTick(Buff buff)
         {
-            Buff[] snapshot = activeBuffs.ToArray();
-            for (int i = snapshot.Length - 1; i >= 0; i--)
-            {
-                Buff buff = snapshot[i];
-                buff.UpdateTime(interval);
-                if (buff is ITick tickBuff)
-                {
-                    tickBuff.OnTick(owner);
-                }
-                if (buff.IsExpired())
-                {
-                    EnqueueRemove(buff);
-                }
-            }
+            if (!IsTrackedAsActive(buff) || pendingRemoveQueue.Contains(buff) || buff is not ITick tickBuff)
+                return;
+
+            float elapsedSeconds = elapsedSinceTick[buff];
+            if (elapsedSeconds <= 0f)
+                return;
+
+            elapsedSinceTick[buff] = 0f;
+            tickBuff.OnTick(owner, elapsedSeconds);
         }
 
 
@@ -270,12 +303,15 @@ namespace Units.Buffs
         {
             activeBuffs.Add(buff);
             activeBuffByKey[buff.GetKey()] = buff;
+            if (buff is ITick)
+                elapsedSinceTick.Add(buff, 0f);
         }
 
         private void RemoveActiveBuffAt(int index)
         {
             Buff buff = activeBuffs[index];
             activeBuffs.RemoveAt(index);
+            elapsedSinceTick.Remove(buff);
 
             string key = buff.GetKey();
             if (activeBuffByKey.TryGetValue(key, out var mapped) && ReferenceEquals(mapped, buff))
@@ -375,7 +411,7 @@ namespace Units.Buffs
                 return;
 
             // Rule 1: removing a not-yet-committed add cancels that add request directly.
-            if (pendingAddQueue.Remove(buff))
+            if (pendingAddQueue.Remove(buff) && !IsTrackedAsActive(buff))
             {
                 SetState(buff, BuffLifecycleState.Removed);
                 return;
@@ -391,6 +427,15 @@ namespace Units.Buffs
             // Rule 2: dedupe remove requests.
             if (pendingRemoveQueue.Contains(target))
                 return;
+
+            pendingAddQueue.Remove(target);
+
+            if (!isClearingAllBuffs)
+            {
+                SettleTick(target);
+                if (!IsTrackedAsActive(target) || pendingRemoveQueue.Contains(target))
+                    return;
+            }
 
             SetState(target, BuffLifecycleState.PendingRemove);
             pendingRemoveQueue.Add(target);

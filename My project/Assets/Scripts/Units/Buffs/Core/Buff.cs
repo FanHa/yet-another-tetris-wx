@@ -41,6 +41,11 @@ namespace Units.Buffs
         public abstract string DescribeAppliedEffect();
         public virtual Type BuffType => GetType();
 
+        protected string DescribeDuration() =>
+            Duration.IsPermanent
+                ? $"{Name()}持续时间: 永久"
+                : $"{Name()}持续时间: {Duration.Seconds} 秒";
+
         public virtual void OnApply(IBuffContext context)
         {
             ResetTimeLeft();
@@ -84,7 +89,7 @@ namespace Units.Buffs
     }
     public interface ITick
     {
-        void OnTick(IBuffContext context);
+        void OnTick(IBuffContext context, float elapsedSeconds);
     }
 
     public interface IAfterTakeDamageTrigger

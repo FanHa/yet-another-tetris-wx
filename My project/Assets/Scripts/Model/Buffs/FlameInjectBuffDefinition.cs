@@ -9,12 +9,6 @@ namespace Model.Buffs
 
         public BurnBuffDefinition BurnDefinition => burnDefinition;
 
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = burnDefinition.CalculateStats(resonantCellCount);
-            return $"{stats.Dps}\n{stats.Duration}\n{BaseDuration.ToDisplayString("效果持续时间")}";
-        }
-
 #if UNITY_EDITOR
         protected override void OnValidate()
         {

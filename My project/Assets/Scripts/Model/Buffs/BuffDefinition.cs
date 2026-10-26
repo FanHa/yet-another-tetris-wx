@@ -30,6 +30,16 @@ namespace Model.Buffs
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(DisplayName)} is not assigned.", this);
             }
 
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(Description)} is not assigned.", this);
+            }
+
+            if (icon == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(Icon)} is not assigned.", this);
+            }
+
             if (!string.IsNullOrWhiteSpace(id) && !IdPattern.IsMatch(id))
             {
                 Debug.LogError($"{nameof(id)} '{id}' is invalid. Expected the format 'buff.example_name'.", this);

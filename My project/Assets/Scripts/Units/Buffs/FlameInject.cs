@@ -1,14 +1,16 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
     /// <summary>
-    /// FlameInject Buff：攻击时对目标附加火焰伤害并施加灼烧Dot
+    /// FlameInject Buff：攻击命中时对目标施加灼烧Dot
     /// </summary>
     public class FlameInject : Buff, IAttackHitTrigger
     {
-        private readonly float dotDps;
-        private readonly float dotDuration;
+        private readonly AdditiveValueBreakdown dotDps;
+        private readonly AdditiveValueBreakdown dotDuration;
         private readonly BurnBuffDefinition burnDefinition;
 
         public FlameInject(FlameInjectBuffDefinition definition, int resonantCellCount, BuffSource source)
@@ -16,20 +18,32 @@ namespace Units.Buffs
         {
             burnDefinition = definition.BurnDefinition;
             var stats = burnDefinition.CalculateStats(resonantCellCount);
-            dotDps = stats.Dps.FinalValue;
-            dotDuration = stats.Duration.FinalValue;
+            dotDps = stats.Dps;
+            dotDuration = stats.Duration;
         }
 
-        public override string Name() => "炎附";
+        public string DescribeEffect()
+        {
+            return string.Join("\n",
+                StatBreakdownFormatter.Format(StatLabel.BurnDamagePerSecond, dotDps),
+                $"{StatBreakdownFormatter.Format(StatLabel.BurnDuration, dotDuration)} 秒",
+                DescribeDuration());
+        }
+
+        public override string Name() => Definition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            $"攻击时对目标附加{dotDps}/s灼烧({dotDuration}秒)";
+            string.Join("\n",
+                Definition.Description,
+                $"灼烧每秒伤害: {dotDps.FinalValue}",
+                $"灼烧持续时间: {dotDuration.FinalValue} 秒",
+                DescribeDuration());
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {
             var burn = new Burn(
                 burnDefinition,
-                dotDps,
-                BuffDuration.ForSeconds(dotDuration),
+                dotDps.FinalValue,
+                BuffDuration.ForSeconds(dotDuration.FinalValue),
                 new BuffSource(attacker, sourceSkill)
             );
             context.AddBuffTo(target, burn);

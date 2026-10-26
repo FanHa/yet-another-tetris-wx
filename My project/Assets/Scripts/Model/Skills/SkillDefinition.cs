@@ -27,6 +27,21 @@ namespace Model.Skills
     #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                Debug.LogError($"{nameof(displayName)} is not assigned.", this);
+            }
+
+            if (string.IsNullOrWhiteSpace(description))
+            {
+                Debug.LogError($"{nameof(description)} is not assigned.", this);
+            }
+
+            if (icon == null)
+            {
+                Debug.LogError($"{nameof(icon)} is not assigned.", this);
+            }
+
             if (!System.Enum.IsDefined(typeof(ResonanceType), resonance))
             {
                 Debug.LogError($"{nameof(resonance)} '{resonance}' is invalid.", this);

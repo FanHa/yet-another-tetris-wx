@@ -38,7 +38,7 @@ namespace UI.UnitInfo
         public void SetBuff(Units.Buffs.Buff buff)
         {
             this.buff = buff;
-            buffIcon.sprite = buff.SourceSkill.Definition.Icon;
+            buffIcon.sprite = buff.Definition.Icon;
 
         }
 

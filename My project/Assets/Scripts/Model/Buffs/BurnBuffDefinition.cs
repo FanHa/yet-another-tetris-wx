@@ -13,8 +13,6 @@ namespace Model.Buffs
         public float DpsPerResonantCell => dpsPerResonantCell;
         public float DurationPerResonance => durationPerResonance;
 
-        public string DescribeEffect(float dps) => $"每秒受到{dps}点伤害";
-
         public (AdditiveValueBreakdown Dps, AdditiveValueBreakdown Duration) CalculateStats(int resonantCellCount)
         {
             return (

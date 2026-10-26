@@ -14,27 +14,25 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            return
-                DescriptionStatic() + ":\n" +
-                ((FlameInjectSkillConfig)Definition.Config).FlameInjectBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+            var previewBuff = CreateBuff();
+            return $"{Definition.Description}\n{previewBuff.DescribeEffect()}";
         }
-        public static string DescriptionStatic() => "攻击时附加火焰伤害";
 
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "炎附";
+        public override string Name() => Definition.DisplayName;
 
         public override void OnPassiveEffectsApplication()
         {
+            Context.AddBuff(CreateBuff());
+        }
+
+        private Units.Buffs.FlameInject CreateBuff()
+        {
             var config = (FlameInjectSkillConfig)Definition.Config;
-            var buff = new Units.Buffs.FlameInject(
+            return new Units.Buffs.FlameInject(
                 config.FlameInjectBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new BuffSource(Context.Unit, this)
             );
-            Context.AddBuff(buff);
         }
 
     }

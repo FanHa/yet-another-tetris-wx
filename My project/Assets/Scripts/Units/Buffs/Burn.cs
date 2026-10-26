@@ -22,11 +22,11 @@ namespace Units.Buffs
         {
             return Name() + sourceSkill.Name() + sourceUnit;
         }
-        public override string DescribeAppliedEffect() => burnDefinition.DescribeEffect(dps);
+        public override string DescribeAppliedEffect() => $"每秒受到{dps}点伤害";
 
-        public void OnTick(IBuffContext context)
+        public void OnTick(IBuffContext context, float elapsedSeconds)
         {
-            var damage = new Damages.Damage(dps, Damages.DamageType.Skill);
+            var damage = new Damages.Damage(dps * elapsedSeconds, Damages.DamageType.Skill);
             damage.SetSourceUnit(sourceUnit);
             damage.SetSourceLabel(sourceSkill.Name() + "-" + Name());
             damage.SetTargetUnit(context.SelfUnit);

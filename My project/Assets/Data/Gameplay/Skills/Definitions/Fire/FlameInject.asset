@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: skill.flame_inject
   displayName: "\u706B\u7130\u6CE8\u5165"
-  description: "\u653B\u51FB\u76EE\u6807\u65F6\u65BD\u52A0\u711A\u70E7debuff"
+  description: "\u653B\u51FB\u547D\u4E2D\u65F6\u4F7F\u76EE\u6807\u707C\u70E7\u3002"
   resonance: 1
   config: {fileID: 11400000, guid: ce0abe232f3541c4a9c1050f48a27157, type: 2}
   icon: {fileID: -7718063817487529584, guid: cd248fb5b0870fa4db6ff6c63dd92797, type: 3}
