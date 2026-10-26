@@ -38,7 +38,7 @@ namespace Units.Buffs
         {
             // 附加伤害与当前攻击距离相关（可配合其他攻击距离加成机制）
             float extraDamage = attacker.Attributes.AttackRange.finalValue;
-            var windDamage = new Damages.Damage(extraDamage, Damages.DamageType.Extra);
+            var windDamage = new Damages.Damage(extraDamage, Damages.DamageType.Skill);
             windDamage.SetSourceUnit(attacker);
             windDamage.SetTargetUnit(target);
             windDamage.SetSourceLabel("风形态加成");

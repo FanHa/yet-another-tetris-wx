@@ -47,7 +47,7 @@ namespace Units.Buffs
 
             float extraDamage = baseExtraDamage + percentSlowMultiplier * totalPercentSlow;
 
-            var bonus = new Damages.Damage(extraDamage, Damages.DamageType.Extra);
+            var bonus = new Damages.Damage(extraDamage, Damages.DamageType.Skill);
             bonus.SetSourceUnit(attacker);
             bonus.SetTargetUnit(target);
             bonus.SetSourceLabel("破冰加成");
