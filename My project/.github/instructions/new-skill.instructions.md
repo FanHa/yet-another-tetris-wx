@@ -8,7 +8,7 @@ description: "Use when adding a gameplay skill or following the new-skill workfl
 
 ## 开始前
 
-1. 读取相关基类和同类技能实现，了解项目约定。
+1. 读取 [技能系统职责与代码约定](../../Doc/技能系统职责与代码约定.md)、相关基类和同类技能实现，了解职责边界及 `CalculateStats`、`DescribeEffect` 的委托约定。
 2. 检查是否已有相似技能，并在 Todo 中注明。
 3. 按下方完整清单列出可执行的 Todo，完成分析和 Todo 拆解前不得开始写代码。标注“按需”的事项也先列入 Todo；执行到该项时再核对是否适用并询问用户，用户确认不需要时将该 Todo 标记为已完成。
 4. 按正常工作流程逐项实施和验证；Unity 资产修改遵守项目的 Unity 编辑器约束。
@@ -41,7 +41,7 @@ description: "Use when adding a gameplay skill or following the new-skill workfl
 - [ ] 若技能 Cell 应在开局库存中可用，将 CellDefinition 加入 TetriInventoryInitConfig.CellDefinitions。
 - [ ] 按需创建 Projectile Prefab 并挂载脚本组件。
 - [ ] 按需在 SkillConfig 中关联 Projectile Prefab 或其他所需资产。
-- [ ] 按需创建 BuffDefinition 资产，填写与 BuffFactory 注册键一致的 ID 并在 SkillConfig 中关联；确认 Prefab 的必需组件引用已赋值。
+- [ ] 按需创建 BuffDefinition 资产，填写与 BuffFactory 注册键一致的 ID；由实际负责施加效果的层持有引用：技能直接施加时放在 SkillConfig，Zone/Projectile 内部施加时放在对应 prefab 组件，不重复配置；确认 Prefab 的必需组件引用已赋值。
 - [ ] 在 SkillDefinition 的图标字段中直接关联技能图标。
 - [ ] 在运行时配置/测试场景中加入该 CellDefinition，验证技能格应用流程。
 
