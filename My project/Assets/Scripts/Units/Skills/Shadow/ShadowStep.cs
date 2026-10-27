@@ -71,7 +71,7 @@ namespace Units.Skills
             targetEnemy.AddBuff(vulnerabilityBuff);
 
             // 造成伤害
-            var damage = new Damages.Damage(Config.Damage, Damages.DamageType.Hit);
+            var damage = new Damages.Damage(stats.Damage.FinalValue, Damages.DamageType.Hit);
             damage.SetSourceUnit(Context.Unit);
             damage.SetTargetUnit(targetEnemy);
             damage.SetSourceLabel(Name());

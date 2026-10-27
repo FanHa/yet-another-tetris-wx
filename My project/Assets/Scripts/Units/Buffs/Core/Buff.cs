@@ -40,6 +40,7 @@ namespace Units.Buffs
         public abstract string Name();
         public abstract string DescribeAppliedEffect();
         public virtual Type BuffType => GetType();
+        public virtual bool ReplaceOnReapply => false;
 
         protected string DescribeDuration() =>
             Duration.IsPermanent

@@ -374,20 +374,26 @@ namespace Units.Buffs
 
             string key = buff.GetKey();
 
-            // Rule 1: if active buff with same key exists, enqueue refresh on the active instance.
             if (activeBuffByKey.TryGetValue(key, out var activeWithSameKey))
             {
-                if (pendingRemoveQueue.Remove(activeWithSameKey))
+                if (activeWithSameKey.ReplaceOnReapply && !ReferenceEquals(activeWithSameKey, buff))
                 {
-                    SetState(activeWithSameKey, BuffLifecycleState.Active);
+                    EnqueueRemove(activeWithSameKey);
                 }
-
-                if (!pendingAddQueue.Contains(activeWithSameKey))
+                else
                 {
-                    pendingAddQueue.Add(activeWithSameKey);
-                }
+                    if (pendingRemoveQueue.Remove(activeWithSameKey))
+                    {
+                        SetState(activeWithSameKey, BuffLifecycleState.Active);
+                    }
 
-                return;
+                    if (!pendingAddQueue.Contains(activeWithSameKey))
+                    {
+                        pendingAddQueue.Add(activeWithSameKey);
+                    }
+
+                    return;
+                }
             }
 
             // Rule 2: for non-active keys, keep only one pending add per key (last write wins).

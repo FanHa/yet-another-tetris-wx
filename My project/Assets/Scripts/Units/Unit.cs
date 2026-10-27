@@ -599,6 +599,8 @@ namespace Units
                 return;
             }
 
+            buffHandler.CommitPendingChanges();
+
             Attributes.TakeDamage(damageReceived.Value);
             bool diedFromThisHit = Attributes.CurrentHealth <= 0;
             if (diedFromThisHit)
@@ -606,10 +608,10 @@ namespace Units
                 hasDied = true;
             }
 
-            buffHandler.DispatchAfterTakeDamage(ref damageReceived);
-
             OnDamageTaken?.Invoke(damageReceived); // 触发伤害事件
             hitEffect.PlayAll();
+
+            buffHandler.DispatchAfterTakeDamage(ref damageReceived);
 
             if (diedFromThisHit)
             {

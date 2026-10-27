@@ -40,6 +40,8 @@ namespace Units.Skills
             if (targetEnemy == null)
                 return;
 
+            var stats = CalcStats();
+
             // 创建并发射暗影箭
             var projectile = Object.Instantiate(
                 SkillConfig.ProjectilePrefab,
@@ -50,6 +52,7 @@ namespace Units.Skills
             projectile.Init(
                 caster: Context.Unit,
                 target: targetEnemy,
+                damageValue: stats.Damage.FinalValue,
                 sourceSkill: this,
                 resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
@@ -60,15 +63,12 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             return
-                DescriptionStatic() + ":\n" +
+                Definition.Description + ":\n" +
                 $"{stats.Damage}\n" +
                 SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
         }
 
-        public static string DescriptionStatic() => "向最大生命值最低的敌人发射暗影箭,施加易伤Debuff并造成伤害";
-
-        public override string Name() => NameStatic();
-        public static string NameStatic() => "暗影箭";
+        public override string Name() => Definition.DisplayName;
     }
 
 }

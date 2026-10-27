@@ -1,4 +1,5 @@
 using Model.Buffs;
+using Presentation;
 using Units.Buffs;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Units.Projectiles
     public class ShadowArrow : ProjectileToUnit
     {
         [SerializeField] private VulnerabilityBuffDefinition vulnerabilityDefinition;
+        private float damageValue;
         private float vulnerabilityPercent;
         private float vulnerabilityDuration;
         private BuffSource vulnerabilitySource;
@@ -18,11 +20,13 @@ namespace Units.Projectiles
         public void Init(
             Units.Unit caster,
             Units.Unit target,
+            float damageValue,
             Units.Skills.Skill sourceSkill,
             int resonantCellCount
         )
         {
             base.Init(caster, target);
+            this.damageValue = damageValue;
             var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
             vulnerabilityPercent = stats.ExtraDamagePercent.FinalValue;
             vulnerabilityDuration = stats.Duration.FinalValue;
@@ -32,12 +36,13 @@ namespace Units.Projectiles
         public string DescribeEffect(int resonantCellCount)
         {
             var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
-            return $"{stats.ExtraDamagePercent}\n{stats.Duration}";
+            return
+                $"{StatBreakdownFormatter.Format(StatLabel.VulnerabilityPercent, stats.ExtraDamagePercent)}\n" +
+                StatBreakdownFormatter.Format(StatLabel.VulnerabilityDuration, stats.Duration);
         }
 
         protected override void HandleHitTarget()
         {
-            float damageValue = caster.Attributes.AttackPower.finalValue;
             var damage = new Damages.Damage(damageValue, Damages.DamageType.Hit);
             damage.SetSourceUnit(caster);
             damage.SetTargetUnit(target);
