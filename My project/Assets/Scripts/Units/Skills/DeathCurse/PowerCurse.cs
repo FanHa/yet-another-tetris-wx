@@ -16,18 +16,13 @@ namespace Units.Skills
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
             var stats = SkillDefinition.CalculateStats(resonantCellCount);
             return
-                DescriptionStatic() + ":\n" +
+                Definition.Description + ":\n" +
                 StatBreakdownFormatter.Format(StatLabel.DomainRadius, stats.Radius) + "\n" +
                 StatBreakdownFormatter.Format(StatLabel.DomainDuration, stats.ZoneLifetime) + "\n" +
                 SkillDefinition.ZonePrefab.DescribeEffect(resonantCellCount);
         }
 
-        public static string DescriptionStatic() => "死亡时在当前位置生成诅咒区域，降低区域内敌人的攻击力。";
-
-        public override string Name() => NameStatic();
-
-        public static string NameStatic() => "力量诅咒";
-
+        public override string Name() => Definition.DisplayName;
 
         public override void OnUnitDeath()
         {

@@ -68,14 +68,10 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             return
-                DescriptionStatic() +
+                Definition.Description +
                 $"{stats.ChargeDamage}\n";
         }
 
-        public override string Name() => NameStatic();
-
-        public static string DescriptionStatic() => "冲向距离自己最远的敌人，沿途对敌人造成伤害";
-
-        public static string NameStatic() => "冲锋";
+        public override string Name() => Definition.DisplayName;
     }
 }
