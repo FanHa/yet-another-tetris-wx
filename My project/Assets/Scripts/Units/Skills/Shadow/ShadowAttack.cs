@@ -4,34 +4,35 @@ namespace Units.Skills
 {
     public class ShadowAttack : Skill
     {
-        public ShadowAttackLevelConfig Config { get; }
+        private readonly ShadowAttackSkillDefinition skillDefinition;
 
-        private ShadowAttackSkillConfig SkillConfig => (ShadowAttackSkillConfig)Definition.Config;
-
-        public ShadowAttack(ShadowAttackLevelConfig config)
+        public ShadowAttack(ShadowAttackSkillDefinition definition)
         {
-            Config = config;
+            skillDefinition = definition;
         }
 
         public override string DescribeEffect()
         {
+            var buff = CreateBuff();
             return
-                DescriptionStatic() + ":\n" +
-                SkillConfig.ShadowAttackBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
+                Definition.Description + ":\n" +
+                buff.DescribeAppliedEffect() + "\n";
         }
-        public static string DescriptionStatic() => "攻击时附加易伤";
 
-        public override string Name() => NameStatic();
-        public static string NameStatic() => "影袭";
+        public override string Name() => Definition.DisplayName;
 
         public override void OnPassiveEffectsApplication()
         {
-            var buff = new Buffs.ShadowAttackBuff(
-                SkillConfig.ShadowAttackBuffDefinition,
+            Context.AddBuff(CreateBuff());
+        }
+
+        private Buffs.ShadowAttackBuff CreateBuff()
+        {
+            return new Buffs.ShadowAttackBuff(
+                skillDefinition.ShadowAttackBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
-            Context.AddBuff(buff);
         }
     }
 }

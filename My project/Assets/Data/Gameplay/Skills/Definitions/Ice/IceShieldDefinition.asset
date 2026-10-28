@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21098d583ba60e74693dab0b38ca8c90, type: 3}
+  m_Name: IceShieldDefinition
+  m_EditorClassIdentifier: 
+  id: skill.ice_shield
+  displayName: "\u51B0\u971C\u62A4\u76FE"
+  description: "\u83B7\u5F97\u4E00\u6B21\u6027\u51B0\u971C\u62A4\u76FE\uFF0C\u88AB\u653B\u51FB\u65F6\u53CD\u5236\u653B\u51FB\u8005\uFF0C\u964D\u4F4E\u5176\u79FB\u901F\u3001\u653B\u901F\u548C\u52A8\u4F5C\u901F\u7387\u3002"
+  resonance: 6
+  icon: {fileID: 6257836175663138734, guid: 78aab2e7dcdd000479aad3dcdc0584a4, type: 3}
+  projectilePrefab: {fileID: 8363342164250943101, guid: f25552e189446a041af81469fcfa1836, type: 3}
+  iceShieldBuffDefinition: {fileID: 11400000, guid: e43f400528953be4f8cebcab3d7d18e0, type: 2}

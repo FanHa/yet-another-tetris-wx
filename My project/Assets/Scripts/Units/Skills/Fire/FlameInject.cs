@@ -5,12 +5,7 @@ namespace Units.Skills
 {
     public class FlameInject : Skill
     {
-        public FlameInjectLevelConfig Config { get; }
-
-        public FlameInject(FlameInjectLevelConfig config)
-        {
-            Config = config;
-        }
+        private FlameInjectSkillDefinition SkillDefinition => (FlameInjectSkillDefinition)Definition;
 
         public override string DescribeEffect()
         {
@@ -27,9 +22,8 @@ namespace Units.Skills
 
         private Units.Buffs.FlameInject CreateBuff()
         {
-            var config = (FlameInjectSkillConfig)Definition.Config;
             return new Units.Buffs.FlameInject(
-                config.FlameInjectBuffDefinition,
+                SkillDefinition.FlameInjectBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new BuffSource(Context.Unit, this)
             );

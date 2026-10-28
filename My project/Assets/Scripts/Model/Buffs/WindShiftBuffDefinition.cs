@@ -9,17 +9,11 @@ namespace Model.Buffs
         [SerializeField] private float baseAttackRangeBonus;
         [SerializeField] private float attackRangePerResonantCell;
 
-        public (AdditiveValueBreakdown AttackRangeBonus, string Duration) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown AttackRangeBonus, BuffDuration Duration) CalculateStats(int resonantCellCount) =>
             (
                 new AdditiveValueBreakdown(baseAttackRangeBonus, resonantCellCount * attackRangePerResonantCell),
-                BaseDuration.ToDisplayString("风形态持续时间")
+                BaseDuration
             );
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            return $"攻击时额外造成等于当前最终攻击距离的伤害。\n{StatBreakdownFormatter.Format(StatLabel.AttackRangeIncrease, stats.AttackRangeBonus)}\n{stats.Duration}";
-        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

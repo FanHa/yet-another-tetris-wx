@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fc04f18c768fe4988190ec500cec90, type: 3}
+  m_Name: AttackBoostDefinition
+  m_EditorClassIdentifier: 
+  id: skill.attack_boost
+  displayName: "\u653B\u51FB\u52A0\u901F"
+  description: "\u63D0\u5347\u653B\u51FB\u901F\u5EA6"
+  resonance: 5
+  icon: {fileID: 6614277198255979678, guid: 05b2f746cff6252489f5ed8dcd013957, type: 3}
+  buffProjectilePrefab: {fileID: 2996347991824612061, guid: 86abf7817d99cc843872c0662a2c8a3c, type: 3}
+  attackBoostBuffDefinition: {fileID: 11400000, guid: daadbd50a2f4d934eadece5cf0d7dc25, type: 2}
+  requiredEnergy: 55

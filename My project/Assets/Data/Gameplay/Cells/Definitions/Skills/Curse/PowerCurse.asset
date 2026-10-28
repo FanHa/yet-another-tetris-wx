@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PowerCurse
   m_EditorClassIdentifier: 
   id: PowerCurse
-  affinity: 9
   resonance: 9
-  skillDefinition: {fileID: 11400000, guid: fe27e17e7940f4e43bb15bde827089de, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 1dc670b6bad96f04cafbbc54dd16a3a4, type: 2}

@@ -9,24 +9,27 @@ namespace Units.Skills
 {
     public class LifeShield : ActiveSkill
     {
-        public LifeShieldLevelConfig Config { get; }
+        private readonly LifeShieldSkillDefinition skillDefinition;
         private Unit cachedTarget;
 
-        private LifeShieldSkillConfig SkillConfig => (LifeShieldSkillConfig)Definition.Config;
-
-        public LifeShield(LifeShieldLevelConfig config)
+        public LifeShield(LifeShieldSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
-        private (StatBreakdownDisplay LifeCostPercent, StatBreakdownDisplay ShieldMultiplierPercent, string Duration) CalcStats(int resonantCellCount) =>
-            (
-                new StatBreakdownDisplay(StatLabel.LifeCostPercent, Config.LifeCostPercent),
-                new StatBreakdownDisplay(StatLabel.ShieldMultiplierPercent, SkillConfig.BaseShieldMultiplierPercent,
-                    resonantCellCount * SkillConfig.ShieldMultiplierPercentPerResonantCell),
-                SkillConfig.LifeShieldBuffDefinition.BaseDuration.ToDisplayString("护盾持续时间")
-            );
+        private (StatBreakdownDisplay LifeCostPercent, StatBreakdownDisplay ShieldMultiplierPercent, string Duration, float LifeCost, float ShieldValue) GetStatsForDisplay()
+        {
+            var stats = skillDefinition.CalculateStats(
+                Context.Attributes.CurrentHealth,
+                Context.GetResonanceCount(Definition.Resonance));
+            return (
+                new StatBreakdownDisplay(StatLabel.LifeCostPercent, stats.LifeCostPercent.BaseValue, stats.LifeCostPercent.AddedAmount),
+                new StatBreakdownDisplay(StatLabel.ShieldMultiplierPercent, stats.ShieldMultiplierPercent.BaseValue, stats.ShieldMultiplierPercent.AddedAmount),
+                stats.Duration.ToDisplayString("护盾持续时间"),
+                stats.LifeCost,
+                stats.ShieldValue);
+        }
 
         protected override bool PrepareCastCore()
         {
@@ -44,25 +47,23 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            var stats = CalcStats(Context.GetResonanceCount(Definition.Resonance));
-            float lifeCost = Context.Attributes.CurrentHealth * (stats.LifeCostPercent.FinalValue / 100f);
-            float shieldValue = lifeCost * (stats.ShieldMultiplierPercent.FinalValue / 100f);
+            var stats = GetStatsForDisplay();
 
             var buff = new Units.Buffs.LifeShieldBuff(
-                SkillConfig.LifeShieldBuffDefinition,
-                shieldValue,
-                SkillConfig.LifeShieldBuffDefinition.BaseDuration,
+                skillDefinition.LifeShieldBuffDefinition,
+                stats.ShieldValue,
+                skillDefinition.LifeShieldBuffDefinition.BaseDuration,
                 new Units.Buffs.BuffSource(Context.Unit, this)
             );
             var projectile = Object.Instantiate(
-                SkillConfig.BuffProjectilePrefab,
+                skillDefinition.BuffProjectilePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
             projectile.Init(Context.Unit, cachedTarget, buff);
             projectile.Activate();
 
-            var damage = new Damages.Damage(lifeCost, Damages.DamageType.Skill);
+            var damage = new Damages.Damage(stats.LifeCost, Damages.DamageType.Skill);
             damage.SetSourceUnit(Context.Unit);
             damage.SetTargetUnit(Context.Unit);
             damage.SetSourceLabel(Name());
@@ -73,18 +74,12 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats(Context.GetResonanceCount(Definition.Resonance));
+            var stats = GetStatsForDisplay();
             return
-                DescriptionStatic() + "\n" +
+                Definition.Description + "\n" +
                 $"{stats.LifeCostPercent}\n{stats.ShieldMultiplierPercent}\n{stats.Duration}";
         }
 
-        public static string DescriptionStatic() => "消耗自身血量,为一个友方单位添加生命护盾，抵挡伤害。";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "生命护盾";
+        public override string Name() => Definition.DisplayName;
     }
 }

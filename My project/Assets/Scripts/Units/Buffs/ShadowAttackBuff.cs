@@ -24,7 +24,7 @@ namespace Units.Buffs
 
         public override string Name() => shadowAttackDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            shadowAttackDefinition.DescribeEffect(vulnerabilityPercent, vulnerabilityDuration);
+            $"攻击时对目标施加{vulnerabilityPercent}%易伤Debuff，持续{vulnerabilityDuration}秒\n{DescribeDuration()}";
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {

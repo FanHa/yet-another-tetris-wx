@@ -1,5 +1,7 @@
 using System.Linq;
+using Model;
 using Model.Buffs;
+using Presentation;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -11,22 +13,23 @@ namespace Units.Buffs
     public class IceBreaker : Buff, IAttackHitTrigger
     {
         private readonly IceBreakerBuffDefinition iceBreakerDefinition;
-        private readonly int resonantCellCount;
-        private readonly float baseExtraDamage;
-        private readonly float percentSlowMultiplier;
+        private readonly AdditiveValueBreakdown baseExtraDamage;
+        private readonly AdditiveValueBreakdown percentSlowMultiplier;
 
         public IceBreaker(IceBreakerBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             iceBreakerDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
             var stats = definition.CalculateStats(resonantCellCount);
-            baseExtraDamage = stats.BaseExtraDamage.FinalValue;
-            percentSlowMultiplier = stats.PercentSlowMultiplier.FinalValue;
+            baseExtraDamage = stats.BaseExtraDamage;
+            percentSlowMultiplier = stats.PercentSlowMultiplier;
         }
         public override string Name() => iceBreakerDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            iceBreakerDefinition.DescribeEffect(resonantCellCount);
+            $"{Definition.Description}\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.BaseExtraDamage, baseExtraDamage)}\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.SlowBasedDamageMultiplier, percentSlowMultiplier)}\n" +
+            Duration.ToDisplayString("破冰持续时间");
 
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
@@ -45,7 +48,7 @@ namespace Units.Buffs
                 context.RemoveBuffFrom(target, buff);
             }
 
-            float extraDamage = baseExtraDamage + percentSlowMultiplier * totalPercentSlow;
+            float extraDamage = baseExtraDamage.FinalValue + percentSlowMultiplier.FinalValue * totalPercentSlow;
 
             var bonus = new Damages.Damage(extraDamage, Damages.DamageType.Skill);
             bonus.SetSourceUnit(attacker);

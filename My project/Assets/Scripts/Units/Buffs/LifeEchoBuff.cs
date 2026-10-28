@@ -1,24 +1,29 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
     public class LifeEchoBuff : Buff, IAfterTakeDamageTrigger
     {
         private readonly LifeEchoBuffDefinition lifeEchoDefinition;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown reflectPercentBreakdown;
         private readonly float reflectPercent;
 
         public LifeEchoBuff(LifeEchoBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             lifeEchoDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
-            reflectPercent = definition.CalculateReflectPercent(resonantCellCount).FinalValue;
+            reflectPercentBreakdown = definition.CalculateStats(resonantCellCount);
+            reflectPercent = reflectPercentBreakdown.FinalValue;
         }
 
         public override string Name() => lifeEchoDefinition.DisplayName;
 
-        public override string DescribeAppliedEffect() => lifeEchoDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() =>
+            $"{Definition.Description}\n" +
+            StatBreakdownFormatter.Format(StatLabel.ReflectedDamagePercent, reflectPercentBreakdown) + "\n" +
+            Duration.ToDisplayString("效果持续时间");
 
         public void OnAfterTakeDamage(IBuffContext context, ref Damages.Damage damage)
         {

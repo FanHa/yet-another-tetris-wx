@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Model;
 using Model.Buffs;
+using Presentation;
 using Units.Skills;
 using UnityEngine;
 
@@ -8,19 +10,20 @@ namespace Units.Buffs
     public class EnergyAbsorb : Buff, IAnyUnitSkillCastTrigger
     {
         private readonly EnergyAbsorbBuffDefinition energyAbsorbDefinition;
-        private readonly int resonantCellCount;
-        private readonly float energyAbsorbPerSkillCast;
+        private readonly AdditiveValueBreakdown energyAbsorbPerSkillCast;
         public EnergyAbsorb(EnergyAbsorbBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             energyAbsorbDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
-            energyAbsorbPerSkillCast = definition.CalculateStats(resonantCellCount).EnergyAbsorbPerSkillCast.FinalValue;
+            energyAbsorbPerSkillCast = definition.CalculateStats(resonantCellCount);
         }
-        // 护盾对象
+
         public override string DescribeAppliedEffect()
         {
-            return energyAbsorbDefinition.DescribeEffect(resonantCellCount);
+            string durationDescription = Duration.ToDisplayString("效果持续时间");
+            return energyAbsorbDefinition.Description + "\n" +
+                   StatBreakdownFormatter.Format(StatLabel.EnergyPerEnemySkillCast, energyAbsorbPerSkillCast) + "\n" +
+                   durationDescription;
         }
 
         public override string Name()
@@ -38,7 +41,7 @@ namespace Units.Buffs
                 {
                     if (ally != context.SelfUnit)
                     {
-                        ally.AddSkillEnergy(energyAbsorbPerSkillCast);
+                        ally.AddSkillEnergy(energyAbsorbPerSkillCast.FinalValue);
                     }
                 }
             }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fc966afdb146248a0ad3ba8cb203b1, type: 3}
+  m_Name: ElectricFieldDefinition
+  m_EditorClassIdentifier: 
+  id: skill.electric_field
+  displayName: "\u7535\u573A"
+  description: "\u5728\u76EE\u6807\u533A\u57DF\u5236\u9020\u7535\u573A\uFF0C\u6BCF\u9694\u4E00\u6BB5\u65F6\u95F4\u968F\u673A\u7535\u51FB\u4E00\u540D\u533A\u57DF\u5185\u654C\u4EBA\uFF0C\u9020\u6210\u4F24\u5BB3\u5E76\u968F\u673A\u524A\u51CF\u5176\u6280\u80FD\u84C4\u80FD\u3002"
+  resonance: 3
+  icon: {fileID: -3218739774384757431, guid: 1cbc1cbe6ec38c646bcfe10373df06d7, type: 3}
+  zonePrefab: {fileID: 5635325094941670474, guid: 02ad67cb76509be438b4b0b9978d0f5f, type: 3}
+  baseRadius: 2
+  radiusPerResonantCell: 0.2
+  baseDuration: 3
+  durationPerResonantCell: 0.2
+  baseDamage: 4
+  damagePerResonantCell: 4
+  baseEnergyDisruptionAmount: 5
+  energyDisruptionAmountPerResonantCell: 5
+  requiredEnergy: 90

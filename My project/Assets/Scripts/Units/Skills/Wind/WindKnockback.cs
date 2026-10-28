@@ -6,33 +6,35 @@ namespace Units.Skills
 {
     public class WindKnockback : Skill
     {
-        public WindKnockbackLevelConfig Config { get; }
+        private readonly WindKnockbackSkillDefinition skillDefinition;
 
-        public WindKnockback(WindKnockbackLevelConfig config)
+        public WindKnockback(WindKnockbackSkillDefinition definition)
         {
-            Config = config;
+            skillDefinition = definition;
         }
 
         public override string DescribeEffect()
         {
             return
-                DescriptionStatic() + ":\n" +
-                ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                Definition.Description + ":\n" +
+                CreateBuff().DescribeAppliedEffect();
         }
 
-        public static string DescriptionStatic() => "普通攻击命中时对目标造成小幅击退";
-
-        public override string Name() => NameStatic();
-
-        public static string NameStatic() => "轻风击退";
+        public override string Name() => Definition.DisplayName;
 
         public override void OnPassiveEffectsApplication()
         {
             Context.AddBuff(new Buffs.WindKnockbackBuff(
-                ((WindKnockbackSkillConfig)Definition.Config).WindKnockbackBuffDefinition,
+                skillDefinition.WindKnockbackBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }
+
+        private Buffs.WindKnockbackBuff CreateBuff() => new(
+            skillDefinition.WindKnockbackBuffDefinition,
+            Context.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(Context.Unit, this)
+        );
     }
 }

@@ -5,13 +5,12 @@ using UnityEngine;
 namespace Model.Skills
 {
     [CreateAssetMenu(menuName = "Game Data/Gameplay/Skills/Definitions/Skill Definition")]
-    public sealed class SkillDefinition : ScriptableObject
+    public class SkillDefinition : ScriptableObject
     {
         [SerializeField] private string id;
         [SerializeField] private string displayName;
         [SerializeField] private string description;
         [SerializeField] private ResonanceType resonance = ResonanceType.None;
-        [SerializeField] private SkillConfig config;
         [SerializeField] private Sprite icon;
 
 #if UNITY_EDITOR
@@ -21,11 +20,20 @@ namespace Model.Skills
         public string DisplayName => displayName;
         public string Description => description;
         public ResonanceType Resonance => resonance;
-        public SkillConfig Config => config;
         public Sprite Icon => icon;
 
     #if UNITY_EDITOR
-        private void OnValidate()
+        // TODO: Share this definition configuration across levels; add level-specific configuration only when required.
+        protected virtual void OnValidate()
+        {
+            if (!ValidateDefinitionFields())
+            {
+                return;
+            }
+
+        }
+
+        protected bool ValidateDefinitionFields()
         {
             if (string.IsNullOrWhiteSpace(displayName))
             {
@@ -50,21 +58,45 @@ namespace Model.Skills
             if (string.IsNullOrWhiteSpace(id))
             {
                 Debug.LogError($"{nameof(id)} is not assigned. Expected the format 'skill.example_name'.", this);
-                return;
+                return false;
             }
 
             if (!IdPattern.IsMatch(id))
             {
                 Debug.LogError($"{nameof(id)} '{id}' is invalid. Expected the format 'skill.example_name'.", this);
-                return;
+                return false;
             }
 
-            if (config == null)
+            return true;
+        }
+
+        protected void ValidateRequiredReference(Object reference, string fieldName)
+        {
+            string assetPath = UnityEditor.AssetDatabase.GetAssetPath(this);
+            string definitionLabel = string.IsNullOrEmpty(assetPath)
+                ? $"{GetType().Name} '{name}'"
+                : $"{GetType().Name} '{name}' ({assetPath})";
+
+            if (reference == null)
             {
-                Debug.LogError($"{nameof(config)} is not assigned.", this);
-                return;
+                Debug.LogError($"{definitionLabel}.{fieldName} is not assigned.", this);
             }
+        }
 
+        protected void ValidateFiniteNonNegative(float value, string fieldName)
+        {
+            if (value < 0f || float.IsNaN(value) || float.IsInfinity(value))
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{fieldName} must be finite and non-negative.", this);
+            }
+        }
+
+        protected void ValidateFinitePositive(float value, string fieldName)
+        {
+            if (value <= 0f || float.IsNaN(value) || float.IsInfinity(value))
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{fieldName} must be finite and greater than zero.", this);
+            }
         }
 
 #endif

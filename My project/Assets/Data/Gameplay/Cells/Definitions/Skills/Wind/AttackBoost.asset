@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: AttackBoost
   m_EditorClassIdentifier: 
   id: AttackBoost
-  affinity: 3
   resonance: 5
-  skillDefinition: {fileID: 11400000, guid: b0352d8c7e3a3504fa8fe94f865fdef6, type: 2}
+  skillDefinition: {fileID: 11400000, guid: cea7b7e2e00b9c44eaad87f5fa842c57, type: 2}

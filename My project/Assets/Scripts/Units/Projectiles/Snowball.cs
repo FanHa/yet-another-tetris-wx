@@ -1,4 +1,5 @@
 using Model.Buffs;
+using Presentation;
 using Units.Buffs;
 using UnityEngine;
 
@@ -31,7 +32,11 @@ namespace Units.Projectiles
 
         public string DescribeEffect(int resonantCellCount)
         {
-            return chilledDefinition.DescribeEffect(resonantCellCount);
+            var stats = chilledDefinition.CalculateStats(resonantCellCount);
+            return $"{StatBreakdownFormatter.Format(StatLabel.ChillDuration, stats.Duration)}\n" +
+                   $"{StatBreakdownFormatter.Format(StatLabel.MovementSpeedReductionPercent, stats.MoveSlowPercent)}\n" +
+                   $"{StatBreakdownFormatter.Format(StatLabel.AttackSpeedReductionPercent, stats.AttackSlowPercent)}\n" +
+                   StatBreakdownFormatter.Format(StatLabel.ActionRateReductionPercent, stats.ActionSlowPercent);
         }
 
         protected override void HandleHitTarget()

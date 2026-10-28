@@ -10,13 +10,13 @@ namespace Units.Skills
 {
     public class ShadowStep : ActiveSkill
     {
-        public ShadowStepLevelConfig Config { get; }
+        private readonly ShadowStepSkillDefinition skillDefinition;
 
-        public ShadowStep(ShadowStepLevelConfig config)
+        public ShadowStep(ShadowStepSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
-            InitializeInitialEnergy(config.InitEnergy);
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
+            InitializeInitialEnergy(definition.InitialEnergy);
         }
 
         private struct ShadowStepStats
@@ -29,22 +29,18 @@ namespace Units.Skills
         private ShadowStepStats CalcStats()
         {
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
-            var vulnerabilityStats = GetVulnerabilityDefinition().CalculateStats(resonantCellCount);
+            var vulnerabilityStats = skillDefinition.VulnerabilityBuffDefinition.CalculateStats(resonantCellCount);
+            AdditiveValueBreakdown damage = skillDefinition.CalculateDamage(resonantCellCount);
             return new ShadowStepStats
             {
                 VulnerabilityPercent = vulnerabilityStats.ExtraDamagePercent,
                 Damage = new StatBreakdownDisplay(
                     StatLabel.SkillDamage,
-                    Config.Damage,
-                    resonantCellCount * Config.DamagePerResonantCell
+                    damage.BaseValue,
+                    damage.AddedAmount
                 ),
                 DebuffDuration = vulnerabilityStats.Duration
             };
-        }
-
-        private Model.Buffs.VulnerabilityBuffDefinition GetVulnerabilityDefinition()
-        {
-            return (Model.Buffs.VulnerabilityBuffDefinition)((ShadowStepSkillConfig)Definition.Config).VulnerabilityBuffDefinition;
         }
 
         protected override void ExecuteCore()
@@ -63,7 +59,7 @@ namespace Units.Skills
             Context.Teleport(targetPos);
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
-                GetVulnerabilityDefinition(),
+                skillDefinition.VulnerabilityBuffDefinition,
                 extraDamagePercent: stats.VulnerabilityPercent.FinalValue,
                 buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.FinalValue),
                 source: new Units.Buffs.BuffSource(Context.Unit, this)
@@ -84,14 +80,12 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             return
-                DescriptionStatic() + ":\n" +
+                Definition.Description + ":\n" +
                 $"{StatBreakdownFormatter.Format(StatLabel.VulnerabilityPercent, stats.VulnerabilityPercent)}\n" +
                 $"{stats.Damage}\n" +
                 $"{StatBreakdownFormatter.Format(StatLabel.VulnerabilityDuration, stats.DebuffDuration)}\n";
         }
 
-            public static string DescriptionStatic() => "闪现到最大生命值最低的敌人身后,施加易伤并造成伤害";
-            public override string Name() => NameStatic();
-        public static string NameStatic() => "影步";
+        public override string Name() => Definition.DisplayName;
     }
 }

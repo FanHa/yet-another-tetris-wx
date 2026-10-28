@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ElectricField
   m_EditorClassIdentifier: 
   id: ElectricField
-  affinity: 8
   resonance: 3
-  skillDefinition: {fileID: 11400000, guid: 068a8df95b99b2f40bede6e4b4ec7848, type: 2}
+  skillDefinition: {fileID: 11400000, guid: a52be00e370c0cf45838fe8a92a2f469, type: 2}

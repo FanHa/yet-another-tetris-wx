@@ -8,14 +8,12 @@ namespace Units.Skills
 {
     public class WildWind : ActiveSkill
     {
-        public WildWindLevelConfig Config { get; }
+        private readonly WildWindSkillDefinition skillDefinition;
 
-        private WildWindSkillConfig SkillConfig => (WildWindSkillConfig)Definition.Config;
-
-        public WildWind(WildWindLevelConfig config)
+        public WildWind(WildWindSkillDefinition definition)
         {
-            this.Config = config;
-            this.RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         private struct WildWindStats
@@ -28,11 +26,12 @@ namespace Units.Skills
         private WildWindStats CalcStats()
         {
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = skillDefinition.CalculateStats(resonantCellCount);
             return new WildWindStats
             {
-                Damage = new StatBreakdownDisplay(StatLabel.Damage, Config.Damage, resonantCellCount * Config.DamageAdditionPerResonantCell),
-                Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, Config.Radius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatBreakdownDisplay(StatLabel.WindFieldDuration, Config.Duration, resonantCellCount * Config.DurationPerResonantCell)
+                Damage = new StatBreakdownDisplay(StatLabel.Damage, stats.Damage.BaseValue, stats.Damage.AddedAmount),
+                Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
+                Duration = new StatBreakdownDisplay(StatLabel.WindFieldDuration, stats.Duration.BaseValue, stats.Duration.AddedAmount)
             };
         }
 
@@ -40,27 +39,21 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             return
-                DescriptionStatic() + $"\n" +
+                Definition.Description + "\n" +
                 $"{stats.Damage}\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                SkillConfig.WildWindDebuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
-        public static string DescriptionStatic() => "在自身周围制造一阵狂风, 击退敌人并造成伤害和减速Debuff.";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "狂风";
+            public override string Name() => Definition.DisplayName;
 
         protected override void ExecuteCore()
         {
             var stats = CalcStats();
 
             var wildWind = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
@@ -69,7 +62,6 @@ namespace Units.Skills
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
-                debuffDefinition: SkillConfig.WildWindDebuffDefinition,
                 resonantCellCount: Context.GetResonanceCount(Definition.Resonance),
                 sourceSkill: this // 传递技能引用
             );

@@ -1,4 +1,6 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 using UnityEngine;
 
 namespace Units.Buffs
@@ -9,7 +11,8 @@ namespace Units.Buffs
     public class WindKnockbackBuff : Buff, IAttackHitTrigger
     {
         private readonly WindKnockbackBuffDefinition windKnockbackDefinition;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown knockbackDistanceStats;
+        private readonly AdditiveValueBreakdown maxKnockbackDistanceStats;
         private readonly float knockbackDistance;
         private readonly float maxKnockbackDistance;
 
@@ -17,15 +20,19 @@ namespace Units.Buffs
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             windKnockbackDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
             var stats = definition.CalculateStats(resonantCellCount);
+            knockbackDistanceStats = stats.KnockbackDistance;
+            maxKnockbackDistanceStats = stats.MaxKnockbackDistance;
             knockbackDistance = Mathf.Min(stats.KnockbackDistance.FinalValue, stats.MaxKnockbackDistance.FinalValue);
             maxKnockbackDistance = stats.MaxKnockbackDistance.FinalValue;
         }
 
         public override string Name() => windKnockbackDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            windKnockbackDefinition.DescribeEffect(resonantCellCount);
+            $"普攻命中时将目标击退{knockbackDistance:F2}（最多{maxKnockbackDistance:F2}）\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.KnockbackDistance, knockbackDistanceStats)}\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.MaxKnockbackDistance, maxKnockbackDistanceStats)}\n" +
+            Duration.ToDisplayString("轻风击退持续时间");
 
         public void OnAttackHit(IBuffContext context, Unit attacker, Unit target, ref Damages.Damage damage)
         {

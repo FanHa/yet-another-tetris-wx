@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ShadowAttack
   m_EditorClassIdentifier: 
   id: ShadowAttack
-  affinity: 5
   resonance: 7
-  skillDefinition: {fileID: 11400000, guid: d848376f6649b684ba1fdd612a967789, type: 2}
+  skillDefinition: {fileID: 11400000, guid: d71d5b7e951c3c34e9a15fbe72f793c2, type: 2}

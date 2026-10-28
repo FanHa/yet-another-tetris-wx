@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: LifeEcho
   m_EditorClassIdentifier: 
   id: LifeEcho
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  affinity: 4
-  skillDefinition: {fileID: 11400000, guid: b02134c126bebdf43b31e6f04f10dd52, type: 2}
+  resonance: 0
+  skillDefinition: {fileID: 11400000, guid: bd7b173d38137fa4f9a123fcfca287d7, type: 2}

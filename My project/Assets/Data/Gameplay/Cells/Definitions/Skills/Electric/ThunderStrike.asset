@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ThunderStrike
   m_EditorClassIdentifier: 
   id: ThunderStrike
-  affinity: 8
   resonance: 3
-  skillDefinition: {fileID: 11400000, guid: d8b21d41905e99c4f9a5e6515afe2748, type: 2}
+  skillDefinition: {fileID: 11400000, guid: dcc20076a3cfd1740bd31dbbb0dea379, type: 2}

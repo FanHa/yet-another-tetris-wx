@@ -51,6 +51,7 @@ MonoBehaviour:
   ringParticle: {fileID: 3025754923956176523}
   ringOutlineParticle: {fileID: 5309808501638171649}
   applyInterval: 1
+  energyCurseBuffDefinition: {fileID: 11400000, guid: 7795746a5ac33a847aa14f883a76ecbe, type: 2}
 --- !u!1001 &6676057310526209900
 PrefabInstance:
   m_ObjectHideFlags: 0

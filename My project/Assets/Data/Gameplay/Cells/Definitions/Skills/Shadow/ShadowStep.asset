@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ShadowStep
   m_EditorClassIdentifier: 
   id: ShadowStep
-  affinity: 5
   resonance: 7
-  skillDefinition: {fileID: 11400000, guid: 136207362c8f06747a8736546ef3e6cf, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 8fd8bf7654af97547894dd6023b37cd2, type: 2}

@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using Model.Buffs;
+using Presentation;
 using UnityEngine;
 
 namespace Units.Projectiles
 {
     public class WildWind : MonoBehaviour
     {
+        [SerializeField] private WildWindDebuffDefinition debuffDefinition;
         private Unit caster;
         private float radius;
         private float duration;
         private float damage;
-        private WildWindDebuffDefinition debuffDefinition;
         private int resonantCellCount;
         private float timer = 0f;
         private bool initialized = false;
@@ -26,7 +27,6 @@ namespace Units.Projectiles
             float radius,
             float duration,
             float damage,
-            WildWindDebuffDefinition debuffDefinition,
             int resonantCellCount,
             Units.Skills.Skill sourceSkill
         )
@@ -35,11 +35,19 @@ namespace Units.Projectiles
             this.radius = radius;
             this.duration = duration;
             this.damage = damage;
-            this.debuffDefinition = debuffDefinition;
             this.resonantCellCount = resonantCellCount;
             this.sourceSkill = sourceSkill;
 
             timer = 0f;
+        }
+
+        public string DescribeEffect(int resonantCellCount)
+        {
+            var stats = debuffDefinition.CalculateStats(resonantCellCount);
+            return
+                $"{stats.Duration.ToDisplayString("持续时间")}\n" +
+                $"{StatBreakdownFormatter.Format(StatLabel.WildWindMovementSpeedReductionPercent, stats.MoveSlowPercent)}\n" +
+                StatBreakdownFormatter.Format(StatLabel.WildWindAttackReductionPercent, stats.AtkReducePercent);
         }
 
         public void Activate()
@@ -106,6 +114,11 @@ namespace Units.Projectiles
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (debuffDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(debuffDefinition)} is not assigned.", this);
+            }
+
             if (float.IsNaN(pushSpeed) || float.IsInfinity(pushSpeed) || pushSpeed < 0f)
             {
                 Debug.LogError($"{nameof(pushSpeed)} must be finite and non-negative.", this);

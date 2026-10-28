@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: FlameInject
   m_EditorClassIdentifier: 
   id: FlameInject
-  affinity: 1
   resonance: 1
-  skillDefinition: {fileID: 11400000, guid: 3fbcbf2a7f9ec624aa80bce20f323c65, type: 2}
+  skillDefinition: {fileID: 11400000, guid: dc434429c88c7ad4da463a3a24921ada, type: 2}

@@ -8,15 +8,13 @@ namespace Units.Skills
 {
     public class ThunderStrike : ActiveSkill
     {
-        public ThunderStrikeLevelConfig Config { get; }
+        private readonly ThunderStrikeSkillDefinition skillDefinition;
         private Unit cachedTarget;
 
-        private ThunderStrikeSkillConfig SkillConfig => (ThunderStrikeSkillConfig)Definition.Config;
-
-        public ThunderStrike(ThunderStrikeLevelConfig config)
+        public ThunderStrike(ThunderStrikeSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -34,7 +32,7 @@ namespace Units.Skills
             var stats = CalcStats();
 
             Units.Projectiles.ThunderStrikeProjectile thunderStrikeEffect = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 cachedTarget.transform.position,
                 Quaternion.identity
             );
@@ -55,14 +53,11 @@ namespace Units.Skills
         {
             var stats = CalcStats();
             return
-                DescriptionStatic() + "\n" +
+                Definition.Description + "\n" +
                 $"{stats.Damage}";
         }
 
-        public static string DescriptionStatic() => "对攻击范围内一个敌人头顶降下雷击，造成伤害并削减其随机技能蓄能";
-
-        public override string Name() => NameStatic();
-        public static string NameStatic() => "雷击";
+        public override string Name() => Definition.DisplayName;
 
         private struct ThunderStrikeStats
         {
@@ -72,14 +67,12 @@ namespace Units.Skills
 
         private ThunderStrikeStats CalcStats()
         {
-            int electricCellCount = Context.GetResonanceCount(Definition.Resonance);
-            float energyDisruptionAmount =
-                Config.BaseEnergyDisruptionAmount + electricCellCount * Config.EnergyDisruptionAmountPerResonantCell;
+            var stats = skillDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
 
             return new ThunderStrikeStats
             {
-                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.BaseDamage, electricCellCount * Config.DamagePerResonantCell),
-                EnergyDisruptionAmount = energyDisruptionAmount
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, stats.Damage.BaseValue, stats.Damage.AddedAmount),
+                EnergyDisruptionAmount = stats.EnergyDisruptionAmount
             };
         }
 

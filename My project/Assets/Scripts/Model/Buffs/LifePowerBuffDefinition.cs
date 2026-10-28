@@ -1,4 +1,5 @@
 using UnityEngine;
+using Model;
 
 namespace Model.Buffs
 {
@@ -8,11 +9,13 @@ namespace Model.Buffs
         [SerializeField] private float healthToAtkPercent;
         [SerializeField] private float healthToAtkPercentPerResonantCell;
 
-        public float CalculateAttackHitBonusDamage(float casterMaxHealthAtCast, int resonanceCount)
+        public (AdditiveValueBreakdown ConversionPercent, float AttackHitBonusDamage) CalculateStats(float casterMaxHealthAtCast, int resonanceCount)
         {
-            float conversionPercent = healthToAtkPercent
-                + resonanceCount * healthToAtkPercentPerResonantCell;
-            return casterMaxHealthAtCast * (conversionPercent / 100f);
+            var conversionPercent = new AdditiveValueBreakdown(
+                healthToAtkPercent,
+                resonanceCount * healthToAtkPercentPerResonantCell);
+            float attackHitBonusDamage = casterMaxHealthAtCast * (conversionPercent.FinalValue / 100f);
+            return (conversionPercent, attackHitBonusDamage);
         }
 
 #if UNITY_EDITOR

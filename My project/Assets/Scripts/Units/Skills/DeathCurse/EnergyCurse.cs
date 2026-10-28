@@ -8,41 +8,18 @@ namespace Units.Skills
 {
     public class EnergyCurse : Skill
     {
-        public EnergyCurseLevelConfig Config { get; }
-
-        private EnergyCurseSkillConfig SkillConfig => (EnergyCurseSkillConfig)Definition.Config;
+        private EnergyCurseSkillDefinition SkillDefinition => (EnergyCurseSkillDefinition)Definition;
         private Units.Projectiles.EnergyCurseZone ownedZone;
-
-        public EnergyCurse(EnergyCurseLevelConfig config)
-        {
-            Config = config;
-        }
-
-        private struct EnergyCurseStats
-        {
-            public StatBreakdownDisplay Radius;
-            public StatBreakdownDisplay ZoneLifetime;
-        }
-
-        private EnergyCurseStats CalcStats()
-        {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
-
-            return new EnergyCurseStats
-            {
-                Radius = new StatBreakdownDisplay(StatLabel.DomainRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                ZoneLifetime = new StatBreakdownDisplay(StatLabel.DomainDuration, Config.BaseZoneLifetime, resonantCellCount * Config.ZoneLifetimePerResonantCell)
-            };
-        }
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = SkillDefinition.CalculateStats(resonantCellCount);
             return
                 DescriptionStatic() + ":\n" +
-                $"{stats.Radius}\n" +
-                $"{stats.ZoneLifetime}\n" +
-                SkillConfig.EnergyCurseBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                StatBreakdownFormatter.Format(StatLabel.DomainRadius, stats.Radius) + "\n" +
+                StatBreakdownFormatter.Format(StatLabel.DomainDuration, stats.ZoneLifetime) + "\n" +
+                SkillDefinition.ZonePrefab.DescribeEffect(resonantCellCount);
         }
 
         public static string DescriptionStatic() => "死亡时在当前位置生成诅咒区域，降低区域内敌人的能量回复速度。";
@@ -53,10 +30,11 @@ namespace Units.Skills
 
         public override void OnUnitDeath()
         {
-            var stats = CalcStats();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = SkillDefinition.CalculateStats(resonantCellCount);
 
             ownedZone = Object.Instantiate(
-                SkillConfig.ZonePrefab,
+                SkillDefinition.ZonePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
@@ -65,9 +43,8 @@ namespace Units.Skills
                 caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.ZoneLifetime.FinalValue,
-                resonantCellCount: Context.GetResonanceCount(Definition.Resonance),
-                sourceSkill: this,
-                energyCurseBuffDefinition: SkillConfig.EnergyCurseBuffDefinition
+                resonantCellCount: resonantCellCount,
+                sourceSkill: this
             );
             ownedZone.Activate();
         }

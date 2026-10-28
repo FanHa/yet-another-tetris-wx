@@ -8,14 +8,12 @@ namespace Units.Skills
 {
     public class ShadowArrow : ActiveSkill
     {
-        public ShadowArrowLevelConfig Config { get; }
+        private readonly ShadowArrowSkillDefinition skillDefinition;
 
-        private ShadowArrowSkillConfig SkillConfig => (ShadowArrowSkillConfig)Definition.Config;
-
-        public ShadowArrow(ShadowArrowLevelConfig config)
+        public ShadowArrow(ShadowArrowSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
         
         private struct ShadowArrowStats
@@ -26,9 +24,10 @@ namespace Units.Skills
         private ShadowArrowStats CalcStats()
         {
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            AdditiveValueBreakdown damage = skillDefinition.CalculateDamage(resonantCellCount);
             return new ShadowArrowStats
             {
-                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.Damage, resonantCellCount * Config.DamagePerResonantCell)
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, damage.BaseValue, damage.AddedAmount)
             };
         }
         protected override void ExecuteCore()
@@ -44,7 +43,7 @@ namespace Units.Skills
 
             // 创建并发射暗影箭
             var projectile = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
@@ -65,7 +64,7 @@ namespace Units.Skills
             return
                 Definition.Description + ":\n" +
                 $"{stats.Damage}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
+                skillDefinition.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n";
         }
 
         public override string Name() => Definition.DisplayName;

@@ -5,36 +5,36 @@ namespace Units.Skills
 {
     public class WindShift : Skill
     {
-        public WindShiftLevelConfig Config { get; }
+        private readonly WindShiftSkillDefinition skillDefinition;
 
-        public WindShift(WindShiftLevelConfig config)
+        public WindShift(WindShiftSkillDefinition definition)
         {
-            Config = config;
+            skillDefinition = definition;
         }
 
         public override string DescribeEffect()
         {
             return
-                DescriptionStatic() + ":\n" +
-                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                Definition.Description + ":\n" +
+                CreateBuff().DescribeAppliedEffect();
         }
- 
-        public static string DescriptionStatic() => "将单位的形态切换为风形态，提升攻击距离,获得攻击距离伤害加成";
 
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "风形态";
+        public override string Name() => Definition.DisplayName;
     
         public override void OnPassiveEffectsApplication()
         {
             Context.AddBuff(new Buffs.WindShiftBuff(
-                ((WindShiftSkillConfig)Definition.Config).WindShiftBuffDefinition,
+                skillDefinition.WindShiftBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             ));
         }
+
+        private Buffs.WindShiftBuff CreateBuff() => new(
+            skillDefinition.WindShiftBuffDefinition,
+            Context.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(Context.Unit, this)
+        );
         
     }
 }

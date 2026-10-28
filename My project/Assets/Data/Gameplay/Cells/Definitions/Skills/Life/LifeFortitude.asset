@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: LifeFortitude
   resonance: 4
-  skillDefinition: {fileID: 11400000, guid: 8ec3d7404698dad45bde02ab53050cba, type: 2}
+  skillDefinition: {fileID: 11400000, guid: ada1b1a7ba9946049846a3f85ac27ec1, type: 2}

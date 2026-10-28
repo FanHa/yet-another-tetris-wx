@@ -10,17 +10,14 @@ namespace Units.Skills
 {
     public class FrostZone : ActiveSkill
     {
-        public FrostZoneLevelConfig Config { get; }
+        private readonly FrostZoneSkillDefinition skillDefinition;
         private Vector3 targetPosition;
         private readonly HashSet<Units.Projectiles.FrostZone> spawnedZones = new();
 
-        private FrostZoneSkillConfig SkillConfig => (FrostZoneSkillConfig)Definition.Config;
-
-
-        public FrostZone(FrostZoneLevelConfig config)
+        public FrostZone(FrostZoneSkillDefinition definition)
         {
-            RequiredEnergy = config.RequiredEnergy;
-            this.Config = config;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -33,11 +30,12 @@ namespace Units.Skills
         }
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
+            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = GetStatsForDisplay(resonantCellCount);
             spawnedZones.RemoveWhere(zone => zone == null);
 
             var frostZone = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ZonePrefab,
                 targetPosition,
                 Quaternion.identity
             );
@@ -48,7 +46,7 @@ namespace Units.Skills
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
                 sourceSkill: this,
-                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
+                resonantCellCount: resonantCellCount
             );
             frostZone.Activate();
         }
@@ -69,22 +67,17 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
+            var resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = GetStatsForDisplay(resonantCellCount);
             return
-                DescriptionStatic() + ":\n" +
+                Definition.Description + ":\n" +
                 $"{stats.Duration}\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Damage}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ZonePrefab.DescribeEffect(resonantCellCount);
         }
 
-        public static string DescriptionStatic() => "在目标区域制造一片极寒地带, 对范围内敌人造成冰属性伤害并降低敌方速度.";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "霜域";
+        public override string Name() => Definition.DisplayName;
 
         private struct FrostZoneStats
         {
@@ -93,14 +86,14 @@ namespace Units.Skills
             public StatBreakdownDisplay Damage;
         }
 
-        private FrostZoneStats CalcStats()
+        private FrostZoneStats GetStatsForDisplay(int resonantCellCount)
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = skillDefinition.CalculateStats(resonantCellCount);
             return new FrostZoneStats
             {
-                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
-                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell)
+                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
+                Duration = new StatBreakdownDisplay(StatLabel.Duration, stats.Duration.BaseValue, stats.Duration.AddedAmount),
+                Damage = new StatBreakdownDisplay(StatLabel.SkillDamage, stats.Damage.BaseValue, stats.Damage.AddedAmount)
             };
         }
     }

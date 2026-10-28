@@ -51,6 +51,7 @@ MonoBehaviour:
   ringParticle: {fileID: 5389475956199084409}
   ringOutlineParticle: {fileID: 3064380081128561651}
   applyInterval: 0.5
+  hitProjectilePrefab: {fileID: 6601108763138610009, guid: 767e31535e0abfa4a8c57f28033de199, type: 3}
 --- !u!1001 &4580434603778320542
 PrefabInstance:
   m_ObjectHideFlags: 0

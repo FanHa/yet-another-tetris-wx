@@ -5,30 +5,20 @@ namespace Units.Skills
 {
     public class LifeEcho : Skill
     {
-        public LifeEchoLevelConfig Config { get; }
+        private LifeEchoSkillDefinition SkillDefinition => (LifeEchoSkillDefinition)Definition;
 
-        public LifeEcho(LifeEchoLevelConfig config)
-        {
-            Config = config;
-        }
+        public override string Name() => Definition.DisplayName;
 
-        public override string Name() => NameStatic();
-        public static string NameStatic() => "生命回响";
-
-        public override string DescribeEffect()
-        {
-            return DescriptionStatic() + ":\n" +
-                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
-        }
-        public static string DescriptionStatic() => "反弹受到的伤害";
+        public override string DescribeEffect() => Definition.Description + ":\n" + CreateBuff().DescribeAppliedEffect();
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.AddBuff(new Units.Buffs.LifeEchoBuff(
-                ((LifeEchoSkillConfig)Definition.Config).LifeEchoBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Units.Buffs.BuffSource(Context.Unit, this)
-            ));
+            Context.AddBuff(CreateBuff());
         }
+
+        private Units.Buffs.LifeEchoBuff CreateBuff() => new(
+                SkillDefinition.LifeEchoBuffDefinition,
+                Context.GetResonanceCount(Definition.Resonance),
+                new Units.Buffs.BuffSource(Context.Unit, this));
     }
 }

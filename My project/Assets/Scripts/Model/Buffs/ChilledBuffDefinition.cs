@@ -1,5 +1,4 @@
 using UnityEngine;
-using Presentation;
 
 namespace Model.Buffs
 {
@@ -22,17 +21,6 @@ namespace Model.Buffs
                 new AdditiveValueBreakdown(baseAttackSlowPercent, resonantCellCount * attackSlowPercentPerResonantCell),
                 new AdditiveValueBreakdown(baseActionSlowPercent, resonantCellCount * actionSlowPercentPerResonantCell)
             );
-        }
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            return $"{StatBreakdownFormatter.Format(StatLabel.ChillDuration, stats.Duration)}\n{StatBreakdownFormatter.Format(StatLabel.MovementSpeedReductionPercent, stats.MoveSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.AttackSpeedReductionPercent, stats.AttackSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.ActionRateReductionPercent, stats.ActionSlowPercent)}";
-        }
-
-        public string DescribeEffect(float duration, int moveSlowPercent, int attackSlowPercent, int actionSlowPercent)
-        {
-            return $"移速-{moveSlowPercent}%，攻速-{attackSlowPercent}%，动作速率-{actionSlowPercent}%，持续{duration}秒";
         }
 
 #if UNITY_EDITOR

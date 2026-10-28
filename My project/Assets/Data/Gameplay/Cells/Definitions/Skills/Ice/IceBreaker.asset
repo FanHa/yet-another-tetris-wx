@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: IceBreaker
   m_EditorClassIdentifier: 
   id: IceBreaker
-  affinity: 2
   resonance: 6
-  skillDefinition: {fileID: 11400000, guid: d5f96687131510843b6c2cc44c0b8932, type: 2}
+  skillDefinition: {fileID: 11400000, guid: a4bbd66deb8cfc242ad954b63ae5e54c, type: 2}

@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: EnergyAbsorb
   m_EditorClassIdentifier: 
   id: EnergyAbsorb
-  affinity: 7
   resonance: 4
-  skillDefinition: {fileID: 11400000, guid: b864ac5a9d8871346be38e57f79d9d7e, type: 2}
+  skillDefinition: {fileID: 11400000, guid: feb9b101914d3cd45a089c2d5381d49e, type: 2}

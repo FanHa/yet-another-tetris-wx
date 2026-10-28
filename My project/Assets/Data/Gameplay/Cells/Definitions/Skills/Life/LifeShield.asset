@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: LifeShield
   m_EditorClassIdentifier: 
   id: LifeShield
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  affinity: 4
-  skillDefinition: {fileID: 11400000, guid: ecad0012de8eb5e44b1643763a2785ce, type: 2}
+  resonance: 0
+  skillDefinition: {fileID: 11400000, guid: c1b0e036f49feac42811a6016f66d12a, type: 2}

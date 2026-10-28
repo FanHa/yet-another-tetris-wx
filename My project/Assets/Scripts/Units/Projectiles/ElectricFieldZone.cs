@@ -5,7 +5,7 @@ namespace Units.Projectiles
 {
     public sealed class ElectricFieldZone : PeriodicAreaEffectZoneBase
     {
-        private ThunderStrikeProjectile hitProjectilePrefab;
+        [SerializeField] private ThunderStrikeProjectile hitProjectilePrefab;
         private float damage;
         private float energyDisruptionAmount;
 
@@ -13,13 +13,11 @@ namespace Units.Projectiles
             Unit caster,
             float radius,
             float duration,
-            ThunderStrikeProjectile hitProjectilePrefab,
             float damage,
             float energyDisruptionAmount,
             Skills.Skill sourceSkill)
         {
             InitializeBase(caster, radius, duration, sourceSkill);
-            this.hitProjectilePrefab = hitProjectilePrefab;
             this.damage = damage;
             this.energyDisruptionAmount = energyDisruptionAmount;
         }
@@ -46,5 +44,16 @@ namespace Units.Projectiles
             hitProjectile.Init(SourceUnit, target, damage, energyDisruptionAmount, SourceSkill);
             hitProjectile.Activate();
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (hitProjectilePrefab == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(hitProjectilePrefab)} is not assigned.", this);
+            }
+        }
+#endif
     }
 }

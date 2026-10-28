@@ -12,13 +12,12 @@ namespace Units.Skills
     /// </summary>
     public class IcyCage : ActiveSkill
     {
-        public IcyCageLevelConfig Config { get; }
+        private IcyCageSkillDefinition SkillDefinition => (IcyCageSkillDefinition)Definition;
         private Unit targetEnemy;
 
-        public IcyCage(IcyCageLevelConfig config)
+        public IcyCage(IcyCageSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -34,33 +33,21 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var config = (IcyCageSkillConfig)Definition.Config;
-            var freezeBuff = new Buffs.Freeze(
-                config.FreezeBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(Context.Unit, this)
-            );
-            targetEnemy.AddBuff(freezeBuff);
+            targetEnemy.AddBuff(CreateFreezeBuff());
             targetEnemy = null;
         }
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
-            return $"对攻击范围内一个敌人施加冻结效果：\n{StatBreakdownFormatter.Format(StatLabel.FreezeDuration, stats)}";
+            return Definition.Description + ":\n" + CreateFreezeBuff().DescribeAppliedEffect();
         }
 
-        public static string DescriptionStatic() => "对攻击范围内一个敌人施加冻结效果";
+        public override string Name() => Definition.DisplayName;
 
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "冰牢";
-        private AdditiveValueBreakdown CalcStats()
-        {
-            return ((IcyCageSkillConfig)Definition.Config).FreezeBuffDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
-        }
+        private Buffs.Freeze CreateFreezeBuff() => new(
+            SkillDefinition.FreezeBuffDefinition,
+            Context.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(Context.Unit, this));
 
     }
 }

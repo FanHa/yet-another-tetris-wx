@@ -1,5 +1,5 @@
 using UnityEngine;
-using Presentation;
+using Model;
 
 namespace Model.Buffs
 {
@@ -9,23 +9,8 @@ namespace Model.Buffs
         [SerializeField] private float reflectPercent;
         [SerializeField] private float reflectPercentPerResonantCell;
 
-        public float ReflectPercent => reflectPercent;
-
-        public AdditiveValueBreakdown CalculateReflectPercent(int resonantCellCount) =>
+        public AdditiveValueBreakdown CalculateStats(int resonantCellCount) =>
             new(reflectPercent, resonantCellCount * reflectPercentPerResonantCell);
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var reflectPercentBreakdown = CalculateReflectPercent(resonantCellCount);
-            string formattedReflectPercent = StatBreakdownFormatter.Format(
-                StatLabel.ReflectedDamagePercent,
-                reflectPercentBreakdown);
-
-            return
-                "受到普攻或技能伤害后，将部分伤害反弹给非自身的来源单位。\n" +
-                $"{formattedReflectPercent}\n" +
-                BaseDuration.ToDisplayString("效果持续时间");
-        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

@@ -8,7 +8,7 @@ namespace Units.Projectiles
     public class PowerCurseZone : PeriodicAreaEffectZoneBase
     {
         private readonly string stackId = System.Guid.NewGuid().ToString("N");
-        private PowerCurseBuffDefinition powerCurseBuffDefinition;
+        [SerializeField] private PowerCurseBuffDefinition powerCurseBuffDefinition;
         private int resonantCellCount;
 
         public void Initialize(
@@ -16,13 +16,13 @@ namespace Units.Projectiles
             float radius,
             float duration,
             int resonantCellCount,
-            Skills.Skill sourceSkill,
-            PowerCurseBuffDefinition powerCurseBuffDefinition)
+            Skills.Skill sourceSkill)
         {
             InitializeBase(caster, radius, duration, sourceSkill);
             this.resonantCellCount = resonantCellCount;
-            this.powerCurseBuffDefinition = powerCurseBuffDefinition;
         }
+
+        public string DescribeEffect(int resonantCellCount) => powerCurseBuffDefinition.DescribeEffect(resonantCellCount);
 
         protected override IEnumerable<Unit> FindTargetsInArea()
         {
@@ -40,5 +40,20 @@ namespace Units.Projectiles
                 new BuffSource(SourceUnit, SourceSkill),
                 stackId));
         }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            if (powerCurseBuffDefinition == null)
+            {
+                Debug.LogError($"{GetType().Name} '{name}'.{nameof(powerCurseBuffDefinition)} is not assigned.", this);
+            }
+            else if (powerCurseBuffDefinition.Id != "buff.power_curse")
+            {
+                Debug.LogError($"{nameof(powerCurseBuffDefinition)} must reference the 'buff.power_curse' definition.", this);
+            }
+        }
+#endif
     }
 }

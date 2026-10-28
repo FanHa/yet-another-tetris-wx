@@ -1,4 +1,6 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
@@ -8,19 +10,27 @@ namespace Units.Buffs
     public class AttackBoostBuff : Buff
     {
         private readonly AttackBoostBuffDefinition attackBoostDefinition;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown atkSpeedPercentStats;
         public float AtkSpeedPercent { get; }
 
         public AttackBoostBuff(AttackBoostBuffDefinition definition, int resonantCellCount, BuffSource source)
-            : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
+            : this(definition, source, definition.CalculateStats(resonantCellCount))
+        {
+        }
+
+        private AttackBoostBuff(AttackBoostBuffDefinition definition, BuffSource source,
+            (BuffDuration Duration, AdditiveValueBreakdown AtkSpeedPercent) stats)
+            : base(definition, stats.Duration, source.SourceUnit, source.SourceSkill)
         {
             attackBoostDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
-            AtkSpeedPercent = definition.CalculateStats(resonantCellCount).AtkSpeedPercent.FinalValue;
+            atkSpeedPercentStats = stats.AtkSpeedPercent;
+            AtkSpeedPercent = stats.AtkSpeedPercent.FinalValue;
         }
 
         public override string Name() => attackBoostDefinition.DisplayName;
-        public override string DescribeAppliedEffect() => attackBoostDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() =>
+            $"{Duration.ToDisplayString("持续时间")}\n" +
+            StatBreakdownFormatter.Format(StatLabel.AttackSpeedIncreasePercent, atkSpeedPercentStats);
 
         public override void OnApply(IBuffContext context)
         {

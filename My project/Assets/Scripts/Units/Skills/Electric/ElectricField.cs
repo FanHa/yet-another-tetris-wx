@@ -9,16 +9,14 @@ namespace Units.Skills
 {
     public sealed class ElectricField : ActiveSkill
     {
-        public ElectricFieldLevelConfig Config { get; }
-
+        private readonly ElectricFieldSkillDefinition skillDefinition;
         private readonly HashSet<Units.Projectiles.ElectricFieldZone> spawnedZones = new();
         private Vector3 targetPosition;
-        private ElectricFieldSkillConfig SkillConfig => (ElectricFieldSkillConfig)Definition.Config;
 
-        public ElectricField(ElectricFieldLevelConfig config)
+        public ElectricField(ElectricFieldSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -34,11 +32,11 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            ElectricFieldStats stats = CalculateStats();
+            ElectricFieldStats stats = GetStatsForDisplay();
             spawnedZones.RemoveWhere(zone => zone == null);
 
             Units.Projectiles.ElectricFieldZone zone = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ZonePrefab,
                 targetPosition,
                 Quaternion.identity);
             spawnedZones.Add(zone);
@@ -46,7 +44,6 @@ namespace Units.Skills
                 caster: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
-                hitProjectilePrefab: SkillConfig.HitProjectilePrefab,
                 damage: stats.Damage.FinalValue,
                 energyDisruptionAmount: stats.EnergyDisruptionAmount.FinalValue,
                 sourceSkill: this);
@@ -66,32 +63,30 @@ namespace Units.Skills
             spawnedZones.Clear();
         }
 
-        public override string Name() => "电场";
+        public override string Name() => Definition.DisplayName;
 
         public override string DescribeEffect()
         {
-            ElectricFieldStats stats = CalculateStats();
-            return "在敌人所在区域制造电场，每隔一段时间随机电击一名区域内敌人，并削减其随机技能蓄能：\n"
+            ElectricFieldStats stats = GetStatsForDisplay();
+            return Definition.Description + "\n"
                    + $"{stats.Radius}\n"
                    + $"{stats.Duration}\n"
-                   + $"触发间隔: <final>{SkillConfig.ProjectilePrefab.ApplyInterval}</final>\n"
+                   + $"触发间隔: <final>{skillDefinition.ZonePrefab.ApplyInterval}</final>\n"
                    + $"{stats.Damage}\n"
                    + $"{stats.EnergyDisruptionAmount}";
         }
 
-        private ElectricFieldStats CalculateStats()
+        private ElectricFieldStats GetStatsForDisplay()
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var stats = skillDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
 
             return new ElectricFieldStats
             {
-                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell),
-                Damage = new StatBreakdownDisplay(StatLabel.ElectricDamage, Config.BaseDamage, resonantCellCount * Config.DamagePerResonantCell),
-                EnergyDisruptionAmount = new StatBreakdownDisplay(
-                    StatLabel.SkillEnergyReduction,
-                    Config.BaseEnergyDisruptionAmount,
-                    resonantCellCount * Config.EnergyDisruptionAmountPerResonantCell)
+                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
+                Duration = new StatBreakdownDisplay(StatLabel.Duration, stats.Duration.BaseValue, stats.Duration.AddedAmount),
+                Damage = new StatBreakdownDisplay(StatLabel.ElectricDamage, stats.Damage.BaseValue, stats.Damage.AddedAmount),
+                EnergyDisruptionAmount = new StatBreakdownDisplay(StatLabel.SkillEnergyReduction,
+                    stats.EnergyDisruptionAmount.BaseValue, stats.EnergyDisruptionAmount.AddedAmount)
             };
         }
 

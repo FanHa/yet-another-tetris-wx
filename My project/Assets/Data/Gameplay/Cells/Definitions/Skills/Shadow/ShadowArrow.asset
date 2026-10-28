@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ShadowArrow
   m_EditorClassIdentifier: 
   id: ShadowArrow
-  affinity: 5
   resonance: 7
-  skillDefinition: {fileID: 11400000, guid: c6db5dc027c2a9545885634b17711c4e, type: 2}
+  skillDefinition: {fileID: 11400000, guid: d927b878e2845c342872fe28b1dbc327, type: 2}

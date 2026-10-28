@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: ChainLightning
   m_EditorClassIdentifier: 
   id: ChainLightning
-  affinity: 8
   resonance: 3
-  skillDefinition: {fileID: 11400000, guid: 0ef3490937c7d3b4ebe1eb043c192fc4, type: 2}
+  skillDefinition: {fileID: 11400000, guid: d262f3d0e236a08488196f581a418bdf, type: 2}

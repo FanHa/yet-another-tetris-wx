@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   id: Fireball
-  affinity: 1
   resonance: 1
-  skillDefinition: {fileID: 11400000, guid: 841b30b29e3420746b7559e0ad2db608, type: 2}
+  skillDefinition: {fileID: 11400000, guid: b648611be77682d4bbba4e1fd357fc7a, type: 2}

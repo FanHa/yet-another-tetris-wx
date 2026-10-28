@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: GuardAlly
   m_EditorClassIdentifier: 
   id: skill.guard_ally
-  displayName: Guard Ally
-  description: "\u91CA\u653E Guard Ally\uFF0C\u5177\u4F53\u6570\u503C\u4E0E\u884C\u4E3A\u7531\u914D\u7F6E\u51B3\u5B9A\u3002"
-  affinity: 4
-  config: {fileID: 11400000, guid: 60744ec7cd980f54bbb0a92c7695dc69, type: 2}
+  displayName: "\u62A4\u536B\u59FF\u6001"
+  description: "\u5C06\u79FB\u52A8\u884C\u4E3A\u5207\u6362\u4E3A\u4F18\u5148\u9760\u8FD1\u961F\u53CB"
+  resonance: 0
   icon: {fileID: -8150554673462657918, guid: 85c068f82d356a04abd05fc049fcdcd2, type: 3}

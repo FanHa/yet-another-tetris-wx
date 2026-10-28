@@ -8,17 +8,16 @@ namespace Units.Buffs
     public class Freeze : Buff
     {
         private readonly FreezeBuffDefinition freezeDefinition;
-        private readonly int resonantCellCount;
 
         public Freeze(FreezeBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, BuffDuration.ForSeconds(definition.CalculateStats(resonantCellCount).FinalValue), source.SourceUnit, source.SourceSkill)
         {
             freezeDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
         }
 
         public override string Name() => freezeDefinition.DisplayName;
-        public override string DescribeAppliedEffect() => freezeDefinition.DescribeEffect(resonantCellCount);
+        public override string DescribeAppliedEffect() =>
+            $"{Definition.Description}\n{Duration.ToDisplayString("冻结持续时间")}";
 
         public override void OnApply(IBuffContext context)
         {

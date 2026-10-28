@@ -1,5 +1,5 @@
 using UnityEngine;
-using Presentation;
+using Model;
 
 namespace Model.Buffs
 {
@@ -8,13 +8,8 @@ namespace Model.Buffs
     {
         [SerializeField, Min(0f)] private float maxHealthIncreasePerResonantCell = 5f;
 
-        public float CalculateMaxHealthIncrease(float baseIncrease, int resonantCellCount) =>
-            baseIncrease + resonantCellCount * maxHealthIncreasePerResonantCell;
-
-        public string DescribeEffect(float baseIncrease, int resonantCellCount) =>
-            StatBreakdownFormatter.Format(
-                StatLabel.MaximumHealth,
-                new AdditiveValueBreakdown(baseIncrease, resonantCellCount * maxHealthIncreasePerResonantCell));
+        public AdditiveValueBreakdown CalculateStats(float baseIncrease, int resonantCellCount) =>
+            new(baseIncrease, resonantCellCount * maxHealthIncreasePerResonantCell);
 
 #if UNITY_EDITOR
         protected override void OnValidate()

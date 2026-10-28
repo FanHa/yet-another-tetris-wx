@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: WindKnockback
   m_EditorClassIdentifier: 
   id: WindKnockback
-  affinity: 3
   resonance: 5
-  skillDefinition: {fileID: 11400000, guid: 2178451fb95d2f2498d92da0feded67a, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 104d78566230dc145b929d11025cd966, type: 2}

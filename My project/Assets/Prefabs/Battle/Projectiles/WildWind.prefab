@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8380b24858ea80c4cbfc740681760eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debuffDefinition: {fileID: 11400000, guid: 9c8705f370e2a3547b3ae096d907d0d8, type: 2}
   spriteRenderer: {fileID: 5167751569373811905}
+  pushSpeed: 2.5
 --- !u!1 &2470373639926018528
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +101,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

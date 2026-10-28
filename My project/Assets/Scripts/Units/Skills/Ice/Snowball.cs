@@ -6,15 +6,13 @@ namespace Units.Skills
 {
     public class Snowball : ActiveSkill
     {
-        public SnowballLevelConfig Config { get; }
+        private readonly SnowballSkillDefinition skillDefinition;
         private Unit cachedTarget;
 
-        private SnowballSkillConfig SkillConfig => (SnowballSkillConfig)Definition.Config;
-
-        public Snowball(SnowballLevelConfig config)
+        public Snowball(SnowballSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -33,7 +31,7 @@ namespace Units.Skills
         {
             // 实例化雪球投射物
             Units.Projectiles.Snowball snowBall = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.ProjectileSpawnPoint.position,
                 Quaternion.identity
             );
@@ -51,16 +49,11 @@ namespace Units.Skills
         public override string DescribeEffect()
         {
             return
-                DescriptionStatic() + "\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                Definition.Description + "\n" +
+                skillDefinition.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
-        public static string DescriptionStatic() => "向攻击范围内一个敌人发射雪球,施加减速Debuff.";
 
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "雪球";
+        public override string Name() => Definition.DisplayName;
         
     }
 }

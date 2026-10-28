@@ -8,86 +8,66 @@ namespace Units.Skills
     {
         private interface ISkillCreator
         {
-            Type ConfigType { get; }
-            Skill Create(SkillConfig config, int level);
+            Type DefinitionType { get; }
+            Skill Create(SkillDefinition definition, int level);
         }
 
-        private sealed class ConfiguredSkillCreator<TConfig, TLevelConfig> : ISkillCreator
-            where TConfig : SkillConfig<TLevelConfig>
-            where TLevelConfig : SkillLevelConfig
+        private sealed class DefinitionSkillCreator<TDefinition> : ISkillCreator where TDefinition : SkillDefinition
         {
-            private readonly Func<TLevelConfig, Skill> create;
+            private readonly Func<TDefinition, Skill> create;
 
-            public ConfiguredSkillCreator(Func<TLevelConfig, Skill> create)
+            public DefinitionSkillCreator(Func<TDefinition, Skill> create)
             {
                 this.create = create;
             }
 
-            public Type ConfigType => typeof(TConfig);
-
-            public Skill Create(SkillConfig config, int level)
-            {
-                return create(((TConfig)config).GetLevelConfig(level));
-            }
-        }
-
-        private sealed class ParameterlessSkillCreator<TConfig> : ISkillCreator where TConfig : SkillConfig
-        {
-            private readonly Func<Skill> create;
-
-            public ParameterlessSkillCreator(Func<Skill> create)
-            {
-                this.create = create;
-            }
-
-            public Type ConfigType => typeof(TConfig);
-
-            public Skill Create(SkillConfig config, int level) => create();
+            public Type DefinitionType => typeof(TDefinition);
+            public Skill Create(SkillDefinition definition, int level) => create((TDefinition)definition);
         }
 
         private static readonly IReadOnlyDictionary<string, ISkillCreator> creators = new Dictionary<string, ISkillCreator>(StringComparer.Ordinal)
         {
-            ["skill.energy_absorb"] = new ConfiguredSkillCreator<EnergyAbsorbSkillConfig, EnergyAbsorbLevelConfig>(config => new EnergyAbsorb(config)),
-            ["skill.chain_lightning"] = new ConfiguredSkillCreator<ChainLightningSkillConfig, ChainLightningLevelConfig>(config => new ChainLightning(config)),
-            ["skill.thunder_strike"] = new ConfiguredSkillCreator<ThunderStrikeSkillConfig, ThunderStrikeLevelConfig>(config => new ThunderStrike(config)),
-            ["skill.electric_field"] = new ConfiguredSkillCreator<ElectricFieldSkillConfig, ElectricFieldLevelConfig>(config => new ElectricField(config)),
-            ["skill.blazing_field"] = new ConfiguredSkillCreator<BlazingFieldSkillConfig, BlazingFieldLevelConfig>(config => new BlazingField(config)),
-            ["skill.fireball"] = new ConfiguredSkillCreator<FireballSkillConfig, FireballLevelConfig>(config => new Fireball(config)),
-            ["skill.flame_inject"] = new ConfiguredSkillCreator<FlameInjectSkillConfig, FlameInjectLevelConfig>(config => new FlameInject(config)),
-            ["skill.flame_ring"] = new ConfiguredSkillCreator<FlameRingSkillConfig, FlameRingLevelConfig>(config => new FlameRing(config)),
-            ["skill.frost_zone"] = new ConfiguredSkillCreator<FrostZoneSkillConfig, FrostZoneLevelConfig>(config => new FrostZone(config)),
-            ["skill.ice_breaker"] = new ConfiguredSkillCreator<IceBreakerSkillConfig, IceBreakerLevelConfig>(config => new IceBreaker(config)),
-            ["skill.ice_shield"] = new ConfiguredSkillCreator<IceShieldSkillConfig, IceShieldLevelConfig>(config => new IceShield(config)),
-            ["skill.icy_cage"] = new ConfiguredSkillCreator<IcyCageSkillConfig, IcyCageLevelConfig>(config => new IcyCage(config)),
-            ["skill.snowball"] = new ConfiguredSkillCreator<SnowballSkillConfig, SnowballLevelConfig>(config => new Snowball(config)),
-            ["skill.guard_ally"] = new ParameterlessSkillCreator<GuardAllySkillConfig>(() => new GuardAlly()),
-            ["skill.life_bomb"] = new ConfiguredSkillCreator<LifeBombSkillConfig, LifeBombLevelConfig>(config => new LifeBomb(config)),
-            ["skill.life_echo"] = new ConfiguredSkillCreator<LifeEchoSkillConfig, LifeEchoLevelConfig>(config => new LifeEcho(config)),
-            ["skill.life_power"] = new ConfiguredSkillCreator<LifePowerSkillConfig, LifePowerLevelConfig>(config => new LifePower(config)),
-            ["skill.life_shield"] = new ConfiguredSkillCreator<LifeShieldSkillConfig, LifeShieldLevelConfig>(config => new LifeShield(config)),
-            ["skill.life_fortitude"] = new ConfiguredSkillCreator<LifeFortitudeSkillConfig, LifeFortitudeLevelConfig>(config => new LifeFortitude(config)),
-            ["skill.shadow_arrow"] = new ConfiguredSkillCreator<ShadowArrowSkillConfig, ShadowArrowLevelConfig>(config => new ShadowArrow(config)),
-            ["skill.shadow_attack"] = new ConfiguredSkillCreator<ShadowAttackSkillConfig, ShadowAttackLevelConfig>(config => new ShadowAttack(config)),
-            ["skill.shadow_step"] = new ConfiguredSkillCreator<ShadowStepSkillConfig, ShadowStepLevelConfig>(config => new ShadowStep(config)),
-            ["skill.vulnerability_field"] = new ConfiguredSkillCreator<VulnerabilityFieldSkillConfig, VulnerabilityFieldLevelConfig>(config => new VulnerabilityField(config)),
-            ["skill.power_curse"] = new ConfiguredSkillCreator<PowerCurseSkillConfig, PowerCurseLevelConfig>(config => new PowerCurse(config)),
-            ["skill.energy_curse"] = new ConfiguredSkillCreator<EnergyCurseSkillConfig, EnergyCurseLevelConfig>(config => new EnergyCurse(config)),
-            ["skill.charge"] = new ConfiguredSkillCreator<ChargeSkillConfig, ChargeLevelConfig>(config => new Charge(config)),
-            ["skill.attack_boost"] = new ConfiguredSkillCreator<AttackBoostSkillConfig, AttackBoostLevelConfig>(config => new AttackBoost(config)),
-            ["skill.wild_wind"] = new ConfiguredSkillCreator<WildWindSkillConfig, WildWindLevelConfig>(config => new WildWind(config)),
-            ["skill.wind_knockback"] = new ConfiguredSkillCreator<WindKnockbackSkillConfig, WindKnockbackLevelConfig>(config => new WindKnockback(config)),
-            ["skill.wind_shift"] = new ConfiguredSkillCreator<WindShiftSkillConfig, WindShiftLevelConfig>(config => new WindShift(config))
+            ["skill.energy_absorb"] = new DefinitionSkillCreator<EnergyAbsorbSkillDefinition>(definition => new EnergyAbsorb()),
+            ["skill.chain_lightning"] = new DefinitionSkillCreator<ChainLightningSkillDefinition>(definition => new ChainLightning(definition)),
+            ["skill.thunder_strike"] = new DefinitionSkillCreator<ThunderStrikeSkillDefinition>(definition => new ThunderStrike(definition)),
+            ["skill.electric_field"] = new DefinitionSkillCreator<ElectricFieldSkillDefinition>(definition => new ElectricField(definition)),
+            ["skill.blazing_field"] = new DefinitionSkillCreator<BlazingFieldSkillDefinition>(definition => new BlazingField(definition)),
+            ["skill.fireball"] = new DefinitionSkillCreator<FireballSkillDefinition>(definition => new Fireball(definition)),
+            ["skill.flame_inject"] = new DefinitionSkillCreator<FlameInjectSkillDefinition>(definition => new FlameInject()),
+            ["skill.flame_ring"] = new DefinitionSkillCreator<FlameRingSkillDefinition>(definition => new FlameRing(definition)),
+            ["skill.frost_zone"] = new DefinitionSkillCreator<FrostZoneSkillDefinition>(definition => new FrostZone(definition)),
+            ["skill.ice_breaker"] = new DefinitionSkillCreator<IceBreakerSkillDefinition>(definition => new IceBreaker()),
+            ["skill.ice_shield"] = new DefinitionSkillCreator<IceShieldSkillDefinition>(definition => new IceShield()),
+            ["skill.icy_cage"] = new DefinitionSkillCreator<IcyCageSkillDefinition>(definition => new IcyCage(definition)),
+            ["skill.snowball"] = new DefinitionSkillCreator<SnowballSkillDefinition>(definition => new Snowball(definition)),
+            ["skill.guard_ally"] = new DefinitionSkillCreator<SkillDefinition>(definition => new GuardAlly()),
+            ["skill.life_bomb"] = new DefinitionSkillCreator<LifeBombSkillDefinition>(definition => new LifeBomb(definition)),
+            ["skill.life_echo"] = new DefinitionSkillCreator<LifeEchoSkillDefinition>(definition => new LifeEcho()),
+            ["skill.life_power"] = new DefinitionSkillCreator<LifePowerSkillDefinition>(definition => new LifePower(definition)),
+            ["skill.life_shield"] = new DefinitionSkillCreator<LifeShieldSkillDefinition>(definition => new LifeShield(definition)),
+            ["skill.life_fortitude"] = new DefinitionSkillCreator<LifeFortitudeSkillDefinition>(definition => new LifeFortitude()),
+            ["skill.shadow_arrow"] = new DefinitionSkillCreator<ShadowArrowSkillDefinition>(definition => new ShadowArrow(definition)),
+            ["skill.shadow_attack"] = new DefinitionSkillCreator<ShadowAttackSkillDefinition>(definition => new ShadowAttack(definition)),
+            ["skill.shadow_step"] = new DefinitionSkillCreator<ShadowStepSkillDefinition>(definition => new ShadowStep(definition)),
+            ["skill.vulnerability_field"] = new DefinitionSkillCreator<VulnerabilityFieldSkillDefinition>(definition => new VulnerabilityField(definition)),
+            ["skill.power_curse"] = new DefinitionSkillCreator<PowerCurseSkillDefinition>(definition => new PowerCurse()),
+            ["skill.energy_curse"] = new DefinitionSkillCreator<EnergyCurseSkillDefinition>(definition => new EnergyCurse()),
+            ["skill.charge"] = new DefinitionSkillCreator<ChargeSkillDefinition>(definition => new Charge(definition)),
+            ["skill.attack_boost"] = new DefinitionSkillCreator<AttackBoostSkillDefinition>(definition => new AttackBoost(definition)),
+            ["skill.wild_wind"] = new DefinitionSkillCreator<WildWindSkillDefinition>(definition => new WildWind(definition)),
+            ["skill.wind_knockback"] = new DefinitionSkillCreator<WindKnockbackSkillDefinition>(definition => new WindKnockback(definition)),
+            ["skill.wind_shift"] = new DefinitionSkillCreator<WindShiftSkillDefinition>(definition => new WindShift(definition))
         };
 
-        public static bool TryGetRequiredConfigType(string skillId, out Type configType)
+        public static bool TryGetRequiredDefinitionType(string skillId, out Type definitionType)
         {
             if (creators.TryGetValue(skillId, out ISkillCreator creator))
             {
-                configType = creator.ConfigType;
+                definitionType = creator.DefinitionType;
                 return true;
             }
 
-            configType = null;
+            definitionType = null;
             return false;
         }
 
@@ -96,7 +76,7 @@ namespace Units.Skills
         public static Skill Create(SkillDefinition skillDefinition, int level)
         {
             ISkillCreator creator = creators[skillDefinition.Id];
-            Skill skill = creator.Create(skillDefinition.Config, level);
+            Skill skill = creator.Create(skillDefinition, level);
             skill.Definition = skillDefinition;
             return skill;
         }

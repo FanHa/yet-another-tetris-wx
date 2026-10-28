@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: Charge
   m_EditorClassIdentifier: 
   id: Charge
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  affinity: 6
-  skillDefinition: {fileID: 11400000, guid: 32b2e42cff705b340810efb9724bd2ee, type: 2}
+  resonance: 0
+  skillDefinition: {fileID: 11400000, guid: a0a603695843f914a94afc93a403c115, type: 2}

@@ -1,5 +1,4 @@
 using UnityEngine;
-using Presentation;
 
 namespace Model.Buffs
 {
@@ -12,18 +11,12 @@ namespace Model.Buffs
         [SerializeField] private int baseAtkReducePercent;
         [SerializeField] private int atkReducePercentPerResonantCell;
 
-        public (AdditiveValueBreakdown Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) CalculateStats(int resonantCellCount) =>
+        public (BuffDuration Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) CalculateStats(int resonantCellCount) =>
             (
-                new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance),
+                BuffDuration.ForSeconds(BaseDuration.Seconds + resonantCellCount * durationPerResonance),
                 new AdditiveValueBreakdown(baseMoveSlowPercent, resonantCellCount * moveSlowPercentPerResonantCell),
                 new AdditiveValueBreakdown(baseAtkReducePercent, resonantCellCount * atkReducePercentPerResonantCell)
             );
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            return $"{StatBreakdownFormatter.Format(StatLabel.WildWindDuration, stats.Duration)}\n{StatBreakdownFormatter.Format(StatLabel.WildWindMovementSpeedReductionPercent, stats.MoveSlowPercent)}\n{StatBreakdownFormatter.Format(StatLabel.WildWindAttackReductionPercent, stats.AtkReducePercent)}";
-        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

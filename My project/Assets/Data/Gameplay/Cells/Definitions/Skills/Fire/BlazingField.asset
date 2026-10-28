@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: BlazingField
   m_EditorClassIdentifier: 
   id: BlazingField
-  affinity: 1
   resonance: 1
-  skillDefinition: {fileID: 11400000, guid: 111315917941123478a31e9e793bea49, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 17724b360d7bc164997258a6de034655, type: 2}

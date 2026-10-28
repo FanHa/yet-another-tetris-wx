@@ -1,4 +1,6 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
@@ -8,7 +10,6 @@ namespace Units.Buffs
     public class Chilled : Buff
     {
         private readonly ChilledBuffDefinition chilledDefinition;
-        private readonly float chilledDuration;
         public int MoveSlowPercent { get; }
         public int AttackSlowPercent { get; }
         public int ActionSlowPercent { get; }
@@ -17,7 +18,6 @@ namespace Units.Buffs
             : base(definition, duration, source.SourceUnit, source.SourceSkill)
         {
             chilledDefinition = definition;
-            chilledDuration = duration.Seconds;
             MoveSlowPercent = moveSlowPercent;
             AttackSlowPercent = attackSlowPercent;
             ActionSlowPercent = actionSlowPercent;
@@ -25,7 +25,11 @@ namespace Units.Buffs
 
         public override string Name() => chilledDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            chilledDefinition.DescribeEffect(chilledDuration, MoveSlowPercent, AttackSlowPercent, ActionSlowPercent);
+            $"{Definition.Description}\n" +
+            Duration.ToDisplayString("减速持续时间") + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.MovementSpeedReductionPercent, new AdditiveValueBreakdown(MoveSlowPercent)) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.AttackSpeedReductionPercent, new AdditiveValueBreakdown(AttackSlowPercent)) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.ActionRateReductionPercent, new AdditiveValueBreakdown(ActionSlowPercent));
 
 
         public override void OnApply(IBuffContext context)

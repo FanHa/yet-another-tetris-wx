@@ -8,32 +8,23 @@ namespace Units.Skills
 {
     public class BlazingField : ActiveSkill
     {
-        public BlazingFieldLevelConfig Config { get; }
+        private readonly BlazingFieldSkillDefinition skillDefinition;
         private Vector3 targetPosition;
         private readonly HashSet<Units.Projectiles.BlazingField> spawnedFields = new();
 
-        private BlazingFieldSkillConfig SkillConfig => (BlazingFieldSkillConfig)Definition.Config;
-
-        public BlazingField(BlazingFieldLevelConfig config)
+        public BlazingField(BlazingFieldSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
-        private struct BlazingFieldStats
-        {
-            public StatBreakdownDisplay Radius;
-            public StatBreakdownDisplay Duration;
-        }
-
-        private BlazingFieldStats CalcStats()
+        private (StatBreakdownDisplay Radius, StatBreakdownDisplay Duration) GetStatsForDisplay()
         {
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
-            return new BlazingFieldStats
-            {
-                Radius = new StatBreakdownDisplay(StatLabel.AreaRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                Duration = new StatBreakdownDisplay(StatLabel.Duration, Config.BaseDuration, resonantCellCount * Config.DurationPerResonantCell)
-            };
+            var stats = skillDefinition.CalculateStats(resonantCellCount);
+            return (
+                new StatBreakdownDisplay(StatLabel.AreaRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
+                new StatBreakdownDisplay(StatLabel.Duration, stats.Duration.BaseValue, stats.Duration.AddedAmount));
         }
 
         protected override bool PrepareCastCore()
@@ -48,11 +39,11 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
+            var stats = GetStatsForDisplay();
             spawnedFields.RemoveWhere(field => field == null);
 
             var effect = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ZonePrefab,
                 targetPosition,
                 Quaternion.identity
             );
@@ -83,20 +74,14 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
+            var stats = GetStatsForDisplay();
             return
-                DescriptionStatic() + ":\n" +
+                Definition.Description + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                SkillConfig.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ZonePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
         }
 
-        public static string DescriptionStatic() => "制造一片燃烧区域, 对敌人造成伤害.";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "焰域";
+        public override string Name() => Definition.DisplayName;
     }
 }

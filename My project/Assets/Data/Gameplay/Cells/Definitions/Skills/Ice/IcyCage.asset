@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: IcyCage
   m_EditorClassIdentifier: 
   id: IcyCage
-  affinity: 2
   resonance: 6
-  skillDefinition: {fileID: 11400000, guid: 84ea59bf39d4a3c44a0939ad397f9414, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 52489d7873ee4324b90cb6c22f9bcfab, type: 2}

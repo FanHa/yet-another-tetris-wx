@@ -9,28 +9,20 @@ namespace Units.Skills
 {
     public class LifeBomb : ActiveSkill
     {
-        public LifeBombLevelConfig Config { get; }
+        private readonly LifeBombSkillDefinition skillDefinition;
         private Vector3 cachedTargetPos; 
 
-        private LifeBombSkillConfig SkillConfig => (LifeBombSkillConfig)Definition.Config;
-
-        public LifeBomb(LifeBombLevelConfig config)
+        public LifeBomb(LifeBombSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
-        private struct LifeBombStats
+        private StatBreakdownDisplay GetHealthCostDisplay(float currentHealth)
         {
-            public StatBreakdownDisplay HealthCostPercent;
-        }
-
-        private LifeBombStats CalcStats()
-        {
-            return new LifeBombStats
-            {
-                HealthCostPercent = new StatBreakdownDisplay(StatLabel.HealthCostPercent, Config.HealthCostPercent)
-            };
+            var stats = skillDefinition.CalculateStats(currentHealth);
+            return new StatBreakdownDisplay(StatLabel.HealthCostPercent,
+                stats.HealthCostPercent.BaseValue, stats.HealthCostPercent.AddedAmount);
         }
 
         protected override bool PrepareCastCore()
@@ -46,12 +38,9 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = CalcStats();
-            float percent = stats.HealthCostPercent.FinalValue / 100f;
-            float healthCost = Context.Attributes.CurrentHealth * percent;
-            healthCost = Mathf.Clamp(healthCost, 1f, Context.Attributes.CurrentHealth); // 至少消耗1点
+            var stats = skillDefinition.CalculateStats(Context.Attributes.CurrentHealth);
             var tempTarget = Object.Instantiate(
-                SkillConfig.TemporaryTargetPrefab,
+                skillDefinition.TemporaryTargetPrefab,
                 cachedTargetPos,
                 Quaternion.identity
             );
@@ -59,7 +48,7 @@ namespace Units.Skills
 
             // 投射炸弹
             Units.Projectiles.LifeBomb lifeBomb = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.ProjectileSpawnPoint.position,
                 Quaternion.identity
             );
@@ -67,7 +56,7 @@ namespace Units.Skills
             lifeBomb.Init(
                 caster: Context.Unit,
                 temporaryTarget: tempTarget,
-                healthAmount: healthCost, // 伤害为消耗的生命值
+                healthAmount: stats.HealthCost, // 伤害为消耗的生命值
                 sourceSkill: this
             );
             
@@ -75,19 +64,9 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
-            return
-                DescriptionStatic() + "\n" +
-                $"{stats.HealthCostPercent}";
+            return Definition.Description + "\n" + GetHealthCostDisplay(Context.Attributes.CurrentHealth);
         }
 
-        public static string DescriptionStatic() => "消耗自身生命值制作炸弹，对目标区域的敌人造成伤害。";
-
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "生命炸弹";
+        public override string Name() => Definition.DisplayName;
     }
 }

@@ -1,6 +1,7 @@
 using Model;
 using Units.Skills;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
@@ -10,7 +11,8 @@ namespace Units.Buffs
     public class WildWindDebuff : Buff
     {
         private readonly WildWindDebuffDefinition wildWindDefinition;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown moveSlowPercentStats;
+        private readonly AdditiveValueBreakdown atkReducePercentStats;
         public int MoveSlowPercent { get; }
         public int AtkReducePercent { get; }
 
@@ -20,18 +22,21 @@ namespace Units.Buffs
         }
 
         private WildWindDebuff(WildWindDebuffDefinition definition, int resonantCellCount, BuffSource source,
-            (AdditiveValueBreakdown Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) stats)
-            : base(definition, BuffDuration.ForSeconds(stats.Duration.FinalValue), source.SourceUnit, source.SourceSkill)
+            (BuffDuration Duration, AdditiveValueBreakdown MoveSlowPercent, AdditiveValueBreakdown AtkReducePercent) stats)
+            : base(definition, stats.Duration, source.SourceUnit, source.SourceSkill)
         {
             wildWindDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
+            moveSlowPercentStats = stats.MoveSlowPercent;
+            atkReducePercentStats = stats.AtkReducePercent;
             MoveSlowPercent = (int)stats.MoveSlowPercent.FinalValue;
             AtkReducePercent = (int)stats.AtkReducePercent.FinalValue;
         }
 
         public override string Name() => wildWindDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            wildWindDefinition.DescribeEffect(resonantCellCount);
+            $"{Duration.ToDisplayString("持续时间")}\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.WildWindMovementSpeedReductionPercent, moveSlowPercentStats)}\n" +
+            StatBreakdownFormatter.Format(StatLabel.WildWindAttackReductionPercent, atkReducePercentStats);
 
         public override void OnApply(IBuffContext context)
         {

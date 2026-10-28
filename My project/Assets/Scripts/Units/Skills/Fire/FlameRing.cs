@@ -7,53 +7,39 @@ namespace Units.Skills
 {
     public class FlameRing : Skill
     {
-        public FlameRingLevelConfig Config { get; }
+        private readonly FlameRingSkillDefinition skillDefinition;
         private Units.Projectiles.FlameRing areaEffect;
 
-        public FlameRing(FlameRingLevelConfig config)
+        public FlameRing(FlameRingSkillDefinition definition)
         {
-            Config = config;
+            skillDefinition = definition;
         }
 
-        private struct FlameRingStats
-        {
-            public StatBreakdownDisplay Radius;
-            public StatBreakdownDisplay AreaDuration;
-        }
-
-        private FlameRingStats CalcStats()
+        private (StatBreakdownDisplay Radius, float AreaDuration) GetStatsForDisplay()
         {
             int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
-            return new FlameRingStats
-            {
-                Radius = new StatBreakdownDisplay(StatLabel.ActionRadius, Config.BaseRadius, resonantCellCount * Config.RadiusPerResonantCell),
-                AreaDuration = new StatBreakdownDisplay(StatLabel.AreaDuration, Config.AreaDuration)
-            };
+            var stats = skillDefinition.CalculateStats(resonantCellCount);
+            return (
+                new StatBreakdownDisplay(StatLabel.ActionRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
+                stats.AreaDuration);
         }
 
         public override string DescribeEffect()
         {
-            var stats = CalcStats();
+            var stats = GetStatsForDisplay();
             return
-                DescriptionStatic() + ":\n" +
-                ((FlameRingSkillConfig)Definition.Config).ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n" +
+                Definition.Description + ":\n" +
+                skillDefinition.ZonePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n" +
                 $"{stats.Radius}\n";
         }
 
-        public static string DescriptionStatic() => "对周围一圈敌人持续造成火焰伤害";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "火环";
+        public override string Name() => Definition.DisplayName;
 
         public override void OnActivate()
         {
-            var stats = CalcStats();
-            var skillConfig = (FlameRingSkillConfig)Definition.Config;
+            var stats = GetStatsForDisplay();
             areaEffect = Object.Instantiate(
-                skillConfig.ProjectilePrefab,
+                skillDefinition.ZonePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
@@ -61,7 +47,7 @@ namespace Units.Skills
                 owner: Context.Unit,
                 radius: stats.Radius.FinalValue,
                 sourceSkill: this,
-                duration: stats.AreaDuration.FinalValue,
+                duration: stats.AreaDuration,
                 resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
             );
             areaEffect.Activate();

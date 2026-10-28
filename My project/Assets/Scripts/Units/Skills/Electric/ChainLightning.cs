@@ -8,73 +8,60 @@ namespace Units.Skills
 {
     public class ChainLightning : ActiveSkill
     {
-        public ChainLightningLevelConfig Config { get; }
-
-        private ChainLightningSkillConfig SkillConfig => (ChainLightningSkillConfig)Definition.Config;
+        private readonly ChainLightningSkillDefinition skillDefinition;
         private Unit initialTarget;
 
-        public ChainLightning(ChainLightningLevelConfig config)
+        public ChainLightning(ChainLightningSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         public override string DescribeEffect()
         {
-            return $"对最近的敌人发射一道闪电，{CalcInitialDamage()}，" +
-                   $"每次弹射伤害增加 {Config.DamageIncreasePercentage}%，最多弹射 {Config.MaxBounces} 次。";
+            var stats = GetStatsForDisplay();
+            return Definition.Description + ":\n" +
+                   $"{stats.Damage}\n" +
+                   $"每次弹射伤害增加 {skillDefinition.DamageIncreasePercentage}%，最多弹射 {skillDefinition.MaxBounces} 次。";
         }
 
         protected override bool PrepareCastCore()
         {
             initialTarget = null;
-            initialTarget = Context.FindClosestEnemyInRange(Config.Range);
+            initialTarget = Context.FindClosestEnemyInRange(skillDefinition.Range);
             return initialTarget != null;
         }
 
         protected override void ExecuteCore()
         {
             Projectiles.ChainLightning projectile = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
-            StatBreakdownDisplay initialDamage = CalcInitialDamage();
-            float energyDisruptionAmount = CalcEnergyDisruptionAmount();
+            var stats = GetStatsForDisplay();
             projectile.Initialize(
                 caster: Context.Unit,
                 initialTarget: initialTarget,
-                baseDamage: initialDamage.FinalValue,
-                damageIncreasePercentage: Config.DamageIncreasePercentage,
-                maxTargets: Config.MaxBounces + 1,
-                chainRange: Config.Range,
-                energyDisruptionAmount: energyDisruptionAmount,
+                baseDamage: stats.Damage.FinalValue,
+                damageIncreasePercentage: skillDefinition.DamageIncreasePercentage,
+                maxTargets: skillDefinition.MaxBounces + 1,
+                chainRange: skillDefinition.Range,
+                energyDisruptionAmount: stats.EnergyDisruptionAmount,
                 sourceSkill: this
             );
             projectile.Activate();
             initialTarget = null;
         }
 
-        private StatBreakdownDisplay CalcInitialDamage()
+        private (StatBreakdownDisplay Damage, float EnergyDisruptionAmount) GetStatsForDisplay()
         {
-            int electricCellCount = Context.GetResonanceCount(Definition.Resonance);
-
-            return new StatBreakdownDisplay(
-                StatLabel.FirstChainDamage,
-                Config.BaseDamage,
-                electricCellCount * Config.DamagePerResonantCell
-            );
+            var stats = skillDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
+            return (
+                new StatBreakdownDisplay(StatLabel.FirstChainDamage, stats.InitialDamage.BaseValue, stats.InitialDamage.AddedAmount),
+                stats.EnergyDisruptionAmount);
         }
 
-        private float CalcEnergyDisruptionAmount()
-        {
-            return Config.BaseEnergyDisruptionAmount
-                     + Context.GetResonanceCount(Definition.Resonance) * Config.EnergyDisruptionAmountPerResonantCell;
-        }
-
-        public override string Name()
-        {
-            return "闪电链";
-        }
+        public override string Name() => Definition.DisplayName;
     }
 }

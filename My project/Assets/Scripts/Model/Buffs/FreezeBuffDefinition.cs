@@ -1,5 +1,4 @@
 using UnityEngine;
-using Presentation;
 
 namespace Model.Buffs
 {
@@ -10,9 +9,6 @@ namespace Model.Buffs
 
         public AdditiveValueBreakdown CalculateStats(int resonantCellCount) =>
             new AdditiveValueBreakdown(BaseDuration.Seconds, resonantCellCount * durationPerResonance);
-
-        public string DescribeEffect(int resonantCellCount) =>
-            $"完全冻结,无法行动,能量回复为0\n{StatBreakdownFormatter.Format(StatLabel.FreezeDuration, CalculateStats(resonantCellCount))}";
 
 #if UNITY_EDITOR
         protected override void OnValidate()

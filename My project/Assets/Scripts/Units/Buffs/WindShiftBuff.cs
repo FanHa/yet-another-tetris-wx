@@ -1,24 +1,29 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
     public class WindShiftBuff : Buff, IAttackHitTrigger
     {
         private readonly WindShiftBuffDefinition windShiftDefinition;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown attackRangeBonusStats;
         private readonly float attackRangeBonus;      // 攻击距离提升）
 
         public WindShiftBuff(WindShiftBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             windShiftDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
-            attackRangeBonus = definition.CalculateStats(resonantCellCount).AttackRangeBonus.FinalValue;
+            var stats = definition.CalculateStats(resonantCellCount);
+            attackRangeBonusStats = stats.AttackRangeBonus;
+            attackRangeBonus = stats.AttackRangeBonus.FinalValue;
         }
 
         public override string Name() => windShiftDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            windShiftDefinition.DescribeEffect(resonantCellCount);
+            $"攻击时额外造成等于当前最终攻击距离的伤害。\n" +
+            $"{StatBreakdownFormatter.Format(StatLabel.AttackRangeIncrease, attackRangeBonusStats)}\n" +
+            Duration.ToDisplayString("风形态持续时间");
 
 
         public override void OnApply(IBuffContext context)

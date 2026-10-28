@@ -9,15 +9,6 @@ namespace Model.Buffs
 
         public VulnerabilityBuffDefinition VulnerabilityDefinition => vulnerabilityDefinition;
 
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = vulnerabilityDefinition.CalculateStats(resonantCellCount);
-            return $"{stats.ExtraDamagePercent}\n{stats.Duration}\n{BaseDuration.ToDisplayString("效果持续时间")}";
-        }
-
-        public string DescribeEffect(float extraDamagePercent, float duration) =>
-            $"攻击时对目标施加{extraDamagePercent}%易伤Debuff，持续{duration}秒";
-
 #if UNITY_EDITOR
         protected override void OnValidate()
         {

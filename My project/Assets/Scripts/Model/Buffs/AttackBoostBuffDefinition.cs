@@ -9,17 +9,11 @@ namespace Model.Buffs
         [SerializeField] private float baseAtkSpeedPercent;
         [SerializeField] private float atkSpeedPercentPerResonantCell;
 
-        public (string Duration, AdditiveValueBreakdown AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
+        public (BuffDuration Duration, AdditiveValueBreakdown AtkSpeedPercent) CalculateStats(int resonantCellCount) =>
             (
-                BaseDuration.ToDisplayString("持续时间"),
+                BaseDuration,
                 new AdditiveValueBreakdown(baseAtkSpeedPercent, resonantCellCount * atkSpeedPercentPerResonantCell)
             );
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            return $"{stats.Duration}\n{StatBreakdownFormatter.Format(StatLabel.AttackSpeedIncreasePercent, stats.AtkSpeedPercent)}";
-        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

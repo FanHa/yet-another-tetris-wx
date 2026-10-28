@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: IceShield
   m_EditorClassIdentifier: 
   id: IceShield
-  affinity: 2
   resonance: 6
-  skillDefinition: {fileID: 11400000, guid: 0ac382e5f8b65684c879b32e40845df5, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 363829ca6ecff3940a0b07d712dc9176, type: 2}

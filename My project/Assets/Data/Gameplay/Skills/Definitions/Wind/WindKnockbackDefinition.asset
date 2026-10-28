@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de56f736849868a47832c4ace8da52c2, type: 3}
+  m_Name: WindKnockbackDefinition
+  m_EditorClassIdentifier: 
+  id: skill.wind_knockback
+  displayName: "\u8F7B\u98CE\u51FB\u9000"
+  description: "\u666E\u901A\u653B\u51FB\u547D\u4E2D\u65F6\u5BF9\u76EE\u6807\u9020\u6210\u5C0F\u5E45\u51FB\u9000"
+  resonance: 5
+  icon: {fileID: -6377495307504447203, guid: 6d602c25858f6704391736937dc0ef1a, type: 3}
+  windKnockbackBuffDefinition: {fileID: 11400000, guid: a4ff4433d052f154f99191baef13bee2, type: 2}

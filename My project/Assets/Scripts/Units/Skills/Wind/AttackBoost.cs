@@ -6,46 +6,43 @@ namespace Units.Skills
 {
     public class AttackBoost : ActiveSkill
     {
-        public AttackBoostLevelConfig Config { get; }
+        private readonly AttackBoostSkillDefinition skillDefinition;
 
-        private AttackBoostSkillConfig SkillConfig => (AttackBoostSkillConfig)Definition.Config;
-
-        public AttackBoost(AttackBoostLevelConfig config)
+        public AttackBoost(AttackBoostSkillDefinition definition)
         {
-            Config = config;
-            this.RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         public override string DescribeEffect()
         {
             return
-                DescriptionStatic() + ":\n" +
-                SkillConfig.AttackBoostBuffDefinition.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                Definition.Description + ":\n" +
+                CreateBuff().DescribeAppliedEffect();
         }
 
-        public static string DescriptionStatic() => "提升攻击速度";
-
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "攻击加速";
+        public override string Name() => Definition.DisplayName;
 
         protected override void ExecuteCore()
         {
-            var buff = new Buffs.AttackBoostBuff(
-                SkillConfig.AttackBoostBuffDefinition,
+            var buff = CreateBuff();
+
+            var projectile = Object.Instantiate(
+                skillDefinition.BuffProjectilePrefab,
+                Context.Transform.position,
+                UnityEngine.Quaternion.identity
+            );
+            projectile.Init(Context.Unit, Context.Unit, buff);
+            projectile.Activate();
+        }
+
+        private Buffs.AttackBoostBuff CreateBuff()
+        {
+            return new Buffs.AttackBoostBuff(
+                skillDefinition.AttackBoostBuffDefinition,
                 Context.GetResonanceCount(Definition.Resonance),
                 new Buffs.BuffSource(Context.Unit, this)
             );
-
-            var projectile = Object.Instantiate(
-                SkillConfig.BuffProjectilePrefab,
-                Context.Transform.position,
-                Quaternion.identity
-            );
-            projectile.Init(Context.Unit, Context.Unit, buff); // 目标为自己
-            projectile.Activate();
         }
     }
 }

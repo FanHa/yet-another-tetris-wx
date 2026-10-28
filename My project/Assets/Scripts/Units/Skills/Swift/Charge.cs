@@ -9,14 +9,12 @@ namespace Units.Skills
 {
     public class Charge : ActiveSkill
     {
-        public ChargeLevelConfig Config { get; }
+        private readonly ChargeSkillDefinition skillDefinition;
 
-        private ChargeSkillConfig SkillConfig => (ChargeSkillConfig)Definition.Config;
-
-        public Charge(ChargeLevelConfig config)
+        public Charge(ChargeSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         private struct ChargeStats
@@ -28,10 +26,14 @@ namespace Units.Skills
         private ChargeStats CalcStats()
         {
             float moveSpeed = Context.Attributes.MoveSpeed.finalValue;
-            float chargeDamage = Config.ChargeDamage + moveSpeed * Config.DamageBonusPerSpeed;
+            AdditiveValueBreakdown chargeDamage = skillDefinition.CalculateDamage(moveSpeed);
             return new ChargeStats
             {
-                ChargeDamage = new StatBreakdownDisplay(StatLabel.DashDamage, chargeDamage),
+                ChargeDamage = new StatBreakdownDisplay(
+                    StatLabel.DashDamage,
+                    chargeDamage.BaseValue,
+                    chargeDamage.AddedAmount
+                ),
             };
         }
 
@@ -47,7 +49,7 @@ namespace Units.Skills
                 return;
 
             var chargeProjectile = Object.Instantiate(
-                SkillConfig.ProjectilePrefab,
+                skillDefinition.ProjectilePrefab,
                 Context.Transform.position,
                 Quaternion.identity
             );
@@ -56,7 +58,7 @@ namespace Units.Skills
                 target: targetEnemy,
                 speed: 2f * Context.Attributes.MoveSpeed.finalValue,
                 chargeDamage: stats.ChargeDamage.FinalValue,
-                avoidancePriority: Config.AvoidancePriority,
+                avoidancePriority: skillDefinition.AvoidancePriority,
                 sourceSkill: this
             );
             chargeProjectile.Activate();

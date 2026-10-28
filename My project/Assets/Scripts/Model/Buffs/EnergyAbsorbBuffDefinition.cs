@@ -1,5 +1,4 @@
 using UnityEngine;
-using Presentation;
 
 namespace Model.Buffs
 {
@@ -9,17 +8,8 @@ namespace Model.Buffs
         [SerializeField] private float baseEnergyAbsorbPerSkillCast;
         [SerializeField] private float energyAbsorbPerResonantCell;
 
-        public (AdditiveValueBreakdown EnergyAbsorbPerSkillCast, string Duration) CalculateStats(int resonantCellCount) =>
-            (
-                new AdditiveValueBreakdown(baseEnergyAbsorbPerSkillCast, resonantCellCount * energyAbsorbPerResonantCell),
-                BaseDuration.ToDisplayString("效果持续时间")
-            );
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            return $"敌对单位施放技能时，为己方除自身外的每个活动单位补充能量。\n{StatBreakdownFormatter.Format(StatLabel.EnergyPerEnemySkillCast, stats.EnergyAbsorbPerSkillCast)}\n{stats.Duration}";
-        }
+        public AdditiveValueBreakdown CalculateStats(int resonantCellCount) =>
+            new(baseEnergyAbsorbPerSkillCast, resonantCellCount * energyAbsorbPerResonantCell);
 
 #if UNITY_EDITOR
         protected override void OnValidate()

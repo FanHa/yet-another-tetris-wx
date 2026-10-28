@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3457c30a98897a6448a02bb19cc4215b, type: 3}
+  m_Name: IcyCageDefinition
+  m_EditorClassIdentifier: 
+  id: skill.icy_cage
+  displayName: "\u51B0\u7262"
+  description: "\u5BF9\u653B\u51FB\u8303\u56F4\u5185\u4E00\u4E2A\u654C\u4EBA\u65BD\u52A0\u51BB\u7ED3\u6548\u679C\u3002"
+  resonance: 6
+  icon: {fileID: 450698819153296390, guid: 40f2981b399acce4b859f6ecb5ecff66, type: 3}
+  projectilePrefab: {fileID: 8931962592207463393, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}
+  freezeBuffDefinition: {fileID: 11400000, guid: ea74cb02cc265b04cbf80a92555a05b6, type: 2}
+  requiredEnergy: 80

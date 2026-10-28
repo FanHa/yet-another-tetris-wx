@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: LifeBomb
   m_EditorClassIdentifier: 
   id: LifeBomb
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  affinity: 4
-  skillDefinition: {fileID: 11400000, guid: b41223e9eb9031b43a4a04f086e64f7f, type: 2}
+  resonance: 0
+  skillDefinition: {fileID: 11400000, guid: 3f27b46592e396c458400ba7d9642298, type: 2}

@@ -1,4 +1,6 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
@@ -8,29 +10,33 @@ namespace Units.Buffs
     public class IceShield : Buff, ITakeHitTrigger
     {
         private readonly IceShieldBuffDefinition iceShieldDefinition;
-        private readonly int resonantCellCount;
         private readonly ChilledBuffDefinition chilledDefinition;
-        private readonly float chilledDuration;
-        private readonly int chilledMoveSlowPercent;
-        private readonly int chilledAttackSlowPercent;
-        private readonly int chilledActionSlowPercent;
+        private readonly AdditiveValueBreakdown chilledDuration;
+        private readonly AdditiveValueBreakdown chilledMoveSlowPercent;
+        private readonly AdditiveValueBreakdown chilledAttackSlowPercent;
+        private readonly AdditiveValueBreakdown chilledActionSlowPercent;
 
         public IceShield(IceShieldBuffDefinition definition, int resonantCellCount, BuffSource source)
             : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             iceShieldDefinition = definition;
-            this.resonantCellCount = resonantCellCount;
             chilledDefinition = definition.ChilledDefinition;
             var stats = chilledDefinition.CalculateStats(resonantCellCount);
-            chilledDuration = stats.Duration.FinalValue;
-            chilledMoveSlowPercent = (int)stats.MoveSlowPercent.FinalValue;
-            chilledAttackSlowPercent = (int)stats.AttackSlowPercent.FinalValue;
-            chilledActionSlowPercent = (int)stats.ActionSlowPercent.FinalValue;
+            chilledDuration = stats.Duration;
+            chilledMoveSlowPercent = stats.MoveSlowPercent;
+            chilledAttackSlowPercent = stats.AttackSlowPercent;
+            chilledActionSlowPercent = stats.ActionSlowPercent;
         }
 
         public override string Name() => iceShieldDefinition.DisplayName;
         public override string DescribeAppliedEffect() =>
-            iceShieldDefinition.DescribeEffect(resonantCellCount);
+            $"{Definition.Description}\n" +
+            Duration.ToDisplayString("护盾持续时间") + "\n" +
+            $"{chilledDefinition.Description}\n" +
+            StatBreakdownFormatter.Format(StatLabel.ChillDuration, chilledDuration) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.MovementSpeedReductionPercent, chilledMoveSlowPercent) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.AttackSpeedReductionPercent, chilledAttackSlowPercent) + "\n" +
+            StatBreakdownFormatter.Format(StatLabel.ActionRateReductionPercent, chilledActionSlowPercent);
 
         public void OnTakeHit(IBuffContext context, Unit self, Unit attacker, ref Damages.Damage damage)
         {
@@ -38,10 +44,10 @@ namespace Units.Buffs
                 return;
             var chilled = new Chilled(
                 chilledDefinition,
-                BuffDuration.ForSeconds(chilledDuration),
-                chilledMoveSlowPercent,
-                chilledAttackSlowPercent,
-                chilledActionSlowPercent,
+                BuffDuration.ForSeconds(chilledDuration.FinalValue),
+                (int)chilledMoveSlowPercent.FinalValue,
+                (int)chilledAttackSlowPercent.FinalValue,
+                (int)chilledActionSlowPercent.FinalValue,
                 new BuffSource(self, sourceSkill));
             context.AddBuffTo(attacker, chilled);
         }

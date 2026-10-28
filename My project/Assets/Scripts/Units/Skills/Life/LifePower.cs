@@ -7,13 +7,13 @@ namespace Units.Skills
 {
     public class LifePower : ActiveSkill
     {
-        public LifePowerLevelConfig Config { get; }
+        private readonly LifePowerSkillDefinition skillDefinition;
         private Unit cachedTarget;
 
-        public LifePower(LifePowerLevelConfig config)
+        public LifePower(LifePowerSkillDefinition definition)
         {
-            Config = config;
-            RequiredEnergy = config.RequiredEnergy;
+            skillDefinition = definition;
+            RequiredEnergy = definition.RequiredEnergy;
         }
 
         protected override bool PrepareCastCore()
@@ -27,8 +27,8 @@ namespace Units.Skills
             if (cachedTarget == null)
             return;
 
-            var definition = ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition;
-            float attackHitBonusDamage = definition.CalculateAttackHitBonusDamage(
+            var definition = skillDefinition.LifePowerBuffDefinition;
+            var stats = definition.CalculateStats(
                 Context.Attributes.MaxHealth.finalValue,
                 Context.GetResonanceCount(Definition.Resonance)
             );
@@ -36,7 +36,7 @@ namespace Units.Skills
                 new Units.Buffs.LifePowerBuff
                 (
                     definition,
-                    attackHitBonusDamage,
+                    stats.AttackHitBonusDamage,
                     new Units.Buffs.BuffSource(Context.Unit, this)
                 )
             );
@@ -45,23 +45,19 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var definition = ((LifePowerSkillConfig)Definition.Config).LifePowerBuffDefinition;
-            float attackHitBonusDamage = definition.CalculateAttackHitBonusDamage(
+            var definition = skillDefinition.LifePowerBuffDefinition;
+            var stats = definition.CalculateStats(
                 Context.Attributes.MaxHealth.finalValue,
                 Context.GetResonanceCount(Definition.Resonance)
             );
             var previewBuff = new Units.Buffs.LifePowerBuff(
                 definition,
-                attackHitBonusDamage,
+                stats.AttackHitBonusDamage,
                 new Units.Buffs.BuffSource(Context.Unit, this)
             );
             return BuffDescriptionFormatter.Format(Definition.Description, previewBuff.DescribeAppliedEffect());
         }
 
-        public override string Name()
-        {
-            return NameStatic();
-        }
-        public static string NameStatic() => "生命之力";
+        public override string Name() => Definition.DisplayName;
     }
 }

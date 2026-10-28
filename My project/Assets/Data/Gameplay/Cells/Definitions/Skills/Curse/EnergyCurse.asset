@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: EnergyCurse
   m_EditorClassIdentifier: 
   id: EnergyCurse
-  affinity: 9
   resonance: 9
-  skillDefinition: {fileID: 11400000, guid: 6ae9a3de7a3e7a94d8213dbebfd821dd, type: 2}
+  skillDefinition: {fileID: 11400000, guid: 3b3f3d44aa5cc7b4d89745fd0a7d2873, type: 2}

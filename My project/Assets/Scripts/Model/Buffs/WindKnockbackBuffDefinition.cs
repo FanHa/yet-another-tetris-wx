@@ -10,19 +10,12 @@ namespace Model.Buffs
         [SerializeField] private float knockbackDistancePerResonantCell;
         [SerializeField] private float maxKnockbackDistance;
 
-        public (AdditiveValueBreakdown KnockbackDistance, AdditiveValueBreakdown MaxKnockbackDistance, string Duration) CalculateStats(int resonantCellCount) =>
+        public (AdditiveValueBreakdown KnockbackDistance, AdditiveValueBreakdown MaxKnockbackDistance, BuffDuration Duration) CalculateStats(int resonantCellCount) =>
             (
                 new AdditiveValueBreakdown(baseKnockbackDistance, resonantCellCount * knockbackDistancePerResonantCell),
                 new AdditiveValueBreakdown(maxKnockbackDistance),
-                BaseDuration.ToDisplayString("轻风击退持续时间")
+                BaseDuration
             );
-
-        public string DescribeEffect(int resonantCellCount)
-        {
-            var stats = CalculateStats(resonantCellCount);
-            float distance = Mathf.Min(stats.KnockbackDistance.FinalValue, stats.MaxKnockbackDistance.FinalValue);
-            return $"普攻命中时将目标击退{distance:F2}（最多{stats.MaxKnockbackDistance.FinalValue:F2}）\n{StatBreakdownFormatter.Format(StatLabel.KnockbackDistance, stats.KnockbackDistance)}\n{StatBreakdownFormatter.Format(StatLabel.MaxKnockbackDistance, stats.MaxKnockbackDistance)}\n{stats.Duration}";
-        }
 
 #if UNITY_EDITOR
         protected override void OnValidate()

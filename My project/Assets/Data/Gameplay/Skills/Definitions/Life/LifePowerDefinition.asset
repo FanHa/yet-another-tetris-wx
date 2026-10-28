@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7680da71362ffb840a69fb75a96a5148, type: 3}
+  m_Name: LifePowerDefinition
+  m_EditorClassIdentifier: 
+  id: skill.life_power
+  displayName: Life Power
+  description: "\u968F\u673A\u9009\u62E9\u4E00\u540D\u5176\u4ED6\u5B58\u6D3B\u53CB\u519B\uFF1B\u82E5\u6CA1\u6709\u5176\u4ED6\u53CB\u519B\uFF0C\u5219\u9009\u62E9\u81EA\u8EAB\u3002Buff
+    \u6301\u7EED\u671F\u95F4\uFF0C\u53D7\u76CA\u5355\u4F4D\u6BCF\u6B21\u653B\u51FB\u547D\u4E2D\u90FD\u4F1A\u9644\u52A0\u6280\u80FD\u4F24\u5BB3\u3002\u9644\u52A0\u4F24\u5BB3\u5728\u65BD\u653E\u65F6\u8BA1\u7B97\uFF1A\u65BD\u6CD5\u8005\u5F53\u65F6\u7684\u6700\u5927\u751F\u547D\u503C
+    \xD7\uFF08\u57FA\u7840\u751F\u547D\u8F6C\u6362\u7387 + \u751F\u547D\u5171\u9E23\u6570
+    \xD7 \u6BCF\u4E2A\u5171\u9E23\u7684\u8F6C\u6362\u7387\u52A0\u6210\uFF09\xF7 100\u3002"
+  resonance: 0
+  icon: {fileID: 1830523377788679087, guid: 71787473c3bcba645a18d20f3b97d484, type: 3}
+  lifePowerBuffDefinition: {fileID: 11400000, guid: dd5672a441899c24f91c74991b62e5f0, type: 2}
+  requiredEnergy: 60

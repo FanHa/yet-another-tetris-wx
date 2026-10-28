@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: LifePower
   m_EditorClassIdentifier: 
   id: LifePower
-  runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
-  affinity: 4
-  skillDefinition: {fileID: 11400000, guid: 49da97fd06bcc784c99cdff854743a87, type: 2}
+  resonance: 0
+  skillDefinition: {fileID: 11400000, guid: 28e824fe2ed29af449fe08942209cdb4, type: 2}

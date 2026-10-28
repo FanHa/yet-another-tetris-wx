@@ -1,12 +1,13 @@
+using Model;
 using Model.Buffs;
+using Presentation;
 
 namespace Units.Buffs
 {
     public sealed class LifeFortitudeBuff : Buff
     {
         private readonly LifeFortitudeBuffDefinition buffDefinition;
-        private readonly float baseMaxHealthIncrease;
-        private readonly int resonantCellCount;
+        private readonly AdditiveValueBreakdown maxHealthIncreaseBreakdown;
         private readonly float maxHealthIncrease;
 
         public LifeFortitudeBuff(
@@ -17,15 +18,16 @@ namespace Units.Buffs
         ) : base(definition, definition.BaseDuration, source.SourceUnit, source.SourceSkill)
         {
             buffDefinition = definition;
-            this.baseMaxHealthIncrease = baseMaxHealthIncrease;
-            this.resonantCellCount = resonantCellCount;
-            maxHealthIncrease = definition.CalculateMaxHealthIncrease(baseMaxHealthIncrease, resonantCellCount);
+            maxHealthIncreaseBreakdown = definition.CalculateStats(baseMaxHealthIncrease, resonantCellCount);
+            maxHealthIncrease = maxHealthIncreaseBreakdown.FinalValue;
         }
 
         public override string Name() => buffDefinition.DisplayName;
 
         public override string DescribeAppliedEffect() =>
-            buffDefinition.DescribeEffect(baseMaxHealthIncrease, resonantCellCount);
+            $"{Definition.Description}\n" +
+            StatBreakdownFormatter.Format(StatLabel.MaximumHealth, maxHealthIncreaseBreakdown) + "\n" +
+            Duration.ToDisplayString("效果持续时间");
 
         public override void OnApply(IBuffContext context)
         {
