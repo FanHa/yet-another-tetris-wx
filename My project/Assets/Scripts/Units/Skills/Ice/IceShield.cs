@@ -18,12 +18,12 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.AddBuff(CreateBuff());
+            OwnerContext.AddBuff(CreateBuff());
         }
 
         private Buffs.IceShield CreateBuff() => new(
             SkillDefinition.IceShieldBuffDefinition,
-            Context.GetResonanceCount(Definition.Resonance),
-            new Buffs.BuffSource(Context.Unit, this));
+            OwnerContext.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(OwnerContext.Owner, this));
     }
 }

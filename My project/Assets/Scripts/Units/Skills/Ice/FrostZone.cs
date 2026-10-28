@@ -23,14 +23,14 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Context.TryGetClosestEnemyInAttackRange(out var targetEnemy))
+            if (!Targeting.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
             targetPosition = targetEnemy.transform.position;
             return true;
         }
         protected override void ExecuteCore()
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
             var stats = GetStatsForDisplay(resonantCellCount);
             spawnedZones.RemoveWhere(zone => zone == null);
 
@@ -41,7 +41,7 @@ namespace Units.Skills
             );
             spawnedZones.Add(frostZone);
             frostZone.Initialize(
-                caster: Context.Unit,
+                caster: OwnerContext.Owner,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
@@ -67,7 +67,7 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            var resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            var resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
             var stats = GetStatsForDisplay(resonantCellCount);
             return
                 Definition.Description + ":\n" +

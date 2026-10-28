@@ -16,15 +16,15 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.AddBuff(CreateBuff());
+            OwnerContext.AddBuff(CreateBuff());
         }
 
         private Buffs.EnergyAbsorb CreateBuff()
         {
             return new Buffs.EnergyAbsorb(
                 SkillDefinition.EnergyAbsorbBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(Context.Unit, this)
+                OwnerContext.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(OwnerContext.Owner, this)
             );
         }
     }

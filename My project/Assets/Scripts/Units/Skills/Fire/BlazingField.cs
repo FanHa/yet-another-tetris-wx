@@ -20,7 +20,7 @@ namespace Units.Skills
 
         private (StatBreakdownDisplay Radius, StatBreakdownDisplay Duration) GetStatsForDisplay()
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
             var stats = skillDefinition.CalculateStats(resonantCellCount);
             return (
                 new StatBreakdownDisplay(StatLabel.AreaRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
@@ -30,7 +30,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Context.TryGetClosestEnemyInAttackRange(out var targetEnemy))
+            if (!Targeting.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
             targetPosition = targetEnemy.transform.position;
             return true;
@@ -49,11 +49,11 @@ namespace Units.Skills
             );
             spawnedFields.Add(effect);
             effect.Init(
-                caster: Context.Unit,
+                caster: OwnerContext.Owner,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 sourceSkill: this,
-                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
+                resonantCellCount: OwnerContext.GetResonanceCount(Definition.Resonance)
             );
             effect.Activate();
         }
@@ -79,7 +79,7 @@ namespace Units.Skills
                 Definition.Description + ":\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                skillDefinition.ZonePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ZonePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance));
         }
 
         public override string Name() => Definition.DisplayName;

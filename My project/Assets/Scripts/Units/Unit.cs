@@ -32,6 +32,8 @@ namespace Units
         private UnitBuffContext buffContext;
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
+        private ISkillOwnerContext skillOwnerContext;
+        private ISkillTargeting skillTargeting;
         private AnimationController animationController;
         private FacingController facingController;
         [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
@@ -86,8 +88,6 @@ namespace Units
         private UnitManager unitManager;
         public UnitManager UnitManager => unitManager;
 
-        private Units.Skills.SkillContext skillContext;
-
         public void InjectUnitManager(UnitManager manager)
         {
             unitManager = manager;
@@ -123,8 +123,9 @@ namespace Units
             buffVisualController = new BuffVisualController(this);
             
             movementController = GetComponent<Movement>();
-            skillContext = new Units.Skills.SkillContext(this);
-            skillHandler = new Units.Skills.SkillHandler(skillContext);
+            skillOwnerContext = new SkillOwnerContext(this);
+            skillTargeting = new SkillTargeting(this);
+            skillHandler = new SkillHandler(new SkillHandlerContext(this));
 
             actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
@@ -483,6 +484,17 @@ namespace Units
 
         public void AddSkill(Skills.Skill newSkill)
         {
+            if (newSkill == null)
+            {
+                throw new ArgumentNullException(nameof(newSkill));
+            }
+
+            if (skillHandler.HasSkillType(newSkill.GetType()))
+            {
+                return;
+            }
+
+            newSkill.Bind(skillOwnerContext, skillTargeting);
             skillHandler.AddSkill(newSkill); // 添加技能
         }
 

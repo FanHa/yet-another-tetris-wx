@@ -13,12 +13,12 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.AddBuff(CreateBuff());
+            OwnerContext.AddBuff(CreateBuff());
         }
 
         private Units.Buffs.LifeEchoBuff CreateBuff() => new(
                 SkillDefinition.LifeEchoBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Units.Buffs.BuffSource(Context.Unit, this));
+                OwnerContext.GetResonanceCount(Definition.Resonance),
+                new Units.Buffs.BuffSource(OwnerContext.Owner, this));
     }
 }

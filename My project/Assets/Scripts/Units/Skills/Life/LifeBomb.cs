@@ -29,7 +29,7 @@ namespace Units.Skills
         {
             cachedTargetPos = default;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Context.TryGetClosestEnemyInAttackRange(out var targetEnemy))
+            if (!Targeting.TryGetClosestEnemyInAttackRange(out var targetEnemy))
                 return false;
 
             cachedTargetPos = targetEnemy.transform.position;
@@ -38,23 +38,23 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = skillDefinition.CalculateStats(Context.Attributes.CurrentHealth);
+            var stats = skillDefinition.CalculateStats(OwnerContext.Attributes.CurrentHealth);
             var tempTarget = Object.Instantiate(
                 skillDefinition.TemporaryTargetPrefab,
                 cachedTargetPos,
                 Quaternion.identity
             );
-            tempTarget.name = "临时目标 By " + Context.Name + " " + Name();
+            tempTarget.name = "临时目标 By " + OwnerContext.Name + " " + Name();
 
             // 投射炸弹
             Units.Projectiles.LifeBomb lifeBomb = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                Context.ProjectileSpawnPoint.position,
+                OwnerContext.ProjectileSpawnPoint.position,
                 Quaternion.identity
             );
 
             lifeBomb.Init(
-                caster: Context.Unit,
+                caster: OwnerContext.Owner,
                 temporaryTarget: tempTarget,
                 healthAmount: stats.HealthCost, // 伤害为消耗的生命值
                 sourceSkill: this
@@ -64,7 +64,7 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            return Definition.Description + "\n" + GetHealthCostDisplay(Context.Attributes.CurrentHealth);
+            return Definition.Description + "\n" + GetHealthCostDisplay(OwnerContext.Attributes.CurrentHealth);
         }
 
         public override string Name() => Definition.DisplayName;

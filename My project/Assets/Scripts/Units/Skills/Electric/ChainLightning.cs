@@ -28,7 +28,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             initialTarget = null;
-            initialTarget = Context.FindClosestEnemyInRange(skillDefinition.Range);
+            initialTarget = Targeting.FindClosestEnemyInRange(skillDefinition.Range);
             return initialTarget != null;
         }
 
@@ -36,12 +36,12 @@ namespace Units.Skills
         {
             Projectiles.ChainLightning projectile = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                Context.Transform.position,
+                OwnerContext.Transform.position,
                 Quaternion.identity
             );
             var stats = GetStatsForDisplay();
             projectile.Initialize(
-                caster: Context.Unit,
+                caster: OwnerContext.Owner,
                 initialTarget: initialTarget,
                 baseDamage: stats.Damage.FinalValue,
                 damageIncreasePercentage: skillDefinition.DamageIncreasePercentage,
@@ -56,7 +56,7 @@ namespace Units.Skills
 
         private (StatBreakdownDisplay Damage, float EnergyDisruptionAmount) GetStatsForDisplay()
         {
-            var stats = skillDefinition.CalculateStats(Context.GetResonanceCount(Definition.Resonance));
+            var stats = skillDefinition.CalculateStats(OwnerContext.GetResonanceCount(Definition.Resonance));
             return (
                 new StatBreakdownDisplay(StatLabel.FirstChainDamage, stats.InitialDamage.BaseValue, stats.InitialDamage.AddedAmount),
                 stats.EnergyDisruptionAmount);

@@ -25,7 +25,7 @@ namespace Units.Skills
 
         private ChargeStats CalcStats()
         {
-            float moveSpeed = Context.Attributes.MoveSpeed.finalValue;
+            float moveSpeed = OwnerContext.Attributes.MoveSpeed.finalValue;
             AdditiveValueBreakdown chargeDamage = skillDefinition.CalculateDamage(moveSpeed);
             return new ChargeStats
             {
@@ -41,8 +41,8 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Vector2 ownerPosition = Context.Transform.position;
-            Unit targetEnemy = Context.GetActiveEnemies()
+            Vector2 ownerPosition = OwnerContext.Transform.position;
+            Unit targetEnemy = Targeting.GetActiveEnemies()
                 .OrderByDescending(enemy => ((Vector2)enemy.transform.position - ownerPosition).sqrMagnitude)
                 .FirstOrDefault();
             if (targetEnemy == null)
@@ -50,13 +50,13 @@ namespace Units.Skills
 
             var chargeProjectile = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                Context.Transform.position,
+                OwnerContext.Transform.position,
                 Quaternion.identity
             );
             chargeProjectile.Init(
-                owner: Context.Unit,
+                owner: OwnerContext.Owner,
                 target: targetEnemy,
-                speed: 2f * Context.Attributes.MoveSpeed.finalValue,
+                speed: 2f * OwnerContext.Attributes.MoveSpeed.finalValue,
                 chargeDamage: stats.ChargeDamage.FinalValue,
                 avoidancePriority: skillDefinition.AvoidancePriority,
                 sourceSkill: this

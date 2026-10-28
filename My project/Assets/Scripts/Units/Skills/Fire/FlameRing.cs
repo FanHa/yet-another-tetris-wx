@@ -17,7 +17,7 @@ namespace Units.Skills
 
         private (StatBreakdownDisplay Radius, float AreaDuration) GetStatsForDisplay()
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
             var stats = skillDefinition.CalculateStats(resonantCellCount);
             return (
                 new StatBreakdownDisplay(StatLabel.ActionRadius, stats.Radius.BaseValue, stats.Radius.AddedAmount),
@@ -29,7 +29,7 @@ namespace Units.Skills
             var stats = GetStatsForDisplay();
             return
                 Definition.Description + ":\n" +
-                skillDefinition.ZonePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance)) + "\n" +
+                skillDefinition.ZonePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance)) + "\n" +
                 $"{stats.Radius}\n";
         }
 
@@ -40,15 +40,15 @@ namespace Units.Skills
             var stats = GetStatsForDisplay();
             areaEffect = Object.Instantiate(
                 skillDefinition.ZonePrefab,
-                Context.Transform.position,
+                OwnerContext.Transform.position,
                 Quaternion.identity
             );
             areaEffect.Initialize(
-                owner: Context.Unit,
+                owner: OwnerContext.Owner,
                 radius: stats.Radius.FinalValue,
                 sourceSkill: this,
                 duration: stats.AreaDuration,
-                resonantCellCount: Context.GetResonanceCount(Definition.Resonance)
+                resonantCellCount: OwnerContext.GetResonanceCount(Definition.Resonance)
             );
             areaEffect.Activate();
         }

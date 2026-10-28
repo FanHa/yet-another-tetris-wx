@@ -24,7 +24,7 @@ namespace Units.Skills
         {
             targetEnemy = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Context.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Targeting.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
             targetEnemy = found;
 
@@ -46,8 +46,8 @@ namespace Units.Skills
 
         private Buffs.Freeze CreateFreezeBuff() => new(
             SkillDefinition.FreezeBuffDefinition,
-            Context.GetResonanceCount(Definition.Resonance),
-            new Buffs.BuffSource(Context.Unit, this));
+            OwnerContext.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(OwnerContext.Owner, this));
 
     }
 }

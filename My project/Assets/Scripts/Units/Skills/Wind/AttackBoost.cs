@@ -29,10 +29,10 @@ namespace Units.Skills
 
             var projectile = Object.Instantiate(
                 skillDefinition.BuffProjectilePrefab,
-                Context.Transform.position,
+                OwnerContext.Transform.position,
                 UnityEngine.Quaternion.identity
             );
-            projectile.Init(Context.Unit, Context.Unit, buff);
+            projectile.Init(OwnerContext.Owner, OwnerContext.Owner, buff);
             projectile.Activate();
         }
 
@@ -40,8 +40,8 @@ namespace Units.Skills
         {
             return new Buffs.AttackBoostBuff(
                 skillDefinition.AttackBoostBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(Context.Unit, this)
+                OwnerContext.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(OwnerContext.Owner, this)
             );
         }
     }

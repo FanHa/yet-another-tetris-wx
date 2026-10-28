@@ -24,8 +24,8 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             cachedTargets.Clear();
-            float attackRange = Context.Attributes.AttackRange.finalValue;
-            cachedTargets.AddRange(Context.FindEnemiesInRange(attackRange));
+            float attackRange = OwnerContext.Attributes.AttackRange.finalValue;
+            cachedTargets.AddRange(Targeting.FindEnemiesInRange(attackRange));
             return cachedTargets.Count > 0;
         }
 
@@ -36,7 +36,7 @@ namespace Units.Skills
                 return;
             }
 
-            float attackFrequency = Context.Attributes.AttacksPerTenSeconds.finalValue;
+            float attackFrequency = OwnerContext.Attributes.AttacksPerTenSeconds.finalValue;
             int projectileCount = Mathf.CeilToInt(attackFrequency * multiplier);
             HashSet<Unit> attackedEnemies = new HashSet<Unit>();
             for (int i = 0; i < projectileCount; i++)
@@ -44,17 +44,17 @@ namespace Units.Skills
                 Unit targetEnemy = cachedTargets
                     .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? cachedTargets[Random.Range(0, cachedTargets.Count)];
 
-                float damageValue = Context.Attributes.AttackPower.finalValue;
+                float damageValue = OwnerContext.Attributes.AttackPower.finalValue;
                 if (attackedEnemies.Contains(targetEnemy))
                 {
                     damageValue *= 1 - damageReductionPercentage / 100f;
                 }
                 var damage = new Units.Damages.Damage(damageValue, Units.Damages.DamageType.Hit);
                 damage.SetSourceLabel(Name());
-                damage.SetSourceUnit(Context.Unit);
+                damage.SetSourceUnit(OwnerContext.Owner);
                 damage.SetTargetUnit(targetEnemy);
-                Context.Unit.TriggerAttackHit(targetEnemy, damage);
-                targetEnemy.TakeHit(Context.Unit, ref damage);
+                OwnerContext.TriggerAttackHit(targetEnemy, damage);
+                targetEnemy.TakeHit(OwnerContext.Owner, ref damage);
 
                 // 记录已攻击的敌人
                 attackedEnemies.Add(targetEnemy);

@@ -11,7 +11,7 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.SetMoveBehaviorMode(Unit.MoveBehaviorMode.TowardAlly);
+            OwnerContext.SetMoveBehaviorMode(Unit.MoveBehaviorMode.TowardAlly);
         }
     }
 }

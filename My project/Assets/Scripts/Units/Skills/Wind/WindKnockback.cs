@@ -24,17 +24,17 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            Context.AddBuff(new Buffs.WindKnockbackBuff(
+            OwnerContext.AddBuff(new Buffs.WindKnockbackBuff(
                 skillDefinition.WindKnockbackBuffDefinition,
-                Context.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(Context.Unit, this)
+                OwnerContext.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(OwnerContext.Owner, this)
             ));
         }
 
         private Buffs.WindKnockbackBuff CreateBuff() => new(
             skillDefinition.WindKnockbackBuffDefinition,
-            Context.GetResonanceCount(Definition.Resonance),
-            new Buffs.BuffSource(Context.Unit, this)
+            OwnerContext.GetResonanceCount(Definition.Resonance),
+            new Buffs.BuffSource(OwnerContext.Owner, this)
         );
     }
 }

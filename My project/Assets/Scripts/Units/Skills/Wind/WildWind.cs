@@ -25,7 +25,7 @@ namespace Units.Skills
 
         private WildWindStats CalcStats()
         {
-            int resonantCellCount = Context.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
             var stats = skillDefinition.CalculateStats(resonantCellCount);
             return new WildWindStats
             {
@@ -43,7 +43,7 @@ namespace Units.Skills
                 $"{stats.Damage}\n" +
                 $"{stats.Radius}\n" +
                 $"{stats.Duration}\n" +
-                skillDefinition.ProjectilePrefab.DescribeEffect(Context.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ProjectilePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance));
         }
 
             public override string Name() => Definition.DisplayName;
@@ -54,15 +54,15 @@ namespace Units.Skills
 
             var wildWind = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                Context.Transform.position,
+                OwnerContext.Transform.position,
                 Quaternion.identity
             );
             wildWind.Initialize(
-                caster: Context.Unit,
+                caster: OwnerContext.Owner,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
-                resonantCellCount: Context.GetResonanceCount(Definition.Resonance),
+                resonantCellCount: OwnerContext.GetResonanceCount(Definition.Resonance),
                 sourceSkill: this // 传递技能引用
             );
             wildWind.Activate();
