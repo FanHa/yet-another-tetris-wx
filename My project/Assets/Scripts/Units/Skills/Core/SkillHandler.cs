@@ -12,7 +12,7 @@ namespace Units.Skills
         private const float TICK_INTERVAL = 0.2f;
         private bool isActive = false;
 
-        private readonly ISkillHandlerContext context;
+        private readonly Unit owner;
 
         public event Action<SkillCastStartedEvent> OnSkillCastStarted;
         public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
@@ -22,9 +22,9 @@ namespace Units.Skills
         private readonly List<ActiveSkill> activeSkills = new();
         private readonly Queue<ActiveSkill> readyQueue = new();
         private readonly HashSet<ActiveSkill> queuedSet = new();
-        public SkillHandler(ISkillHandlerContext context, float energyDecayPerSkill = 1f)
+        public SkillHandler(Unit owner, float energyDecayPerSkill = 1f)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.owner = owner;
             if (float.IsNaN(energyDecayPerSkill) || float.IsInfinity(energyDecayPerSkill) || energyDecayPerSkill < 0f || energyDecayPerSkill > 1f)
             {
                 throw new ArgumentOutOfRangeException(nameof(energyDecayPerSkill), "Must be finite and between 0 and 1.");
@@ -46,7 +46,7 @@ namespace Units.Skills
                 float elapsedEnergyTime = Mathf.Floor(tickTimer / TICK_INTERVAL) * TICK_INTERVAL;
                 tickTimer -= elapsedEnergyTime;
 
-                float energyToDistribute = context.EnergyPerSecond * elapsedEnergyTime;
+                float energyToDistribute = owner.Attributes.EnergyPerSecond.finalValue * elapsedEnergyTime;
                 DistributeEnergy(energyToDistribute);
             }
         }
@@ -101,20 +101,8 @@ namespace Units.Skills
 
 
 
-        internal bool HasSkillType(Type skillType)
-        {
-            return skills.Any(skill => skill.GetType() == skillType);
-        }
-
         internal void AddSkill(Skill newSkill)
         {
-            if (HasSkillType(newSkill.GetType()))
-                return;
-            if (newSkill.OwnerContext == null || newSkill.OwnerContext.Owner != context.Owner)
-            {
-                throw new InvalidOperationException("A skill must be bound to this handler's owner before registration.");
-            }
-
             skills.Add(newSkill);
             if (newSkill is ActiveSkill activeSkill)
             {
@@ -215,7 +203,7 @@ namespace Units.Skills
         {
             if (readyQueue.Count == 0)
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.Owner, null, SkillCastFailureReason.NoPendingSkill));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(owner, null, SkillCastFailureReason.NoPendingSkill));
                 return SkillCastResult.Failure(null, SkillCastFailureReason.NoPendingSkill);
             }
 
@@ -225,13 +213,13 @@ namespace Units.Skills
 
             if (!skill.HasEnoughEnergy)
             {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(context.Owner, skill, SkillCastFailureReason.PrerequisiteNotMet));
+                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(owner, skill, SkillCastFailureReason.PrerequisiteNotMet));
                 return SkillCastResult.Failure(skill, SkillCastFailureReason.PrerequisiteNotMet);
             }
 
-            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(context.Owner, skill));
+            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(owner, skill));
             skill.Execute();
-            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(context.Owner, skill));
+            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(owner, skill));
             return SkillCastResult.Success(skill);
         }
 

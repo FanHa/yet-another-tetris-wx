@@ -23,15 +23,15 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            OwnerContext.AddBuff(CreateBuff());
+            Owner.AddBuff(CreateBuff());
         }
 
         private Buffs.ShadowAttackBuff CreateBuff()
         {
             return new Buffs.ShadowAttackBuff(
                 skillDefinition.ShadowAttackBuffDefinition,
-                OwnerContext.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(OwnerContext.Owner, this)
+                Owner.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(Owner, this)
             );
         }
     }

@@ -13,7 +13,7 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             var stats = SkillDefinition.CalculateStats(resonantCellCount);
             return
                 Definition.Description + ":\n" +
@@ -26,17 +26,17 @@ namespace Units.Skills
 
         public override void OnUnitDeath()
         {
-            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             var stats = SkillDefinition.CalculateStats(resonantCellCount);
 
             ownedZone = Object.Instantiate(
                 SkillDefinition.ZonePrefab,
-                OwnerContext.Transform.position,
+                Owner.transform.position,
                 Quaternion.identity
             );
 
             ownedZone.Initialize(
-                caster: OwnerContext.Owner,
+                caster: Owner,
                 radius: stats.Radius.FinalValue,
                 duration: stats.ZoneLifetime.FinalValue,
                 resonantCellCount: resonantCellCount,

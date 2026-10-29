@@ -28,7 +28,7 @@ namespace Units.Skills
 
         private ShadowStepStats CalcStats()
         {
-            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             var vulnerabilityStats = skillDefinition.VulnerabilityBuffDefinition.CalculateStats(resonantCellCount);
             AdditiveValueBreakdown damage = skillDefinition.CalculateDamage(resonantCellCount);
             return new ShadowStepStats
@@ -47,28 +47,28 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Targeting.GetActiveEnemies()
+            Unit targetEnemy = Owner.UnitManager.GetActiveEnemies(Owner)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)
                 return;
 
-            Vector3 dir = (targetEnemy.transform.position - OwnerContext.Transform.position).normalized;
+            Vector3 dir = (targetEnemy.transform.position - Owner.transform.position).normalized;
             Vector3 targetPos = targetEnemy.transform.position + dir * 1.2f; // 1.2f为身后距离，可调整
 
-            OwnerContext.Teleport(targetPos);
+            Owner.Teleport(targetPos);
 
             var vulnerabilityBuff = new Units.Buffs.Vulnerability(
                 skillDefinition.VulnerabilityBuffDefinition,
                 extraDamagePercent: stats.VulnerabilityPercent.FinalValue,
                 buffDuration: BuffDuration.ForSeconds(stats.DebuffDuration.FinalValue),
-                source: new Units.Buffs.BuffSource(OwnerContext.Owner, this)
+                source: new Units.Buffs.BuffSource(Owner, this)
             );
             targetEnemy.AddBuff(vulnerabilityBuff);
 
             // 造成伤害
             var damage = new Damages.Damage(stats.Damage.FinalValue, Damages.DamageType.Hit);
-            damage.SetSourceUnit(OwnerContext.Owner);
+            damage.SetSourceUnit(Owner);
             damage.SetTargetUnit(targetEnemy);
             damage.SetSourceLabel(Name());
             targetEnemy.TakeDamage(damage);

@@ -32,8 +32,6 @@ namespace Units
         private UnitBuffContext buffContext;
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
-        private ISkillOwnerContext skillOwnerContext;
-        private ISkillTargeting skillTargeting;
         private AnimationController animationController;
         private FacingController facingController;
         [SerializeField] private Projectiles.RangeAttack rangeAttackPrefab;
@@ -123,9 +121,7 @@ namespace Units
             buffVisualController = new BuffVisualController(this);
             
             movementController = GetComponent<Movement>();
-            skillOwnerContext = new SkillOwnerContext(this);
-            skillTargeting = new SkillTargeting(this);
-            skillHandler = new SkillHandler(new SkillHandlerContext(this));
+            skillHandler = new SkillHandler(this);
 
             actionRunner = new UnitActionRunner(this, this, this, this, this);
             actionRunner.OnActionStarted += HandleActionStarted;
@@ -484,17 +480,7 @@ namespace Units
 
         public void AddSkill(Skills.Skill newSkill)
         {
-            if (newSkill == null)
-            {
-                throw new ArgumentNullException(nameof(newSkill));
-            }
-
-            if (skillHandler.HasSkillType(newSkill.GetType()))
-            {
-                return;
-            }
-
-            newSkill.Bind(skillOwnerContext, skillTargeting);
+            newSkill.Bind(this);
             skillHandler.AddSkill(newSkill); // 添加技能
         }
 
@@ -553,6 +539,23 @@ namespace Units
                 ? cachedClosestEnemy
                 : null;
             return closestEnemy != null;
+        }
+
+        public bool TryGetClosestEnemyInAttackRange(out Unit target)
+        {
+            target = null;
+            if (!TryGetClosestEnemy(out var candidate))
+            {
+                return false;
+            }
+
+            if (GetEffectiveAttackRangeTo(candidate) < Vector2.Distance(transform.position, candidate.transform.position))
+            {
+                return false;
+            }
+
+            target = candidate;
+            return true;
         }
 
         public bool TryGetClosestAlly(out Unit closestAlly)

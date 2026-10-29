@@ -23,7 +23,7 @@ namespace Units.Skills
 
         private ShadowArrowStats CalcStats()
         {
-            int resonantCellCount = OwnerContext.GetResonanceCount(Definition.Resonance);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             AdditiveValueBreakdown damage = skillDefinition.CalculateDamage(resonantCellCount);
             return new ShadowArrowStats
             {
@@ -33,7 +33,7 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             // 查找最大生命值最低的敌人
-            Unit targetEnemy = Targeting.GetActiveEnemies()
+            Unit targetEnemy = Owner.UnitManager.GetActiveEnemies(Owner)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)
@@ -44,16 +44,16 @@ namespace Units.Skills
             // 创建并发射暗影箭
             var projectile = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                OwnerContext.Transform.position,
+                Owner.transform.position,
                 Quaternion.identity
             );
 
             projectile.Init(
-                caster: OwnerContext.Owner,
+                caster: Owner,
                 target: targetEnemy,
                 damageValue: stats.Damage.FinalValue,
                 sourceSkill: this,
-                resonantCellCount: OwnerContext.GetResonanceCount(Definition.Resonance)
+                resonantCellCount: Owner.GetResonanceCount(Definition.Resonance)
             );
             projectile.Activate();
         }
@@ -64,7 +64,7 @@ namespace Units.Skills
             return
                 Definition.Description + ":\n" +
                 $"{stats.Damage}\n" +
-                skillDefinition.ProjectilePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance)) + "\n";
+                skillDefinition.ProjectilePrefab.DescribeEffect(Owner.GetResonanceCount(Definition.Resonance)) + "\n";
         }
 
         public override string Name() => Definition.DisplayName;

@@ -19,7 +19,7 @@ namespace Units.Skills
         {
             cachedTarget = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Targeting.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
             cachedTarget = found;
 
@@ -32,14 +32,14 @@ namespace Units.Skills
             // 实例化雪球投射物
             Units.Projectiles.Snowball snowBall = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                OwnerContext.ProjectileSpawnPoint.position,
+                Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
             snowBall.Init(
-                OwnerContext.Owner,
+                Owner,
                 cachedTarget,
                 this,
-                OwnerContext.GetResonanceCount(Definition.Resonance)
+                Owner.GetResonanceCount(Definition.Resonance)
             );
             snowBall.Activate();
             // 清空目标
@@ -50,7 +50,7 @@ namespace Units.Skills
         {
             return
                 Definition.Description + "\n" +
-                skillDefinition.ProjectilePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ProjectilePrefab.DescribeEffect(Owner.GetResonanceCount(Definition.Resonance));
         }
 
         public override string Name() => Definition.DisplayName;

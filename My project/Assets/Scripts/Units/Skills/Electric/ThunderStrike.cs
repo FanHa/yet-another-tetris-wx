@@ -20,7 +20,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             cachedTarget = null;
-            if (!Targeting.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
 
             cachedTarget = found;
@@ -38,7 +38,7 @@ namespace Units.Skills
             );
 
             thunderStrikeEffect.Init(
-                OwnerContext.Owner,
+                Owner,
                 cachedTarget,
                 stats.Damage.FinalValue,
                 stats.EnergyDisruptionAmount,
@@ -67,7 +67,7 @@ namespace Units.Skills
 
         private ThunderStrikeStats CalcStats()
         {
-            var stats = skillDefinition.CalculateStats(OwnerContext.GetResonanceCount(Definition.Resonance));
+            var stats = skillDefinition.CalculateStats(Owner.GetResonanceCount(Definition.Resonance));
 
             return new ThunderStrikeStats
             {

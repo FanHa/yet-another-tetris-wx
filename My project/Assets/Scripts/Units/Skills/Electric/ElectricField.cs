@@ -21,7 +21,7 @@ namespace Units.Skills
 
         protected override bool PrepareCastCore()
         {
-            if (!Targeting.TryGetClosestEnemyInAttackRange(out Unit target))
+            if (!Owner.TryGetClosestEnemyInAttackRange(out Unit target))
             {
                 return false;
             }
@@ -41,7 +41,7 @@ namespace Units.Skills
                 Quaternion.identity);
             spawnedZones.Add(zone);
             zone.Initialize(
-                caster: OwnerContext.Owner,
+                caster: Owner,
                 radius: stats.Radius.FinalValue,
                 duration: stats.Duration.FinalValue,
                 damage: stats.Damage.FinalValue,
@@ -78,7 +78,7 @@ namespace Units.Skills
 
         private ElectricFieldStats GetStatsForDisplay()
         {
-            var stats = skillDefinition.CalculateStats(OwnerContext.GetResonanceCount(Definition.Resonance));
+            var stats = skillDefinition.CalculateStats(Owner.GetResonanceCount(Definition.Resonance));
 
             return new ElectricFieldStats
             {

@@ -12,13 +12,13 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            OwnerContext.AddBuff(CreateBuff());
+            Owner.AddBuff(CreateBuff());
         }
 
         private Buffs.LifeFortitudeBuff CreateBuff() => new(
                 SkillDefinition.BuffDefinition,
                 SkillDefinition.MaxHealthIncrease,
-                OwnerContext.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(OwnerContext.Owner, this));
+                Owner.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(Owner, this));
     }
 }

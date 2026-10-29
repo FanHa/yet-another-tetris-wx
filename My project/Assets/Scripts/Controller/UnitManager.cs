@@ -169,6 +169,14 @@ namespace Controller
             return GetFactionUnits(faction).Where(unit => unit != null && unit.IsActive).ToArray();
         }
 
+        public IReadOnlyList<Unit> GetActiveEnemies(Unit self)
+        {
+            Unit.Faction enemyFaction = self.faction == Unit.Faction.FactionA
+                ? Unit.Faction.FactionB
+                : Unit.Faction.FactionA;
+            return GetActiveUnits(enemyFaction);
+        }
+
         public IReadOnlyList<Unit> GetActiveUnits()
         {
             return factionA.Concat(factionB).Where(unit => unit != null && unit.IsActive).ToArray();

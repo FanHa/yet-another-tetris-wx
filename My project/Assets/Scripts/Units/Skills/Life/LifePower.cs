@@ -18,7 +18,7 @@ namespace Units.Skills
 
         protected override bool PrepareCastCore()
         {
-            cachedTarget = Targeting.FindRandomAlly() ?? OwnerContext.Owner;
+            cachedTarget = Owner.UnitManager.FindRandomAlly(Owner) ?? Owner;
             return true;
         }
 
@@ -29,15 +29,15 @@ namespace Units.Skills
 
             var definition = skillDefinition.LifePowerBuffDefinition;
             var stats = definition.CalculateStats(
-                OwnerContext.Attributes.MaxHealth.finalValue,
-                OwnerContext.GetResonanceCount(Definition.Resonance)
+                Owner.Attributes.MaxHealth.finalValue,
+                Owner.GetResonanceCount(Definition.Resonance)
             );
             cachedTarget.AddBuff(
                 new Units.Buffs.LifePowerBuff
                 (
                     definition,
                     stats.AttackHitBonusDamage,
-                    new Units.Buffs.BuffSource(OwnerContext.Owner, this)
+                    new Units.Buffs.BuffSource(Owner, this)
                 )
             );
             cachedTarget = null;
@@ -47,13 +47,13 @@ namespace Units.Skills
         {
             var definition = skillDefinition.LifePowerBuffDefinition;
             var stats = definition.CalculateStats(
-                OwnerContext.Attributes.MaxHealth.finalValue,
-                OwnerContext.GetResonanceCount(Definition.Resonance)
+                Owner.Attributes.MaxHealth.finalValue,
+                Owner.GetResonanceCount(Definition.Resonance)
             );
             var previewBuff = new Units.Buffs.LifePowerBuff(
                 definition,
                 stats.AttackHitBonusDamage,
-                new Units.Buffs.BuffSource(OwnerContext.Owner, this)
+                new Units.Buffs.BuffSource(Owner, this)
             );
             return BuffDescriptionFormatter.Format(Definition.Description, previewBuff.DescribeAppliedEffect());
         }

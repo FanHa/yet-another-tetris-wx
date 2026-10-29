@@ -19,15 +19,15 @@ namespace Units.Skills
 
         public override void OnPassiveEffectsApplication()
         {
-            OwnerContext.AddBuff(CreateBuff());
+            Owner.AddBuff(CreateBuff());
         }
 
         private Buffs.IceBreaker CreateBuff()
         {
             return new Buffs.IceBreaker(
                 SkillDefinition.IceBreakerBuffDefinition,
-                OwnerContext.GetResonanceCount(Definition.Resonance),
-                new Buffs.BuffSource(OwnerContext.Owner, this)
+                Owner.GetResonanceCount(Definition.Resonance),
+                new Buffs.BuffSource(Owner, this)
             );
         }
     }

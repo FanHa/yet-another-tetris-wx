@@ -18,7 +18,7 @@ namespace Units.Skills
         {
             targetEnemy = null;
             // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Targeting.TryGetClosestEnemyInAttackRange(out var found))
+            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
                 return false;
             targetEnemy = found;
 
@@ -29,15 +29,15 @@ namespace Units.Skills
         {
             Units.Projectiles.Fireball fireball = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                OwnerContext.ProjectileSpawnPoint.position,
+                Owner.projectileSpawnPoint.position,
                 Quaternion.identity
             );
 
             fireball.Init(
-                caster: OwnerContext.Owner,
+                caster: Owner,
                 target: targetEnemy,
                 sourceSkill: this,
-                resonantCellCount: OwnerContext.GetResonanceCount(Definition.Resonance)
+                resonantCellCount: Owner.GetResonanceCount(Definition.Resonance)
             );
             fireball.Activate();
             targetEnemy = null; // 用完清空
@@ -47,7 +47,7 @@ namespace Units.Skills
         {
             return
                 Definition.Description + ":\n" +
-                skillDefinition.ProjectilePrefab.DescribeEffect(OwnerContext.GetResonanceCount(Definition.Resonance));
+                skillDefinition.ProjectilePrefab.DescribeEffect(Owner.GetResonanceCount(Definition.Resonance));
         }
 
         public override string Name() => Definition.DisplayName;
