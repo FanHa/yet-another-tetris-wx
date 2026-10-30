@@ -82,15 +82,20 @@ namespace Units
 
         public Transform projectileSpawnPoint; // 投射物生成位置
 
-        [Header("运行时注入")]
-        private UnitManager unitManager;
+        [Header("战场服务")]
+        // 持有服务引用不代表已注册或激活；展示预览也使用此配置。
+        [SerializeField] private UnitManager unitManager;
         public UnitManager UnitManager => unitManager;
 
-        public void InjectUnitManager(UnitManager manager)
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            unitManager = manager;
+            if (unitManager == null)
+            {
+                Debug.LogError($"[{nameof(Unit)}] Unit manager is missing.", this);
+            }
         }
-
+#endif
 
         private bool isActive = false; // 是否处于活动状态
         private bool hasDied;
@@ -195,12 +200,6 @@ namespace Units
                 return;
             }
 
-            if (unitManager == null)
-            {
-                Debug.LogError($"[Unit] Cannot activate '{name}' because UnitManager was not injected.", this);
-                return;
-            }
-
             movementController.Initialize(Attributes);
             skillHandler.Activate();
             skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
@@ -240,6 +239,8 @@ namespace Units
 
         void OnDestroy()
         {
+            unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
+
             buffVisualController.Deactivate();
             skillHandler.Release();
         }
@@ -530,7 +531,7 @@ namespace Units
 
         private void RefreshClosestEnemy()
         {
-            cachedClosestEnemy = unitManager != null ? unitManager.FindClosestEnemy(this) : null;
+            cachedClosestEnemy = unitManager.FindClosestEnemy(this);
         }
 
         public bool TryGetClosestEnemy(out Unit closestEnemy)
@@ -560,7 +561,7 @@ namespace Units
 
         public bool TryGetClosestAlly(out Unit closestAlly)
         {
-            closestAlly = unitManager != null ? unitManager.FindClosestAlly(this) : null;
+            closestAlly = unitManager.FindClosestAlly(this);
             return closestAlly != null;
         }
 

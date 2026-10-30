@@ -42,7 +42,7 @@ namespace Units.Skills
             var stats = CalcStats();
 
             Vector2 ownerPosition = Owner.transform.position;
-            Unit targetEnemy = Owner.UnitManager.GetActiveEnemies(Owner)
+            Unit targetEnemy = UnitManager.GetActiveEnemies(Owner)
                 .OrderByDescending(enemy => ((Vector2)enemy.transform.position - ownerPosition).sqrMagnitude)
                 .FirstOrDefault();
             if (targetEnemy == null)

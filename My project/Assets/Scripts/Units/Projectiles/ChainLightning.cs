@@ -8,6 +8,7 @@ namespace Units.Projectiles
 {
     public class ChainLightning : MonoBehaviour
     {
+        [SerializeField] private Controller.UnitManager unitManager;
         [Header("开发调校")]
         [SerializeField, Min(0.01f)] private float travelSpeed = 18f;
         [SerializeField, Min(0f)] private float bounceDelay = 0.2f;
@@ -35,6 +36,11 @@ namespace Units.Projectiles
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (unitManager == null)
+            {
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
+            }
+
             if (travelSpeed <= 0f)
             {
                 Debug.LogError($"{nameof(travelSpeed)} must be greater than 0.", this);
@@ -206,12 +212,7 @@ namespace Units.Projectiles
 
         private Unit FindNextTarget(Vector3 origin)
         {
-            if (caster.UnitManager == null)
-            {
-                return null;
-            }
-
-            return caster.UnitManager.FindEnemiesInRangeAtPosition(
+            return unitManager.FindEnemiesInRangeAtPosition(
                     caster.faction,
                     (Vector2)origin,
                     chainRange

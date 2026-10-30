@@ -35,7 +35,7 @@ namespace Units.Skills
         {
             cachedTarget = null;
             // 找到友方目标（不包括自己）
-            cachedTarget = Owner.UnitManager.FindRandomAlly(Owner);
+            cachedTarget = UnitManager.FindRandomAlly(Owner);
             if (cachedTarget == null)
                 return false;
 

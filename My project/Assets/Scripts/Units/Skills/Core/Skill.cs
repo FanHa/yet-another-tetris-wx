@@ -1,3 +1,4 @@
+using Controller;
 using Model.Skills;
 
 namespace Units.Skills
@@ -9,6 +10,7 @@ namespace Units.Skills
         public abstract string DescribeEffect();
 
         public SkillDefinition Definition { get; internal set; }
+        public UnitManager UnitManager { get; internal set; }
         public Unit Owner { get; private set; }
 
         internal void Bind(Unit owner)

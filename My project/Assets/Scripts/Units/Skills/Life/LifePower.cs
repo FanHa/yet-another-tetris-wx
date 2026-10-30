@@ -18,7 +18,7 @@ namespace Units.Skills
 
         protected override bool PrepareCastCore()
         {
-            cachedTarget = Owner.UnitManager.FindRandomAlly(Owner) ?? Owner;
+            cachedTarget = UnitManager.FindRandomAlly(Owner) ?? Owner;
             return true;
         }
 

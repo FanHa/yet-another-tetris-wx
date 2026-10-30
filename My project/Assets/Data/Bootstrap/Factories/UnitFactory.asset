@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleUnitPrefab: {fileID: 3257186687159062623, guid: e24af89409bdbde439f9cc8254dac7ad, type: 3}
   previewUnitPrefab: {fileID: 3650917277825002224, guid: 0e2d1da76342e1d47ae8fd29896e2a1e, type: 3}
-  resourceMapping: {fileID: 11400000, guid: 078ea8f38612872449dc4e3122cffa29, type: 2}
+  skillFactory: {fileID: 11400000, guid: 6c4891e451ceb0049a4ea134e8949f03, type: 2}

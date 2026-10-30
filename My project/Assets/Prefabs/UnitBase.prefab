@@ -1636,6 +1636,7 @@ MonoBehaviour:
   Fist1SpriteRenderer: {fileID: 7780507553668852956}
   Fist2SpriteRenderer: {fileID: 8140681470083442678}
   projectileSpawnPoint: {fileID: 1587690522871941135}
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}
 --- !u!58 &8368620811269264414
 CircleCollider2D:
   m_ObjectHideFlags: 0

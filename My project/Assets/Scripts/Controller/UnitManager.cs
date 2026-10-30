@@ -7,7 +7,8 @@ using System.Linq;
 
 namespace Controller
 {
-    public class UnitManager : MonoBehaviour
+    [CreateAssetMenu(fileName = "UnitManager", menuName = "Game Data/Runtime/Unit Manager")]
+    public class UnitManager : ScriptableObject
     {
         public event Action<Unit> OnUnitClicked;
         public event Action<Unit> OnUnitDeath;
@@ -16,11 +17,19 @@ namespace Controller
         public event Action<Units.Unit, Units.Skills.Skill> OnAnyUnitSkillCast;
 
         [SerializeField] private UnitFactory unitFactory;
-        [SerializeField] private Transform factionARoot;
-        [SerializeField] private Transform factionBRoot;
         private List<Unit> factionA = new();
         private List<Unit> factionB = new();
         private HashSet<Unit> ownedUnits = new();
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (unitFactory == null)
+            {
+                Debug.LogError($"[{nameof(UnitManager)}] Unit factory is missing.", this);
+            }
+        }
+#endif
 
         /// <summary>
         /// 批量生成单位
@@ -28,21 +37,22 @@ namespace Controller
         /// <param name="items">单位配置列表</param>
         /// <param name="spawnPoint">出生点</param>
         /// <param name="faction">阵营</param>
+        /// <param name="parent">场景中的单位父节点</param>
         public void SpawnUnits(
             IReadOnlyList<UnitSpawnPlacement> items,
             Transform spawnPoint,
-            Unit.Faction faction
+            Unit.Faction faction,
+            Transform parent
         )
         {
             foreach (Model.UnitSpawnPlacement item in items)
             {
                 Unit unit = unitFactory.CreateBattleUnit(item.CharacterBuild);
-                unit.transform.SetParent(GetRootByFaction(faction), false);
+                unit.transform.SetParent(parent, false);
 
                 Vector3 spawnPos = spawnPoint.position + item.SpawnOffset;
 
                 unit.PlaceAt(spawnPos);
-                unit.InjectUnitManager(this);
                 unit.Setup(faction);
                 RegisterUnit(unit);
             }
@@ -97,16 +107,11 @@ namespace Controller
             }
         }
         
+        // 正常清场入口；场景销毁时仅重置登记，由 Unity 销毁对象。
         public void ReleaseAllUnits()
         {
             Unit[] unitsToRelease = ownedUnits.ToArray();
-            foreach (Unit unit in unitsToRelease)
-            {
-                UnsubscribeUnit(unit);
-            }
-            ownedUnits.Clear();
-            factionA.Clear();
-            factionB.Clear();
+            ResetUnitRegistrations();
             foreach (Unit unit in unitsToRelease)
             {
                 unit.Deactivate();
@@ -115,11 +120,18 @@ namespace Controller
 
         }
 
-        private Transform GetRootByFaction(Unit.Faction faction)
+        // 仅解除托管事件并清空登记，不访问可能已销毁的场景组件。
+        internal void ResetUnitRegistrations()
         {
-            return faction == Unit.Faction.FactionA ? factionARoot : factionBRoot;
-        }
+            foreach (Unit unit in ownedUnits)
+            {
+                UnsubscribeUnit(unit);
+            }
 
+            ownedUnits.Clear();
+            factionA.Clear();
+            factionB.Clear();
+        }
 
         private void HandleUnitDeath(Unit deadUnit)
         {

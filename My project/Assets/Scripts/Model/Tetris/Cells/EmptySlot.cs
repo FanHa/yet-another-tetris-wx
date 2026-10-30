@@ -1,6 +1,4 @@
 using System;
-using Units;
-using UnityEngine;
 
 namespace Model.Tetri
 {
@@ -10,11 +8,6 @@ namespace Model.Tetri
         public EmptySlot()
         {
             // 可以在这里添加初始化逻辑
-        }
-
-        public override void Apply(Unit unit)
-        {
-            
         }
 
         public override string Description()

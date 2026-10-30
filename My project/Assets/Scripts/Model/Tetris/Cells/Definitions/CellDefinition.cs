@@ -19,7 +19,7 @@ namespace Model.Tetri
 #if UNITY_EDITOR
         private static readonly Regex IdPattern = new("^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
 
-        private void OnValidate()
+        protected virtual void OnValidate()
         {
             if (!Enum.IsDefined(typeof(ResonanceType), resonance))
             {

@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c4bb8e2a33148949a3cebcde78f22fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}
   overshootDistance: 3

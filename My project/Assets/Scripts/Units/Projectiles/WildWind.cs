@@ -7,6 +7,7 @@ namespace Units.Projectiles
 {
     public class WildWind : MonoBehaviour
     {
+        [SerializeField] private Controller.UnitManager unitManager;
         [SerializeField] private WildWindDebuffDefinition debuffDefinition;
         private Unit caster;
         private float radius;
@@ -63,42 +64,36 @@ namespace Units.Projectiles
             timer += Time.deltaTime;
             spriteRenderer.transform.Rotate(Vector3.forward, rotateSpeed * Time.deltaTime);
 
-            var enemies = caster.UnitManager != null
-                ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius)
-                : null;
-            if (enemies != null)
+            var enemies = unitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, radius);
+            foreach (var unit in enemies)
             {
-                foreach (var unit in enemies)
+                if (unit != null)
                 {
-                    if (unit != null)
+                    // 计算当前与中心的向量
+                    Vector3 toUnit = unit.transform.position - transform.position;
+                    // 旋转向量
+                    float angle = rotateSpeed * Time.deltaTime;
+                    Vector3 rotated = Quaternion.Euler(0, 0, angle) * toUnit;
+                    // 计算目标位置
+                    Vector3 targetPos = transform.position + rotated + rotated.normalized * pushSpeed * Time.deltaTime;
+                    // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
+                    Vector3 delta = targetPos - unit.transform.position;
+                    unit.MoveBy(delta);
+                    var buff = new Units.Buffs.WildWindDebuff(
+                        debuffDefinition,
+                        resonantCellCount,
+                        new Units.Buffs.BuffSource(caster, sourceSkill)
+                    );
+                    unit.AddBuff(buff);
+
+                    if (!damagedUnits.Contains(unit))
                     {
-                        // 计算当前与中心的向量
-                        Vector3 toUnit = unit.transform.position - transform.position;
-                        // 旋转向量
-                        float angle = rotateSpeed * Time.deltaTime;
-                        Vector3 rotated = Quaternion.Euler(0, 0, angle) * toUnit;
-                        // 计算目标位置
-                        Vector3 targetPos = transform.position + rotated + rotated.normalized * pushSpeed * Time.deltaTime;
-                        // 按统一 Movement 接口做强制位移，由 Movement 处理 NavMesh 可达性与阻挡。
-                        Vector3 delta = targetPos - unit.transform.position;
-                        unit.MoveBy(delta);
-                        var buff = new Units.Buffs.WildWindDebuff(
-                            debuffDefinition,
-                            resonantCellCount,
-                            new Units.Buffs.BuffSource(caster, sourceSkill)
-                        );
-                        unit.AddBuff(buff);
-
-                        if (!damagedUnits.Contains(unit))
-                        {
-                            var dmg = new Damages.Damage(damage, Damages.DamageType.Skill);
-                            dmg.SetSourceUnit(caster);
-                            dmg.SetSourceLabel("狂风");
-                            dmg.SetTargetUnit(unit);
-                            unit.TakeDamage(dmg);
-                            damagedUnits.Add(unit);
-                        }
-
+                        var dmg = new Damages.Damage(damage, Damages.DamageType.Skill);
+                        dmg.SetSourceUnit(caster);
+                        dmg.SetSourceLabel("狂风");
+                        dmg.SetTargetUnit(unit);
+                        unit.TakeDamage(dmg);
+                        damagedUnits.Add(unit);
                     }
                 }
             }
@@ -114,6 +109,11 @@ namespace Units.Projectiles
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (unitManager == null)
+            {
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
+            }
+
             if (debuffDefinition == null)
             {
                 Debug.LogError($"{GetType().Name} '{name}'.{nameof(debuffDefinition)} is not assigned.", this);

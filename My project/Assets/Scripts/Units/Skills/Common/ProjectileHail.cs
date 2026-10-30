@@ -25,7 +25,7 @@ namespace Units.Skills
         {
             cachedTargets.Clear();
             float attackRange = Owner.Attributes.AttackRange.finalValue;
-            cachedTargets.AddRange(Owner.UnitManager.FindEnemiesInRange(Owner, attackRange));
+            cachedTargets.AddRange(UnitManager.FindEnemiesInRange(Owner, attackRange));
             return cachedTargets.Count > 0;
         }
 

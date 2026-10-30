@@ -47,7 +47,7 @@ namespace Units.Skills
         {
             var stats = CalcStats();
 
-            Unit targetEnemy = Owner.UnitManager.GetActiveEnemies(Owner)
+            Unit targetEnemy = UnitManager.GetActiveEnemies(Owner)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)

@@ -16,17 +16,18 @@ namespace Controller {
         }
     }
 
-    [RequireComponent(typeof(UnitManager))]
     public class BattleField : MonoBehaviour
     {
         [Header("Spawn Points")]
         [SerializeField] private Transform spawnPointA;
         [SerializeField] private Transform spawnPointB;
+        [SerializeField] private Transform factionARoot;
+        [SerializeField] private Transform factionBRoot;
         [SerializeField] private float timeDelayBeforeBattle; // 战斗开始前的延迟时间
         private Coroutine battleStartDelayCoroutine;
 
         [Header("Data")]
-        private UnitManager unitManager;
+        [SerializeField] private UnitManager unitManager;
         public event Action OnBattleStarted;
         public event Action<BattleResult> OnBattleFinished;
         public event Action OnBattleCleared;
@@ -46,7 +47,8 @@ namespace Controller {
 
         void Awake()
         {
-            unitManager = GetComponent<UnitManager>();
+            unitManager.ResetUnitRegistrations();
+            State = BattleState.Empty;
         }
 
 #if UNITY_EDITOR
@@ -56,6 +58,12 @@ namespace Controller {
                 Debug.LogError($"{nameof(spawnPointA)} is not assigned.", this);
             if (spawnPointB == null)
                 Debug.LogError($"{nameof(spawnPointB)} is not assigned.", this);
+            if (factionARoot == null)
+                Debug.LogError($"{nameof(factionARoot)} is not assigned.", this);
+            if (factionBRoot == null)
+                Debug.LogError($"{nameof(factionBRoot)} is not assigned.", this);
+            if (unitManager == null)
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
         }
 #endif
 
@@ -93,12 +101,14 @@ namespace Controller {
             unitManager.SpawnUnits(
                 factionAItems,
                 spawnPointA,
-                Unit.Faction.FactionA
+                Unit.Faction.FactionA,
+                factionARoot
             );
             unitManager.SpawnUnits(
                 factionBItems,
                 spawnPointB,
-                Unit.Faction.FactionB
+                Unit.Faction.FactionB,
+                factionBRoot
             );
         }
 
@@ -173,6 +183,7 @@ namespace Controller {
         {
             State = BattleState.Empty;
             CancelPendingActivation();
+            unitManager.ResetUnitRegistrations();
         }
         
     }

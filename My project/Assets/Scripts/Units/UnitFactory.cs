@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Model;
 using Model.Resonance;
 using Model.Tetri;
+using Units.Skills;
 using UnityEngine;
 
 namespace Units
@@ -11,6 +12,7 @@ namespace Units
     {
         [SerializeField] private Units.Unit battleUnitPrefab;
         [SerializeField] private Units.Unit previewUnitPrefab;
+        [SerializeField] private SkillFactory skillFactory;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -23,6 +25,11 @@ namespace Units
             if (previewUnitPrefab == null)
             {
                 Debug.LogError($"[{nameof(UnitFactory)}] Preview unit prefab is missing.", this);
+            }
+
+            if (skillFactory == null)
+            {
+                Debug.LogError($"[{nameof(UnitFactory)}] Skill factory is missing.", this);
             }
         }
 #endif
@@ -62,7 +69,10 @@ namespace Units
             build.Character.Apply(unit);
             foreach (var cell in build.Cells)
             {
-                cell.Apply(unit);
+                if (cell.Definition is SkillBackedCellDefinition definition)
+                {
+                    unit.AddSkill(skillFactory.Create(definition.SkillDefinition, cell.Level));
+                }
             }
 
             var resonanceCounts = new Dictionary<ResonanceType, int>();

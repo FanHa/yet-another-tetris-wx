@@ -54,6 +54,8 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_virtualGeometry: 0
   m_virtualGeometryShadow: 0
+  m_ShadingRate: 0
+  m_ForceDisableGRD: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -101,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84c355734b5dcc842b441d6092526e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}
   explosionRadius: 2.5
 --- !u!58 &-953764677658672536
 CircleCollider2D:

@@ -1,6 +1,5 @@
 using System;
 using Model.Resonance;
-using Units.Skills;
 using UnityEngine;
 
 namespace Model.Tetri
@@ -36,6 +35,5 @@ namespace Model.Tetri
             resonance = definition.Resonance;
         }
 
-        public virtual void Apply(Units.Unit unit) { }
     }
 }

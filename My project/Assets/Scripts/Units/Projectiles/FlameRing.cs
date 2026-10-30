@@ -40,9 +40,6 @@ namespace Units.Projectiles
 
         protected override IEnumerable<Unit> FindTargetsInArea()
         {
-            if (UnitManager == null)
-                return System.Array.Empty<Unit>();
-
             return UnitManager.FindEnemiesInRangeAtPosition(
                 SourceUnit.faction,
                 (Vector2)transform.position,

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c44071e07254fc546887b1c46235eca0, type: 3}
+  m_Name: SkillFactory
+  m_EditorClassIdentifier: 
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}

@@ -20,8 +20,6 @@ namespace Controller
                 Debug.LogError($"{nameof(battleField)} is not assigned.", this);
             if (unitManager == null)
                 Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
-            if (battleField != null && unitManager != null && battleField.GetComponent<UnitManager>() != unitManager)
-                Debug.LogError("The damage recorder must reference the UnitManager belonging to its BattleField.", this);
         }
 #endif
 

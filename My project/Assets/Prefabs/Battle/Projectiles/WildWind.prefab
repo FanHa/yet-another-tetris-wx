@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8380b24858ea80c4cbfc740681760eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}
   debuffDefinition: {fileID: 11400000, guid: 9c8705f370e2a3547b3ae096d907d0d8, type: 2}
   spriteRenderer: {fileID: 5167751569373811905}
   pushSpeed: 2.5

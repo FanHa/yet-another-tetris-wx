@@ -1,11 +1,26 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using Model.Skills;
+using UnityEngine;
 
 namespace Units.Skills
 {
-    public static class SkillFactory
+    [CreateAssetMenu(fileName = "SkillFactory", menuName = "Game Data/Bootstrap/Factories/Skill Factory")]
+    public class SkillFactory : ScriptableObject
     {
+        [SerializeField] private UnitManager unitManager;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (unitManager == null)
+            {
+                Debug.LogError($"[{nameof(SkillFactory)}] Unit manager is missing.", this);
+            }
+        }
+#endif
+
         private interface ISkillCreator
         {
             Type DefinitionType { get; }
@@ -73,11 +88,12 @@ namespace Units.Skills
 
         public static IEnumerable<string> GetRegisteredSkillIds() => creators.Keys;
 
-        public static Skill Create(SkillDefinition skillDefinition, int level)
+        public Skill Create(SkillDefinition skillDefinition, int level)
         {
             ISkillCreator creator = creators[skillDefinition.Id];
             Skill skill = creator.Create(skillDefinition, level);
             skill.Definition = skillDefinition;
+            skill.UnitManager = unitManager;
             return skill;
         }
 

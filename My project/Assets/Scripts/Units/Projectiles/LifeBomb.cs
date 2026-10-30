@@ -4,6 +4,7 @@ namespace Units.Projectiles
 {
     public class LifeBomb : MonoBehaviour
     {
+        [SerializeField] private Controller.UnitManager unitManager;
         private Unit caster;
         private GameObject temporaryTarget;
         private float speed = 8f;
@@ -14,6 +15,16 @@ namespace Units.Projectiles
         private float explosionDelay = 1f; // 爆炸延迟秒数
         private float explosionTimer = 0f;
         private bool arrived = false;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (unitManager == null)
+            {
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
+            }
+        }
+#endif
 
         public void Init(Unit caster, GameObject temporaryTarget, float healthAmount, Skills.Skill sourceSkill)
         {
@@ -62,20 +73,15 @@ namespace Units.Projectiles
 
         private void HandleExplosion()
         {
-            var enemies = caster.UnitManager != null
-                ? caster.UnitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, explosionRadius)
-                : null;
+            var enemies = unitManager.FindEnemiesInRangeAtPosition(caster.faction, (Vector2)transform.position, explosionRadius);
 
-            if (enemies != null)
+            foreach (var unit in enemies)
             {
-                foreach (var unit in enemies)
-                {
-                    var damage = new Damages.Damage(healthAmount, Damages.DamageType.Skill);
-                    damage.SetSourceUnit(caster);
-                    damage.SetSourceLabel(sourceSkill != null ? sourceSkill.Name() : "生命炸弹");
-                    damage.SetTargetUnit(unit);
-                    unit.TakeDamage(damage);
-                }
+                var damage = new Damages.Damage(healthAmount, Damages.DamageType.Skill);
+                damage.SetSourceUnit(caster);
+                damage.SetSourceLabel(sourceSkill != null ? sourceSkill.Name() : "生命炸弹");
+                damage.SetTargetUnit(unit);
+                unit.TakeDamage(damage);
             }
             Destroy(temporaryTarget);
             Destroy(gameObject);

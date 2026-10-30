@@ -33,7 +33,7 @@ namespace Units.Skills
         protected override void ExecuteCore()
         {
             // 查找最大生命值最低的敌人
-            Unit targetEnemy = Owner.UnitManager.GetActiveEnemies(Owner)
+            Unit targetEnemy = UnitManager.GetActiveEnemies(Owner)
                 .OrderBy(enemy => enemy.Attributes.MaxHealth.finalValue)
                 .FirstOrDefault();
             if (targetEnemy == null)

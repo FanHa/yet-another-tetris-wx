@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd213555b4e11514f8e9182555b2eceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitManager: {fileID: 11400000, guid: 3f1d531aa594d6c43a61af330d438ff4, type: 2}
   resonanceDatabase: {fileID: 11400000, guid: ff606cb9bd098c241aebe0b48b517a5a, type: 2}
   zoneParticle: {fileID: 3947613165004499946}
   ringParticle: {fileID: 3025754923956176523}

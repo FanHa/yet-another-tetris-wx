@@ -52,7 +52,7 @@ description: "Use when adding a gameplay skill or following the new-skill workfl
 
 - [ ] SkillDefinition 的 `OnValidate` 没有报错；通过受支持的 Unity 资产编辑流程设置其 ID。
 - [ ] Unity 注册表校验菜单运行通过。
-- [ ] SkillBackedCellDefinition 的 SkillDefinition 引用已赋值（当前 Inspector 不提供该引用的自动校验）。
+- [ ] SkillBackedCellDefinition 的 SkillDefinition 引用已赋值，且其 OnValidate 没有报错。
 - [ ] CellDatabase 已注册该 SkillBackedCellDefinition，Cell ID 不重复且 Filler Definition 已赋值。
 - [ ] 训练单位配置引用的 CellDefinition 正确，等级不小于 1，且该 Cell 未在同一单位上重复配置。
 

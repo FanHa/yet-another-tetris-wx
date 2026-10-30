@@ -11,5 +11,17 @@ namespace Model.Tetri
         public override Sprite Icon => skillDefinition != null ? skillDefinition.Icon : null;
         public override string DisplayName => skillDefinition != null ? skillDefinition.DisplayName : null;
         public override string Description => skillDefinition != null ? skillDefinition.Description : null;
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+
+            if (skillDefinition == null)
+            {
+                Debug.LogError($"[{nameof(SkillBackedCellDefinition)}] Skill definition is missing.", this);
+            }
+        }
+#endif
     }
 }

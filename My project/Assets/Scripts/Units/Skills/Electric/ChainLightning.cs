@@ -28,7 +28,7 @@ namespace Units.Skills
         protected override bool PrepareCastCore()
         {
             initialTarget = null;
-            initialTarget = Owner.UnitManager.FindClosestEnemyInRange(Owner, skillDefinition.Range);
+            initialTarget = UnitManager.FindClosestEnemyInRange(Owner, skillDefinition.Range);
             return initialTarget != null;
         }
 

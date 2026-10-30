@@ -1,0 +1,26 @@
+{
+	"mcpServers": {
+		"aseprite-ai-artist": {
+			"type": "stdio",
+			"command": "C:\\Program Files\\nodejs\\npx.cmd",
+			"args": [
+				"-y",
+				"@pebbly/aseprite-ai-artist@latest",
+				"serve"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"ASEPRITE_PATH": "D:\\Program Files (x86)\\Steam\\steamapps\\common\\Aseprite\\Aseprite.exe"
+			}
+		},
+		"unityMCP": {
+			"type": "http",
+			"url": "http://127.0.0.1:8080/mcp",
+			"tools": [
+				"*"
+			]
+		}
+	}
+}

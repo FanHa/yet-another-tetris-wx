@@ -6,6 +6,7 @@ namespace Units.Projectiles
 {
     public class Charge : MonoBehaviour
     {
+        [SerializeField] private Controller.UnitManager unitManager;
         private Unit owner;
         private Unit target;
         private Vector3 targetPosition;
@@ -18,6 +19,15 @@ namespace Units.Projectiles
         private bool hasAcquiredSkillMotion = false;
         [SerializeField] private float overshootDistance = 1f;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (unitManager == null)
+            {
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
+            }
+        }
+#endif
 
         public void Init(Unit owner, Unit target, float speed, float chargeDamage, int avoidancePriority, Skill sourceSkill)
         {
@@ -64,34 +74,22 @@ namespace Units.Projectiles
                 return;
             }
 
-            var unitManager = owner.UnitManager;
-            if (unitManager == null)
-            {
-                isActive = false;
-                ReleaseSkillMotion();
-                Destroy(gameObject);
-                return;
-            }
-
             var enemies = unitManager.FindEnemiesInRangeAtPosition(
                 owner.faction,
                 (Vector2)owner.transform.position,
                 1f // todo: 这里可以用合理的参数,而不是写死1f
             );
 
-            if (enemies != null)
+            foreach (var unit in enemies)
             {
-                foreach (var unit in enemies)
+                if (unit != null && unit != owner && !damagedUnits.Contains(unit))
                 {
-                    if (unit != null && unit != owner && !damagedUnits.Contains(unit))
-                    {
-                        var damage = new Damages.Damage(chargeDamage, Damages.DamageType.Skill);
-                        damage.SetSourceUnit(owner);
-                        damage.SetTargetUnit(unit);
-                        damage.SetSourceLabel("冲锋");
-                        unit.TakeDamage(damage);
-                        damagedUnits.Add(unit);
-                    }
+                    var damage = new Damages.Damage(chargeDamage, Damages.DamageType.Skill);
+                    damage.SetSourceUnit(owner);
+                    damage.SetTargetUnit(unit);
+                    damage.SetSourceLabel("冲锋");
+                    unit.TakeDamage(damage);
+                    damagedUnits.Add(unit);
                 }
             }
 

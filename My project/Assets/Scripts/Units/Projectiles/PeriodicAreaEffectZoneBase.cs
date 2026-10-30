@@ -6,6 +6,7 @@ namespace Units.Projectiles
 {
     public abstract class PeriodicAreaEffectZoneBase : MonoBehaviour
     {
+        [SerializeField] private Controller.UnitManager unitManager;
         [SerializeField] private ResonanceDatabase resonanceDatabase;
         [SerializeField] private ParticleSystem zoneParticle;
         [SerializeField] private ParticleSystem ringParticle;
@@ -19,7 +20,7 @@ namespace Units.Projectiles
         private float applyTimer;
         private bool isActive;
 
-        protected Controller.UnitManager UnitManager { get; private set; }
+        protected Controller.UnitManager UnitManager => unitManager;
         protected Unit SourceUnit { get; private set; }
         protected Skills.Skill SourceSkill { get; private set; }
         protected float Radius => radius;
@@ -28,6 +29,11 @@ namespace Units.Projectiles
 #if UNITY_EDITOR
         protected virtual void OnValidate()
         {
+            if (unitManager == null)
+            {
+                Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
+            }
+
             if (resonanceDatabase == null)
             {
                 Debug.LogError($"{nameof(resonanceDatabase)} is not assigned.", this);
@@ -62,7 +68,6 @@ namespace Units.Projectiles
             Skills.Skill sourceSkill)
         {
             SourceUnit = caster;
-            UnitManager = caster.UnitManager;
             this.radius = radius;
             this.duration = duration;
             SourceSkill = sourceSkill;
