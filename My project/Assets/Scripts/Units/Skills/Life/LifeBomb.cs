@@ -10,7 +10,6 @@ namespace Units.Skills
     public class LifeBomb : ActiveSkill
     {
         private readonly LifeBombSkillDefinition skillDefinition;
-        private Vector3 cachedTargetPos; 
 
         public LifeBomb(LifeBombSkillDefinition definition)
         {
@@ -34,24 +33,20 @@ namespace Units.Skills
                     stats.Damage.AddedAmount));
         }
 
-        protected override bool PrepareCastCore()
-        {
-            cachedTargetPos = default;
-            // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
-                return false;
-
-            cachedTargetPos = targetEnemy.transform.position;
-            return true;
-        }
-
         protected override void ExecuteCore()
         {
+            Unit targetEnemy = UnitManager.FindClosestEnemy(Owner);
+            if (targetEnemy == null)
+            {
+                return;
+            }
+
+            Vector3 targetPosition = targetEnemy.transform.position;
             int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             var stats = skillDefinition.CalculateStats(Owner.Attributes.CurrentHealth, resonantCellCount);
             var tempTarget = Object.Instantiate(
                 skillDefinition.TemporaryTargetPrefab,
-                cachedTargetPos,
+                targetPosition,
                 Quaternion.identity
             );
             tempTarget.name = "临时目标 By " + Owner.name + " " + Name();

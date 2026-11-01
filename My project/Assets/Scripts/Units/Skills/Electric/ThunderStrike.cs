@@ -9,7 +9,6 @@ namespace Units.Skills
     public class ThunderStrike : ActiveSkill
     {
         private readonly ThunderStrikeSkillDefinition skillDefinition;
-        private Unit cachedTarget;
 
         public ThunderStrike(ThunderStrikeSkillDefinition definition)
         {
@@ -17,36 +16,31 @@ namespace Units.Skills
             RequiredEnergy = definition.RequiredEnergy;
         }
 
-        protected override bool PrepareCastCore()
-        {
-            cachedTarget = null;
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var found))
-                return false;
-
-            cachedTarget = found;
-            return true;
-        }
-
         protected override void ExecuteCore()
         {
+            Unit targetEnemy = UnitManager.FindClosestEnemy(Owner);
+            if (targetEnemy == null)
+            {
+                return;
+            }
+
             var stats = CalcStats();
 
             Units.Projectiles.ThunderStrikeProjectile thunderStrikeEffect = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
-                cachedTarget.transform.position,
+                targetEnemy.transform.position,
                 Quaternion.identity
             );
 
             thunderStrikeEffect.Init(
                 Owner,
-                cachedTarget,
+                targetEnemy,
                 stats.Damage.FinalValue,
                 stats.EnergyDisruptionAmount,
                 this
             );
             thunderStrikeEffect.Activate();
 
-            cachedTarget = null;
         }
 
         public override string DescribeEffect()

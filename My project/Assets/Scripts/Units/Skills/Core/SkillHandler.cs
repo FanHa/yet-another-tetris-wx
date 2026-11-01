@@ -14,14 +14,11 @@ namespace Units.Skills
 
         private readonly Unit owner;
 
-        public event Action<SkillCastStartedEvent> OnSkillCastStarted;
-        public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
-        public event Action<SkillCastFailedEvent> OnSkillCastFailed;
+        public event Action<Unit, Skill> OnSkillCastCommitted;
 
         private readonly List<Skill> skills = new();
         private readonly List<ActiveSkill> activeSkills = new();
         private readonly Queue<ActiveSkill> readyQueue = new();
-        private readonly HashSet<ActiveSkill> queuedSet = new();
         public SkillHandler(Unit owner, float energyDecayPerSkill = 1f)
         {
             this.owner = owner;
@@ -56,7 +53,6 @@ namespace Units.Skills
             isActive = true;
             tickTimer = 0f;
             readyQueue.Clear();
-            queuedSet.Clear();
             foreach (var skill in skills)
             {
                 skill.OnActivate();
@@ -68,7 +64,6 @@ namespace Units.Skills
             isActive = false;
             tickTimer = 0f;
             readyQueue.Clear();
-            queuedSet.Clear();
             foreach (var skill in skills)
             {
                 skill.OnDeactivate();
@@ -127,9 +122,8 @@ namespace Units.Skills
 
             foreach (var s in activeSkills)
             {
-                if (!queuedSet.Contains(s) && s.IsReady())
+                if (!readyQueue.Contains(s) && s.HasEnoughEnergy)
                 {
-                    queuedSet.Add(s);
                     readyQueue.Enqueue(s);
                 }
             }
@@ -142,7 +136,7 @@ namespace Units.Skills
             float availableEnergy = 0f;
             foreach (ActiveSkill skill in activeSkills)
             {
-                if (skill.HasEnoughEnergy || queuedSet.Contains(skill) || skill.CurrentEnergy <= 0f)
+                if (skill.HasEnoughEnergy || readyQueue.Contains(skill) || skill.CurrentEnergy <= 0f)
                 {
                     continue;
                 }
@@ -199,28 +193,13 @@ namespace Units.Skills
         }
 
 
-        public SkillCastResult TryCastNextSkill()
+        public void CastNextSkill()
         {
-            if (readyQueue.Count == 0)
-            {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(owner, null, SkillCastFailureReason.NoPendingSkill));
-                return SkillCastResult.Failure(null, SkillCastFailureReason.NoPendingSkill);
-            }
-
             // 先出队，避免 Execute() 过程中队列被清空后再次 Dequeue 引发异常
             var skill = readyQueue.Dequeue();
-            queuedSet.Remove(skill);
 
-            if (!skill.HasEnoughEnergy)
-            {
-                OnSkillCastFailed?.Invoke(new SkillCastFailedEvent(owner, skill, SkillCastFailureReason.PrerequisiteNotMet));
-                return SkillCastResult.Failure(skill, SkillCastFailureReason.PrerequisiteNotMet);
-            }
-
-            OnSkillCastStarted?.Invoke(new SkillCastStartedEvent(owner, skill));
             skill.Execute();
-            OnSkillCastSucceeded?.Invoke(new SkillCastSucceededEvent(owner, skill));
-            return SkillCastResult.Success(skill);
+            OnSkillCastCommitted?.Invoke(owner, skill);
         }
 
         public bool HasReadySkill => readyQueue.Count > 0;

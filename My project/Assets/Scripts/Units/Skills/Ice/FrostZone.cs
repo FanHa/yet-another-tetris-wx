@@ -11,7 +11,6 @@ namespace Units.Skills
     public class FrostZone : ActiveSkill
     {
         private readonly FrostZoneSkillDefinition skillDefinition;
-        private Vector3 targetPosition;
         private readonly HashSet<Units.Projectiles.FrostZone> spawnedZones = new();
 
         public FrostZone(FrostZoneSkillDefinition definition)
@@ -20,16 +19,15 @@ namespace Units.Skills
             RequiredEnergy = definition.RequiredEnergy;
         }
 
-        protected override bool PrepareCastCore()
-        {
-            // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
-                return false;
-            targetPosition = targetEnemy.transform.position;
-            return true;
-        }
         protected override void ExecuteCore()
         {
+            Unit targetEnemy = UnitManager.FindClosestEnemy(Owner);
+            if (targetEnemy == null)
+            {
+                return;
+            }
+
+            Vector3 targetPosition = targetEnemy.transform.position;
             int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
             var stats = GetStatsForDisplay(resonantCellCount);
             spawnedZones.RemoveWhere(zone => zone == null);

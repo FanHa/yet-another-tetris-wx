@@ -9,7 +9,6 @@ namespace Units.Skills
     public class BlazingField : ActiveSkill
     {
         private readonly BlazingFieldSkillDefinition skillDefinition;
-        private Vector3 targetPosition;
         private readonly HashSet<Units.Projectiles.BlazingField> spawnedFields = new();
 
         public BlazingField(BlazingFieldSkillDefinition definition)
@@ -27,18 +26,15 @@ namespace Units.Skills
                 new StatBreakdownDisplay(StatLabel.Duration, stats.Duration.BaseValue, stats.Duration.AddedAmount));
         }
 
-        protected override bool PrepareCastCore()
-        {
-            // 使用与 AttackAction 相同的有效射程（含 AgentRadius）查找敌人
-            if (!Owner.TryGetClosestEnemyInAttackRange(out var targetEnemy))
-                return false;
-            targetPosition = targetEnemy.transform.position;
-            return true;
-
-        }
-
         protected override void ExecuteCore()
         {
+            Unit targetEnemy = UnitManager.FindClosestEnemy(Owner);
+            if (targetEnemy == null)
+            {
+                return;
+            }
+
+            Vector3 targetPosition = targetEnemy.transform.position;
             var stats = GetStatsForDisplay();
             spawnedFields.RemoveWhere(field => field == null);
 

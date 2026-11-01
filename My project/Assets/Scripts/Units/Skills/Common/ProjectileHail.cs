@@ -8,7 +8,6 @@ namespace Units.Skills
     {
         public float damageReductionPercentage = 50f; // 重复攻击时伤害降低百分比
         public float multiplier = 2f; // 攻击频率的倍数
-        private readonly List<Unit> cachedTargets = new();
 
         public override string Name()
         {
@@ -21,17 +20,11 @@ namespace Units.Skills
                    $"优先攻击不重复的敌人，重复攻击时伤害降低 {damageReductionPercentage}%。";
         }
 
-        protected override bool PrepareCastCore()
-        {
-            cachedTargets.Clear();
-            float attackRange = Owner.Attributes.AttackRange.finalValue;
-            cachedTargets.AddRange(UnitManager.FindEnemiesInRange(Owner, attackRange));
-            return cachedTargets.Count > 0;
-        }
-
         protected override void ExecuteCore()
         {
-            if (cachedTargets.Count == 0)
+            float attackRange = Owner.Attributes.AttackRange.finalValue;
+            var targets = UnitManager.FindEnemiesInRange(Owner, attackRange);
+            if (targets.Count == 0)
             {
                 return;
             }
@@ -41,8 +34,8 @@ namespace Units.Skills
             HashSet<Unit> attackedEnemies = new HashSet<Unit>();
             for (int i = 0; i < projectileCount; i++)
             {
-                Unit targetEnemy = cachedTargets
-                    .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? cachedTargets[Random.Range(0, cachedTargets.Count)];
+                Unit targetEnemy = targets
+                    .FirstOrDefault(enemy => !attackedEnemies.Contains(enemy)) ?? targets[Random.Range(0, targets.Count)];
 
                 float damageValue = Owner.Attributes.AttackPower.finalValue;
                 if (attackedEnemies.Contains(targetEnemy))
@@ -60,7 +53,6 @@ namespace Units.Skills
                 attackedEnemies.Add(targetEnemy);
             }
 
-            cachedTargets.Clear();
         }
 
     }

@@ -59,7 +59,7 @@ namespace Units.Actions
 
         float GetSkillActionDurationSeconds();
 
-        SkillCastResult TryCastNextSkill();
+        void CastNextSkill();
 
         void SuspendAutoMovement();
         void ResumeAutoMovement();

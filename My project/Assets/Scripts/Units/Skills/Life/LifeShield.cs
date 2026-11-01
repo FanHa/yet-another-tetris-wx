@@ -10,7 +10,6 @@ namespace Units.Skills
     public class LifeShield : ActiveSkill
     {
         private readonly LifeShieldSkillDefinition skillDefinition;
-        private Unit cachedTarget;
 
         public LifeShield(LifeShieldSkillDefinition definition)
         {
@@ -31,21 +30,13 @@ namespace Units.Skills
                 stats.ShieldValue);
         }
 
-        protected override bool PrepareCastCore()
-        {
-            cachedTarget = null;
-            // 找到友方目标（不包括自己）
-            cachedTarget = UnitManager.FindRandomAlly(Owner);
-            if (cachedTarget == null)
-                return false;
-
-            return true;
-        }
-
         protected override void ExecuteCore()
         {
-            if (cachedTarget == null)
-            return;
+            Unit targetAlly = UnitManager.FindRandomAlly(Owner);
+            if (targetAlly == null)
+            {
+                return;
+            }
 
             var stats = GetStatsForDisplay();
 
@@ -60,7 +51,7 @@ namespace Units.Skills
                 Owner.transform.position,
                 Quaternion.identity
             );
-            projectile.Init(Owner, cachedTarget, buff);
+            projectile.Init(Owner, targetAlly, buff);
             projectile.Activate();
 
             var damage = new Damages.Damage(stats.LifeCost, Damages.DamageType.Skill);
@@ -69,7 +60,6 @@ namespace Units.Skills
             damage.SetSourceLabel(Name());
             Owner.TakeDamage(damage);
 
-            cachedTarget = null;
         }
 
         public override string DescribeEffect()

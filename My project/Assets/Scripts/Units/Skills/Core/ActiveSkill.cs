@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Units.Skills
 {
     public abstract class ActiveSkill : Skill
@@ -9,16 +7,9 @@ namespace Units.Skills
         public bool HasEnoughEnergy => CurrentEnergy >= RequiredEnergy;
         public float EnergyProgress => RequiredEnergy == 0f ? 1f : CurrentEnergy / RequiredEnergy;
 
-        protected virtual bool PrepareCastCore() => true;
-
         protected void InitializeInitialEnergy(float initialEnergy)
         {
             CurrentEnergy = initialEnergy;
-        }
-
-        public virtual bool IsReady()
-        {
-            return HasEnoughEnergy && PrepareCastCore();
         }
 
         internal void Execute()

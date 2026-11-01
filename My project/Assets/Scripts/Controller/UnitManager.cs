@@ -64,7 +64,7 @@ namespace Controller
             GetFactionUnits(unit.faction).Add(unit);
             unit.OnDeath += HandleUnitDeath;
             unit.OnDamageTaken += HandleDamageTaken;
-            unit.OnSkillCast += HandleUnitSkillCast;
+            unit.OnSkillCastCommitted += HandleUnitSkillCast;
             unit.OnClicked += HandleUnitClicked;
         }
 
@@ -72,7 +72,7 @@ namespace Controller
         {
             unit.OnDeath -= HandleUnitDeath;
             unit.OnDamageTaken -= HandleDamageTaken;
-            unit.OnSkillCast -= HandleUnitSkillCast;
+            unit.OnSkillCastCommitted -= HandleUnitSkillCast;
             unit.OnClicked -= HandleUnitClicked;
         }
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: skill.icy_cage
   displayName: "\u51B0\u7262"
-  description: "\u5BF9\u653B\u51FB\u8303\u56F4\u5185\u4E00\u4E2A\u654C\u4EBA\u65BD\u52A0\u51BB\u7ED3\u6548\u679C\u3002"
+  description: "\u5BF9\u6700\u8FD1\u7684\u6D3B\u52A8\u654C\u4EBA\u65BD\u52A0\u51BB\u7ED3\u6548\u679C\u3002"
   resonance: 6
   icon: {fileID: 450698819153296390, guid: 40f2981b399acce4b859f6ecb5ecff66, type: 3}
   projectilePrefab: {fileID: 8931962592207463393, guid: cba24ab43b454354db92f3dc3d76e73b, type: 3}

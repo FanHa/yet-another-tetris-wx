@@ -58,10 +58,7 @@ namespace Units
 
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
-        public event Action<Units.Unit, Skill> OnSkillCast;
-        public event Action<SkillCastStartedEvent> OnSkillCastStarted;
-        public event Action<SkillCastSucceededEvent> OnSkillCastSucceeded;
-        public event Action<SkillCastFailedEvent> OnSkillCastFailed;
+        public event Action<Units.Unit, Skill> OnSkillCastCommitted;
         public event Action<Units.Unit, UnitActionType> OnActionStarted;
         public event Action<Units.Unit, UnitActionType> OnActionCompleted;
         public event Action<Units.Unit, UnitActionType> OnActionCanceled;
@@ -202,9 +199,7 @@ namespace Units
 
             movementController.Initialize(Attributes);
             skillHandler.Activate();
-            skillHandler.OnSkillCastStarted += HandleSkillCastStarted;
-            skillHandler.OnSkillCastSucceeded += HandleSkillCastSucceeded;
-            skillHandler.OnSkillCastFailed += HandleSkillCastFailed;
+            skillHandler.OnSkillCastCommitted += HandleSkillCastCommitted;
             unitManager.OnAnyUnitSkillCast += HandleAnyUnitSkillCast;
             healthBar.gameObject.SetActive(true);
             hitEffect.Initialize();
@@ -218,9 +213,7 @@ namespace Units
         {
             healthBar.gameObject.SetActive(false);
             unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
-            skillHandler.OnSkillCastStarted -= HandleSkillCastStarted;
-            skillHandler.OnSkillCastSucceeded -= HandleSkillCastSucceeded;
-            skillHandler.OnSkillCastFailed -= HandleSkillCastFailed;
+            skillHandler.OnSkillCastCommitted -= HandleSkillCastCommitted;
             skillHandler.Deactivate();
             buffHandler.RemoveAllActiveBuffsImmediately();
             buffVisualController.Deactivate();
@@ -251,20 +244,9 @@ namespace Units
             buffHandler.DispatchSkillCast(caster, skill);
         }
 
-        private void HandleSkillCastStarted(SkillCastStartedEvent skillCastStartedEvent)
+        private void HandleSkillCastCommitted(Unit caster, Skill skill)
         {
-            OnSkillCastStarted?.Invoke(skillCastStartedEvent);
-        }
-
-        private void HandleSkillCastSucceeded(SkillCastSucceededEvent skillCastSucceededEvent)
-        {
-            OnSkillCastSucceeded?.Invoke(skillCastSucceededEvent);
-            OnSkillCast?.Invoke(skillCastSucceededEvent.Owner, skillCastSucceededEvent.Skill);
-        }
-
-        private void HandleSkillCastFailed(SkillCastFailedEvent skillCastFailedEvent)
-        {
-            OnSkillCastFailed?.Invoke(skillCastFailedEvent);
+            OnSkillCastCommitted?.Invoke(caster, skill);
         }
 
         public void EnterStun()
@@ -458,9 +440,9 @@ namespace Units
 
         bool ISkillActionContext.HasReadySkill => skillHandler.HasReadySkill;
 
-        SkillCastResult ISkillActionContext.TryCastNextSkill()
+        void ISkillActionContext.CastNextSkill()
         {
-            return skillHandler.TryCastNextSkill();
+            skillHandler.CastNextSkill();
         }
 
         public void SetCellResonanceCounts(Dictionary<ResonanceType, int> counts)

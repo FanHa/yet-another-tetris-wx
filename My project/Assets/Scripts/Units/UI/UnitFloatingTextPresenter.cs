@@ -27,7 +27,7 @@ namespace Units.UI
         private void OnEnable()
         {
             unit.OnDamageTaken += HandleDamageTaken;
-            unit.OnSkillCast += HandleSkillCast;
+            unit.OnSkillCastCommitted += HandleSkillCast;
         }
 
         private void OnDisable()
@@ -36,7 +36,7 @@ namespace Units.UI
                 return;
 
             unit.OnDamageTaken -= HandleDamageTaken;
-            unit.OnSkillCast -= HandleSkillCast;
+            unit.OnSkillCastCommitted -= HandleSkillCast;
         }
 
         private void HandleDamageTaken(Damage damage)

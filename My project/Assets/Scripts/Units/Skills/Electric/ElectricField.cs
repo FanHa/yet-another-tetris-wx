@@ -11,7 +11,6 @@ namespace Units.Skills
     {
         private readonly ElectricFieldSkillDefinition skillDefinition;
         private readonly HashSet<Units.Projectiles.ElectricFieldZone> spawnedZones = new();
-        private Vector3 targetPosition;
 
         public ElectricField(ElectricFieldSkillDefinition definition)
         {
@@ -19,19 +18,15 @@ namespace Units.Skills
             RequiredEnergy = definition.RequiredEnergy;
         }
 
-        protected override bool PrepareCastCore()
-        {
-            if (!Owner.TryGetClosestEnemyInAttackRange(out Unit target))
-            {
-                return false;
-            }
-
-            targetPosition = target.transform.position;
-            return true;
-        }
-
         protected override void ExecuteCore()
         {
+            Unit targetEnemy = UnitManager.FindClosestEnemy(Owner);
+            if (targetEnemy == null)
+            {
+                return;
+            }
+
+            Vector3 targetPosition = targetEnemy.transform.position;
             ElectricFieldStats stats = GetStatsForDisplay();
             spawnedZones.RemoveWhere(zone => zone == null);
 

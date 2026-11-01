@@ -8,7 +8,6 @@ namespace Units.Skills
     public class LifePower : ActiveSkill
     {
         private readonly LifePowerSkillDefinition skillDefinition;
-        private Unit cachedTarget;
 
         public LifePower(LifePowerSkillDefinition definition)
         {
@@ -16,23 +15,16 @@ namespace Units.Skills
             RequiredEnergy = definition.RequiredEnergy;
         }
 
-        protected override bool PrepareCastCore()
-        {
-            cachedTarget = UnitManager.FindRandomAlly(Owner) ?? Owner;
-            return true;
-        }
-
         protected override void ExecuteCore()
         {
-            if (cachedTarget == null)
-            return;
+            Unit targetAlly = UnitManager.FindRandomAlly(Owner) ?? Owner;
 
             var definition = skillDefinition.LifePowerBuffDefinition;
             var stats = definition.CalculateStats(
                 Owner.Attributes.MaxHealth.finalValue,
                 Owner.GetResonanceCount(Definition.Resonance)
             );
-            cachedTarget.AddBuff(
+            targetAlly.AddBuff(
                 new Units.Buffs.LifePowerBuff
                 (
                     definition,
@@ -40,7 +32,6 @@ namespace Units.Skills
                     new Units.Buffs.BuffSource(Owner, this)
                 )
             );
-            cachedTarget = null;
         }
 
         public override string DescribeEffect()

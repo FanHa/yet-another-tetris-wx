@@ -9,7 +9,6 @@ namespace Units.Skills
     public class ChainLightning : ActiveSkill
     {
         private readonly ChainLightningSkillDefinition skillDefinition;
-        private Unit initialTarget;
 
         public ChainLightning(ChainLightningSkillDefinition definition)
         {
@@ -25,15 +24,14 @@ namespace Units.Skills
                    $"每次弹射伤害增加 {skillDefinition.DamageIncreasePercentage}%，最多弹射 {skillDefinition.MaxBounces} 次。";
         }
 
-        protected override bool PrepareCastCore()
-        {
-            initialTarget = null;
-            initialTarget = UnitManager.FindClosestEnemyInRange(Owner, skillDefinition.Range);
-            return initialTarget != null;
-        }
-
         protected override void ExecuteCore()
         {
+            Unit initialTarget = UnitManager.FindClosestEnemy(Owner);
+            if (initialTarget == null)
+            {
+                return;
+            }
+
             Projectiles.ChainLightning projectile = Object.Instantiate(
                 skillDefinition.ProjectilePrefab,
                 Owner.transform.position,
@@ -51,7 +49,6 @@ namespace Units.Skills
                 sourceSkill: this
             );
             projectile.Activate();
-            initialTarget = null;
         }
 
         private (StatBreakdownDisplay Damage, float EnergyDisruptionAmount) GetStatsForDisplay()
