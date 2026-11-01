@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Charge
   m_EditorClassIdentifier: 
   id: Charge
-  resonance: 0
+  resonance: 5
   skillDefinition: {fileID: 11400000, guid: a0a603695843f914a94afc93a403c115, type: 2}

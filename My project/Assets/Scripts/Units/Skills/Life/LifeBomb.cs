@@ -18,11 +18,20 @@ namespace Units.Skills
             RequiredEnergy = definition.RequiredEnergy;
         }
 
-        private StatBreakdownDisplay GetHealthCostDisplay(float currentHealth)
+        private (StatBreakdownDisplay HealthCostPercent, StatBreakdownDisplay Damage) GetStatsForDisplay(
+            float currentHealth,
+            int resonantCellCount)
         {
-            var stats = skillDefinition.CalculateStats(currentHealth);
-            return new StatBreakdownDisplay(StatLabel.HealthCostPercent,
-                stats.HealthCostPercent.BaseValue, stats.HealthCostPercent.AddedAmount);
+            var stats = skillDefinition.CalculateStats(currentHealth, resonantCellCount);
+            return (
+                new StatBreakdownDisplay(
+                    StatLabel.HealthCostPercent,
+                    stats.HealthCostPercent.BaseValue,
+                    stats.HealthCostPercent.AddedAmount),
+                new StatBreakdownDisplay(
+                    StatLabel.SkillDamage,
+                    stats.Damage.BaseValue,
+                    stats.Damage.AddedAmount));
         }
 
         protected override bool PrepareCastCore()
@@ -38,7 +47,8 @@ namespace Units.Skills
 
         protected override void ExecuteCore()
         {
-            var stats = skillDefinition.CalculateStats(Owner.Attributes.CurrentHealth);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
+            var stats = skillDefinition.CalculateStats(Owner.Attributes.CurrentHealth, resonantCellCount);
             var tempTarget = Object.Instantiate(
                 skillDefinition.TemporaryTargetPrefab,
                 cachedTargetPos,
@@ -56,7 +66,7 @@ namespace Units.Skills
             lifeBomb.Init(
                 caster: Owner,
                 temporaryTarget: tempTarget,
-                healthAmount: stats.HealthCost, // 伤害为消耗的生命值
+                healthAmount: stats.Damage.FinalValue,
                 sourceSkill: this
             );
             
@@ -64,7 +74,11 @@ namespace Units.Skills
 
         public override string DescribeEffect()
         {
-            return Definition.Description + "\n" + GetHealthCostDisplay(Owner.Attributes.CurrentHealth);
+            var stats = GetStatsForDisplay(
+                Owner.Attributes.CurrentHealth,
+                Owner.GetResonanceCount(Definition.Resonance));
+            return Definition.Description + "\n" +
+                $"{stats.HealthCostPercent}\n{stats.Damage}";
         }
 
         public override string Name() => Definition.DisplayName;

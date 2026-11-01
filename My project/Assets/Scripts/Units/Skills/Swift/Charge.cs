@@ -26,7 +26,8 @@ namespace Units.Skills
         private ChargeStats CalcStats()
         {
             float moveSpeed = Owner.Attributes.MoveSpeed.finalValue;
-            AdditiveValueBreakdown chargeDamage = skillDefinition.CalculateDamage(moveSpeed);
+            int resonantCellCount = Owner.GetResonanceCount(Definition.Resonance);
+            AdditiveValueBreakdown chargeDamage = skillDefinition.CalculateDamage(moveSpeed, resonantCellCount);
             return new ChargeStats
             {
                 ChargeDamage = new StatBreakdownDisplay(

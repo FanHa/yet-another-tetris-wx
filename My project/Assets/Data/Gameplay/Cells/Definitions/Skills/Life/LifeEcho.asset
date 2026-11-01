@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LifeEcho
   m_EditorClassIdentifier: 
   id: LifeEcho
-  resonance: 0
+  resonance: 4
   skillDefinition: {fileID: 11400000, guid: bd7b173d38137fa4f9a123fcfca287d7, type: 2}

@@ -20,5 +20,5 @@ MonoBehaviour:
   baseDuration:
     mode: 0
     seconds: 10
-  healthToAtkPercent: 1
-  healthToAtkPercentPerResonantCell: 1
+  healthToAtkPercent: 0.25
+  healthToAtkPercentPerResonantCell: 1.5

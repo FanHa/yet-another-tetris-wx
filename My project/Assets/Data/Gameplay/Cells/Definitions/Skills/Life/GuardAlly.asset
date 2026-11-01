@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GuardAlly
   m_EditorClassIdentifier: 
   id: GuardAlly
+  resonance: 4
   runtimeTypeName: Model.Tetri.SkillCell, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
   affinity: 4

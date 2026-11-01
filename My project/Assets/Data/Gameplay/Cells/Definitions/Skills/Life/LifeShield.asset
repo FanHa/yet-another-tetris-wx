@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LifeShield
   m_EditorClassIdentifier: 
   id: LifeShield
-  resonance: 0
+  resonance: 4
   skillDefinition: {fileID: 11400000, guid: c1b0e036f49feac42811a6016f66d12a, type: 2}

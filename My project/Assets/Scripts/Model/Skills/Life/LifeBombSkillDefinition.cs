@@ -12,18 +12,26 @@ namespace Model.Skills
         [SerializeField] private GameObject temporaryTargetPrefab;
         [Header("Cost")]
         [SerializeField] private float requiredEnergy = 80f;
-        [SerializeField] private float healthCostPercent = 10f;
+        [SerializeField] private float healthCostPercent = 3f;
+        [Header("Damage")]
+        [SerializeField] private float damagePercentPerResonantCell = 3f;
 
         public LifeBomb ProjectilePrefab => projectilePrefab;
         public GameObject TemporaryTargetPrefab => temporaryTargetPrefab;
         public float RequiredEnergy => requiredEnergy;
         public float HealthCostPercent => healthCostPercent;
+        public float DamagePercentPerResonantCell => damagePercentPerResonantCell;
 
-        public (AdditiveValueBreakdown HealthCostPercent, float HealthCost) CalculateStats(float currentHealth)
+        public (AdditiveValueBreakdown HealthCostPercent, AdditiveValueBreakdown Damage, float HealthCost) CalculateStats(
+            float currentHealth,
+            int resonantCellCount)
         {
             var healthCostPercentStats = new AdditiveValueBreakdown(healthCostPercent);
             float healthCost = Mathf.Clamp(currentHealth * (healthCostPercentStats.FinalValue / 100f), 1f, currentHealth);
-            return (healthCostPercentStats, healthCost);
+            var damage = new AdditiveValueBreakdown(
+                healthCost,
+                currentHealth * resonantCellCount * damagePercentPerResonantCell / 100f);
+            return (healthCostPercentStats, damage, healthCost);
         }
 
 #if UNITY_EDITOR
@@ -43,6 +51,7 @@ namespace Model.Skills
 
             ValidateFinitePositive(requiredEnergy, nameof(requiredEnergy));
             ValidateFiniteNonNegative(healthCostPercent, nameof(healthCostPercent));
+            ValidateFiniteNonNegative(damagePercentPerResonantCell, nameof(damagePercentPerResonantCell));
         }
 #endif
     }

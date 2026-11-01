@@ -15,6 +15,6 @@ MonoBehaviour:
   id: skill.life_echo
   displayName: Life Echo
   description: "\u53CD\u5F39\u53D7\u5230\u7684\u4F24\u5BB3"
-  resonance: 0
+  resonance: 4
   icon: {fileID: -5587755329506514606, guid: 0ffef48aa8f00064696c938ff3c24b3e, type: 3}
   lifeEchoBuffDefinition: {fileID: 11400000, guid: b8c0248a973ad064f874d507e3159ee7, type: 2}

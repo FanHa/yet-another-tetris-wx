@@ -20,5 +20,5 @@ MonoBehaviour:
   baseDuration:
     mode: 1
     seconds: 0
-  reflectPercent: 10
-  reflectPercentPerResonantCell: 4
+  reflectPercent: 2
+  reflectPercentPerResonantCell: 5

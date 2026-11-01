@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LifeBomb
   m_EditorClassIdentifier: 
   id: LifeBomb
-  resonance: 0
+  resonance: 4
   skillDefinition: {fileID: 11400000, guid: 3f27b46592e396c458400ba7d9642298, type: 2}
