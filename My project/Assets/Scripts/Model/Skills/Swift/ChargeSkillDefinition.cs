@@ -15,15 +15,12 @@ namespace Model.Skills
         [SerializeField] private float chargeDamage = 20f;
         [SerializeField] private float damageBonusPerSpeed = 2f;
         [SerializeField] private float damagePerResonantCell = 5f;
-        [Header("Movement")]
-        [SerializeField] private int avoidancePriority;
 
         public Charge ProjectilePrefab => projectilePrefab;
         public float RequiredEnergy => requiredEnergy;
         public float ChargeDamage => chargeDamage;
         public float DamageBonusPerSpeed => damageBonusPerSpeed;
         public float DamagePerResonantCell => damagePerResonantCell;
-        public int AvoidancePriority => avoidancePriority;
 
         public AdditiveValueBreakdown CalculateDamage(float moveSpeed, int resonantCellCount) =>
             new(chargeDamage, moveSpeed * damageBonusPerSpeed + resonantCellCount * damagePerResonantCell);

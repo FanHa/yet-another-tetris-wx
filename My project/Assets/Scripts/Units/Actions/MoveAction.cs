@@ -4,7 +4,7 @@ namespace Units.Actions
 {
     public sealed class MoveAction : UnitAction<IMoveActionContext>
     {
-        public override int Priority => 0;
+        public override int StartSelectionPriority => 0;
 
         private const float HitAndRunMinRatio = 0.9f;
         private const float AllyProtectDistancePadding = 0.1f;

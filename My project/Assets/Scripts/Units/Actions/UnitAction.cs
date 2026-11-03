@@ -8,7 +8,7 @@ namespace Units.Actions
 
         public UnitActionType Type { get; }
         public bool IsCompleted { get; protected set; }
-        public virtual int Priority => 0;
+        public virtual int StartSelectionPriority => 0;
 
         protected UnitAction(UnitActionType type)
         {
@@ -18,11 +18,6 @@ namespace Units.Actions
         public virtual bool CanStart()
         {
             return true;
-        }
-
-        public virtual bool CanPreempt(UnitAction currentAction)
-        {
-            return false;
         }
 
         public void Enter()

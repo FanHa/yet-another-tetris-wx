@@ -22,13 +22,10 @@ namespace Units
         IPointerClickHandler,
         IMoveActionContext,
         IAttackActionContext,
-        ISkillActionContext,
-        IStatusActionContext,
-        IUnitActionRunnerContext
+        ISkillActionContext
     {
         public Attributes Attributes;
         private Units.Buffs.BuffHandler buffHandler;// Buff管理器
-        private Units.States.UnitStateHandler unitStateHandler;
         private UnitBuffContext buffContext;
         private Movement movementController;
         private Units.Skills.SkillHandler skillHandler; // 技能处理器
@@ -62,7 +59,6 @@ namespace Units
         public event Action<Units.Unit, UnitActionType> OnActionStarted;
         public event Action<Units.Unit, UnitActionType> OnActionCompleted;
         public event Action<Units.Unit, UnitActionType> OnActionCanceled;
-        public event Action<Units.Unit, UnitActionType> OnActionInterrupted;
         public event Action<Units.Unit, UnitActionType, UnitActionCommitKind> OnActionCommitted;
         public event Action<UnitBuffChangedEvent> OnBuffChanged;
 
@@ -96,10 +92,10 @@ namespace Units
 
         private bool isActive = false; // 是否处于活动状态
         private bool hasDied;
-        private int skillMotionLockCount = 0;
+        private readonly HashSet<SelfSkillMotionLease> selfSkillMotionLeases = new();
         private int stunLockCount = 0;
         public bool IsActive => isActive;
-        public bool IsSkillMotionActive => skillMotionLockCount > 0;
+        public bool IsSelfSkillMotionActive => selfSkillMotionLeases.Count > 0;
         public bool IsStunned => stunLockCount > 0;
         public float ActionSpeed => Attributes.ActionSpeed.finalValue;
         public float AttackRange => Attributes.AttackRange.finalValue;
@@ -114,7 +110,6 @@ namespace Units
             animationController = GetComponent<AnimationController>();
             facingController = GetComponent<FacingController>();
             hitEffect = GetComponent<HitEffect>();
-            unitStateHandler = new Units.States.UnitStateHandler(Units.States.UnitStateHandlerArgs.Default);
 
             buffContext = new UnitBuffContext(this);
             buffHandler = new Units.Buffs.BuffHandler(buffContext);
@@ -125,11 +120,15 @@ namespace Units
             movementController = GetComponent<Movement>();
             skillHandler = new SkillHandler(this);
 
-            actionRunner = new UnitActionRunner(this, this, this, this, this);
+            actionRunner = new UnitActionRunner(new UnitAction[]
+            {
+                new CastSkillAction(this),
+                new AttackAction(this),
+                new MoveAction(this)
+            });
             actionRunner.OnActionStarted += HandleActionStarted;
             actionRunner.OnActionCompleted += HandleActionCompleted;
             actionRunner.OnActionCanceled += HandleActionCanceled;
-            actionRunner.OnActionInterrupted += HandleActionInterrupted;
             actionRunner.OnActionCommitted += HandleActionCommitted;
 
             
@@ -154,15 +153,22 @@ namespace Units
 
             RefreshClosestEnemy();
             buffHandler.Tick(Time.deltaTime);
-            unitStateHandler.AccumulateEnergy(Time.deltaTime, Attributes.EnergyPerSecond.finalValue);
             skillHandler.Tick(Time.deltaTime);
             UpdateFacing();
+            UpdateActions();
+            UpdateActionAnimationSpeed();
+        }
+
+        private void UpdateActions()
+        {
+            if (IsStunned || IsSelfSkillMotionActive)
+            {
+                return;
+            }
 
             actionRunner.Tick(new global::Units.Actions.ActionTickContext(
                 Time.deltaTime,
                 GetActionTimelineSpeed()));
-            UpdateActionAnimationSpeed();
-            
         }
 
         private void UpdateFacing()
@@ -217,14 +223,11 @@ namespace Units
             skillHandler.Deactivate();
             buffHandler.RemoveAllActiveBuffsImmediately();
             buffVisualController.Deactivate();
-            actionRunner.OnOwnerDeactivated();
+            actionRunner.CancelCurrentAction();
+            stunLockCount = 0;
+            InvalidateSelfSkillMotionLeases();
+            movementController.Deactivate();
             animationController.ResetPlaybackSpeed();
-            // 若单位在技能位移中途被回收，需恢复被覆盖的避让优先级，避免残留脏状态
-            if (skillMotionLockCount > 0)
-            {
-                movementController.PopAvoidancePriorityOverride();
-            }
-            skillMotionLockCount = 0;
             isActive = false;
             cachedClosestEnemy = null;
         }
@@ -232,6 +235,7 @@ namespace Units
 
         void OnDestroy()
         {
+            InvalidateSelfSkillMotionLeases();
             unitManager.OnAnyUnitSkillCast -= HandleAnyUnitSkillCast;
 
             buffVisualController.Deactivate();
@@ -252,6 +256,18 @@ namespace Units
         public void EnterStun()
         {
             stunLockCount++;
+            if (stunLockCount != 1)
+            {
+                return;
+            }
+
+            actionRunner.CancelCurrentAction();
+            if (!isActive || !IsStunned)
+            {
+                return;
+            }
+
+            SuspendAutoMovement();
         }
 
         public void ExitStun()
@@ -263,6 +279,10 @@ namespace Units
             }
 
             stunLockCount--;
+            if (stunLockCount == 0)
+            {
+                ResumeAutoMovement();
+            }
         }
 
         public void Teleport(Vector3 position)
@@ -278,35 +298,68 @@ namespace Units
             return ApplyMovement(Movement.MovementRequest.DirectMove(delta));
         }
 
-        public void EnterSkillMotion(int avoidancePriority)
+        public SelfSkillMotionLease AcquireSelfSkillMotion()
         {
-            skillMotionLockCount++;
+            var lease = new SelfSkillMotionLease(this);
+            selfSkillMotionLeases.Add(lease);
 
-            if (skillMotionLockCount == 1)
+            if (selfSkillMotionLeases.Count == 1)
             {
-                movementController.PushAvoidancePriorityOverride(avoidancePriority);
-                movementController.ClearNavigationPath();
+                movementController.BeginSelfSkillMotion();
+            }
+
+            return lease;
+        }
+
+        private void ReleaseSelfSkillMotion(SelfSkillMotionLease lease)
+        {
+            if (!selfSkillMotionLeases.Remove(lease))
+            {
+                throw new InvalidOperationException("The self skill motion lease does not belong to this Unit.");
+            }
+
+            if (selfSkillMotionLeases.Count == 0)
+            {
+                movementController.EndSelfSkillMotion();
             }
         }
 
-        public void PrepareForSkillMotion()
+        private void InvalidateSelfSkillMotionLeases()
         {
-            movementController.ClearNavigationPath();
-        }
-
-        public void ExitSkillMotion()
-        {
-            if (skillMotionLockCount <= 0)
+            foreach (var lease in selfSkillMotionLeases)
             {
-                skillMotionLockCount = 0;
-                return;
+                lease.Invalidate();
             }
 
-            skillMotionLockCount--;
+            selfSkillMotionLeases.Clear();
+        }
 
-            if (skillMotionLockCount == 0)
+        public sealed class SelfSkillMotionLease : IDisposable
+        {
+            private Unit owner;
+
+            public bool IsValid => owner != null;
+
+            internal SelfSkillMotionLease(Unit owner)
             {
-                movementController.PopAvoidancePriorityOverride();
+                this.owner = owner;
+            }
+
+            public void Dispose()
+            {
+                if (!IsValid)
+                {
+                    return;
+                }
+
+                var previousOwner = owner;
+                Invalidate();
+                previousOwner.ReleaseSelfSkillMotion(this);
+            }
+
+            internal void Invalidate()
+            {
+                owner = null;
             }
         }
 
@@ -326,7 +379,7 @@ namespace Units
         //       确保 Unit 是 Actions 与 AnimationController 之间的唯一协调者。
         //
         // 架构流程:
-        //   1. ActionRunner 发出事件 (OnActionStarted/Completed/Canceled/Interrupted)
+        //   1. ActionRunner 发出事件 (OnActionStarted/Completed/Canceled)
         //   2. Unit 的 HandleAction* 方法响应事件，调用 AnimationController 播放/停止动画
         //   3. Actions 通过 GetAttackActionDurationSeconds()/GetSkillActionDurationSeconds() 获取动作总时长
         //   4. Unit.Update() 每帧调用 UpdateActionAnimationSpeed() 更新速度
@@ -351,17 +404,12 @@ namespace Units
         }
 
         /// <summary>
-        /// 响应 ActionRunner 事件：Action 停止（取消/中断）时，停止对应动画。
+        /// 响应 ActionRunner 事件：Action 取消时，停止对应动画。
         /// 由 Unit.Awake() 中的事件订阅自动触发，外部不应调用。
         /// </summary>
         private void HandleActionCanceled(UnitActionType actionType)
         {
             OnActionCanceled?.Invoke(this, actionType);
-        }
-
-        private void HandleActionInterrupted(UnitActionType actionType)
-        {
-            OnActionInterrupted?.Invoke(this, actionType);
         }
 
         private void HandleActionCommitted(UnitActionType actionType, UnitActionCommitKind commitKind)

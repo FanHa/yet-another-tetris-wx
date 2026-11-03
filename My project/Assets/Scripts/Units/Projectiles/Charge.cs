@@ -12,12 +12,12 @@ namespace Units.Projectiles
         private Vector3 targetPosition;
         private float speed;
         private float chargeDamage;
-        private int avoidancePriority;
         private Skill sourceSkill;
         private HashSet<Unit> damagedUnits = new HashSet<Unit>();
         private bool isActive = false;
-        private bool hasAcquiredSkillMotion = false;
+        private Unit.SelfSkillMotionLease skillMotionLease;
         [SerializeField] private float overshootDistance = 1f;
+        [SerializeField] private float damageRadius = 1f;
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -26,16 +26,20 @@ namespace Units.Projectiles
             {
                 Debug.LogError($"{nameof(unitManager)} is not assigned.", this);
             }
+
+            if (float.IsNaN(damageRadius) || float.IsInfinity(damageRadius) || damageRadius <= 0f)
+            {
+                Debug.LogError($"{nameof(damageRadius)} must be positive and finite.", this);
+            }
         }
 #endif
 
-        public void Init(Unit owner, Unit target, float speed, float chargeDamage, int avoidancePriority, Skill sourceSkill)
+        public void Init(Unit owner, Unit target, float speed, float chargeDamage, Skill sourceSkill)
         {
             this.owner = owner;
             this.target = target;
             this.speed = speed;
             this.chargeDamage = chargeDamage;
-            this.avoidancePriority = avoidancePriority;
             this.sourceSkill = sourceSkill;
             Vector3 dir = target.transform.position - owner.transform.position;
             if (dir.sqrMagnitude < 0.0001f)
@@ -55,7 +59,7 @@ namespace Units.Projectiles
             if (!isActive)
                 return;
 
-            if (owner == null || !owner.IsActive || owner.IsStunned)
+            if (owner == null || !owner.IsActive || owner.IsStunned || !skillMotionLease.IsValid)
             {
                 ReleaseSkillMotion();
                 Destroy(gameObject);
@@ -77,7 +81,7 @@ namespace Units.Projectiles
             var enemies = unitManager.FindEnemiesInRangeAtPosition(
                 owner.faction,
                 (Vector2)owner.transform.position,
-                1f // todo: 这里可以用合理的参数,而不是写死1f
+                damageRadius
             );
 
             foreach (var unit in enemies)
@@ -103,24 +107,23 @@ namespace Units.Projectiles
 
         private void AcquireSkillMotion()
         {
-            if (hasAcquiredSkillMotion || owner == null)
+            if (skillMotionLease != null || owner == null)
             {
                 return;
             }
 
-            owner.EnterSkillMotion(avoidancePriority);
-            hasAcquiredSkillMotion = true;
+            skillMotionLease = owner.AcquireSelfSkillMotion();
         }
 
         private void ReleaseSkillMotion()
         {
-            if (!hasAcquiredSkillMotion || owner == null)
+            if (skillMotionLease == null)
             {
                 return;
             }
 
-            owner.ExitSkillMotion();
-            hasAcquiredSkillMotion = false;
+            skillMotionLease.Dispose();
+            skillMotionLease = null;
         }
 
         private void OnDestroy()

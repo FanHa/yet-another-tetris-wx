@@ -59,7 +59,6 @@ namespace Units.Skills
                 target: targetEnemy,
                 speed: 2f * Owner.Attributes.MoveSpeed.finalValue,
                 chargeDamage: stats.ChargeDamage.FinalValue,
-                avoidancePriority: skillDefinition.AvoidancePriority,
                 sourceSkill: this
             );
             chargeProjectile.Activate();

@@ -8,10 +8,21 @@ namespace Units
     {
         [SerializeField] private float moveToTargetSampleRadius = 1.5f;
         [SerializeField] private float navigationRetargetDeadZone = 0.5f;
+        [SerializeField] private int selfSkillMotionAvoidancePriority = 0;
         private Attributes attributes;
         private NavMeshAgent agent;
         private int originalAvoidancePriority;
         public float AgentRadius => agent.radius;
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (selfSkillMotionAvoidancePriority < 0 || selfSkillMotionAvoidancePriority > 99)
+            {
+                Debug.LogError($"{nameof(selfSkillMotionAvoidancePriority)} must be between 0 and 99.", this);
+            }
+        }
+#endif
 
         public enum MovementResultCode
         {
@@ -109,6 +120,7 @@ namespace Units
         void Awake() // 或 Start
         {
             agent = GetComponent<NavMeshAgent>();
+            originalAvoidancePriority = agent.avoidancePriority;
             agent.enabled = false;
             agent.updateRotation = false;
             agent.updateUpAxis = false;
@@ -119,7 +131,14 @@ namespace Units
         {
             this.attributes = attributes;
             agent.enabled = true;
-            originalAvoidancePriority = agent.avoidancePriority;
+            agent.ResetPath();
+            agent.isStopped = false;
+            agent.avoidancePriority = originalAvoidancePriority;
+        }
+
+        internal void Deactivate()
+        {
+            agent.enabled = false;
         }
 
         private MovementResult MoveToDistanceFromTarget(Transform targetEnemy, float minTargetDistance, float maxTargetDistance)
@@ -260,19 +279,13 @@ namespace Units
             agent.isStopped = !enabled;
         }
 
-        internal void ClearNavigationPath()
+        internal void BeginSelfSkillMotion()
         {
+            agent.avoidancePriority = selfSkillMotionAvoidancePriority;
             agent.ResetPath();
         }
 
-        // 仅负责临时覆盖导航避让优先级，不表示进入完整技能状态。
-        internal void PushAvoidancePriorityOverride(int avoidancePriority)
-        {
-            agent.avoidancePriority = Mathf.Clamp(avoidancePriority, 0, 99);
-        }
-
-        // 与 PushAvoidancePriorityOverride 成对调用，恢复 Initialize 时记录的原始避让优先级。
-        internal void PopAvoidancePriorityOverride()
+        internal void EndSelfSkillMotion()
         {
             agent.avoidancePriority = originalAvoidancePriority;
         }

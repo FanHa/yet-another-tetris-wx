@@ -22,4 +22,3 @@ MonoBehaviour:
   chargeDamage: 5
   damageBonusPerSpeed: 2
   damagePerResonantCell: 10
-  avoidancePriority: 0

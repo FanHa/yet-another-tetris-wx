@@ -6,11 +6,6 @@ namespace Units.Actions
 {
     public sealed class UnitActionRunner
     {
-        private readonly IMoveActionContext moveContext;
-        private readonly IAttackActionContext attackContext;
-        private readonly ISkillActionContext skillContext;
-        private readonly IStatusActionContext statusContext;
-        private readonly IUnitActionRunnerContext runnerContext;
         private readonly List<UnitAction> actions;
         private UnitAction currentAction;
 
@@ -22,32 +17,19 @@ namespace Units.Actions
         /// <summary>动作按预期完成，Exit() 已执行。</summary>
         public event Action<UnitActionType> OnActionCompleted;
 
-        /// <summary>动作被外部状态（眩晕/强制位移/Deactivate）中止。</summary>
+        /// <summary>动作被调用方取消，Cancel() 已执行。</summary>
         public event Action<UnitActionType> OnActionCanceled;
-
-        /// <summary>动作被更高优先级动作抢占。</summary>
-        public event Action<UnitActionType> OnActionInterrupted;
 
         /// <summary>动作业务效果已提交（例如发射投射物、执行技能）。</summary>
         public event Action<UnitActionType, UnitActionCommitKind> OnActionCommitted;
 
-        public UnitActionRunner(
-            IMoveActionContext moveContext,
-            IAttackActionContext attackContext,
-            ISkillActionContext skillContext,
-            IStatusActionContext statusContext,
-            IUnitActionRunnerContext runnerContext)
+        public UnitActionRunner(IEnumerable<UnitAction> actions)
         {
-            this.moveContext = moveContext;
-            this.attackContext = attackContext;
-            this.skillContext = skillContext;
-            this.statusContext = statusContext;
-            this.runnerContext = runnerContext;
-            actions = CreateDefaultActions(moveContext, attackContext, skillContext, statusContext)
-                .OrderByDescending(action => action.Priority)
+            this.actions = actions
+                .OrderByDescending(action => action.StartSelectionPriority)
                 .ToList();
 
-            foreach (var action in actions)
+            foreach (var action in this.actions)
             {
                 action.OnCommitted += HandleActionCommitted;
             }
@@ -60,16 +42,9 @@ namespace Units.Actions
 
         public void Tick(global::Units.Actions.ActionTickContext context)
         {
-            SynchronizeOwnerState();
-            bool startedActionThisTick = TryStartHighestPriority();
-
             if (!HasCurrentAction)
             {
-                return;
-            }
-
-            if (startedActionThisTick)
-            {
+                TryStartNextEligibleAction();
                 return;
             }
 
@@ -88,30 +63,15 @@ namespace Units.Actions
             }
         }
 
-        private void SynchronizeOwnerState()
-        {
-            if (!HasCurrentAction)
-            {
-                return;
-            }
-
-            if (ShouldYieldToOwnerState(currentAction))
-            {
-                CancelCurrentInternal(interrupted: false);
-            }
-        }
-
-        private bool TryStartHighestPriority()
+        private void TryStartNextEligibleAction()
         {
             foreach (var action in actions)
             {
                 if (TryStart(action))
                 {
-                    return true;
+                    return;
                 }
             }
-
-            return false;
         }
 
         private bool TryStart(UnitAction action)
@@ -121,19 +81,16 @@ namespace Units.Actions
                 return false;
             }
 
-            if (HasCurrentAction)
-            {
-                if (!action.CanPreempt(currentAction))
-                {
-                    return false;
-                }
-
-                CancelCurrentInternal(interrupted: true);
-            }
-
             currentAction = action;
             var startedAction = currentAction;
             startedAction.Enter();
+
+            if (currentAction != startedAction)
+            {
+                return true;
+            }
+
+            OnActionStarted?.Invoke(startedAction.Type);
 
             if (currentAction != startedAction)
             {
@@ -146,19 +103,17 @@ namespace Units.Actions
                 return true;
             }
 
-            OnActionStarted?.Invoke(startedAction.Type);
-
             return true;
         }
 
-        public void OnOwnerDeactivated()
+        public void CancelCurrentAction()
         {
             if (!HasCurrentAction)
             {
                 return;
             }
 
-            CancelCurrentInternal(interrupted: false);
+            CancelCurrentInternal();
         }
 
         private void ExitCurrent()
@@ -169,45 +124,12 @@ namespace Units.Actions
             OnActionCompleted?.Invoke(action.Type);
         }
 
-        private void CancelCurrentInternal(bool interrupted)
+        private void CancelCurrentInternal()
         {
             var action = currentAction;
             currentAction = null;
             action.Cancel();
-            if (interrupted)
-                OnActionInterrupted?.Invoke(action.Type);
-            else
-                OnActionCanceled?.Invoke(action.Type);
-        }
-
-        private bool ShouldYieldToOwnerState(UnitAction action)
-        {
-            if (runnerContext.IsStunned && action.Type != UnitActionType.Stun)
-            {
-                return true;
-            }
-
-            if (runnerContext.IsSkillMotionActive && action.Type != UnitActionType.SkillMotion)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        
-
-        private static IEnumerable<UnitAction> CreateDefaultActions(
-            IMoveActionContext moveContext,
-            IAttackActionContext attackContext,
-            ISkillActionContext skillContext,
-            IStatusActionContext statusContext)
-        {
-            yield return new StunAction(statusContext);
-            yield return new SkillMotionAction(statusContext);
-            yield return new CastSkillAction(skillContext);
-            yield return new AttackAction(attackContext);
-            yield return new MoveAction(moveContext);
+            OnActionCanceled?.Invoke(action.Type);
         }
     }
 }

@@ -4,15 +4,6 @@ using UnityEngine;
 namespace Units.Actions
 {
     /// <summary>
-    /// Runner 在调度层读取的最小状态端口。
-    /// </summary>
-    public interface IUnitActionRunnerContext
-    {
-        bool IsStunned { get; }
-        bool IsSkillMotionActive { get; }
-    }
-
-    /// <summary>
     /// 移动类 Action 依赖的最小能力端口。
     /// </summary>
     public interface IMoveActionContext
@@ -65,16 +56,4 @@ namespace Units.Actions
         void ResumeAutoMovement();
     }
 
-    /// <summary>
-    /// 状态类 Action 依赖的最小能力端口。
-    /// </summary>
-    public interface IStatusActionContext
-    {
-        bool IsStunned { get; }
-        bool IsSkillMotionActive { get; }
-
-        void SuspendAutoMovement();
-        void ResumeAutoMovement();
-        void PrepareForSkillMotion();
-    }
 }

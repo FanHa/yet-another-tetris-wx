@@ -4,12 +4,10 @@ namespace Units.Actions
 {
     public sealed class AttackAction : UnitAction<IAttackActionContext>
     {
-        public override int Priority => 10;
+        public override int StartSelectionPriority => 10;
 
-        private Unit pendingTarget;
-        private bool hasLaunchedProjectile;
-        private bool hasMarkedAttackExecuted;
         private float attackElapsedSeconds;
+        private Unit attackTarget;
 
         public AttackAction(IAttackActionContext context) : base(context, UnitActionType.Attack)
         {
@@ -17,6 +15,8 @@ namespace Units.Actions
 
         public override bool CanStart()
         {
+            attackTarget = null;
+
             if (Context.ActionSpeed <= 0f)
             {
                 return false;
@@ -27,13 +27,13 @@ namespace Units.Actions
                 return false;
             }
 
-            if (!Context.TryGetClosestEnemy(out var target))
+            if (!Context.TryGetClosestEnemy(out var target) || !IsAttackableTarget(target))
             {
                 return false;
             }
 
-            float distance = Vector2.Distance(Context.Position, target.transform.position);
-            return distance <= Context.GetEffectiveAttackRangeTo(target);
+            attackTarget = target;
+            return true;
         }
 
         private void AdvanceAttackTimeline(global::Units.Actions.ActionTickContext context)
@@ -47,37 +47,20 @@ namespace Units.Actions
             return attackElapsedSeconds >= durationSeconds;
         }
 
-        private void TryLaunchProjectile()
+        private bool IsAttackableTarget(Unit target)
         {
-            if (pendingTarget != null && pendingTarget.IsActive)
+            if (target == null || !target.IsActive)
             {
-                Context.ExecuteAttackProjectile(pendingTarget);
-                RaiseCommitted(UnitActionCommitKind.AttackProjectileLaunched);
-            }
-        }
-
-        private void MarkAttackExecutedIfNeeded()
-        {
-            if (hasMarkedAttackExecuted)
-            {
-                return;
+                return false;
             }
 
-            Context.MarkAttackExecuted();
-            hasMarkedAttackExecuted = true;
+            float distance = Vector2.Distance(Context.Position, target.transform.position);
+            return distance <= Context.GetEffectiveAttackRangeTo(target);
         }
 
         protected override void OnEnter()
         {
-            if (!Context.TryGetClosestEnemy(out pendingTarget) || pendingTarget == null)
-            {
-                Complete();
-                return;
-            }
-
             Context.SuspendAutoMovement();
-            hasLaunchedProjectile = false;
-            hasMarkedAttackExecuted = false;
             attackElapsedSeconds = 0f;
         }
 
@@ -90,21 +73,20 @@ namespace Units.Actions
                 return;
             }
 
-            if (!hasLaunchedProjectile)
+            if (IsAttackableTarget(attackTarget))
             {
-                TryLaunchProjectile();
-                hasLaunchedProjectile = true;
+                Context.ExecuteAttackProjectile(attackTarget);
+                RaiseCommitted(UnitActionCommitKind.AttackProjectileLaunched);
+                Context.MarkAttackExecuted();
             }
-
-            MarkAttackExecutedIfNeeded();
 
             Complete();
         }
 
         protected override void OnExit()
         {
-            pendingTarget = null;
             Context.ResumeAutoMovement();
+            attackTarget = null;
         }
 
         protected override void OnCancel()

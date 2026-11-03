@@ -2,7 +2,7 @@ namespace Units.Actions
 {
     public sealed class CastSkillAction : UnitAction<ISkillActionContext>
     {
-        public override int Priority => 20;
+        public override int StartSelectionPriority => 20;
         private bool hasExecuted;
         private float castSkillElapsedSeconds;
 

@@ -2,10 +2,8 @@ namespace Units.Actions
 {
     public enum UnitActionType
     {
-        Stun,
-        Move,
-        Attack,
-        CastSkill,
-        SkillMotion
+        Move = 1,
+        Attack = 2,
+        CastSkill = 3
     }
 }

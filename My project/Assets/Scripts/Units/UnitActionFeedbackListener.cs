@@ -31,7 +31,6 @@ namespace Units
         {
             unit.OnActionStarted += HandleActionStarted;
             unit.OnActionCanceled += HandleActionStopped;
-            unit.OnActionInterrupted += HandleActionStopped;
             unit.OnActionCommitted += HandleActionCommitted;
         }
 
@@ -44,7 +43,6 @@ namespace Units
 
             unit.OnActionStarted -= HandleActionStarted;
             unit.OnActionCanceled -= HandleActionStopped;
-            unit.OnActionInterrupted -= HandleActionStopped;
             unit.OnActionCommitted -= HandleActionCommitted;
         }
 

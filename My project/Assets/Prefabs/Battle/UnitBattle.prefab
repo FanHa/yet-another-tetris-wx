@@ -119,6 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveToTargetSampleRadius: 1.5
   navigationRetargetDeadZone: 0.5
+  selfSkillMotionAvoidancePriority: 0
 --- !u!114 &1400082344347180184
 MonoBehaviour:
   m_ObjectHideFlags: 0
