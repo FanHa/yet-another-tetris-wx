@@ -33,8 +33,7 @@ namespace Units.Actions
 
         float GetAttackActionDurationSeconds();
 
-        void ExecuteAttackProjectile(Unit target);
-        void MarkAttackExecuted();
+        void ExecuteAttack(Unit target);
 
         void SuspendAutoMovement();
         void ResumeAutoMovement();

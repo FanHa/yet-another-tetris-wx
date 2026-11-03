@@ -612,12 +612,7 @@ namespace Units
             return Attributes.AttackRange.finalValue + BodyRadius + target.BodyRadius;
         }
 
-        public void MarkAttackExecuted()
-        {
-            lastAttackTime = Time.time;
-        }
-
-        public void ExecuteAttackProjectile(Unit target)
+        public void ExecuteAttack(Unit target)
         {
             var projectile = Instantiate(
                 rangeAttackPrefab,
@@ -626,8 +621,7 @@ namespace Units
             );
             projectile.Init(this, target);
             projectile.Activate();
-            
-
+            lastAttackTime = Time.time;
         }
 
         public void TriggerAttackHit(Unit target, Damages.Damage damage)

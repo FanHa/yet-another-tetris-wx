@@ -75,9 +75,8 @@ namespace Units.Actions
 
             if (IsAttackableTarget(attackTarget))
             {
-                Context.ExecuteAttackProjectile(attackTarget);
+                Context.ExecuteAttack(attackTarget);
                 RaiseCommitted();
-                Context.MarkAttackExecuted();
             }
 
             FinishExecution();
