@@ -56,10 +56,14 @@ namespace Units
         public event Action<Damages.Damage> OnDamageTaken;
         public event Action<Unit> OnClicked;
         public event Action<Units.Unit, Skill> OnSkillCastCommitted;
+        /// <summary>动作已进入；订阅者不改变动作生命周期或重入动作调度。</summary>
         public event Action<Units.Unit, UnitActionType> OnActionStarted;
+        /// <summary>动作执行正常结束，已撤下并退出清理；订阅者不重入动作调度。</summary>
         public event Action<Units.Unit, UnitActionType> OnActionCompleted;
+        /// <summary>动作调度已取消并退出清理，不撤销效果；原调用返回后仍可能发出 Committed。订阅者不重入动作调度。</summary>
         public event Action<Units.Unit, UnitActionType> OnActionCanceled;
-        public event Action<Units.Unit, UnitActionType, UnitActionCommitKind> OnActionCommitted;
+        /// <summary>攻击已发射或技能执行正常返回，不保证产生效果、命中或效果结束；可在 Canceled 后发出。订阅者不重入动作调度。</summary>
+        public event Action<Units.Unit, UnitActionType> OnActionCommitted;
         public event Action<UnitBuffChangedEvent> OnBuffChanged;
 
         public Faction faction { get; private set; }
@@ -412,9 +416,9 @@ namespace Units
             OnActionCanceled?.Invoke(this, actionType);
         }
 
-        private void HandleActionCommitted(UnitActionType actionType, UnitActionCommitKind commitKind)
+        private void HandleActionCommitted(UnitActionType actionType)
         {
-            OnActionCommitted?.Invoke(this, actionType, commitKind);
+            OnActionCommitted?.Invoke(this, actionType);
         }
 
 

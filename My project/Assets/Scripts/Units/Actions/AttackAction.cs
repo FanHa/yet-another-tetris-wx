@@ -76,22 +76,17 @@ namespace Units.Actions
             if (IsAttackableTarget(attackTarget))
             {
                 Context.ExecuteAttackProjectile(attackTarget);
-                RaiseCommitted(UnitActionCommitKind.AttackProjectileLaunched);
+                RaiseCommitted();
                 Context.MarkAttackExecuted();
             }
 
-            Complete();
+            FinishExecution();
         }
 
         protected override void OnExit()
         {
             Context.ResumeAutoMovement();
             attackTarget = null;
-        }
-
-        protected override void OnCancel()
-        {
-            base.OnCancel();
         }
     }
 }

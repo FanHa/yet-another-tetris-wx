@@ -72,15 +72,15 @@ namespace Units
             }
         }
 
-        private void HandleActionCommitted(Unit sender, UnitActionType actionType, UnitActionCommitKind commitKind)
+        private void HandleActionCommitted(Unit sender, UnitActionType actionType)
         {
-            switch (commitKind)
+            switch (actionType)
             {
-                case UnitActionCommitKind.AttackProjectileLaunched:
+                case UnitActionType.Attack:
                     SpawnVfx(attackCommittedVfx, unit.projectileSpawnPoint != null ? unit.projectileSpawnPoint.position : unit.transform.position);
                     PlaySfx(attackCommittedSfx);
                     break;
-                case UnitActionCommitKind.SkillExecuted:
+                case UnitActionType.CastSkill:
                     SpawnVfx(skillCommittedVfx, unit.transform.position);
                     PlaySfx(skillCommittedSfx);
                     break;

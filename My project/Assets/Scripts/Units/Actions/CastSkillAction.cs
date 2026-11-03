@@ -45,21 +45,16 @@ namespace Units.Actions
             if (!hasExecuted)
             {
                 Context.CastNextSkill();
-                RaiseCommitted(UnitActionCommitKind.SkillExecuted);
+                RaiseCommitted();
                 hasExecuted = true;
             }
 
-            Complete();
+            FinishExecution();
         }
 
         protected override void OnExit()
         {
             Context.ResumeAutoMovement();
-        }
-
-        protected override void OnCancel()
-        {
-            base.OnCancel();
         }
     }
 }

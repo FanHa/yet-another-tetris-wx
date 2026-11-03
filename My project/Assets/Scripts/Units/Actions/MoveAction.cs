@@ -22,7 +22,7 @@ namespace Units.Actions
         {
             if (!TryGetMoveTarget(out var target))
             {
-                Complete();
+                FinishExecution();
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Units.Actions
             Context.ApplyMovement(Movement.MovementRequest.PathfindToTarget(target.transform, minDistance, maxDistance));
 
             // Move action is a one-frame command; movement continues in NavMeshAgent.
-            Complete();
+            FinishExecution();
         }
 
         private void GetMoveDistanceRange(Unit target, out float minDistance, out float maxDistance)

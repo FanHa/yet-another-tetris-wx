@@ -11,17 +11,17 @@ namespace Units.Actions
 
         private bool HasCurrentAction => currentAction != null;
 
-        /// <summary>动作成功进入，Enter() 已执行。</summary>
+        /// <summary>动作成功进入，Enter() 已执行；订阅者不改变动作生命周期或重入 Runner 调度。</summary>
         public event Action<UnitActionType> OnActionStarted;
 
-        /// <summary>动作按预期完成，Exit() 已执行。</summary>
+        /// <summary>动作执行正常结束，已撤下并执行 Exit() 清理；订阅者不重入 Runner 调度。</summary>
         public event Action<UnitActionType> OnActionCompleted;
 
-        /// <summary>动作被调用方取消，Cancel() 已执行。</summary>
+        /// <summary>动作调度被取消，已撤下并执行 Exit() 清理；不撤销业务效果，原调用返回后仍可能发出 Committed。订阅者不重入 Runner 调度。</summary>
         public event Action<UnitActionType> OnActionCanceled;
 
-        /// <summary>动作业务效果已提交（例如发射投射物、执行技能）。</summary>
-        public event Action<UnitActionType, UnitActionCommitKind> OnActionCommitted;
+        /// <summary>攻击已发射或技能执行正常返回；不保证产生效果、命中或效果结束，也可能在 Canceled 后发出。订阅者不重入 Runner 调度。</summary>
+        public event Action<UnitActionType> OnActionCommitted;
 
         public UnitActionRunner(IEnumerable<UnitAction> actions)
         {
@@ -35,9 +35,9 @@ namespace Units.Actions
             }
         }
 
-        private void HandleActionCommitted(UnitActionType actionType, UnitActionCommitKind commitKind)
+        private void HandleActionCommitted(UnitActionType actionType)
         {
-            OnActionCommitted?.Invoke(actionType, commitKind);
+            OnActionCommitted?.Invoke(actionType);
         }
 
         public void Tick(global::Units.Actions.ActionTickContext context)
@@ -45,21 +45,15 @@ namespace Units.Actions
             if (!HasCurrentAction)
             {
                 TryStartNextEligibleAction();
-                return;
+            }
+            else
+            {
+                currentAction.Tick(context);
             }
 
-            var action = currentAction;
-            action.Tick(context);
-
-            // Tick 内可能触发中断/回收，导致 currentAction 被清空或替换。
-            if (currentAction != action)
+            if (HasCurrentAction && currentAction.IsExecutionFinished)
             {
-                return;
-            }
-
-            if (action.IsCompleted)
-            {
-                ExitCurrent();
+                CompleteCurrentAction();
             }
         }
 
@@ -85,23 +79,7 @@ namespace Units.Actions
             var startedAction = currentAction;
             startedAction.Enter();
 
-            if (currentAction != startedAction)
-            {
-                return true;
-            }
-
             OnActionStarted?.Invoke(startedAction.Type);
-
-            if (currentAction != startedAction)
-            {
-                return true;
-            }
-
-            if (startedAction.IsCompleted)
-            {
-                ExitCurrent();
-                return true;
-            }
 
             return true;
         }
@@ -113,23 +91,18 @@ namespace Units.Actions
                 return;
             }
 
-            CancelCurrentInternal();
+            var action = currentAction;
+            currentAction = null;
+            action.Exit();
+            OnActionCanceled?.Invoke(action.Type);
         }
 
-        private void ExitCurrent()
+        private void CompleteCurrentAction()
         {
             var action = currentAction;
             currentAction = null;
             action.Exit();
             OnActionCompleted?.Invoke(action.Type);
-        }
-
-        private void CancelCurrentInternal()
-        {
-            var action = currentAction;
-            currentAction = null;
-            action.Cancel();
-            OnActionCanceled?.Invoke(action.Type);
         }
     }
 }

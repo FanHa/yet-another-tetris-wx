@@ -4,10 +4,12 @@ namespace Units.Actions
 {
     public abstract class UnitAction
     {
-        public event Action<UnitActionType, UnitActionCommitKind> OnCommitted;
+        public event Action<UnitActionType> OnCommitted;
+
+        private bool isExecuting;
 
         public UnitActionType Type { get; }
-        public bool IsCompleted { get; protected set; }
+        public bool IsExecutionFinished { get; private set; }
         public virtual int StartSelectionPriority => 0;
 
         protected UnitAction(UnitActionType type)
@@ -22,13 +24,14 @@ namespace Units.Actions
 
         public void Enter()
         {
-            IsCompleted = false;
+            IsExecutionFinished = false;
+            isExecuting = true;
             OnEnter();
         }
 
         public void Tick(global::Units.Actions.ActionTickContext context)
         {
-            if (IsCompleted)
+            if (!isExecuting || IsExecutionFinished)
             {
                 return;
             }
@@ -38,23 +41,22 @@ namespace Units.Actions
 
         public void Exit()
         {
+            isExecuting = false;
             OnExit();
         }
 
-        public void Cancel()
+        protected void FinishExecution()
         {
-            IsCompleted = true;
-            OnCancel();
+            // 业务回调可能已同步取消动作，返回后不再标记为正常完成。
+            if (isExecuting)
+            {
+                IsExecutionFinished = true;
+            }
         }
 
-        protected void Complete()
+        protected void RaiseCommitted()
         {
-            IsCompleted = true;
-        }
-
-        protected void RaiseCommitted(UnitActionCommitKind commitKind)
-        {
-            OnCommitted?.Invoke(Type, commitKind);
+            OnCommitted?.Invoke(Type);
         }
 
         protected abstract void OnEnter();
@@ -65,11 +67,6 @@ namespace Units.Actions
 
         protected virtual void OnExit()
         {
-        }
-
-        protected virtual void OnCancel()
-        {
-            OnExit();
         }
     }
 
