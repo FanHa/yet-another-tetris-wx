@@ -15,3 +15,15 @@
 
 > ⚔️ 在进入战斗前，系统根据角色 Tetri 周围连接的能力 Cell，构建最终的 Unit。
 > 🚧 后续可考虑连接判定（邻近/连通）、技能链、专属构建等高级策略。
+
+---
+
+## 📚 项目文档 (Project Documentation)
+
+如需了解项目的详细分析和架构，请查看以下文档：
+
+For detailed project analysis and architecture, please refer to:
+
+- **[PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md)** - 完整的中文项目总结 (Complete Chinese project summary)
+- **[PROJECT_SUMMARY_EN.md](./PROJECT_SUMMARY_EN.md)** - Complete English project summary
+- **[ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md)** - 系统架构图和流程图 (System architecture and flow diagrams)
